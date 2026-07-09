@@ -1,74 +1,59 @@
 import Link from 'next/link';
 
-// 서버 컴포넌트 — 첫 방문 랜딩 (봉인封 + 어제 증명 + 4블록)
-export default function Landing() {
-  const today = new Date();
-  const dt = today.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+// 첫 메인 (v5 정본 01) — 봉인 + 오늘의 사정률 전망 + 해설 5카드
+const Hamburger = () => (<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>);
 
-  const blocks = [
-    { mk: '率', h: '사정률 뽑기', p: '오늘 내 사주로 방향·밴드를', hot: true },
-    { mk: '處', h: '발주처 궁합', p: '설립일 사주로 상성 보기' },
-    { mk: '器', h: '대표 사주', p: '만세력·십성 그릇 풀이' },
-    { mk: '法', h: '법인 운세', p: '회사 설립일 사주 진단' },
+export default function Home() {
+  const cards = [
+    { h: '사정률 뽑기', p: '내 사주+일진 · 방향 무료', bt: '사정률', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#25406a,#182c49)', price: '무료', cls: 'free' },
+    { h: '발주처 궁합', p: '발주처 고르면 상성', bt: '궁합', btc: '#f6e7d6', bg: 'linear-gradient(135deg,#7f1a17,#a5241f)', price: '첫 990원', cls: 'paid' },
+    { h: '대표 사주', p: '만세력 · 오늘 기운', bt: '대표', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#2f4d7d,#1a2c46)', price: '무료', cls: 'free' },
+    { h: '법인 운세', p: '설립일 사주 · 흐름', bt: '법인', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#3a2c19,#232a38)', price: '무료', cls: 'free' },
   ];
 
   return (
-    <div className="app">
-      <div className="hero">
-        <div className="k">運 七 技 三</div>
-        <h1>낙찰사주</h1>
-        <p>재주는 갖추셨습니다.<br />그 운칠(運七)을 짚어드립니다</p>
+    <div className="app home">
+      <div className="topbar"><div className="logo"><span className="s">士</span>낙찰사주</div><div className="ic"><Hamburger /></div></div>
+
+      <div className="hero"><div className="kick">運 七 技 三</div>
+        <h2>재주는 갖추셨습니다.<br />그 <b>운칠(運七)</b>을 짚어드립니다</h2>
       </div>
-      <div className="wrap">
-        <div className="card seal">
-          <div className="stamp">封</div>
-          <div className="dt">{dt}</div>
-          <h2>오늘의 사정률은 봉인되어 있습니다</h2>
-          <p>대표님 사주를 넣으면, 오늘 일진과 맞물린<br />사정률의 <b>방향과 흐름</b>을 짚어 드립니다.</p>
-          <Link className="landing-cta" href="/reading">내 사주로 오늘 짚기 →<small>생년월일만 넣으면 무료로 방향을 봅니다</small></Link>
-        </div>
 
-        <div className="card">
-          <div className="st"><span className="b" />어제, 짚은 대로였는지</div>
-          <div className="proof">
-            <div className="col"><div className="l">어제 짚은 흐름</div><div className="v" style={{ color: 'var(--navy)' }}>하단 ▼</div></div>
-            <div className="arw">→</div>
-            <div className="col"><div className="l">실제 개찰 사정률</div><div className="v" style={{ color: 'var(--red)' }}>99.12%</div></div>
-          </div>
-          <div className="hit">✓ 방향 적중 — 하단 밴드로 짚었고, 실제도 100% 아래</div>
-          <div className="mini">매일 개찰 결과를 조달청 OpenAPI로 자동 대조합니다 · 빗나간 날도 그대로 공개</div>
-        </div>
-
-        <div className="grid">
-          {blocks.map((b, i) => (
-            <Link key={i} className={'blk' + (b.hot ? ' hot' : '')} href="/reading">
-              {b.hot && <span className="tag">오늘</span>}
-              <div className="mk">{b.mk}</div>
-              <h3>{b.h}</h3>
-              <p>{b.p}</p>
-            </Link>
-          ))}
-        </div>
-
-        <div className="card" style={{ marginTop: 13 }}>
-          <div className="rec">
-            <div><div className="big">7 / 10</div><div className="lab">최근 10건 방향 적중 · 공개 기록</div></div>
-            <span className="go2">전체 보기 →</span>
-          </div>
-        </div>
-
-        <div className="disc">
-          재미로 보는 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.<br />
-          <Link className="legal-link" href="/terms">이용약관</Link> · <Link className="legal-link" href="/privacy">개인정보처리방침</Link>
-        </div>
+      <div className="sechd" style={{ marginTop: 15 }}><span className="t"><span className="b" />오늘의 사정률 전망</span><span className="m">7/9 · 丙午일</span></div>
+      <div className="hcard seal-card">
+        <div className="seal-stamp">封</div>
+        <div className="seal-t">내 사주로 보는 오늘의 전망</div>
+        <div className="seal-s">생년월일만 넣으면 바로 열립니다</div>
+        <Link className="hcta" href="/reading">오늘의 전망 확인<small>무료 · 로그인/입력은 여기서</small></Link>
       </div>
+
+      <div className="sechd"><span className="t"><span className="b" />해설 보기</span></div>
+      <div className="hgrid">
+        {cards.map((c, i) => (
+          <Link key={i} className="gc" href="/reading">
+            <div className="art" style={{ background: c.bg }}><span className="bt" style={{ color: c.btc }}>{c.bt}</span></div>
+            <div className="info"><h3>{c.h}</h3><p>{c.p}</p>
+              <div className="row"><span className={'price ' + c.cls}>{c.price}</span><span className="go">›</span></div>
+            </div>
+          </Link>
+        ))}
+        <Link className="gc" href="/reading" style={{ gridColumn: '1 / -1' }}>
+          <div className="art" style={{ height: 58, background: 'linear-gradient(135deg,#b98f3f,#e3c27a)' }}><span className="bt" style={{ color: '#2a2013' }}>同業宮合 · 協定</span></div>
+          <div className="info"><h3>동업 궁합 <span style={{ fontSize: 10.5, color: 'var(--sub)', fontWeight: 600 }}>(협정 궁합)</span></h3>
+            <p>대표×대표 · 회사×회사 — 손잡기 전 진단</p>
+            <div className="row"><span className="price paid">9,900원 ~</span><span className="go">›</span></div>
+          </div>
+        </Link>
+      </div>
+
+      <div className="hdisc">명리 기반 참고 정보 · 투찰금액 산정 근거 아님</div>
 
       <div className="tab">
-        <div className="t on"><span className="i">🏠</span>홈</div>
-        <div className="t"><span className="i">📋</span>내 공고</div>
-        <Link className="fab" href="/reading">오늘<br />전망</Link>
-        <div className="t"><span className="i">🗂</span>기록</div>
-        <div className="t"><span className="i">⋯</span>더보기</div>
+        <a className="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</a>
+        <a><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5" /></svg>발주처</a>
+        <Link className="fab" href="/reading"><span className="fi">士</span><span className="fl">오늘 전망</span></Link>
+        <a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3" /></svg>보관함</a>
+        <a><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>더보기</a>
       </div>
     </div>
   );
