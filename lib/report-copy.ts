@@ -85,7 +85,7 @@ function compatWith(meChart,otherChart,table,A,S){
  const me=meChart.dayMasterEl,o=otherChart.dayMasterEl;
  const rel=relation(me,o);const c=table[rel];
  const fill=s=>s.replace(/\{M\}/g,EL[me]).replace(/\{O\}/g,EL[o]).replace(/\{A\}/g,A).replace(/\{S\}/g,S);
- return {rel,grade:c.grade,score:c.score,gc:c.gc,letter:c.g,t:fill(c.t),
+ return {rel,grade:c.grade,score:c.score,gc:c.gc,letter:c.g,t:fill(c.t),score2:compatScore(rel,otherChart),
    pills:pil(otherChart.dGan,otherChart.dZhi),paras:c.p.map(fill)};
 }
 function compat(meChart,clientChart){return compatWith(meChart,clientChart,CO,'대표님','발주처');}
@@ -121,9 +121,55 @@ function distHtml(c){const tot=c.dist.reduce((a,b)=>a+b,0);
   return `<div class="dist">${EL.map((e,i)=>`<div class="d"><div class="c" style="color:${EL_HEX[i]}">${e}</div><div class="bar"><div class="fill" style="height:${Math.max(8,Math.round(c.dist[i]/tot*100))}%;background:${EL_HEX[i]}"></div></div><div class="n">${c.dist[i]}</div></div>`).join('')}</div>`;}
 function compatHtml(cm,relLabel){
   const P=a=>a.map(x=>`<p>${x}</p>`).join('');
-  return `<div class="compat"><div class="grade" style="background:${cm.gc}">${cm.letter}</div><div><div class="gt">${cm.grade} · ${cm.score}</div><div class="gs">${relLabel} 일주 <b>${cm.pills}</b></div></div></div>`+P(cm.paras);
+  return `<div class="compat"><div class="grade" style="background:${cm.gc}">${cm.score2}</div><div><div class="gt">${cm.grade} · ${cm.score}</div><div class="gs">${relLabel} 일주 <b>${cm.pills}</b></div></div></div>`+P(cm.paras);
 }
-function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,unlocked,names){
+const GAN_ELc=[0,0,1,1,2,2,3,3,4,4];
+const ZHI_ELc=[4,2,0,0,2,1,1,2,3,3,2,4];
+// 궁합 점수 (0~100, 결정론적)
+const COMPAT_SCORE={in:90,jae:80,bi:64,sik:56,gwan:48};
+function compatScore(rel,otherChart){
+  const j=((otherChart.dGan*7+otherChart.dZhi*3)%9)-4;
+  return Math.max(31,Math.min(97,COMPAT_SCORE[rel]+j));
+}
+// 결과 히어로 (큰 점수 + 후킹 제목) — 무료(방향 기반)
+const REL_SCORE={in:88,bi:74,jae:70,sik:56,gwan:44};
+function heroFor(c,s){
+  const score=Math.max(22,Math.min(96,Math.round(REL_SCORE[s.rel]+(s.pos-50)*0.3)));
+  const up=s.tilt>0;
+  const headline=up
+    ? '오늘, 대표님의 기운이 사정률을 <b>위로</b> 끌어올립니다'
+    : '오늘은 기운이 눌리는 날 — <b>서두르지 않는 자</b>가 잡습니다';
+  return {score,label:'오늘 낙찰 유리도',headline,sub:`${s.dir} · ${up?'상승 흐름':'관망 흐름'}`,up};
+}
+// 회사의 대운 (설립일 사주 기준 10년 주기 · 근사)
+function daeun(legalChart,foundYear,curYear){
+  let mi=0;for(let i=0;i<60;i++){if(i%10===legalChart.mGan&&i%12===legalChart.mZhi){mi=i;break;}}
+  const forward=[0,2,4,6,8].includes(legalChart.yGan); // 년간 양 → 순행
+  const age=Math.max(0,curYear-foundYear);
+  const curBlock=Math.min(7,Math.floor(age/10));
+  const list=[];
+  for(let k=0;k<8;k++){
+    const idx=((mi+(forward?(k+1):-(k+1)))%60+60)%60;
+    const g=idx%10,z=idx%12;
+    list.push({from:k*10,to:k*10+9,gan:g,zhi:z,el:GAN_ELc[g],cur:k===curBlock});
+  }
+  return {forward,age,curBlock,list,me:legalChart.dayMasterEl};
+}
+const DAEUN_REL={in:'회사를 밖에서 밀어주는 기운이 드는 시기 — 자금·수주·인연이 붙습니다',
+ bi:'회사와 같은 기운이 겹치는 시기 — 힘은 세나 경쟁·확장 과열을 조심할 때',
+ jae:'회사가 결실을 거둬들이는 재물의 시기 — 벌이는 것보다 챙기고 굳힐 때',
+ sik:'회사가 힘을 밖으로 쏟는 시기 — 실적은 나되 소모가 크니 관리가 관건',
+ gwan:'회사가 눌리고 조여지는 시기 — 무리한 확장보다 내실·시스템을 다질 때'};
+function daeunSectionHtml(d,legalName){
+  const cur=d.list[d.curBlock];
+  const relc=relation(d.me,cur.el);
+  const cells=d.list.slice(0,6).map(b=>`<div class="dcell${b.cur?' cur':''}"><div class="dg" style="color:${EL_HEX[b.el]}">${GAN[b.gan]}${ZHI[b.zhi]}</div><div class="dy">${b.from}~${b.to}년차</div></div>`).join('');
+  return `<div class="daeun">${cells}</div>`+
+    `<p style="margin-top:12px"><b>${legalName||'회사'}</b>는 설립 <b>${d.age}년차</b> — 지금은 <b>${GAN[cur.gan]}${ZHI[cur.zhi]}(${EL[cur.el]})</b> 대운, ${d.forward?'순행':'역행'}으로 흐릅니다.</p>`+
+    `<p>${DAEUN_REL[relc]}.</p>`+
+    `<p>다음 10년(<b>${d.list[Math.min(7,d.curBlock+1)].from}년차~</b>)엔 <b>${EL[d.list[Math.min(7,d.curBlock+1)].el]}</b> 기운으로 넘어가니, 그 결에 맞춰 확장·정비의 때를 잡으십시오.</p>`;
+}
+function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,unlocked,names,daeunMeta){
   names=names||{};
   const me=c.dayMasterEl,gan=GAN[c.dGan],sip=sipsung(c),dom=argmax(sip);
   let strong=0,weak=0;for(let i=1;i<5;i++){if(c.dist[i]>c.dist[strong])strong=i;if(c.dist[i]<c.dist[weak])weak=i;}
@@ -158,7 +204,9 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     `수주와 자금은 ${WL_V[me]}.`])});
   if(legalChart){const lr=legalReport(c,legalChart);const nm=names.legal?`${names.legal} — `:'';
     secs.push({mk:'法',free:false,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
-      `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});}
+      `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});
+    if(daeunMeta&&daeunMeta.foundYear){const d=daeun(legalChart,daeunMeta.foundYear,daeunMeta.curYear);
+      secs.push({mk:'運',free:false,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal)});}}
   if(clientChart){const cm=compat(c,clientChart);const nm=names.client?`${names.client} — `:'';
     secs.push({mk:'處',free:false,t:`${nm}${cm.t}`,html:compatHtml(cm,`발주처${names.client?' '+names.client:''}`)});}
   if(partnerChart){const cm=compatWith(c,partnerChart,DONGUP,'대표님','동업 상대');
@@ -182,17 +230,19 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
 export type Section = { mk:string; free:boolean; t:string; html:string };
 // 전체(유료 포함) 섹션 — 서버에서 결제 검증된 뒤에만 호출
 export type RelNames = { client?:string; legal?:string; partner?:string; ally?:string };
+export type DaeunMeta = { foundYear?:number; curYear:number };
+export function reportHero(c:Chart, s:Sajeong){ return heroFor(c,s); }
 export function buildFull(
   c:Chart, today:any, s:Sajeong, worry:string,
-  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames
+  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames, daeunMeta?:DaeunMeta
 ):Section[]{
-  return buildReport(c,today,s,worry,cli,legal,partner,ally,true,names) as Section[];
+  return buildReport(c,today,s,worry,cli,legal,partner,ally,true,names,daeunMeta) as Section[];
 }
 // 무료 티어 — 유료 섹션의 html을 제거(placeholder만)하고 정밀값도 삭제해 응답
 export function buildFreeGated(
   c:Chart, today:any, s:Sajeong, worry:string,
-  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames
+  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames, daeunMeta?:DaeunMeta
 ):Section[]{
-  const full = buildReport(c,today,s,worry,cli,legal,partner,ally,false,names) as Section[];
+  const full = buildReport(c,today,s,worry,cli,legal,partner,ally,false,names,daeunMeta) as Section[];
   return full.map(sec => sec.free ? sec : { ...sec, html:'' }); // 유료 텍스트 미전송
 }

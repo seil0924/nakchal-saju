@@ -173,3 +173,19 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .sheet .sumbtns{display:flex;gap:9px;padding:16px 20px 22px}
 .sheet .sumbtns button{flex:1;padding:14px;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:var(--sans);border:1.5px solid #ddd6c6;background:#fff;color:#7c7768}
 .sheet .sumbtns button.ok{background:linear-gradient(135deg,var(--navy),#182c49);color:#fff;border:none}
+
+/* ===== 결과 히어로 (큰 점수 + 후킹 제목) ===== */
+.rhero{background:linear-gradient(160deg,#25406a,#1a2c46);border:1px solid var(--gold2);border-radius:18px;padding:22px 18px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+.rhero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}
+.rhero .hl{color:#fff;font-family:var(--serif);font-weight:900;font-size:18px;line-height:1.45}
+.rhero .hl b{color:var(--gold2)}
+.rhero .num{font-family:var(--serif);font-weight:900;font-size:54px;line-height:1;margin:14px 0 2px}
+.rhero .lab{color:#c3cfe3;font-size:12px;font-weight:600}
+.rhero .sub2{color:var(--gold2);font-size:12.5px;font-weight:700;margin-top:9px;font-family:var(--serif)}
+/* 대운 타임라인 */
+.daeun{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.daeun::-webkit-scrollbar{display:none}
+.daeun .dcell{flex:0 0 auto;min-width:62px;text-align:center;background:#f7f4ec;border:1px solid var(--line);border-radius:10px;padding:9px 6px}
+.daeun .dcell.cur{background:#fbf1d9;border:1.5px solid var(--gold)}
+.daeun .dg{font-family:var(--serif);font-weight:900;font-size:16px}
+.daeun .dy{font-size:9px;color:var(--sub);font-weight:600;margin-top:3px}

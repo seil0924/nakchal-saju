@@ -6,7 +6,8 @@ import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc,
 
 type Section = { mk: string; free: boolean; t: string; html: string };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
-type Result = { reportId: string; title: string; gauge: Gauge; sections: Section[] };
+type Hero = { score: number; label: string; headline: string; sub: string; up: boolean };
+type Result = { reportId: string; title: string; gauge: Gauge; hero: Hero; sections: Section[] };
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
@@ -262,6 +263,14 @@ export default function Reading() {
 
         {res && (
           <div id="rep" style={{ marginTop: 6 }}>
+            {res.hero && (
+              <div className="rhero">
+                <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
+                <div className="num" style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.score}<span style={{ fontSize: 20 }}>점</span></div>
+                <div className="lab">{res.hero.label}</div>
+                <div className="sub2">{res.hero.sub}</div>
+              </div>
+            )}
             <div className="rephd">{res.title}</div>
             <div id="acc">
               {res.sections.map((sec, i) => {

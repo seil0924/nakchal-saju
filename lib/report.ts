@@ -1,7 +1,7 @@
 // lib/report.ts — 명식 입력 → 섹션 리포트 (서버 전용)
 import 'server-only';
 import { chartFromBirth, compute, todayPillar, sajeong, type Chart } from './engine';
-import { buildFull, buildFreeGated, type Section } from './report-copy';
+import { buildFull, buildFreeGated, reportHero, type Section } from './report-copy';
 
 export type ReportInput = {
   name?: string;
@@ -28,6 +28,7 @@ export type ReportResult = {
   title: string;
   dayMaster: number;
   gauge: { dir: string; band: [string, string]; pos: number; precise?: string };
+  hero: { score: number; label: string; headline: string; sub: string; up: boolean };
   sections: Section[];
 };
 
@@ -52,15 +53,17 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean): Report
         partner = dateChart(input.partner), ally = dateChart(input.ally);
 
   const names = { client: input.clientName, legal: input.legalName, partner: input.partnerName, ally: input.allyName };
+  const daeunMeta = input.legal ? { foundYear: parseInt(input.legal.slice(0, 4), 10), curYear: now.getFullYear() } : undefined;
   const sections = unlockedFlag
-    ? buildFull(c, today, s, worry, cli, legal, partner, ally, names)
-    : buildFreeGated(c, today, s, worry, cli, legal, partner, ally, names);
+    ? buildFull(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta)
+    : buildFreeGated(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta);
 
   // ★게이팅: 정밀값(precise)은 잠금 해제 시에만 응답에 포함
   const gauge = unlockedFlag
     ? { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos, precise: s.precise }
     : { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos };
 
+  const hero = reportHero(c, s); // 큰 점수 + 후킹 제목 (무료 · 방향 기반)
   const title = `士가 읽는 ${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
-  return { title, dayMaster: c.dayMasterEl, gauge, sections };
+  return { title, dayMaster: c.dayMasterEl, gauge, hero, sections };
 }

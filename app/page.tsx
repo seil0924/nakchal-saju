@@ -15,8 +15,9 @@ export default function Home() {
     <div className="app home">
       <div className="topbar"><div className="logo"><span className="s">士</span>낙찰사주</div><div className="ic"><Hamburger /></div></div>
 
-      <div className="hero"><div className="kick">運 七 技 三</div>
-        <h2>재주는 갖추셨습니다.<br />그 <b>운칠(運七)</b>을 짚어드립니다</h2>
+      <div className="hero"><div className="kick">運 七 技 三 · 회사 사주 전문</div>
+        <h2>대표와 회사의 사주,<br />그 <b>운칠(運七)</b>을 짚어드립니다</h2>
+        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>낙찰 사정률 · 법인 운세 · 발주처/동업/협정 궁합</div>
       </div>
 
       <div className="sechd" style={{ marginTop: 15 }}><span className="t"><span className="b" />오늘의 사정률 전망</span><span className="m">7/9 · 丙午일</span></div>
