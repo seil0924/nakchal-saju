@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>낙찰사주 · 통합 전체 화면 세트 v5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ec;--card:#fff;--ink:#20242c;--sub:#6f6a5c;--line:#ece7db;--navy:#22406b;--navy2:#232a38;--gold:#b98f3f;--gold2:#e3c27a;--red:#a5241f;--good:#177f5e;--serif:"Noto Serif KR",serif;--sans:"Noto Sans KR",sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#c9c5b9;font-family:var(--sans);color:var(--ink);padding:32px 16px 60px}
+.page-hd{max-width:1560px;margin:0 auto 22px;text-align:center}
+.page-hd h1{font-family:var(--serif);font-size:28px;font-weight:900;color:#232a38}
+.page-hd p{color:#4c4a42;margin-top:8px;font-size:13.5px;line-height:1.7;max-width:840px;margin:8px auto 0}
+.grp{max-width:1560px;margin:26px auto 6px;font-family:var(--serif);font-weight:900;color:#3a3830;font-size:16px;border-bottom:2px solid #aca690;padding-bottom:6px}
+.gal{max-width:1560px;margin:0 auto;display:flex;flex-wrap:wrap;gap:34px 24px;justify-content:flex-start}
+.cell{width:340px}
+.cap{text-align:center;margin-bottom:9px;min-height:44px}
+.cap b{font-family:var(--serif);font-weight:700;color:#2a2a24;font-size:14px}
+.cap .ch{display:inline-block;font-size:9px;font-weight:800;padding:2px 7px;border-radius:6px;margin-left:5px;vertical-align:middle}
+.cap .ch.new{background:#177f5e;color:#fff} .cap .ch.chg{background:#b98f3f;color:#fff}
+.cap span{display:block;font-size:11px;color:#4c4a42;margin-top:3px;line-height:1.45}
+.ph{width:340px;height:740px;background:var(--bg);border-radius:30px;border:1px solid #b6b0a0;box-shadow:0 16px 38px rgba(30,28,20,.32);overflow:hidden;display:flex;flex-direction:column;position:relative}
+.body{flex:1;overflow:auto}
+.body::-webkit-scrollbar{display:none}
+.topbar{background:var(--navy2);display:flex;align-items:center;justify-content:space-between;padding:11px 15px;flex:0 0 auto}
+.topbar .logo{font-family:var(--serif);font-weight:900;color:#fff;font-size:16px;display:flex;align-items:center;gap:6px}
+.topbar .logo .s{width:23px;height:23px;border-radius:7px;border:1px solid var(--gold2);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:12px}
+.topbar .ic{display:flex;gap:13px;color:#c7d2e6;align-items:center}
+.topbar .ic svg{width:18px;height:18px;stroke:#c7d2e6;fill:none;stroke-width:1.7}
+.hero{position:relative;padding:16px 18px;background:linear-gradient(180deg,#25406a,#1c3357)}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}
+.hero .kick{color:var(--gold2);font-family:var(--serif);font-size:11px;letter-spacing:.2em;text-align:center}
+.hero h2{color:#fff;font-family:var(--serif);font-weight:900;font-size:21px;text-align:center;margin-top:7px;line-height:1.35}
+.hero h2 b{color:var(--gold2)}
+.hero .sub{color:#c3cfe3;font-size:12px;text-align:center;margin-top:7px;font-weight:500}
+.sechd{display:flex;align-items:center;justify-content:space-between;margin:15px 15px 8px}
+.sechd .t{font-family:var(--serif);font-weight:700;font-size:14px;color:var(--navy);display:flex;align-items:center;gap:7px}
+.sechd .t .b{width:4px;height:14px;background:var(--gold);border-radius:2px}
+.sechd .m{font-size:11px;color:var(--sub);font-weight:600}
+.card{margin:0 13px 11px;background:var(--card);border-radius:15px;padding:14px 15px;border:1px solid var(--line);box-shadow:0 3px 11px rgba(40,36,20,.05)}
+.st{font-family:var(--serif);font-size:14px;color:var(--navy);font-weight:700;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.st .l{display:flex;align-items:center;gap:7px} .st .l .b{width:4px;height:14px;background:var(--gold);border-radius:2px}
+.chip{font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px}
+.chip.free{background:#e7f4ee;color:var(--good)} .chip.lock{background:#f3ead6;color:#8a6a2a} .chip.anon{background:#eef1f7;color:var(--navy)} .chip.new{background:#fbe9e8;color:var(--red)}
+.val{font-size:32px;font-weight:900;text-align:center;font-family:var(--serif)} .val .u{color:var(--red)}
+.bandtxt{text-align:center;color:var(--sub);font-size:12px;font-weight:500;margin-top:3px}
+.track{height:11px;border-radius:999px;background:#eee7d8;margin-top:13px;position:relative}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,var(--navy),var(--gold) 70%,var(--red))}
+.dot{position:absolute;top:50%;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid var(--red);transform:translate(-50%,-50%);box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.scale{display:flex;justify-content:space-between;color:#9a917a;font-size:10px;margin-top:7px;font-weight:600}
+.inlock{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed #e6ddc9;margin-top:12px;padding-top:10px}
+.inlock .k{font-size:12px;color:#57523f;font-weight:700} .inlock .v{font-family:var(--serif);font-weight:900;font-size:15px;color:var(--ink)} .inlock .v .q{color:#c2b48d;background:#f3ead6;border-radius:6px;padding:0 5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 13px 13px}
+.gc{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.gc .art{height:68px;display:flex;align-items:center;justify-content:center}
+.gc .art .bt{font-family:var(--serif);font-weight:900;font-size:24px;letter-spacing:.06em}
+.gc .info{padding:9px 11px 11px}
+.gc .info h3{font-family:var(--serif);font-size:13.5px;font-weight:700}
+.gc .info p{font-size:10.5px;color:var(--sub);margin-top:3px;line-height:1.4;font-weight:500;min-height:28px}
+.gc .row{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.price{font-size:10.5px;font-weight:700} .price.free{color:var(--good)} .price.paid{color:var(--red)} .price.subp{color:var(--navy)}
+.gc .go{font-size:10.5px;font-weight:700;color:#fff;background:var(--navy);padding:5px 10px;border-radius:999px}
+.persona{margin:0 13px 11px;background:#fff;border-radius:14px;padding:13px 14px;display:flex;gap:11px;align-items:center;border:1px solid var(--line)}
+.persona .av{width:42px;height:42px;border-radius:12px;background:radial-gradient(circle at 35% 30%,#2f4d7d,#1a2c46);border:1px solid var(--gold2);flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:var(--gold2);font-family:var(--serif);font-weight:900;font-size:18px}
+.persona p{font-size:13.5px;color:#33383f;line-height:1.5;font-weight:500} .persona b{color:var(--red);font-weight:700}
+.tease{text-align:center;font-family:var(--serif);font-weight:900;font-size:24px;color:var(--ink);padding:4px 0 0}
+.tease .q{color:#c2b48d;background:#f3ead6;border-radius:7px;padding:0 6px;margin:0 1px}
+.lockrow{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;color:var(--navy);font-weight:700;font-size:12.5px}
+.cta{margin:4px 13px 11px;background:linear-gradient(135deg,var(--red),#7f1a17);color:#fff;text-align:center;padding:15px;border-radius:14px;font-family:var(--serif);font-weight:900;font-size:15.5px;border:1px solid var(--gold2);box-shadow:0 5px 13px rgba(165,36,31,.26)}
+.cta small{display:block;font-family:var(--sans);font-weight:500;font-size:11px;color:#f6d9cd;margin-top:4px}
+.cta.navy{background:linear-gradient(135deg,var(--navy),#182c49)} .cta.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy);box-shadow:none}
+.disc{text-align:center;font-size:10.5px;color:#8d8672;padding:0 16px 13px;line-height:1.6;font-weight:500}
+.kv{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #e6ddc9;font-size:12.5px}
+.kv:last-child{border:none} .kv .k{color:var(--sub);font-weight:600} .kv .v{font-weight:700;color:var(--ink)}
+.msg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
+.msg .col{text-align:center} .msg .lbl{font-size:9.5px;color:var(--sub);font-weight:700;margin-bottom:4px}
+.msg .gan,.msg .ji{font-family:var(--serif);font-weight:900;font-size:18px;border-radius:8px;padding:6px 0;margin-bottom:4px}
+.msg .gan{background:#eef1f7;color:var(--navy)} .msg .ji{background:#f3ead6;color:#8a6a2a}
+.big-score{text-align:center;padding:2px 0} .big-score .s{font-family:var(--serif);font-weight:900;font-size:46px;color:var(--good);line-height:1}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:9px}
+.cal .dh{font-size:9.5px;color:var(--sub);text-align:center;font-weight:700} .cal .dd{height:28px;border-radius:8px;background:#faf7ef;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600;color:#8a8577}
+.cal .dd.gil{background:#fbf1d9;border:1.5px solid var(--gold);color:#7a5c1e;font-weight:800} .cal .dd.mute{background:transparent}
+.legend{display:flex;gap:12px;justify-content:center;font-size:10.5px;color:var(--sub);font-weight:600;margin-top:9px}
+.field{margin:11px 18px 0} .field label{font-size:12px;color:#57523f;font-weight:700;display:block;margin-bottom:6px}
+.field .in{background:#fff;border:1.5px solid #ddd6c6;border-radius:12px;padding:13px;font-size:14.5px;color:var(--ink);display:flex;justify-content:space-between;font-weight:600}
+.field .in.ph{color:#b7b0a0;font-weight:500}
+.seg{display:flex;gap:8px} .seg .s{flex:1;text-align:center;padding:12px 0;border-radius:12px;border:1.5px solid #ddd6c6;background:#fff;font-size:13.5px;font-weight:700;color:#7c7768}
+.seg .s.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.hint{margin:2px 18px 0;font-size:11px;color:var(--good);font-weight:600}
+.assure{display:flex;justify-content:center;gap:13px;margin-top:13px;font-size:11px;color:var(--good);font-weight:700}
+.sheetbg{flex:1;background:rgba(24,28,38,.55);display:flex;flex-direction:column;justify-content:flex-end}
+.sheet{background:var(--bg);border-radius:22px 22px 0 0;padding:8px 0 0}
+.sheet .grab{width:42px;height:5px;border-radius:3px;background:#d5cdb8;margin:6px auto 13px}
+.sheet .shd{text-align:center;padding:0 20px}
+.sheet .shd .av{width:52px;height:52px;border-radius:15px;background:radial-gradient(circle at 35% 30%,#2f4d7d,#1a2c46);border:1.5px solid var(--gold2);display:flex;align-items:center;justify-content:center;color:var(--gold2);font-family:var(--serif);font-weight:900;font-size:22px;margin:0 auto 9px}
+.sheet .shd h3{font-family:var(--serif);font-weight:900;font-size:19px;color:var(--ink);line-height:1.4}
+.sheet .shd p{font-size:12.5px;color:var(--sub);margin-top:6px;font-weight:500;line-height:1.5}
+.filt{display:flex;gap:6px;padding:11px 13px 4px;flex-wrap:wrap}
+.fchip{font-size:11px;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #ddd6c6;color:#7c7768;font-weight:600}
+.fchip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.li{margin:8px 13px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px 12px;display:flex;justify-content:space-between;align-items:center}
+.li .t b{font-size:13px;font-weight:700} .li .t span{display:block;font-size:10.5px;color:var(--sub);margin-top:3px} .li .r{font-size:11px;font-weight:700}
+.pricebox{margin:0 13px 10px;border:1.5px solid #e0d8c6;border-radius:14px;padding:14px;display:flex;justify-content:space-between;align-items:center;background:#fff;position:relative}
+.pricebox.best{border-color:var(--gold);background:linear-gradient(180deg,#fffdf7,#fbf4e4)}
+.pricebox .pl b{font-family:var(--serif);font-size:14.5px} .pricebox .pl span{display:block;font-size:11px;color:var(--sub);margin-top:3px}
+.pricebox .pr b{font-family:var(--serif);font-weight:900;font-size:18px;color:var(--navy)} .pricebox .pr{text-align:right} .pricebox .pr span{display:block;font-size:10px;color:var(--sub)}
+.tag-best{position:absolute;top:-9px;left:13px;font-size:9.5px;background:var(--gold);color:#fff;padding:2px 8px;border-radius:7px;font-weight:800}
+.searchbar{margin:13px;background:#fff;border:1.5px solid #ddd6c6;border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:8px;color:#b7b0a0;font-size:13.5px;font-weight:500}
+.warn{margin:0 13px 11px;background:#fbe9e8;border:1px solid #f0c9c6;border-radius:12px;padding:11px 12px;font-size:12px;color:#7f1a17;font-weight:600;line-height:1.5}
+.amulet{margin:12px auto 6px;width:132px;height:176px;border-radius:12px;background:linear-gradient(180deg,#2a2013,#3a2c19);border:2px solid var(--gold2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--gold2);box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.amulet .sy{font-family:var(--serif);font-size:38px} .amulet .tx{font-family:var(--serif);font-size:12px;letter-spacing:.2em;writing-mode:vertical-rl}
+.setrow{margin:0 13px;background:#fff;border:1px solid var(--line);border-radius:13px}
+.setrow a{display:flex;justify-content:space-between;align-items:center;padding:14px 15px;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none}
+.setrow a:last-child{border:none} .setrow a .r{color:var(--sub);font-size:12px;font-weight:500}
+.tab{display:flex;background:var(--navy2);border-top:2px solid var(--gold);flex:0 0 auto;position:relative;padding-bottom:4px}
+.tab a{flex:1;text-align:center;color:#9fa7b6;font-size:9.5px;padding:8px 0 6px;text-decoration:none;font-weight:600}
+.tab a svg{width:19px;height:19px;stroke:#9fa7b6;fill:none;stroke-width:1.7;display:block;margin:0 auto 3px}
+.tab a.on{color:var(--gold2)} .tab a.on svg{stroke:var(--gold2)}
+.tab .fab{position:absolute;left:50%;top:-19px;transform:translateX(-50%);width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--red),#7f1a17);border:3px solid #f6f3ec;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;box-shadow:0 6px 14px rgba(165,36,31,.4)}
+.tab .fab .fi{font-family:var(--serif);font-weight:900;font-size:15px;line-height:1} .tab .fab .fl{font-size:8px;font-weight:700;margin-top:2px;color:#f6d9cd}
+</style>
+</head>
+<body>
+<div class="page-hd">
+  <h1>낙찰사주 · 통합 전체 화면 세트 v5</h1>
+  <p>확정 구조 반영 19화면 — 발주처 중심 · 지연 입력 · 사정률=사주+일진(공고 무관) · 무료 방향/유료 소수점 · 동업/협정 궁합. 낙찰 결과 데이터 미사용. 반반형 디자인 통일.</p>
+</div>
+<div class="grp">Ⅰ. 진입 · 온보딩</div>
+<div class="gal">
+  <div class="cell">
+    <div class="cap"><b>01 · 첫 메인 (비로그인)</b><span class="ch chg">변경</span><span>로그인·입력 없이 구경 · 봉인 + 5카드</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo"><span class="s">士</span>낙찰사주</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="body">
+        <div class="hero"><div class="kick">運 七 技 三</div><h2>재주는 갖추셨습니다.<br>그 <b>운칠(運七)</b>을 짚어드립니다</h2></div>
+        <div class="sechd" style="margin-top:15px"><span class="t"><span class="b"></span>오늘의 사정률 전망</span><span class="m">7/9 · 丙午일</span></div>
+        <div class="card" style="background:linear-gradient(180deg,#fffdf6,#f6efdd);border-color:#dfd2ac;text-align:center;padding:16px 15px">
+          <div style="width:56px;height:56px;margin:0 auto;border:2.5px solid var(--red);border-radius:11px;color:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:22px;transform:rotate(-6deg);background:rgba(165,36,31,.04)">封</div>
+          <div style="font-family:var(--serif);font-weight:900;font-size:16px;margin-top:11px">내 사주로 보는 오늘의 전망</div>
+          <div style="font-size:11.5px;color:var(--sub);margin-top:5px;font-weight:500">생년월일만 넣으면 바로 열립니다</div>
+          <div class="cta" style="margin:11px 4px 0">오늘의 전망 확인<small>무료 · 로그인/입력은 여기서</small></div>
+        </div>
+        <div class="sechd"><span class="t"><span class="b"></span>해설 보기</span></div>
+        <div class="grid">
+          <div class="gc"><div class="art" style="background:linear-gradient(135deg,#25406a,#182c49)"><span class="bt" style="color:var(--gold2)">사정률</span></div><div class="info"><h3>사정률 뽑기</h3><p>내 사주+일진 · 방향 무료</p><div class="row"><span class="price free">무료</span><span class="go">›</span></div></div></div>
+          <div class="gc"><div class="art" style="background:linear-gradient(135deg,#7f1a17,#a5241f)"><span class="bt" style="color:#f6e7d6">궁합</span></div><div class="info"><h3>발주처 궁합</h3><p>발주처 고르면 상성</p><div class="row"><span class="price paid">첫 990원</span><span class="go">›</span></div></div></div>
+          <div class="gc"><div class="art" style="background:linear-gradient(135deg,#2f4d7d,#1a2c46)"><span class="bt" style="color:var(--gold2)">대표</span></div><div class="info"><h3>대표 사주</h3><p>만세력 · 오늘 기운</p><div class="row"><span class="price free">무료</span><span class="go">›</span></div></div></div>
+          <div class="gc"><div class="art" style="background:linear-gradient(135deg,#3a2c19,#232a38)"><span class="bt" style="color:var(--gold2)">법인</span></div><div class="info"><h3>법인 운세</h3><p>설립일 사주 · 흐름</p><div class="row"><span class="price free">무료</span><span class="go">›</span></div></div></div>
+          <div class="gc" style="grid-column:1/-1"><div class="art" style="height:58px;background:linear-gradient(135deg,#b98f3f,#e3c27a)"><span class="bt" style="color:#2a2013">同業宮合 · 協定</span></div><div class="info"><h3>동업 궁합 <span style="font-size:10.5px;color:var(--sub);font-weight:600">(협정 궁합)</span></h3><p>대표×대표 · 회사×회사 — 손잡기 전 진단</p><div class="row"><span class="price paid">9,900원 ~</span><span class="go">›</span></div></div></div>
+        </div>
+        <div class="disc">명리 기반 참고 정보 · 투찰금액 산정 근거 아님</div>
+      </div>
+      <div class="tab"><a class="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>홈</a><a><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5"/></svg>발주처</a><span class="fab"><span class="fi">士</span><span class="fl">오늘 전망</span></span><a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3"/></svg>보관함</a><a><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>더보기</a></div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>02 · 지연 입력 (대표 생년월일)</b><span class="ch chg">변경</span><span>기능 누른 순간 · 필요한 것만 + 간편가입</span></div>
+    <div class="ph">
+      <div class="topbar" style="opacity:.45"><div class="logo"><span class="s">士</span>낙찰사주</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="sheetbg"><div class="sheet"><div class="grab"></div>
+        <div class="shd"><div class="av">士</div><h3>오늘의 전망을<br>보시려면</h3><p>대표님 생년월일만 있으면 됩니다.<br>회사 정보는 <b style="color:var(--navy)">법인·궁합 볼 때</b> 그때.</p></div>
+        <div class="field"><label>생년월일</label><div class="in">1974. 05. 17</div></div>
+        <div class="field"><label>태어난 시 <span style="color:#b7b0a0;font-weight:500">(모르면 '모름')</span></label><div class="in">卯시 (05:00~07:00) <span style="color:var(--gold)">▾</span></div></div>
+        <div class="field"><label>성별</label><div class="seg"><div class="s on">남</div><div class="s">여</div></div></div>
+        <div class="assure"><span>✓ 무료</span><span>✓ 30초</span><span>✓ 언제든 삭제</span></div>
+        <div class="cta navy" style="margin-top:15px">전망 보기 · 간편가입<small>카카오 3초 · 넣은 정보 재사용</small></div>
+        <div style="text-align:center;font-size:12px;color:#8d8672;padding-bottom:16px;font-weight:600">다음에 할게요</div>
+      </div></div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>03 · 짚는 중 (연출)</b><span>답은 요청한 사람에게만 · 기다림=의례</span></div>
+    <div class="ph">
+      <div class="body" style="background:linear-gradient(180deg,#232a38,#1a2c46);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px">
+        <div style="width:82px;height:82px;border-radius:22px;background:radial-gradient(circle at 35% 30%,#2f4d7d,#15243a);border:2px solid var(--gold2);display:flex;align-items:center;justify-content:center;color:var(--gold2);font-family:var(--serif);font-weight:900;font-size:36px;box-shadow:0 0 40px rgba(227,194,122,.25)">士</div>
+        <div style="color:#fff;font-family:var(--serif);font-weight:900;font-size:20px;margin-top:24px;line-height:1.5">오늘의 전망을<br>산출하고 있습니다</div>
+        <div style="color:var(--gold2);font-size:12.5px;margin-top:13px;font-weight:600;font-family:var(--serif);letter-spacing:.06em">丙午일 일진 · 火 기운 대조 중</div>
+        <div style="display:flex;gap:7px;margin-top:20px"><span style="width:8px;height:8px;border-radius:50%;background:var(--gold2)"></span><span style="width:8px;height:8px;border-radius:50%;background:rgba(227,194,122,.45)"></span><span style="width:8px;height:8px;border-radius:50%;background:rgba(227,194,122,.2)"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>04 · 회사 설립일 추가 시트</b><span class="ch new">신규</span><span>법인 운세·통합 사정률 열 때 그때 추가</span></div>
+    <div class="ph">
+      <div class="topbar" style="opacity:.45"><div class="logo"><span class="s">士</span>낙찰사주</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="sheetbg"><div class="sheet"><div class="grab"></div>
+        <div class="shd"><div class="av">士</div><h3>회사 기운까지<br>합산하려면</h3><p>법인 설립일을 넣으면 <b style="color:var(--navy)">회사+대표 통합</b>으로<br>사정률이 더 정교해집니다.</p></div>
+        <div class="field"><label>회사명</label><div class="in">세일건설(주)</div></div>
+        <div class="field"><label>법인 설립일 <span style="color:#b7b0a0;font-weight:500">(등기 기준)</span></label><div class="in">2015. 03. 02</div></div>
+        <div class="field"><label>회사 주소 <span style="color:#b7b0a0;font-weight:500">(방위 계산 · 선택)</span></label><div class="in ph">주소 검색</div></div>
+        <div class="assure"><span>✓ 한 번만</span><span>✓ 계속 재사용</span></div>
+        <div class="cta navy" style="margin-top:15px">통합 사정률 보기</div>
+        <div style="text-align:center;font-size:12px;color:#8d8672;padding-bottom:16px;font-weight:600">대표 사주만 볼게요</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+<div class="grp">Ⅱ. 데일리 · 사정률</div>
+<div class="gal">
+  <div class="cell">
+    <div class="cap"><b>05 · 오늘 브리핑 홈 (등록 후)</b><span class="ch chg">변경</span><span>재방문 데일리 · 4블록</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo"><span class="s">士</span>낙찰사주</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:15px 18px"><div class="kick">7월 9일 목요일 · 丙午일</div><h2 style="font-size:19px">오세일 대표님,<br>오늘은 <b>기다리는 날</b></h2></div>
+        <div class="persona" style="margin-top:12px"><div class="av">士</div><p>대표 기운은 상승, 법인은 보합 — <b>서두르면 잃고 기다리면 얻는 흐름</b>입니다.</p></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>사정률 성향</span><span class="chip free">방향 무료</span></div>
+          <div class="val" style="font-size:28px">상단 밴드 <span class="u">▲</span></div><div class="bandtxt">이번달 <b style="color:var(--ink)">100~101%</b>에 무게</div>
+          <div class="track"><div class="fill" style="width:73%"></div><div class="dot" style="left:73%"></div></div>
+          <div class="inlock"><span class="k">🔒 소수점 정밀값</span><span class="v">100.<span class="q">3?</span>%</span></div></div>
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <div class="gc"><div class="art" style="height:52px;background:linear-gradient(135deg,#2f4d7d,#1a2c46)"><span class="bt" style="font-size:20px;color:var(--gold2)">대표 ▲</span></div><div class="info"><h3>대표 사주</h3><p>상승 · 결단 유리</p></div></div>
+          <div class="gc"><div class="art" style="height:52px;background:linear-gradient(135deg,#3a2c19,#232a38)"><span class="bt" style="font-size:20px;color:var(--gold2)">법인 —</span></div><div class="info"><h3>법인 운세</h3><p>보합 · 확장 자제</p></div></div>
+        </div>
+        <div class="cta" style="margin-top:2px">소수점 · 통합 리포트 열기<small>첫 990원 (이후 1,900원)</small></div>
+      </div>
+      <div class="tab"><a class="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>홈</a><a><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5"/></svg>발주처</a><span class="fab"><span class="fi">吉</span><span class="fl">부적 받기</span></span><a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3"/></svg>보관함</a><a><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>더보기</a></div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>06 · 사정률 통합 리포트 (무료)</b><span class="ch new">신규</span><span>방향+좁힌 밴드 무료 / 소수점 잠금</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 오늘의 사정률</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:14px 18px"><div class="kick">査定率 展望</div><h2 style="font-size:18px">오세일 대표님<br>이번달 <b>상단 밴드</b>에 강합니다</h2><div class="sub" style="margin-top:5px">회사·대표 사주 + 7/9 丙午일</div></div>
+        <div class="card" style="margin-top:12px"><div class="st"><span class="l"><span class="b"></span>오늘의 사정률 성향</span><span class="chip free">방향 무료</span></div>
+          <div class="val" style="font-size:29px">상단 밴드 <span class="u">▲</span></div><div class="bandtxt">이번달은 <b style="color:var(--ink)">100~101%</b>에 무게 · 하단 리스크 낮음</div>
+          <div class="track"><div class="fill" style="width:73%"></div><div class="dot" style="left:73%"></div></div><div class="scale"><span>98%</span><span>기초 100%</span><span>102%</span></div>
+          <div class="inlock"><span class="k">🔒 소수점 정밀값</span><span class="v">100.<span class="q">3?</span>%</span></div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>대표 사주 요약</span><span class="chip free">무료</span></div>
+          <div class="kv"><span class="k">일간</span><span class="v">甲(木) · 용신 火</span></div><div class="kv"><span class="k">오늘 기운</span><span class="v" style="color:var(--red)">木生火 · 상승</span></div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>법인 사주 요약</span><span class="chip lock">회사정보 필요</span></div>
+          <div class="bandtxt" style="text-align:left">설립일을 넣으면 회사 기운까지 합산해 사정률이 더 정교해집니다.</div>
+          <div class="lockrow" style="justify-content:flex-start">＋ 회사 설립일 추가</div></div>
+        <div class="cta">소수점 정밀값 · 통합 리포트 열기<small>첫 990원 (이후 1,900원)</small></div>
+        <div class="disc">사정률은 명리 기운상 유리한 밴드를 안내하는 참고 정보입니다.</div>
+      </div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>07 · 통합 리포트 (열람 후)</b><span class="ch new">신규</span><span>소수점 열림 + 대표·법인 통합</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 통합 리포트</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12v7h16v-7M12 3v13M8 12l4 4 4-4"/></svg></div></div>
+      <div class="body">
+        <div class="card" style="margin-top:12px"><div class="st"><span class="l"><span class="b"></span>정밀 사정률</span><span class="chip new">열람</span></div>
+          <div class="val" style="color:var(--navy);font-size:30px">100.28 <span style="font-size:15px;color:var(--sub)">~</span> 100.42<span style="font-size:17px">%</span></div>
+          <div class="bandtxt">중심값 100.35% · 상단 우세</div>
+          <div class="track"><div class="fill" style="left:53%;width:14%"></div></div><div class="scale"><span>98%</span><span>100%</span><span>102%</span></div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>산출 근거</span></div>
+          <div class="kv"><span class="k">오늘 일진</span><span class="v">丙午 · 火 상승</span></div>
+          <div class="kv"><span class="k">대표 사주</span><span class="v">甲(木) — 火를 생함</span></div>
+          <div class="kv"><span class="k">법인 사주</span><span class="v">庚(金) — 火에 눌림</span></div>
+          <div class="kv"><span class="k">합산 해석</span><span class="v" style="color:var(--red)">위로 뻗되 과속 금지</span></div></div>
+        <div class="persona"><div class="av">士</div><p>대표 기운이 법인을 끌어올리는 형국입니다. <b>상단이되 최상단은 무리</b> — 100.3대에 무게를 두십시오.</p></div>
+        <div class="warn">⚠ 명리 기반 참고 정보입니다. 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
+      </div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>08 · 페이월 (결제만)</b><span class="ch chg">변경</span><span>사정률 소수점·통합리포트 · 투명</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 리포트 열기</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:16px 18px"><h2 style="font-size:18px">오늘 사정률의<br><b>정밀값</b>을 엽니다</h2></div>
+        <div class="sechd"><span class="t"><span class="b"></span>열리는 내용</span></div>
+        <div class="card" style="padding:6px 15px"><div class="kv"><span class="k">소수점 정밀 구간·중심값</span><span class="v" style="color:var(--good)">열림</span></div>
+          <div class="kv"><span class="k">회사+대표 통합 산출 근거</span><span class="v" style="color:var(--good)">열림</span></div>
+          <div class="kv"><span class="k">士 총평</span><span class="v" style="color:var(--good)">열림</span></div></div>
+        <div class="sechd"><span class="t"><span class="b"></span>선택</span></div>
+        <div class="pricebox"><div class="pl"><b>오늘 열람</b><span>당일 · 보관함 영구 저장</span></div><div class="pr"><b>990원</b><span>첫 열람가 · 이후 1,900원</span></div></div>
+        <div class="pricebox best"><span class="tag-best">BEST · 매일 보는 분</span><div class="pl"><b>월 정기 이용</b><span>사정률·궁합·월간 리포트·길일 알림</span></div><div class="pr"><b>9,900원</b><span>월 · 언제든 해지</span></div></div>
+        <div style="text-align:center;font-size:11px;color:#57523f;font-weight:600;padding:2px 18px 10px;line-height:1.6"><b style="color:var(--good)">✓ 자동결제 아님 · ✓ 열람 전 100% 환불</b> · 결제 금액은 위 표기가 전부</div>
+        <div class="cta">990원 결제 후 열람</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grp">Ⅲ. 대표 · 법인 사주</div>
+<div class="gal">
+  <div class="cell">
+    <div class="cap"><b>09 · 대표 사주 상세</b><span>만세력 명식 + 오늘 기운</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 대표 사주</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:14px 18px"><div class="kick">四 柱 · 萬歲曆</div><h2 style="font-size:18px">오세일 대표님<br><b>오늘의 기운</b></h2><div class="sub" style="margin-top:5px">1974.05.17 卯시 · 木일간</div></div>
+        <div class="card" style="margin-top:12px"><div class="st"><span class="l"><span class="b"></span>사주 명식</span></div>
+          <div class="msg"><div class="col"><div class="lbl">시</div><div class="gan">丁</div><div class="ji">卯</div></div><div class="col"><div class="lbl">일</div><div class="gan" style="outline:2px solid var(--red)">甲</div><div class="ji">寅</div></div><div class="col"><div class="lbl">월</div><div class="gan">己</div><div class="ji">巳</div></div><div class="col"><div class="lbl">년</div><div class="gan">甲</div><div class="ji">寅</div></div></div>
+          <div class="bandtxt" style="margin-top:9px">일간 <b style="color:var(--red)">甲(木)</b> · 용신 火 · 희신 木</div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>오늘의 기운</span><span class="chip free">무료</span></div>
+          <div class="kv"><span class="k">오늘 일진</span><span class="v">丙午 · 火 왕성</span></div><div class="kv"><span class="k">일간과 관계</span><span class="v" style="color:var(--red)">木生火 — 상승</span></div><div class="kv"><span class="k">종합</span><span class="v">결단·추진 유리</span></div></div>
+        <div class="persona"><div class="av">士</div><p>목(木)이 화(火)를 낳아 <b>기운이 위로 뻗는 날</b>입니다. 결단은 오늘, 다만 서두르진 마십시오.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>10 · 법인 운세 상세</b><span>설립일 사주 + 상호 수리오행</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 법인 운세</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:14px 18px"><div class="kick">法 人 四 柱</div><h2 style="font-size:18px">세일건설(주)<br><b>회사의 오늘</b></h2><div class="sub" style="margin-top:5px">2015.03.02 설립 · 金 기운</div></div>
+        <div class="card" style="margin-top:12px"><div class="st"><span class="l"><span class="b"></span>법인 명식 · 설립일(삼주)</span></div>
+          <div class="msg" style="grid-template-columns:repeat(3,1fr)"><div class="col"><div class="lbl">일</div><div class="gan">庚</div><div class="ji">申</div></div><div class="col"><div class="lbl">월</div><div class="gan">己</div><div class="ji">卯</div></div><div class="col"><div class="lbl">년</div><div class="gan">乙</div><div class="ji">未</div></div></div>
+          <div class="bandtxt" style="margin-top:9px">법인 기운 <b style="color:#8a6a2a">庚(金)</b> · 상호 획수 길격(吉格)</div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>오늘의 회사 흐름</span><span class="chip free">무료</span></div>
+          <div class="kv"><span class="k">오늘 일진</span><span class="v">丙午 · 火</span></div><div class="kv"><span class="k">법인 기운과 관계</span><span class="v" style="color:var(--navy)">火克金 — 눌림, 보합</span></div><div class="kv"><span class="k">종합</span><span class="v">무리한 확장 불리</span></div></div>
+        <div class="persona"><div class="av">士</div><p>대표 기운은 오르나 <b>법인은 눌리는 날</b>입니다. 오늘은 대표님 개인기로 밀되, 회사 차원 큰 무리는 삼가십시오.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grp">Ⅳ. 발주처</div>
+<div class="gal">
+  <div class="cell">
+    <div class="cap"><b>11 · 발주처 검색 · 선택</b><span class="ch new">신규</span><span>공고 대신 발주처에서 시작</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo"><span class="s">士</span>발주처</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="body">
+        <div class="searchbar"><svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#b7b0a0;fill:none;stroke-width:1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> 발주처 이름으로 검색</div>
+        <div class="sechd"><span class="t"><span class="b"></span>오늘 나와 궁합 좋은 발주처</span></div>
+        <div class="li"><div class="t"><b>한국도로공사</b><span>1969 설립 · 오늘 상성 상생</span></div><div class="r" style="color:var(--good)">82</div></div>
+        <div class="li"><div class="t"><b>한국수자원공사</b><span>1967 설립 · 오늘 상성 양호</span></div><div class="r" style="color:var(--good)">76</div></div>
+        <div class="li"><div class="t"><b>한국토지주택공사(LH)</b><span>2009 출범 · 오늘 상성 보통</span></div><div class="r" style="color:var(--gold)">61</div></div>
+        <div class="sechd"><span class="t"><span class="b"></span>많이 찾는 발주처</span></div>
+        <div class="li"><div class="t"><b>서울특별시교육청</b><span>1964 설립 · 오늘 상성 보통</span></div><div class="r" style="color:var(--gold)">58</div></div>
+        <div class="li"><div class="t"><b>조달청</b><span>1949 설립 · 오늘 상성 양호</span></div><div class="r" style="color:var(--good)">70</div></div>
+        <div class="disc">발주처 설립일은 자체 구축 DB(상위 기관 수기 검증).</div>
+      </div>
+      <div class="tab"><a><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>홈</a><a class="on"><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5"/></svg>발주처</a><span class="fab"><span class="fi">士</span><span class="fl">오늘 전망</span></span><a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3"/></svg>보관함</a><a><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>더보기</a></div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>12 · 발주처 상세 (궁합)</b><span class="ch new">신규</span><span>궁합=명식(고정)+일진(변동)</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 한국도로공사</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-7-10a7 7 0 0 1 14 0c0 5.5-7 10-7 10z"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:15px 18px 16px"><div class="kick">發注處 宮合</div><h2 style="font-size:18px">세일건설(주) ×<br>한국도로공사</h2><div class="sub" style="margin-top:6px">1969 己酉 설립 · 서쪽(오늘 길방)</div></div>
+        <div class="card" style="margin-top:12px;text-align:center"><div style="display:inline-block;background:#e7f4ee;color:var(--good);font-weight:800;font-size:11px;padding:4px 13px;border-radius:999px;font-family:var(--serif)">오늘 상생</div>
+          <div class="big-score"><div class="s">82</div></div><div class="bandtxt" style="margin-top:2px">명식 상성 76 <b>＋오늘 일진 +6</b> · 날마다 달라집니다</div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>상성 풀이</span><span class="chip lock">상세 유료</span></div>
+          <div class="kv"><span class="k">오행 상성</span><span class="v" style="color:var(--good)">발주처 金 → 당사 水(생)</span></div><div class="kv"><span class="k">한줄</span><span class="v">오늘 밀어붙일 발주처</span></div></div>
+        <div class="cta">상성 상세 · 궁합 열기<small>첫 990원 · 명식 풀이 + 투찰 길일</small></div>
+        <div class="disc">발주처 명식과 오늘 일진으로 산출한 명리 기반 참고 정보입니다.</div>
+      </div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>13 · 발주처 궁합 상세 (열람 후)</b><span class="ch new">신규</span><span>명식 풀이 + 투찰 길일 캘린더</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 궁합 상세</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12v7h16v-7M12 3v13M8 12l4 4 4-4"/></svg></div></div>
+      <div class="body">
+        <div class="card" style="margin-top:12px"><div class="st"><span class="l"><span class="b"></span>명식 대조</span><span class="chip new">열람</span></div>
+          <div class="kv"><span class="k">발주처</span><span class="v">1969 己酉 · 金</span></div><div class="kv"><span class="k">당사</span><span class="v">2015 乙未 · 水기 보강</span></div><div class="kv"><span class="k">상성</span><span class="v" style="color:var(--good)">金生水 — 상생</span></div><div class="kv"><span class="k">방위</span><span class="v">서쪽 · 오늘 길방</span></div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>투찰 길일 · 7월</span></div>
+          <div class="cal"><span class="dh">일</span><span class="dh">월</span><span class="dh">화</span><span class="dh">수</span><span class="dh">목</span><span class="dh">금</span><span class="dh">토</span>
+            <span class="dd mute"></span><span class="dd mute"></span><span class="dd mute"></span><span class="dd">1</span><span class="dd">2</span><span class="dd">3</span><span class="dd">4</span>
+            <span class="dd">5</span><span class="dd">6</span><span class="dd">7</span><span class="dd">8</span><span class="dd gil">9</span><span class="dd">10</span><span class="dd">11</span>
+            <span class="dd">12</span><span class="dd">13</span><span class="dd">14</span><span class="dd">15</span><span class="dd gil">16</span><span class="dd">17</span><span class="dd">18</span>
+            <span class="dd">19</span><span class="dd">20</span><span class="dd">21</span><span class="dd">22</span><span class="dd gil">23</span><span class="dd">24</span><span class="dd">25</span>
+            <span class="dd">26</span><span class="dd">27</span><span class="dd">28</span><span class="dd">29</span><span class="dd gil">30</span><span class="dd">31</span><span class="dd mute"></span></div>
+          <div class="legend"><i style="color:#7a5c1e">■ 길일</i></div></div>
+        <div class="card" style="padding:6px 15px"><div class="kv"><span class="k">유리한 요일</span><span class="v" style="color:var(--red)">목요일</span></div><div class="kv"><span class="k">권장 시간대</span><span class="v">10:20~마감</span></div><div class="kv"><span class="k">유의</span><span class="v">저가 투찰 불리</span></div></div>
+        <div class="disc">보관함 저장 · 개찰 후 자동 대조 · 명리 기반 참고 정보</div>
+      </div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>14 · 관심 발주처 (발주처 탭)</b><span class="ch chg">변경</span><span>옛 '내 공고' 대체</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo"><span class="s">士</span>발주처</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      <div class="body">
+        <div class="filt"><span class="fchip on">관심</span><span class="fchip">상생순</span><span class="fchip">최근 본</span></div>
+        <div class="li"><div class="t"><b>한국도로공사</b><span>오늘 궁합 82 · 상생</span></div><div class="r" style="color:var(--good)">상생</div></div>
+        <div class="li"><div class="t"><b>서울시교육청</b><span>오늘 궁합 58 · 보통</span></div><div class="r" style="color:var(--gold)">보통</div></div>
+        <div class="li"><div class="t"><b>LH공사</b><span>오늘 궁합 47 · 상극</span></div><div class="r" style="color:#b0605c">상극</div></div>
+        <div style="text-align:center;margin:14px"><span style="display:inline-block;background:var(--navy);color:#fff;font-weight:700;font-size:13px;padding:11px 18px;border-radius:12px">+ 발주처 추가</span></div>
+      </div>
+      <div class="tab"><a><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>홈</a><a class="on"><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5"/></svg>발주처</a><span class="fab"><span class="fi">士</span><span class="fl">오늘 전망</span></span><a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3"/></svg>보관함</a><a><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>더보기</a></div>
+    </div>
+  </div>
+</div>
+<div class="grp">Ⅴ. 궁합 (관계형)</div>
+<div class="gal">
+  <div class="cell">
+    <div class="cap"><b>15 · 궁합 진입 (두 갈래)</b><span>동업(대표×대표) / 협정(회사×회사)</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 궁합 보기</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:16px 18px"><div class="kick">宮 合</div><h2 style="font-size:19px">누구와의 궁합을<br>보시겠습니까</h2></div>
+        <div class="card" style="margin-top:13px"><div style="display:flex;align-items:center;gap:11px"><div style="width:46px;height:46px;border-radius:13px;background:#eef1f7;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg viewBox="0 0 24 24" style="width:23px;height:23px;stroke:var(--navy);fill:none;stroke-width:1.7"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 5-5s5 2 5 5M13 19c.5-2.5 2.5-4 4-4s3.5 1.2 4 4"/></svg></div><div style="flex:1"><div style="font-family:var(--serif);font-weight:700;font-size:15px">동업 궁합 <span style="font-size:11px;color:var(--sub);font-weight:600">· 대표 × 대표</span></div><div style="font-size:11.5px;color:var(--sub);margin-top:3px;font-weight:500">두 사람이 손발 맞을지</div></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:11px;border-top:1px dashed #e6ddc9;padding-top:10px"><span style="font-size:11.5px;color:var(--sub);font-weight:600">사람 궁합 · 가볍게</span><span style="font-family:var(--serif);font-weight:900;color:var(--navy);font-size:15px">9,900원</span></div></div>
+        <div class="card" style="border-color:var(--gold);background:linear-gradient(180deg,#fffdf7,#fbf4e4);position:relative"><span style="position:absolute;top:-9px;left:15px;font-size:9.5px;background:var(--gold);color:#fff;padding:2px 8px;border-radius:7px;font-weight:800">풀 진단서</span>
+          <div style="display:flex;align-items:center;gap:11px"><div style="width:46px;height:46px;border-radius:13px;background:#f3ead6;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg viewBox="0 0 24 24" style="width:23px;height:23px;stroke:#8a6a2a;fill:none;stroke-width:1.7"><path d="M4 21V8l5-3v3l5-3v16M9 21v-4h4v4M20 21V11l-6-3"/></svg></div><div style="flex:1"><div style="font-family:var(--serif);font-weight:700;font-size:15px">협정 궁합 <span style="font-size:11px;color:var(--sub);font-weight:600">· 회사 × 회사</span></div><div style="font-size:11.5px;color:var(--sub);margin-top:3px;font-weight:500">함께 잘 굴러갈지 · <b style="color:#8a6a2a">대표 궁합 포함</b></div></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:11px;border-top:1px dashed #e2d6b8;padding-top:10px"><span style="font-size:11.5px;color:#8a6a2a;font-weight:700">회사+대표 · 주관사·리스크·길일</span><span style="font-family:var(--serif);font-weight:900;color:var(--red);font-size:15px">39,000원</span></div></div>
+        <div class="disc">공동도급 검토 시 협정 궁합 권장 — 회사 상성 + 두 대표 궁합 함께.</div>
+      </div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>16 · 동업 궁합 진단서 (대표×대표)</b><span>두 사람 만세력 상성 · 9,900원</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 동업 궁합</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12v7h16v-7M12 3v13M8 12l4 4 4-4"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:15px 18px 16px"><div class="kick">同 業 宮 合 · 人</div><h2 style="font-size:18px">두 분, <b>손발이 맞습니다</b></h2><div class="sub" style="margin-top:6px">오세일 대표 × 김대영 대표</div></div>
+        <div class="card" style="margin-top:12px;text-align:center"><div style="display:inline-block;background:#e7f4ee;color:var(--good);font-family:var(--serif);font-weight:800;font-size:11px;padding:4px 13px;border-radius:999px">양호한 동업</div><div class="big-score"><div class="s">74</div></div><div style="font-size:11px;color:var(--sub);margin-top:5px;font-weight:500">木 × 水 — 서로를 살리나 성향 조율 필요</div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>사람 궁합</span></div><div class="kv"><span class="k">두 대표 상성</span><span class="v" style="color:var(--good)">양호 (木生水)</span></div><div class="kv"><span class="k">성향</span><span class="v">추진형 × 관리형</span></div><div class="kv"><span class="k">유형</span><span class="v">역할 보완형</span></div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>유의 · 2</span></div><div style="font-size:12px;color:#4c4a42;line-height:1.55;font-weight:500"><div style="display:flex;gap:8px;padding:4px 0"><span style="color:var(--red);font-weight:800">①</span> 둘 다 결단 강 — 권한을 미리 나누십시오.</div><div style="display:flex;gap:8px;padding:4px 0;border-top:1px dashed #e6ddc9"><span style="color:var(--red);font-weight:800">②</span> 돈 문제엔 정산 원칙을 문서로.</div></div></div>
+        <div class="cta navy">회사 궁합까지 · 협정 궁합 ▶<small>회사×회사 + 이 진단 포함 · 39,000원</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>17 · 협정 궁합 진단서 (회사×회사)</b><span>두 회사 설립일 사주 + 대표 궁합 포함 · 39,000원</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo" style="font-size:15px"><span style="color:#c7d2e6;margin-right:4px">‹</span> 협정 궁합</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12v7h16v-7M12 3v13M8 12l4 4 4-4"/></svg></div></div>
+      <div class="body">
+        <div class="hero" style="padding:15px 18px 16px"><div class="kick">同業宮合 · 協定</div><h2 style="font-size:18px">함께 가도<br><b>좋은 결합</b>입니다</h2><div class="sub" style="margin-top:6px">세일건설(주) × 대영토건(주)</div></div>
+        <div class="card" style="margin-top:12px;text-align:center"><div style="display:inline-block;background:#e7f4ee;color:var(--good);font-family:var(--serif);font-weight:800;font-size:11px;padding:4px 13px;border-radius:999px">상생형 협정</div><div class="big-score"><div class="s">78</div></div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:9px;margin-top:8px"><div style="text-align:center"><div style="font-family:var(--serif);font-weight:800;color:var(--navy);font-size:13px">대영토건</div><div style="font-size:10px;color:var(--sub)">金</div></div><div style="font-family:var(--serif);color:var(--gold);font-size:11px;font-weight:800">— 生 →</div><div style="text-align:center"><div style="font-family:var(--serif);font-weight:800;color:var(--navy);font-size:13px">세일건설</div><div style="font-size:10px;color:var(--sub)">水</div></div></div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>회사 궁합 · 역할</span></div><div class="kv"><span class="k">오행 상성</span><span class="v" style="color:var(--good)">상생 (金→水)</span></div><div class="kv"><span class="k">주관사 권장</span><span class="v" style="color:var(--red)">세일건설(주)</span></div><div class="kv"><span class="k">지분 방향</span><span class="v">세일 우위 안정</span></div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>대표 궁합</span><span class="chip free">포함</span></div><div class="kv"><span class="k">두 대표 상성</span><span class="v" style="color:var(--good)">양호 74</span></div><div class="kv"><span class="k">주의</span><span class="v">결단 강 — 권한 분장</span></div></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>유의 · 체결 길일</span></div><div style="font-size:12px;color:#4c4a42;line-height:1.5;font-weight:500;margin-bottom:6px">정산 조건 명문화 · 공기 후반 관재수 주의</div><div class="kv"><span class="k">체결 길일</span><span class="v" style="color:var(--red)">7/16(목) · 23(목)</span></div></div>
+        <div class="disc">PDF 저장·상대사 공유 · 계약 판단 근거 아님</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grp">Ⅵ. 리추얼 · 계정</div>
+<div class="gal">
+  <div class="cell">
+    <div class="cap"><b>18 · 투찰 직전 리추얼</b><span>부적 · 주문 · 경고 · 택시</span></div>
+    <div class="ph">
+      <div class="topbar" style="background:#2a2013"><div class="logo" style="font-size:15px"><span style="color:#e3c27a;margin-right:4px">‹</span> 기 모으기</div><div class="ic"><svg viewBox="0 0 24 24" style="stroke:#e3c27a"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div></div>
+      <div class="body" style="background:linear-gradient(180deg,#f6f3ec,#efe7d6)">
+        <div class="sechd"><span class="t"><span class="b"></span>오늘의 부적</span><span class="m">투찰 D-15h</span></div>
+        <div class="amulet"><div class="sy">吉</div><div class="tx">落札大吉</div></div>
+        <div style="text-align:center;font-size:11.5px;color:var(--sub);margin-top:2px">길게 눌러 저장 · 폰 배경화면</div>
+        <div class="persona" style="margin-top:12px"><div class="av">士</div><p>"<b>마감 10분 전에 기운이 튼다.</b> 조급함을 버리고 그때 손을 쓰라."</p></div>
+        <div class="card"><div class="st"><span class="l"><span class="b"></span>투찰 택시(擇時)</span></div><div class="kv"><span class="k">권장 시간대</span><span class="v" style="color:var(--red)">10:20 ~ 마감(11:00)</span></div></div>
+        <div class="warn">⚠ 오늘 무리한 저가 투찰은 관재수(官災數)를 부릅니다. 하한선을 지키십시오.</div>
+      </div>
+      <div class="cta navy" style="margin:0 13px 11px">기 모으기 완료</div>
+    </div>
+  </div>
+  <div class="cell">
+    <div class="cap"><b>19 · 더보기 · 설정</b><span class="ch new">신규</span><span>프로필·회사·구독·알림</span></div>
+    <div class="ph">
+      <div class="topbar"><div class="logo"><span class="s">士</span>더보기</div><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1l-.3-2.5h-4l-.3 2.5a7 7 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7 7 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5a7 7 0 0 0 .1-1z"/></svg></div></div>
+      <div class="body">
+        <div class="card" style="display:flex;align-items:center;gap:12px;margin-top:12px"><div style="width:48px;height:48px;border-radius:14px;background:radial-gradient(circle at 35% 30%,#2f4d7d,#1a2c46);border:1px solid var(--gold2);display:flex;align-items:center;justify-content:center;color:var(--gold2);font-family:var(--serif);font-weight:900;font-size:20px">士</div><div><div style="font-family:var(--serif);font-weight:700;font-size:15px">오세일 대표님</div><div style="font-size:11.5px;color:var(--sub);margin-top:2px">세일건설(주) · 월 정기 이용중</div></div></div>
+        <div class="sechd"><span class="t"><span class="b"></span>내 정보</span></div>
+        <div class="setrow"><a>대표 사주 정보<span class="r">1974.05.17 卯시 ›</span></a><a>회사 정보<span class="r">세일건설(주) ›</span></a><a>회사 주소·방위<span class="r">미입력 ›</span></a></div>
+        <div class="sechd"><span class="t"><span class="b"></span>이용</span></div>
+        <div class="setrow"><a>구독 관리<span class="r">월 9,900원 ›</span></a><a>알림 설정<span class="r">아침 전망·길일 ›</span></a><a>보관함<span class="r">›</span></a></div>
+        <div class="sechd"><span class="t"><span class="b"></span>기타</span></div>
+        <div class="setrow"><a>이용약관·면책<span class="r">›</span></a><a>고객센터<span class="r">›</span></a><a style="color:var(--sub)">로그아웃</a></div>
+      </div>
+      <div class="tab"><a><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>홈</a><a><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5"/></svg>발주처</a><span class="fab"><span class="fi">士</span><span class="fl">오늘 전망</span></span><a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3"/></svg>보관함</a><a class="on"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>더보기</a></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

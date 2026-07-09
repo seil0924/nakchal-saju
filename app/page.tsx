@@ -46,7 +46,9 @@ export default function Home() {
         </Link>
       </div>
 
-      <div className="hdisc">명리 기반 참고 정보 · 투찰금액 산정 근거 아님</div>
+      <div className="hdisc">명리 기반 참고 정보 · 투찰금액 산정 근거 아님<br />
+        <a href="/prototype.html" style={{ color: 'var(--navy)', textDecoration: 'underline' }}>전체 화면 세트(19) 미리보기 →</a>
+      </div>
 
       <div className="tab">
         <a className="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</a>
