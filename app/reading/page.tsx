@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { PRICE_FIRST, PRICE_REGULAR, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
@@ -10,6 +10,16 @@ type Result = { reportId: string; title: string; gauge: Gauge; sections: Section
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
+
+// 관계 유형 (사주아이식: 유형 선택 → 대상 저장/재사용)
+const REL_KINDS = [
+  { key: 'client', label: '발주처 궁합', sub: '설립일', ph: '예) 한국도로공사' },
+  { key: 'partner', label: '동업 궁합', sub: '생년월일', ph: '예) 김대영 대표' },
+  { key: 'ally', label: '협정 궁합', sub: '회사 설립일', ph: '예) 대영토건(주)' },
+] as const;
+type RelKind = 'client' | 'partner' | 'ally';
+type Target = { kind: RelKind; name: string; date: string };
+const LS_KEY = 'nakchal_saved_targets_v1';
 
 export default function Reading() {
   const [f, setF] = useState({
@@ -27,6 +37,26 @@ export default function Reading() {
   const [err, setErr] = useState('');
   const [consent, setConsent] = useState(false);
   const set = (k: string, v: any) => setF(s => ({ ...s, [k]: v }));
+
+  // 관계 대상: 추가 목록 + 저장(재사용)
+  const [targets, setTargets] = useState<Target[]>([]);
+  const [addKind, setAddKind] = useState<RelKind>('client');
+  const [addName, setAddName] = useState('');
+  const [addDate, setAddDate] = useState('');
+  const [saved, setSaved] = useState<Target[]>([]);
+  useEffect(() => { try { const s = localStorage.getItem(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
+  function persistSaved(list: Target[]) { setSaved(list); try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch {} }
+  function addTarget() {
+    if (!addDate) { setErr('대상의 날짜를 넣어주세요.'); return; }
+    setErr('');
+    const t: Target = { kind: addKind, name: addName.trim() || REL_KINDS.find(k => k.key === addKind)!.label, date: addDate };
+    setTargets(prev => [...prev.filter(x => x.kind !== t.kind), t]); // 유형별 1개
+    if (!saved.some(x => x.kind === t.kind && x.name === t.name && x.date === t.date)) persistSaved([t, ...saved].slice(0, 12));
+    setAddName(''); setAddDate('');
+  }
+  const removeTarget = (kind: RelKind) => setTargets(prev => prev.filter(x => x.kind !== kind));
+  const quickFill = (t: Target) => { setAddKind(t.kind); setAddName(t.name); setAddDate(t.date); };
+  const kindLabel = (k: RelKind) => REL_KINDS.find(r => r.key === k)!.label;
 
   const effTime = f.timeMode === 'Y' ? f.time : f.timeMode === 'grid' ? SIJIN_MID[f.sijin] : null;
   const situation = [f.bidType, f.condition].filter(Boolean).join(' · ');
@@ -56,10 +86,14 @@ export default function Reading() {
   async function run() {
     setConfirm(false); setBusy(true); setUnlocked(false);
     try {
+      const tg = (k: RelKind) => targets.find(t => t.kind === k);
       const body = {
         name: f.name, birth: f.birth, time: f.timeMode === 'N' ? null : effTime,
         cal: f.cal, leap: f.leap,
-        legal: f.legal || null, client: f.client || null, partner: f.partner || null, ally: f.ally || null,
+        legal: f.legal || null, legalName: f.company || undefined,
+        client: tg('client')?.date || null, clientName: tg('client')?.name,
+        partner: tg('partner')?.date || null, partnerName: tg('partner')?.name,
+        ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
         situation, worry: f.worry,
       };
       const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
@@ -188,15 +222,38 @@ export default function Reading() {
           <div className="note">※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.</div>
         </div>
 
-        {/* 4. 관계 진단 (선택) */}
+        {/* 4. 관계·궁합 (사주아이식: 유형 선택 → 대상 저장·재사용) */}
         <div className="card">
-          <div className="st"><span className="l"><span className="b" />관계 진단</span><span className="opt">선택</span></div>
-          <label>발주처 설립일 <span className="opt">· 발주처 궁합</span></label>
-          <input type="date" value={f.client} onChange={e => set('client', e.target.value)} />
-          <label>동업 상대 생년월일 <span className="opt">· 동업 궁합</span></label>
-          <input type="date" value={f.partner} onChange={e => set('partner', e.target.value)} />
-          <label>협정 상대 회사 설립일 <span className="opt">· 협정 궁합</span></label>
-          <input type="date" value={f.ally} onChange={e => set('ally', e.target.value)} />
+          <div className="st"><span className="l"><span className="b" />관계·궁합</span><span className="opt">선택</span></div>
+          <div className="chips">
+            {REL_KINDS.map(k => <button key={k.key} className={'chip2' + (addKind === k.key ? ' on' : '')} onClick={() => setAddKind(k.key)}>{k.label}</button>)}
+          </div>
+          {saved.filter(t => t.kind === addKind).length > 0 && (
+            <div>
+              <div className="qh" style={{ fontSize: 12 }}>저장된 대상 <span className="opt">(눌러서 불러오기)</span></div>
+              <div className="chips">
+                {saved.filter(t => t.kind === addKind).map((t, i) => (
+                  <button key={i} className="chip2" onClick={() => quickFill(t)}>{t.name} · {t.date.slice(2)}</button>
+                ))}
+              </div>
+            </div>
+          )}
+          <label style={{ marginTop: 12 }}>{kindLabel(addKind)} 대상 이름 <span className="opt">(선택)</span></label>
+          <input value={addName} maxLength={20} placeholder={REL_KINDS.find(k => k.key === addKind)!.ph} onChange={e => setAddName(e.target.value)} />
+          <label>{REL_KINDS.find(k => k.key === addKind)!.sub}</label>
+          <input type="date" value={addDate} onChange={e => setAddDate(e.target.value)} />
+          <button className="go" style={{ marginTop: 12, padding: 12, fontSize: 14, background: 'linear-gradient(135deg,var(--navy),#182c49)' }} onClick={addTarget}>+ {kindLabel(addKind)} 추가</button>
+
+          {targets.length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              {targets.map(t => (
+                <div key={t.kind} className="sumrow">
+                  <span className="k">{kindLabel(t.kind)}</span>
+                  <span className="v">{t.name} · {t.date} <span onClick={() => removeTarget(t.kind)} style={{ color: 'var(--red)', cursor: 'pointer', marginLeft: 6 }}>✕</span></span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <button className="go" onClick={submit} disabled={busy}>{busy ? '짚는 중…' : '회사 사주 리포트 뽑기 →'}</button>
@@ -248,7 +305,8 @@ export default function Reading() {
               <div className="sumrow"><span className="k">태어난 시</span><span className="v">{f.timeMode === 'Y' ? f.time : f.timeMode === 'grid' ? SIJIN[f.sijin][0] + ' ' + SIJIN[f.sijin][1] : '모름 (삼주)'}</span></div>
               <div className="sumrow"><span className="k">성별</span><span className="v">{f.gender === 'M' ? '남' : '여'}</span></div>
               {situation && <div className="sumrow"><span className="k">상황</span><span className="v">{situation}</span></div>}
-              {f.legal && <div className="sumrow"><span className="k">법인 설립일</span><span className="v">{f.legal}</span></div>}
+              {f.legal && <div className="sumrow"><span className="k">법인{f.company ? ' · ' + f.company : ''}</span><span className="v">{f.legal}</span></div>}
+              {targets.map(t => <div key={t.kind} className="sumrow"><span className="k">{kindLabel(t.kind)}</span><span className="v">{t.name} · {t.date}</span></div>)}
             </div>
             <div className="sumbtns">
               <button onClick={() => setConfirm(false)}>수정하기</button>

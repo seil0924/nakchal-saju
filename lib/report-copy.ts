@@ -45,22 +45,41 @@ const CO={
    p:['발주처의 <b>{O}</b> 기운이 대표님의 <b>{M}</b> 기운을 누릅니다. 명리로 <b>관성(官星)</b> — 상대가 나를 통제하는 관계라, 기준이 엄격하고 절차가 까다롭게 느껴지는 자리입니다.','감정보다 서류와 원칙으로 다가가야 통합니다. 요구가 많더라도 정면으로 맞서기보다, 요건을 꼼꼼히 맞춰 신뢰를 얻는 편이 유리합니다.','한번 인정받으면 오래가는 곳이니, 초반의 깐깐함을 관문으로 여기고 넘으십시오.']}
 };
 // 동업/협정 공용 궁합 카피 ({A}=우리측, {S}=상대측)
-const RELG={
- in:{g:'合',grade:'상생(相生)',score:'매우 좋음',gc:'#177f5e',
-   t:'{S}가 {A}을 밀어주는 자리',
-   p:['{S}의 <b>{O}</b> 기운이 {A}의 <b>{M}</b> 기운을 살립니다. 명리로 <b>인성(印星)</b> — 상대가 나를 키워주는, 궁합 중 가장 귀한 자리입니다.','억지로 맞추지 않아도 흐름이 순합니다. {A}을 받쳐주는 인연이니 길게 보고 신뢰를 쌓으십시오.','다만 기대어 안주하기 쉬우니, 받은 만큼 제 몫을 해낸다는 자세면 오래갑니다.']},
+// 동업 궁합 (대표×대표) — 사람 관계: 역할·신뢰·지분·의사결정
+const DONGUP={
+ in:{g:'合',grade:'상생(相生)',score:'좋음',gc:'#177f5e',
+   t:'상대가 대표님을 받쳐주는 동업',
+   p:['동업 상대의 <b>{O}</b> 기운이 대표님의 <b>{M}</b> 기운을 살립니다. 명리로 <b>인성(印星)</b> — 상대가 나를 세워주는 자리라, 대표님이 앞에서 밀고 상대가 뒤를 받치는 조합입니다.','억지로 맞추지 않아도 손발이 붙는 인연입니다. 다만 기대다 주도권을 통째로 넘기지 않게, 지분과 최종 결정권은 처음에 문서로 정하십시오.','성과가 나면 공을 나눠 돌리는 태도가 이 동업을 오래 가게 합니다.']},
  jae:{g:'財',grade:'재물(財)',score:'좋음',gc:'#b58a2f',
-   t:'{A}이 결실을 쥐고 이끄는 자리',
-   p:['{A}의 <b>{M}</b> 기운이 {S}의 <b>{O}</b> 기운을 다스립니다. 명리로 <b>재성(財星)</b> — 내가 주도권을 쥐고 결실을 취하는 관계입니다.','역할·지분을 {A} 중심으로 정하면 순조롭습니다. 다만 급히 쥐려다 무리하면 탈이 나니 페이스를 지키십시오.','상대를 도구로만 보면 오래 못 가니, 취하는 만큼 대우도 챙기십시오.']},
+   t:'대표님이 판을 쥐고 이끄는 동업',
+   p:['대표님의 <b>{M}</b> 기운이 상대의 <b>{O}</b> 기운을 다스립니다. 명리로 <b>재성(財星)</b> — 대표님이 주도권을 쥐고 상대가 실무를 받치는 구도입니다.','지분·의사결정은 대표님 우위로 두는 편이 자연스럽습니다. 다만 아랫사람 대하듯 하면 금세 등을 돌리니, 대우와 몫은 넉넉히 챙기십시오.','대표님이 방향을 정하고 상대가 실행하는 역할 분담이 뚜렷할수록 돈이 됩니다.']},
  bi:{g:'比',grade:'대등(比肩)',score:'보통',gc:'#6f6a5c',
-   t:'대등하게 맞서는 자리',
-   p:['{S}와 {A}이 같은 <b>{M}</b> 기운입니다. 명리로 <b>비겁(比劫)</b> — 서로 대등해, 맞으면 든든한 동지요 어긋나면 경쟁이 되는 자리입니다.','역할·지분·책임을 처음부터 문서로 못박아야 뒤탈이 없습니다.','같은 강점이 겹치기 쉬우니, 서로 다른 영역을 맡아야 시너지가 납니다.']},
+   t:'두 대표가 정면으로 맞서는 동업',
+   p:['상대와 대표님이 같은 <b>{M}</b> 기운입니다. 명리로 <b>비겁(比劫)</b> — 둘 다 대표 기질이라, 맞으면 천군만마요 어긋나면 사사건건 부딪힙니다.','같은 걸 잘하고 같은 걸 못하니, 한 명은 안(관리·재무)을 한 명은 밖(영업·수주)을 맡아 영역을 아예 갈라야 시너지가 납니다.','의견이 갈렸을 때 누가 최종 결정을 하는지 규칙을 처음에 못박지 않으면, 위기에 반드시 터집니다.']},
  sik:{g:'食',grade:'베풂(食傷)',score:'노력 필요',gc:'#b5402f',
-   t:'{A}이 더 내주는 자리',
-   p:['{A}의 <b>{M}</b> 기운이 {S}의 <b>{O}</b> 기운으로 흘러 나갑니다. 명리로 <b>식상(食傷)</b> — 내가 베풀고 이끄는 관계라 {A}이 더 많이 내줍니다.','{A}이 리드하고 상대가 따라오는 구도면 잘 맞습니다. 다만 소모가 크니 선을 정하십시오.','단기 성과보다 {A}이 키워 함께 크는 그림일 때 빛납니다.']},
+   t:'대표님이 더 내주고 끌어주는 동업',
+   p:['대표님의 <b>{M}</b> 기운이 상대의 <b>{O}</b> 기운으로 흘러 나갑니다. 명리로 <b>식상(食傷)</b> — 대표님이 베풀고 끌어주는 관계라, 상대가 대표님 그늘에서 크는 그림입니다.','대표님이 리드하고 상대가 따라오는 구도면 잘 맞지만, 내주는 게 많으니 지분·보상으로 균형을 맞추지 않으면 대표님만 소진됩니다.','사람으로 키운다는 마음이면 오래가고, 당장의 손익만 따지면 대표님이 손해 보는 자리입니다.']},
  gwan:{g:'官',grade:'압박(官星)',score:'까다로움',gc:'#22406b',
-   t:'상대의 기준이 까다로운 자리',
-   p:['{S}의 <b>{O}</b> 기운이 {A}의 <b>{M}</b> 기운을 누릅니다. 명리로 <b>관성(官星)</b> — 상대가 {A}을 통제하는 관계라 기준과 요구가 까다롭게 느껴집니다.','감정보다 원칙과 문서로 다가가야 통합니다. 주도권을 상대가 쥐기 쉬우니 조건을 미리 분명히 하십시오.','한번 신뢰를 얻으면 든든한 울타리가 되니, 초반의 깐깐함을 관문으로 여기십시오.']}
+   t:'상대가 판을 쥐는 동업',
+   p:['상대의 <b>{O}</b> 기운이 대표님의 <b>{M}</b> 기운을 누릅니다. 명리로 <b>관성(官星)</b> — 상대의 스타일과 기준이 대표님을 조이는 구도입니다.','대표님이 2인자로 뒤를 받치는 편이 편하다면 나쁘지 않으나, 대등을 원하면 초반에 역할·권한·지분을 분명히 못박아야 눌리지 않습니다.','상대 페이스에 끌려가기 쉬우니, 중요한 결정일수록 감정보다 계약서로 대응하십시오.']}
+};
+// 협정 궁합 (회사×회사) — 공동도급: 주관사·지분·공종·관재수
+const HYEOPJEONG={
+ in:{g:'合',grade:'상생(相生)',score:'좋음',gc:'#177f5e',
+   t:'상대 회사가 우리를 끌어올리는 결합',
+   p:['상대 회사의 <b>{O}</b> 기운이 우리 법인의 <b>{M}</b> 기운을 살립니다. 명리로 <b>인성(印星)</b> — 자금·실적·신용 면에서 상대가 우리를 받쳐주는 결합입니다.','공동도급에서 우리가 덕을 보는 구도이니, 주관사 자리는 상대에게 양보하더라도 지분과 실리는 확실히 챙기는 편이 유리합니다.','상대의 간판·자격을 빌려 판을 키우는 그림이라, 우리 실적을 성실히 쌓아 다음 협정에서 대등해지는 것을 목표로 두십시오.']},
+ jae:{g:'財',grade:'재물(財)',score:'좋음',gc:'#b58a2f',
+   t:'우리 회사가 주관사로 이끄는 결합',
+   p:['우리 법인의 <b>{M}</b> 기운이 상대 회사의 <b>{O}</b> 기운을 다스립니다. 명리로 <b>재성(財星)</b> — 우리가 주도권을 쥐는 결합이라 주관사·대표사 포지션이 자연스럽습니다.','지분·의사결정을 우리 우위로 가져가되, 상대의 몫과 역할을 계약서에 분명히 보장해야 공사 후반까지 관계가 갑니다.','우리가 판을 짜고 상대가 실무를 대는 구조일 때 수익성이 가장 좋습니다.']},
+ bi:{g:'比',grade:'대등(比肩)',score:'보통',gc:'#6f6a5c',
+   t:'체급이 비슷해 주관사를 다투는 결합',
+   p:['두 회사가 같은 <b>{M}</b> 기운 — 체급과 색깔이 비슷한 결합입니다. 명리로 <b>비겁(比劫)</b> — 대등해서 주관사 자리와 지분을 놓고 부딪히기 쉽습니다.','공동도급 지분·대표사·정산 방식을 계약서로 못박지 않으면, 공사 후반 준공·정산 단계에서 반드시 분쟁 소지가 생깁니다.','강점이 겹치니, 공종(工種)이나 구간을 아예 갈라 맡아야 중복과 마찰을 줄입니다.']},
+ sik:{g:'食',grade:'베풂(食傷)',score:'노력 필요',gc:'#b5402f',
+   t:'우리가 기술·인력을 더 대는 결합',
+   p:['우리 법인의 <b>{M}</b> 기운이 상대 회사의 <b>{O}</b> 기운으로 흘러 나갑니다. 명리로 <b>식상(食傷)</b> — 우리가 기술·인력·실무를 더 대주는 결합입니다.','우리가 실질을 끌고 상대가 이름·자격을 대는 구조라면 맞물리지만, 소모가 크니 수수료·정산 조건을 냉정하게 잡으십시오.','당장의 도급 실적보다, 우리 기술이 다음 수주로 이어지는 레퍼런스가 되는지를 보고 결정하십시오.']},
+ gwan:{g:'官',grade:'압박(官星)',score:'까다로움',gc:'#22406b',
+   t:'상대 규모에 눌리기 쉬운 결합',
+   p:['상대 회사의 <b>{O}</b> 기운이 우리 법인의 <b>{M}</b> 기운을 누릅니다. 명리로 <b>관성(官星)</b> — 규모·기준 면에서 상대가 우리를 압박하는 결합입니다.','상대가 주관사·주도권을 쥐기 쉬우니, 하도급으로 눌리지 않으려면 우리 역할·지분·책임 범위를 계약 초반에 분명히 못박아야 합니다.','공기 후반의 관재수(官災數)를 조심하고, 정산·하자 책임 조건을 반드시 명문화하십시오.']}
 };
 function compatWith(meChart,otherChart,table,A,S){
  const me=meChart.dayMasterEl,o=otherChart.dayMasterEl;
@@ -104,7 +123,8 @@ function compatHtml(cm,relLabel){
   const P=a=>a.map(x=>`<p>${x}</p>`).join('');
   return `<div class="compat"><div class="grade" style="background:${cm.gc}">${cm.letter}</div><div><div class="gt">${cm.grade} · ${cm.score}</div><div class="gs">${relLabel} 일주 <b>${cm.pills}</b></div></div></div>`+P(cm.paras);
 }
-function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,unlocked){
+function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,unlocked,names){
+  names=names||{};
   const me=c.dayMasterEl,gan=GAN[c.dGan],sip=sipsung(c),dom=argmax(sip);
   let strong=0,weak=0;for(let i=1;i<5;i++){if(c.dist[i]>c.dist[strong])strong=i;if(c.dist[i]<c.dist[weak])weak=i;}
   const zero=c.dist[weak]===0;
@@ -136,15 +156,15 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     `사주에 재성(財)의 기운이 <b>${sip[2]}</b>로 ${sip[2]>=2?'분명해':'옅어'}, ${WL_A[me]} 버는 구조입니다.`,
     `${WL_R[me]}.`,
     `수주와 자금은 ${WL_V[me]}.`])});
-  if(legalChart){const lr=legalReport(c,legalChart);
-    secs.push({mk:'法',free:false,t:`법인의 그릇과 대표님의 궁합`,html:
-      `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">법인 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});}
-  if(clientChart){const cm=compat(c,clientChart);
-    secs.push({mk:'處',free:false,t:cm.t,html:compatHtml(cm,'발주처')});}
-  if(partnerChart){const cm=compatWith(c,partnerChart,RELG,'대표님','동업 상대');
-    secs.push({mk:'同',free:false,t:`동업 궁합 — ${cm.t}`,html:compatHtml(cm,'동업 상대')});}
-  if(allyChart){const cm=compatWith(c,allyChart,RELG,'우리 법인','상대 회사');
-    secs.push({mk:'協',free:false,t:`협정 궁합 — ${cm.t}`,html:compatHtml(cm,'상대 회사')});}
+  if(legalChart){const lr=legalReport(c,legalChart);const nm=names.legal?`${names.legal} — `:'';
+    secs.push({mk:'法',free:false,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
+      `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});}
+  if(clientChart){const cm=compat(c,clientChart);const nm=names.client?`${names.client} — `:'';
+    secs.push({mk:'處',free:false,t:`${nm}${cm.t}`,html:compatHtml(cm,`발주처${names.client?' '+names.client:''}`)});}
+  if(partnerChart){const cm=compatWith(c,partnerChart,DONGUP,'대표님','동업 상대');
+    secs.push({mk:'同',free:false,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatHtml(cm,names.partner||'동업 상대')});}
+  if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사');
+    secs.push({mk:'協',free:false,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatHtml(cm,names.ally||'상대 회사')});}
   secs.push({mk:'率',free:true,t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:gaugeHtml(s,worryTxt,unlocked),gauge:true});
   secs.push({mk:'方',free:false,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
@@ -161,17 +181,18 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
 
 export type Section = { mk:string; free:boolean; t:string; html:string };
 // 전체(유료 포함) 섹션 — 서버에서 결제 검증된 뒤에만 호출
+export type RelNames = { client?:string; legal?:string; partner?:string; ally?:string };
 export function buildFull(
   c:Chart, today:any, s:Sajeong, worry:string,
-  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null
+  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames
 ):Section[]{
-  return buildReport(c,today,s,worry,cli,legal,partner,ally,true) as Section[];
+  return buildReport(c,today,s,worry,cli,legal,partner,ally,true,names) as Section[];
 }
 // 무료 티어 — 유료 섹션의 html을 제거(placeholder만)하고 정밀값도 삭제해 응답
 export function buildFreeGated(
   c:Chart, today:any, s:Sajeong, worry:string,
-  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null
+  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames
 ):Section[]{
-  const full = buildReport(c,today,s,worry,cli,legal,partner,ally,false) as Section[];
+  const full = buildReport(c,today,s,worry,cli,legal,partner,ally,false,names) as Section[];
   return full.map(sec => sec.free ? sec : { ...sec, html:'' }); // 유료 텍스트 미전송
 }

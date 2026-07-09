@@ -13,6 +13,7 @@ export type ReportInput = {
   legal?: string | null;         // 법인 설립일
   partner?: string | null;       // 동업 상대 생년월일
   ally?: string | null;          // 협정 상대 회사 설립일
+  clientName?: string; legalName?: string; partnerName?: string; allyName?: string; // 대상 이름
   situation?: string;            // 상황 칩 요약 (예: "관급 공사 · 저가경쟁 심함")
   worry?: string;
 };
@@ -50,9 +51,10 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean): Report
   const cli = dateChart(input.client), legal = dateChart(input.legal),
         partner = dateChart(input.partner), ally = dateChart(input.ally);
 
+  const names = { client: input.clientName, legal: input.legalName, partner: input.partnerName, ally: input.allyName };
   const sections = unlockedFlag
-    ? buildFull(c, today, s, worry, cli, legal, partner, ally)
-    : buildFreeGated(c, today, s, worry, cli, legal, partner, ally);
+    ? buildFull(c, today, s, worry, cli, legal, partner, ally, names)
+    : buildFreeGated(c, today, s, worry, cli, legal, partner, ally, names);
 
   // ★게이팅: 정밀값(precise)은 잠금 해제 시에만 응답에 포함
   const gauge = unlockedFlag
