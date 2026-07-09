@@ -143,3 +143,33 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .consent{display:flex;gap:8px;align-items:flex-start;margin:10px 0 4px;font-size:11.5px;color:#57523f;font-weight:600;text-align:left;line-height:1.5}
 .consent input{margin-top:2px}
 .errbox{background:#fbe9e6;border:1px solid #eeccc6;color:#8f2018;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:12.5px;font-weight:600;text-align:center}
+
+/* ===== 사주아이식 입력 UX (/reading) ===== */
+.qh{font-family:var(--serif);font-weight:700;color:var(--navy);font-size:14px;margin:16px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip2{padding:9px 13px;border:1.5px solid #ddd6c6;border-radius:999px;background:#fff;font-size:13px;font-weight:600;color:#7c7768;cursor:pointer;font-family:var(--sans)}
+.chip2.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.prevbox{margin-top:12px;background:#fbf9f3;border:1px solid var(--line);border-radius:12px;padding:12px}
+.prevhd{font-size:11.5px;color:var(--sub);font-weight:700;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.prevhd .live{color:var(--good);font-weight:700}
+.msg4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.pilc{text-align:center}
+.pilc .lb{font-size:10px;color:var(--sub);font-weight:700;margin-bottom:4px}
+.pilc .g,.pilc .z{font-family:var(--serif);font-weight:900;font-size:20px;border-radius:8px;padding:6px 0;margin-bottom:3px;color:#fff}
+.pilc.day .g{outline:2px solid var(--red);outline-offset:-2px}
+.pilc .sb{font-size:9px;color:var(--sub);font-weight:600}
+.pgray{background:#cfc8b6 !important}
+.sipline{margin-top:10px;font-size:11.5px;color:var(--sub);font-weight:600;text-align:center}
+.sijin{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:8px}
+.sijin .sj{border:1.5px solid #ddd6c6;border-radius:10px;padding:9px;text-align:center;background:#fff;cursor:pointer}
+.sijin .sj.on{background:var(--navy);border-color:var(--navy)}
+.sijin .sj b{font-family:var(--serif);font-size:13px;color:var(--ink)}
+.sijin .sj span{display:block;font-size:10px;color:var(--sub);margin-top:2px}
+.sijin .sj.on b,.sijin .sj.on span{color:#fff}
+.sumrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed #e6ddc9;font-size:13px}
+.sumrow:last-child{border:none}.sumrow .k{color:var(--sub);font-weight:600}.sumrow .v{font-weight:700}
+.sheet .sumhd{text-align:center;font-family:var(--serif);font-weight:900;font-size:17px;color:var(--ink);margin-bottom:4px}
+.sheet .sumbox{padding:4px 20px 0}
+.sheet .sumbtns{display:flex;gap:9px;padding:16px 20px 22px}
+.sheet .sumbtns button{flex:1;padding:14px;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:var(--sans);border:1.5px solid #ddd6c6;background:#fff;color:#7c7768}
+.sheet .sumbtns button.ok{background:linear-gradient(135deg,var(--navy),#182c49);color:#fff;border:none}

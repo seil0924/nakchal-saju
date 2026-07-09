@@ -13,6 +13,7 @@ export type ReportInput = {
   legal?: string | null;         // 법인 설립일
   partner?: string | null;       // 동업 상대 생년월일
   ally?: string | null;          // 협정 상대 회사 설립일
+  situation?: string;            // 상황 칩 요약 (예: "관급 공사 · 저가경쟁 심함")
   worry?: string;
 };
 
@@ -36,11 +37,15 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean): Report
   const s = sajeong(c, today);
 
   const wtxt = (input.worry || '').trim();
-  const worry = wtxt
-    ? `「고민 반영」 말씀하신 「${wtxt.slice(0, 60)}」 — ${s.tilt > 0
-        ? '오늘은 기운이 위로 뻗는 날이라 <b>나설 만한 흐름</b>'
-        : '오늘은 기운이 눌리는 날이라 <b>서두르기보다 관망이 유리한 흐름</b>'}입니다.`
-    : '';
+  const sit = (input.situation || '').trim();
+  const flow = s.tilt > 0
+    ? '오늘은 기운이 위로 뻗는 날이라 <b>나설 만한 흐름</b>'
+    : '오늘은 기운이 눌리는 날이라 <b>서두르기보다 관망이 유리한 흐름</b>';
+  // 상황 칩 + 고민 텍스트를 결과에 반영 (input→output 가시화)
+  let worry = '';
+  if (sit && wtxt) worry = `「상황 반영」 <b>${sit}</b> 상황에서 「${wtxt.slice(0, 60)}」 — ${flow}입니다.`;
+  else if (sit)   worry = `「상황 반영」 이번 건은 <b>${sit}</b> — 그런 판에서 ${flow}입니다.`;
+  else if (wtxt)  worry = `「고민 반영」 말씀하신 「${wtxt.slice(0, 60)}」 — ${flow}입니다.`;
 
   const cli = dateChart(input.client), legal = dateChart(input.legal),
         partner = dateChart(input.partner), ally = dateChart(input.ally);
