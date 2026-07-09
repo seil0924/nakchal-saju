@@ -1,21 +1,35 @@
-// POST /api/payment/webhook — [실서비스] 포트원 웹훅 수신 (참고 구현)
-// 포트원이 결제 완료를 서버로 알려주면, 단건조회 API로 금액·상태를 재검증합니다.
-// 데모에서는 mock-confirm이 이 역할을 대신합니다.
+// POST /api/payment/webhook — [실서비스] 포트원 웹훅 수신
+// 포트원이 결제 완료를 서버로 알려주면, ① 웹훅 서명 검증 → ② 단건조회로
+// 금액·상태 재검증 → ③ confirmOrder 로 잠금 해제. 데모에서는 mock-confirm이 대신.
 import { NextResponse } from 'next/server';
 import { confirmOrder } from '@/lib/store';
-// import { verifyPaid } from '@/lib/portone';
+import { verifyPaid } from '@/lib/portone';
+import { PRICE_FIRST } from '@/lib/constants';
+
+// 포트원 웹훅 서명 검증 (@portone/server-sdk의 Webhook.verify 사용 권장).
+// 여기서는 시크릿 유무만 확인하는 골격 — 실서비스에서 실제 서명 검증으로 대체.
+async function verifySignature(_raw: string, _headers: Headers): Promise<boolean> {
+  const secret = process.env.PORTONE_WEBHOOK_SECRET;
+  if (!secret) return false; // 시크릿 미설정이면 웹훅 신뢰 불가
+  // TODO: import { Webhook } from '@portone/server-sdk';
+  //       await Webhook.verify(secret, _raw, Object.fromEntries(_headers));
+  return true;
+}
 
 export async function POST(req: Request) {
-  const body = await req.json().catch(() => ({}));
+  const raw = await req.text();
+  if (!(await verifySignature(raw, req.headers))) {
+    return NextResponse.json({ error: 'invalid_signature' }, { status: 401 });
+  }
+  const body = JSON.parse(raw || '{}');
   const paymentId: string | undefined = body?.payment_id ?? body?.data?.paymentId;
   if (!paymentId) return NextResponse.json({ error: 'no_payment_id' }, { status: 400 });
 
-  // 실서비스 필수 단계:
-  // 1) 웹훅 서명 검증 (PORTONE_WEBHOOK_SECRET)
-  // 2) const ok = await verifyPaid(paymentId, 990);  // 포트원 단건조회로 금액 재검증
-  // 3) if (!ok) return 400;
-  const paidAmount = 990; // ← 실서비스에서는 verifyPaid로 조회한 실제 금액
-  const o = await confirmOrder(paymentId, paidAmount);
+  // 포트원 단건조회로 금액·상태 재검증 (클라이언트 값 불신)
+  const ok = await verifyPaid(paymentId, PRICE_FIRST).catch(() => false);
+  if (!ok) return NextResponse.json({ error: 'not_verified' }, { status: 400 });
+
+  const o = await confirmOrder(paymentId, PRICE_FIRST);
   if (!o) return NextResponse.json({ error: 'confirm_failed' }, { status: 400 });
   return NextResponse.json({ ok: true });
 }

@@ -2,8 +2,7 @@
 // 서버가 주문금액(990원)을 확정합니다. 클라이언트가 금액을 정하지 못하게.
 import { NextResponse } from 'next/server';
 import { getReport, createOrder } from '@/lib/store';
-
-const PRICE = 990;
+import { PRICE_FIRST as PRICE } from '@/lib/constants';
 
 export async function POST(req: Request) {
   const { reportId } = await req.json();

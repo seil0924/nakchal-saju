@@ -19,8 +19,12 @@ export function supabaseServer() {
   );
 }
 
-// 로그인/소유권 확인 헬퍼 — 실서비스 유료 라우트에서 사용
+export const authEnabled = () =>
+  !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
+// 로그인 사용자 반환 — 인증 미설정(데모)이면 null (게이팅은 결제 검증으로 유지)
 export async function requireUser() {
+  if (!authEnabled()) return null;
   const sb = supabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   return user; // null이면 미인증

@@ -20,7 +20,8 @@ export const backend = () => (sb() ? 'supabase' : 'memory');
 
 // ── 인메모리 백엔드 (폴백) ───────────────────────────────
 const g = globalThis as any;
-const memReports: Map<string, ReportInput> = g.__reports ?? (g.__reports = new Map());
+type MemReport = { input: ReportInput; userId: string | null };
+const memReports: Map<string, MemReport> = g.__reports ?? (g.__reports = new Map());
 const memOrders: Map<string, Order> = g.__orders ?? (g.__orders = new Map());
 const memUnlocked: Set<string> = g.__unlocked ?? (g.__unlocked = new Set());
 if (g.__seq === undefined) g.__seq = 1000;
@@ -34,7 +35,7 @@ export async function saveReport(input: ReportInput, userId?: string): Promise<s
     return data.id as string;
   }
   const id = 'r' + g.__seq++;
-  memReports.set(id, input);
+  memReports.set(id, { input, userId: userId ?? null });
   return id;
 }
 
@@ -44,7 +45,17 @@ export async function getReport(id: string): Promise<ReportInput | null> {
     const { data } = await c.from('reports').select('input').eq('id', id).maybeSingle();
     return (data?.input as ReportInput) ?? null;
   }
-  return memReports.get(id) ?? null;
+  return memReports.get(id)?.input ?? null;
+}
+
+// 리포트 소유자 — 실서비스에서 유료 라우트가 본인 확인에 사용
+export async function getReportOwner(id: string): Promise<string | null> {
+  const c = sb();
+  if (c) {
+    const { data } = await c.from('reports').select('user_id').eq('id', id).maybeSingle();
+    return (data?.user_id as string) ?? null;
+  }
+  return memReports.get(id)?.userId ?? null;
 }
 
 export async function createOrder(reportId: string, amount: number): Promise<Order> {

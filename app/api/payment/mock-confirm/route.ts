@@ -3,8 +3,7 @@
 // 포트원 단건조회로 금액을 재검증한 뒤 confirmOrder를 호출합니다.
 import { NextResponse } from 'next/server';
 import { confirmOrder } from '@/lib/store';
-
-const PRICE = 990;
+import { PRICE_FIRST as PRICE } from '@/lib/constants';
 
 export async function POST(req: Request) {
   const { paymentId } = await req.json();
