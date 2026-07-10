@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import TodayChip from '@/app/_components/TodayChip';
+import HeroCarousel from '@/app/_components/HeroCarousel';
 
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
 export default function Home() {
@@ -14,17 +15,8 @@ export default function Home() {
         <div className="ham"><i /><i /><i /></div>
       </div>
 
-      {/* 히어로 — 4:5 영상 배너 (밝은 영상 + 하단 그라데이션) */}
-      <div className="hero5 vhero">
-        <video className="herovid" autoPlay muted loop playsInline poster="/herobg-poster.jpg">
-          <source src="/herobg.mp4" type="video/mp4" />
-        </video>
-        <div className="wm">士</div>
-        <div className="kick">運七技三</div>
-        <h1>대표와 회사의 사주,<br />그 <b>운칠(運七)</b>을 짚어드립니다</h1>
-        <div className="rule" />
-        <div className="sub">낙찰 사정률과 이달의 투찰 길일, 법인 운세와 발주처 궁합까지 — 만세력으로 짚어 드립니다.</div>
-      </div>
+      {/* 히어로 — 자동 넘김 롤링 배너 (4장) */}
+      <HeroCarousel />
 
       {/* 닮은 CEO — 바이럴 입구 */}
       <Link className="ceoband" href="/ceo">

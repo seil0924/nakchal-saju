@@ -32,7 +32,7 @@ export default async function MyPage() {
           </div>
         </div>
         <div className="mychips">
-          <div className="c"><div className="k">구독</div><div className="v">무료</div></div>
+          <div className="c"><div className="k">열람 리포트</div><div className="v">0건</div></div>
           <div className="c"><div className="k">보관 리포트</div><div className="v">0건</div></div>
           <div className="c"><div className="k">등록 회사</div><div className="v">0곳</div></div>
         </div>
@@ -46,7 +46,7 @@ export default async function MyPage() {
 
         <div className="sechd"><span className="t"><span className="b" />이용</span></div>
         <div className="setrow">
-          <Link href="/reading">구독 관리<span className="r">›</span></Link>
+          <Link href="/vault">결제·주문 내역<span className="r">단건 결제 ›</span></Link>
           <Link href="/vault">보관함<span className="r">›</span></Link>
           <Link href="/ritual">투찰 부적 리추얼<span className="r">吉 ›</span></Link>
           {admin && <Link href="/admin" style={{ color: 'var(--navy)' }}>관리자 페이지<span className="r">운영자 ›</span></Link>}

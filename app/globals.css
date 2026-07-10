@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
 
 :root{--bg:#f6f3ec;--card:#fff;--ink:#20242c;--sub:#6f6a5c;--line:#ece7db;--navy:#22406b;--navy2:#232a38;--gold:#b98f3f;--gold2:#e3c27a;--red:#a5241f;--good:#177f5e;--serif:"Noto Serif KR","Noto Serif CJK KR",serif;--sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -863,3 +862,27 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5 .hero5.vhero .herovid{opacity:1;z-index:-1}
 .home5 .hero5.vhero::after{background:linear-gradient(to bottom,rgba(24,27,33,.12) 0%,rgba(24,27,33,.28) 44%,rgba(24,27,33,.72) 78%,rgba(24,27,33,.94) 100%)}
 .home5 .hero5.vhero .wm{display:none}
+
+/* ═══════════ 홈 롤링 히어로 배너 ═══════════ */
+.home5 .herocar{position:relative;height:372px;overflow:hidden;background:#181b21;isolation:isolate}
+@media(min-width:560px){.home5 .herocar{height:392px}}
+.home5 .hcslide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:44px 24px 40px;text-decoration:none;opacity:0;visibility:hidden;transition:opacity .8s ease}
+.home5 .hcslide.on{opacity:1;visibility:visible}
+.home5 .hcslide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.home5 .hcslide::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to bottom,rgba(24,27,33,.15) 0%,rgba(24,27,33,.3) 46%,rgba(24,27,33,.74) 80%,rgba(24,27,33,.94) 100%)}
+.home5 .hcin{position:relative}
+.home5 .hckick{font-size:11px;letter-spacing:.34em;color:var(--h-goldlt);font-weight:700}
+.home5 .hctitle{font-family:var(--serif);font-weight:900;font-size:26px;line-height:1.42;color:#f2ede0;margin-top:12px;letter-spacing:-.01em}
+.home5 .hctitle b{color:var(--h-goldlt)}
+.home5 .hcgo{margin-top:13px;display:inline-block;font-family:var(--serif);font-weight:800;font-size:13px;color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:6px 15px}
+/* 활성 슬라이드 카피 페이드업 */
+.home5 .hcslide.on .hckick{animation:hcup .6s .1s both}
+.home5 .hcslide.on .hctitle{animation:hcup .6s .2s both}
+.home5 .hcslide.on .hcgo{animation:hcup .6s .34s both}
+@keyframes hcup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* 점 인디케이터 */
+.home5 .hcdots{position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:7px;z-index:3}
+.home5 .hcdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);border:0;cursor:pointer;padding:0;transition:width .3s,background .3s}
+.home5 .hcdot.on{background:var(--h-goldlt);width:20px;border-radius:4px}
+@media(hover:hover){.home5 .hcgo{transition:background .2s}.home5 .hcslide:hover .hcgo{background:rgba(255,255,255,.14)}}
+@media(prefers-reduced-motion:reduce){.home5 .hcslide{transition:none}.home5 .hcslide.on *{animation:none !important}}
