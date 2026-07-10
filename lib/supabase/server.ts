@@ -29,3 +29,17 @@ export async function requireUser() {
   const { data: { user } } = await sb.auth.getUser();
   return user; // null이면 미인증
 }
+
+// 관리자 판별 (profiles.role='admin')
+export async function currentUserRole() {
+  if (!authEnabled()) return { user: null as any, role: null as string | null };
+  const sb = supabaseServer();
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return { user: null, role: null };
+  const { data } = await sb.from('profiles').select('role,name,email').eq('id', user.id).single();
+  return { user, role: ((data as any)?.role ?? 'user') as string, profile: data as any };
+}
+export async function isAdmin() {
+  const { role } = await currentUserRole();
+  return role === 'admin';
+}

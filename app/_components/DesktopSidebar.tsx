@@ -13,6 +13,8 @@ const NAV = [
 export default function DesktopSidebar() {
   const path = usePathname() || '/';
   const active = (h: string) => (h === '/' ? path === '/' : path.startsWith(h));
+  const hideShell = path.startsWith('/admin') || path === '/login' || path === '/signup';
+  if (hideShell) return null;
   return (
     <aside className="dsidebar">
       <Link href="/" className="dbrand"><span className="ds">士</span><span className="dbt">낙찰사주<small>會社 사주 전문</small></span></Link>
