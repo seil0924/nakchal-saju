@@ -14,8 +14,8 @@ export default function Home() {
         <div className="ham"><i /><i /><i /></div>
       </div>
 
-      {/* 히어로 — 먹빛 (영상 배너) */}
-      <div className="hero5">
+      {/* 히어로 — 4:5 영상 배너 (밝은 영상 + 하단 그라데이션) */}
+      <div className="hero5 vhero">
         <video className="herovid" autoPlay muted loop playsInline poster="/herobg-poster.jpg">
           <source src="/herobg.mp4" type="video/mp4" />
         </video>
