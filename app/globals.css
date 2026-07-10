@@ -859,7 +859,7 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .bujavid .bvtx{position:absolute;left:16px;bottom:12px;font-family:var(--serif);font-weight:800;font-size:14px;color:#e3c27a;letter-spacing:.1em;text-shadow:0 2px 10px rgba(0,0,0,.7)}
 
 /* 홈 히어로 — 4:5 영상 배너 (밝은 영상 + 하단 그라데이션) */
-.home5 .hero5.vhero{aspect-ratio:4/5;min-height:440px;max-height:600px;display:flex;flex-direction:column;justify-content:flex-end;padding:52px 24px 30px;background-image:none}
+.home5 .hero5.vhero{min-height:340px;max-height:392px;display:flex;flex-direction:column;justify-content:flex-end;padding:44px 24px 26px;background-image:none}
 .home5 .hero5.vhero .herovid{opacity:1;z-index:-1}
 .home5 .hero5.vhero::after{background:linear-gradient(to bottom,rgba(24,27,33,.12) 0%,rgba(24,27,33,.28) 44%,rgba(24,27,33,.72) 78%,rgba(24,27,33,.94) 100%)}
 .home5 .hero5.vhero .wm{display:none}
