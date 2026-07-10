@@ -48,23 +48,28 @@ export default function Home() {
       <div className="list">
         <Link className="li5" href="/reading">
           <div className="gz" style={{ color: '#2f4a7a' }}>率</div>
-          <div className="bd5"><div className="t">사정률 뽑기</div><div className="d">내 사주와 오늘 일진으로 방향을 봅니다</div></div>
+          <div className="bd5"><div className="t">사정률 뽑기</div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/balju">
           <div className="gz" style={{ color: '#a5342a' }}>宮</div>
-          <div className="bd5"><div className="t">발주처 궁합</div><div className="d">발주처 설립일 사주와 대표님의 상성</div></div>
+          <div className="bd5"><div className="t">발주처 궁합</div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
           <div className="rt"><div className="pz paid">전체 12,900</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/reading">
           <div className="gz" style={{ color: '#2f6b57' }}>代</div>
-          <div className="bd5"><div className="t">대표 사주</div><div className="d">만세력 원국과 오늘의 기운</div></div>
+          <div className="bd5"><div className="t">대표 사주</div><div className="d">나도 몰랐던 승부 기질 — 밀 때와 접을 때</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/reading">
           <div className="gz" style={{ color: '#9c7a2a' }}>法</div>
-          <div className="bd5"><div className="t">법인 운세 <small>설립일 사주</small></div><div className="d">회사의 그릇과 대운의 흐름</div></div>
+          <div className="bd5"><div className="t">법인 운세 <small>설립일 사주</small></div><div className="d">회사가 나를 밀어주는가, 누르는가</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
+        </Link>
+        <Link className="li5" href="/full">
+          <div className="gz" style={{ color: '#9a2a20' }}>全</div>
+          <div className="bd5"><div className="t">전체 리포트 <small>十六章</small></div><div className="d">큰 건만 비껴가는 이유 — 열여섯 장으로 통째로</div></div>
+          <div className="rt"><div className="pz paid">자세히</div><div className="arw">→</div></div>
         </Link>
       </div>
 

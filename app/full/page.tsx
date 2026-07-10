@@ -1,0 +1,109 @@
+import Link from 'next/link';
+
+export const metadata = {
+  title: '전체 리포트 — 대표의 사주 열여섯 장 · 낙찰사주',
+  description: '견적은 틀린 게 없는데 큰 건만 비껴간다면 — 그건 실력이 아니라 명식(命式)의 구조입니다. 대표와 회사의 사주 열여섯 장, 통째로 폅니다.',
+};
+
+// 욕구를 긁는 체크리스트 — 40~70대 입찰 대표의 실제 통점
+const PAINS = [
+  '견적 산출은 틀린 게 없는데, 이상하게 큰 건만 번번이 비껴간다',
+  '실력은 자신 있는데 「운이 없다」는 말을 올해 몇 번이나 했다',
+  '큰 개찰 날 아침 — 안 믿는다면서도 괜히 신경이 쓰인다',
+  '동업·컨소시엄 제안, 사람은 좋은데 어딘가 찜찜하다',
+  '잘 나가다 한 번씩 크게 꺾이는 패턴이 자꾸 반복된다',
+  '직원들에게 「차갑다·고집 세다」 소리를 듣는데, 그 속은 아무도 모른다',
+];
+
+// 열여섯 장 목차 — 분량 앵커 + 호기심
+const TOC: [string, string, string][] = [
+  ['器', '그릇', '대표님이 어떤 그릇으로 태어났는가'],
+  ['鏡', '닮은 사주', '세계 거장 50인 중 누구와 같은 뼈대인가'],
+  ['符', '신살', '명식에 새겨진 특수 부호 — 괴강·백호·역마'],
+  ['率', '사정률', '오늘 유리한가, 불리한가 — 시진별 창(窓)까지'],
+  ['擇', '택일', '이달의 투찰 길일 캘린더 — 넣을 날, 접을 날'],
+  ['五', '오행', '넘치는 기운과 텅 빈 자리 — 평생의 숙제'],
+  ['決', '승부 기질', '밀어붙일 때와 접을 때 — 투찰의 심법'],
+  ['人', '사람', '오해받는 이유, 곁에 사람을 남기는 법'],
+  ['財', '재물', '언제 쥐고 언제 풀 것인가 — 새는 곳까지'],
+  ['法', '법인', '회사가 대표님을 밀어주는가, 누르는가'],
+  ['運', '대운', '회사의 10년 흐름 — 지금 어디쯤 와 있는가'],
+  ['處', '발주처 궁합', '그 발주처, 나와 맞는 판인가'],
+  ['同', '동업 궁합', '지분·결정권을 어떻게 나눠야 안 깨지는가'],
+  ['協', '협정 궁합', '주관사·관재수 — 계약 전 반드시 짚을 것'],
+  ['方', '방위', '기운을 돋우는 방면, 피해야 할 방면'],
+  ['士', '마무리', '홀로 벼려온 날카로움을 무기로 바꾸는 한마디'],
+];
+
+export default function FullIntro() {
+  return (
+    <div className="app home5">
+      <div className="mast">
+        <div className="mb">
+          <Link href="/" className="s" style={{ textDecoration: 'none' }}>士</Link>
+          <div className="n">전체 리포트<em>大 全 書 · 十六章</em></div>
+        </div>
+        <Link href="/" style={{ fontSize: 12, color: '#7f786c', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
+      </div>
+
+      {/* 통점 히어로 */}
+      <div className="hero5">
+        <div className="wm">命</div>
+        <div className="kick">運七技三</div>
+        <h1>낙찰은 운이라면서,<br />왜 <b>운(運)</b>은 준비 안 하십니까</h1>
+        <div className="rule" />
+        <div className="sub">견적·실적·서류, 기술(技三)은 이미 갖추셨습니다. 이제 나머지 칠 할 — 운칠(運七)을 준비할 차례입니다.</div>
+      </div>
+
+      {/* 이런 대표님께 — 긁는 체크리스트 */}
+      <div className="lab"><i /><span>이런 대표님께</span></div>
+      <div className="painbox">
+        {PAINS.map((p, i) => (
+          <div key={i} className="pain"><span className="pk">✓</span>{p}</div>
+        ))}
+        <div className="painout">
+          하나라도 뜨끔하셨다면 — 그것은 성격 탓도, 실력 탓도 아니라 <b>명식(命式)의 구조</b>입니다.<br />
+          타고난 구조는 바꿀 수 없어도, <b>쓰는 법</b>은 배울 수 있습니다. 그 쓰는 법이 이 열여섯 장에 담깁니다.
+        </div>
+      </div>
+
+      {/* 목차 — 열여섯 장 */}
+      <div className="lab"><i /><span>열여섯 장(章) 목차</span><span className="m">항목 60여 개</span></div>
+      <div className="toc">
+        {TOC.map(([mk, t, d], i) => (
+          <div key={i} className="tocrow">
+            <span className="tmk">{mk}</span>
+            <span className="ttl">{t}</span>
+            <span className="tds">{d}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* 무엇이 다른가 */}
+      <div className="lab"><i /><span>무엇이 다른가</span></div>
+      <div className="diff">
+        <div className="drow"><b>절기 천문 계산 만세력</b><span>절기를 천문 계산으로 산출하고 진태양시(−30분)·서머타임까지 보정합니다. 하루가 어긋나면 사주 전체가 어긋나기 때문입니다.</span></div>
+        <div className="drow"><b>회사(법인) 사주 전문</b><span>대표 개인만 보지 않습니다. 법인 설립일 사주와 대표 사주를 통합해 — 회사가 대표를 밀어주는지 누르는지까지 봅니다.</span></div>
+        <div className="drow"><b>맞히기가 아니라 처방</b><span>「좋다·나쁘다」로 끝나지 않습니다. 시점·주의·대안 — 오늘 무엇을 어떻게 할지 실행 지침으로 드립니다.</span></div>
+      </div>
+
+      {/* 가격 · 보장 */}
+      <div className="pricebox">
+        <div className="pline"><span>전체 리포트 · 열여섯 장</span><b>12,900원</b></div>
+        <div className="pline sub2"><span>택일팩 · 정밀 사정률 + 이달 길일</span><b>990원</b></div>
+        <div className="passure">✓ 첫 리포트, 만족스럽지 않으면 환불해 드립니다</div>
+      </div>
+
+      <div style={{ padding: '0 24px' }}>
+        <Link className="fullcta" href="/reading">내 사주로 열어보기 <small>생년월일만 · 30초 · 무료로 시작</small></Link>
+      </div>
+
+      <div className="foot">
+        <div className="crule" />
+        <div className="colo">士</div>
+        명리 기반 참고 정보입니다 · 투찰금액 산정 근거가 아닙니다<br />
+        <Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보처리방침</Link>
+      </div>
+    </div>
+  );
+}
