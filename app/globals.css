@@ -820,3 +820,20 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5 .emocore .emrule{width:36px;height:1px;background:var(--h-gold);margin:18px auto;position:relative}
 .home5 .emocore .emlast{font-family:var(--serif);font-weight:700;font-size:15px;color:#f2ede0;margin-top:14px;line-height:1.9}
 .home5 .emocore .emlast b{color:var(--h-goldlt)}
+
+/* ═══════════ 실물 에셋 (먹·한지·인주 영상/텍스처) ═══════════ */
+/* 로딩 리추얼 영상 배너 */
+.rite .ritevid{margin:-4px -2px 4px;border-radius:10px;overflow:hidden;height:150px;background:#181b21}
+.rite .ritevid video{width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block}
+
+/* 히어로 — 먹 텍스처 오버레이 (home5) */
+.home5 .hero5{background-color:var(--h-ink);background-image:linear-gradient(rgba(24,27,33,.66),rgba(24,27,33,.9)),url(/tx-ink.jpg);background-size:cover;background-position:center}
+/* 히어로 — 네이비 계열(/ceo·/reading·/balju)에도 은은한 먹결 */
+.hero{background-image:linear-gradient(180deg,rgba(37,64,106,.86),rgba(28,51,87,.94)),url(/tx-ink.jpg);background-size:cover;background-position:center}
+
+/* home5 페이지 — 한지 종이 바탕(고정 커버, 카드 사이로 비침) */
+.app.home5{background-color:#f2efe7;background-image:url(/tx-hanji.jpg);background-size:cover;background-position:center;background-attachment:fixed}
+
+/* 감정의 핵 — 인주 번짐 배경 */
+.home5 .emocore::before{background:url(/bloom.jpg) center/cover;opacity:.5;mix-blend-mode:screen}
+.home5 .emocore{background-color:var(--h-ink)}

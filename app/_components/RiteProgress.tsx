@@ -19,7 +19,12 @@ export default function RiteProgress({ open, title, steps, stepMs = 430 }: {
   return (
     <div className="riteov" role="status" aria-live="polite">
       <div className="rite">
-        <div className="rseal">士</div>
+        <div className="ritevid">
+          <video autoPlay muted loop playsInline poster="/ritual-poster.jpg">
+            <source src="/ritual.webm" type="video/webm" />
+            <source src="/ritual.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div className="rtitle">{title}</div>
         <div className="rsteps">
           {steps.map((s, i) => (
