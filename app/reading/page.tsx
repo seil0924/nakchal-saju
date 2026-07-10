@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
+import { CLIENTS } from '@/lib/clients';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
 
@@ -74,6 +75,7 @@ export default function Reading() {
   const [addName, setAddName] = useState('');
   const [addDate, setAddDate] = useState('');
   const [saved, setSaved] = useState<Target[]>([]);
+  const [cbOpen, setCbOpen] = useState(false); // 발주처 검색 셀렉트 열림
   useEffect(() => { try { const s = localStorage.getItem(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
   // 발주처 탭에서 넘어온 경우 프리필 (?ck=client&cn=이름&cd=날짜)
   useEffect(() => {
@@ -301,7 +303,36 @@ export default function Reading() {
             </div>
           )}
           <label style={{ marginTop: 12 }}>{kindLabel(addKind)} 대상 이름 <span className="opt">(선택)</span></label>
-          <input value={addName} maxLength={20} placeholder={REL_KINDS.find(k => k.key === addKind)!.ph} onChange={e => setAddName(e.target.value)} />
+          {addKind === 'client' ? (() => {
+            const q = addName.trim();
+            const hits = CLIENTS.filter(c => !q || c.name.includes(q) || c.cat.includes(q));
+            return (
+              <div className="cbx">
+                <input value={addName} maxLength={20} placeholder="발주처 검색 — 예) 도로공사, LH"
+                  onChange={e => { setAddName(e.target.value); setCbOpen(true); }}
+                  onFocus={() => setCbOpen(true)}
+                  onBlur={() => setTimeout(() => setCbOpen(false), 150)}
+                  onKeyDown={e => { if (e.key === 'Escape') setCbOpen(false); }} />
+                <span className={'cbxi' + (cbOpen ? ' up' : '')} onMouseDown={e => { e.preventDefault(); setCbOpen(v => !v); }}>▾</span>
+                {cbOpen && (
+                  <div className="cbxdd">
+                    {hits.map((c, i) => (
+                      <button key={i} type="button" className="cbxop"
+                        onMouseDown={e => e.preventDefault()}
+                        onClick={() => { setAddName(c.name); setAddDate(c.date); setCbOpen(false); }}>
+                        <b>{c.name}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat}</span>
+                      </button>
+                    ))}
+                    {hits.length > 0
+                      ? <div className="cbxhint">고르면 설립일이 자동으로 채워집니다 · 목록에 없으면 그대로 직접 입력</div>
+                      : <div className="cbxnone">‘{q}’ — 아직 DB에 없는 발주처입니다. 이대로 쓰시고 아래 설립일만 직접 넣어주세요.</div>}
+                  </div>
+                )}
+              </div>
+            );
+          })() : (
+            <input value={addName} maxLength={20} placeholder={REL_KINDS.find(k => k.key === addKind)!.ph} onChange={e => setAddName(e.target.value)} />
+          )}
           <label>{REL_KINDS.find(k => k.key === addKind)!.sub}</label>
           <input type="date" value={addDate} onChange={e => setAddDate(e.target.value)} />
           <button className="go" style={{ marginTop: 12, padding: 12, fontSize: 14, background: 'linear-gradient(135deg,var(--navy),#182c49)' }} onClick={addTarget}>+ {kindLabel(addKind)} 추가</button>
