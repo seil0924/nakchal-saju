@@ -34,8 +34,11 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
         <Link href="/why" style={{ fontSize: 12, color: '#7f786c', textDecoration: 'none', fontWeight: 600 }}>다른 고민 ›</Link>
       </div>
 
-      {/* 통점 히어로 */}
+      {/* 통점 히어로 (상징 영상) */}
       <div className="hero5">
+        <video className="herovid" autoPlay muted loop playsInline>
+          <source src={`/why-${p.slug}.mp4`} type="video/mp4" />
+        </video>
         <div className="wm">{p.mk}</div>
         <div className="kick">{p.kicker}</div>
         <h1>{p.title.split('\n').map((line, i) => <span key={i}>{i > 0 && <br />}<T s={line} /></span>)}</h1>

@@ -53,7 +53,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
       }
       await new Promise(r => setTimeout(r, 500));
       await load(); markUnlocked(id); setModal(false);
-      setSeal(true); setTimeout(() => setSeal(false), 1400);
+      setSeal(true); setTimeout(() => setSeal(false), 2600);
     } catch { setErr('결제 확인에 실패했습니다.'); }
     finally { setBusy(false); }
   }
@@ -129,7 +129,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
 
       {seal && (
         <div className="sealov" aria-hidden>
-          <div className="sealbox"><div className="sealstamp">開</div><div className="sealtxt">봉인 해제 — 잠긴 섹션이 열렸습니다</div></div>
+          <div className="sealbox"><video className="sealvid" autoPlay muted playsInline poster="/openseal-poster.jpg"><source src="/openseal.mp4" type="video/mp4" /></video><div className="sealtxt">봉인 해제 — 잠긴 섹션이 열렸습니다</div></div>
         </div>
       )}
       {res && level < 2 && sticky && !modal && (

@@ -182,6 +182,10 @@ export default function CeoTwin() {
         {res && (
           <div id="twinres" style={{ marginTop: 8 }}>
             {/* 1막 — 거장의 명(命): 명리학 기반 칭찬일색 */}
+            <div className="ceoreveal">
+              <video autoPlay muted loop playsInline><source src="/ceoreveal.mp4" type="video/mp4" /></video>
+              <span className="crlab">鏡 · 거울에 비추다</span>
+            </div>
             <div className="twinlead" style={{ marginTop: 4 }}>
               대표님의 명(命)을 세계 거장 50인과 견줬습니다.<br />
               가장 <b>{LV(res.level)}</b>는 이 사람 — <b>{res.tycoon.name}</b>입니다.

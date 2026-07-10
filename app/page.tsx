@@ -14,8 +14,11 @@ export default function Home() {
         <div className="ham"><i /><i /><i /></div>
       </div>
 
-      {/* 히어로 — 먹빛 */}
+      {/* 히어로 — 먹빛 (영상 배너) */}
       <div className="hero5">
+        <video className="herovid" autoPlay muted loop playsInline poster="/herobg-poster.jpg">
+          <source src="/herobg.mp4" type="video/mp4" />
+        </video>
         <div className="wm">士</div>
         <div className="kick">運七技三</div>
         <h1>대표와 회사의 사주,<br />그 <b>운칠(運七)</b>을 짚어드립니다</h1>

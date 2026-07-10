@@ -176,7 +176,7 @@ export default function Reading() {
       if (!full) throw new Error();
       setRes({ ...res, ...full }); setLevel(full.level ?? (chosen === 'taekil' ? 1 : 2)); setModal(false);
       markUnlocked(res.reportId);
-      setSeal(true); setTimeout(() => setSeal(false), 1400); // 개봉(開) 연출 — 절정으로 마무리
+      setSeal(true); setTimeout(() => setSeal(false), 2600); // 개봉(開) 연출 — 절정으로 마무리
     } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
     finally { setBusy(false); }
   }
@@ -436,7 +436,9 @@ export default function Reading() {
       {seal && (
         <div className="sealov" aria-hidden>
           <div className="sealbox">
-            <div className="sealstamp">開</div>
+            <video className="sealvid" autoPlay muted playsInline poster="/openseal-poster.jpg">
+              <source src="/openseal.mp4" type="video/mp4" />
+            </video>
             <div className="sealtxt">봉인 해제 — 잠긴 섹션이 열렸습니다</div>
           </div>
         </div>

@@ -34,6 +34,11 @@ export default function Ritual() {
         <div className="ic"><svg viewBox="0 0 24 24" style={{ stroke: '#e3c27a' }}><path d="M4 6h16M4 12h16M4 18h16" /></svg></div>
       </div>
 
+      <div className="bujavid">
+        <video autoPlay muted loop playsInline poster="/ritual-poster.jpg"><source src="/ritual-buja.mp4" type="video/mp4" /></video>
+        <div className="bvtx">붉은 기운을 담습니다</div>
+      </div>
+
       <div style={{ padding: '0 16px 20px' }}>
         <div className="sechd" style={{ marginTop: 15 }}><span className="t"><span className="b" />오늘의 부적</span><span className="m">투찰 임박</span></div>
 

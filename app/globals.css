@@ -837,3 +837,23 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 /* 감정의 핵 — 인주 번짐 배경 */
 .home5 .emocore::before{background:url(/bloom.jpg) center/cover;opacity:.5;mix-blend-mode:screen}
 .home5 .emocore{background-color:var(--h-ink)}
+
+/* ═══════════ 영상 배너 배선 ═══════════ */
+/* 히어로 라이브 배경 (홈·통점 랜딩) */
+.home5 .hero5{position:relative;isolation:isolate}
+.home5 .hero5 .herovid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;opacity:.5}
+.home5 .hero5::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(24,27,33,.5),rgba(24,27,33,.82))}
+.home5 .hero5 .wm,.home5 .hero5 .kick,.home5 .hero5 h1,.home5 .hero5 .rule,.home5 .hero5 .sub{position:relative;z-index:1}
+
+/* 결제 성공 開 — 영상 */
+.sealvid{width:180px;height:180px;object-fit:cover;border-radius:18px;display:block;margin:0 auto;box-shadow:0 14px 44px rgba(154,42,32,.5)}
+
+/* /ceo 동경 리빌 배너 */
+.ceoreveal{position:relative;margin:2px 0 12px;border-radius:12px;overflow:hidden;height:120px;background:#181b21}
+.ceoreveal video{width:100%;height:100%;object-fit:cover;display:block;opacity:.92}
+.ceoreveal .crlab{position:absolute;left:14px;bottom:11px;font-family:var(--serif);font-weight:800;font-size:13px;color:#e3c27a;letter-spacing:.14em;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+
+/* /ritual 부적 영상 배너 */
+.bujavid{position:relative;height:190px;overflow:hidden;background:#1a130a}
+.bujavid video{width:100%;height:100%;object-fit:cover;display:block}
+.bujavid .bvtx{position:absolute;left:16px;bottom:12px;font-family:var(--serif);font-weight:800;font-size:14px;color:#e3c27a;letter-spacing:.1em;text-shadow:0 2px 10px rgba(0,0,0,.7)}
