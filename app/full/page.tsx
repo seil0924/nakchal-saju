@@ -58,8 +58,11 @@ export default function FullIntro() {
         <Link href="/" style={{ fontSize: 12, color: '#7f786c', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
       </div>
 
-      {/* 통점 히어로 */}
+      {/* 통점 히어로 (촛불·먹산수 영상) */}
       <div className="hero5">
+        <video className="herovid" autoPlay muted loop playsInline poster="/fullhero-poster.jpg">
+          <source src="/fullhero.mp4" type="video/mp4" />
+        </video>
         <div className="wm">命</div>
         <div className="kick">運七技三</div>
         <h1>낙찰은 운이라면서,<br />왜 <b>운(運)</b>은 준비 안 하십니까</h1>
