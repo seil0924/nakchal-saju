@@ -145,6 +145,16 @@ export default function Reading() {
     finally { setBusy(false); }
   }
 
+  async function share() {
+    if (!res) return;
+    const url = `${location.origin}/report/${res.reportId}`;
+    const text = `[낙찰사주] 오늘 내 낙찰 유리도 ${res.hero?.score ?? ''}점 — ${res.hero?.sub ?? ''}. 대표·회사 사주로 오늘 사정률 짚어주는 데, 너도 한번 봐봐:`;
+    try {
+      if (navigator.share) await navigator.share({ title: '낙찰사주', text, url });
+      else { await navigator.clipboard.writeText(text + ' ' + url); alert('공유 문구와 링크를 복사했어요. 카톡에 붙여넣어 보내세요.'); }
+    } catch {}
+  }
+
   const seg = (on: boolean) => 'seg-b' + (on ? ' on' : '');
 
   return (
@@ -314,6 +324,7 @@ export default function Reading() {
             {unlocked && res.gauge.precise && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
             )}
+            <button className="sharebtn" onClick={share}>📷 결과 공유하기 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카톡으로 자랑하기</span></button>
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
           </div>
         )}

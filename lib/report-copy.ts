@@ -1,7 +1,26 @@
 // lib/report-copy.ts — 낙찰사주 리포트 카피 + 섹션 생성 (서버 전용)
 // ⚠️ 유료 섹션 텍스트는 이 모듈에서만 생성됩니다. 클라이언트로 직접 노출 금지.
 import 'server-only';
-import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, type Chart, type Sajeong } from './engine';
+import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, type Chart, type Sajeong } from './engine';
+
+// 투찰 택일: 이번 달 길일 캘린더 (대표 일간을 살리는 일진 = 상단/생 날)
+function choilHtml(c:Chart, y:number, m:number){
+  const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();
+  const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const gilDays:number[]=[];
+  let cells='';
+  for(let i=0;i<first;i++) cells+='<div class="cd mute"></div>';
+  for(let d=1;d<=days;d++){
+    const rel=relation(c.dayMasterEl, todayPillar(y,m,d).el);
+    const gil=(rel==='in'||rel==='bi'); if(gil) gilDays.push(d);
+    cells+=`<div class="cd${gil?' gil':''}">${d}</div>`;
+  }
+  const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="cdh">${x}</div>`).join('');
+  return `<div class="choil">${dh}${cells}</div>`+
+    `<p>이번 달 <b>${m}월</b>, 대표님 기운이 위로 뻗는 <b>투찰 길일</b>은 <b>${gilDays.length?gilDays.join('·')+'일':'해당 없음'}</b>입니다.</p>`+
+    `<p>오늘의 사정률과 같은 원리로, 대표님 일간(${GAN[c.dGan]})을 살리는 일진이 드는 날 — 큰 건 투찰·계약·미팅을 이 날에 맞추면 유리합니다.</p>`+
+    `<p>반대로 표시 없는 날은 기운이 눌리니, 무리한 저가 투찰은 피하고 관망하십시오.</p>`;
+}
 
 const DMc=['한번 정하면 밀어붙여 새 판을 여는 개척형 대표이십니다.','현장을 달구고 사람을 움직이는 추진력의 대표이십니다.','신뢰로 오래 버티는 뚝심의 경영자이십니다.','빠르게 끊고 확실히 마무리하는 승부사형 대표이십니다.','판을 읽고 돌아갈 길을 찾는 지략형 대표이십니다.'];
 const DMs=['굽히기 싫어 홀로 부딪히고, 원칙을 지키다 손해도 감수해오셨습니다.','빠르게 타올랐다 식으며, 속도와 감정 사이에서 홀로 애태워오셨습니다.','남의 짐까지 짊어지고, 답답할 만큼 참으며 버텨오셨습니다.','강한 만큼 부딪히고, 냉정하다는 오해 속에 홀로 결정해오셨습니다.','속을 잘 드러내지 않고, 정처 없이 흔들리는 시기를 홀로 견뎌오셨습니다.'];
@@ -179,7 +198,7 @@ function daeunSectionHtml(d,legalName){
     `<p>${DAEUN_REL[relc]}.</p>`+
     `<p>다음 10년(<b>${d.list[Math.min(7,d.curBlock+1)].from}년차~</b>)엔 <b>${EL[d.list[Math.min(7,d.curBlock+1)].el]}</b> 기운으로 넘어가니, 그 결에 맞춰 확장·정비의 때를 잡으십시오.</p>`;
 }
-function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,unlocked,names,daeunMeta){
+function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,unlocked,names,daeunMeta,nowYMD){
   names=names||{};
   const me=c.dayMasterEl,gan=GAN[c.dGan],sip=sipsung(c),dom=argmax(sip);
   let strong=0,weak=0;for(let i=1;i<5;i++){if(c.dist[i]>c.dist[strong])strong=i;if(c.dist[i]<c.dist[weak])weak=i;}
@@ -224,6 +243,7 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
   if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사');
     secs.push({mk:'協',free:false,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사')});}
   secs.push({mk:'率',free:true,t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:gaugeHtml(s,worryTxt,unlocked),gauge:true});
+  if(nowYMD){secs.push({mk:'擇',free:false,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
   secs.push({mk:'方',free:false,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
     `사주에 <b>${EL[weak]}</b>가 ${zero?'비어':'옅어'}, 그 기운이 채워지는 <b>${DIR_EL[weak]}</b> 현장·발주처가 유리합니다.`,
@@ -241,18 +261,19 @@ export type Section = { mk:string; free:boolean; t:string; html:string };
 // 전체(유료 포함) 섹션 — 서버에서 결제 검증된 뒤에만 호출
 export type RelNames = { client?:string; legal?:string; partner?:string; ally?:string };
 export type DaeunMeta = { foundYear?:number; curYear:number };
+export type NowYMD = { y:number; m:number; d:number };
 export function reportHero(c:Chart, s:Sajeong){ return heroFor(c,s); }
 export function buildFull(
   c:Chart, today:any, s:Sajeong, worry:string,
-  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames, daeunMeta?:DaeunMeta
+  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames, daeunMeta?:DaeunMeta, nowYMD?:NowYMD
 ):Section[]{
-  return buildReport(c,today,s,worry,cli,legal,partner,ally,true,names,daeunMeta) as Section[];
+  return buildReport(c,today,s,worry,cli,legal,partner,ally,true,names,daeunMeta,nowYMD) as Section[];
 }
 // 무료 티어 — 유료 섹션의 html을 제거(placeholder만)하고 정밀값도 삭제해 응답
 export function buildFreeGated(
   c:Chart, today:any, s:Sajeong, worry:string,
-  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames, daeunMeta?:DaeunMeta
+  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames, daeunMeta?:DaeunMeta, nowYMD?:NowYMD
 ):Section[]{
-  const full = buildReport(c,today,s,worry,cli,legal,partner,ally,false,names,daeunMeta) as Section[];
+  const full = buildReport(c,today,s,worry,cli,legal,partner,ally,false,names,daeunMeta,nowYMD) as Section[];
   return full.map(sec => sec.free ? sec : { ...sec, html:'' }); // 유료 텍스트 미전송
 }

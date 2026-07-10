@@ -54,9 +54,10 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean): Report
 
   const names = { client: input.clientName, legal: input.legalName, partner: input.partnerName, ally: input.allyName };
   const daeunMeta = input.legal ? { foundYear: parseInt(input.legal.slice(0, 4), 10), curYear: now.getFullYear() } : undefined;
+  const nowYMD = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
   const sections = unlockedFlag
-    ? buildFull(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta)
-    : buildFreeGated(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta);
+    ? buildFull(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD)
+    : buildFreeGated(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD);
 
   // ★게이팅: 정밀값(precise)은 잠금 해제 시에만 응답에 포함
   const gauge = unlockedFlag

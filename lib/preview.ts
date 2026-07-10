@@ -43,24 +43,28 @@ export function lunarToSolar(y:number,m:number,d:number,isLeap=false){
 }
 
 export type PChart = { yGan:number;yZhi:number;mGan:number;mZhi:number;dGan:number;dZhi:number;hGan:number|null;hZhi:number|null;dayMasterEl:number };
-export function computePreview(y:number,m:number,d:number,hourFloat:number|null):PChart{
+export function computePreview(y:number,m:number,d:number,hourFloat:number|null,yaja=false):PChart{
   const lam=sunLongAt(y,m,d,hourFloat);
   let yy=y;if(m<=2&&lam<315)yy=y-1;
   const yGan=((yy-4)%10+10)%10,yZhi=((yy-4)%12+12)%12;
   const mZhi=(2+Math.floor(((lam-315+360)%360)/30))%12,mOrder=(mZhi-2+12)%12,mStart=((yGan%5)*2+2)%10,mGan=(mStart+mOrder)%10;
   const dIdx=((jdn(y,m,d)+49)%60+60)%60,dGan=dIdx%10,dZhi=dIdx%12;
   let hGan:number|null=null,hZhi:number|null=null;
-  if(hourFloat!==null){let hf=hourFloat;if(hf<0)hf+=24;hZhi=((Math.floor((hf+1)/2))%12+12)%12;hGan=((dGan%5)*2+hZhi)%10;}
+  if(hourFloat!==null){let hf=hourFloat;if(hf<0)hf+=24;hZhi=((Math.floor((hf+1)/2))%12+12)%12;const hdg=yaja?(dGan+1)%10:dGan;hGan=((hdg%5)*2+hZhi)%10;}
   return {yGan,yZhi,mGan,mZhi,dGan,dZhi,hGan,hZhi,dayMasterEl:GAN_EL[dGan]};
 }
+const DST:[number,number][]=[[19480601,19480913],[19490403,19490911],[19500401,19500910],[19510506,19510909],[19550505,19550909],[19560520,19560930],[19570505,19570922],[19580504,19580921],[19590503,19590920],[19600501,19600918],[19870510,19871011],[19880508,19881009]];
+const isDST=(y:number,m:number,d:number)=>{const k=y*10000+m*100+d;return DST.some(([a,b])=>k>=a&&k<b);};
 export function chartFromInput(dateISO:string,timeHHMM:string|null,cal:'solar'|'lunar'='solar',isLeap=false):PChart|null{
   if(!dateISO) return null;
   let [y,m,d]=dateISO.split('-').map(Number);
   if(!y||!m||!d) return null;
   if(cal==='lunar'){const so=lunarToSolar(y,m,d,isLeap);y=so.y;m=so.m;d=so.d;}
-  let hf:number|null=null;
-  if(timeHHMM){const [hh,mm]=timeHHMM.split(':').map(Number);hf=hh+mm/60-0.5;}
-  return computePreview(y,m,d,hf);
+  let hf:number|null=null,yaja=false;
+  if(timeHHMM){const [hh,mm]=timeHHMM.split(':').map(Number);let total=hh*60+mm-(isDST(y,m,d)?60:0);
+    if(total<0){total+=1440;const dt=new Date(Date.UTC(y,m-1,d));dt.setUTCDate(dt.getUTCDate()-1);y=dt.getUTCFullYear();m=dt.getUTCMonth()+1;d=dt.getUTCDate();}
+    const clock=total/60;yaja=clock>=23;hf=clock-0.5;}
+  return computePreview(y,m,d,hf,yaja);
 }
 export function sipsungPreview(c:PChart):number[]{
   const me=c.dayMasterEl;
