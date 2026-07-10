@@ -189,3 +189,23 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .daeun .dcell.cur{background:#fbf1d9;border:1.5px solid var(--gold)}
 .daeun .dg{font-family:var(--serif);font-weight:900;font-size:16px}
 .daeun .dy{font-size:9px;color:var(--sub);font-weight:600;margin-top:3px}
+
+/* ===== 발주처 탭 (/balju) ===== */
+.searchbar{margin:14px 13px 6px;background:#fff;border:1.5px solid #ddd6c6;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:8px}
+.searchbar input{border:none;outline:none;flex:1;font-size:14px;font-weight:600;color:var(--ink);background:transparent;font-family:var(--sans)}
+.searchbar .si{color:#b7b0a0;font-size:16px}
+.balist{padding:2px 0 8px}
+.li{margin:8px 13px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;color:var(--ink)}
+.li .t b{font-size:14px;font-weight:700}
+.li .t span{display:block;font-size:11px;color:var(--sub);margin-top:3px}
+.li .r{font-size:11.5px;font-weight:700;color:var(--navy);background:#eef1f7;padding:6px 11px;border-radius:999px;white-space:nowrap}
+.balnote{text-align:center;font-size:10.5px;color:#8d8672;padding:8px 16px 12px;line-height:1.6;font-weight:500}
+
+/* ===== 궁합 히어로 (대표↔상대 명식 + 큰 점수) ===== */
+.cverdict{display:flex;align-items:center;justify-content:center;gap:10px;margin:2px 0 8px}
+.cvs{text-align:center;flex:1;max-width:96px}
+.cvs .cnm{font-size:11px;color:var(--sub);font-weight:700;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cvs .cpl{font-family:var(--serif);font-weight:900;font-size:22px;color:#fff;border-radius:10px;padding:9px 0}
+.cvscore{text-align:center;flex:0 0 auto;padding:0 2px}
+.cvscore .n{font-family:var(--serif);font-weight:900;font-size:36px;line-height:1}
+.cvscore .g2{font-size:10px;font-weight:700;margin-top:3px}

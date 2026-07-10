@@ -5,10 +5,10 @@ const Hamburger = () => (<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h
 
 export default function Home() {
   const cards = [
-    { h: '사정률 뽑기', p: '내 사주+일진 · 방향 무료', bt: '사정률', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#25406a,#182c49)', price: '무료', cls: 'free' },
-    { h: '발주처 궁합', p: '발주처 고르면 상성', bt: '궁합', btc: '#f6e7d6', bg: 'linear-gradient(135deg,#7f1a17,#a5241f)', price: '첫 990원', cls: 'paid' },
-    { h: '대표 사주', p: '만세력 · 오늘 기운', bt: '대표', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#2f4d7d,#1a2c46)', price: '무료', cls: 'free' },
-    { h: '법인 운세', p: '설립일 사주 · 흐름', bt: '법인', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#3a2c19,#232a38)', price: '무료', cls: 'free' },
+    { h: '사정률 뽑기', p: '내 사주+일진 · 방향 무료', bt: '사정률', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#25406a,#182c49)', price: '무료', cls: 'free', href: '/reading' },
+    { h: '발주처 궁합', p: '발주처 고르면 상성', bt: '궁합', btc: '#f6e7d6', bg: 'linear-gradient(135deg,#7f1a17,#a5241f)', price: '첫 990원', cls: 'paid', href: '/balju' },
+    { h: '대표 사주', p: '만세력 · 오늘 기운', bt: '대표', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#2f4d7d,#1a2c46)', price: '무료', cls: 'free', href: '/reading' },
+    { h: '법인 운세', p: '설립일 사주 · 흐름', bt: '법인', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#3a2c19,#232a38)', price: '무료', cls: 'free', href: '/reading' },
   ];
 
   return (
@@ -31,7 +31,7 @@ export default function Home() {
       <div className="sechd"><span className="t"><span className="b" />해설 보기</span></div>
       <div className="hgrid">
         {cards.map((c, i) => (
-          <Link key={i} className="gc" href="/reading">
+          <Link key={i} className="gc" href={c.href}>
             <div className="art" style={{ background: c.bg }}><span className="bt" style={{ color: c.btc }}>{c.bt}</span></div>
             <div className="info"><h3>{c.h}</h3><p>{c.p}</p>
               <div className="row"><span className={'price ' + c.cls}>{c.price}</span><span className="go">›</span></div>
@@ -53,7 +53,7 @@ export default function Home() {
 
       <div className="tab">
         <a className="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</a>
-        <a><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5" /></svg>발주처</a>
+        <Link href="/balju"><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5" /></svg>발주처</Link>
         <Link className="fab" href="/reading"><span className="fi">士</span><span className="fl">오늘 전망</span></Link>
         <a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3" /></svg>보관함</a>
         <a><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>더보기</a>

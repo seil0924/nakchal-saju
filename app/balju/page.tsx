@@ -1,0 +1,44 @@
+'use client';
+import { useState } from 'react';
+import Link from 'next/link';
+import { CLIENTS } from '@/lib/clients';
+
+export default function Balju() {
+  const [q, setQ] = useState('');
+  const list = CLIENTS.filter(c => c.name.includes(q) || c.cat.includes(q));
+
+  return (
+    <div className="app home">
+      <div className="topbar"><div className="logo"><span className="s">士</span>발주처</div><div className="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></div></div>
+
+      <div className="hero"><div className="kick">發 注 處 宮 合</div>
+        <h2 style={{ fontSize: 19 }}>어느 발주처와<br />붙어볼까요</h2>
+        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>발주처 설립일 사주 × 대표님 사주로 궁합을 봅니다</div>
+      </div>
+
+      <div className="searchbar">
+        <span className="si">🔍</span>
+        <input value={q} onChange={e => setQ(e.target.value)} placeholder="발주처 이름·분야로 검색" />
+      </div>
+
+      <div className="balist">
+        {list.length === 0 && <div className="balnote">‘{q}’에 맞는 발주처가 아직 없습니다. 더 많은 발주처를 계속 추가하고 있어요.</div>}
+        {list.map((c, i) => (
+          <Link key={i} className="li" href={`/reading?ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`}>
+            <div className="t"><b>{c.name}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat}</span></div>
+            <div className="r">궁합 보기 ›</div>
+          </Link>
+        ))}
+      </div>
+      <div className="balnote">설립일은 공개 연혁 기준의 자체 구축 DB입니다.<br />더 많은 발주처가 계속 추가됩니다.</div>
+
+      <div className="tab">
+        <Link className="" href="/"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</Link>
+        <a className="on"><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5" /></svg>발주처</a>
+        <Link className="fab" href="/reading"><span className="fi">士</span><span className="fl">오늘 전망</span></Link>
+        <a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3" /></svg>보관함</a>
+        <a><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>더보기</a>
+      </div>
+    </div>
+  );
+}

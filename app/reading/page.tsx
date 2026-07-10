@@ -46,6 +46,17 @@ export default function Reading() {
   const [addDate, setAddDate] = useState('');
   const [saved, setSaved] = useState<Target[]>([]);
   useEffect(() => { try { const s = localStorage.getItem(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
+  // 발주처 탭에서 넘어온 경우 프리필 (?ck=client&cn=이름&cd=날짜)
+  useEffect(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const ck = p.get('ck') as RelKind | null, cn = p.get('cn'), cd = p.get('cd');
+      if (ck && cd && ['client', 'partner', 'ally'].includes(ck)) {
+        setAddKind(ck);
+        setTargets(prev => [...prev.filter(x => x.kind !== ck), { kind: ck, name: cn || '', date: cd }]);
+      }
+    } catch {}
+  }, []);
   function persistSaved(list: Target[]) { setSaved(list); try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch {} }
   function addTarget() {
     if (!addDate) { setErr('대상의 날짜를 넣어주세요.'); return; }

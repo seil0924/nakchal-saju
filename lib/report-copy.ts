@@ -86,7 +86,17 @@ function compatWith(meChart,otherChart,table,A,S){
  const rel=relation(me,o);const c=table[rel];
  const fill=s=>s.replace(/\{M\}/g,EL[me]).replace(/\{O\}/g,EL[o]).replace(/\{A\}/g,A).replace(/\{S\}/g,S);
  return {rel,grade:c.grade,score:c.score,gc:c.gc,letter:c.g,t:fill(c.t),score2:compatScore(rel,otherChart),
-   pills:pil(otherChart.dGan,otherChart.dZhi),paras:c.p.map(fill)};
+   pills:pil(otherChart.dGan,otherChart.dZhi),oel:GAN_ELc[otherChart.dGan],paras:c.p.map(fill)};
+}
+// 궁합 히어로 — 대표↔상대 명식 나란히 + 큰 점수 (사주아이식 극화)
+function compatBlock(cm,c,otherLabel){
+  const P=a=>a.map(x=>`<p>${x}</p>`).join('');
+  const meCol=EL_HEX[GAN_ELc[c.dGan]],otCol=EL_HEX[cm.oel];
+  return `<div class="cverdict">`+
+    `<div class="cvs"><div class="cnm">대표님</div><div class="cpl" style="background:${meCol}">${pil(c.dGan,c.dZhi)}</div></div>`+
+    `<div class="cvscore"><div class="n" style="color:${cm.gc}">${cm.score2}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
+    `<div class="cvs"><div class="cnm">${otherLabel}</div><div class="cpl" style="background:${otCol}">${cm.pills}</div></div>`+
+  `</div>`+P(cm.paras);
 }
 function compat(meChart,clientChart){return compatWith(meChart,clientChart,CO,'대표님','발주처');}
 // 법인 운세 (설립일 사주 × 대표)
@@ -208,11 +218,11 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     if(daeunMeta&&daeunMeta.foundYear){const d=daeun(legalChart,daeunMeta.foundYear,daeunMeta.curYear);
       secs.push({mk:'運',free:false,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal)});}}
   if(clientChart){const cm=compat(c,clientChart);const nm=names.client?`${names.client} — `:'';
-    secs.push({mk:'處',free:false,t:`${nm}${cm.t}`,html:compatHtml(cm,`발주처${names.client?' '+names.client:''}`)});}
+    secs.push({mk:'處',free:false,t:`${nm}${cm.t}`,html:compatBlock(cm,c,names.client||'발주처')});}
   if(partnerChart){const cm=compatWith(c,partnerChart,DONGUP,'대표님','동업 상대');
-    secs.push({mk:'同',free:false,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatHtml(cm,names.partner||'동업 상대')});}
+    secs.push({mk:'同',free:false,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대')});}
   if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사');
-    secs.push({mk:'協',free:false,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatHtml(cm,names.ally||'상대 회사')});}
+    secs.push({mk:'協',free:false,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사')});}
   secs.push({mk:'率',free:true,t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:gaugeHtml(s,worryTxt,unlocked),gauge:true});
   secs.push({mk:'方',free:false,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
