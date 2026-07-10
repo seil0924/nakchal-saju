@@ -617,3 +617,102 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .sec .bd p,.twinlead,.tystory p,.myeong p,.mecard .mep,.dcs,.teaser .ttx{line-height:1.8}
 /* 50대+ 가독: 최소 본문 크기 하한 */
 .sec .bd p{font-size:13.5px}
+
+/* 발주처 검색 셀렉트 (콤보박스) */
+.cbx{position:relative}
+.cbx input{width:100%;padding-right:34px}
+.cbx .cbxi{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#8a8270;font-size:12px;cursor:pointer;transition:transform .18s;padding:6px}
+.cbx .cbxi.up{transform:translateY(-50%) rotate(180deg)}
+.cbxdd{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:40;background:#fff;border:1px solid #e0d9c6;border-radius:12px;box-shadow:0 14px 34px rgba(24,27,33,.16);max-height:264px;overflow-y:auto;animation:risein .18s}
+.cbxop{display:block;width:100%;text-align:left;background:#fff;border:0;border-bottom:1px solid #f1ece0;padding:11px 14px;cursor:pointer}
+.cbxop:last-of-type{border-bottom:0}
+.cbxop b{display:block;font-size:13.5px;font-weight:700;color:#20242c}
+.cbxop span{display:block;font-size:11px;color:#8a8270;font-weight:500;margin-top:2px}
+@media(hover:hover){.cbxop:hover{background:#faf7ef}}
+.cbxop:active{background:#f4efe3}
+.cbxhint{padding:9px 14px;font-size:10.5px;color:#9a9384;background:#faf8f2;border-top:1px solid #f1ece0;line-height:1.5}
+.cbxnone{padding:12px 14px;font-size:12px;color:#6f6a5c;line-height:1.6}
+
+/* ═══════════ HOME5 — 정관장×무복 현대 해석 (승인 시안 이식) ═══════════ */
+.home5{--h-ink:#181b21;--h-inktx:#f2ede0;--h-hanji:#f5f4f0;--h-panel:#fff;--h-line:#e7e4db;
+  --h-tx:#22252c;--h-mut:#7f786c;--h-mut2:#a39c8e;--h-red:#9a2a20;--h-gold:#a5862f;--h-goldlt:#d8b25f;
+  background:var(--h-hanji);min-height:100vh;display:flex;flex-direction:column}
+@media(min-width:900px){.dmain .app.home5{max-width:560px}}
+
+/* 마스트헤드 */
+.home5 .mast{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 15px;border-bottom:1px solid var(--h-line)}
+.home5 .mast .mb{display:flex;align-items:center;gap:12px}
+.home5 .mast .s{width:34px;height:34px;border:1.5px solid var(--h-red);color:var(--h-red);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:19px}
+.home5 .mast .n{font-family:var(--serif);font-weight:800;font-size:18px;color:#1e2129;line-height:1}
+.home5 .mast .n em{display:block;font-style:normal;font-family:var(--sans);font-weight:600;font-size:9.5px;letter-spacing:.26em;color:var(--h-mut);margin-top:5px}
+.home5 .mast .ham{display:flex;flex-direction:column;gap:4px;padding:6px 0}
+.home5 .mast .ham i{width:20px;height:1.5px;background:#3c3a33}
+
+/* 히어로 — 먹빛 + 士 워터마크 */
+.home5 .hero5{background:var(--h-ink);padding:52px 24px 50px;position:relative;overflow:hidden}
+.home5 .hero5 .wm{position:absolute;right:-26px;bottom:-46px;font-family:var(--serif);font-weight:900;font-size:200px;line-height:1;color:#fff;opacity:.035;user-select:none;pointer-events:none}
+.home5 .hero5 .kick{font-size:11px;letter-spacing:.44em;color:var(--h-goldlt);font-weight:700;position:relative}
+.home5 .hero5 h1{font-family:var(--serif);font-weight:900;font-size:31px;line-height:1.4;color:var(--h-inktx);margin-top:20px;letter-spacing:-.012em;position:relative}
+.home5 .hero5 h1 b{color:var(--h-goldlt);font-weight:900}
+.home5 .hero5 .rule{width:40px;height:1px;background:var(--h-gold);margin:24px 0 16px;position:relative}
+.home5 .hero5 .sub{font-size:12.5px;color:#9298a4;line-height:1.9;font-weight:500;max-width:300px;position:relative}
+
+/* 섹션 라벨 */
+.home5 .lab{display:flex;align-items:baseline;gap:11px;padding:32px 24px 2px}
+.home5 .lab i{width:17px;height:2px;background:var(--h-red);transform:translateY(-3px)}
+.home5 .lab span{font-size:11.5px;letter-spacing:.2em;font-weight:800;color:#6b6249}
+.home5 .lab .m{margin-left:auto;font-size:10.5px;letter-spacing:.08em;color:var(--h-mut2);font-weight:600}
+
+/* 오늘의 전망 패널 — 封 인장 + 먹 CTA */
+.home5 .today{margin:14px 24px 0;background:var(--h-panel);border:1px solid var(--h-line)}
+.home5 .today .in{display:flex;gap:19px;padding:23px 22px 21px;align-items:center}
+.home5 .today .stamp{flex:0 0 auto;width:58px;height:58px;border:2px solid var(--h-red);color:var(--h-red);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:30px}
+.home5 .today h3{font-family:var(--serif);font-weight:800;font-size:18px;color:#1e222a;line-height:1.42}
+.home5 .today p{font-size:11.5px;color:var(--h-mut);margin-top:8px;line-height:1.6;font-weight:500}
+.home5 .today .tcta{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px;background:var(--h-ink);text-decoration:none}
+.home5 .today .tcta b{font-family:var(--serif);font-weight:800;font-size:15px;color:var(--h-goldlt);letter-spacing:.03em}
+.home5 .today .tcta b .a{color:#9298a4;margin-left:7px;font-weight:400}
+.home5 .today .tcta em{font-style:normal;font-weight:500;font-size:10.5px;color:#868c98}
+@media(hover:hover){.home5 .today .tcta:hover b{color:#ecd9a8}}
+
+/* 해설 — 괘선 리스트 (오행색 한자 리드) */
+.home5 .list{margin:10px 24px 0;border-top:1px solid var(--h-line)}
+.home5 .li5{display:flex;align-items:center;gap:16px;padding:18px 2px;border-bottom:1px solid var(--h-line);text-decoration:none;background:transparent}
+@media(hover:hover){.home5 .li5:hover{background:#faf8f2}}
+.home5 .li5 .gz{flex:0 0 auto;width:34px;text-align:center;font-family:var(--serif);font-weight:900;font-size:23px;position:relative}
+.home5 .li5 .gz::after{content:"";position:absolute;right:-9px;top:50%;width:1px;height:22px;background:var(--h-line);transform:translateY(-50%)}
+.home5 .li5 .bd5{flex:1;min-width:0}
+.home5 .li5 .t{font-family:var(--serif);font-weight:700;font-size:16px;color:#20242c}
+.home5 .li5 .t small{font-family:var(--sans);font-weight:600;font-size:10px;color:var(--h-mut2);margin-left:7px}
+.home5 .li5 .d{font-size:11px;color:var(--h-mut);margin-top:4px;font-weight:500}
+.home5 .li5 .rt{flex:0 0 auto;text-align:right}
+.home5 .li5 .pz{font-size:12px;font-weight:800;letter-spacing:.01em}
+.home5 .li5 .pz.free{color:#2f6b57}.home5 .li5 .pz.paid{color:var(--h-red)}
+.home5 .li5 .arw{font-size:14px;color:#c0b699;margin-top:5px;transition:transform .18s}
+@media(hover:hover){.home5 .li5:hover .arw{transform:translateX(3px)}}
+
+/* 동업·협정 — 먹 헤더 밴드 */
+.home5 .ally{margin:26px 24px 0;border:1px solid var(--h-line);display:block;text-decoration:none}
+.home5 .ally .h{background:var(--h-ink);color:var(--h-goldlt);font-family:var(--serif);font-weight:800;font-size:14.5px;letter-spacing:.14em;text-align:center;padding:12px}
+.home5 .ally .b{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;background:var(--h-panel)}
+.home5 .ally .b .t{font-family:var(--serif);font-weight:700;font-size:14.5px;color:#20242c}
+.home5 .ally .b .d{font-size:10.5px;color:var(--h-mut);margin-top:3px;font-weight:500}
+.home5 .ally .b .p{font-size:13px;font-weight:800;color:var(--h-red)}
+
+/* 콜로폰 푸터 */
+.home5 .foot{text-align:center;font-size:10px;color:var(--h-mut2);letter-spacing:.03em;padding:34px 24px 22px;line-height:1.8;font-weight:500;margin-top:auto}
+.home5 .foot .crule{width:30px;height:1px;background:#d7d2c6;margin:0 auto 15px}
+.home5 .foot .colo{width:27px;height:27px;margin:0 auto 13px;border:1px solid #d7d2c6;color:var(--h-gold);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:14px}
+.home5 .foot a{color:#8a8270;text-decoration:underline;text-underline-offset:2px}
+
+/* 하단 내비 — 먹 바 + 중앙 士 인장 */
+.home5 .nav5{display:flex;background:var(--h-ink);border-top:1px solid #34302a;padding:12px 0 15px;position:relative}
+.home5 .nav5::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--h-gold),transparent);opacity:.5}
+.home5 .nav5 a{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;color:#797e8d;font-size:9.5px;font-weight:600;text-decoration:none}
+.home5 .nav5 a svg{width:19px;height:19px;stroke:#797e8d;fill:none;stroke-width:1.6}
+.home5 .nav5 a.on{color:var(--h-goldlt)}.home5 .nav5 a.on svg{stroke:var(--h-goldlt)}
+.home5 .nav5 .c{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;text-decoration:none}
+.home5 .nav5 .c .btn{width:50px;height:50px;margin-top:-25px;border:1px solid var(--h-gold);background:var(--h-red);color:#f3e6cf;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:21px;box-shadow:0 8px 20px rgba(154,42,32,.35)}
+.home5 .nav5 .c .cl{font-size:9px;color:#c9a86f;margin-top:6px;font-weight:700;text-align:center}
+/* home5 안의 닮은 CEO 밴드 — 에디토리얼 리듬에 맞춤 */
+.home5 .ceoband{margin:14px 24px 0;border-radius:0;border:1px solid #3a3f4a}
