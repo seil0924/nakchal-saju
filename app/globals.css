@@ -1,5 +1,5 @@
 
-:root{--bg:#f6f3ec;--card:#fff;--ink:#20242c;--sub:#6f6a5c;--line:#ece7db;--navy:#22406b;--navy2:#232a38;--gold:#b98f3f;--gold2:#e3c27a;--red:#a5241f;--good:#177f5e;--serif:"Noto Serif KR","Noto Serif CJK KR",serif;--sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;}
+:root{--bg:#ffffff;--card:#fff;--ink:#20242c;--sub:#6f6a5c;--line:#ece7db;--navy:#2b2119;--navy2:#211c15;--gold:#b98f3f;--gold2:#e3c27a;--red:#a5241f;--good:#177f5e;--serif:"Noto Serif KR","Noto Serif CJK KR",serif;--sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;}
 *{box-sizing:border-box;margin:0;padding:0}
 /* 모바일 우선: 화면 꽉 채움 (프레임 없음) */
 body{background:var(--bg);font-family:var(--sans);color:var(--ink);letter-spacing:-.012em;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"ss05"}
@@ -472,7 +472,7 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 /* ═══════════ 인터랙션·퍼널 장치 레이어 ═══════════ */
 
 /* 홈 — 닮은 CEO 먹빛 밴드 (사정률 카드와 형태를 다르게) */
-.ceoband{display:flex;align-items:center;gap:13px;margin:14px 16px 2px;background:linear-gradient(135deg,#181b21,#20242c);border:1px solid #3a3f4a;border-radius:14px;padding:14px 16px;text-decoration:none;position:relative;overflow:hidden}
+.ceoband{display:flex;align-items:center;gap:13px;margin:14px 16px 2px;background:linear-gradient(135deg,#211c16,#2c261d);border:1px solid #3a3f4a;border-radius:14px;padding:14px 16px;text-decoration:none;position:relative;overflow:hidden}
 .ceoband::before{content:"士";position:absolute;right:-8px;bottom:-26px;font-family:var(--serif);font-weight:900;font-size:92px;color:rgba(255,255,255,.045);pointer-events:none}
 .ceoband .cbseal{flex:0 0 auto;width:40px;height:40px;border:1.5px solid #d8b25f;color:#e3c27a;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:20px}
 .ceoband .cbtx{flex:1;min-width:0}
@@ -633,7 +633,7 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .cbxnone{padding:12px 14px;font-size:12px;color:#6f6a5c;line-height:1.6}
 
 /* ═══════════ HOME5 — 정관장×무복 현대 해석 (승인 시안 이식) ═══════════ */
-.home5{--h-ink:#181b21;--h-inktx:#f2ede0;--h-hanji:#f5f4f0;--h-panel:#fff;--h-line:#e7e4db;
+.home5{--h-ink:#211c16;--h-inktx:#f2ede0;--h-hanji:#ffffff;--h-panel:#fff;--h-line:#e7e4db;
   --h-tx:#22252c;--h-mut:#7f786c;--h-mut2:#a39c8e;--h-red:#9a2a20;--h-gold:#a5862f;--h-goldlt:#d8b25f;
   background:var(--h-hanji);min-height:100vh;display:flex;flex-direction:column}
 @media(min-width:900px){.dmain .app.home5{max-width:560px}}
@@ -828,10 +828,10 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 /* 히어로 — 먹 텍스처 오버레이 (home5) */
 .home5 .hero5{background-color:var(--h-ink);background-image:linear-gradient(rgba(24,27,33,.66),rgba(24,27,33,.9)),url(/tx-ink.jpg);background-size:cover;background-position:center}
 /* 히어로 — 네이비 계열(/ceo·/reading·/balju)에도 은은한 먹결 */
-.hero{background-image:linear-gradient(180deg,rgba(30,33,40,.84),rgba(18,20,25,.93)),url(/tx-ink.jpg);background-size:cover;background-position:center}
+.hero{background-image:linear-gradient(180deg,rgba(33,28,22,.66),rgba(20,17,13,.9)),url(/tx-ink.jpg);background-size:cover;background-position:center}
 
 /* home5 페이지 — 한지 종이 바탕(고정 커버, 카드 사이로 비침) */
-.app.home5{background-color:#f5f4f0}
+.app.home5{background-color:#ffffff}
 
 /* 감정의 핵 — 인주 번짐 배경 */
 .home5 .emocore::before{background:url(/bloom.jpg) center/cover;opacity:.5;mix-blend-mode:screen}
@@ -840,8 +840,8 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 /* ═══════════ 영상 배너 배선 ═══════════ */
 /* 히어로 라이브 배경 (홈·통점 랜딩) */
 .home5 .hero5{position:relative;isolation:isolate}
-.home5 .hero5 .herovid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;opacity:.5}
-.home5 .hero5::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(24,27,33,.5),rgba(24,27,33,.82))}
+.home5 .hero5 .herovid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;opacity:.82}
+.home5 .hero5::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to bottom,rgba(20,18,14,.28) 0%,rgba(20,18,14,.5) 55%,rgba(20,18,14,.88) 100%)}
 .home5 .hero5 .wm,.home5 .hero5 .kick,.home5 .hero5 h1,.home5 .hero5 .rule,.home5 .hero5 .sub{position:relative;z-index:1}
 
 /* 결제 성공 開 — 영상 */
@@ -905,3 +905,18 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .catpage .emocore .emk{border-color:var(--acc);color:var(--acc)}
 /* 리스트 화살표/틱도 살짝 */
 .catpage .li5 .arw{color:var(--acc)}
+
+/* ═══════════ 사주아이식 폼 다듬기 (입력 크게·대화형 리빌) ═══════════ */
+.card label{font-size:13.5px;font-weight:700;color:#3a3f47}
+.card input,.card select,.card textarea{font-size:16px;padding:14px 14px}
+.card input::placeholder,.card textarea::placeholder{color:#b7b1a3;font-size:15px}
+.card .chip2{font-size:14px;padding:11px 15px}
+.card .seg-b{font-size:15px;padding:13px 0}
+/* 순차 리빌 애니메이션 */
+.reveal{animation:rvup .5s cubic-bezier(.2,.7,.3,1) both}
+@keyframes rvup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* 생년월일 3단 셀렉트 */
+.bdate{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px}
+.bdate select{width:100%;-webkit-appearance:none;appearance:none;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238a8270' stroke-width='1.6'/></svg>") no-repeat right 12px center;border:1px solid var(--line);border-radius:12px;color:var(--ink);font-weight:600}
+.bdate select:invalid{color:#b7b1a3}
+@media(prefers-reduced-motion:reduce){.reveal{animation:none}}

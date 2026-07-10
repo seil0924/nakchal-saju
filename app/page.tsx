@@ -35,31 +35,31 @@ export default function Home() {
             <p>좋은 날만 말씀드리지 않습니다 — <b style={{ color: '#9a2a20' }}>피해야 할 날</b>도 짚어드립니다.</p>
           </div>
         </div>
-        <Link className="tcta" href="/reading"><b>오늘의 전망 열기<span className="a">→</span></b><em>무료 · 정밀값은 택일팩(990원)부터</em></Link>
+        <Link className="tcta" href="/reading"><b>오늘의 전망 열기<span className="a">→</span></b><em>무료로 시작 · 생년월일만 30초</em></Link>
       </div>
 
       {/* 해설 보기 — 괘선 리스트 */}
       <div className="lab"><i /><span>해설 보기</span></div>
       <div className="list">
         <Link className="li5" href="/reading">
-          <div className="gz" style={{ color: '#4f93aa' }}>率</div>
+          <div className="gz" style={{ color: '#3f8f80' }}>率</div>
           <div className="bd5"><div className="t">사정률 뽑기</div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/product/balju">
           <div className="gz" style={{ color: '#46a07d' }}>宮</div>
           <div className="bd5"><div className="t">발주처 궁합</div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
-          <div className="rt"><div className="pz paid">전체 12,900</div><div className="arw">→</div></div>
+          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/product/dongup">
           <div className="gz" style={{ color: '#d15c4a' }}>同</div>
           <div className="bd5"><div className="t">동업·협정 궁합</div><div className="d">손잡기 전에, 깨질 궁합인지부터</div></div>
-          <div className="rt"><div className="pz paid">전체 12,900</div><div className="arw">→</div></div>
+          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/product/beopin">
           <div className="gz" style={{ color: '#cfa64e' }}>法</div>
           <div className="bd5"><div className="t">법인 운세 <small>설립일 사주</small></div><div className="d">회사가 나를 밀어주는가, 누르는가</div></div>
-          <div className="rt"><div className="pz free">무료~</div><div className="arw">→</div></div>
+          <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/full">
           <div className="gz" style={{ color: '#9a2a20' }}>全</div>
@@ -80,7 +80,7 @@ export default function Home() {
         <div className="h">同業宮合 · 協定宮合</div>
         <div className="b">
           <div><div className="t">손잡기 전, 궁합부터</div><div className="d">대표×대표 · 회사×회사 진단</div></div>
-          <div className="p">전체 12,900원</div>
+          <div className="p" style={{ fontSize: 12.5, color: '#8a8270', fontWeight: 700 }}>무료로 시작 →</div>
         </div>
       </Link>
 

@@ -26,6 +26,9 @@ type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
+const YEARS = Array.from({ length: 83 }, (_, i) => 2012 - i); // 2012..1930
+const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
+const DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
 
 // 관계 유형 (사주아이식: 유형 선택 → 대상 저장/재사용)
 const REL_KINDS = [
@@ -192,6 +195,8 @@ export default function Reading() {
   }
 
   const seg = (on: boolean) => 'seg-b' + (on ? ' on' : '');
+  const by = f.birth ? +f.birth.slice(0, 4) : 0, bm = f.birth ? +f.birth.slice(5, 7) : 0, bd = f.birth ? +f.birth.slice(8, 10) : 0;
+  const setB = (y: number, m: number, d: number) => { if (y && m && d) set('birth', `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`); };
 
   return (
     <div className="app">
@@ -207,19 +212,21 @@ export default function Reading() {
           <div className="chips">
             {BID_TYPES.map(t => <button key={t} className={'chip2' + (f.bidType === t ? ' on' : '')} onClick={() => set('bidType', f.bidType === t ? '' : t)}>{t}</button>)}
           </div>
+          {f.bidType && (<div className="reveal">
           <div className="qh">지금 상황은? <span className="opt">(고르면 리포트에 반영됩니다)</span></div>
           <div className="chips">
             {CONDITIONS.map(t => <button key={t} className={'chip2' + (f.condition === t ? ' on' : '')} onClick={() => set('condition', f.condition === t ? '' : t)}>{t}</button>)}
           </div>
           <label style={{ marginTop: 14 }}>지금 가장 고민되는 결정 <span className="opt">(선택)</span></label>
           <textarea value={f.worry} maxLength={200} onChange={e => set('worry', e.target.value)} placeholder="예) 이번 도로공사 큰 건, 넣을지 말지 고민입니다" />
+          </div>)}
         </div>
 
-        {/* 2. 대표님 명식 + 실시간 미리보기 */}
-        <div className="card">
+        {/* 2. 대표님 정보 (입찰 선택 후 노출) */}
+        <div className="card reveal" style={{ display: (f.bidType || f.birth) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />대표님 정보</span></div>
           <label>성함 <span className="opt">(선택)</span></label>
-          <input value={f.name} maxLength={12} placeholder="예) 오세일" onChange={e => set('name', e.target.value)} />
+          <input value={f.name} maxLength={12} placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
           <label>달력</label>
           <div className="seg">
             <button className={seg(f.cal === 'solar')} onClick={() => set('cal', 'solar')}>양력</button>
@@ -232,7 +239,11 @@ export default function Reading() {
             </div>
           )}
           <label>생년월일</label>
-          <input type="date" value={f.birth} onChange={e => set('birth', e.target.value)} />
+          <div className="bdate">
+            <select required value={by || ''} onChange={e => setB(+e.target.value, bm, bd)}><option value="" disabled>년</option>{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
+            <select required value={bm || ''} onChange={e => setB(by, +e.target.value, bd)}><option value="" disabled>월</option>{MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}</select>
+            <select required value={bd || ''} onChange={e => setB(by, bm, +e.target.value)}><option value="" disabled>일</option>{DAYS.map(d => <option key={d} value={d}>{d}일</option>)}</select>
+          </div>
           <label>성별</label>
           <div className="seg">
             <button className={seg(f.gender === 'M')} onClick={() => set('gender', 'M')}>남</button>
@@ -276,18 +287,18 @@ export default function Reading() {
           </div>
         </div>
 
-        {/* 3. 회사 정보 (회사 사주 · 간판) */}
-        <div className="card">
+        {/* 3. 회사 정보 (생일 입력 후 노출) */}
+        <div className="card reveal" style={{ display: f.birth ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />회사 정보</span><span className="chip free">회사 사주</span></div>
           <label>회사명 <span className="opt">(선택)</span></label>
-          <input value={f.company} maxLength={20} placeholder="예) 세일건설(주)" onChange={e => set('company', e.target.value)} />
+          <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
           <label>법인 설립일 <span className="opt">· 법인 운세 + 통합 사정률</span></label>
           <input type="date" value={f.legal} onChange={e => set('legal', e.target.value)} />
           <div className="note">※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.</div>
         </div>
 
-        {/* 4. 관계·궁합 (사주아이식: 유형 선택 → 대상 저장·재사용) */}
-        <div className="card">
+        {/* 4. 관계·궁합 (생일 입력 후 노출) */}
+        <div className="card reveal" style={{ display: f.birth ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />관계·궁합</span><span className="opt">선택</span></div>
           <div className="chips">
             {REL_KINDS.map(k => <button key={k.key} className={'chip2' + (addKind === k.key ? ' on' : '')} onClick={() => setAddKind(k.key)}>{k.label}</button>)}
@@ -335,7 +346,7 @@ export default function Reading() {
           )}
           <label>{REL_KINDS.find(k => k.key === addKind)!.sub}</label>
           <input type="date" value={addDate} onChange={e => setAddDate(e.target.value)} />
-          <button className="go" style={{ marginTop: 12, padding: 12, fontSize: 14, background: 'linear-gradient(135deg,var(--navy),#182c49)' }} onClick={addTarget}>+ {kindLabel(addKind)} 추가</button>
+          <button className="go" style={{ marginTop: 12, padding: 12, fontSize: 14, background: 'linear-gradient(135deg,#2b2119,#181209)' }} onClick={addTarget}>+ {kindLabel(addKind)} 추가</button>
 
           {targets.length > 0 && (
             <div style={{ marginTop: 12 }}>
@@ -349,7 +360,7 @@ export default function Reading() {
           )}
         </div>
 
-        <button className="go" onClick={submit} disabled={busy}>{busy ? '짚는 중…' : '회사 사주 리포트 뽑기 →'}</button>
+        {f.birth && <button className="go reveal" onClick={submit} disabled={busy}>{busy ? '짚는 중…' : '회사 사주 리포트 뽑기 →'}</button>}
         {err && !res && !confirm && <div className="errbox">{err}</div>}
         <div className="note" style={{ textAlign: 'center' }}>※ 재미로 보는 명리 기반 참고 정보. 투찰금액 산정 근거로 사용 불가.</div>
 

@@ -8,7 +8,7 @@ export const OHAENG: Record<string, Ohaeng> = {
   hwa:  { el: '火', acc: '#d15c4a' }, // 인주 — 사람·열기
   to:   { el: '土', acc: '#cfa64e' }, // 황금 — 기반·회사
   geum: { el: '金', acc: '#b9b0a0' }, // 백은 — 결단·결실
-  su:   { el: '水', acc: '#4f93aa' }, // 먹빛 청 — 흐름·지혜 (남색 아님)
+  su:   { el: '水', acc: '#3f8f80' }, // 먹빛 청 — 흐름·지혜 (남색 아님)
 };
 
 export type Product = {
