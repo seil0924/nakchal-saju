@@ -2,6 +2,34 @@
 // ⚠️ 유료 섹션 텍스트는 이 모듈에서만 생성됩니다. 클라이언트로 직접 노출 금지.
 import 'server-only';
 import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, sinsal, type Chart, type Sajeong } from './engine';
+import { matchTycoon, type TyMatch } from './tycoon';
+
+// 鏡 — 해외 거장(작고) 닮은 사주 (무료 바이럴 훅)
+const TYPE_NAME=['개척형','추진형','뚝심형','승부사형','지략형'];
+const TYPE_DESC=['한번 정하면 새 판을 여는','현장을 달구고 사람을 움직이는','신뢰로 오래 버티는','빠르게 끊고 확실히 매듭짓는','판을 읽고 돌아갈 길을 찾는'];
+const TYPE_WAY=[
+  '방향이 서면 밀되, 물러설 하한선을 미리 정해 두는 것이 이 유형의 관건입니다.',
+  '기세가 오를수록 마감 직전까지 속도를 아끼고, 식었을 때 무리하지 않는 것이 요령입니다.',
+  '평소의 뚝심대로 가되, 좋은 때를 놓치지 않도록 결단의 순간만은 앞당기십시오.',
+  '끊고 매듭짓는 힘은 무기이나, 끊기 전 한 박자만 상대 사정을 헤아리면 사람이 남습니다.',
+  '흐름을 읽는 지혜가 강점이나, 재느라 결정적 순간을 놓치지 않도록 매듭은 단호히 지으십시오.'];
+function twinHtml(tm:TyMatch, me:number){
+  const lv = tm.level==='twin' ? '닮은 사주' : tm.level==='near' ? '가까운 사주' : '결이 비슷한 사주';
+  const t=tm.tycoon;
+  const chips = tm.matched.length
+    ? `<div class="twinchips">${tm.matched.map(m=>`<span class="twc">${m}</span>`).join('')}</div>`
+    : '';
+  const cnt = tm.count>0 ? `<div class="twcount">겹치는 명식 부호 <b>${tm.count}가지</b></div>` : '';
+  return `<div class="twinlead">대표님은 <b>${TYPE_NAME[me]}</b> — ${TYPE_DESC[me]} 그릇입니다.<br>`+
+    `이 명식과 세계 거장들의 사주를 견주면, 가장 <b>${lv}</b>은 이 사람입니다.</div>`+
+    `<div class="twincard">`+
+      `<div class="tface" style="background:${EL_HEX[tm.el]}">${tm.pills}</div>`+
+      `<div class="tinfo"><div class="tnm">${t.name}</div>`+
+      `<div class="ten">${t.en}</div><div class="tco">${t.co}</div></div>`+
+    `</div>`+chips+cnt+
+    `<p style="margin-top:12px">이런 <b>${TYPE_NAME[me]}</b>은 이렇게 하십시오 — ${TYPE_WAY[me]}</p>`+
+    `<p class="twinnote">※ 인물 명식은 널리 공개된 출생일 기준이며 생시(生時)는 미상이라 삼주(三柱)로만 계산했습니다. 명식의 구조를 견준 것으로, 재미로 보는 유형 비교일 뿐 그분들의 삶이나 대표님의 운을 단정하는 것이 아닙니다.</p>`;
+}
 
 // 투찰 택일: 이번 달 길일 캘린더 (대표 일간을 살리는 일진 = 상단/생 날)
 function choilHtml(c:Chart, y:number, m:number){
@@ -226,6 +254,8 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     `이는 일간 <b>${gan}(${EL[me]})</b>에 <b>${SIP[dom]}</b>의 기운이 두텁게 실려, ${SIP_MEAN[dom]} 사주이기 때문입니다.`,
     `전체로 보면 <b>${EL[strong]}</b>의 기운이 무기이고, ${zero?`<b>${EL[weak]}</b>의 기운이 통째로 비어`:`<b>${EL[weak]}</b>의 기운이 옅어`} 그 자리가 평생의 숙제였습니다.`,
     `${DMs[me]}`])});
+  const tm=matchTycoon(c);
+  secs.push({mk:'鏡',free:true,t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me)});
   const ss=sinsal(c);
   if(ss.length){
     secs.push({mk:'符',free:true,t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
