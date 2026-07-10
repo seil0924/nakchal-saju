@@ -31,6 +31,7 @@ export type ReportResult = {
   gauge: { dir: string; band: [string, string]; pos: number; precise?: string };
   hero: { score: number; label: string; headline: string; sub: string; up: boolean };
   sections: Section[];
+  meta: { chapters: number; items: number }; // 분량 앵커 — 전체 리포트 장(章)·항목 수
 };
 
 // level: 0 무료 · 1 택일팩(정밀값+택일) · 2 전체. (boolean 하위호환: true→2, false→0)
@@ -60,6 +61,11 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   const nowYMD = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
   const sections = buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level);
 
+  // 분량 앵커: 전체(레벨 2) 기준 장·항목 수를 산출해 노출 (텍스트는 미전송 — 숫자만)
+  const fullSecs = level >= 2 ? sections : buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2);
+  const items = fullSecs.reduce((n, sec) => n + (sec.html.match(/<p|<div class="cbrow|<div class="ssrow/g) || []).length, 0);
+  const meta = { chapters: fullSecs.length, items };
+
   // ★게이팅: 정밀값(precise)은 택일팩(레벨 1)부터 응답에 포함
   const gauge = level >= 1
     ? { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos, precise: s.precise }
@@ -67,5 +73,5 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
 
   const hero = reportHero(c, s); // 큰 점수 + 후킹 제목 (무료 · 방향 기반)
   const title = `士가 읽는 ${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
-  return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections };
+  return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta };
 }

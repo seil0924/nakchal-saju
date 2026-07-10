@@ -716,3 +716,19 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5 .nav5 .c .cl{font-size:9px;color:#c9a86f;margin-top:6px;font-weight:700;text-align:center}
 /* home5 안의 닮은 CEO 밴드 — 에디토리얼 리듬에 맞춤 */
 .home5 .ceoband{margin:14px 24px 0;border-radius:0;border:1px solid #3a3f4a}
+
+/* 시진별 흐름 (오늘의 예보) */
+.sjhd{font-family:var(--serif);font-weight:800;font-size:14px;color:#20242c;margin:16px 0 9px}
+.sijin12{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.sj12{text-align:center;border:1px solid #e7e0cf;border-radius:9px;padding:7px 2px 6px;background:#fff}
+.sj12 b{display:block;font-family:var(--serif);font-weight:800;font-size:14px;color:#20242c}
+.sj12 span{display:block;font-size:8.5px;color:#a39c8e;font-weight:600;margin-top:1px;letter-spacing:.02em}
+.sj12 i{display:block;width:6px;height:6px;border-radius:50%;margin:5px auto 0}
+.sj12.g{border-color:var(--gold);background:#fdf8ec}
+.sj12.g i{background:var(--gold)}
+.sj12.g b{color:#7a5c1e}
+.sj12.m i{background:#c9c2b0}
+.sj12.c{opacity:.55}
+.sj12.c i{background:#d8d2c2}
+.fcline{margin-top:10px;font-size:11.5px;color:#8a8270;font-weight:600;border-top:1px dashed #e0d7c0;padding-top:9px}
+.fcline b{color:var(--navy)}

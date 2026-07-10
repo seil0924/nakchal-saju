@@ -240,6 +240,20 @@ function cheobangHtml(s:Sajeong){
     `<div class="cbrow"><span class="cbk">주의</span><span class="cbv">${warn}</span></div>`+
     `<div class="cbrow"><span class="cbk">대안</span><span class="cbv">${alt}</span></div></div>`;
 }
+// 시진별 흐름 — '판정이 아니라 예보' (12시진 × 일간 상성)
+const SIJIN12:[string,string][]=[['子','23~01'],['丑','01~03'],['寅','03~05'],['卯','05~07'],['辰','07~09'],['巳','09~11'],['午','11~13'],['未','13~15'],['申','15~17'],['酉','17~19'],['戌','19~21'],['亥','21~23']];
+const ZHI_EL12=[4,2,0,0,2,1,1,2,3,3,2,4];
+function sijinHtml(c:Chart){
+  const cells=SIJIN12.map(([h,t],z)=>{
+    const rel=relation(c.dayMasterEl,ZHI_EL12[z]);
+    const lv=(rel==='in'||rel==='bi')?'g':(rel==='jae')?'m':'c';
+    return `<div class="sj12 ${lv}"><b>${h}</b><span>${t}</span><i></i></div>`;
+  }).join('');
+  const gil=SIJIN12.filter((_,z)=>{const r=relation(c.dayMasterEl,ZHI_EL12[z]);return r==='in'||r==='bi';}).map(([h])=>h+'시');
+  return `<div class="sjhd">시진별 흐름 — 오늘, 언제 움직일까</div><div class="sijin12">${cells}</div>`+
+    `<p style="margin-top:10px">오늘은 <b>${gil.join('·')}</b>가 대표님 일간을 살리는 창(窓)입니다. 큰 건의 제출·통화·미팅은 이 창에 맞추십시오.</p>`+
+    `<p class="fcline">이 점수는 판정이 아니라 <b>예보</b>입니다 — 우산을 챙길지는 대표님이 정하십니다.</p>`;
+}
 function gilCount(c:Chart,y:number,m:number){
   const days=new Date(Date.UTC(y,m,0)).getUTCDate();let n=0;
   for(let d=1;d<=days;d++){const rel=relation(c.dayMasterEl,todayPillar(y,m,d).el);if(rel==='in'||rel==='bi')n++;}
@@ -275,7 +289,7 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
       `<p style="margin-top:10px">신살(神殺)은 여느 사람 사주엔 잘 안 드는 특수 부호입니다. 대표님껜 <b>${ss.map(x=>x.name).join('·')}</b>이(가) 함께 앉아, 남다른 승부 기질로 여기까지 오신 것입니다.</p>`});
   }
   // ── 무료 정점(率) → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
-  let rateHtml=gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s);
+  let rateHtml=gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c);
   if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
     rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 바로 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
   secs.push({mk:'率',tier:'free',t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});

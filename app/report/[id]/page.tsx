@@ -6,7 +6,7 @@ import { markUnlocked } from '@/lib/vault';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
-type Result = { reportId: string; title: string; unlocked: boolean; level?: number; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[] };
+type Result = { reportId: string; title: string; unlocked: boolean; level?: number; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number } };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
@@ -104,7 +104,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             })}
             {level < 2 && (
               <>
-                <div className="readyline">리포트 <b>{res.sections.length}개 섹션</b>은 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
+                <div className="readyline">전체 <b>{res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목</b> 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
                 <div className="cta" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>{level === 0 ? '잠긴 리포트 전체 열기' : '전체 리포트로 업그레이드'}<small>{level === 0 ? `잠긴 심층 해석 · 궁합 · 이달 택일 · 정밀 사정률까지 · ${won(PRICE_FULL)}` : `남은 심층 섹션까지 모두 · ${won(PRICE_FULL)}`}</small></div>
                 <div className="ctaassure">✓ 첫 리포트 만족 환불 · 카카오페이/토스로 30초</div>
               </>

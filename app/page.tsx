@@ -37,7 +37,7 @@ export default function Home() {
           <div className="stamp">封</div>
           <div>
             <h3>오늘 이 투찰,<br />나에게 유리한 날인가</h3>
-            <p>대표님 생년월일만 넣으면 30초, 무료로 열립니다.</p>
+            <p>좋은 날만 말씀드리지 않습니다 — <b style={{ color: '#9a2a20' }}>피해야 할 날</b>도 짚어드립니다.</p>
           </div>
         </div>
         <Link className="tcta" href="/reading"><b>오늘의 전망 열기<span className="a">→</span></b><em>무료 · 정밀값은 택일팩(990원)부터</em></Link>
