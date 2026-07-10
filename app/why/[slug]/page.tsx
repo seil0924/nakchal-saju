@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PAINS, painBySlug } from '@/lib/pains';
+import { PAIN_OH, OHAENG } from '@/lib/categories';
 
 export function generateStaticParams() {
   return PAINS.map(p => ({ slug: p.slug }));
@@ -23,9 +24,10 @@ function T({ s }: { s: string }) {
 export default function WhyPage({ params }: { params: { slug: string } }) {
   const p = painBySlug(params.slug);
   if (!p) notFound();
+  const acc = OHAENG[PAIN_OH[p.slug] ?? 'su'].acc;
 
   return (
-    <div className="app home5">
+    <div className="app home5 catpage" style={{ ['--acc' as any]: acc }}>
       <div className="mast">
         <div className="mb">
           <Link href="/" className="s" style={{ textDecoration: 'none' }}>士</Link>

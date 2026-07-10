@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 type Slide = { src: string; poster: string; kick: string; title: string; href: string };
 
-const SLIDES: Slide[] = [
+const BASE_SLIDES: Slide[] = [
   { src: '/hero-1.mp4', poster: '/hero-1-poster.jpg', kick: '運七技三 · 會社 사주 전문', title: '대표와 회사의 사주,<br>그 <b>운칠(運七)</b>을 짚어드립니다', href: '/reading' },
   { src: '/hero-2.mp4', poster: '/hero-2-poster.jpg', kick: '鏡 · 닮은 사주', title: '나와 닮은<br><b>세계적 CEO</b>는 누구일까', href: '/ceo' },
   { src: '/hero-3.mp4', poster: '/hero-3-poster.jpg', kick: '擇 · 오늘의 택일', title: '오늘 이 투찰,<br><b>유리한 날</b>인가', href: '/reading' },
@@ -15,6 +15,13 @@ const DUR = 5000;
 
 export default function HeroCarousel() {
   const [i, setI] = useState(0);
+  const [SLIDES, setSlides] = useState(BASE_SLIDES);
+  // 진입할 때마다 슬라이드 순서 랜덤 (하이드레이션 불일치 방지 위해 마운트 후 셔플)
+  useEffect(() => {
+    const a = [...BASE_SLIDES];
+    for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
+    setSlides(a); setI(0);
+  }, []);
   const vids = useRef<(HTMLVideoElement | null)[]>([]);
   const touch = useRef<number | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);

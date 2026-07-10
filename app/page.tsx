@@ -42,24 +42,24 @@ export default function Home() {
       <div className="lab"><i /><span>해설 보기</span></div>
       <div className="list">
         <Link className="li5" href="/reading">
-          <div className="gz" style={{ color: '#2f4a7a' }}>率</div>
+          <div className="gz" style={{ color: '#4f93aa' }}>率</div>
           <div className="bd5"><div className="t">사정률 뽑기</div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/balju">
-          <div className="gz" style={{ color: '#a5342a' }}>宮</div>
+        <Link className="li5" href="/product/balju">
+          <div className="gz" style={{ color: '#46a07d' }}>宮</div>
           <div className="bd5"><div className="t">발주처 궁합</div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
           <div className="rt"><div className="pz paid">전체 12,900</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/reading">
-          <div className="gz" style={{ color: '#2f6b57' }}>代</div>
-          <div className="bd5"><div className="t">대표 사주</div><div className="d">나도 몰랐던 승부 기질 — 밀 때와 접을 때</div></div>
-          <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
+        <Link className="li5" href="/product/dongup">
+          <div className="gz" style={{ color: '#d15c4a' }}>同</div>
+          <div className="bd5"><div className="t">동업·협정 궁합</div><div className="d">손잡기 전에, 깨질 궁합인지부터</div></div>
+          <div className="rt"><div className="pz paid">전체 12,900</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/reading">
-          <div className="gz" style={{ color: '#9c7a2a' }}>法</div>
+        <Link className="li5" href="/product/beopin">
+          <div className="gz" style={{ color: '#cfa64e' }}>法</div>
           <div className="bd5"><div className="t">법인 운세 <small>설립일 사주</small></div><div className="d">회사가 나를 밀어주는가, 누르는가</div></div>
-          <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
+          <div className="rt"><div className="pz free">무료~</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/full">
           <div className="gz" style={{ color: '#9a2a20' }}>全</div>
@@ -76,7 +76,7 @@ export default function Home() {
       </Link>
 
       {/* 동업·협정 궁합 */}
-      <Link className="ally" href="/reading" style={{ marginTop: 16 }}>
+      <Link className="ally" href="/product/dongup" style={{ marginTop: 16 }}>
         <div className="h">同業宮合 · 協定宮合</div>
         <div className="b">
           <div><div className="t">손잡기 전, 궁합부터</div><div className="d">대표×대표 · 회사×회사 진단</div></div>
