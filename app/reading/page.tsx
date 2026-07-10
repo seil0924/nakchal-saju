@@ -3,6 +3,7 @@ import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { PRICE_FIRST, PRICE_REGULAR, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
+import { recordReport, markUnlocked } from '@/lib/vault';
 
 type Section = { mk: string; free: boolean; t: string; html: string };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
@@ -112,6 +113,10 @@ export default function Reading() {
       if (!resp.ok) throw new Error();
       const r = await resp.json();
       setRes(r);
+      // 보관함 기록 (이 기기 · 로그인 시 계정) + 저장된 사주/대상 서버 기록(best-effort)
+      recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
+      fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: 'self', name: f.name, birth_date: f.birth, birth_time: f.timeMode === 'N' ? null : effTime, calendar: f.cal, is_leap: f.leap }) }).catch(() => {});
+      targets.forEach(t => fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: t.kind, name: t.name, birth_date: t.date }) }).catch(() => {}));
       setTimeout(() => document.getElementById('rep')?.scrollIntoView({ behavior: 'smooth' }), 60);
     } catch { setErr('리포트를 뽑는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
     finally { setBusy(false); }
@@ -135,6 +140,7 @@ export default function Reading() {
       for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
       if (!full) throw new Error();
       setRes({ ...res, ...full }); setUnlocked(true); setModal(false);
+      markUnlocked(res.reportId);
     } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
     finally { setBusy(false); }
   }
