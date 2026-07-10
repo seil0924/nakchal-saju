@@ -324,7 +324,11 @@ export default function Reading() {
             {unlocked && res.gauge.precise && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
             )}
-            <button className="sharebtn" onClick={share}>📷 결과 공유하기 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카톡으로 자랑하기</span></button>
+            <button className="sharebtn no-print" onClick={share}>📷 결과 공유하기 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카톡으로 자랑하기</span></button>
+            <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={() => window.print()}>
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
+              PDF로 내보내기 · 저장
+            </button>
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
           </div>
         )}

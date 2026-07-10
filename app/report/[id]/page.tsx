@@ -58,6 +58,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               </div>
             )}
             <div className="rephd">{res.title}</div>
+            <div className="print-only pfoot" style={{ display: 'none' }}>낙찰사주 · 士가 읽는 사주·사정률 리포트 · 명리 기반 참고 정보</div>
             {res.sections.map((sec, i) => {
               const open = sec.free || (unlocked && sec.html);
               const locked = !sec.free && !unlocked;
@@ -71,6 +72,11 @@ export default function ReportView({ params }: { params: { id: string } }) {
             })}
             {!unlocked && <div className="cta" onClick={() => { setErr(''); setModal(true); }}>전체 리포트 열기<small>첫 열람 {won(PRICE_FIRST)} · 전체 섹션 + 소수점 정밀값</small></div>}
             {unlocked && res.gauge?.precise && <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b></div>}
+            <button className="sharebtn no-print" style={{ marginTop: 12 }} onClick={() => window.print()}>
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
+              PDF로 내보내기 · 저장
+            </button>
+            {!unlocked && <div className="no-print" style={{ textAlign: 'center', fontSize: 11.5, color: '#a99f88', marginTop: 6 }}>전체 리포트를 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
           </div>
         )}
         {!res && !err && <div style={{ textAlign: 'center', color: '#a99f88', padding: 30 }}>불러오는 중…</div>}

@@ -10,8 +10,9 @@ export const metadata: Metadata = {
     title: '낙찰사주 — 대표와 회사의 사주 전문',
     description: '재주는 갖추셨습니다. 그 운칠(運七)을 짚어드립니다. 오늘의 낙찰 사정률부터 회사 운세·궁합까지.',
     type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: '낙찰사주 — 會社 사주 전문' }],
   },
-  twitter: { card: 'summary', title: '낙찰사주', description: '오늘의 낙찰 사정률을 사주로 짚다' },
+  twitter: { card: 'summary_large_image', title: '낙찰사주 — 會社 사주 전문', description: '오늘의 낙찰 사정률을 사주로 짚다', images: ['/og.png'] },
   robots: { index: true, follow: true },
 };
 

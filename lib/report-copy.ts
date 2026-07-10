@@ -1,7 +1,7 @@
 // lib/report-copy.ts — 낙찰사주 리포트 카피 + 섹션 생성 (서버 전용)
 // ⚠️ 유료 섹션 텍스트는 이 모듈에서만 생성됩니다. 클라이언트로 직접 노출 금지.
 import 'server-only';
-import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, type Chart, type Sajeong } from './engine';
+import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, sinsal, type Chart, type Sajeong } from './engine';
 
 // 투찰 택일: 이번 달 길일 캘린더 (대표 일간을 살리는 일진 = 상단/생 날)
 function choilHtml(c:Chart, y:number, m:number){
@@ -210,6 +210,17 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     `이는 일간 <b>${gan}(${EL[me]})</b>에 <b>${SIP[dom]}</b>의 기운이 두텁게 실려, ${SIP_MEAN[dom]} 사주이기 때문입니다.`,
     `전체로 보면 <b>${EL[strong]}</b>의 기운이 무기이고, ${zero?`<b>${EL[weak]}</b>의 기운이 통째로 비어`:`<b>${EL[weak]}</b>의 기운이 옅어`} 그 자리가 평생의 숙제였습니다.`,
     `${DMs[me]}`])});
+  const ss=sinsal(c);
+  if(ss.length){
+    secs.push({mk:'符',free:true,t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
+      `<div class="sinsal">`+
+      ss.map((x,i)=>`<div class="ssrow"><div class="sshan" style="background:${['#7a1f1f','#22406b'][i%2]}">${x.hanja.slice(0,2)}</div>`+
+        `<div class="ssbody"><div class="sshead">${x.head}</div>`+
+        ((i===0||unlocked)?`<p class="sstxt">${x.body}</p>`:`<p class="sstxt lockt">🔒 전체 리포트에서 <b>${x.name}(${x.hanja})</b>의 풀이가 열립니다.</p>`)+
+      `</div></div>`).join('')+
+      `</div>`+
+      `<p style="margin-top:10px">신살(神殺)은 여느 사람 사주엔 잘 안 드는 특수 부호입니다. 대표님껜 <b>${ss.map(x=>x.name).join('·')}</b>이(가) 함께 앉아, 남다른 승부 기질로 여기까지 오신 것입니다.</p>`});
+  }
   secs.push({mk:'五',free:false,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
     distHtml(c)+P([
     `여덟 글자의 오행은 ${EL.map((e,i)=>`${e}${c.dist[i]}`).join(' · ')} — ${zero?'한쪽으로 크게 쏠린 극단적 구성':'다소 치우친 구성'}입니다.`,

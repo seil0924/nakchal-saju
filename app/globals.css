@@ -225,3 +225,63 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 /* 공유 버튼 */
 .sharebtn{width:100%;margin-top:10px;padding:13px;background:#fff;border:1.5px solid var(--navy);color:var(--navy);border-radius:13px;font-family:var(--serif);font-weight:800;font-size:14.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
 .sharebtn:active{background:#eef1f7}
+
+/* ===== 신살(神殺) 부호 (符) ===== */
+.sinsal{display:flex;flex-direction:column;gap:10px;margin:2px 0 4px}
+.ssrow{display:flex;gap:11px;align-items:flex-start;background:#faf7ef;border:1px solid #e7e1d1;border-radius:13px;padding:12px 13px}
+.ssrow .sshan{flex:0 0 auto;width:42px;height:42px;border-radius:11px;color:#fff;font-family:var(--serif);font-weight:900;font-size:19px;display:flex;align-items:center;justify-content:center;letter-spacing:-1px}
+.ssrow .ssbody{flex:1;min-width:0}
+.ssrow .sshead{font-family:var(--serif);font-weight:800;font-size:14px;color:var(--ink);line-height:1.45;margin-bottom:5px}
+.ssrow .sstxt{font-size:13px;color:var(--sub);line-height:1.72;margin:0}
+.ssrow .sstxt.lockt{color:var(--gold);font-weight:700}
+
+/* ===== 부적 리추얼(18) · 더보기(19) ===== */
+.persona{background:#fff;border-radius:14px;padding:13px 14px;display:flex;gap:11px;align-items:center;border:1px solid var(--line);margin:12px 0 4px}
+.persona .av{width:42px;height:42px;border-radius:12px;background:radial-gradient(circle at 35% 30%,#2f4d7d,#1a2c46);border:1px solid var(--gold2);flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:var(--gold2);font-family:var(--serif);font-weight:900;font-size:18px}
+.persona p{font-size:13.5px;color:#33383f;line-height:1.55;font-weight:500;margin:0}
+.persona b{color:var(--red);font-weight:700}
+.kv{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #e6ddc9;font-size:12.5px}
+.kv:last-child{border:none}
+.kv .k{color:var(--sub);font-weight:600}
+.kv .v{font-weight:700;color:var(--ink)}
+.warn{background:#fbe9e8;border:1px solid #f0c9c6;border-radius:12px;padding:11px 12px;font-size:12px;color:#7f1a17;font-weight:600;line-height:1.55;margin:12px 0 4px}
+.amulet{margin:14px auto 8px;width:150px;height:200px;border-radius:14px;background:linear-gradient(180deg,#2a2013,#3a2c19);border:2px solid var(--gold2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--gold2);box-shadow:0 10px 26px rgba(0,0,0,.32)}
+.amulet .sy{font-family:var(--serif);font-size:44px}
+.amulet .tx{font-family:var(--serif);font-size:13px;letter-spacing:.24em;writing-mode:vertical-rl}
+.ritsub{text-align:center;font-size:11.5px;color:var(--sub);margin-top:2px}
+.setrow{background:#fff;border:1px solid var(--line);border-radius:13px;margin-bottom:6px}
+.setrow a,.setrow button{width:100%;background:none;text-align:left;display:flex;justify-content:space-between;align-items:center;padding:14px 15px;border:none;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none;cursor:pointer;font-family:inherit}
+.setrow a:last-child,.setrow button:last-child{border-bottom:none}
+.setrow .r{color:var(--sub);font-size:12px;font-weight:500}
+.profcard{display:flex;align-items:center;gap:12px;margin:12px 0 4px}
+.profcard .pav{width:48px;height:48px;border-radius:14px;background:radial-gradient(circle at 35% 30%,#2f4d7d,#1a2c46);border:1px solid var(--gold2);display:flex;align-items:center;justify-content:center;color:var(--gold2);font-family:var(--serif);font-weight:900;font-size:20px;flex:0 0 auto}
+.profcard .pn{font-family:var(--serif);font-weight:700;font-size:15px}
+.profcard .ps{font-size:11.5px;color:var(--sub);margin-top:2px}
+.subbody{padding:14px 16px 0}
+.donebar{margin:8px 13px 14px;padding:15px;background:linear-gradient(135deg,#22406b,#182c49);color:#fff;border:1px solid var(--gold2);border-radius:14px;font-family:var(--serif);font-weight:800;font-size:15px;text-align:center;cursor:pointer}
+.donebar.done{background:linear-gradient(135deg,#177f5e,#0f5f45)}
+
+/* ===== PDF 내보내기 (print) ===== */
+@media print{
+  @page{margin:14mm}
+  body{background:#fff !important;padding:0 !important}
+  .app{max-width:100% !important;border:none !important;box-shadow:none !important;border-radius:0 !important}
+  .no-print,.tab,.cta,.modal,.topbar,.rhero .no-print{display:none !important}
+  .hero{background:#fff !important;color:#20242c !important;padding:0 0 6px !important}
+  .hero .k,.hero h1{color:#20242c !important}
+  .print-only{display:block !important}
+  .pfoot{text-align:center;font-size:11px;color:#6f6a5c;border-top:1px solid #ddd;padding-top:8px;margin:2px 0 12px}
+  .rhero{border:1px solid #ddd !important;background:#faf7ef !important;color:#20242c !important;break-inside:avoid}
+  .rhero .hl,.rhero .lab,.rhero .sub2{color:#20242c !important}
+  .rhero .num{color:#b58a2f !important}
+  .sec{break-inside:avoid;border:1px solid #e5e0d4 !important;margin-bottom:8px}
+  .sec .bd{max-height:none !important;height:auto !important;overflow:visible !important;padding:0 14px 12px !important;display:block !important}
+  .sec .cv{display:none !important}
+  .sec.locked .bd{display:none !important}
+}
+
+/* 공통 상단바 (홈 외 페이지: 발주처·보관함·부적·더보기) */
+.topbar{background:var(--navy2);display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.topbar .logo{font-family:var(--serif);font-weight:900;color:#fff;font-size:17px;display:flex;align-items:center;gap:6px}
+.topbar .logo .s{width:24px;height:24px;border-radius:7px;border:1px solid var(--gold2);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:13px}
+.topbar .ic svg{width:20px;height:20px;stroke:#c7d2e6;fill:none;stroke-width:1.8}
