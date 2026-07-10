@@ -831,7 +831,7 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .hero{background-image:linear-gradient(180deg,rgba(37,64,106,.86),rgba(28,51,87,.94)),url(/tx-ink.jpg);background-size:cover;background-position:center}
 
 /* home5 페이지 — 한지 종이 바탕(고정 커버, 카드 사이로 비침) */
-.app.home5{background-color:#f2efe7;background-image:url(/tx-hanji.jpg);background-size:cover;background-position:center;background-attachment:fixed}
+.app.home5{background-color:#f5f4f0}
 
 /* 감정의 핵 — 인주 번짐 배경 */
 .home5 .emocore::before{background:url(/bloom.jpg) center/cover;opacity:.5;mix-blend-mode:screen}
