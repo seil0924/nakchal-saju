@@ -5,6 +5,17 @@ import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
+import RiteProgress from '@/app/_components/RiteProgress';
+
+// 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
+const RITE_STEPS = [
+  '절기(節氣) 천문 계산 — 진태양시 보정',
+  '원국(元局) 구성 — 십성·오행 배치',
+  '신살(神殺) 대조',
+  '오늘 일진 × 사정률 흐름 대조',
+  '세계 거장 50인 명식 대조',
+  '리포트 봉인 — 섹션 산출',
+];
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
@@ -41,7 +52,21 @@ export default function Reading() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [consent, setConsent] = useState(false);
+  const [prog, setProg] = useState(false);     // 로딩 리추얼
+  const [seal, setSeal] = useState(false);     // 결제 후 개봉 연출
+  const [sticky, setSticky] = useState(false); // 스크롤 스티키 CTA
   const set = (k: string, v: any) => setF(s => ({ ...s, [k]: v }));
+
+  // 잠긴 섹션을 지나 스크롤하면 슬림 CTA 노출 (결과 없거나 전체 열람이면 숨김)
+  useEffect(() => {
+    const on = () => {
+      const el = document.getElementById('rep');
+      if (!el) { setSticky(false); return; }
+      setSticky(el.getBoundingClientRect().top < -420);
+    };
+    window.addEventListener('scroll', on, { passive: true }); on();
+    return () => window.removeEventListener('scroll', on);
+  }, [res, level]);
 
   // 관계 대상: 추가 목록 + 저장(재사용)
   const [targets, setTargets] = useState<Target[]>([]);
@@ -103,7 +128,7 @@ export default function Reading() {
   }
 
   async function run() {
-    setConfirm(false); setBusy(true); setLevel(0);
+    setConfirm(false); setBusy(true); setLevel(0); setProg(true);
     try {
       const tg = (k: RelKind) => targets.find(t => t.kind === k);
       const body = {
@@ -115,9 +140,11 @@ export default function Reading() {
         ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
         situation, worry: f.worry,
       };
+      const minWait = new Promise(r => setTimeout(r, 2500)); // 리추얼 최소 상영 시간
       const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
       if (!resp.ok) throw new Error();
       const r = await resp.json();
+      await minWait;
       setRes(r);
       // 보관함 기록 (이 기기 · 로그인 시 계정) + 저장된 사주/대상 서버 기록(best-effort)
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
@@ -125,7 +152,7 @@ export default function Reading() {
       targets.forEach(t => fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: t.kind, name: t.name, birth_date: t.date }) }).catch(() => {}));
       setTimeout(() => document.getElementById('rep')?.scrollIntoView({ behavior: 'smooth' }), 60);
     } catch { setErr('리포트를 뽑는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
-    finally { setBusy(false); }
+    finally { setBusy(false); setProg(false); }
   }
 
   async function pay(chosen: 'taekil' | 'full') {
@@ -147,6 +174,7 @@ export default function Reading() {
       if (!full) throw new Error();
       setRes({ ...res, ...full }); setLevel(full.level ?? (chosen === 'taekil' ? 1 : 2)); setModal(false);
       markUnlocked(res.reportId);
+      setSeal(true); setTimeout(() => setSeal(false), 1400); // 개봉(開) 연출 — 절정으로 마무리
     } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
     finally { setBusy(false); }
   }
@@ -309,6 +337,14 @@ export default function Reading() {
             </div>
             <div className="rright">
             <div className="rephd">{res.title}</div>
+            {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
+              return (
+                <div className="rprog">
+                  <span className="rpl">열람 <b>{opened}</b> / {total} 섹션</span>
+                  <span className="rpbar"><i style={{ width: Math.round(opened / total * 100) + '%' }} /></span>
+                  <span className="rpr">{level >= 2 ? '전체 열람' : level === 1 ? '택일팩' : '무료 열람'}</span>
+                </div>
+              ); })()}
             <div id="acc">
               {res.sections.map((sec, i) => {
                 const rank = RANK[sec.tier] ?? 2;
@@ -316,7 +352,7 @@ export default function Reading() {
                 const locked = rank > level;
                 const openThis = () => { setErr(''); setSku(sec.tier === 'taekil' ? 'taekil' : 'full'); setModal(true); };
                 return (
-                  <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')}>
+                  <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                     <div className="hd" onClick={locked ? openThis : undefined}>
                       <div className="mk">{sec.mk}</div>
                       <div className="ti">{sec.t}</div>
@@ -339,10 +375,14 @@ export default function Reading() {
               })}
             </div>
             {level < 2 && (
-              <div className="cta" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
-                {level === 0 ? '잠긴 리포트 전체 열기' : '전체 리포트로 업그레이드'}
-                <small>{level === 0 ? `잠긴 심층 해석 · 궁합 · 이달 택일 · 정밀 사정률까지 · ${won(PRICE_FULL)}` : `남은 심층 섹션까지 모두 열기 · ${won(PRICE_FULL)}`}</small>
-              </div>
+              <>
+                <div className="readyline">리포트 <b>{res.sections.length}개 섹션</b>은 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
+                <div className="cta" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
+                  {level === 0 ? '잠긴 리포트 전체 열기' : '전체 리포트로 업그레이드'}
+                  <small>{level === 0 ? `잠긴 심층 해석 · 궁합 · 이달 택일 · 정밀 사정률까지 · ${won(PRICE_FULL)}` : `남은 심층 섹션까지 모두 열기 · ${won(PRICE_FULL)}`}</small>
+                </div>
+                <div className="ctaassure">✓ 첫 리포트 만족 환불 · 카카오페이/토스로 30초</div>
+              </>
             )}
             {level >= 1 && res.gauge.precise && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
@@ -357,6 +397,27 @@ export default function Reading() {
           </div>
         )}
       </div>
+
+      {/* 로딩 리추얼 */}
+      <RiteProgress open={prog} title="만세력을 폅니다" steps={RITE_STEPS} stepMs={410} />
+
+      {/* 결제 성공 — 개봉(開) 연출 */}
+      {seal && (
+        <div className="sealov" aria-hidden>
+          <div className="sealbox">
+            <div className="sealstamp">開</div>
+            <div className="sealtxt">봉인 해제 — 잠긴 섹션이 열렸습니다</div>
+          </div>
+        </div>
+      )}
+
+      {/* 스크롤 스티키 CTA (전체 미열람 시) */}
+      {res && level < 2 && sticky && !modal && !prog && (
+        <div className="stickycta no-print" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
+          <span className="sl"><b>전체 리포트 열기</b><em>산출 완료 · 열람만 잠금</em></span>
+          <span className="sr">{won(PRICE_FULL)} →</span>
+        </div>
+      )}
 
       {/* 입력 확인 모달 (사주아이식) */}
       {confirm && (

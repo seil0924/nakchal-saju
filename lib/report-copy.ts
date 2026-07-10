@@ -2,24 +2,28 @@
 // ⚠️ 유료 섹션 텍스트는 이 모듈에서만 생성됩니다. 클라이언트로 직접 노출 금지.
 import 'server-only';
 import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, sinsal, type Chart, type Sajeong } from './engine';
-import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_WAY, type TyMatch } from './tycoon';
+import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, type TyMatch } from './tycoon';
 
 // 鏡 — 해외 거장(작고) 닮은 사주 (무료 바이럴 훅)
-function twinHtml(tm:TyMatch, me:number){
+function twinHtml(tm:TyMatch, me:number, myDist:number[]){
   const lv = tm.level==='twin' ? '닮은 사주' : tm.level==='near' ? '가까운 사주' : '결이 비슷한 사주';
   const t=tm.tycoon;
+  const dl=(d:number[])=>d.map((n,i)=>`${EL[i]}${n}`).join('·');
   const chips = tm.matched.length
     ? `<div class="twinchips">${tm.matched.map(m=>`<span class="twc">${m}</span>`).join('')}</div>`
     : '';
-  const cnt = tm.count>0 ? `<div class="twcount">겹치는 명식 부호 <b>${tm.count}가지</b></div>` : '';
   return `<div class="twinlead">대표님은 <b>${TYPE_NAME[me]}</b> — ${TYPE_DESC[me]} 그릇입니다.<br>`+
-    `이 명식과 세계 거장들의 사주를 견주면, 가장 <b>${lv}</b>은 이 사람입니다.</div>`+
+    `이 명식과 세계 거장들의 사주를 견주면, 가장 <b>${lv}</b>는 이 사람입니다.</div>`+
     `<div class="twincard">`+
       `<div class="tface" style="background:${EL_HEX[tm.el]}">${tm.pills}</div>`+
       `<div class="tinfo"><div class="tnm">${t.name}</div>`+
       `<div class="ten">${t.en}</div><div class="tco">${t.co}</div></div>`+
-    `</div>`+chips+cnt+
-    `<p style="margin-top:12px">이런 <b>${TYPE_NAME[me]}</b>은 이렇게 하십시오 — ${TYPE_WAY[me]}</p>`+
+    `</div>`+
+    `<div class="tystory"><div class="tsl">그는 누구였나</div><p>${tm.story}</p></div>`+
+    `<p class="twbasis">대표님 명식 <b>${dl(myDist)}</b> · ${t.name} 삼주 <b>${dl(tm.tyDist)}</b> — `+
+    (tm.count?`두 명식에서 <b>${tm.matched.join('</b>·<b>')}</b>, 여섯 부호 중 ${tm.count}가지가 겹칩니다.`:`구조의 결이 닿습니다.`)+`</p>`+
+    chips+
+    `<p style="margin-top:12px">이런 <b>${TYPE_NAME[me]}</b>은 — ${TYPE_GOOD[me]} ${TYPE_RISK[me]}<br>그러니 ${TYPE_WAY[me]}</p>`+
     `<p class="twinnote">※ 인물 명식은 널리 공개된 출생일 기준이며 생시(生時)는 미상이라 삼주(三柱)로만 계산했습니다. 명식의 구조를 견준 것으로, 재미로 보는 유형 비교일 뿐 그분들의 삶이나 대표님의 운을 단정하는 것이 아닙니다.</p>`;
 }
 
@@ -163,7 +167,7 @@ function gaugeHtml(s,worryTxt,unlocked){
   <div class="bandtxt">이번 흐름은 <b style="color:var(--ink)">${s.bandLo}~${s.bandHi}%</b>에 무게</div>
   <div class="track"><div class="fill2" style="width:${s.pos}%"></div><div class="dot" style="left:${s.pos}%"></div></div>
   <div class="scale"><span>98%</span><span>기초 100%</span><span>102%</span></div>
-  <div class="sjlock"><span class="k">${unlocked?'소수점 정밀값':'🔒 소수점 정밀값'}</span>${unlocked?`<span class="precise">${s.precise}%</span>`:'<span class="sjhint" style="font-size:11px;color:var(--gold);font-weight:700">전체 리포트에서 열림</span>'}</div>
+  <div class="sjlock"><span class="k">${unlocked?'소수점 정밀값':'🔒 소수점 정밀값'}</span>${unlocked?`<span class="precise">${s.precise}%</span>`:'<span class="sjhint" style="font-size:11px;color:var(--gold);font-weight:700">택일팩(990원)부터 열립니다</span>'}</div>
   <p style="margin-top:11px">${s.bridge}</p>${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
 }
 function distHtml(c){const tot=c.dist.reduce((a,b)=>a+b,0);
@@ -251,7 +255,7 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     `전체로 보면 <b>${EL[strong]}</b>의 기운이 무기이고, ${zero?`<b>${EL[weak]}</b>의 기운이 통째로 비어`:`<b>${EL[weak]}</b>의 기운이 옅어`} 그 자리가 평생의 숙제였습니다.`,
     `${DMs[me]}`])});
   const tm=matchTycoon(c);
-  secs.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me)});
+  secs.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me,c.dist)});
   const ss=sinsal(c);
   if(ss.length){
     secs.push({mk:'符',tier:'free',t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
@@ -263,6 +267,13 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
       `</div>`+
       `<p style="margin-top:10px">신살(神殺)은 여느 사람 사주엔 잘 안 드는 특수 부호입니다. 대표님껜 <b>${ss.map(x=>x.name).join('·')}</b>이(가) 함께 앉아, 남다른 승부 기질로 여기까지 오신 것입니다.</p>`});
   }
+  // ── 무료 정점(率) → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
+  let rateHtml=gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s);
+  if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
+    rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 바로 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
+  secs.push({mk:'率',tier:'free',t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
+  if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
+    secs.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 길일 <b>${gc0}일</b>의 정확한 날짜가 이미 산출되어 있습니다 — 이달이 가기 전에 확인하십시오.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
   secs.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>으로 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
     distHtml(c)+P([
     `여덟 글자의 오행은 ${EL.map((e,i)=>`${e}${c.dist[i]}`).join(' · ')} — ${zero?'한쪽으로 크게 쏠린 극단적 구성':'다소 치우친 구성'}입니다.`,
@@ -295,12 +306,6 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     secs.push({mk:'同',tier:'full',teaser:`<b>${names.partner||'상대 대표'}</b>와의 동업 궁합 — 지분·역할·최종 결정권을 어떻게 나눠야 깨지지 않는지가 가려져 있습니다.`,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대')});}
   if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사');
     secs.push({mk:'協',tier:'full',teaser:`<b>${names.ally||'상대 회사'}</b>와의 협정(공동도급) 궁합 — 주관사·지분·관재수까지, 계약 전 반드시 짚을 점이 여기 있습니다.`,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사')});}
-  let rateHtml=gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s);
-  if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
-    rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
-  secs.push({mk:'率',tier:'free',t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
-  if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
-    secs.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc0}일</b> 있습니다 — 대표님 일간을 살리는 정확한 날짜와, 그날 어떻게 움직일지가 잠겨 있습니다.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
   secs.push({mk:'方',tier:'full',teaser:`대표님께 기운을 돋우는 방면과 피해야 할 방면 — 현장·발주처·사무실 택지의 기준이 가려져 있습니다.`,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
     `사주에 <b>${EL[weak]}</b>가 ${zero?'비어':'옅어'}, 그 기운이 채워지는 <b>${DIR_EL[weak]}</b> 현장·발주처가 유리합니다.`,

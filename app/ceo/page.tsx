@@ -2,12 +2,21 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { EL_HEX } from '@/lib/preview';
+import RiteProgress from '@/app/_components/RiteProgress';
+
+const CEO_STEPS = [
+  '삼주(三柱) 구성 — 년·월·일',
+  '여섯 부호 추출 — 오행·음양·십성·신살',
+  '세계 거장 50인 명식과 대조',
+];
 
 type Twin = {
-  type: string; typeDesc: string; way: string; me: number;
-  myPills: string; level: 'twin' | 'near' | 'none'; count: number; matched: string[];
+  type: string; typeDesc: string; good: string; risk: string; way: string; me: number;
+  myPills: string; myDist: number[]; level: 'twin' | 'near' | 'none'; count: number; matched: string[];
   tycoon: { name: string; en: string; co: string; born: string }; tyPills: string; tyEl: number;
+  tyDist: number[]; story: string;
 };
+const ELC = ['木', '火', '土', '金', '水'];
 
 const LV = (l: Twin['level']) => (l === 'twin' ? '닮은 사주' : l === 'near' ? '가까운 사주' : '결이 비슷한 사주');
 // 받침 유무로 와/과 조사 선택
@@ -17,6 +26,7 @@ export default function CeoTwin() {
   const [f, setF] = useState({ name: '', birth: '', cal: 'solar' as 'solar' | 'lunar', leap: false });
   const [res, setRes] = useState<Twin | null>(null);
   const [busy, setBusy] = useState(false);
+  const [prog, setProg] = useState(false);
   const [err, setErr] = useState('');
   const set = (k: string, v: any) => setF(s => ({ ...s, [k]: v }));
   const seg = (on: boolean) => 'seg-b' + (on ? ' on' : '');
@@ -24,15 +34,17 @@ export default function CeoTwin() {
   async function run() {
     setErr('');
     if (!f.birth) { setErr('생년월일을 넣어주세요.'); return; }
-    setBusy(true); setRes(null);
+    setBusy(true); setRes(null); setProg(true);
     try {
+      const minWait = new Promise(r => setTimeout(r, 1650)); // 리추얼 최소 상영
       const r = await fetch('/api/twin', { method: 'POST', body: JSON.stringify({ birth: f.birth, cal: f.cal, leap: f.leap }) });
       if (!r.ok) throw new Error();
       const j = await r.json();
+      await minWait;
       setRes(j);
       setTimeout(() => document.getElementById('twinres')?.scrollIntoView({ behavior: 'smooth' }), 60);
     } catch { setErr('결과를 뽑는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
-    finally { setBusy(false); }
+    finally { setBusy(false); setProg(false); }
   }
 
   const shareText = res
@@ -170,7 +182,7 @@ export default function CeoTwin() {
           <div id="twinres" style={{ marginTop: 8 }}>
             <div className="twinlead" style={{ marginTop: 4 }}>
               대표님은 <b>{res.type}</b> — {res.typeDesc} 그릇입니다.<br />
-              세계 거장 50인과 견주니, 가장 <b>{LV(res.level)}</b>은 이 사람입니다.
+              세계 거장 50인과 견주니, 가장 <b>{LV(res.level)}</b>는 이 사람입니다.
             </div>
             <div className="twincard">
               <div className="tface" style={{ background: EL_HEX[res.tyEl] }}>{res.tyPills}</div>
@@ -180,17 +192,42 @@ export default function CeoTwin() {
                 <div className="tco">{res.tycoon.co}</div>
               </div>
             </div>
+            {/* 그는 누구였나 — 인물 서사 */}
+            <div className="tystory">
+              <div className="tsl">그는 누구였나</div>
+              <p>{res.story}</p>
+            </div>
+
+            {/* 명리 근거 — 오행 분포 대조 (생시 미상 → 삼주) */}
+            <div className="distcmp">
+              <div className="dch">명식 대조 <small>삼주(三柱) 기준 — 오행이 몇 자씩 앉았는가</small></div>
+              <div className="dcg">
+                <span className="dcl" />
+                {ELC.map((e, i) => <span key={i} className="dce" style={{ color: EL_HEX[i] }}>{e}</span>)}
+                <span className="dcl">대표님</span>
+                {res.myDist.map((n, i) => <span key={i} className={'dcn' + (n === 0 ? ' zero' : '')}>{n}</span>)}
+                <span className="dcl">{res.tycoon.name.length > 5 ? res.tycoon.name.slice(0, 5) + '…' : res.tycoon.name}</span>
+                {res.tyDist.map((n, i) => <span key={i} className={'dcn' + (n === 0 ? ' zero' : '')}>{n}</span>)}
+              </div>
+              <p className="dcs">
+                이렇게 놓고 보면 두 명식은 <b>{res.matched.join(' · ')}</b>{res.count ? ` — 여섯 부호 중 ${res.count}가지가 겹칩니다.` : '에서 결이 닿습니다.'}
+              </p>
+            </div>
             {res.matched.length > 0 && (
               <div className="twinchips">{res.matched.map((m, i) => <span key={i} className="twc">{m}</span>)}</div>
             )}
-            {res.count > 0 && <div className="twcount">겹치는 명식 부호 <b>{res.count}가지</b></div>}
-            <p style={{ marginTop: 12, fontSize: 13.5, lineHeight: 1.75, color: '#3a3f47' }}>
-              이런 <b>{res.type}</b>은 이렇게 하십시오 — {res.way}
-            </p>
+
+            {/* 유형 풀이 — 강점 · 주의 · 지침 */}
+            <div className="cheobang" style={{ marginTop: 16 }}>
+              <div className="cbt">{res.type} · {res.typeDesc} 그릇</div>
+              <div className="cbrow"><span className="cbk">강점</span><span className="cbv">{res.good}</span></div>
+              <div className="cbrow"><span className="cbk">주의</span><span className="cbv">{res.risk}</span></div>
+              <div className="cbrow"><span className="cbk">지침</span><span className="cbv">{res.way}</span></div>
+            </div>
 
             <div className="sharewrap">
-              <button className="sharebtn primary" onClick={share}>결과 카드 이미지로 공유 <span style={{ fontWeight: 500, fontSize: 12 }}>· 카카오톡·인스타</span></button>
-              <button className="sharebtn" onClick={saveImage}>카드 이미지 저장</button>
+              <button className="sharebtn primary" onClick={share}>결과 카드 공유<span style={{ fontWeight: 500, fontSize: 11.5, display: 'block', marginTop: 2 }}>카카오톡 · 인스타</span></button>
+              <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 11.5, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
             </div>
 
             {/* 미끼 브리지 — 유형은 알려줬지만 '나 개인'은 감춰 갈증을 만든다 */}
@@ -220,6 +257,7 @@ export default function CeoTwin() {
         )}
         <div className="note" style={{ textAlign: 'center', marginTop: 10 }}>※ 재미로 보는 명리 기반 참고 정보.</div>
       </div>
+      <RiteProgress open={prog} title="거장 50인과 견줍니다" steps={CEO_STEPS} stepMs={500} />
     </div>
   );
 }

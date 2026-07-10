@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import TodayChip from '@/app/_components/TodayChip';
 
 // 첫 메인 (v5 정본 01) — 봉인 + 오늘의 사정률 전망 + 해설 5카드
 const Hamburger = () => (<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>);
@@ -16,19 +17,18 @@ export default function Home() {
       <div className="topbar"><div className="logo"><span className="s">士</span>낙찰사주</div><div className="ic"><Hamburger /></div></div>
 
       <div className="hero"><div className="kick">運 七 技 三 · 회사 사주 전문</div>
-        <h2>대표님과 닮은<br /><b>세계적 CEO</b>는 누구일까</h2>
-        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>잡스 · 록펠러 · 샤넬 … 거장 50인 중, 내 사주와 가장 닮은 대표</div>
+        <h2>대표와 회사의 사주,<br />그 <b>운칠(運七)</b>을 짚어드립니다</h2>
+        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>낙찰 사정률 · 이달의 투찰 길일 · 법인 운세 · 발주처 궁합</div>
       </div>
 
-      <div className="sechd" style={{ marginTop: 15 }}><span className="t"><span className="b" />먼저, 재미로</span><span className="m">무료 · 30초</span></div>
-      <div className="hcard seal-card">
-        <div className="seal-stamp">鏡</div>
-        <div className="seal-t">나와 닮은 세계적 CEO는?</div>
-        <div className="seal-s">생년월일만 넣으면 30초. 세계 거장 50인 중 대표님 사주와 가장 닮은 대표를 찾아 카톡으로 공유하세요 · 무료</div>
-        <Link className="hcta" href="/ceo">나와 닮은 CEO 찾기<small>무료 · 결과 카드 카톡 공유</small></Link>
-      </div>
+      {/* 닮은 CEO — 바이럴 입구 (먹빛 밴드, 사정률 카드와 형태 구분) */}
+      <Link className="ceoband" href="/ceo">
+        <span className="cbseal">鏡</span>
+        <span className="cbtx"><b>나와 닮은 세계적 CEO는?</b><em>잡스·록펠러·샤넬 … 거장 50인 × 내 사주 · 30초</em></span>
+        <span className="cbgo">무료 →</span>
+      </Link>
 
-      <div className="sechd"><span className="t"><span className="b" />오늘의 사정률 전망</span><span className="m">7/9 · 丙午일</span></div>
+      <div className="sechd"><span className="t"><span className="b" />오늘의 사정률 전망</span><TodayChip /></div>
       <div className="hcard seal-card">
         <div className="seal-stamp">封</div>
         <div className="seal-t">오늘 이 투찰, 나에게 유리한 날인가</div>
@@ -55,9 +55,7 @@ export default function Home() {
         </Link>
       </div>
 
-      <div className="hdisc">명리 기반 참고 정보 · 투찰금액 산정 근거 아님<br />
-        <a href="/prototype.html" style={{ color: 'var(--navy)', textDecoration: 'underline' }}>전체 화면 세트(19) 미리보기 →</a>
-      </div>
+      <div className="hdisc">명리 기반 참고 정보 · 투찰금액 산정 근거 아님</div>
 
       <div className="tab">
         <a className="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</a>
