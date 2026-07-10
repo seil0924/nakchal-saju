@@ -1,7 +1,7 @@
 // lib/report.ts — 명식 입력 → 섹션 리포트 (서버 전용)
 import 'server-only';
 import { chartFromBirth, compute, todayPillar, sajeong, wonguk, type Chart, type Pillar } from './engine';
-import { buildFull, buildFreeGated, reportHero, type Section } from './report-copy';
+import { buildTiered, reportHero, type Section } from './report-copy';
 
 export type ReportInput = {
   name?: string;
@@ -33,7 +33,9 @@ export type ReportResult = {
   sections: Section[];
 };
 
-export function computeReport(input: ReportInput, unlockedFlag: boolean): ReportResult {
+// level: 0 무료 · 1 택일팩(정밀값+택일) · 2 전체. (boolean 하위호환: true→2, false→0)
+export function computeReport(input: ReportInput, unlockedFlag: boolean | number): ReportResult {
+  const level = typeof unlockedFlag === 'number' ? unlockedFlag : (unlockedFlag ? 2 : 0);
   const c = chartFromBirth(input.birth, input.time ?? null, input.cal ?? 'solar', input.leap ?? false);
   const now = new Date();
   const today = todayPillar(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -56,12 +58,10 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean): Report
   const names = { client: input.clientName, legal: input.legalName, partner: input.partnerName, ally: input.allyName };
   const daeunMeta = input.legal ? { foundYear: parseInt(input.legal.slice(0, 4), 10), curYear: now.getFullYear() } : undefined;
   const nowYMD = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
-  const sections = unlockedFlag
-    ? buildFull(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD)
-    : buildFreeGated(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD);
+  const sections = buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level);
 
-  // ★게이팅: 정밀값(precise)은 잠금 해제 시에만 응답에 포함
-  const gauge = unlockedFlag
+  // ★게이팅: 정밀값(precise)은 택일팩(레벨 1)부터 응답에 포함
+  const gauge = level >= 1
     ? { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos, precise: s.precise }
     : { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos };
 

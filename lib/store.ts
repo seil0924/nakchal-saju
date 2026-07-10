@@ -5,7 +5,7 @@ import 'server-only';
 import type { ReportInput } from './report';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-export type Order = { paymentId: string; reportId: string; amount: number; status: 'pending' | 'paid' };
+export type Order = { paymentId: string; reportId: string; amount: number; level: number; status: 'pending' | 'paid' };
 
 // ── Supabase 백엔드 (서버 전용 · SERVICE_ROLE) ───────────
 let _sb: SupabaseClient | null | undefined;
@@ -24,7 +24,7 @@ type MemReport = { input: ReportInput; userId: string | null; label?: string; cr
 type SavedChart = { id: string; kind: string; name?: string; birth_date: string; birth_time?: string | null; calendar?: string; is_leap?: boolean };
 const memReports: Map<string, MemReport> = g.__reports ?? (g.__reports = new Map());
 const memOrders: Map<string, Order> = g.__orders ?? (g.__orders = new Map());
-const memUnlocked: Set<string> = g.__unlocked ?? (g.__unlocked = new Set());
+const memUnlockLvl: Map<string, number> = g.__unlockLvl ?? (g.__unlockLvl = new Map()); // reportId → 0/1/2
 const memCharts: Map<string, SavedChart[]> = g.__charts ?? (g.__charts = new Map()); // userId('demo') → charts
 if (g.__seq === undefined) g.__seq = 1000;
 const uid = (u?: string | null) => u || 'demo';
@@ -46,11 +46,11 @@ export async function saveReport(input: ReportInput, userId?: string, label?: st
 export async function listReports(userId?: string): Promise<{ id: string; label?: string; unlocked: boolean }[]> {
   const c = sb();
   if (c) {
-    const { data } = await c.from('reports').select('id,label,unlocked').eq('user_id', userId ?? '').order('created_at', { ascending: false }).limit(50);
-    return (data ?? []).map((r: any) => ({ id: r.id, label: r.label, unlocked: !!r.unlocked }));
+    const { data } = await c.from('reports').select('id,label,unlock_level').eq('user_id', userId ?? '').order('created_at', { ascending: false }).limit(50);
+    return (data ?? []).map((r: any) => ({ id: r.id, label: r.label, unlocked: (r.unlock_level ?? 0) >= 1 }));
   }
   const out: { id: string; label?: string; unlocked: boolean }[] = [];
-  for (const [id, r] of memReports) if (uid(r.userId) === uid(userId)) out.push({ id, label: r.label, unlocked: memUnlocked.has(id) });
+  for (const [id, r] of memReports) if (uid(r.userId) === uid(userId)) out.push({ id, label: r.label, unlocked: (memUnlockLvl.get(id) ?? 0) >= 1 });
   return out.reverse();
 }
 
@@ -87,15 +87,15 @@ export async function getReportOwner(id: string): Promise<string | null> {
   return memReports.get(id)?.userId ?? null;
 }
 
-export async function createOrder(reportId: string, amount: number): Promise<Order> {
+export async function createOrder(reportId: string, amount: number, level: number = 2): Promise<Order> {
   const c = sb();
   const paymentId = 'pay_' + (g.__seq ? g.__seq++ : Math.floor(performance.now()));
   if (c) {
-    const { error } = await c.from('payments').insert({ payment_id: paymentId, report_id: reportId, amount, status: 'pending' });
+    const { error } = await c.from('payments').insert({ payment_id: paymentId, report_id: reportId, amount, level, status: 'pending' });
     if (error) throw error;
-    return { paymentId, reportId, amount, status: 'pending' };
+    return { paymentId, reportId, amount, level, status: 'pending' };
   }
-  const o: Order = { paymentId, reportId, amount, status: 'pending' };
+  const o: Order = { paymentId, reportId, amount, level, status: 'pending' };
   memOrders.set(paymentId, o);
   return o;
 }
@@ -107,21 +107,37 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
     const { data: o } = await c.from('payments').select('*').eq('payment_id', paymentId).maybeSingle();
     if (!o || paidAmount !== o.amount) return null;      // ★금액 재검증
     await c.from('payments').update({ status: 'paid', paid_at: new Date().toISOString() }).eq('payment_id', paymentId);
-    await c.from('reports').update({ unlocked: true }).eq('id', o.report_id);
-    return { paymentId, reportId: o.report_id, amount: o.amount, status: 'paid' };
+    const lvl = o.level ?? 2;
+    const { data: cur } = await c.from('reports').select('unlock_level').eq('id', o.report_id).maybeSingle();
+    const next = Math.max(cur?.unlock_level ?? 0, lvl);   // 상위 레벨은 유지 (다운그레이드 방지)
+    await c.from('reports').update({ unlock_level: next }).eq('id', o.report_id);
+    return { paymentId, reportId: o.report_id, amount: o.amount, level: lvl, status: 'paid' };
   }
   const o = memOrders.get(paymentId);
   if (!o || paidAmount !== o.amount) return null;
   o.status = 'paid';
-  memUnlocked.add(o.reportId);
+  memUnlockLvl.set(o.reportId, Math.max(memUnlockLvl.get(o.reportId) ?? 0, o.level));
   return o;
 }
 
-export async function isUnlocked(reportId: string): Promise<boolean> {
+export async function getOrder(paymentId: string): Promise<Order | null> {
   const c = sb();
   if (c) {
-    const { data } = await c.from('reports').select('unlocked').eq('id', reportId).maybeSingle();
-    return !!data?.unlocked;
+    const { data } = await c.from('payments').select('*').eq('payment_id', paymentId).maybeSingle();
+    return data ? { paymentId, reportId: data.report_id, amount: data.amount, level: data.level ?? 2, status: data.status } : null;
   }
-  return memUnlocked.has(reportId);
+  return memOrders.get(paymentId) ?? null;
+}
+
+// 리포트 언락 레벨 (0 무료 · 1 택일팩 · 2 전체)
+export async function unlockLevel(reportId: string): Promise<number> {
+  const c = sb();
+  if (c) {
+    const { data } = await c.from('reports').select('unlock_level').eq('id', reportId).maybeSingle();
+    return data?.unlock_level ?? 0;
+  }
+  return memUnlockLvl.get(reportId) ?? 0;
+}
+export async function isUnlocked(reportId: string): Promise<boolean> {
+  return (await unlockLevel(reportId)) >= 1;
 }

@@ -242,23 +242,27 @@ function gilCount(c:Chart,y:number,m:number){
   for(let d=1;d<=days;d++){const rel=relation(c.dayMasterEl,todayPillar(y,m,d).el);if(rel==='in'||rel==='bi')n++;}
   return n;
 }
-function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,unlocked,names,daeunMeta,nowYMD){
+// 언락 레벨: 0 무료 · 1 택일팩 · 2 전체
+const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
+function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD){
   names=names||{};
+  const unlocked = level>=2; // 전체(신살 2번째 등 유료 내부 요소)
+  const preciseOn = level>=1; // 택일팩부터 정밀값 공개
   const me=c.dayMasterEl,gan=GAN[c.dGan],sip=sipsung(c),dom=argmax(sip);
   let strong=0,weak=0;for(let i=1;i<5;i++){if(c.dist[i]>c.dist[strong])strong=i;if(c.dist[i]<c.dist[weak])weak=i;}
   const zero=c.dist[weak]===0;
   const P=a=>a.map(x=>`<p>${x}</p>`).join('');
   const secs=[];
-  secs.push({mk:'器',free:true,t:T1[me],html:P([
+  secs.push({mk:'器',tier:'free',t:T1[me],html:P([
     `대표님은 <b>${NAT[me]}</b> 그릇입니다. ${DMc[me]}`,
     `이는 일간 <b>${gan}(${EL[me]})</b>에 <b>${SIP[dom]}</b>의 기운이 두텁게 실려, ${SIP_MEAN[dom]} 사주이기 때문입니다.`,
     `전체로 보면 <b>${EL[strong]}</b>의 기운이 무기이고, ${zero?`<b>${EL[weak]}</b>의 기운이 통째로 비어`:`<b>${EL[weak]}</b>의 기운이 옅어`} 그 자리가 평생의 숙제였습니다.`,
     `${DMs[me]}`])});
   const tm=matchTycoon(c);
-  secs.push({mk:'鏡',free:true,t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me)});
+  secs.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me)});
   const ss=sinsal(c);
   if(ss.length){
-    secs.push({mk:'符',free:true,t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
+    secs.push({mk:'符',tier:'free',t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
       `<div class="sinsal">`+
       ss.map((x,i)=>`<div class="ssrow"><div class="sshan" style="background:${['#7a1f1f','#22406b'][i%2]}">${x.hanja.slice(0,2)}</div>`+
         `<div class="ssbody"><div class="sshead">${x.head}</div>`+
@@ -267,73 +271,72 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
       `</div>`+
       `<p style="margin-top:10px">신살(神殺)은 여느 사람 사주엔 잘 안 드는 특수 부호입니다. 대표님껜 <b>${ss.map(x=>x.name).join('·')}</b>이(가) 함께 앉아, 남다른 승부 기질로 여기까지 오신 것입니다.</p>`});
   }
-  secs.push({mk:'五',free:false,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
+  secs.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>으로 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
     distHtml(c)+P([
     `여덟 글자의 오행은 ${EL.map((e,i)=>`${e}${c.dist[i]}`).join(' · ')} — ${zero?'한쪽으로 크게 쏠린 극단적 구성':'다소 치우친 구성'}입니다.`,
     `<b>${EL[strong]}</b>이 강하다는 것은 ${STRONG_MEAN[strong]}는 뜻입니다. 다만 지나치면 ${STRONG_RISK[strong]}.`,
     `${zero?`비어 있는 <b>${EL[weak]}</b>의 자리 — ${LACK[weak]} 늘 아쉬우셨을 것입니다.`:`옅은 <b>${EL[weak]}</b>를 채울수록 사주가 균형을 찾습니다.`}`,
     `개운으로는 <b>${DIR_EL[weak]}</b> 방향, 행운 숫자 <b>${NUM_EL[weak]}</b>, 색 <b>${COLOR_EL[weak]}</b> — 부족한 기운을 일상에서 채우십시오.`])});
-  secs.push({mk:'決',free:false,t:DEC_T[me],html:P([
+  secs.push({mk:'決',tier:'full',teaser:`대표님의 승부 기질은 <b>${DEC_A[me]}</b> 쪽 — 이 힘이 큰 건을 따내지만, 투찰·계약에서 독이 되는 순간과 반드시 지켜야 할 한 가지가 아직 가려져 있습니다.`,t:DEC_T[me],html:P([
     `대표님의 승부 기질은 <b>${DEC_A[me]}</b> 쪽입니다.`,
     `일지 <b>${ZHI[c.dZhi]}</b>와 <b>${SIP[dom]}</b>의 기운이 겹쳐, 판단이 서면 좀처럼 되돌리지 않습니다.`,
     `그 힘이 큰 건을 따내지만, 지나치면 ${DEC_R[me]}.`,
     `투찰과 계약에서는 ${DEC_V[me]}.`])});
-  secs.push({mk:'人',free:false,t:PPL_T[me],html:P([
+  secs.push({mk:'人',tier:'full',teaser:`직원과 파트너가 대표님을 <b>${CL_MIS[me]}</b>고 오해하기 쉬운 이유, 그리고 곁에 사람을 남기는 법이 여기 있습니다.`,t:PPL_T[me],html:P([
     `대표님은 <b>${PPL_A[me]}</b> 유형이라, 직원과 파트너에게 ${PPL_E[me]}.`,
     `${dom===1?'특히 식상이 강해 말이 날카로워, 옳은 말도 상처가 되기 쉽습니다.':dom===3?'특히 관성이 강해 책임을 홀로 짊어지다 지치기 쉽습니다.':dom===2?'실리를 앞세워 사람보다 성과를 먼저 보기 쉽습니다.':'사람을 쓰는 데 본인만의 엄격한 기준이 섭니다.'}`,
     `그 기준이 조직을 세우지만, 선을 넘은 이는 가차 없이 잘라 홀로 남기도 합니다.`,
     `사람을 남기려면 ${PPL_V[me]}.`])});
-  secs.push({mk:'財',free:false,t:WL_T[me],html:P([
+  secs.push({mk:'財',tier:'full',teaser:`대표님의 재물운은 <b>${['새 판을 벌여 키우는 확장형','크게 벌고 크게 쓰는 기복형','천천히 쌓는 축적형','끊고 맺어 남기는 결실형','굴려서 불리는 순환형'][me]}</b> — 언제 쥐고 언제 풀지, 어디서 새는지가 가려져 있습니다.`,t:WL_T[me],html:P([
     `대표님의 재물운은 <b>${['새 판을 벌여 키우는 확장형','크게 벌고 크게 쓰는 기복형','천천히 쌓는 축적형','끊고 맺어 남기는 결실형','굴려서 불리는 순환형'][me]}</b>입니다.`,
     `사주에 재성(財)의 기운이 <b>${sip[2]}</b>로 ${sip[2]>=2?'분명해':'옅어'}, ${WL_A[me]} 버는 구조입니다.`,
     `${WL_R[me]}.`,
     `수주와 자금은 ${WL_V[me]}.`])});
   if(legalChart){const lr=legalReport(c,legalChart);const nm=names.legal?`${names.legal} — `:'';
-    secs.push({mk:'法',free:false,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
+    secs.push({mk:'法',tier:'full',teaser:`<b>${names.legal||'법인'}</b> 설립일 사주로 본 회사의 그릇과 대표님의 궁합 — 지금 회사가 대표님을 받치는지 누르는지가 여기서 드러납니다.`,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
       `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});
     if(daeunMeta&&daeunMeta.foundYear){const d=daeun(legalChart,daeunMeta.foundYear,daeunMeta.curYear);
-      secs.push({mk:'運',free:false,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal)});}}
+      secs.push({mk:'運',tier:'full',teaser:`<b>${names.legal||'회사'}</b>는 지금 대운의 어느 길목에 있는지, 다음 10년 확장·정비의 때가 언제인지가 가려져 있습니다.`,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal)});}}
   if(clientChart){const cm=compat(c,clientChart);const nm=names.client?`${names.client} — `:'';
-    secs.push({mk:'處',free:false,t:`${nm}${cm.t}`,html:compatBlock(cm,c,names.client||'발주처')});}
+    secs.push({mk:'處',tier:'full',teaser:`<b>${names.client||'발주처'}</b>와 대표님의 궁합 점수와, 이 발주처를 어떻게 대해야 유리한지가 여기 담깁니다.`,t:`${nm}${cm.t}`,html:compatBlock(cm,c,names.client||'발주처')});}
   if(partnerChart){const cm=compatWith(c,partnerChart,DONGUP,'대표님','동업 상대');
-    secs.push({mk:'同',free:false,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대')});}
+    secs.push({mk:'同',tier:'full',teaser:`<b>${names.partner||'상대 대표'}</b>와의 동업 궁합 — 지분·역할·최종 결정권을 어떻게 나눠야 깨지지 않는지가 가려져 있습니다.`,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대')});}
   if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사');
-    secs.push({mk:'協',free:false,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사')});}
-  let rateHtml=gaugeHtml(s,worryTxt,unlocked)+cheobangHtml(s);
+    secs.push({mk:'協',tier:'full',teaser:`<b>${names.ally||'상대 회사'}</b>와의 협정(공동도급) 궁합 — 주관사·지분·관재수까지, 계약 전 반드시 짚을 점이 여기 있습니다.`,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사')});}
+  let rateHtml=gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s);
   if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
     rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
-  secs.push({mk:'率',free:true,t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
-  if(nowYMD){secs.push({mk:'擇',free:false,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
-  secs.push({mk:'方',free:false,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
+  secs.push({mk:'率',tier:'free',t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
+  if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
+    secs.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc0}일</b> 있습니다 — 대표님 일간을 살리는 정확한 날짜와, 그날 어떻게 움직일지가 잠겨 있습니다.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
+  secs.push({mk:'方',tier:'full',teaser:`대표님께 기운을 돋우는 방면과 피해야 할 방면 — 현장·발주처·사무실 택지의 기준이 가려져 있습니다.`,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
     `사주에 <b>${EL[weak]}</b>가 ${zero?'비어':'옅어'}, 그 기운이 채워지는 <b>${DIR_EL[weak]}</b> 현장·발주처가 유리합니다.`,
     `반대 방면은 예민함을 키우니, 그쪽 큰 건은 한 박자 신중히 보십시오.`,
     `사무실·현장 택지에도 같은 원리를 적용하십시오.`])});
-  secs.push({mk:'士',free:false,t:`홀로 벼려온 그 날카로움이, 결국 대표님의 무기입니다`,html:P([
+  secs.push({mk:'士',tier:'full',teaser:`홀로 벼려온 그 날카로움을, 이제 무기로 바꾸는 마지막 한마디가 여기 있습니다.`,t:`홀로 벼려온 그 날카로움이, 결국 대표님의 무기입니다`,html:P([
     `남들은 대표님을 <b>${CL_MIS[me]}</b>고 볼지 모르나, 그 뒤에 홀로 짊어진 무게를 저는 압니다.`,
     `타고난 <b>${EL[strong]}</b>의 힘으로 여기까지 오셨으니, 이제 그 기운을 ${CL_TURN[me]} 쓰실 때입니다.`,
     `행운 숫자 <b>${NUM_EL[weak]}</b>, 색 <b>${COLOR_EL[weak]}</b>, 방위 <b>${DIR_EL[weak]}</b> — 부족한 <b>${EL[weak]}</b>를 곁에 두십시오.`,
     `오늘도 그 마지막 한 끗을 살피는 참모 士가, 대표님의 길을 함께 봅니다.`])});
-  return secs;
+  // ★레벨 게이팅: 잠긴 섹션은 html 제거(teaser만 남겨 갈증 유발), 정밀 텍스트 미전송
+  return secs.map((sec:any)=>({
+    mk:sec.mk, tier:sec.tier, free:sec.tier==='free', t:sec.t,
+    html: (TIER_RANK[sec.tier] <= level) ? sec.html : '',
+    teaser: sec.teaser, gauge: sec.gauge,
+  }));
 }
 
-export type Section = { mk:string; free:boolean; t:string; html:string };
-// 전체(유료 포함) 섹션 — 서버에서 결제 검증된 뒤에만 호출
+export type Section = { mk:string; free:boolean; tier:'free'|'taekil'|'full'; t:string; html:string; teaser?:string; gauge?:boolean };
 export type RelNames = { client?:string; legal?:string; partner?:string; ally?:string };
 export type DaeunMeta = { foundYear?:number; curYear:number };
 export type NowYMD = { y:number; m:number; d:number };
 export function reportHero(c:Chart, s:Sajeong){ return heroFor(c,s); }
-export function buildFull(
+// 레벨(0 무료 · 1 택일팩 · 2 전체)로 섹션 생성. 유료 html은 서버에서 결제 검증 후에만 채워짐.
+export function buildTiered(
   c:Chart, today:any, s:Sajeong, worry:string,
-  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames, daeunMeta?:DaeunMeta, nowYMD?:NowYMD
+  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null,
+  names?:RelNames, daeunMeta?:DaeunMeta, nowYMD?:NowYMD, level:number=0
 ):Section[]{
-  return buildReport(c,today,s,worry,cli,legal,partner,ally,true,names,daeunMeta,nowYMD) as Section[];
-}
-// 무료 티어 — 유료 섹션의 html을 제거(placeholder만)하고 정밀값도 삭제해 응답
-export function buildFreeGated(
-  c:Chart, today:any, s:Sajeong, worry:string,
-  cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null, names?:RelNames, daeunMeta?:DaeunMeta, nowYMD?:NowYMD
-):Section[]{
-  const full = buildReport(c,today,s,worry,cli,legal,partner,ally,false,names,daeunMeta,nowYMD) as Section[];
-  return full.map(sec => sec.free ? sec : { ...sec, html:'' }); // 유료 텍스트 미전송
+  return buildReport(c,today,s,worry,cli,legal,partner,ally,level,names,daeunMeta,nowYMD) as Section[];
 }

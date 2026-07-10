@@ -3,7 +3,7 @@
 // 유료 텍스트는 여기서 처음 생성됩니다.
 import { NextResponse } from 'next/server';
 import { computeReport } from '@/lib/report';
-import { getReport, getReportOwner, isUnlocked } from '@/lib/store';
+import { getReport, getReportOwner, unlockLevel } from '@/lib/store';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
@@ -18,12 +18,13 @@ export async function GET(req: Request) {
     if (owner && owner !== user.id) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   }
 
-  if (!(await isUnlocked(id))) {
+  const level = await unlockLevel(id);           // 0 무료 · 1 택일팩 · 2 전체
+  if (level < 1) {
     return NextResponse.json({ error: 'payment_required' }, { status: 402 });
   }
   const input = await getReport(id);
   if (!input) return NextResponse.json({ error: 'not_found' }, { status: 404 });
 
-  const full = computeReport(input, true);       // unlocked=true → 전체 섹션 + 정밀값
-  return NextResponse.json(full);
+  const full = computeReport(input, level);      // 결제된 레벨만큼만 섹션·정밀값 공개
+  return NextResponse.json({ ...full, level });
 }

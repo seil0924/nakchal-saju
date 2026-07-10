@@ -2,7 +2,7 @@
 // 결제된 리포트면 전체, 아니면 무료 게이팅본을 반환.
 import { NextResponse } from 'next/server';
 import { computeReport } from '@/lib/report';
-import { getReport, getReportOwner, isUnlocked } from '@/lib/store';
+import { getReport, getReportOwner, unlockLevel } from '@/lib/store';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
@@ -16,7 +16,7 @@ export async function GET(req: Request) {
   }
   const input = await getReport(id);
   if (!input) return NextResponse.json({ error: 'not_found' }, { status: 404 });
-  const unlocked = await isUnlocked(id);
-  const rep = computeReport(input, unlocked);
-  return NextResponse.json({ reportId: id, unlocked, ...rep });
+  const level = await unlockLevel(id);
+  const rep = computeReport(input, level);
+  return NextResponse.json({ reportId: id, unlocked: level >= 1, level, ...rep });
 }

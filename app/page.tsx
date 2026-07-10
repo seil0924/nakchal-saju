@@ -5,8 +5,8 @@ const Hamburger = () => (<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h
 
 export default function Home() {
   const cards = [
-    { h: '사정률 뽑기', p: '내 사주+일진 · 방향 무료', bt: '사정률', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#25406a,#182c49)', price: '무료', cls: 'free', href: '/reading' },
-    { h: '발주처 궁합', p: '발주처 고르면 상성', bt: '궁합', btc: '#f6e7d6', bg: 'linear-gradient(135deg,#7f1a17,#a5241f)', price: '첫 990원', cls: 'paid', href: '/balju' },
+    { h: '사정률 뽑기', p: '방향 무료 · 정밀값 990', bt: '사정률', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#25406a,#182c49)', price: '무료', cls: 'free', href: '/reading' },
+    { h: '발주처 궁합', p: '발주처 고르면 상성', bt: '궁합', btc: '#f6e7d6', bg: 'linear-gradient(135deg,#7f1a17,#a5241f)', price: '전체 12,900', cls: 'paid', href: '/balju' },
     { h: '대표 사주', p: '만세력 · 오늘 기운', bt: '대표', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#2f4d7d,#1a2c46)', price: '무료', cls: 'free', href: '/reading' },
     { h: '법인 운세', p: '설립일 사주 · 흐름', bt: '법인', btc: 'var(--gold2)', bg: 'linear-gradient(135deg,#3a2c19,#232a38)', price: '무료', cls: 'free', href: '/reading' },
   ];
@@ -42,7 +42,7 @@ export default function Home() {
           <div className="art" style={{ height: 58, background: 'linear-gradient(135deg,#b98f3f,#e3c27a)' }}><span className="bt" style={{ color: '#2a2013' }}>同業宮合 · 協定</span></div>
           <div className="info"><h3>동업 궁합 <span style={{ fontSize: 10.5, color: 'var(--sub)', fontWeight: 600 }}>(협정 궁합)</span></h3>
             <p>대표×대표 · 회사×회사 — 손잡기 전 진단</p>
-            <div className="row"><span className="price paid">9,900원 ~</span><span className="go">›</span></div>
+            <div className="row"><span className="price paid">전체 12,900원</span><span className="go">›</span></div>
           </div>
         </Link>
       </div>

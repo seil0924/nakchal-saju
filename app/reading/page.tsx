@@ -1,12 +1,13 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { PRICE_FIRST, PRICE_REGULAR, won } from '@/lib/constants';
+import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 
-type Section = { mk: string; free: boolean; t: string; html: string };
+type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
+const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
 type Hero = { score: number; label: string; headline: string; sub: string; up: boolean };
 type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[] };
@@ -33,7 +34,8 @@ export default function Reading() {
     bidType: '', condition: '', worry: '',
   });
   const [res, setRes] = useState<Result | null>(null);
-  const [unlocked, setUnlocked] = useState(false);
+  const [level, setLevel] = useState(0);              // 0 무료 · 1 택일팩 · 2 전체
+  const [sku, setSku] = useState<'taekil' | 'full'>('full');
   const [confirm, setConfirm] = useState(false);
   const [modal, setModal] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -98,7 +100,7 @@ export default function Reading() {
   }
 
   async function run() {
-    setConfirm(false); setBusy(true); setUnlocked(false);
+    setConfirm(false); setBusy(true); setLevel(0);
     try {
       const tg = (k: RelKind) => targets.find(t => t.kind === k);
       const body = {
@@ -123,16 +125,16 @@ export default function Reading() {
     finally { setBusy(false); }
   }
 
-  async function pay() {
+  async function pay(chosen: 'taekil' | 'full') {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
     if (!res) return;
     setErr(''); setBusy(true);
     try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId }) }).then(x => x.json());
+      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: chosen }) }).then(x => x.json());
       const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID, channelKey = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY;
       if (storeId && channelKey) {
         const PortOne = (await import('@portone/browser-sdk/v2')).default;
-        const r = await PortOne.requestPayment({ storeId, channelKey, paymentId: prep.paymentId, orderName: prep.orderName ?? '낙찰사주 전체 리포트', totalAmount: prep.amount, currency: 'CURRENCY_KRW', payMethod: 'EASY_PAY' });
+        const r = await PortOne.requestPayment({ storeId, channelKey, paymentId: prep.paymentId, orderName: prep.orderName ?? '낙찰사주 리포트', totalAmount: prep.amount, currency: 'CURRENCY_KRW', payMethod: 'EASY_PAY' });
         if (r?.code) { setBusy(false); setErr('결제가 취소되었습니다.'); return; }
       } else {
         await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
@@ -140,7 +142,7 @@ export default function Reading() {
       let full: any = null;
       for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
       if (!full) throw new Error();
-      setRes({ ...res, ...full }); setUnlocked(true); setModal(false);
+      setRes({ ...res, ...full }); setLevel(full.level ?? (chosen === 'taekil' ? 1 : 2)); setModal(false);
       markUnlocked(res.reportId);
     } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
     finally { setBusy(false); }
@@ -306,27 +308,40 @@ export default function Reading() {
             <div className="rephd">{res.title}</div>
             <div id="acc">
               {res.sections.map((sec, i) => {
-                const open = sec.free || (unlocked && sec.html);
-                const locked = !sec.free && !unlocked;
+                const rank = RANK[sec.tier] ?? 2;
+                const open = rank <= level && !!sec.html;
+                const locked = rank > level;
+                const openThis = () => { setErr(''); setSku(sec.tier === 'taekil' ? 'taekil' : 'full'); setModal(true); };
                 return (
                   <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')}>
-                    <div className="hd">
+                    <div className="hd" onClick={locked ? openThis : undefined}>
                       <div className="mk">{sec.mk}</div>
                       <div className="ti">{sec.t}</div>
-                      {sec.free ? <span className="lb free">무료</span> : unlocked ? <span className="lb free">열림</span> : <span className="lb">🔒</span>}
+                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {sec.tier === 'taekil' ? won(PRICE_TAEKIL) : won(PRICE_FULL)}</span>}
                       <div className="cv">▾</div>
                     </div>
                     <div className="bd">
-                      {sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} /> : <p style={{ color: '#a99f88' }}>🔒 결제 후 열람 가능한 섹션입니다.</p>}
+                      {sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
+                        : (
+                          <div className="teaser">
+                            <div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
+                            <button className="tunlock" onClick={openThis}>
+                              {sec.tier === 'taekil' ? `택일팩으로 지금 열기 · ${won(PRICE_TAEKIL)}` : `전체 리포트로 지금 열기 · ${won(PRICE_FULL)}`} →
+                            </button>
+                          </div>
+                        )}
                     </div>
                   </div>
                 );
               })}
             </div>
-            {!unlocked && (
-              <div className="cta" onClick={() => { setErr(''); setModal(true); }}>잠긴 리포트 전체 열기<small>잠긴 섹션 + 소수점 정밀 사정률까지 · 첫 열람만 {won(PRICE_FIRST)}</small></div>
+            {level < 2 && (
+              <div className="cta" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
+                {level === 0 ? '잠긴 리포트 전체 열기' : '전체 리포트로 업그레이드'}
+                <small>{level === 0 ? `잠긴 심층 해석 · 궁합 · 이달 택일 · 정밀 사정률까지 · ${won(PRICE_FULL)}` : `남은 심층 섹션까지 모두 열기 · ${won(PRICE_FULL)}`}</small>
+              </div>
             )}
-            {unlocked && res.gauge.precise && (
+            {level >= 1 && res.gauge.precise && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
             )}
             <button className="sharebtn no-print" onClick={share}>결과 이미지로 공유 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>
@@ -368,18 +383,30 @@ export default function Reading() {
         <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setModal(false); }}>
           <div className="sheet">
             <div className="grip" />
-            <h3>전체 리포트 잠금 해제</h3>
-            <div className="price"><span className="p">{won(PRICE_FIRST)}</span><span className="o">{won(PRICE_REGULAR)}</span></div>
-            <div className="plan">첫 열람 특가 · 전체 섹션 + 궁합 + 소수점 정밀값</div>
+            <h3>어디까지 열어 볼까요?</h3>
+            <div className="plans">
+              <button className={'plan2' + (sku === 'taekil' ? ' on' : '')} onClick={() => setSku('taekil')}>
+                <div className="pn">택일팩</div>
+                <div className="pp">{won(PRICE_TAEKIL)}</div>
+                <div className="pd">오늘 정밀 사정률 + 이번 달 투찰 길일 캘린더. 오늘 당장 쓰는 완결판.</div>
+              </button>
+              <button className={'plan2' + (sku === 'full' ? ' on' : '')} onClick={() => setSku('full')}>
+                <div className="pbest">추천</div>
+                <div className="pn">전체 리포트</div>
+                <div className="pp">{won(PRICE_FULL)}</div>
+                <div className="pd">잠긴 심층 해석 전부 · 발주처·동업·협정 궁합 · 택일 · 정밀값까지.</div>
+              </button>
+            </div>
+            <div className="guarantee">✓ 첫 리포트, 만족스럽지 않으면 환불해 드립니다 — 안심하고 확인하세요</div>
             <div className="pay kakao on2">카카오페이</div>
             <div className="pay toss">토스페이</div>
             <div className="pay">신용/체크카드</div>
             <label className="consent">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
-              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 환불 제한될 수 있음)</span>
+              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회가 제한될 수 있으며, 위 만족 환불 정책과 별개로 관련 법령이 적용됩니다.)</span>
             </label>
             {err && <div className="errbox">{err}</div>}
-            <button className="paygo" onClick={pay} disabled={busy}>{busy ? '결제 처리중…' : `${won(PRICE_FIRST)} 결제하기`}</button>
+            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(sku === 'taekil' ? PRICE_TAEKIL : PRICE_FULL)} 결제하기`}</button>
             <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
             <div className="msec">🔒 데모: 결제 확정을 서버에서 시뮬레이션 · 실서비스는 포트원 웹훅 재검증</div>
           </div>

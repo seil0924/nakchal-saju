@@ -50,7 +50,7 @@ export default function More() {
 
         <div className="sechd"><span className="t"><span className="b" />이용</span></div>
         <div className="setrow">
-          <Link href="/reading">구독 관리<span className="r">월 9,900원 ›</span></Link>
+          <Link href="/vault">결제·주문 내역<span className="r">단건 결제 ›</span></Link>
           <button onClick={toggleNotify}>알림 설정<span className="r">{notify ? '아침 전망·길일 켜짐 ›' : '꺼짐 ›'}</span></button>
           <Link href="/vault">보관함<span className="r">›</span></Link>
           <Link href="/ritual">투찰 부적 리추얼<span className="r">吉 ›</span></Link>
