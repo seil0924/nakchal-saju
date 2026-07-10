@@ -84,6 +84,14 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .plan2 .pp{font-family:var(--serif);font-weight:900;font-size:20px;color:var(--red);margin-top:4px}
 .plan2 .pd{font-size:11px;color:#7f786c;line-height:1.55;margin-top:7px;font-weight:500}
 .plan2 .pbest{position:absolute;top:-9px;right:10px;background:var(--red);color:#f3e6cf;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;letter-spacing:.04em}
+/* 카테고리 개별 결제 카드 (단일 상품) */
+.catbuy{margin:14px 0 4px;background:#fff;border:1.5px solid var(--red);border-radius:14px;padding:15px 15px 14px;box-shadow:0 0 0 3px rgba(154,42,32,.08)}
+.catbuy-hd{display:flex;align-items:center;gap:12px}
+.catbuy-seal{flex:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:22px;color:#f3e6cf;background:linear-gradient(135deg,var(--red),#7f1a17);border:1px solid var(--gold2);border-radius:11px}
+.catbuy-nm{font-family:var(--serif);font-weight:900;font-size:17px;color:#20242c}
+.catbuy-kick{font-size:11px;color:#9a8f7c;font-weight:700;letter-spacing:.06em;margin-top:2px}
+.catbuy-pp{margin-left:auto;font-family:var(--serif);font-weight:900;font-size:23px;color:var(--red);white-space:nowrap}
+.catbuy-lead{font-size:12.5px;color:#6f6858;line-height:1.65;margin-top:11px;font-weight:500;word-break:keep-all}
 .guarantee{margin:12px 0 6px;background:#f2f7f1;border:1px solid #cfe3cf;border-radius:10px;padding:10px 12px;font-size:12px;color:#2f6b42;font-weight:700;text-align:center;line-height:1.5}
 .cta{margin-top:6px;padding:16px;background:linear-gradient(135deg,var(--red),#7f1a17);color:#fff;border:1px solid var(--gold2);border-radius:14px;font-family:var(--serif);font-weight:900;font-size:16px;text-align:center;cursor:pointer}
 .cta small{display:block;font-family:var(--sans);font-weight:500;font-size:11.5px;color:#f6d9cd;margin-top:4px}
@@ -211,6 +219,17 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .daeun .dcell.cur{background:#fbf1d9;border:1.5px solid var(--gold)}
 .daeun .dg{font-family:var(--serif);font-weight:900;font-size:16px}
 .daeun .dy{font-size:9px;color:var(--sub);font-weight:600;margin-top:3px}
+/* 세운(연도별 큰 흐름) 표 */
+.seunhd{margin:16px 0 8px;font-family:var(--serif);font-weight:800;font-size:14.5px;color:var(--ink)}
+.seun{display:flex;flex-direction:column;gap:5px}
+.syrow{display:flex;align-items:center;gap:9px;background:#f7f4ec;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.syrow.now{background:#fbf1d9;border:1.5px solid var(--gold)}
+.syrow .syy{flex:0 0 46px;font-family:var(--serif);font-weight:800;font-size:14px;color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
+.syrow .syy em{display:block;font-family:var(--sans);font-style:normal;font-size:9px;color:var(--sub);font-weight:700;margin-top:1px}
+.syrow .syg{flex:0 0 auto;font-family:var(--serif);font-weight:900;font-size:17px}
+.syrow .sytag{flex:0 0 auto;color:#fff;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;letter-spacing:.02em}
+.syrow .syd{flex:1;font-size:11px;color:#6f6858;line-height:1.5;font-weight:500;word-break:keep-all}
+@media(max-width:400px){.syrow .syd{font-size:10.5px}}
 
 /* ===== 발주처 탭 (/balju) ===== */
 .searchbar{margin:14px 13px 6px;background:#fff;border:1.5px solid #ddd6c6;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:8px}

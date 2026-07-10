@@ -5,6 +5,7 @@ import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
 import { CLIENTS } from '@/lib/clients';
+import { CAT_INFO, isCatKey } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
 
@@ -59,6 +60,10 @@ export default function Reading() {
   const [prog, setProg] = useState(false);     // 로딩 리추얼
   const [seal, setSeal] = useState(false);     // 결제 후 개봉 연출
   const [sticky, setSticky] = useState(false); // 스크롤 스티키 CTA
+  const [cat, setCat] = useState('');           // 카테고리(대표·사정률·발주처·궁합·대운)
+  const catInfo = isCatKey(cat) ? CAT_INFO[cat] : null;
+  // 카테고리 개별 결제가 (카테고리 모드면 단일가, 아니면 sku 기준가)
+  const unlockPrice = catInfo ? catInfo.price : (sku === 'taekil' ? PRICE_TAEKIL : PRICE_FULL);
   const set = (k: string, v: any) => setF(s => ({ ...s, [k]: v }));
 
   // 잠긴 섹션을 지나 스크롤하면 슬림 CTA 노출 (결과 없거나 전체 열람이면 숨김)
@@ -92,6 +97,7 @@ export default function Reading() {
       // 닮은 CEO(/ceo)에서 넘어온 경우 대표 생년월일·성함 프리필
       const b = p.get('b'), n = p.get('n');
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) setF(s => ({ ...s, birth: b, name: n || s.name }));
+      const ct = p.get('cat'); if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
     } catch {}
   }, []);
   function persistSaved(list: Target[]) { setSaved(list); try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch {} }
@@ -143,7 +149,7 @@ export default function Reading() {
         client: tg('client')?.date || null, clientName: tg('client')?.name,
         partner: tg('partner')?.date || null, partnerName: tg('partner')?.name,
         ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
-        situation, worry: f.worry,
+        situation, worry: f.worry, cat: cat || undefined,
       };
       const minWait = new Promise(r => setTimeout(r, 2500)); // 리추얼 최소 상영 시간
       const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
@@ -202,12 +208,12 @@ export default function Reading() {
     <div className="app">
       <div className="hero">
         <div className="k">運 七 技 三</div>
-        <h1>회사 사주 · 오늘의 사정률</h1>
+        <h1>{catInfo ? catInfo.name : '회사 사주 · 오늘의 사정률'}</h1>
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p>
       </div>
       <div className="wrap">
-        {/* 1. 상황 (사주아이식 대화형 칩) */}
-        <div className="card">
+        {/* 1. 상황 (사정률·통합에서만) */}
+        {(!cat || cat === 'sajeong') && (<div className="card">
           <div className="st"><span className="l"><span className="b" />지금 어떤 입찰을 앞두고 계세요?</span></div>
           <div className="chips">
             {BID_TYPES.map(t => <button key={t} className={'chip2' + (f.bidType === t ? ' on' : '')} onClick={() => set('bidType', f.bidType === t ? '' : t)}>{t}</button>)}
@@ -220,10 +226,10 @@ export default function Reading() {
           <label style={{ marginTop: 14 }}>지금 가장 고민되는 결정 <span className="opt">(선택)</span></label>
           <textarea value={f.worry} maxLength={200} onChange={e => set('worry', e.target.value)} placeholder="예) 이번 도로공사 큰 건, 넣을지 말지 고민입니다" />
           </div>)}
-        </div>
+        </div>)}
 
-        {/* 2. 대표님 정보 (입찰 선택 후 노출) */}
-        <div className="card reveal" style={{ display: (f.bidType || f.birth) ? undefined : 'none' }}>
+        {/* 2. 대표님 정보 */}
+        <div className="card reveal" style={{ display: ((cat && cat !== 'sajeong') || f.bidType || f.birth) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />대표님 정보</span></div>
           <label>성함 <span className="opt">(선택)</span></label>
           <input value={f.name} maxLength={12} placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
@@ -287,8 +293,8 @@ export default function Reading() {
           </div>
         </div>
 
-        {/* 3. 회사 정보 (생일 입력 후 노출) */}
-        <div className="card reveal" style={{ display: f.birth ? undefined : 'none' }}>
+        {/* 3. 회사 정보 */}
+        <div className="card reveal" style={{ display: (f.birth && (!cat || cat === 'daepyo' || cat === 'daeun' || cat === 'sajeong')) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />회사 정보</span><span className="chip free">회사 사주</span></div>
           <label>회사명 <span className="opt">(선택)</span></label>
           <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
@@ -297,8 +303,8 @@ export default function Reading() {
           <div className="note">※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.</div>
         </div>
 
-        {/* 4. 관계·궁합 (생일 입력 후 노출) */}
-        <div className="card reveal" style={{ display: f.birth ? undefined : 'none' }}>
+        {/* 4. 관계·궁합 */}
+        <div className="card reveal" style={{ display: (f.birth && (!cat || cat === 'balju' || cat === 'gunghap')) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />관계·궁합</span><span className="opt">선택</span></div>
           <div className="chips">
             {REL_KINDS.map(k => <button key={k.key} className={'chip2' + (addKind === k.key ? ' on' : '')} onClick={() => setAddKind(k.key)}>{k.label}</button>)}
@@ -360,7 +366,7 @@ export default function Reading() {
           )}
         </div>
 
-        {f.birth && <button className="go reveal" onClick={submit} disabled={busy}>{busy ? '짚는 중…' : '회사 사주 리포트 뽑기 →'}</button>}
+        {f.birth && <button className="go reveal" onClick={submit} disabled={busy}>{busy ? '짚는 중…' : (catInfo ? `${catInfo.name} 보기 →` : '회사 사주 리포트 뽑기 →')}</button>}
         {err && !res && !confirm && <div className="errbox">{err}</div>}
         <div className="note" style={{ textAlign: 'center' }}>※ 재미로 보는 명리 기반 참고 정보. 투찰금액 산정 근거로 사용 불가.</div>
 
@@ -398,7 +404,7 @@ export default function Reading() {
                     <div className="hd" onClick={locked ? openThis : undefined}>
                       <div className="mk">{sec.mk}</div>
                       <div className="ti">{sec.t}</div>
-                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {sec.tier === 'taekil' ? won(PRICE_TAEKIL) : won(PRICE_FULL)}</span>}
+                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {won(catInfo ? catInfo.price : (sec.tier === 'taekil' ? PRICE_TAEKIL : PRICE_FULL))}</span>}
                       <div className="cv">▾</div>
                     </div>
                     <div className="bd">
@@ -407,7 +413,7 @@ export default function Reading() {
                           <div className="teaser">
                             <div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
                             <button className="tunlock" onClick={openThis}>
-                              {sec.tier === 'taekil' ? `택일팩으로 지금 열기 · ${won(PRICE_TAEKIL)}` : `전체 리포트로 지금 열기 · ${won(PRICE_FULL)}`} →
+                              {catInfo ? `${catInfo.name} 열기 · ${won(catInfo.price)}` : (sec.tier === 'taekil' ? `택일팩으로 지금 열기 · ${won(PRICE_TAEKIL)}` : `전체 리포트로 지금 열기 · ${won(PRICE_FULL)}`)} →
                             </button>
                           </div>
                         )}
@@ -418,10 +424,10 @@ export default function Reading() {
             </div>
             {level < 2 && (
               <>
-                <div className="readyline">전체 <b>{res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목</b> 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
+                <div className="readyline">{catInfo ? <><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목</> : <>전체 <b>{res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목</b></>} 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
                 <div className="cta" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
-                  {level === 0 ? '잠긴 리포트 전체 열기' : '전체 리포트로 업그레이드'}
-                  <small>{level === 0 ? `잠긴 심층 해석 · 궁합 · 이달 택일 · 정밀 사정률까지 · ${won(PRICE_FULL)}` : `남은 심층 섹션까지 모두 열기 · ${won(PRICE_FULL)}`}</small>
+                  {catInfo ? `${catInfo.name} 전체 열기` : (level === 0 ? '잠긴 리포트 전체 열기' : '전체 리포트로 업그레이드')}
+                  <small>{catInfo ? `${catInfo.lead} · ${won(catInfo.price)}` : (level === 0 ? `잠긴 심층 해석 · 궁합 · 이달 택일 · 정밀 사정률까지 · ${won(PRICE_FULL)}` : `남은 심층 섹션까지 모두 열기 · ${won(PRICE_FULL)}`)}</small>
                 </div>
                 <div className="ctaassure">✓ 첫 리포트 만족 환불 · 카카오페이/토스로 30초</div>
               </>
@@ -458,8 +464,8 @@ export default function Reading() {
       {/* 스크롤 스티키 CTA (전체 미열람 시) */}
       {res && level < 2 && sticky && !modal && !prog && (
         <div className="stickycta no-print" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
-          <span className="sl"><b>전체 리포트 열기</b><em>산출 완료 · 열람만 잠금</em></span>
-          <span className="sr">{won(PRICE_FULL)} →</span>
+          <span className="sl"><b>{catInfo ? `${catInfo.name} 열기` : '전체 리포트 열기'}</b><em>산출 완료 · 열람만 잠금</em></span>
+          <span className="sr">{won(catInfo ? catInfo.price : PRICE_FULL)} →</span>
         </div>
       )}
 
@@ -491,20 +497,32 @@ export default function Reading() {
         <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setModal(false); }}>
           <div className="sheet">
             <div className="grip" />
-            <h3>어디까지 열어 볼까요?</h3>
-            <div className="plans">
-              <button className={'plan2' + (sku === 'taekil' ? ' on' : '')} onClick={() => setSku('taekil')}>
-                <div className="pn">택일팩</div>
-                <div className="pp">{won(PRICE_TAEKIL)}</div>
-                <div className="pd">오늘 정밀 사정률 + 이번 달 투찰 길일 캘린더. 오늘 당장 쓰는 완결판.</div>
-              </button>
-              <button className={'plan2' + (sku === 'full' ? ' on' : '')} onClick={() => setSku('full')}>
-                <div className="pbest">추천</div>
-                <div className="pn">전체 리포트</div>
-                <div className="pp">{won(PRICE_FULL)}</div>
-                <div className="pd">잠긴 심층 해석 전부 · 발주처·동업·협정 궁합 · 택일 · 정밀값까지.</div>
-              </button>
-            </div>
+            {catInfo ? (
+              <>
+                <h3>{catInfo.name} 전체 열기</h3>
+                <div className="catbuy">
+                  <div className="catbuy-hd"><span className="catbuy-seal">{catInfo.hanja}</span><div><div className="catbuy-nm">{catInfo.name}</div><div className="catbuy-kick">{catInfo.kicker}</div></div><div className="catbuy-pp">{won(catInfo.price)}</div></div>
+                  <div className="catbuy-lead">{catInfo.lead}</div>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3>어디까지 열어 볼까요?</h3>
+                <div className="plans">
+                  <button className={'plan2' + (sku === 'taekil' ? ' on' : '')} onClick={() => setSku('taekil')}>
+                    <div className="pn">택일팩</div>
+                    <div className="pp">{won(PRICE_TAEKIL)}</div>
+                    <div className="pd">오늘 정밀 사정률 + 이번 달 투찰 길일 캘린더. 오늘 당장 쓰는 완결판.</div>
+                  </button>
+                  <button className={'plan2' + (sku === 'full' ? ' on' : '')} onClick={() => setSku('full')}>
+                    <div className="pbest">추천</div>
+                    <div className="pn">전체 리포트</div>
+                    <div className="pp">{won(PRICE_FULL)}</div>
+                    <div className="pd">잠긴 심층 해석 전부 · 발주처·동업·협정 궁합 · 택일 · 정밀값까지.</div>
+                  </button>
+                </div>
+              </>
+            )}
             <div className="guarantee">✓ 첫 리포트, 만족스럽지 않으면 환불해 드립니다 — 안심하고 확인하세요</div>
             <div className="pay kakao on2">카카오페이</div>
             <div className="pay toss">토스페이</div>
@@ -514,7 +532,7 @@ export default function Reading() {
               <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회가 제한될 수 있으며, 위 만족 환불 정책과 별개로 관련 법령이 적용됩니다.)</span>
             </label>
             {err && <div className="errbox">{err}</div>}
-            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(sku === 'taekil' ? PRICE_TAEKIL : PRICE_FULL)} 결제하기`}</button>
+            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(unlockPrice)} 결제하기`}</button>
             <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
             <div className="msec">🔒 데모: 결제 확정을 서버에서 시뮬레이션 · 실서비스는 포트원 웹훅 재검증</div>
           </div>

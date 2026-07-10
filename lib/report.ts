@@ -2,6 +2,7 @@
 import 'server-only';
 import { chartFromBirth, compute, todayPillar, sajeong, wonguk, type Chart, type Pillar } from './engine';
 import { buildTiered, reportHero, type Section } from './report-copy';
+import { catMks } from './report-categories';
 
 export type ReportInput = {
   name?: string;
@@ -16,6 +17,7 @@ export type ReportInput = {
   clientName?: string; legalName?: string; partnerName?: string; allyName?: string; // 대상 이름
   situation?: string;            // 상황 칩 요약 (예: "관급 공사 · 저가경쟁 심함")
   worry?: string;
+  cat?: string;                  // 카테고리(daepyo·sajeong·balju·gunghap·daeun) — 섹션 필터
 };
 
 function dateChart(v?: string | null): Chart | null {
@@ -59,10 +61,13 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   const names = { client: input.clientName, legal: input.legalName, partner: input.partnerName, ally: input.allyName };
   const daeunMeta = input.legal ? { foundYear: parseInt(input.legal.slice(0, 4), 10), curYear: now.getFullYear() } : undefined;
   const nowYMD = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
-  const sections = buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level);
+  // 카테고리 섹션 필터 (해당 카테고리 섹션만 노출)
+  const mks = catMks(input.cat);
+  const filt = (arr: Section[]) => mks ? arr.filter(x => mks.includes(x.mk)) : arr;
+  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level));
 
   // 분량 앵커: 전체(레벨 2) 기준 장·항목 수를 산출해 노출 (텍스트는 미전송 — 숫자만)
-  const fullSecs = level >= 2 ? sections : buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2);
+  const fullSecs = filt(level >= 2 ? buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2) : buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2));
   const items = fullSecs.reduce((n, sec) => n + (sec.html.match(/<p|<div class="cbrow|<div class="ssrow/g) || []).length, 0);
   const meta = { chapters: fullSecs.length, items };
 

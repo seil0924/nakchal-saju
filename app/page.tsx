@@ -38,28 +38,33 @@ export default function Home() {
         <Link className="tcta" href="/reading"><b>오늘의 전망 열기<span className="a">→</span></b><em>무료로 시작 · 생년월일만 30초</em></Link>
       </div>
 
-      {/* 해설 보기 — 괘선 리스트 */}
-      <div className="lab"><i /><span>해설 보기</span></div>
+      {/* 해설 보기 — 카테고리별 개별 사주 (사주아이식) */}
+      <div className="lab"><i /><span>사주별로 골라 보기</span></div>
       <div className="list">
-        <Link className="li5" href="/reading">
+        <Link className="li5" href="/reading?cat=daepyo">
+          <div className="gz" style={{ color: '#46a07d' }}>代</div>
+          <div className="bd5"><div className="t">대표 사주 <small>代表 四柱</small></div><div className="d">대표님이 어떤 그릇인가 — 성정·승부 기질·재물·사람까지</div></div>
+          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
+        </Link>
+        <Link className="li5" href="/reading?cat=sajeong">
           <div className="gz" style={{ color: '#3f8f80' }}>率</div>
-          <div className="bd5"><div className="t">사정률 뽑기</div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
+          <div className="bd5"><div className="t">사정률 사주 <small>査定率</small></div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/product/balju">
           <div className="gz" style={{ color: '#46a07d' }}>宮</div>
-          <div className="bd5"><div className="t">발주처 궁합</div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
+          <div className="bd5"><div className="t">발주처 사주 <small>發注處 宮合</small></div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/product/dongup">
-          <div className="gz" style={{ color: '#d15c4a' }}>同</div>
-          <div className="bd5"><div className="t">동업·협정 궁합</div><div className="d">손잡기 전에, 깨질 궁합인지부터</div></div>
+          <div className="gz" style={{ color: '#d15c4a' }}>合</div>
+          <div className="bd5"><div className="t">협정·궁합 사주 <small>同業 · 協定</small></div><div className="d">손잡기 전에, 깨질 궁합인지부터</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/product/beopin">
-          <div className="gz" style={{ color: '#cfa64e' }}>法</div>
-          <div className="bd5"><div className="t">법인 운세 <small>설립일 사주</small></div><div className="d">회사가 나를 밀어주는가, 누르는가</div></div>
-          <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
+        <Link className="li5" href="/reading?cat=daeun">
+          <div className="gz" style={{ color: '#cfa64e' }}>運</div>
+          <div className="bd5"><div className="t">회사 대운 <small>會社 大運</small></div><div className="d">회사가 대표님을 밀어주는가 — 년도별 큰 흐름</div></div>
+          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link className="li5" href="/full">
           <div className="gz" style={{ color: '#9a2a20' }}>全</div>

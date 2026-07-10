@@ -34,7 +34,7 @@ export const PRODUCTS: Product[] = [
       ['이 발주처를 대하는 법', '서류로 다가갈지 관계로 풀지 — 유리한 전략'],
       ['유리한 시점', '이 발주처 건은 언제 넣어야 결이 맞는지'],
     ],
-    href: '/balju', cta: '발주처 골라 궁합 보기',
+    href: '/reading?cat=balju', cta: '발주처 골라 궁합 보기',
   },
   {
     slug: 'dongup', oh: 'hwa', hanja: '同', name: '동업·협정 궁합',
@@ -51,7 +51,7 @@ export const PRODUCTS: Product[] = [
       ['지분·결정권 나누는 법', '어떻게 나눠야 위기에 안 깨지는지'],
       ['협정(회사×회사) 관재수', '공동도급 주관사·지분·정산까지 계약 전 진단'],
     ],
-    href: '/reading', cta: '동업 궁합 보기',
+    href: '/reading?cat=gunghap', cta: '동업 궁합 보기',
   },
   {
     slug: 'beopin', oh: 'to', hanja: '法', name: '법인 운세',
@@ -68,7 +68,7 @@ export const PRODUCTS: Product[] = [
       ['회사의 대운 10년 흐름', '지금이 도는 구간인지 눌리는 구간인지, 전환점은 언제인지'],
       ['상호·로고 개운 방위', '부족한 기운을 상호 색·사무실 방위로 채우는 법'],
     ],
-    href: '/reading', cta: '법인 운세 보기',
+    href: '/reading?cat=daeun', cta: '법인 운세 보기',
   },
 ];
 
