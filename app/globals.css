@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
 
-:root{--bg:#f6f3ec;--card:#fff;--ink:#20242c;--sub:#6f6a5c;--line:#ece7db;--navy:#22406b;--navy2:#232a38;--gold:#b98f3f;--gold2:#e3c27a;--red:#a5241f;--good:#177f5e;--serif:"Noto Serif KR",serif;--sans:"Noto Sans KR",sans-serif;}
+:root{--bg:#f6f3ec;--card:#fff;--ink:#20242c;--sub:#6f6a5c;--line:#ece7db;--navy:#22406b;--navy2:#232a38;--gold:#b98f3f;--gold2:#e3c27a;--red:#a5241f;--good:#177f5e;--serif:"Noto Serif KR","Noto Serif CJK KR",serif;--sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;}
 *{box-sizing:border-box;margin:0;padding:0}
 /* 모바일 우선: 화면 꽉 채움 (프레임 없음) */
-body{background:var(--bg);font-family:var(--sans);color:var(--ink)}
+body{background:var(--bg);font-family:var(--sans);color:var(--ink);letter-spacing:-.012em;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"ss05"}
 .app{width:100%;max-width:100%;background:var(--bg);min-height:100vh;overflow:hidden}
 /* 태블릿(600~899): 기존 480 폰 프레임 유지 */
 @media (min-width:600px) and (max-width:899px){
@@ -604,3 +604,16 @@ input:focus,textarea:focus,select:focus{border-color:var(--navy) !important;box-
 .mecard .mep.dim{color:#a8adb9;font-size:12.5px}
 .mecard .merule{width:34px;height:1px;background:var(--gold);margin:13px 0 5px}
 .sharewrap .sharebtn{white-space:nowrap;padding-left:8px;padding-right:8px;font-size:13.5px}
+
+/* ═══════════ 타이포그래피 정리 (Pretendard 본문 × 명조 디스플레이) ═══════════ */
+/* 명조(제목·인장)는 살짝 조인 자간, 본문은 keep-all로 단어 단위 줄바꿈 */
+h1,h2,h3,.rephd,.sec .ti,.twincard .tnm,.mecard .mel,.myeong .myl{letter-spacing:-.02em}
+/* 숫자·가격·날짜: 고정폭 숫자로 단정하게 */
+.price,.pp,.num,.precise,.dcn,.sr,.rpl,.won,.cd,.dy,.giltease .glt,.plan2 .pp,.sheet .price .p{font-variant-numeric:tabular-nums lining-nums}
+/* 버튼·칩·배지는 줄바꿈 금지 */
+button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
+.teaser .tunlock,.sharewrap .sharebtn{white-space:normal} /* 좁은 화면 예외 */
+/* 본문 문단 리듬 통일 */
+.sec .bd p,.twinlead,.tystory p,.myeong p,.mecard .mep,.dcs,.teaser .ttx{line-height:1.8}
+/* 50대+ 가독: 최소 본문 크기 하한 */
+.sec .bd p{font-size:13.5px}

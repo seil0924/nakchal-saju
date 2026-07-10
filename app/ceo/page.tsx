@@ -59,7 +59,7 @@ export default function CeoTwin() {
     cv.width = W; cv.height = H;
     const x = cv.getContext('2d'); if (!x) return null;
     try { await (document as any).fonts?.ready; } catch {}
-    const serif = '"Noto Serif KR", serif', sans = '"Noto Sans KR", sans-serif';
+    const serif = '"Noto Serif KR", serif', sans = '"Pretendard Variable", Pretendard, "Noto Sans KR", sans-serif';
     // 배경(먹빛)
     x.fillStyle = '#181b21'; x.fillRect(0, 0, W, H);
     x.fillStyle = 'rgba(255,255,255,.03)'; x.font = `900 620px ${serif}`; x.textAlign = 'right';
