@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { PRICE_FIRST, PRICE_REGULAR, won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
+import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 
 type Section = { mk: string; free: boolean; t: string; html: string };
-type Result = { reportId: string; title: string; unlocked: boolean; hero?: any; gauge?: any; sections: Section[] };
+type Result = { reportId: string; title: string; unlocked: boolean; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[] };
 
 export default function ReportView({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -50,6 +51,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
         {err && <div className="errbox">{err}</div>}
         {res && (
           <div>
+            {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
@@ -70,7 +72,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 </div>
               );
             })}
-            {!unlocked && <div className="cta" onClick={() => { setErr(''); setModal(true); }}>전체 리포트 열기<small>첫 열람 {won(PRICE_FIRST)} · 전체 섹션 + 소수점 정밀값</small></div>}
+            {!unlocked && <div className="cta" onClick={() => { setErr(''); setModal(true); }}>잠긴 리포트 전체 열기<small>잠긴 섹션 + 소수점 정밀 사정률까지 · 첫 열람만 {won(PRICE_FIRST)}</small></div>}
             {unlocked && res.gauge?.precise && <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b></div>}
             <button className="sharebtn no-print" style={{ marginTop: 12 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>

@@ -23,9 +23,9 @@ export default function Home() {
       <div className="sechd" style={{ marginTop: 15 }}><span className="t"><span className="b" />오늘의 사정률 전망</span><span className="m">7/9 · 丙午일</span></div>
       <div className="hcard seal-card">
         <div className="seal-stamp">封</div>
-        <div className="seal-t">내 사주로 보는 오늘의 전망</div>
-        <div className="seal-s">생년월일만 넣으면 바로 열립니다</div>
-        <Link className="hcta" href="/reading">오늘의 전망 확인<small>무료 · 로그인/입력은 여기서</small></Link>
+        <div className="seal-t">오늘 이 투찰, 나에게 유리한 날인가</div>
+        <div className="seal-s">대표님 생년월일만 넣으면 30초 만에 무료로 확인</div>
+        <Link className="hcta" href="/reading">오늘의 사정률 전망 열기<small>무료 · 소수점 정밀값은 전체 리포트에서</small></Link>
       </div>
 
       <div className="sechd"><span className="t"><span className="b" />해설 보기</span></div>

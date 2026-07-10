@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { PRICE_FIRST, PRICE_REGULAR, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
+import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 
 type Section = { mk: string; free: boolean; t: string; html: string };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
 type Hero = { score: number; label: string; headline: string; sub: string; up: boolean };
-type Result = { reportId: string; title: string; gauge: Gauge; hero: Hero; sections: Section[] };
+type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[] };
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
@@ -148,7 +149,7 @@ export default function Reading() {
   async function share() {
     if (!res) return;
     const url = `${location.origin}/report/${res.reportId}`;
-    const text = `[낙찰사주] 오늘 내 낙찰 유리도 ${res.hero?.score ?? ''}점 — ${res.hero?.sub ?? ''}. 대표·회사 사주로 오늘 사정률 짚어주는 데, 너도 한번 봐봐:`;
+    const text = `[낙찰사주] 오늘 낙찰 유리도 ${res.hero?.score ?? ''}점 — ${res.hero?.sub ?? ''}. 대표와 회사 사주로 오늘의 사정률을 짚어 봤습니다. 대표님도 한번 보시죠:`;
     try {
       if (navigator.share) await navigator.share({ title: '낙찰사주', text, url });
       else { await navigator.clipboard.writeText(text + ' ' + url); alert('공유 문구와 링크를 복사했어요. 카톡에 붙여넣어 보내세요.'); }
@@ -290,6 +291,7 @@ export default function Reading() {
 
         {res && (
           <div id="rep" style={{ marginTop: 6 }}>
+            {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
@@ -319,12 +321,12 @@ export default function Reading() {
               })}
             </div>
             {!unlocked && (
-              <div className="cta" onClick={() => { setErr(''); setModal(true); }}>전체 리포트 열기<small>첫 열람 {won(PRICE_FIRST)} · 전체 섹션 + 소수점 정밀값</small></div>
+              <div className="cta" onClick={() => { setErr(''); setModal(true); }}>잠긴 리포트 전체 열기<small>잠긴 섹션 + 소수점 정밀 사정률까지 · 첫 열람만 {won(PRICE_FIRST)}</small></div>
             )}
             {unlocked && res.gauge.precise && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
             )}
-            <button className="sharebtn no-print" onClick={share}>📷 결과 공유하기 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카톡으로 자랑하기</span></button>
+            <button className="sharebtn no-print" onClick={share}>결과 이미지로 공유 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장

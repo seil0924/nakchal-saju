@@ -113,6 +113,22 @@ export function todayPillar(y:number,m:number,d:number){
   return {gan:g,zhi:i%12,el:GAN_EL[g]};
 }
 
+// ── 원국(元局): 사주팔자 판 표시 모델 ──────────────────
+export type Pillar = { pos:string; gan:number; zhi:number; ganEl:number; zhiEl:number; sip:string };
+export function wonguk(c:Chart):Pillar[]{
+  const me=GAN_EL[c.dGan];
+  const sipOf=(g:number,isDay:boolean)=>{ if(isDay)return '일원'; const t=GAN_EL[g];
+    if(t===me)return '비겁'; if((me+1)%5===t)return '식상'; if((me+2)%5===t)return '재성'; if((t+2)%5===me)return '관성'; return '인성';};
+  const cols:Pillar[]=[
+    {pos:'年',gan:c.yGan,zhi:c.yZhi,ganEl:GAN_EL[c.yGan],zhiEl:ZHI_EL[c.yZhi],sip:sipOf(c.yGan,false)},
+    {pos:'月',gan:c.mGan,zhi:c.mZhi,ganEl:GAN_EL[c.mGan],zhiEl:ZHI_EL[c.mZhi],sip:sipOf(c.mGan,false)},
+    {pos:'日',gan:c.dGan,zhi:c.dZhi,ganEl:GAN_EL[c.dGan],zhiEl:ZHI_EL[c.dZhi],sip:sipOf(c.dGan,true)},
+  ];
+  if(c.hGan!==null&&c.hZhi!==null)
+    cols.push({pos:'時',gan:c.hGan,zhi:c.hZhi,ganEl:GAN_EL[c.hGan],zhiEl:ZHI_EL[c.hZhi],sip:sipOf(c.hGan,false)});
+  return cols;
+}
+
 // ── 신살(神殺): 명식에서 드러나는 특수 부호 ──────────────
 //   사주아이류가 "어떻게 알았지" 반응을 끌어내는 핵심 장치.
 //   대표(경영자) 정서에 맞춰 위엄 있는 참모 어투로 서술한다.

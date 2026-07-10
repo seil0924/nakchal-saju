@@ -1,6 +1,6 @@
 // lib/report.ts — 명식 입력 → 섹션 리포트 (서버 전용)
 import 'server-only';
-import { chartFromBirth, compute, todayPillar, sajeong, type Chart } from './engine';
+import { chartFromBirth, compute, todayPillar, sajeong, wonguk, type Chart, type Pillar } from './engine';
 import { buildFull, buildFreeGated, reportHero, type Section } from './report-copy';
 
 export type ReportInput = {
@@ -27,6 +27,7 @@ function dateChart(v?: string | null): Chart | null {
 export type ReportResult = {
   title: string;
   dayMaster: number;
+  wonguk: Pillar[];              // 사주팔자 원국 (무료 · 만세력 신뢰)
   gauge: { dir: string; band: [string, string]; pos: number; precise?: string };
   hero: { score: number; label: string; headline: string; sub: string; up: boolean };
   sections: Section[];
@@ -66,5 +67,5 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean): Report
 
   const hero = reportHero(c, s); // 큰 점수 + 후킹 제목 (무료 · 방향 기반)
   const title = `士가 읽는 ${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
-  return { title, dayMaster: c.dayMasterEl, gauge, hero, sections };
+  return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections };
 }

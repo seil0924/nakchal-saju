@@ -53,17 +53,17 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .sjlock .k{font-size:12px;color:#57523f;font-weight:700}.precise{font-family:var(--serif);font-weight:900;font-size:16px;color:var(--good)}
 .worry{font-size:12.5px;color:#2a3b57;line-height:1.6;font-weight:600;margin-top:11px;background:#eef1f7;border-radius:10px;padding:11px 12px}
 /* 아코디언 리포트 */
-.rephd{font-family:var(--serif);font-weight:900;color:#232a38;font-size:16px;text-align:center;margin:6px 0 12px}
+.rephd{font-family:var(--serif);font-weight:900;color:#232a38;font-size:17px;text-align:center;margin:6px 0 12px}
 .sec{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;box-shadow:0 2px 10px rgba(40,36,20,.04)}
 .sec .hd{display:flex;align-items:center;gap:10px;padding:14px 14px;cursor:pointer}
 .sec .mk{width:28px;height:28px;border-radius:8px;background:#f3ead6;color:#8a6a2a;font-family:var(--serif);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.sec .ti{font-family:var(--serif);font-weight:700;font-size:14px;color:var(--ink);flex:1;line-height:1.4}
+.sec .ti{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--ink);flex:1;line-height:1.42}
 .sec .cv{color:var(--sub);font-size:12px;font-weight:700}
 .sec .lb{font-size:10px;color:#8a6a2a;background:#f3ead6;padding:3px 8px;border-radius:999px;font-weight:700;flex:0 0 auto}
 .sec .lb.free{color:var(--good);background:#e7f4ee}
 .sec .bd{display:none;padding:0 15px 15px}
 .sec.open .bd{display:block}
-.sec .bd p{font-size:13px;color:#3a3f47;line-height:1.72;font-weight:500;margin-top:11px}
+.sec .bd p{font-size:14.5px;color:#33383f;line-height:1.8;font-weight:500;margin-top:12px}
 .sec .bd p b{color:var(--navy);font-weight:700}
 .sec.locked .bd{display:block;position:relative;max-height:66px;overflow:hidden}
 .sec.locked .bd::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46px;background:linear-gradient(transparent,#fff)}
@@ -285,3 +285,18 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .topbar .logo{font-family:var(--serif);font-weight:900;color:#fff;font-size:17px;display:flex;align-items:center;gap:6px}
 .topbar .logo .s{width:24px;height:24px;border-radius:7px;border:1px solid var(--gold2);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:13px}
 .topbar .ic svg{width:20px;height:20px;stroke:#c7d2e6;fill:none;stroke-width:1.8}
+
+/* ===== 사주팔자 원국(元局) 판 ===== */
+.wonguk{background:linear-gradient(180deg,#242a3a,#1b2130);border:1px solid #39415a;border-radius:18px;padding:15px 14px 13px;margin-bottom:14px}
+.wonguk .wgt{font-family:var(--serif);font-weight:800;font-size:14.5px;text-align:center;color:#ececdf;margin-bottom:12px;letter-spacing:.02em}
+.wonguk .wgt span{color:var(--gold2);font-size:12px;margin-left:3px}
+.wgrid{display:flex;gap:8px;justify-content:center}
+.wgcol{flex:1;max-width:82px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px}
+.wgcol.day .wgpos{color:var(--gold2)}
+.wgcol.day .wgc{box-shadow:0 0 0 2px var(--gold2),0 3px 8px rgba(0,0,0,.3)}
+.wgpos{font-family:var(--serif);font-weight:700;color:#c7d2e6;font-size:14px;display:flex;flex-direction:column;line-height:1.2}
+.wgpos small{font-family:var(--sans);font-weight:600;color:#8b93a8;font-size:9.5px;margin-top:1px}
+.wgsip{font-size:10.5px;font-weight:700;color:#9aa3b8;background:rgba(255,255,255,.06);border-radius:6px;padding:2px 6px}
+.wgc{width:100%;aspect-ratio:1;max-width:60px;border-radius:11px;color:#fff;font-family:var(--serif);font-weight:900;font-size:27px;display:flex;align-items:center;justify-content:center;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.wgel{font-size:10px;color:#8b93a8;font-weight:600}
+.wgnote{text-align:center;font-size:10.5px;color:#828aa0;margin-top:11px;line-height:1.5}
