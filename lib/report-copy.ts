@@ -2,7 +2,7 @@
 // ⚠️ 유료 섹션 텍스트는 이 모듈에서만 생성됩니다. 클라이언트로 직접 노출 금지.
 import 'server-only';
 import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, sinsal, type Chart, type Sajeong } from './engine';
-import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, type TyMatch } from './tycoon';
+import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, TYPE_MYEONG, TYPE_USER, TYPE_BIZ, type TyMatch } from './tycoon';
 
 // 鏡 — 해외 거장(작고) 닮은 사주 (무료 바이럴 훅)
 function twinHtml(tm:TyMatch, me:number, myDist:number[]){
@@ -12,18 +12,25 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[]){
   const chips = tm.matched.length
     ? `<div class="twinchips">${tm.matched.map(m=>`<span class="twc">${m}</span>`).join('')}</div>`
     : '';
-  return `<div class="twinlead">대표님은 <b>${TYPE_NAME[me]}</b> — ${TYPE_DESC[me]} 그릇입니다.<br>`+
-    `이 명식과 세계 거장들의 사주를 견주면, 가장 <b>${lv}</b>는 이 사람입니다.</div>`+
+  return `<div class="twinlead">대표님의 명(命)을 세계 거장 50인과 견줬습니다.<br>`+
+    `가장 <b>${lv}</b>는 이 사람 — <b>${t.name}</b>입니다.</div>`+
     `<div class="twincard">`+
       `<div class="tface" style="background:${EL_HEX[tm.el]}">${tm.pills}</div>`+
       `<div class="tinfo"><div class="tnm">${t.name}</div>`+
       `<div class="ten">${t.en}</div><div class="tco">${t.co}</div></div>`+
     `</div>`+
-    `<div class="tystory"><div class="tsl">그는 누구였나</div><p>${tm.story}</p></div>`+
+    `<div class="myeong"><div class="myl">命 · ${TYPE_NAME[me]} — ${TYPE_DESC[me]} 명</div>`+
+      `<p>${TYPE_MYEONG[me]}</p>`+
+      `<p class="mys"><b>${t.name}</b>이 바로 이 명(命)이었습니다. ${tm.story}</p></div>`+
     `<p class="twbasis">대표님 명식 <b>${dl(myDist)}</b> · ${t.name} 삼주 <b>${dl(tm.tyDist)}</b> — `+
     (tm.count?`두 명식에서 <b>${tm.matched.join('</b>·<b>')}</b>, 여섯 부호 중 ${tm.count}가지가 겹칩니다.`:`구조의 결이 닿습니다.`)+`</p>`+
     chips+
-    `<p style="margin-top:12px">이런 <b>${TYPE_NAME[me]}</b>은 — ${TYPE_GOOD[me]} ${TYPE_RISK[me]}<br>그러니 ${TYPE_WAY[me]}</p>`+
+    `<div class="mecard"><div class="mel">그리고 — 대표님이 그 명(命)입니다</div>`+
+      `<p class="mep">${t.name}을 일으킨 그 <b>${EL[me]}의 기운</b>이, 대표님 여덟 글자에 같은 뼈대로 앉아 있습니다.</p>`+
+      `<p class="mep">${TYPE_USER[me]}</p>`+
+      `<div class="merule"></div>`+
+      `<p class="mep">${TYPE_BIZ[me]}</p></div>`+
+    `<p style="margin-top:12px">다만 ${TYPE_RISK[me]}<br>그러니 ${TYPE_WAY[me]}</p>`+
     `<p class="twinnote">※ 인물 명식은 널리 공개된 출생일 기준이며 생시(生時)는 미상이라 삼주(三柱)로만 계산했습니다. 명식의 구조를 견준 것으로, 재미로 보는 유형 비교일 뿐 그분들의 삶이나 대표님의 운을 단정하는 것이 아닙니다.</p>`;
 }
 

@@ -2,7 +2,7 @@
 // 개인 심층값(원국·사정률·궁합)은 주지 않고 '유형 + 닮은 CEO + 명리 근거'만 반환해 갈증을 만든다.
 import { NextResponse } from 'next/server';
 import { chartFromBirth, pil } from '@/lib/engine';
-import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY } from '@/lib/tycoon';
+import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, TYPE_MYEONG, TYPE_USER, TYPE_BIZ, TYPE_HOPE } from '@/lib/tycoon';
 
 export async function POST(req: Request) {
   try {
@@ -16,6 +16,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       type: TYPE_NAME[me], typeDesc: TYPE_DESC[me],
       good: TYPE_GOOD[me], risk: TYPE_RISK[me], way: TYPE_WAY[me],
+      myeong: TYPE_MYEONG[me], user: TYPE_USER[me], biz: TYPE_BIZ[me], hope: TYPE_HOPE[me],
       me,
       myPills: pil(c.dGan, c.dZhi),           // 내 일주(맛보기) — 전체 원국은 리포트에서
       myDist: c.dist,                          // 내 여덟 글자 오행 분포

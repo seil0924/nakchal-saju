@@ -12,6 +12,7 @@ const CEO_STEPS = [
 
 type Twin = {
   type: string; typeDesc: string; good: string; risk: string; way: string; me: number;
+  myeong: string; user: string; biz: string; hope: string;
   myPills: string; myDist: number[]; level: 'twin' | 'near' | 'none'; count: number; matched: string[];
   tycoon: { name: string; en: string; co: string; born: string }; tyPills: string; tyEl: number;
   tyDist: number[]; story: string;
@@ -180,9 +181,10 @@ export default function CeoTwin() {
 
         {res && (
           <div id="twinres" style={{ marginTop: 8 }}>
+            {/* 1막 — 거장의 명(命): 명리학 기반 칭찬일색 */}
             <div className="twinlead" style={{ marginTop: 4 }}>
-              대표님은 <b>{res.type}</b> — {res.typeDesc} 그릇입니다.<br />
-              세계 거장 50인과 견주니, 가장 <b>{LV(res.level)}</b>는 이 사람입니다.
+              대표님의 명(命)을 세계 거장 50인과 견줬습니다.<br />
+              가장 <b>{LV(res.level)}</b>는 이 사람 — <b>{res.tycoon.name}</b>입니다.
             </div>
             <div className="twincard">
               <div className="tface" style={{ background: EL_HEX[res.tyEl] }}>{res.tyPills}</div>
@@ -192,13 +194,13 @@ export default function CeoTwin() {
                 <div className="tco">{res.tycoon.co}</div>
               </div>
             </div>
-            {/* 그는 누구였나 — 인물 서사 */}
-            <div className="tystory">
-              <div className="tsl">그는 누구였나</div>
-              <p>{res.story}</p>
+            <div className="myeong">
+              <div className="myl">命 · {res.type} — {res.typeDesc} 명</div>
+              <p>{res.myeong}</p>
+              <p className="mys"><b>{res.tycoon.name}</b>이 바로 이 명(命)이었습니다. {res.story}</p>
             </div>
 
-            {/* 명리 근거 — 오행 분포 대조 (생시 미상 → 삼주) */}
+            {/* 2막 — 근거: 명식 대조 (오행이 몇 자씩) */}
             <div className="distcmp">
               <div className="dch">명식 대조 <small>삼주(三柱) 기준 — 오행이 몇 자씩 앉았는가</small></div>
               <div className="dcg">
@@ -217,9 +219,19 @@ export default function CeoTwin() {
               <div className="twinchips">{res.matched.map((m, i) => <span key={i} className="twc">{m}</span>)}</div>
             )}
 
-            {/* 유형 풀이 — 강점 · 주의 · 지침 */}
-            <div className="cheobang" style={{ marginTop: 16 }}>
-              <div className="cbt">{res.type} · {res.typeDesc} 그릇</div>
+            {/* 3막 — 주인공 전환: 대표님이 그 명입니다 (칭찬 → 회사 연결 → 방향·희망) */}
+            <div className="mecard">
+              <div className="mel">그리고 — 대표님이 그 명(命)입니다</div>
+              <p className="mep">{res.tycoon.name}을 일으킨 그 <b>{ELC[res.me]}의 기운</b>이, 대표님 명식에 같은 뼈대로 앉아 있습니다.</p>
+              <p className="mep">{res.user}</p>
+              <div className="merule" />
+              <p className="mep">{res.biz}</p>
+              <p className="mep dim">{res.hope}</p>
+            </div>
+
+            {/* 유형 실전 지침 */}
+            <div className="cheobang" style={{ marginTop: 14 }}>
+              <div className="cbt">{res.type}의 승부 기질 — 실전에서는</div>
               <div className="cbrow"><span className="cbk">강점</span><span className="cbv">{res.good}</span></div>
               <div className="cbrow"><span className="cbk">주의</span><span className="cbv">{res.risk}</span></div>
               <div className="cbrow"><span className="cbk">지침</span><span className="cbv">{res.way}</span></div>
@@ -232,7 +244,7 @@ export default function CeoTwin() {
 
             {/* 미끼 브리지 — 유형은 알려줬지만 '나 개인'은 감춰 갈증을 만든다 */}
             <div className="bridges">
-              <div className="bridgehd">그런데, <b>{res.tycoon.name}</b>{gwa(res.tycoon.name)} 닮았어도 — 대표님만의 사주는 따로 있습니다</div>
+              <div className="bridgehd">그 명(命)이 <b>오늘, 이달, 이 발주처</b>에서 어떻게 흐르는지 — 대표님만의 풀이는 따로 있습니다</div>
               <Link className="bridge" href={bridge}>
                 <div className="bi">率</div>
                 <div className="bt"><b>오늘, 나의 사정률은 어느 쪽인가</b><span>같은 {res.type}이라도 오늘 일진은 사람마다 다릅니다 · 무료</span></div>

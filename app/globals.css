@@ -587,3 +587,20 @@ input:focus,textarea:focus,select:focus{border-color:var(--navy) !important;box-
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none !important;transition:none !important}
 }
+
+/* 닮은 CEO — 1막: 명(命) 찬사 박스 */
+.myeong{margin-top:14px;background:#fbf9f3;border:1px solid #e7e0cf;border-radius:13px;padding:15px 16px}
+.myeong .myl{font-family:var(--serif);font-weight:900;font-size:14.5px;color:var(--red);letter-spacing:.02em;margin-bottom:8px}
+.myeong p{font-size:13.5px;line-height:1.8;color:#3a3f47}
+.myeong p b{color:var(--navy)}
+.myeong .mys{margin-top:10px;padding-top:10px;border-top:1px dashed #e0d7c0;color:#57523f;font-size:13px}
+
+/* 닮은 CEO — 3막: 대표님이 그 명입니다 (주인공 전환 · 시각적 정점) */
+.mecard{margin-top:16px;background:linear-gradient(150deg,#181b21,#232833);border:1px solid var(--gold2);border-radius:15px;padding:19px 18px;position:relative;overflow:hidden}
+.mecard::before{content:"命";position:absolute;right:-12px;bottom:-36px;font-family:var(--serif);font-weight:900;font-size:120px;color:rgba(255,255,255,.05);pointer-events:none}
+.mecard .mel{font-family:var(--serif);font-weight:900;font-size:16.5px;color:var(--gold2);letter-spacing:-.01em;margin-bottom:10px}
+.mecard .mep{font-size:13.5px;line-height:1.82;color:#e8e4d8;margin-top:8px;position:relative}
+.mecard .mep b{color:var(--gold2)}
+.mecard .mep.dim{color:#a8adb9;font-size:12.5px}
+.mecard .merule{width:34px;height:1px;background:var(--gold);margin:13px 0 5px}
+.sharewrap .sharebtn{white-space:nowrap;padding-left:8px;padding-right:8px;font-size:13.5px}
