@@ -20,7 +20,13 @@ export default function WonGuk({ p }: { p: Pillar[] }) {
           </div>
         ))}
       </div>
-      <div className="wgnote">만세력 · 절기(節氣) 천문 계산으로 뽑은 대표님의 명식입니다{p.length === 3 ? ' (태어난 시를 넣으면 시주까지 완성됩니다)' : ''}</div>
+      <div className="wgnote">한국천문연구원 절기(節氣) 기준으로 계산한 대표님의 명식입니다{p.length === 3 ? ' · 태어난 시를 넣으면 시주까지 완성됩니다' : ''}</div>
+      <div className="wgtrust">
+        <span>절기 천문계산</span>
+        <span>진태양시 −30분 보정</span>
+        <span>서머타임 자동보정</span>
+        <span>경도 127.5° 기준</span>
+      </div>
     </div>
   );
 }

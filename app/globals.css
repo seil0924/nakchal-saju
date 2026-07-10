@@ -5,9 +5,10 @@
 /* 모바일 우선: 화면 꽉 채움 (프레임 없음) */
 body{background:var(--bg);font-family:var(--sans);color:var(--ink)}
 .app{width:100%;max-width:100%;background:var(--bg);min-height:100vh;overflow:hidden}
-/* 태블릿·데스크톱: 살짝 더 크게 + 폰 프레임 */
-@media (min-width:600px){
-  body{background:#cbc7bb;display:flex;flex-direction:column;align-items:center;padding:28px 16px 40px}
+/* 태블릿(600~899): 기존 480 폰 프레임 유지 */
+@media (min-width:600px) and (max-width:899px){
+  body{background:#cbc7bb;padding:28px 16px 40px}
+  .dmain{display:flex;justify-content:center}
   .app{max-width:480px;min-height:auto;border-radius:28px;box-shadow:0 18px 44px rgba(30,28,20,.34);border:1px solid #b6b0a0}
 }
 .hero{background:linear-gradient(180deg,#25406a,#1c3357);padding:20px;text-align:center;position:relative}
@@ -300,3 +301,66 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .wgc{width:100%;aspect-ratio:1;max-width:60px;border-radius:11px;color:#fff;font-family:var(--serif);font-weight:900;font-size:27px;display:flex;align-items:center;justify-content:center;text-shadow:0 1px 3px rgba(0,0,0,.35)}
 .wgel{font-size:10px;color:#8b93a8;font-weight:600}
 .wgnote{text-align:center;font-size:10.5px;color:#828aa0;margin-top:11px;line-height:1.5}
+/* ============ 데스크톱(≥900px) 웹앱형 사이드바 레이아웃 ============ */
+.shell{display:block}
+.dsidebar{display:none}
+@media (min-width:900px){
+  body{background:#e7e3d8;padding:0}
+  .shell{display:flex;min-height:100vh;max-width:1240px;margin:0 auto;background:var(--bg);box-shadow:0 0 80px rgba(30,28,20,.12)}
+  /* 좌측 사이드바 */
+  .dsidebar{display:flex;flex-direction:column;flex:0 0 252px;width:252px;background:var(--navy2);color:#e8ebf2;position:sticky;top:0;height:100vh;padding:26px 18px 20px;border-right:1px solid #333b52}
+  .dbrand{display:flex;align-items:center;gap:10px;text-decoration:none;padding:0 6px 22px;border-bottom:1px solid #333b52;margin-bottom:18px}
+  .dbrand .ds{width:38px;height:38px;border-radius:10px;border:1px solid var(--gold2);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:20px;flex:0 0 auto}
+  .dbrand .dbt{font-family:var(--serif);font-weight:900;color:#fff;font-size:19px;line-height:1.1;display:flex;flex-direction:column}
+  .dbrand .dbt small{font-family:var(--sans);font-weight:600;font-size:10.5px;color:var(--gold2);margin-top:3px;letter-spacing:.02em}
+  .dcta{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--red),#7f1a17);color:#fff;border:1px solid var(--gold2);border-radius:13px;padding:13px;font-family:var(--serif);font-weight:800;font-size:14.5px;text-decoration:none;margin-bottom:20px;box-shadow:0 6px 16px rgba(165,36,31,.3)}
+  .dcta .dci{font-weight:900}
+  .dnav{display:flex;flex-direction:column;gap:3px}
+  .dnavi{display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:11px;color:#b6bdcc;text-decoration:none;font-weight:700;font-size:14.5px;border-left:3px solid transparent}
+  .dnavi svg{width:20px;height:20px;stroke:#b6bdcc;fill:none;stroke-width:1.8}
+  .dnavi:hover{background:#2b3346;color:#fff}
+  .dnavi.on{background:#2b3346;color:var(--gold2);border-left-color:var(--gold2)}
+  .dnavi.on svg{stroke:var(--gold2)}
+  .dfoot{margin-top:auto;padding:16px 8px 2px;font-size:11px;color:#8b93a8;line-height:1.6;font-weight:500;border-top:1px solid #333b52}
+  .dfoot .dkick{color:var(--gold2);font-family:var(--serif);letter-spacing:.24em;font-size:12px;margin-bottom:8px}
+  .dfoot .dlinks{margin-top:10px}
+  .dfoot .dlinks a{color:#aeb5c6;text-decoration:none}
+  /* 본문: 프레임 해제, 넓게, 사이드 여백 */
+  .dmain{flex:1;min-width:0;background:var(--bg);display:flex;justify-content:center}
+  /* 본문 프레임 해제 + 가독 폭 제한(블록 중앙정렬로 사이드 여백 확보) */
+  .dmain .app{max-width:880px;width:100%;min-height:100vh;border:none;box-shadow:none;border-radius:0;overflow:visible;margin:0;padding:34px 44px 60px}
+  /* 모바일 상단바/하단탭은 데스크톱에서 숨김(사이드바가 대체) */
+  .dmain .app > .topbar, .dmain .app > .tab{display:none}
+  .dmain .home.app{display:block}
+  .dmain .home .hero{border-radius:16px;overflow:hidden}
+  .dmain .home .hero::after{border-radius:0 0 16px 16px}
+  /* 리포트는 2단이라 조금 더 넓게 */
+  .dmain .app:has(.rcols){max-width:1020px}
+  /* 결과(리포트) 2단: 좌 원국·점수 고정 / 우 해설 */
+  .rcols{display:grid;grid-template-columns:330px 1fr;gap:34px;align-items:start}
+  .rleft{position:sticky;top:24px}
+  .rright{min-width:0}
+  .rright .rephd{text-align:left}
+}
+/* 모바일·태블릿에서는 2단 래퍼가 그냥 세로로 쌓임 */
+@media (max-width:899px){
+  .rcols{display:block}
+  .rleft,.rright{min-width:0}
+}
+
+/* 원국 신뢰 앵커 칩 (보정 상수·천문 출처) */
+.wgtrust{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px;padding-top:11px;border-top:1px solid rgba(255,255,255,.09)}
+.wgtrust span{font-size:10px;font-weight:600;color:#c9b184;background:rgba(214,175,94,.1);border:1px solid rgba(214,175,94,.28);border-radius:999px;padding:3px 9px}
+
+/* 처방(處方) 블록 — 시점·주의·대안 */
+.cheobang{margin-top:14px;background:#f7f4ec;border:1px solid #e7e0cf;border-radius:12px;padding:13px 14px}
+.cheobang .cbt{font-family:var(--serif);font-weight:800;color:var(--navy);font-size:13px;margin-bottom:9px;letter-spacing:.02em}
+.cheobang .cbrow{display:flex;gap:10px;padding:7px 0;border-top:1px dashed #e2dac6}
+.cheobang .cbrow:first-of-type{border-top:none}
+.cheobang .cbk{flex:0 0 34px;font-size:11.5px;font-weight:800;color:#8a6a2a;padding-top:1px}
+.cheobang .cbv{flex:1;font-size:13px;color:#33383f;line-height:1.62;font-weight:500}
+/* 이번 달 투찰 길일 teaser (택일 전면화 훅) */
+.giltease{margin-top:12px;background:linear-gradient(135deg,#fbf1d9,#f4e6c2);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;text-align:center}
+.giltease .glt{font-family:var(--serif);font-weight:800;color:#7a5c1e;font-size:14.5px}
+.giltease .glt b{color:var(--red)}
+.giltease .gls{font-size:11.5px;color:#8a7a52;font-weight:600;margin-top:4px;line-height:1.5}

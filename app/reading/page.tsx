@@ -290,7 +290,8 @@ export default function Reading() {
         <div className="note" style={{ textAlign: 'center' }}>※ 재미로 보는 명리 기반 참고 정보. 투찰금액 산정 근거로 사용 불가.</div>
 
         {res && (
-          <div id="rep" style={{ marginTop: 6 }}>
+          <div id="rep" className="rcols" style={{ marginTop: 6 }}>
+            <div className="rleft">
             {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             {res.hero && (
               <div className="rhero">
@@ -300,6 +301,8 @@ export default function Reading() {
                 <div className="sub2">{res.hero.sub}</div>
               </div>
             )}
+            </div>
+            <div className="rright">
             <div className="rephd">{res.title}</div>
             <div id="acc">
               {res.sections.map((sec, i) => {
@@ -332,6 +335,7 @@ export default function Reading() {
               PDF로 내보내기 · 저장
             </button>
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
+            </div>
           </div>
         )}
       </div>

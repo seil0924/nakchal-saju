@@ -198,6 +198,22 @@ function daeunSectionHtml(d,legalName){
     `<p>${DAEUN_REL[relc]}.</p>`+
     `<p>다음 10년(<b>${d.list[Math.min(7,d.curBlock+1)].from}년차~</b>)엔 <b>${EL[d.list[Math.min(7,d.curBlock+1)].el]}</b> 기운으로 넘어가니, 그 결에 맞춰 확장·정비의 때를 잡으십시오.</p>`;
 }
+// 처방형 결과 (saju.ai식): 시점·주의·대안 3박자 — '맞히기'가 아니라 '의사결정 지침'
+function cheobangHtml(s:Sajeong){
+  const up=s.tilt>0;
+  const when=up?'오늘은 기운이 위로 뻗는 날 — 준비된 건이라면 정면 승부해도 좋습니다.':'오늘은 눌리는 흐름 — 개시 직후를 피하고 마감 직전 시간대에 손을 쓰십시오.';
+  const warn=up?'자신감이 과해지기 쉬우니, 미리 정한 하한선 아래로는 내려가지 마십시오.':'조급함에 성급한 저가·과속 투찰을 던지지 마십시오.';
+  const alt=up?'흐름이 꺾이거나 조건이 나쁘면, 무리하지 말고 이번 달 투찰 길일로 미루십시오.':'큰 건이라면 오늘 무리하기보다 이번 달 투찰 길일(擇日)로 옮기는 편이 유리합니다.';
+  return `<div class="cheobang"><div class="cbt">處方 · 오늘의 실행 지침</div>`+
+    `<div class="cbrow"><span class="cbk">시점</span><span class="cbv">${when}</span></div>`+
+    `<div class="cbrow"><span class="cbk">주의</span><span class="cbv">${warn}</span></div>`+
+    `<div class="cbrow"><span class="cbk">대안</span><span class="cbv">${alt}</span></div></div>`;
+}
+function gilCount(c:Chart,y:number,m:number){
+  const days=new Date(Date.UTC(y,m,0)).getUTCDate();let n=0;
+  for(let d=1;d<=days;d++){const rel=relation(c.dayMasterEl,todayPillar(y,m,d).el);if(rel==='in'||rel==='bi')n++;}
+  return n;
+}
 function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,unlocked,names,daeunMeta,nowYMD){
   names=names||{};
   const me=c.dayMasterEl,gan=GAN[c.dGan],sip=sipsung(c),dom=argmax(sip);
@@ -253,7 +269,10 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     secs.push({mk:'同',free:false,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대')});}
   if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사');
     secs.push({mk:'協',free:false,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사')});}
-  secs.push({mk:'率',free:true,t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:gaugeHtml(s,worryTxt,unlocked),gauge:true});
+  let rateHtml=gaugeHtml(s,worryTxt,unlocked)+cheobangHtml(s);
+  if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
+    rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
+  secs.push({mk:'率',free:true,t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
   if(nowYMD){secs.push({mk:'擇',free:false,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
   secs.push({mk:'方',free:false,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,

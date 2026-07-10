@@ -50,7 +50,8 @@ export default function ReportView({ params }: { params: { id: string } }) {
       <div className="wrap">
         {err && <div className="errbox">{err}</div>}
         {res && (
-          <div>
+          <div className="rcols">
+            <div className="rleft">
             {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             {res.hero && (
               <div className="rhero">
@@ -59,6 +60,8 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 <div className="lab">{res.hero.label}</div><div className="sub2">{res.hero.sub}</div>
               </div>
             )}
+            </div>
+            <div className="rright">
             <div className="rephd">{res.title}</div>
             <div className="print-only pfoot" style={{ display: 'none' }}>낙찰사주 · 士가 읽는 사주·사정률 리포트 · 명리 기반 참고 정보</div>
             {res.sections.map((sec, i) => {
@@ -79,6 +82,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               PDF로 내보내기 · 저장
             </button>
             {!unlocked && <div className="no-print" style={{ textAlign: 'center', fontSize: 11.5, color: '#a99f88', marginTop: 6 }}>전체 리포트를 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
+            </div>
           </div>
         )}
         {!res && !err && <div style={{ textAlign: 'center', color: '#a99f88', padding: 30 }}>불러오는 중…</div>}

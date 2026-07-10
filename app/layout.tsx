@@ -1,5 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import DesktopSidebar from '@/app/_components/DesktopSidebar';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nakchal-saju.example.com'),
@@ -19,7 +20,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <div className="shell">
+          <DesktopSidebar />
+          <div className="dmain">{children}</div>
+        </div>
+      </body>
     </html>
   );
 }

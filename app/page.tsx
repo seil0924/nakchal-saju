@@ -17,14 +17,14 @@ export default function Home() {
 
       <div className="hero"><div className="kick">運 七 技 三 · 회사 사주 전문</div>
         <h2>대표와 회사의 사주,<br />그 <b>운칠(運七)</b>을 짚어드립니다</h2>
-        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>낙찰 사정률 · 법인 운세 · 발주처/동업/협정 궁합</div>
+        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>낙찰 사정률 · 이달의 투찰 길일 · 법인 운세 · 발주처 궁합</div>
       </div>
 
       <div className="sechd" style={{ marginTop: 15 }}><span className="t"><span className="b" />오늘의 사정률 전망</span><span className="m">7/9 · 丙午일</span></div>
       <div className="hcard seal-card">
         <div className="seal-stamp">封</div>
         <div className="seal-t">오늘 이 투찰, 나에게 유리한 날인가</div>
-        <div className="seal-s">대표님 생년월일만 넣으면 30초 만에 무료로 확인</div>
+        <div className="seal-s">오늘의 사정률 + 이달의 투찰 길일까지 · 생년월일만 넣으면 30초 무료</div>
         <Link className="hcta" href="/reading">오늘의 사정률 전망 열기<small>무료 · 소수점 정밀값은 전체 리포트에서</small></Link>
       </div>
 
