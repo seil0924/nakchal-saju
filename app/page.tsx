@@ -73,8 +73,15 @@ export default function Home() {
         </Link>
       </div>
 
+      {/* 통점 위로 랜딩 */}
+      <Link className="ceoband" href="/why" style={{ marginTop: 26 }}>
+        <span className="cbseal" style={{ borderColor: '#c98b4a', color: '#e3c27a' }}>運</span>
+        <span className="cbtx"><b>하한가·연패·큰 건… 대표님 잘못이 아닙니다</b><em>그 고민, 실력이 아니라 흐름의 문제일 수 있습니다</em></span>
+        <span className="cbgo">→</span>
+      </Link>
+
       {/* 동업·협정 궁합 */}
-      <Link className="ally" href="/reading">
+      <Link className="ally" href="/reading" style={{ marginTop: 16 }}>
         <div className="h">同業宮合 · 協定宮合</div>
         <div className="b">
           <div><div className="t">손잡기 전, 궁합부터</div><div className="d">대표×대표 · 회사×회사 진단</div></div>
