@@ -396,6 +396,22 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .twcount b{color:var(--red)}
 .twinnote{margin-top:12px;font-size:11px;color:#9a9384;line-height:1.65}
 
+/* 닮은 CEO 공유 버튼 */
+.sharewrap{display:flex;gap:9px;margin-top:16px}
+.sharewrap .sharebtn{flex:1;margin-top:0}
+.sharebtn.primary{background:linear-gradient(135deg,#7f1a17,#a5241f);color:#fff;border-color:var(--gold2)}
+/* 미끼 브리지 — 닮은 CEO → 개인 리포트 유입 */
+.bridges{margin-top:20px;border-top:1px solid #e7e0cf;padding-top:16px}
+.bridgehd{font-family:var(--serif);font-weight:800;font-size:15px;color:#20242c;line-height:1.5;margin-bottom:12px}
+.bridgehd b{color:var(--red)}
+.bridge{display:flex;align-items:center;gap:13px;background:#fbf9f3;border:1px solid #e7e0cf;border-radius:13px;padding:14px 15px;text-decoration:none;margin-bottom:9px}
+.bridge:active{background:#f4efe3}
+.bridge .bi{flex:0 0 auto;width:42px;height:42px;border-radius:10px;background:var(--ink,#181b21);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:20px}
+.bridge .bt{flex:1;min-width:0}
+.bridge .bt b{display:block;font-family:var(--serif);font-weight:700;font-size:14.5px;color:#20242c;line-height:1.4}
+.bridge .bt span{display:block;font-size:11.5px;color:#7f786c;font-weight:500;margin-top:3px;line-height:1.45}
+.bridge .ba{flex:0 0 auto;color:var(--red);font-weight:800;font-size:18px}
+
 /* ================= 관리자 (/admin) ================= */
 .adminroot{width:100%;min-height:100vh;display:flex;background:#f4f3ef;color:#23262d;font-family:var(--sans)}
 .adminroot .aside{width:236px;flex:0 0 236px;background:#171a20;color:#c4c9d4;padding:22px 14px;display:flex;flex-direction:column}

@@ -59,6 +59,9 @@ export default function Reading() {
         setAddKind(ck);
         setTargets(prev => [...prev.filter(x => x.kind !== ck), { kind: ck, name: cn || '', date: cd }]);
       }
+      // 닮은 CEO(/ceo)에서 넘어온 경우 대표 생년월일·성함 프리필
+      const b = p.get('b'), n = p.get('n');
+      if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) setF(s => ({ ...s, birth: b, name: n || s.name }));
     } catch {}
   }, []);
   function persistSaved(list: Target[]) { setSaved(list); try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch {} }

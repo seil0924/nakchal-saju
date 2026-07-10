@@ -2,17 +2,9 @@
 // ⚠️ 유료 섹션 텍스트는 이 모듈에서만 생성됩니다. 클라이언트로 직접 노출 금지.
 import 'server-only';
 import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, sinsal, type Chart, type Sajeong } from './engine';
-import { matchTycoon, type TyMatch } from './tycoon';
+import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_WAY, type TyMatch } from './tycoon';
 
 // 鏡 — 해외 거장(작고) 닮은 사주 (무료 바이럴 훅)
-const TYPE_NAME=['개척형','추진형','뚝심형','승부사형','지략형'];
-const TYPE_DESC=['한번 정하면 새 판을 여는','현장을 달구고 사람을 움직이는','신뢰로 오래 버티는','빠르게 끊고 확실히 매듭짓는','판을 읽고 돌아갈 길을 찾는'];
-const TYPE_WAY=[
-  '방향이 서면 밀되, 물러설 하한선을 미리 정해 두는 것이 이 유형의 관건입니다.',
-  '기세가 오를수록 마감 직전까지 속도를 아끼고, 식었을 때 무리하지 않는 것이 요령입니다.',
-  '평소의 뚝심대로 가되, 좋은 때를 놓치지 않도록 결단의 순간만은 앞당기십시오.',
-  '끊고 매듭짓는 힘은 무기이나, 끊기 전 한 박자만 상대 사정을 헤아리면 사람이 남습니다.',
-  '흐름을 읽는 지혜가 강점이나, 재느라 결정적 순간을 놓치지 않도록 매듭은 단호히 지으십시오.'];
 function twinHtml(tm:TyMatch, me:number){
   const lv = tm.level==='twin' ? '닮은 사주' : tm.level==='near' ? '가까운 사주' : '결이 비슷한 사주';
   const t=tm.tycoon;
