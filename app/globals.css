@@ -250,6 +250,15 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .cvscore{text-align:center;flex:0 0 auto;padding:0 2px}
 .cvscore .n{font-family:var(--serif);font-weight:900;font-size:36px;line-height:1}
 .cvscore .g2{font-size:10px;font-weight:700;margin-top:3px}
+/* 궁합 심화 — 실전 3계 + 주의 신호 */
+.threekye{margin:12px 0;background:#f7f4ec;border:1px solid var(--line);border-radius:12px;padding:13px 14px}
+.threekye .tkt{font-family:var(--serif);font-weight:800;font-size:13.5px;color:var(--ink);margin-bottom:9px}
+.threekye .tkrow{display:flex;gap:9px;align-items:flex-start;padding:5px 0}
+.threekye .tkrow+.tkrow{border-top:1px dashed #e3ddcd}
+.threekye .tkdot{flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:6px}
+.threekye .tktx{flex:1;font-size:12.5px;color:#4f4a40;line-height:1.6;font-weight:500;word-break:keep-all}
+.threekye .tktx b{color:var(--ink);font-weight:800}
+.cwarn{margin-top:10px;padding:11px 13px;background:#fbf4e9;border-left:3px solid var(--red);border-radius:0 10px 10px 0;font-size:12.5px;color:#6b4a2e;line-height:1.65;font-weight:500;word-break:keep-all}
 
 /* ===== 투찰 택일 캘린더 (擇) ===== */
 .choil{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:2px 0 4px}
