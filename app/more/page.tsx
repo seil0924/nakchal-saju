@@ -1,15 +1,32 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { supabaseBrowser } from '@/lib/supabase/client';
 
 // 19 · 더보기 · 설정 (프로필 · 회사 · 구독 · 알림)
 const NK = 'nakchal_notify_v1';
+const AUTH_ON = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 export default function More() {
   const [notify, setNotify] = useState(true);
   const [prof, setProf] = useState<{ name?: string; corp?: string }>({});
+  const [acct, setAcct] = useState<{ email?: string; name?: string } | null>(null);
+  const [authReady, setAuthReady] = useState(false);
+
+  async function logout() {
+    try { await supabaseBrowser().auth.signOut(); } catch {}
+    setAcct(null);
+    if (typeof window !== 'undefined') window.location.reload();
+  }
 
   useEffect(() => {
+    if (AUTH_ON) {
+      supabaseBrowser().auth.getUser().then(({ data }) => {
+        const u = data?.user;
+        if (u) setAcct({ email: u.email, name: (u.user_metadata as any)?.name || (u.user_metadata as any)?.full_name });
+        setAuthReady(true);
+      }).catch(() => setAuthReady(true));
+    } else { setAuthReady(true); }
     try { setNotify(localStorage.getItem(NK) !== '0'); } catch {}
     try {
       const raw = localStorage.getItem('nakchal_saved_targets_v1');
@@ -35,11 +52,22 @@ export default function More() {
       <div style={{ padding: '0 16px 24px' }}>
         <div className="profcard" style={{ marginTop: 14 }}>
           <div className="pav">士</div>
-          <div>
-            <div className="pn">{prof.name ? `${prof.name} 대표님` : '대표님'}</div>
-            <div className="ps">{prof.corp || '회사 정보 미입력'} · 무료 이용중</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="pn">{acct?.name ? `${acct.name} 대표님` : prof.name ? `${prof.name} 대표님` : '대표님'}</div>
+            <div className="ps">{acct?.email ? acct.email : (prof.corp || '회사 정보 미입력')} · 무료 이용중</div>
           </div>
+          {authReady && (acct
+            ? <button className="acctbtn ghost" onClick={logout}>로그아웃</button>
+            : <Link className="acctbtn" href="/login">로그인</Link>)}
         </div>
+
+        {authReady && !acct && (
+          <Link className="loginpromo" href="/login">
+            <span className="lpk">계정 연동</span>
+            <span className="lpt"><b>로그인하고 내 사주를 계정에 저장</b><em>기기가 바뀌어도 리포트·저장 정보가 그대로 이어집니다</em></span>
+            <span className="lpg">→</span>
+          </Link>
+        )}
 
         <div className="sechd"><span className="t"><span className="b" />내 정보</span></div>
         <div className="setrow">
