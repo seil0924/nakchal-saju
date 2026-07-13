@@ -353,16 +353,17 @@ function gaugeHtml(s,worryTxt,unlocked){
   const pos=clamp(s.pos);
   return `<div class="gauge">`+
     `<div class="gverdict ${up?'up':'down'}">`+
-      `<span class="gvl">오늘의 사정률 방향</span>`+
-      `<span class="gvd">${s.dir}<i>${up?'▲':'▼'}</i></span>`+
-      `<span class="gvb">이번 흐름 <b>${s.bandLo}~${s.bandHi}%</b>에 무게가 실립니다</span>`+
+      `<span class="gvseal">${up?'上':'下'}</span>`+
+      `<span class="gvl">오늘의 사정률 흐름</span>`+
+      `<span class="gvd">${up?'상단':'하단'} 흐름<i>${up?'▲':'▼'}</i></span>`+
+      `<span class="gvb">기준(基準) <b>100.0</b> 대비 <b>${up?'위':'아래'}쪽</b> — 이번 흐름 <b>${s.bandLo}~${s.bandHi}%</b>에 무게</span>`+
     `</div>`+
     `<div class="gmeter">`+
       `<div class="gmtrack"><div class="gmband" style="left:${bL}%;width:${bW}%"></div></div>`+
       `<div class="gmbase"></div>`+
       `<div class="gmneedle" style="left:${pos}%"></div>`+
     `</div>`+
-    `<div class="gscale"><span>98%<em>하한</em></span><span class="mid">기초 100%</span><span>102%<em>상한</em></span></div>`+
+    `<div class="gscale"><span>98.0<em>下限</em></span><span class="mid">基準 100.0</span><span>102.0<em>上限</em></span></div>`+
     `<div class="gprec">`+
       `<span class="gpk">${unlocked?'소수점 정밀값':'🔒 소수점 정밀값'}</span>`+
       (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">택일팩(990원)부터 열립니다</span>`)+

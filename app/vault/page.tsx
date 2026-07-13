@@ -34,7 +34,14 @@ export default function Vault() {
       </div>
 
       <div className="sechd"><span className="t"><span className="b" />내 리포트</span><span className="m">{items.length}건</span></div>
-      {items.length === 0 && <div className="balnote">아직 뽑은 리포트가 없습니다. 홈에서 오늘의 전망을 먼저 확인해 보세요.</div>}
+      {items.length === 0 && (
+        <div className="emptybox">
+          <div className="ebseal">封</div>
+          <div className="ebtit">아직 열어본 리포트가 없습니다</div>
+          <div className="ebtx">대표님의 사주와 오늘의 사정률부터<br />무료로 확인해 보세요.</div>
+          <Link className="ebcta" href="/reading">오늘의 전망 열기 <span>· 무료 · 30초 →</span></Link>
+        </div>
+      )}
       {items.map(it => (
         <Link key={it.id} className="li" href={`/report/${it.id}`}>
           <div className="t"><b>{it.label}</b><span>{it.unlocked ? '✓ 전체 열람됨' : '무료 · 잠긴 섹션 있음'}</span></div>

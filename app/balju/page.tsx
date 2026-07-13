@@ -17,7 +17,7 @@ export default function Balju() {
       </div>
 
       <div className="searchbar">
-        <span className="si">🔍</span>
+        <span className="si"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.2-3.2" /></svg></span>
         <input value={q} onChange={e => setQ(e.target.value)} placeholder="발주처 이름·분야로 검색" />
       </div>
 
