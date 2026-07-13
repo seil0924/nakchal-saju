@@ -501,6 +501,16 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .myeong .mys2{margin-top:9px;color:#6a5f45;font-size:13.5px;line-height:1.7;word-break:keep-all}
 .twinchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
 .twinchips .twc{font-size:11.5px;font-weight:700;color:#7a5c1e;background:#f4e6c2;border:1px solid var(--gold);border-radius:999px;padding:5px 11px}
+/* 왜 닮았나 — 겹치는 결 풀이 */
+.whymatch{margin-top:14px;background:#fbf9f3;border:1px solid #e7e0cf;border-radius:13px;padding:15px 16px}
+.whymatch .wmh{font-family:var(--serif);font-weight:800;font-size:14.5px;color:#20242c;margin-bottom:11px}
+.whymatch .wmrow{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
+.whymatch .wmrow+.wmrow{border-top:1px dashed #e6ddc9}
+.whymatch .wmk{flex:0 0 62px;font-size:11px;font-weight:800;color:#a5862f;letter-spacing:.02em;padding-top:2px}
+.whymatch .wmv{flex:1;font-size:14px;color:#4a463a;line-height:1.65;font-weight:500;word-break:keep-all}
+.whymatch .wmv b{color:#20242c;font-weight:800}
+.whymatch .wmsum{margin-top:12px;padding-top:12px;border-top:1px solid #ece3d0;font-size:14px;color:#57523f;line-height:1.8;font-weight:500;word-break:keep-all}
+.whymatch .wmsum b{color:#7a1f14;font-weight:800}
 .twcount{margin-top:10px;font-size:12.5px;color:#6f6a5c;font-weight:600}
 .twcount b{color:var(--red)}
 .twinnote{margin-top:12px;font-size:11px;color:#9a9384;line-height:1.65}
