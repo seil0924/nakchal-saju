@@ -28,7 +28,7 @@ export default function Vault() {
 
   return (
     <div className="app home">
-      <div className="topbar"><div className="logo"><span className="s">士</span>보관함</div><div className="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></div></div>
+      <div className="topbar"><div className="logo"><span className="s">士</span>보관함</div><Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link></div>
       <div className="hero"><div className="kick">保 管 函</div><h2 style={{ fontSize: 19 }}>내 리포트와<br />저장된 사주</h2>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>결제한 리포트는 여기서 다시 볼 수 있어요</div>
       </div>

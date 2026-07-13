@@ -9,7 +9,7 @@ export default function Balju() {
 
   return (
     <div className="app home">
-      <div className="topbar"><div className="logo"><span className="s">士</span>발주처</div><div className="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></div></div>
+      <div className="topbar"><div className="logo"><span className="s">士</span>발주처</div><Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link></div>
 
       <div className="hero"><div className="kick">發 注 處 宮 合</div>
         <h2 style={{ fontSize: 19 }}>어느 발주처와<br />붙어볼까요</h2>

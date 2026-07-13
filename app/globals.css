@@ -430,6 +430,7 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .topbar .logo{font-family:var(--serif);font-weight:900;color:#fff;font-size:17px;display:flex;align-items:center;gap:6px}
 .topbar .logo .s{width:25px;height:25px;border-radius:7px;background:linear-gradient(180deg,#b23a2b,#7d1d12);border:1px solid #5c140b;box-shadow:inset 0 0 0 1px rgba(230,198,128,.7);color:#f7ecd4;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
 .topbar .ic svg{width:20px;height:20px;stroke:#c7d2e6;fill:none;stroke-width:1.8}
+.topbar .ic,.home .topbar .ic{display:flex;align-items:center;justify-content:center;padding:6px;margin:-6px;cursor:pointer;text-decoration:none}
 
 /* ===== 사주팔자 원국(元局) 판 ===== */
 .wonguk{background:linear-gradient(180deg,#242a3a,#1b2130);border:1px solid #39415a;border-radius:18px;padding:15px 14px 13px;margin-bottom:14px}
