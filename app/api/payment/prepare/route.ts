@@ -6,7 +6,13 @@ import { SKU, type Sku } from '@/lib/constants';
 import { isCatKey, CAT_INFO } from '@/lib/report-categories';
 
 export async function POST(req: Request) {
-  const { reportId, sku } = await req.json();
+  const { reportId, sku, bokchae, amount } = await req.json();
+  // 복채(福債) — 리포트와 무관한 자율 감사·기원 결제. 서버가 금액 범위만 clamp.
+  if (bokchae) {
+    const amt = Math.max(1000, Math.min(1000000, Math.round(Number(amount) || 0)));
+    const order = await createOrder(reportId || 'bokchae', amt, 0);   // level 0 — 언락과 무관
+    return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 복채(福債)', sku: 'bokchae' });
+  }
   const input = await getReport(reportId);
   if (!reportId || !input) {
     return NextResponse.json({ error: 'invalid_report' }, { status: 400 });

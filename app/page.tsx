@@ -100,6 +100,7 @@ export default function Home() {
         <div className="colo">士</div>
         명리 기반 참고 정보입니다 · 투찰금액 산정 근거가 아닙니다<br />
         <Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보처리방침</Link>
+        <Link className="bokquiet" href="/bokchae"><span>福</span>복채 청산</Link>
       </div>
 
       {/* 하단 내비 */}
