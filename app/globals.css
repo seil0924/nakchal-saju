@@ -250,6 +250,40 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .cvscore{text-align:center;flex:0 0 auto;padding:0 2px}
 .cvscore .n{font-family:var(--serif);font-weight:900;font-size:36px;line-height:1}
 .cvscore .g2{font-size:10px;font-weight:700;margin-top:3px}
+/* 曆 · 사업운 캘린더 */
+.bizcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:2px 0 4px}
+.bizcal .bch{text-align:center;font-size:10.5px;font-weight:800;color:#a49b88;padding:2px 0}
+.bizcal .bcd{position:relative;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f7f4ec;border:1px solid var(--line);border-radius:9px;min-height:38px}
+.bizcal .bcd.mute{background:transparent;border:none}
+.bizcal .bcn{font-size:12.5px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.bizcal .bcm{width:14px;height:5px;border-radius:999px;margin-top:3px}
+.bizleg{display:flex;flex-wrap:wrap;gap:8px 12px;margin:11px 0 2px}
+.bizleg .blg{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#5b5545}
+.bizleg .blg i{width:11px;height:6px;border-radius:999px;flex:none}
+.bizlist{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.bizrow{display:flex;gap:10px;align-items:flex-start;background:#f7f4ec;border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+.bizrow .bztag{flex:0 0 auto;color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:1px}
+.bizrow .bzdays{font-family:var(--serif);font-weight:800;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.bizrow .bzdesc{font-size:11.5px;color:#6f6858;line-height:1.55;font-weight:500;margin-top:2px;word-break:keep-all}
+/* 診 · 대표 유형 진단 (4유형 + 4축 + 위기 약점) */
+.jin{margin:2px 0}
+.jin .jintag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#a5862f;border:1px solid var(--gold);border-radius:999px;padding:3px 10px}
+.jin .jintype{margin-top:11px;font-family:var(--serif);font-weight:800;font-size:17px;color:#20242c;line-height:1.5;word-break:keep-all}
+.jin .jintype b{color:var(--red)}
+.jin .axes{margin-top:15px;display:flex;flex-direction:column;gap:16px}
+.jin .axrow{}
+.jin .axhd{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#a49b88}
+.jin .axhd .axon{color:var(--ink);font-weight:800}
+.jin .axbar{position:relative;height:7px;margin:7px 0 8px;border-radius:999px;background:linear-gradient(90deg,#e9e3d4,#d9d2c0)}
+.jin .axdot{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--red);border:2.5px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.28);transform:translate(-50%,-50%)}
+.jin .axdesc{font-size:12px;color:#5b5545;line-height:1.6;font-weight:500;word-break:keep-all}
+.jin .axdesc b{color:var(--ink);font-weight:800}
+.jin .crisis{margin-top:16px;background:#fbf1ec;border:1px solid #ecccbe;border-left:3px solid var(--red);border-radius:0 12px 12px 0;padding:13px 15px}
+.jin .crisis .crhd{font-family:var(--serif);font-weight:800;font-size:13.5px;color:var(--red);margin-bottom:7px}
+.jin .crisis p{font-size:13px;color:#5c4436;line-height:1.7;font-weight:500;word-break:keep-all}
+.jin .crisis p b{color:#7a1f14;font-weight:800}
+.jin .jinhook{margin-top:12px;font-size:12.5px;color:#6f6858;line-height:1.65;font-weight:500;word-break:keep-all}
+.jin .jinhook b{color:var(--ink);font-weight:700}
 /* 궁합 심화 — 실전 3계 + 주의 신호 */
 .threekye{margin:12px 0;background:#f7f4ec;border:1px solid var(--line);border-radius:12px;padding:13px 14px}
 .threekye .tkt{font-family:var(--serif);font-weight:800;font-size:13.5px;color:var(--ink);margin-bottom:9px}
@@ -259,6 +293,16 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .threekye .tktx{flex:1;font-size:12.5px;color:#4f4a40;line-height:1.6;font-weight:500;word-break:keep-all}
 .threekye .tktx b{color:var(--ink);font-weight:800}
 .cwarn{margin-top:10px;padding:11px 13px;background:#fbf4e9;border-left:3px solid var(--red);border-radius:0 10px 10px 0;font-size:12.5px;color:#6b4a2e;line-height:1.65;font-weight:500;word-break:keep-all}
+/* 파트너 역할 제안 */
+.prole{margin-top:12px;background:#f6f8f5;border:1px solid #d6e2d3;border-radius:12px;padding:13px 14px}
+.prole .prhd{font-family:var(--serif);font-weight:800;font-size:13.5px;color:#2f6b42;margin-bottom:10px}
+.prole .prsplit{display:flex;align-items:center;gap:10px}
+.prole .prc{flex:1;text-align:center;background:#fff;border:1px solid #dfe7db;border-radius:10px;padding:9px 6px}
+.prole .prwho{display:block;font-size:11px;color:#8a9284;font-weight:700}
+.prole .prwhat{display:block;font-family:var(--serif);font-weight:900;font-size:15px;margin-top:3px}
+.prole .prvs{flex:0 0 auto;font-weight:800;color:#a49b88;font-size:13px}
+.prole .prline{margin-top:11px;font-size:12.5px;color:#4f5a49;line-height:1.65;font-weight:500;word-break:keep-all}
+.prole .prline b{color:#245e37;font-weight:800}
 
 /* ===== 투찰 택일 캘린더 (擇) ===== */
 .choil{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:2px 0 4px}

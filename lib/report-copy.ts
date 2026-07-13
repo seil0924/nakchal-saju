@@ -269,6 +269,29 @@ const HYEOP_X={
    ['<b>주관사</b> — 하도급으로 눌리지 않으려면, 우리 역할·지분·책임 범위를 계약 초반에 분명히 못박으십시오.','<b>지분</b> — 상대 페이스에 끌려 지분이 깎이지 않게, 최소 보장선을 계약서에 명시하십시오.','<b>관재수</b> — 공기 후반의 관재수(官災數)를 조심하고, 정산·하자 책임 조건을 반드시 명문화하십시오.'],
    '위기 시나리오 — 큰 회사와 손잡았다는 안도감에 계약을 대충 넘기면, 후반에 불리한 조건이 줄줄이 딸려옵니다. 규모에 눌릴수록 계약서로 방패를 세우십시오.']};
 const CTX_X={client:CO_X,partner:DONGUP_X,ally:HYEOP_X};
+// ── 파트너 궁합 역할 제안 (사주아이식) — 82점으로 끝내지 않고 '누가 무엇을 맡을지'까지
+const ROLE_STR=['신규 사업 개척과 새 시장 진출','외부 영업·수주와 대외 관계','재무·운영과 조직 안정화','결단·구조조정과 품질·리스크 관리','전략·기획과 정보·자금 운용'];
+const ROLE_SHORT=['개척·신사업','영업·대외','재무·운영','결단·관리','전략·기획'];
+// 관계별 스트레스 지점 / 충돌 해결법
+const P_STRESS={in:'대표님이 상대에게 기대다 주도권을 슬며시 놓치는 순간',jae:'상대를 아랫사람처럼 대해 상대가 소외감을 느끼는 순간',bi:'누가 옳은지를 두고 정면으로 부딪히는 순간',sik:'대표님만 계속 내주다 혼자 지치는 순간',gwan:'상대 페이스에 끌려가 대표님이 눌리는 순간'};
+const P_RESOLVE={in:'큰 결정은 대표님이 내리되, 과정에서 상대의 조언을 먼저 구하는 절차를 두십시오.',jae:'대표님이 방향을 정하되, 상대의 몫과 공을 공개적으로 인정하십시오.',bi:'최종 결정권자를 영역별로 미리 정하고, 그 영역은 서로 침범하지 않기로 문서화하십시오.',sik:'주는 만큼 상대의 책임과 성과 목표를 명확히 걸어 균형을 맞추십시오.',gwan:'감정으로 맞서지 말고, 역할·권한의 경계를 계약서로 그으십시오.'};
+const P_LONG={in:'장기 동업 적합도 — 높음. 서로를 받치는 구조라 오래 갈수록 단단해집니다.',jae:'장기 동업 적합도 — 좋음. 역할만 분명하면 길게 이어갈 조합입니다.',bi:'장기 동업 적합도 — 조건부. 규칙을 세우면 강하지만, 방치하면 오래 못 갑니다.',sik:'장기 동업 적합도 — 보통. 보상 균형이 무너지면 대표님이 먼저 지칩니다.',gwan:'장기 동업 적합도 — 조건부. 경계를 그으면 안정되나, 모호하면 대표님이 눌립니다.'};
+function partnerExtraHtml(meEl:number,otherEl:number,rel:string,otherLabel:string,company:boolean){
+  const same=meEl===otherEl;
+  const roleLine=same
+    ? `대표님과 ${otherLabel} 모두 <b>${ROLE_SHORT[meEl]}</b>에 강해 영역이 겹칩니다. 같은 일을 공동으로 결정하면 갈등이 커지니, 한 분은 반드시 반대 축(안/밖, 공격/수비)을 맡아야 합니다.`
+    : `대표님은 <b>${ROLE_STR[meEl]}</b>에, ${otherLabel}는 <b>${ROLE_STR[otherEl]}</b>에 적합합니다. 이 둘을 겹치지 않게 나누면 시너지가 크고, 같은 영역을 공동 결정하면 갈등이 커집니다.`;
+  return `<div class="prole"><div class="prhd">${company?'회사 역할 분담 제안':'업무 분담 제안'}</div>`+
+    `<div class="prsplit"><div class="prc"><span class="prwho">대표님</span><span class="prwhat" style="color:${EL_HEX[meEl]}">${ROLE_SHORT[meEl]}</span></div>`+
+    `<div class="prvs">×</div>`+
+    `<div class="prc"><span class="prwho">${otherLabel}</span><span class="prwhat" style="color:${EL_HEX[otherEl]}">${ROLE_SHORT[otherEl]}</span></div></div>`+
+    `<p class="prline">${roleLine}</p></div>`+
+    `<div class="threekye"><div class="tkt">동업, 이렇게 굴리십시오</div>`+
+    `<div class="tkrow"><span class="tkdot"></span><span class="tktx"><b>스트레스 지점</b> — ${P_STRESS[rel]||'역할이 모호해지는 순간'}입니다. 여기서 관계가 상합니다.</span></div>`+
+    `<div class="tkrow"><span class="tkdot"></span><span class="tktx"><b>의견 충돌 해결</b> — ${P_RESOLVE[rel]||'결정 규칙을 먼저 정하십시오.'}</span></div>`+
+    `<div class="tkrow"><span class="tkdot"></span><span class="tktx"><b>${(P_LONG[rel]||'장기 동업 적합도 — 보통.').split(' — ')[0]}</b> — ${(P_LONG[rel]||'장기 동업 적합도 — 보통.').split(' — ')[1]||''}</span></div>`+
+    `</div>`;
+}
 function compatWith(meChart,otherChart,table,A,S){
  const me=meChart.dayMasterEl,o=otherChart.dayMasterEl;
  const rel=relation(me,o);const c=table[rel];
@@ -287,6 +310,10 @@ function compatBlock(cm,c,otherLabel,ctx?,stepTitle?){
       `<div class="threekye"><div class="tkt">${stepTitle||'실전 3계(計)'}</div>`+
       X[1].map(s=>`<div class="tkrow"><span class="tkdot"></span><span class="tktx">${s}</span></div>`).join('')+`</div>`+
       `<p class="cwarn">${X[2]}</p>`;
+  }
+  // 파트너(동업)·협정에는 역할 제안 + 스트레스·충돌·장기적합도까지
+  if(ctx==='partner'||ctx==='ally'){
+    deep+=partnerExtraHtml(c.dayMasterEl, cm.oel, cm.rel, otherLabel, ctx==='ally');
   }
   return `<div class="cverdict">`+
     `<div class="cvs"><div class="cnm">대표님</div><div class="cpl" style="background:${meCol}">${pil(c.dGan,c.dZhi)}</div></div>`+
@@ -421,11 +448,96 @@ function sijinHtml(c:Chart){
     `<p style="margin-top:10px">오늘은 <b>${gil.join('·')}</b>가 대표님 일간을 살리는 창(窓)입니다. 큰 건의 제출·통화·미팅은 이 창에 맞추십시오.</p>`+
     `<p class="fcline">이 점수는 판정이 아니라 <b>예보</b>입니다 — 우산을 챙길지는 대표님이 정하십니다.</p>`;
 }
+// ── 曆 · 사업운 캘린더 (개인화) — 이달 각 날에 사업 흐름을 표시
+// 일진(日辰) × 대표 일간의 상성으로 8개 사업 유형을 배정한다.
+const BIZ_TYPE:Record<string,{k:string;lb:string;full:string;c:string}> = {
+  jae:  { k:'계약', lb:'계약·수주·수금', full:'계약·수주·수금에 좋은 날 — 결실(財)의 기운이 드는 날입니다.', c:'#46a07d' },
+  in:   { k:'채용', lb:'채용·면접·투자 검토', full:'채용·면접·투자 검토에 좋은 날 — 사람과 귀인(印)이 드는 날입니다.', c:'#3f6fb0' },
+  bi:   { k:'발표', lb:'신규 발표·중요 미팅', full:'신규 사업 발표·중요 미팅에 좋은 날 — 기운이 오르는(比) 날입니다.', c:'#cfa64e' },
+  sik:  { k:'영업', lb:'영업·홍보·소통', full:'영업·홍보·프레젠테이션에 좋은 날 — 표현(食傷)이 트이는 날입니다.', c:'#3f8f80' },
+  gwanY:{ k:'주의', lb:'갈등·지출 주의', full:'갈등·관재·큰 지출을 조심할 날 — 기운이 눌리는(官) 날이니 무리한 결정을 피하십시오.', c:'#c0453a' },
+  gwanE:{ k:'휴식', lb:'휴식·재정비', full:'휴식과 재정비가 필요한 날 — 힘을 아끼고 다음을 준비할 날입니다.', c:'#8a8578' },
+};
+function dayBizKey(me:number,y:number,m:number,d:number){
+  const tp=todayPillar(y,m,d); const rel=relation(me,tp.el);
+  if(rel==='gwan') return (tp.gan%2===0)?'gwanY':'gwanE';
+  return rel; // jae·in·bi·sik
+}
+function bizCalHtml(c:Chart,y:number,m:number,unlocked:boolean){
+  const me=c.dayMasterEl;
+  const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();
+  const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const buckets:Record<string,number[]>={};
+  let cells='';
+  for(let i=0;i<first;i++) cells+='<div class="bcd mute"></div>';
+  for(let d=1;d<=days;d++){
+    const key=dayBizKey(me,y,m,d); const t=BIZ_TYPE[key];
+    (buckets[key]=buckets[key]||[]).push(d);
+    cells+=`<div class="bcd"><span class="bcn">${d}</span><span class="bcm" style="background:${t.c}" title="${t.lb}"></span></div>`;
+  }
+  const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="bch">${x}</div>`).join('');
+  const legend=Object.values(BIZ_TYPE).map(t=>`<span class="blg"><i style="background:${t.c}"></i>${t.lb}</span>`).join('');
+  const grid=`<div class="bizcal">${dh}${cells}</div><div class="bizleg">${legend}</div>`;
+  if(!unlocked){
+    return grid+`<p class="jinhook" style="margin-top:12px">이달 <b>${m}월</b>의 하루하루가 이미 산출되었습니다 — <b>어느 날에 계약을, 어느 날에 채용을, 어느 날을 피해야 하는지</b> 정확한 날짜와 그날의 이유는 결제 후 열립니다.</p>`;
+  }
+  const order=['jae','in','bi','sik','gwanY','gwanE'];
+  const list=order.filter(k=>buckets[k]&&buckets[k].length).map(k=>{const t=BIZ_TYPE[k];
+    return `<div class="bizrow"><span class="bztag" style="background:${t.c}">${t.k}</span><div class="bzbd"><div class="bzdays">${buckets[k].join(' · ')}일</div><div class="bzdesc">${t.full}</div></div></div>`;}).join('');
+  return grid+`<div class="bizlist">${list}</div>`+
+    `<p style="margin-top:12px">※ 일진(日辰)과 대표님 일간(${GAN[c.dGan]})의 상성으로 산출한 참고 흐름입니다. 큰 계약·채용·발표는 표시된 좋은 날에, 무리한 결정은 주의·휴식일을 피해 잡으십시오.</p>`;
+}
 function gilCount(c:Chart,y:number,m:number){
   const days=new Date(Date.UTC(y,m,0)).getUTCDate();let n=0;
   for(let d=1;d<=days;d++){const rel=relation(c.dayMasterEl,todayPillar(y,m,d).el);if(rel==='in'||rel==='bi')n++;}
   return n;
 }
+// ── 診 · 대표 유형 진단 (사주아이식 프로파일) — 4유형 + 4축 스펙트럼 + 위기 약점(심리 훅)
+const TYPE4=['공격형','관계형','안정형','분석형','분석형'];
+const TYPE4_SUB=['밀어붙여 판을 여는 대표','사람을 모아 판을 키우는 대표','신용으로 오래 버티는 대표','정보와 결단으로 판을 가르는 대표','흐름을 읽어 스며드는 대표'];
+// 4축: 라벨(좌/우) + me별 위치(0=좌 강 ~ 100=우 강) + 좌/우 해설
+const JIN_AX=[
+  {l:'신규 사업 개척', r:'운영·관리', p:[22,34,74,60,52],
+   dl:'없던 길을 내고 새 판을 벌이는 데 대표님의 명이 삽니다. 다만 벌인 것을 끝맺는 관리는 사람에게 맡기십시오.',
+   dr:'판을 지키고 굴리는 운영에 강합니다. 다만 새 시장은 한 박자 늦을 수 있으니, 개척은 젊은 피에게 열어 두십시오.'},
+  {l:'빠른 결정', r:'신중한 검토', p:[24,22,72,30,66],
+   dl:'판단이 서면 즉시 움직여 기회를 낚습니다. 다만 열이 오른 상태의 결정은 하한선을 미리 정해 두십시오.',
+   dr:'재고 또 재어 실수가 적습니다. 다만 검토가 길어 좋은 때를 놓치지 않도록 결정 마감 시각을 정해 두십시오.'},
+  {l:'믿고 맡김', r:'직접 통제', p:[62,30,38,78,50],
+   dl:'사람을 믿고 맡겨 조직을 키웁니다. 다만 맡긴 뒤에도 돈과 숫자만은 직접 보십시오.',
+   dr:'직접 쥐어야 마음이 놓입니다. 다만 다 쥐면 사람이 크지 못하니, 권한을 조금씩 나눠 주십시오.'},
+  {l:'버는 능력', r:'지키는 능력', p:[26,36,72,58,46],
+   dl:'새 수익을 만들어내는 힘이 강합니다. 다만 버는 만큼 새기 쉬우니, 지키는 사람을 곁에 두십시오.',
+   dr:'한번 쥔 것을 지키고 불리는 힘이 강합니다. 다만 기회 앞에 몸을 사려 놓치지 않도록 하십시오.'},
+];
+// 위기 상황에서 나타나는 약점 (심리 훅 — 대표가 가장 두려워하는 그 지점)
+const CRISIS=[
+  '위기가 닥치면 대표님은 <b>혼자 다 떠안고 정면으로 부딪히는</b> 쪽으로 기웁니다. 물러설 줄 몰라 이미 기운 판에서도 손을 못 떼는 것 — 이것이 대표님이 큰 건에서 무너지는 지점입니다.',
+  '위기가 닥치면 대표님은 <b>급히 타올랐다 급히 식는</b> 쪽으로 기웁니다. 초반에 과하게 지르고 후반에 힘이 빠져 마무리에서 새는 것 — 이것이 대표님이 다 잡은 건을 놓치는 지점입니다.',
+  '위기가 닥치면 대표님은 <b>버티며 결정을 미루는</b> 쪽으로 기웁니다. 신중함이 지나쳐 골든타임을 넘겨 손 쓸 때를 놓치는 것 — 이것이 대표님이 좋은 기회를 흘려보내는 지점입니다.',
+  '위기가 닥치면 대표님은 <b>차갑게 끊고 혼자 결정하는</b> 쪽으로 기웁니다. 사람을 내치고 조언을 닫아 고립된 채 판단하는 것 — 이것이 대표님이 곁을 잃는 지점입니다.',
+  '위기가 닥치면 대표님은 <b>재고 또 재다 실기하는</b> 쪽으로 기웁니다. 완벽한 수를 찾다 결단의 순간을 넘겨 아무것도 못 하는 것 — 이것이 대표님이 판을 놓치는 지점입니다.',
+];
+function clamp(n:number){return Math.max(6,Math.min(94,Math.round(n)));}
+function jinHtml(c:Chart){
+  const me=c.dayMasterEl, sipA=sipsung(c), dom=argmaxRC(sipA);
+  const nudge = (dom===1||dom===2)?-12:(dom===3||dom===4)?12:0; // 식상·재성→왼쪽, 관성·인성→오른쪽
+  const axes=JIN_AX.map((a,i)=>{
+    let pos=a.p[me]; if(i===0||i===3) pos+=nudge; pos=clamp(pos);
+    const leftSide=pos<50; const active=leftSide?a.l:a.r; const desc=leftSide?a.dl:a.dr;
+    return `<div class="axrow"><div class="axhd"><span class="${leftSide?'axon':''}">${a.l}</span><span class="${leftSide?'':'axon'}">${a.r}</span></div>`+
+      `<div class="axbar"><div class="axdot" style="left:${pos}%"></div></div>`+
+      `<div class="axdesc"><b>${active}</b> — ${desc}</div></div>`;
+  }).join('');
+  return `<div class="jin">`+
+    `<div class="jintag">진단 · 診</div>`+
+    `<div class="jintype">대표님은 <b>${TYPE4[me]}</b> — ${TYPE4_SUB[me]}입니다.</div>`+
+    `<div class="axes">${axes}</div>`+
+    `<div class="crisis"><div class="crhd">⚠ 위기 상황에서 나타나는 약점</div><p>${CRISIS[me]}</p></div>`+
+    `<p class="jinhook">이 약점이 <b>언제, 어떤 발주처·계약</b>에서 터지는지 — 그 정확한 타이밍과 처방은 아래 <b>승부(決)·사람(人)·재물(財)</b>에서 짚어 드립니다.</p>`+
+    `</div>`;
+}
+function argmaxRC(a:number[]){let x=0;for(let i=1;i<a.length;i++)if(a[i]>a[x])x=i;return x;}
 // 언락 레벨: 0 무료 · 1 택일팩 · 2 전체
 const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
 function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD){
@@ -446,6 +558,8 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     `${DM_D2[me]}`])});
   const tm=matchTycoon(c);
   secs.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me,c.dist)});
+  // 診 · 대표 유형 진단 (4유형 + 4축 + 위기 약점) — 무료 훅
+  secs.push({mk:'診',tier:'free',t:`대표님은 어떤 유형의 대표인가 — ${TYPE4[me]}`,html:jinHtml(c)});
   const ss=sinsal(c);
   if(ss.length){
     secs.push({mk:'符',tier:'free',t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
@@ -464,6 +578,8 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
   secs.push({mk:'率',tier:'free',t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
   if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
     secs.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 길일 <b>${gc0}일</b>의 정확한 날짜가 이미 산출되어 있습니다 — 이달이 가기 전에 확인하십시오.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
+  // 曆 · 사업운 캘린더 (그리드는 무료 노출, 날짜별 상세는 결제 후)
+  if(nowYMD){secs.push({mk:'曆',tier:'free',t:`${nowYMD.m}월 사업운 캘린더 — 이달, 언제 움직일까`,html:bizCalHtml(c,nowYMD.y,nowYMD.m,level>=2)});}
   secs.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>으로 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
     distHtml(c)+P([
     `여덟 글자의 오행은 ${EL.map((e,i)=>`${e}${c.dist[i]}`).join(' · ')} — ${zero?'한쪽으로 크게 쏠린 극단적 구성':'다소 치우친 구성'}입니다.`,

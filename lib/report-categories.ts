@@ -1,6 +1,6 @@
 // lib/report-categories.ts — 카테고리별 개별 상품(사주아이식)
 // 각 카테고리는 자기 섹션(mk)만 보여주고, 자기 가격으로 개별 결제된다.
-export type CatKey = 'daepyo' | 'sajeong' | 'balju' | 'gunghap' | 'daeun';
+export type CatKey = 'daepyo' | 'sajeong' | 'balju' | 'gunghap' | 'daeun' | 'calendar';
 
 export type CatInfo = {
   name: string; hanja: string; oh: 'mok' | 'hwa' | 'to' | 'geum' | 'su';
@@ -13,7 +13,7 @@ export type CatInfo = {
 export const CAT_INFO: Record<CatKey, CatInfo> = {
   daepyo: {
     name: '대표 사주', hanja: '代', oh: 'mok',
-    mks: ['器', '鏡', '符', '五', '決', '人', '財', '方', '士'],
+    mks: ['器', '鏡', '診', '符', '五', '決', '人', '財', '方', '士'],
     price: 4900, needs: [],
     kicker: '代表 四柱', lead: '대표님이 어떤 그릇으로 태어났는지 — 성정·승부 기질·재물·사람까지 낱낱이.',
   },
@@ -40,6 +40,12 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
     mks: ['法', '運'],
     price: 4900, needs: ['legal'],
     kicker: '會社 大運', lead: '회사가 대표님을 밀어주는가 — 법인의 그릇과 년도별 큰 흐름.',
+  },
+  calendar: {
+    name: '사업운 캘린더', hanja: '曆', oh: 'hwa',
+    mks: ['曆'],
+    price: 2900, needs: [],
+    kicker: '事業運 月曆', lead: '이달 — 계약·채용·투자·발표에 좋은 날과, 갈등·지출을 조심할 날을 달력에 짚어 드립니다.',
   },
 };
 

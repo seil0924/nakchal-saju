@@ -66,6 +66,11 @@ export default function Home() {
           <div className="bd5"><div className="t">회사 대운 <small>會社 大運</small></div><div className="d">회사가 대표님을 밀어주는가 — 년도별 큰 흐름</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
+        <Link className="li5" href="/reading?cat=calendar">
+          <div className="gz" style={{ color: '#d15c4a' }}>曆</div>
+          <div className="bd5"><div className="t">사업운 캘린더 <small>事業運 月曆</small></div><div className="d">이달 — 계약·채용·발표에 좋은 날, 갈등·지출 조심할 날</div></div>
+          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
+        </Link>
         <Link className="li5" href="/full">
           <div className="gz" style={{ color: '#9a2a20' }}>全</div>
           <div className="bd5"><div className="t">전체 리포트 <small>十六章</small></div><div className="d">큰 건만 비껴가는 이유 — 열여섯 장으로 통째로</div></div>
