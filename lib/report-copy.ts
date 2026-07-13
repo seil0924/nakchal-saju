@@ -12,7 +12,7 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[]){
   const chips = tm.matched.length
     ? `<div class="twinchips">${tm.matched.map(m=>`<span class="twc">${m}</span>`).join('')}</div>`
     : '';
-  return `<div class="twinlead">대표님의 명(命)을 세계 거장 50인과 견줬습니다.<br>`+
+  return `<div class="twinlead">대표님의 명(命)을 세계 거장 100인과 견줬습니다.<br>`+
     `가장 <b>${lv}</b>는 이 사람 — <b>${t.name}</b>입니다.</div>`+
     `<div class="twincard">`+
       `<div class="tface" style="background:${EL_HEX[tm.el]}">${tm.pills}</div>`+

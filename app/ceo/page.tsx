@@ -7,7 +7,7 @@ import RiteProgress from '@/app/_components/RiteProgress';
 const CEO_STEPS = [
   '삼주(三柱) 구성 — 년·월·일',
   '여섯 부호 추출 — 오행·음양·십성·신살',
-  '세계 거장 50인 명식과 대조',
+  '세계 거장 100인 명식과 대조',
 ];
 
 type Twin = {
@@ -152,7 +152,7 @@ export default function CeoTwin() {
         <div className="k">運 七 技 三</div>
         <h1>나와 닮은<br />세계적 CEO는?</h1>
         <p style={{ color: '#c3cfe3', marginTop: 10, fontSize: 13.5, lineHeight: 1.7 }}>
-          생년월일만 넣으면 30초. 잡스·록펠러·샤넬… 세계 거장 50인 중<br />당신의 사주와 가장 닮은 대표를 찾아 드립니다. <b style={{ color: 'var(--gold2)' }}>무료</b>
+          생년월일만 넣으면 30초. 잡스·록펠러·샤넬… 세계 거장 100인 중<br />당신의 사주와 가장 닮은 대표를 찾아 드립니다. <b style={{ color: 'var(--gold2)' }}>무료</b>
         </p>
         <p style={{ marginTop: 8 }}><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p>
       </div>
@@ -177,7 +177,7 @@ export default function CeoTwin() {
           <div className="note">※ 태어난 시간은 몰라도 됩니다(삼주 기준). 닮은 유형만 보는 재미용입니다.</div>
         </div>
 
-        <button className="go" onClick={run} disabled={busy}>{busy ? '거장 50인과 견주는 중…' : '나와 닮은 CEO 찾기 →'}</button>
+        <button className="go" onClick={run} disabled={busy}>{busy ? '거장 100인과 견주는 중…' : '나와 닮은 CEO 찾기 →'}</button>
         {err && <div className="errbox">{err}</div>}
 
         {res && (
@@ -188,7 +188,7 @@ export default function CeoTwin() {
               <span className="crlab">鏡 · 거울에 비추다</span>
             </div>
             <div className="twinlead" style={{ marginTop: 4 }}>
-              대표님의 명(命)을 세계 거장 50인과 견줬습니다.<br />
+              대표님의 명(命)을 세계 거장 100인과 견줬습니다.<br />
               가장 <b>{LV(res.level)}</b>는 이 사람 — <b>{res.tycoon.name}</b>입니다.
             </div>
             <div className="twincard">
@@ -295,7 +295,7 @@ export default function CeoTwin() {
         )}
         <div className="note" style={{ textAlign: 'center', marginTop: 10 }}>※ 재미로 보는 명리 기반 참고 정보.</div>
       </div>
-      <RiteProgress open={prog} title="거장 50인과 견줍니다" steps={CEO_STEPS} stepMs={500} />
+      <RiteProgress open={prog} title="거장 100인과 견줍니다" steps={CEO_STEPS} stepMs={500} />
     </div>
   );
 }

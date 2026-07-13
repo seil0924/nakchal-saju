@@ -21,7 +21,7 @@ export default function Home() {
       {/* 닮은 CEO — 바이럴 입구 */}
       <Link className="ceoband" href="/ceo">
         <span className="cbseal">鏡</span>
-        <span className="cbtx"><b>나와 닮은 세계적 CEO는?</b><em>잡스·록펠러·샤넬 … 거장 50인 × 내 사주 · 30초</em></span>
+        <span className="cbtx"><b>나와 닮은 세계적 CEO는?</b><em>잡스·록펠러·샤넬 … 거장 100인 × 내 사주 · 30초</em></span>
         <span className="cbgo">무료 →</span>
       </Link>
 
@@ -51,12 +51,12 @@ export default function Home() {
           <div className="bd5"><div className="t">사정률 사주 <small>査定率</small></div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/product/balju">
+        <Link className="li5" href="/reading?cat=balju">
           <div className="gz" style={{ color: '#46a07d' }}>宮</div>
           <div className="bd5"><div className="t">발주처 사주 <small>發注處 宮合</small></div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/product/dongup">
+        <Link className="li5" href="/reading?cat=gunghap">
           <div className="gz" style={{ color: '#d15c4a' }}>合</div>
           <div className="bd5"><div className="t">협정·궁합 사주 <small>同業 · 協定</small></div><div className="d">손잡기 전에, 깨질 궁합인지부터</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
@@ -73,7 +73,7 @@ export default function Home() {
         </Link>
         <Link className="li5" href="/full">
           <div className="gz" style={{ color: '#9a2a20' }}>全</div>
-          <div className="bd5"><div className="t">전체 리포트 <small>十六章</small></div><div className="d">큰 건만 비껴가는 이유 — 열여섯 장으로 통째로</div></div>
+          <div className="bd5"><div className="t">전체 리포트 <small>十八章</small></div><div className="d">큰 건만 비껴가는 이유 — 열여덟 장으로 통째로</div></div>
           <div className="rt"><div className="pz paid">자세히</div><div className="arw">→</div></div>
         </Link>
       </div>

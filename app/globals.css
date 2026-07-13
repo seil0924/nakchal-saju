@@ -202,7 +202,7 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .sheet .sumbox{padding:4px 20px 0}
 .sheet .sumbtns{display:flex;gap:9px;padding:16px 20px 22px}
 .sheet .sumbtns button{flex:1;padding:14px;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:var(--sans);border:1.5px solid #ddd6c6;background:#fff;color:#7c7768}
-.sheet .sumbtns button.ok{background:linear-gradient(135deg,var(--navy),#182c49);color:#fff;border:none}
+.sheet .sumbtns button.ok{background:linear-gradient(135deg,#2b2119,#181209);color:#fff;border:none}
 
 /* ===== 결과 히어로 (큰 점수 + 후킹 제목) ===== */
 .rhero{background:linear-gradient(160deg,#23262e,#14161b);border:1px solid var(--gold2);border-radius:18px;padding:22px 18px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
@@ -342,11 +342,11 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .setrow a:last-child,.setrow button:last-child{border-bottom:none}
 .setrow .r{color:var(--sub);font-size:12px;font-weight:500}
 .profcard{display:flex;align-items:center;gap:12px;margin:12px 0 4px}
-.profcard .pav{width:48px;height:48px;border-radius:14px;background:radial-gradient(circle at 35% 30%,#2f4d7d,#1a2c46);border:1px solid var(--gold2);display:flex;align-items:center;justify-content:center;color:var(--gold2);font-family:var(--serif);font-weight:900;font-size:20px;flex:0 0 auto}
+.profcard .pav{width:48px;height:48px;border-radius:14px;background:radial-gradient(circle at 35% 30%,#3a2f22,#191309);border:1px solid var(--gold2);display:flex;align-items:center;justify-content:center;color:var(--gold2);font-family:var(--serif);font-weight:900;font-size:20px;flex:0 0 auto}
 .profcard .pn{font-family:var(--serif);font-weight:700;font-size:15px}
 .profcard .ps{font-size:11.5px;color:var(--sub);margin-top:2px}
 .subbody{padding:14px 16px 0}
-.donebar{margin:8px 13px 14px;padding:15px;background:linear-gradient(135deg,#22406b,#182c49);color:#fff;border:1px solid var(--gold2);border-radius:14px;font-family:var(--serif);font-weight:800;font-size:15px;text-align:center;cursor:pointer}
+.donebar{margin:8px 13px 14px;padding:15px;background:linear-gradient(135deg,#2b2119,#181209);color:#fff;border:1px solid var(--gold2);border-radius:14px;font-family:var(--serif);font-weight:800;font-size:15px;text-align:center;cursor:pointer}
 .donebar.done{background:linear-gradient(135deg,#177f5e,#0f5f45)}
 
 /* ===== PDF 내보내기 (print) ===== */
@@ -865,7 +865,7 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5 .fshd{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:800;font-size:14.5px;color:#20242c;margin-bottom:10px}
 .home5 .fshd .fsmk{width:30px;height:30px;background:var(--h-ink);color:var(--h-goldlt);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px}
 .home5 .fstx{font-size:13.5px;line-height:1.85;color:#3a3f47}
-.home5 .fstx b{color:var(--h-navy,#22406b);color:#22406b}
+.home5 .fstx b{color:#7a1f14}
 .home5 .fsfade{height:64px;margin:0 -18px;background:linear-gradient(transparent,#fff)}
 .home5 .fscap{text-align:center;font-size:11.5px;color:#8a8270;font-weight:600;padding:0 0 15px}
 

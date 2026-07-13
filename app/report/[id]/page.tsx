@@ -113,7 +113,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {/* 바이럴 루프 — 공유받은 사람의 입구 */}
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 14 }}>
               <div className="bi">鏡</div>
-              <div className="bt"><b>나도 30초 만에 — 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 50인 중 내 사주와 닮은 대표 · 무료</span></div>
+              <div className="bt"><b>나도 30초 만에 — 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 100인 중 내 사주와 닮은 대표 · 무료</span></div>
               <div className="ba">→</div>
             </Link>
             <button className="sharebtn no-print" style={{ marginTop: 12 }} onClick={() => window.print()}>

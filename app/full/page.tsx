@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: '전체 리포트 — 대표의 사주 열여섯 장 · 낙찰사주',
-  description: '견적은 틀린 게 없는데 큰 건만 비껴간다면 — 그건 실력이 아니라 명식(命式)의 구조입니다. 대표와 회사의 사주 열여섯 장, 통째로 폅니다.',
+  title: '전체 리포트 — 대표의 사주 열여덟 장 · 낙찰사주',
+  description: '견적은 틀린 게 없는데 큰 건만 비껴간다면 — 그건 실력이 아니라 명식(命式)의 구조입니다. 대표와 회사의 사주 열여덟 장, 통째로 폅니다.',
 };
 
 // 욕구를 긁는 체크리스트 — 40~70대 입찰 대표의 실제 통점
@@ -17,10 +17,12 @@ const PAINS = [
 
 const TOC: [string, string, string][] = [
   ['器', '그릇', '대표님이 어떤 그릇으로 태어났는가'],
-  ['鏡', '닮은 사주', '세계 거장 50인 중 누구와 같은 뼈대인가'],
+  ['鏡', '닮은 사주', '세계 거장 100인 중 누구와 같은 뼈대인가'],
+  ['診', '유형 진단', '공격·관계·안정·분석형 — 위기의 약점까지'],
   ['符', '신살', '명식에 새겨진 특수 부호 — 괴강·백호·역마'],
   ['率', '사정률', '오늘 유리한가, 불리한가 — 시진별 창(窓)까지'],
   ['擇', '택일', '이달의 투찰 길일 캘린더 — 넣을 날, 접을 날'],
+  ['曆', '사업운 캘린더', '계약·채용·발표에 좋은 날, 조심할 날'],
   ['五', '오행', '넘치는 기운과 텅 빈 자리 — 평생의 숙제'],
   ['決', '승부 기질', '밀어붙일 때와 접을 때 — 투찰의 심법'],
   ['人', '사람', '오해받는 이유, 곁에 사람을 남기는 법'],
@@ -53,7 +55,7 @@ export default function FullIntro() {
       <div className="mast">
         <div className="mb">
           <Link href="/" className="s" style={{ textDecoration: 'none' }}>士</Link>
-          <div className="n">전체 리포트<em>大 全 書 · 十六章</em></div>
+          <div className="n">전체 리포트<em>大 全 書 · 十八章</em></div>
         </div>
         <Link href="/" style={{ fontSize: 12, color: '#7f786c', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
       </div>
@@ -78,7 +80,7 @@ export default function FullIntro() {
         ))}
         <div className="painout">
           하나라도 뜨끔하셨다면 — 그것은 성격 탓도, 실력 탓도 아니라 <b>명식(命式)의 구조</b>입니다.<br />
-          타고난 구조는 바꿀 수 없어도, <b>쓰는 법</b>은 배울 수 있습니다. 그 쓰는 법이 이 열여섯 장에 담깁니다.
+          타고난 구조는 바꿀 수 없어도, <b>쓰는 법</b>은 배울 수 있습니다. 그 쓰는 법이 이 열여덟 장에 담깁니다.
         </div>
       </div>
 
@@ -101,8 +103,8 @@ export default function FullIntro() {
         <p className="ucout">맞히는 도구가 아니라, <b>결정을 돕는 도구</b>입니다.</p>
       </div>
 
-      {/* 목차 — 열여섯 장 */}
-      <div className="lab"><i /><span>열여섯 장(章) 목차</span><span className="m">항목 60여 개</span></div>
+      {/* 목차 — 열여덟 장 */}
+      <div className="lab"><i /><span>열여덟 장(章) 목차</span><span className="m">항목 60여 개</span></div>
       <div className="toc">
         {TOC.map(([mk, t, d], i) => (
           <div key={i} className="tocrow">
@@ -126,13 +128,13 @@ export default function FullIntro() {
       <div className="lab"><i /><span>값어치</span></div>
       <div className="anchorbox">
         <div className="acmp"><span className="al">청담·강남 대면 사주 상담</span><span className="ar old">수만~수십만 원</span></div>
-        <div className="acmp"><span className="al">낙찰사주 전체 리포트 <em>대표+법인 16장</em></span><span className="ar now">12,900원</span></div>
+        <div className="acmp"><span className="al">낙찰사주 전체 리포트 <em>대표+법인 18장</em></span><span className="ar now">12,900원</span></div>
         <p className="anout">입찰 한 건 앞에서, 이 값은 반올림 오차입니다. 게다가 회사(법인) 사주까지 함께 보는 곳은 드뭅니다.</p>
       </div>
 
       {/* 가격 · 보장 */}
       <div className="pricebox">
-        <div className="pline"><span>전체 리포트 · 열여섯 장</span><b>12,900원</b></div>
+        <div className="pline"><span>전체 리포트 · 열여덟 장</span><b>12,900원</b></div>
         <div className="pline sub2"><span>택일팩 · 정밀 사정률 + 이달 길일</span><b>990원</b></div>
         <div className="passure">✓ 첫 리포트, 만족스럽지 않으면 환불해 드립니다</div>
       </div>

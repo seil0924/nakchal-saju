@@ -75,7 +75,7 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
       {/* 가격 + CTA */}
       <div className="pricebox" style={{ marginTop: 20 }}>
         <div className="pline sub2"><span>택일팩 · 정밀 사정률 + 이달 길일</span><b>990원</b></div>
-        <div className="pline"><span>전체 리포트 · 열여섯 장</span><b>12,900원</b></div>
+        <div className="pline"><span>전체 리포트 · 열여덟 장</span><b>12,900원</b></div>
         <div className="passure">✓ 첫 리포트, 만족스럽지 않으면 환불해 드립니다</div>
       </div>
       <div style={{ padding: '16px 24px 0' }}>
