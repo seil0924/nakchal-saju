@@ -14,10 +14,11 @@ export default function Login() {
     setErr(''); setBusy(provider);
     try {
       const sb = supabaseBrowser();
-      const { error } = await sb.auth.signInWithOAuth({
-        provider,
-        options: { redirectTo: `${window.location.origin}/auth/callback` },
-      });
+      // 카카오는 이메일(account_email) 권한이 검수 전이라 요청에서 제외 — 닉네임만.
+      // (이메일 요구 시 KOE205). 비즈앱 검수 후 'account_email' 추가하면 됨.
+      const options: { redirectTo: string; scopes?: string } = { redirectTo: `${window.location.origin}/auth/callback` };
+      if (provider === 'kakao') options.scopes = 'profile_nickname';
+      const { error } = await sb.auth.signInWithOAuth({ provider, options });
       if (error) { setErr('로그인 창을 여는 데 실패했습니다. 잠시 후 다시 시도해 주세요.'); setBusy(''); }
       // 성공 시 브라우저가 소셜 로그인 페이지로 리다이렉트됩니다.
     } catch { setErr('로그인 처리 중 문제가 생겼습니다.'); setBusy(''); }
