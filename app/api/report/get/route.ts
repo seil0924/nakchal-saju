@@ -18,5 +18,5 @@ export async function GET(req: Request) {
   if (!input) return NextResponse.json({ error: 'not_found' }, { status: 404 });
   const level = await unlockLevel(id);
   const rep = computeReport(input, level);
-  return NextResponse.json({ reportId: id, unlocked: level >= 1, level, ...rep });
+  return NextResponse.json({ reportId: id, unlocked: level >= 1, level, cat: input.cat ?? null, ...rep });
 }
