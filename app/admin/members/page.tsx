@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { listMembers, won } from '@/lib/admin-data';
 
 export default async function AdminMembers() {
@@ -7,11 +8,11 @@ export default async function AdminMembers() {
       <div className="atop"><div><h1>회원 관리</h1><div className="sub">전체 {won(mems.length)}명 표시</div></div></div>
       <div className="abody">
         <div className="filters">
-          <div className="fx on">전체</div><div className="fx">구독중</div><div className="fx">무료</div><div className="fx">카카오·네이버·구글</div>
+          <div className="fx on">전체</div><div className="fx">유료</div><div className="fx">무료</div><div className="fx">카카오·구글</div>
         </div>
         <div className="acard">
           <table><tbody>
-            <tr><th>회원</th><th>수단</th><th>가입일</th><th>구독</th><th>결제총액</th><th>리포트</th></tr>
+            <tr><th>회원</th><th>수단</th><th>가입일</th><th>등급</th><th>결제총액</th><th>리포트</th></tr>
             {mems.map((m, i) => (
               <tr key={i}>
                 <td className="who">{m.name}<em>{m.email}</em></td>

@@ -14,9 +14,11 @@ export default function Login() {
     setErr(''); setBusy(provider);
     try {
       const sb = supabaseBrowser();
+      // 로그인 후 원래 가려던 경로로 복귀(next)
+      const next = new URLSearchParams(window.location.search).get('next') || '/';
+      const cb = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
       // 카카오는 이메일(account_email) 권한이 검수 전이라 요청에서 제외 — 닉네임만.
-      // (이메일 요구 시 KOE205). 비즈앱 검수 후 'account_email' 추가하면 됨.
-      const options: { redirectTo: string; scopes?: string } = { redirectTo: `${window.location.origin}/auth/callback` };
+      const options: { redirectTo: string; scopes?: string } = { redirectTo: cb };
       if (provider === 'kakao') options.scopes = 'profile_nickname';
       const { error } = await sb.auth.signInWithOAuth({ provider, options });
       if (error) { setErr('로그인 창을 여는 데 실패했습니다. 잠시 후 다시 시도해 주세요.'); setBusy(''); }
@@ -45,12 +47,6 @@ export default function Login() {
             </span>
             {busy === 'kakao' ? '카카오로 이동 중…' : '카카오로 3초 만에 시작'}
           </button>
-          <button className="lgbtn google" onClick={() => oauth('google')} disabled={!!busy}>
-            <span className="lgic" aria-hidden>
-              <svg viewBox="0 0 24 24" width="19" height="19"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z" /><path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.2 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z" /></svg>
-            </span>
-            {busy === 'google' ? '구글로 이동 중…' : '구글로 시작'}
-          </button>
         </div>
 
         {err && <div className="errbox" style={{ marginTop: 14 }}>{err}</div>}
@@ -59,7 +55,6 @@ export default function Login() {
         <div className="loginterms">
           계속하면 <Link href="/terms">이용약관</Link>·<Link href="/privacy">개인정보처리방침</Link>에 동의하는 것으로 봅니다.
         </div>
-        <Link className="loginskip" href="/">로그인 없이 둘러보기 →</Link>
       </div>
     </div>
   );

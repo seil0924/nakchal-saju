@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { listReports } from '@/lib/admin-data';
 
 export default async function AdminReports() {
@@ -11,7 +12,7 @@ export default async function AdminReports() {
           <table><tbody>
             <tr><th>리포트</th><th>회원</th><th>회사</th><th>방향</th><th>상태</th><th>발급</th><th>원문</th></tr>
             {reps.map((r, i) => (
-              <tr key={i}><td>{r.id}</td><td className="who">{r.name}</td><td>{r.corp}</td><td>{r.dir}</td><td><span className={'pill ' + (r.unlocked ? 'unlock' : 'lock')}>{r.unlocked ? '유료' : '무료'}</span></td><td style={{ color: '#a39c8e' }}>{r.at}</td><td><a href={`/report/${r.id}`} style={{ color: 'var(--gold)', fontWeight: 700, textDecoration: 'none', fontSize: 11 }}>열람 →</a></td></tr>
+              <tr key={i}><td style={{ fontFamily: 'monospace', fontSize: 11, color: '#a39c8e' }}>{String(r.id).slice(0, 8)}</td><td className="who">{r.name}</td><td>{r.corp}</td><td>{r.dir}</td><td><span className={'pill ' + (r.unlocked ? 'unlock' : 'lock')}>{r.unlocked ? '유료' : '무료'}</span></td><td style={{ color: '#a39c8e' }}>{r.at}</td><td><a href={`/report/${r.id}`} style={{ color: 'var(--gold)', fontWeight: 700, textDecoration: 'none', fontSize: 11 }}>열람 →</a></td></tr>
             ))}
             {reps.length === 0 && <tr><td colSpan={7}><div className="empty">리포트가 없습니다.</div></td></tr>}
           </tbody></table>

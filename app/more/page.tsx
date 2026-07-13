@@ -69,15 +69,7 @@ export default function More() {
         <div className="setrow">
           <Link href="/reading">대표 사주 정보<span className="r">입력·수정 ›</span></Link>
           <Link href="/reading">회사(법인) 정보<span className="r">설립일·상호 ›</span></Link>
-          <Link href="/reading">회사 주소·방위<span className="r">개운 방위 ›</span></Link>
-        </div>
-
-        <div className="sechd"><span className="t"><span className="b" />이용</span></div>
-        <div className="setrow">
-          <Link href="/vault">결제·주문 내역<span className="r">단건 결제 ›</span></Link>
-          <button onClick={toggleNotify}>알림 설정<span className="r">{notify ? '아침 전망·길일 켜짐 ›' : '꺼짐 ›'}</span></button>
-          <Link href="/vault">보관함<span className="r">›</span></Link>
-          <Link href="/ritual">투찰 부적 리추얼<span className="r">吉 ›</span></Link>
+          <Link href="/vault">보관함 · 내 리포트<span className="r">›</span></Link>
         </div>
 
         <div className="sechd"><span className="t"><span className="b" />기타</span></div>

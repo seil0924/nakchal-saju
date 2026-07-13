@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { listPayments, won } from '@/lib/admin-data';
 
 export default async function AdminPayments() {

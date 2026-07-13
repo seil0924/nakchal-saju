@@ -1,66 +1,115 @@
-// lib/admin-data.ts — 관리자 페이지 데이터 (Supabase Service Role, 미설정 시 데모)
+// lib/admin-data.ts — 관리자 페이지 데이터 (Supabase Service Role · 실데이터)
+// ※ 더미/데모 데이터 제거 — 백엔드 미설정 시 빈 값 반환
 import 'server-only';
 import { adminEnabled, supabaseAdmin } from './supabase/admin';
+import { chartFromBirth, sajeong, todayPillar } from './engine';
+import { CAT_INFO, isCatKey } from './report-categories';
 
 const won = (n: number) => n.toLocaleString('ko-KR');
 
-const DEMO = {
-  stats: { members: 3428, todaySignup: 42, paid: 512, convRate: '14.9', mrr: 4982000, subs: 388, todayReports: 271, todayPay: 37, todayPayAmt: 412300 },
-  members: [
-    { name: '오세일', email: 'ohseil@company.co.kr', provider: 'kakao', joined: '26.07.10', sub: '월 정기', paidTotal: 42700, reports: 7 },
-    { name: '김상무', email: 'kim@daehan.co.kr', provider: 'naver', joined: '26.07.09', sub: '무료', paidTotal: 990, reports: 2 },
-    { name: '박대표', email: 'park@ilsung.com', provider: 'google', joined: '26.07.08', sub: '월 정기', paidTotal: 21700, reports: 5 },
-    { name: '정회장', email: 'jung@hanla.co.kr', provider: 'kakao', joined: '26.07.07', sub: '무료', paidTotal: 0, reports: 1 },
-    { name: '최이사', email: 'choi@sungwoo.kr', provider: 'google', joined: '26.07.06', sub: '월 정기', paidTotal: 31600, reports: 9 },
-    { name: '한부장', email: 'han@kumho.co.kr', provider: 'naver', joined: '26.07.05', sub: '무료', paidTotal: 1900, reports: 3 },
-  ],
-  payments: [
-    { id: 'A8213', name: '오세일', email: 'ohseil@company.co.kr', item: '월 정기 구독', amount: 9900, pay: '카카오페이', status: '완료', at: '07.10 09:12' },
-    { id: 'A8212', name: '김상무', email: 'kim@daehan.co.kr', item: '첫 열람', amount: 990, pay: '토스페이', status: '완료', at: '07.10 08:41' },
-    { id: 'A8211', name: '박대표', email: 'park@ilsung.com', item: '전체 리포트', amount: 1900, pay: '신용카드', status: '완료', at: '07.09 22:03' },
-    { id: 'A8210', name: '정회장', email: 'jung@hanla.co.kr', item: '월 정기 구독', amount: 9900, pay: '카카오페이', status: '환불', at: '07.09 19:20' },
-    { id: 'A8209', name: '최이사', email: 'choi@sungwoo.kr', item: '첫 열람', amount: 990, pay: '네이버페이', status: '완료', at: '07.09 15:55' },
-  ],
-  reports: [
-    { id: 'r1042', name: '오세일', corp: '세일건설(주)', dir: '상단', unlocked: true, at: '07.10 09:05' },
-    { id: 'r1041', name: '김상무', corp: '대한ENG', dir: '하단', unlocked: false, at: '07.10 08:40' },
-    { id: 'r1040', name: '박대표', corp: '일성산업', dir: '상단', unlocked: true, at: '07.09 21:58' },
-  ],
-};
+// 결제 카테고리/금액 → 상품명
+function itemName(cat?: string | null, amount?: number): string {
+  if (cat && isCatKey(cat)) return CAT_INFO[cat].name;
+  if (amount === 990) return '택일팩';
+  return amount ? `${won(amount)}원 상품` : '리포트';
+}
+function dirOf(input: any): string {
+  try {
+    const c = chartFromBirth(input.birth, input.time ?? null, input.cal ?? 'solar', input.leap ?? false);
+    const now = new Date();
+    return sajeong(c, todayPillar(now.getFullYear(), now.getMonth() + 1, now.getDate())).dir;
+  } catch { return '-'; }
+}
+const isoDayStart = () => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()).toISOString(); };
+const isoMonthStart = () => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), 1).toISOString(); };
+
+const EMPTY_STATS = { members: 0, todaySignup: 0, paid: 0, convRate: '0.0', mrr: 0, subs: 0, todayReports: 0, todayPay: 0, todayPayAmt: 0 };
 
 export async function getStats() {
-  if (!adminEnabled()) return DEMO.stats;
+  if (!adminEnabled()) return EMPTY_STATS;
   try {
     const sb = supabaseAdmin();
-    const [{ count: members }, { count: paid }] = await Promise.all([
+    const dayStart = isoDayStart(), monthStart = isoMonthStart();
+    const [mAll, mToday, payRows, rToday] = await Promise.all([
       sb.from('profiles').select('*', { count: 'exact', head: true }),
-      sb.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'paid'),
+      sb.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
+      sb.from('payments').select('amount,paid_at,user_id').eq('status', 'paid'),
+      sb.from('reports').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
     ]);
-    return { ...DEMO.stats, members: members ?? 0, paid: paid ?? 0 };
-  } catch { return DEMO.stats; }
+    const members = mAll.count ?? 0;
+    const paidList = payRows.data ?? [];
+    const paidUsers = new Set(paidList.map((p: any) => p.user_id).filter(Boolean)).size;
+    const monthAmt = paidList.filter((p: any) => p.paid_at && p.paid_at >= monthStart).reduce((a: number, p: any) => a + (p.amount || 0), 0);
+    const todayList = paidList.filter((p: any) => p.paid_at && p.paid_at >= dayStart);
+    return {
+      members, todaySignup: mToday.count ?? 0, paid: paidList.length,
+      convRate: members ? ((paidUsers / members) * 100).toFixed(1) : '0.0',
+      mrr: monthAmt, subs: paidUsers,
+      todayReports: rToday.count ?? 0,
+      todayPay: todayList.length,
+      todayPayAmt: todayList.reduce((a: number, p: any) => a + (p.amount || 0), 0),
+    };
+  } catch { return EMPTY_STATS; }
 }
+
 export async function listMembers() {
-  if (!adminEnabled()) return DEMO.members;
+  if (!adminEnabled()) return [];
   try {
     const sb = supabaseAdmin();
-    const { data } = await sb.from('profiles').select('name,email,provider,created_at,role').order('created_at', { ascending: false }).limit(50);
-    return (data ?? []).map((p: any) => ({ name: p.name ?? '(이름없음)', email: p.email ?? '', provider: p.provider ?? 'email', joined: (p.created_at ?? '').slice(2, 10).replace(/-/g, '.'), sub: '무료', paidTotal: 0, reports: 0 }));
-  } catch { return DEMO.members; }
+    const { data: profs } = await sb.from('profiles').select('id,name,email,provider,created_at').order('created_at', { ascending: false }).limit(50);
+    const ids = (profs ?? []).map((p: any) => p.id);
+    const [pays, reps] = ids.length ? await Promise.all([
+      sb.from('payments').select('user_id,amount').eq('status', 'paid').in('user_id', ids),
+      sb.from('reports').select('user_id').in('user_id', ids),
+    ]) : [{ data: [] }, { data: [] }] as any;
+    const paidBy: Record<string, number> = {}, repBy: Record<string, number> = {};
+    (pays.data ?? []).forEach((p: any) => { paidBy[p.user_id] = (paidBy[p.user_id] || 0) + (p.amount || 0); });
+    (reps.data ?? []).forEach((r: any) => { repBy[r.user_id] = (repBy[r.user_id] || 0) + 1; });
+    return (profs ?? []).map((p: any) => ({
+      name: p.name ?? '(이름없음)', email: p.email ?? '', provider: p.provider ?? 'email',
+      joined: (p.created_at ?? '').slice(2, 10).replace(/-/g, '.'),
+      sub: (paidBy[p.id] || 0) > 0 ? '유료' : '무료',
+      paidTotal: paidBy[p.id] || 0, reports: repBy[p.id] || 0,
+    }));
+  } catch { return []; }
 }
+
 export async function listPayments() {
-  if (!adminEnabled()) return DEMO.payments;
+  if (!adminEnabled()) return [];
   try {
     const sb = supabaseAdmin();
-    const { data } = await sb.from('payments').select('payment_id,amount,status,paid_at,user_id').order('created_at', { ascending: false }).limit(50);
-    return (data ?? []).map((p: any) => ({ id: (p.payment_id ?? '').slice(-5), name: '-', email: '', item: '-', amount: p.amount ?? 0, pay: '-', status: p.status === 'paid' ? '완료' : p.status, at: (p.paid_at ?? '').slice(5, 16) }));
-  } catch { return DEMO.payments; }
+    const { data: pays } = await sb.from('payments').select('payment_id,amount,status,paid_at,created_at,user_id,report_id').order('created_at', { ascending: false }).limit(50);
+    const uids = [...new Set((pays ?? []).map((p: any) => p.user_id).filter(Boolean))];
+    const rids = [...new Set((pays ?? []).map((p: any) => p.report_id).filter(Boolean))];
+    const [profs, reps] = await Promise.all([
+      uids.length ? sb.from('profiles').select('id,name,email').in('id', uids) : Promise.resolve({ data: [] } as any),
+      rids.length ? sb.from('reports').select('id,input').in('id', rids) : Promise.resolve({ data: [] } as any),
+    ]);
+    const pmap: Record<string, any> = {}; (profs.data ?? []).forEach((p: any) => { pmap[p.id] = p; });
+    const cmap: Record<string, string> = {}; (reps.data ?? []).forEach((r: any) => { cmap[r.id] = r.input?.cat; });
+    return (pays ?? []).map((p: any) => ({
+      id: (p.payment_id ?? '').slice(-6),
+      name: pmap[p.user_id]?.name ?? '비회원', email: pmap[p.user_id]?.email ?? '',
+      item: itemName(cmap[p.report_id], p.amount), amount: p.amount ?? 0, pay: '간편결제',
+      status: p.status === 'paid' ? '완료' : (p.status === 'cancelled' || p.status === 'refunded' ? '환불' : p.status),
+      at: (p.paid_at ?? p.created_at ?? '').slice(5, 16),
+    }));
+  } catch { return []; }
 }
+
 export async function listReports() {
-  if (!adminEnabled()) return DEMO.reports;
+  if (!adminEnabled()) return [];
   try {
     const sb = supabaseAdmin();
-    const { data } = await sb.from('reports').select('id,unlocked,created_at,user_id').order('created_at', { ascending: false }).limit(50);
-    return (data ?? []).map((r: any) => ({ id: (r.id ?? '').slice(0, 6), name: '-', corp: '-', dir: '-', unlocked: !!r.unlocked, at: (r.created_at ?? '').slice(5, 16) }));
-  } catch { return DEMO.reports; }
+    const { data } = await sb.from('reports').select('id,input,unlock_level,created_at').order('created_at', { ascending: false }).limit(50);
+    return (data ?? []).map((r: any) => ({
+      id: r.id,
+      name: r.input?.name || '(이름없음)',
+      corp: r.input?.legalName || '-',
+      dir: dirOf(r.input || {}),
+      unlocked: (r.unlock_level ?? 0) >= 1,
+      at: (r.created_at ?? '').slice(5, 16),
+    }));
+  } catch { return []; }
 }
 export { won };

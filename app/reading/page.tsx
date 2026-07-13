@@ -42,6 +42,11 @@ const REL_KINDS = [
 type RelKind = 'client' | 'partner' | 'ally';
 type Target = { kind: RelKind; name: string; date: string };
 const LS_KEY = 'nakchal_saved_targets_v1';
+function dedupe<T>(arr: T[], keyFn: (x: T) => string): T[] {
+  const seen = new Set<string>(); const out: T[] = [];
+  for (const x of arr) { const k = keyFn(x); if (!seen.has(k)) { seen.add(k); out.push(x); } }
+  return out;
+}
 
 export default function Reading() {
   const [f, setF] = useState({
@@ -121,6 +126,18 @@ export default function Reading() {
   const [savedSelf, setSavedSelf] = useState<any[]>([]);
   const [savedLegal, setSavedLegal] = useState<any[]>([]);
   useEffect(() => { try { const a = localStorage.getItem(SELF_KEY); if (a) setSavedSelf(JSON.parse(a)); const b = localStorage.getItem(LEGAL_KEY); if (b) setSavedLegal(JSON.parse(b)); } catch {} }, []);
+  // 로그인 계정에 저장된 사주/대상 불러오기 (기기가 바뀌어도 이어짐 · 사주아이식)
+  useEffect(() => {
+    fetch('/api/charts').then(r => r.json()).then(d => {
+      const cs: any[] = d?.charts || [];
+      const selfs = cs.filter(c => c.kind === 'self').map(c => ({ name: c.name || '', birth: c.birth_date, gender: 'M', cal: c.calendar || 'solar', leap: !!c.is_leap, timeMode: (c.birth_time ? 'Y' : 'N'), time: c.birth_time || '09:20', sijin: 3 }));
+      const legals = cs.filter(c => c.kind === 'legal').map(c => ({ company: c.name || '', legal: c.birth_date }));
+      const tgts = cs.filter(c => ['client', 'partner', 'ally'].includes(c.kind)).map(c => ({ kind: c.kind as RelKind, name: c.name || '', date: c.birth_date }));
+      if (selfs.length) setSavedSelf(prev => dedupe([...selfs, ...prev], (x: any) => x.birth + '|' + x.name).slice(0, 12));
+      if (legals.length) setSavedLegal(prev => dedupe([...legals, ...prev], (x: any) => x.legal + '|' + x.company).slice(0, 12));
+      if (tgts.length) setSaved(prev => dedupe([...tgts, ...prev], (x: any) => x.kind + '|' + x.date + '|' + x.name).slice(0, 20));
+    }).catch(() => {});
+  }, []);
   function saveSelfProfile() {
     if (!f.birth) return;
     const p = { name: f.name, birth: f.birth, gender: f.gender, cal: f.cal, leap: f.leap, timeMode: f.timeMode, time: f.time, sijin: f.sijin };
@@ -186,6 +203,7 @@ export default function Reading() {
       // 보관함 기록 (이 기기 · 로그인 시 계정) + 저장된 사주/대상 서버 기록(best-effort)
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
       fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: 'self', name: f.name, birth_date: f.birth, birth_time: f.timeMode === 'N' ? null : effTime, calendar: f.cal, is_leap: f.leap }) }).catch(() => {});
+      if (f.legal) fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: 'legal', name: f.company, birth_date: f.legal }) }).catch(() => {});
       targets.forEach(t => fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: t.kind, name: t.name, birth_date: t.date }) }).catch(() => {}));
       saveSelfProfile(); if (f.legal) saveLegalProfile();
       setTimeout(() => document.getElementById('rep')?.scrollIntoView({ behavior: 'smooth' }), 60);
