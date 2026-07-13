@@ -67,7 +67,7 @@ export async function listMembers() {
     (reps.data ?? []).forEach((r: any) => { repBy[r.user_id] = (repBy[r.user_id] || 0) + 1; });
     return (profs ?? []).map((p: any) => ({
       name: p.name ?? '(이름없음)', email: p.email ?? '', provider: p.provider ?? 'email',
-      joined: (p.created_at ?? '').slice(2, 10).replace(/-/g, '.'),
+      joined: (p.created_at ?? '').slice(2, 16).replace('T', ' ').replace(/-/g, '.'),
       sub: (paidBy[p.id] || 0) > 0 ? '유료' : '무료',
       paidTotal: paidBy[p.id] || 0, reports: repBy[p.id] || 0,
     }));
