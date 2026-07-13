@@ -94,6 +94,15 @@ export default function FullIntro() {
         <p className="authout">믿고 안 믿고를 떠나 — <b>최소한 계산은 정확해야</b> 참고할 값어치가 있습니다.</p>
       </div>
 
+      {/* 필름 밴드 — 運七 */}
+      <div className="filmband">
+        <video autoPlay muted loop playsInline poster="/herobg-poster.jpg"><source src="/herobg.mp4" type="video/mp4" /></video>
+        <div className="fbin">
+          <div className="fbk">運 七 技 三</div>
+          <div className="fbt">실력(技三)은 이미 갖추셨습니다.<br />이제 남은 건 <b>운(運七)</b>입니다.</div>
+        </div>
+      </div>
+
       {/* 사용 시나리오 */}
       <div className="lab"><i /><span>개찰을 앞둔 사흘, 이렇게 씁니다</span></div>
       <div className="usecase">
@@ -152,6 +161,7 @@ export default function FullIntro() {
 
       {/* 감정의 핵 — 버팀목 (외로움을 긁고, 동행으로 갚는다) */}
       <div className="emocore">
+        <video className="emovid" autoPlay muted loop playsInline poster="/why-losing-streak-poster.jpg"><source src="/why-losing-streak.mp4" type="video/mp4" /></video>
         <div className="emk">士</div>
         <p>대표님, 이 자리까지 <b>혼자</b> 오셨죠.</p>
         <p>직원도 가족도 대표님만 봅니다. 그런데 정작 대표님은 — 누구한테 기대십니까.</p>

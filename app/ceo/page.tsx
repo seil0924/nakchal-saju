@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { EL_HEX } from '@/lib/preview';
 import RiteProgress from '@/app/_components/RiteProgress';
+import DateSelect from '@/app/_components/DateSelect';
 
 const CEO_STEPS = [
   '삼주(三柱) 구성 — 년·월·일',
@@ -174,6 +175,7 @@ export default function CeoTwin() {
       </div>
 
       <div className="wrap">
+        {!res && (<>
         <div className="card">
           <label>성함 <span className="opt">(선택)</span></label>
           <input value={f.name} maxLength={12} placeholder="예) 오세일" onChange={e => set('name', e.target.value)} />
@@ -189,12 +191,16 @@ export default function CeoTwin() {
             </div>
           )}
           <label>생년월일</label>
-          <input type="date" value={f.birth} onChange={e => set('birth', e.target.value)} />
+          <DateSelect value={f.birth} onChange={v => set('birth', v)} yearFrom={1930} yearTo={2012} />
           <div className="note">※ 태어난 시간은 몰라도 됩니다(삼주 기준). 닮은 유형만 보는 재미용입니다.</div>
         </div>
 
         <button className="go" onClick={run} disabled={busy}>{busy ? '거장 100인과 견주는 중…' : '나와 닮은 CEO 찾기 →'}</button>
         {err && <div className="errbox">{err}</div>}
+        </>)}
+        {res && (
+          <button className="reinput no-print" onClick={() => { setRes(null); setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 30); }}>← 다시 찾기</button>
+        )}
 
         {res && (
           <div id="twinres" style={{ marginTop: 8 }}>

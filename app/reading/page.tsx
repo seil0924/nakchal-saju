@@ -8,6 +8,7 @@ import { CLIENTS } from '@/lib/clients';
 import { CAT_INFO, isCatKey } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
+import DateSelect from '@/app/_components/DateSelect';
 
 // 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
 const RITE_STEPS = [
@@ -224,6 +225,7 @@ export default function Reading() {
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p>
       </div>
       <div className="wrap">
+        {!res && (<>
         {/* 1. 상황 (사정률·통합에서만) */}
         {(!cat || cat === 'sajeong') && (<div className="card">
           <div className="st"><span className="l"><span className="b" />지금 어떤 입찰을 앞두고 계세요?</span></div>
@@ -311,7 +313,7 @@ export default function Reading() {
           <label>회사명 <span className="opt">(선택)</span></label>
           <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
           <label>법인 설립일 {cat === 'daeun' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 사정률</span>}</label>
-          <input type="date" value={f.legal} onChange={e => set('legal', e.target.value)} />
+          <DateSelect value={f.legal} onChange={v => set('legal', v)} yearFrom={1945} yearTo={2026} />
           <div className="note">{cat === 'daeun' ? '※ 회사 대운은 법인 설립일을 기준으로 연도별 큰 흐름(세운)을 산출합니다. 사업자등록증의 「개업연월일」을 넣어주세요.' : '※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.'}</div>
         </div>
 
@@ -363,7 +365,7 @@ export default function Reading() {
             <input value={addName} maxLength={20} placeholder={REL_KINDS.find(k => k.key === addKind)!.ph} onChange={e => setAddName(e.target.value)} />
           )}
           <label>{REL_KINDS.find(k => k.key === addKind)!.sub}</label>
-          <input type="date" value={addDate} onChange={e => setAddDate(e.target.value)} />
+          <DateSelect value={addDate} onChange={v => setAddDate(v)} yearFrom={1930} yearTo={2026} />
           <button className="go" style={{ marginTop: 12, padding: 12, fontSize: 14, background: 'linear-gradient(135deg,#2b2119,#181209)' }} onClick={addTarget}>+ {kindLabel(addKind)} 추가</button>
 
           {targets.length > 0 && (
@@ -381,7 +383,11 @@ export default function Reading() {
         {f.birth && <button className="go reveal" onClick={submit} disabled={busy}>{busy ? '짚는 중…' : (catInfo ? `${catInfo.name} 보기 →` : '회사 사주 리포트 뽑기 →')}</button>}
         {err && !res && !confirm && <div className="errbox">{err}</div>}
         <div className="note" style={{ textAlign: 'center' }}>※ 재미로 보는 명리 기반 참고 정보. 투찰금액 산정 근거로 사용 불가.</div>
+        </>)}
 
+        {res && (
+          <button className="reinput no-print" onClick={() => { setRes(null); setLevel(0); setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 30); }}>← 정보 다시 입력</button>
+        )}
         {res && (
           <div id="rep" className="rcols" style={{ marginTop: 6 }}>
             <div className="rleft">

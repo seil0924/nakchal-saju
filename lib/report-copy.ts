@@ -346,12 +346,28 @@ function legalReport(meChart,legalChart){
 }
 function argmax(a){let x=0;for(let i=1;i<a.length;i++)if(a[i]>a[x])x=i;return x;}
 function gaugeHtml(s,worryTxt,unlocked){
-  return `<div class="val">${s.dir} ${s.tilt>0?'<span class="u">▲</span>':'<span class="u">▼</span>'}</div>
-  <div class="bandtxt">이번 흐름은 <b style="color:var(--ink)">${s.bandLo}~${s.bandHi}%</b>에 무게</div>
-  <div class="track"><div class="fill2" style="width:${s.pos}%"></div><div class="dot" style="left:${s.pos}%"></div></div>
-  <div class="scale"><span>98%</span><span>기초 100%</span><span>102%</span></div>
-  <div class="sjlock"><span class="k">${unlocked?'소수점 정밀값':'🔒 소수점 정밀값'}</span>${unlocked?`<span class="precise">${s.precise}%</span>`:'<span class="sjhint" style="font-size:11px;color:var(--gold);font-weight:700">택일팩(990원)부터 열립니다</span>'}</div>
-  <p style="margin-top:11px">${s.bridge}</p>${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
+  const up=s.tilt>0;
+  const clamp=(v)=>Math.max(0,Math.min(100,v));
+  const toPct=(v)=>clamp((parseFloat(v)-98)/4*100);
+  const bL=toPct(s.bandLo), bW=Math.max(5,toPct(s.bandHi)-toPct(s.bandLo));
+  const pos=clamp(s.pos);
+  return `<div class="gauge">`+
+    `<div class="gverdict ${up?'up':'down'}">`+
+      `<span class="gvl">오늘의 사정률 방향</span>`+
+      `<span class="gvd">${s.dir}<i>${up?'▲':'▼'}</i></span>`+
+      `<span class="gvb">이번 흐름 <b>${s.bandLo}~${s.bandHi}%</b>에 무게가 실립니다</span>`+
+    `</div>`+
+    `<div class="gmeter">`+
+      `<div class="gmtrack"><div class="gmband" style="left:${bL}%;width:${bW}%"></div></div>`+
+      `<div class="gmbase"></div>`+
+      `<div class="gmneedle" style="left:${pos}%"></div>`+
+    `</div>`+
+    `<div class="gscale"><span>98%<em>하한</em></span><span class="mid">기초 100%</span><span>102%<em>상한</em></span></div>`+
+    `<div class="gprec">`+
+      `<span class="gpk">${unlocked?'소수점 정밀값':'🔒 소수점 정밀값'}</span>`+
+      (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">택일팩(990원)부터 열립니다</span>`)+
+    `</div></div>`+
+    `<p class="gbridge">${s.bridge}</p>${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
 }
 function distHtml(c){const tot=c.dist.reduce((a,b)=>a+b,0);
   return `<div class="dist">${EL.map((e,i)=>`<div class="d"><div class="c" style="color:${EL_HEX[i]}">${e}</div><div class="bar"><div class="fill" style="height:${Math.max(8,Math.round(c.dist[i]/tot*100))}%;background:${EL_HEX[i]}"></div></div><div class="n">${c.dist[i]}</div></div>`).join('')}</div>`;}
