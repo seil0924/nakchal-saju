@@ -292,11 +292,14 @@ function partnerExtraHtml(meEl:number,otherEl:number,rel:string,otherLabel:strin
     `<div class="tkrow"><span class="tkdot"></span><span class="tktx"><b>${(P_LONG[rel]||'장기 동업 적합도 — 보통.').split(' — ')[0]}</b> — ${(P_LONG[rel]||'장기 동업 적합도 — 보통.').split(' — ')[1]||''}</span></div>`+
     `</div>`;
 }
-function compatWith(meChart,otherChart,table,A,S){
+function compatWith(meChart,otherChart,table,A,S,seun?){
  const me=meChart.dayMasterEl,o=otherChart.dayMasterEl;
  const rel=relation(me,o);const c=table[rel];
  const fill=s=>s.replace(/\{M\}/g,EL[me]).replace(/\{O\}/g,EL[o]).replace(/\{A\}/g,A).replace(/\{S\}/g,S);
- return {rel,grade:c.grade,score:c.score,gc:c.gc,letter:c.g,t:fill(c.t),score2:compatScore(rel,otherChart),
+ const boost=seun?Math.round((seun.tilt||0)*2):0;              // 그해 세운이 궁합을 밀거나 누른다
+ const base=compatScore(rel,otherChart,0);
+ return {rel,grade:c.grade,score:c.score,gc:c.gc,letter:c.g,t:fill(c.t),
+   base,score2:compatScore(rel,otherChart,boost),seun:seun||null,
    pills:pil(otherChart.dGan,otherChart.dZhi),oel:GAN_ELc[otherChart.dGan],paras:c.p.map(fill)};
 }
 // 궁합 히어로 — 대표↔상대 명식 나란히 + 큰 점수 (사주아이식 극화)
@@ -315,13 +318,16 @@ function compatBlock(cm,c,otherLabel,ctx?,stepTitle?){
   if(ctx==='partner'||ctx==='ally'){
     deep+=partnerExtraHtml(c.dayMasterEl, cm.oel, cm.rel, otherLabel, ctx==='ally');
   }
+  const yearLine = cm.seun ? `<div class="cyear"><span class="cyl">${cm.seun.year}년 기준</span>`+
+    `<span class="cyd">바탕 ${cm.base} → 올해 <b style="color:${cm.gc}">${cm.score2}</b> `+
+    `<em>${cm.score2>cm.base?'▲ 세운이 밀어주는 해':cm.score2<cm.base?'▼ 세운이 조이는 해':'· 평이한 해'}</em></span></div>` : '';
   return `<div class="cverdict">`+
     `<div class="cvs"><div class="cnm">대표님</div><div class="cpl" style="background:${meCol}">${pil(c.dGan,c.dZhi)}</div></div>`+
     `<div class="cvscore"><div class="n" style="color:${cm.gc}">${cm.score2}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
     `<div class="cvs"><div class="cnm">${otherLabel}</div><div class="cpl" style="background:${otCol}">${cm.pills}</div></div>`+
-  `</div>`+P(cm.paras)+deep;
+  `</div>`+yearLine+P(cm.paras)+deep;
 }
-function compat(meChart,clientChart){return compatWith(meChart,clientChart,CO,'대표님','발주처');}
+function compat(meChart,clientChart,seun?){return compatWith(meChart,clientChart,CO,'대표님','발주처',seun);}
 // 법인 운세 (설립일 사주 × 대표)
 const LEGREL={
  in:'법인의 <b>{LO}</b> 기운이 대표님의 <b>{M}</b> 기운을 살리는 구조 — 회사가 대표님을 받쳐주는, 궁합 좋은 법인입니다.',
@@ -378,11 +384,11 @@ function compatHtml(cm,relLabel){
 }
 const GAN_ELc=[0,0,1,1,2,2,3,3,4,4];
 const ZHI_ELc=[4,2,0,0,2,1,1,2,3,3,2,4];
-// 궁합 점수 (0~100, 결정론적)
+// 궁합 점수 (0~100, 결정론적) — boost는 그해 세운 보정(±)
 const COMPAT_SCORE={in:90,jae:80,bi:64,sik:56,gwan:48};
-function compatScore(rel,otherChart){
+function compatScore(rel,otherChart,boost=0){
   const j=((otherChart.dGan*7+otherChart.dZhi*3)%9)-4;
-  return Math.max(31,Math.min(97,COMPAT_SCORE[rel]+j));
+  return Math.max(31,Math.min(97,COMPAT_SCORE[rel]+j+boost));
 }
 // 결과 히어로 (큰 점수 + 후킹 제목) — 무료(방향 기반)
 const REL_SCORE={in:88,bi:74,jae:70,sik:56,gwan:44};
@@ -536,7 +542,21 @@ const CRISIS=[
   '위기가 닥치면 대표님은 <b>재고 또 재다 실기하는</b> 쪽으로 기웁니다. 완벽한 수를 찾다 결단의 순간을 넘겨 아무것도 못 하는 것 — 이것이 대표님이 판을 놓치는 지점입니다.',
 ];
 function clamp(n:number){return Math.max(6,Math.min(94,Math.round(n)));}
-function jinHtml(c:Chart){
+// 대표 본인의 그해 세운(歲運) 배너 — "○○년 기준" 고지 + 올해 흐름
+const SEUN_SELF={
+  in:['도움','올해는 밖에서 밀어주는 기운 — 사람·자금·기회가 붙어 판을 키우기 좋은 해입니다','#177f5e'],
+  bi:['경쟁','같은 기운이 겹치는 해 — 힘은 세나 경쟁·과속 확장을 조심하고 내실을 지킬 때','#6f6a5c'],
+  jae:['결실','거둬들이는 재물의 해 — 벌이기보다 이미 벌인 것을 챙기고 굳혀 실속을 남길 때','#b58a2f'],
+  sik:['분출','힘을 밖으로 쏟는 해 — 실적은 나되 지출·소모가 크니 관리가 관건인 때','#b5402f'],
+  gwan:['시련','눌리고 조여지는 해 — 무리한 확장을 접고 시스템·내실을 다질 때','#22406b']};
+function seunBannerHtml(seun,selYear){
+  if(!seun||!selYear) return '';
+  const info=SEUN_SELF[seun.rel]||SEUN_SELF.bi;
+  return `<div class="seunban"><div class="sbl"><span class="sby">${selYear}<em>${seun.hanja}</em></span>`+
+    `<span class="sbk" style="background:${info[2]}">${info[0]}運</span></div>`+
+    `<div class="sbd"><b>${selYear}년 기준</b> — ${info[1]}. <span class="sbnote">해가 바뀌면 세운도 바뀌니, 연도를 바꿔 확인하십시오.</span></div></div>`;
+}
+function jinHtml(c:Chart,seun?,selYear?){
   const me=c.dayMasterEl, sipA=sipsung(c), dom=argmaxRC(sipA);
   const nudge = (dom===1||dom===2)?-12:(dom===3||dom===4)?12:0; // 식상·재성→왼쪽, 관성·인성→오른쪽
   const axes=JIN_AX.map((a,i)=>{
@@ -548,6 +568,7 @@ function jinHtml(c:Chart){
   }).join('');
   return `<div class="jin">`+
     `<div class="jintag">진단 · 診</div>`+
+    seunBannerHtml(seun,selYear)+
     `<div class="jintype">대표님은 <b>${TYPE4[me]}</b> — ${TYPE4_SUB[me]}입니다.</div>`+
     `<div class="axes">${axes}</div>`+
     `<div class="crisis"><div class="crhd">⚠ 위기 상황에서 나타나는 약점</div><p>${CRISIS[me]}</p></div>`+
@@ -557,7 +578,7 @@ function jinHtml(c:Chart){
 function argmaxRC(a:number[]){let x=0;for(let i=1;i<a.length;i++)if(a[i]>a[x])x=i;return x;}
 // 언락 레벨: 0 무료 · 1 택일팩 · 2 전체
 const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
-function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD){
+function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear?,seunSelf?){
   names=names||{};
   const unlocked = level>=2; // 전체(신살 2번째 등 유료 내부 요소)
   const preciseOn = level>=1; // 택일팩부터 정밀값 공개
@@ -576,7 +597,7 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
   const tm=matchTycoon(c);
   secs.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me,c.dist)});
   // 診 · 대표 유형 진단 (4유형 + 4축 + 위기 약점) — 무료 훅
-  secs.push({mk:'診',tier:'free',t:`대표님은 어떤 유형의 대표인가 — ${TYPE4[me]}`,html:jinHtml(c)});
+  secs.push({mk:'診',tier:'free',t:`${selYear?selYear+'년 ':''}대표님은 어떤 유형의 대표인가 — ${TYPE4[me]}`,html:jinHtml(c,seunSelf,selYear)});
   const ss=sinsal(c);
   if(ss.length){
     secs.push({mk:'符',tier:'free',t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
@@ -631,11 +652,11 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
       `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});
     if(daeunMeta&&daeunMeta.foundYear){const d=daeun(legalChart,daeunMeta.foundYear,daeunMeta.curYear);
       secs.push({mk:'運',tier:'full',teaser:`<b>${names.legal||'회사'}</b>는 지금 대운의 어느 길목에 있는지, 다음 10년 확장·정비의 때가 언제인지가 가려져 있습니다.`,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal,daeunMeta.curYear)});}}
-  if(clientChart){const cm=compat(c,clientChart);const nm=names.client?`${names.client} — `:'';
+  if(clientChart){const cm=compat(c,clientChart,seunSelf);const nm=names.client?`${names.client} — `:'';
     secs.push({mk:'處',tier:'full',teaser:`<b>${names.client||'발주처'}</b>와 대표님의 궁합 점수와, 이 발주처를 어떻게 대해야 유리한지가 여기 담깁니다.`,t:`${nm}${cm.t}`,html:compatBlock(cm,c,names.client||'발주처','client','이 발주처를 대하는 3계(計)')});}
-  if(partnerChart){const cm=compatWith(c,partnerChart,DONGUP,'대표님','동업 상대');
+  if(partnerChart){const cm=compatWith(c,partnerChart,DONGUP,'대표님','동업 상대',seunSelf);
     secs.push({mk:'同',tier:'full',teaser:`<b>${names.partner||'상대 대표'}</b>와의 동업 궁합 — 지분·역할·최종 결정권을 어떻게 나눠야 깨지지 않는지가 가려져 있습니다.`,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대','partner','깨지지 않게 나누는 3계(計)')});}
-  if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사');
+  if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사',seunSelf);
     secs.push({mk:'協',tier:'full',teaser:`<b>${names.ally||'상대 회사'}</b>와의 협정(공동도급) 궁합 — 주관사·지분·관재수까지, 계약 전 반드시 짚을 점이 여기 있습니다.`,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사','ally','계약 전 반드시 짚을 3계(計)')});}
   secs.push({mk:'方',tier:'full',teaser:`대표님께 기운을 돋우는 방면과 피해야 할 방면 — 현장·발주처·사무실 택지의 기준이 가려져 있습니다.`,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
@@ -666,7 +687,8 @@ export function reportHero(c:Chart, s:Sajeong){ return heroFor(c,s); }
 export function buildTiered(
   c:Chart, today:any, s:Sajeong, worry:string,
   cli?:Chart|null, legal?:Chart|null, partner?:Chart|null, ally?:Chart|null,
-  names?:RelNames, daeunMeta?:DaeunMeta, nowYMD?:NowYMD, level:number=0
+  names?:RelNames, daeunMeta?:DaeunMeta, nowYMD?:NowYMD, level:number=0,
+  selYear?:number, seunSelf?:any
 ):Section[]{
-  return buildReport(c,today,s,worry,cli,legal,partner,ally,level,names,daeunMeta,nowYMD) as Section[];
+  return buildReport(c,today,s,worry,cli,legal,partner,ally,level,names,daeunMeta,nowYMD,selYear,seunSelf) as Section[];
 }

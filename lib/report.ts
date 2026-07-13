@@ -1,6 +1,6 @@
 // lib/report.ts — 명식 입력 → 섹션 리포트 (서버 전용)
 import 'server-only';
-import { chartFromBirth, compute, todayPillar, sajeong, wonguk, type Chart, type Pillar } from './engine';
+import { chartFromBirth, compute, todayPillar, sajeong, wonguk, seunOf, type Chart, type Pillar, type Seun } from './engine';
 import { buildTiered, reportHero, type Section } from './report-copy';
 import { catMks } from './report-categories';
 
@@ -34,13 +34,18 @@ export type ReportResult = {
   hero: { score: number; label: string; headline: string; sub: string; up: boolean };
   sections: Section[];
   meta: { chapters: number; items: number }; // 분량 앵커 — 전체 리포트 장(章)·항목 수
+  selYear: number;              // 이 리포트가 기준으로 삼은 해 (세운)
+  seun: { hanja: string; rel: string; tilt: number }; // 대표 본인의 그해 세운
 };
 
 // level: 0 무료 · 1 택일팩(정밀값+택일) · 2 전체. (boolean 하위호환: true→2, false→0)
-export function computeReport(input: ReportInput, unlockedFlag: boolean | number): ReportResult {
+// year: 세운 기준 연도(대표·회사·궁합을 그 해 것으로) — 없으면 올해
+export function computeReport(input: ReportInput, unlockedFlag: boolean | number, year?: number): ReportResult {
   const level = typeof unlockedFlag === 'number' ? unlockedFlag : (unlockedFlag ? 2 : 0);
   const c = chartFromBirth(input.birth, input.time ?? null, input.cal ?? 'solar', input.leap ?? false);
   const now = new Date();
+  const selYear = (year && year >= 1900 && year <= 2100) ? Math.floor(year) : now.getFullYear();
+  const seunSelf: Seun = seunOf(c, selYear);
   const today = todayPillar(now.getFullYear(), now.getMonth() + 1, now.getDate());
   const s = sajeong(c, today);
 
@@ -59,15 +64,15 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
         partner = dateChart(input.partner), ally = dateChart(input.ally);
 
   const names = { client: input.clientName, legal: input.legalName, partner: input.partnerName, ally: input.allyName };
-  const daeunMeta = input.legal ? { foundYear: parseInt(input.legal.slice(0, 4), 10), curYear: now.getFullYear() } : undefined;
+  const daeunMeta = input.legal ? { foundYear: parseInt(input.legal.slice(0, 4), 10), curYear: selYear } : undefined;
   const nowYMD = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
   // 카테고리 섹션 필터 (해당 카테고리 섹션만 노출)
   const mks = catMks(input.cat);
   const filt = (arr: Section[]) => mks ? arr.filter(x => mks.includes(x.mk)) : arr;
-  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level));
+  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf));
 
   // 분량 앵커: 전체(레벨 2) 기준 장·항목 수를 산출해 노출 (텍스트는 미전송 — 숫자만)
-  const fullSecs = filt(level >= 2 ? buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2) : buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2));
+  const fullSecs = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2, selYear, seunSelf));
   const items = fullSecs.reduce((n, sec) => n + (sec.html.match(/<p|<div class="cbrow|<div class="ssrow/g) || []).length, 0);
   const meta = { chapters: fullSecs.length, items };
 
@@ -78,5 +83,6 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
 
   const hero = reportHero(c, s); // 큰 점수 + 후킹 제목 (무료 · 방향 기반)
   const title = `士가 읽는 ${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
-  return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta };
+  return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta,
+    selYear, seun: { hanja: seunSelf.hanja, rel: seunSelf.rel, tilt: seunSelf.tilt } };
 }

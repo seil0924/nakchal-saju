@@ -192,6 +192,19 @@ export type Sajeong = {
   dir:string; bandLo:string; bandHi:string; pos:number; bridge:string;
   precise:string; // ⚠️ 유료값 — API에서 잠금 시 응답 전 제거
 };
+// ── 세운(歲運): 그 해의 간지 × 명식 상성 ─────────────────
+// 타고난 사주는 고정이지만, 그 해(세운)가 명식을 살리느냐 누르느냐로
+// '올해의 흐름'은 매년 바뀐다. 대표·회사·궁합을 연도별로 보는 근거.
+export function yearGanji(year:number){
+  const g=((year-4)%10+10)%10, z=((year-4)%12+12)%12;
+  return {g,z,el:GAN_EL[g],hanja:GAN[g]+ZHI[z]};
+}
+export type Seun = { year:number; rel:string; el:number; gan:number; zhi:number; hanja:string; tilt:number };
+export function seunOf(c:Chart, year:number):Seun{
+  const y=yearGanji(year);
+  const rel=relation(c.dayMasterEl,y.el);
+  return { year, rel, el:y.el, gan:y.g, zhi:y.z, hanja:y.hanja, tilt:(TILT[rel]??0) };
+}
 export function sajeong(c:Chart, today:{gan:number;zhi:number;el:number}):Sajeong{
   const rel=relation(c.dayMasterEl,today.el), t=TILT[rel];
   const seed=((c.yGan*31+c.yZhi*17+c.mGan*13+c.mZhi*7+c.dGan*3+c.dZhi)*997+(today.gan*11+today.zhi)*61)>>>0;

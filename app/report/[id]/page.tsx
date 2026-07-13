@@ -5,9 +5,10 @@ import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
+import YearBar from '@/app/_components/YearBar';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
-type Result = { reportId: string; title: string; unlocked: boolean; level?: number; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number } };
+type Result = { reportId: string; title: string; unlocked: boolean; level?: number; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
@@ -39,6 +40,12 @@ export default function ReportView({ params }: { params: { id: string } }) {
     setRes(await r.json());
   }
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [id]);
+
+  async function switchYear(y: number) {
+    if (busy) return; setBusy(true);
+    try { const r = await fetch(`/api/report/get?id=${id}&year=${y}`); if (r.ok) { const d = await r.json(); if (d?.sections) setRes(prev => (prev ? { ...prev, ...d } : d)); } }
+    catch {} finally { setBusy(false); }
+  }
 
   async function pay(chosen: 'taekil' | 'full') {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
@@ -80,6 +87,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             </div>
             <div className="rright">
             <div className="rephd">{res.title}</div>
+            {res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
                 <div className="rprog">

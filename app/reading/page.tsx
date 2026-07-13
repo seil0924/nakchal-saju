@@ -9,6 +9,7 @@ import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
+import YearBar from '@/app/_components/YearBar';
 
 // 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
 const RITE_STEPS = [
@@ -24,7 +25,7 @@ type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t:
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
 type Hero = { score: number; label: string; headline: string; sub: string; up: boolean };
-type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; meta?: { chapters: number; items: number } };
+type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
@@ -195,6 +196,15 @@ export default function Reading() {
       setTimeout(() => document.getElementById('rep')?.scrollIntoView({ behavior: 'smooth' }), 60);
     } catch { setErr('상품을 여는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
     finally { setBusy(false); }
+  }
+  // 연도(세운) 전환 — 대표·회사·발주처 궁합을 그 해 기준으로 다시 계산
+  async function switchYear(y: number) {
+    if (!res || busy) return;
+    setBusy(true);
+    try {
+      const r = await fetch(`/api/report/get?id=${res.reportId}&year=${y}`).then(x => x.json());
+      if (r && r.sections) setRes(prev => (prev ? { ...prev, ...r } : r));
+    } catch {} finally { setBusy(false); }
   }
   // 이 리포트에서 낱개로 살 수 있는 상품(잠긴 섹션 소속) — 중복 제거
   const lockedProducts = useMemo(() => {
@@ -437,6 +447,7 @@ export default function Reading() {
             </div>
             <div className="rright">
             <div className="rephd">{res.title}</div>
+            {res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
                 <div className="rprog">

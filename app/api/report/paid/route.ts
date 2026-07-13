@@ -25,6 +25,7 @@ export async function GET(req: Request) {
   const input = await getReport(id);
   if (!input) return NextResponse.json({ error: 'not_found' }, { status: 404 });
 
-  const full = computeReport(input, level);      // 결제된 레벨만큼만 섹션·정밀값 공개
+  const year = Number(new URL(req.url).searchParams.get('year')) || undefined;
+  const full = computeReport(input, level, year); // 결제된 레벨만큼만 섹션·정밀값 공개
   return NextResponse.json({ ...full, level });
 }

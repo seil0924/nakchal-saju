@@ -47,8 +47,9 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       </div>
 
       <div className="pricebox">
-        <div className="pline sub2"><span>사정률·발주처·캘린더 사주</span><b>각 19,000원</b></div>
-        <div className="pline"><span>대표 사주 · 협정·궁합 · 회사 대운</span><b>29,000원부터</b></div>
+        <div className="pline sub2"><span>사정률 · 사업운 캘린더 사주</span><b>각 39,000원</b></div>
+        <div className="pline sub2"><span>발주처 · 협정·궁합 · 회사 대운 사주</span><b>각 69,000원</b></div>
+        <div className="pline"><span>대표 사주 진단 · 열여덟 장</span><b>190,000원</b></div>
         <div className="passure">✓ 필요한 풀이만 낱개로 · 묶음 없이 상품별</div>
       </div>
 

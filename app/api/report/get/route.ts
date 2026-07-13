@@ -17,6 +17,7 @@ export async function GET(req: Request) {
   const input = await getReport(id);
   if (!input) return NextResponse.json({ error: 'not_found' }, { status: 404 });
   const level = await unlockLevel(id);
-  const rep = computeReport(input, level);
+  const year = Number(new URL(req.url).searchParams.get('year')) || undefined;
+  const rep = computeReport(input, level, year);
   return NextResponse.json({ reportId: id, unlocked: level >= 1, level, cat: input.cat ?? null, ...rep });
 }

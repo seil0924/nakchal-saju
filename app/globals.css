@@ -674,6 +674,35 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .pmtx b{font-family:var(--serif);font-weight:800;font-size:15.5px;color:var(--ink,#2b2119)}
 .pmtx em{font-style:normal;font-size:12px;color:#8a8270;font-weight:500;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .pmpp{flex:none;font-family:var(--serif);font-weight:900;font-size:15px;color:var(--red,#9a2a20);white-space:nowrap}
+/* 연도별 세운 선택 바 */
+.yearbar{margin:10px 0 14px;border:1px solid #e7dcc2;border-radius:14px;background:linear-gradient(180deg,#fffdf7,#faf3e6);padding:11px 12px 9px}
+.ybhd{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.ybhd .ybk{flex:none;font-family:var(--serif);font-weight:900;font-size:13px;letter-spacing:2px;color:#7a5c1e;background:#f3e6c8;border:1px solid #e6d5aa;border-radius:7px;padding:3px 7px}
+.ybhd .ybt{font-size:12.5px;color:#6f6858;font-weight:600;line-height:1.45}
+.ybhd .ybt b{color:var(--ink,#2b2119);font-family:var(--serif);font-weight:800}
+.ybrow{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.ybrow::-webkit-scrollbar{height:0}
+.ybchip{flex:none;position:relative;border:1px solid #e2d6bb;background:#fff;color:#6f6858;border-radius:10px;padding:8px 12px;font-family:var(--serif);font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+.ybchip em{display:block;font-style:normal;font-size:9.5px;font-weight:700;color:#b08a3a;margin-top:1px}
+.ybchip:hover{border-color:var(--gold,#c9a24a)}
+.ybchip.on{background:linear-gradient(135deg,#2b2119,#181109);color:#f4cf80;border-color:#3a2c18}
+.ybchip.on em{color:#e3c27a}
+.ybchip:disabled{opacity:.5;cursor:default}
+/* 대표 세운 배너 (診 안) */
+.seunban{margin:2px 0 12px;border:1px solid #e7dcc2;border-radius:12px;background:linear-gradient(180deg,#fffdf6,#f8f0df);padding:11px 12px;box-shadow:inset 0 1px 0 #fff}
+.seunban .sbl{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.seunban .sby{font-family:var(--serif);font-weight:900;font-size:18px;color:var(--ink,#2b2119);display:flex;align-items:baseline;gap:6px}
+.seunban .sby em{font-style:normal;font-size:13px;font-weight:800;color:#7a5c1e;letter-spacing:1px}
+.seunban .sbk{flex:none;color:#fff;font-family:var(--serif);font-weight:800;font-size:12px;border-radius:7px;padding:3px 9px}
+.seunban .sbd{font-size:13.5px;color:#3a352c;font-weight:600;line-height:1.6}
+.seunban .sbd b{color:var(--red,#9a2a20);font-family:var(--serif);font-weight:800}
+.seunban .sbnote{color:#8a8270;font-weight:500;font-size:12px}
+/* 궁합 연도 라인 */
+.cyear{display:flex;align-items:center;gap:9px;margin:2px 0 12px;padding:8px 11px;border:1px dashed #e0d3b6;border-radius:10px;background:#fbf5e9}
+.cyear .cyl{flex:none;font-family:var(--serif);font-weight:800;font-size:12px;color:#7a5c1e;background:#f3e6c8;border-radius:6px;padding:2px 8px}
+.cyear .cyd{font-size:13px;color:#4a453b;font-weight:600}
+.cyear .cyd b{font-family:var(--serif)}
+.cyear .cyd em{font-style:normal;font-size:12px;color:#8a8270;font-weight:600}
 
 /* 스크롤 스티키 CTA */
 .stickycta{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:60;width:min(440px,calc(100% - 24px));display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#181b21,#232833);color:#f2ede0;border:1px solid var(--gold2);border-radius:14px;padding:12px 16px;box-shadow:0 14px 34px rgba(0,0,0,.38);cursor:pointer;animation:ctain .35s cubic-bezier(.2,.7,.3,1)}
