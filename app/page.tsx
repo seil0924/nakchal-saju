@@ -97,15 +97,6 @@ export default function Home() {
         <span className="cbgo">→</span>
       </Link>
 
-      {/* 동업·협정 궁합 */}
-      <Link className="ally" href="/product/dongup" style={{ marginTop: 16 }}>
-        <div className="h">同業宮合 · 協定宮合</div>
-        <div className="b">
-          <div><div className="t">손잡기 전, 궁합부터</div><div className="d">대표×대표 · 회사×회사 진단</div></div>
-          <div className="p" style={{ fontSize: 12.5, color: '#8a8270', fontWeight: 700 }}>무료로 시작 →</div>
-        </div>
-      </Link>
-
       {/* 콜로폰 */}
       <div className="foot">
         <div className="crule" />
