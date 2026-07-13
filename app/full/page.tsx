@@ -40,7 +40,7 @@ const FAQ: [string, string][] = [
   ['사주, 솔직히 안 믿는 편입니다.',
     '믿으실 필요 없습니다. 이건 점(占)이 아니라 만세력·명리 데이터로 만든 의사결정 보조입니다. 오늘의 흐름과 유리한 시간대를 「참고」로 드릴 뿐, 최종 결정은 언제나 대표님 몫입니다. 안 믿는 대표님일수록, 무료 구간만 먼저 열어 보시길 권합니다.'],
   ['안 맞으면 어떡합니까?',
-    '첫 리포트가 기대에 못 미치면 환불해 드립니다. 그래서 결제 전에 무료로 원국·사정률 방향·닮은 CEO까지 먼저 열어 보시게 해 뒀습니다. 무료에서 「이거 물건이네」 싶을 때만 결제하십시오.'],
+    '그래서 결제 전에 무료로 원국·사정률 방향·닮은 CEO까지 먼저 열어 보시게 해 뒀습니다. 무료에서 「이거 물건이네」 싶을 때만, 필요한 풀이만 낱개로 결제하십시오. 묶음으로 크게 사실 필요 없습니다.'],
   ['태어난 시간을 모릅니다.',
     '괜찮습니다. 시(時)를 몰라도 삼주(三柱)로 계산해 드립니다. 아시면 더 정밀해질 뿐, 몰라도 대부분의 풀이는 그대로 나옵니다.'],
   ['이걸로 투찰 금액을 정해도 됩니까?',
@@ -136,16 +136,17 @@ export default function FullIntro() {
       {/* 가격 앵커 */}
       <div className="lab"><i /><span>값어치</span></div>
       <div className="anchorbox">
-        <div className="acmp"><span className="al">청담·강남 대면 사주 상담</span><span className="ar old">수만~수십만 원</span></div>
-        <div className="acmp"><span className="al">낙찰사주 전체 리포트 <em>대표+법인 18장</em></span><span className="ar now">12,900원</span></div>
+        <div className="acmp"><span className="al">청담·강남 대면 사주 상담</span><span className="ar old">수십만 원</span></div>
+        <div className="acmp"><span className="al">낙찰사주 <em>필요한 풀이만 낱개로</em></span><span className="ar now">19,000원부터</span></div>
         <p className="anout">입찰 한 건 앞에서, 이 값은 반올림 오차입니다. 게다가 회사(법인) 사주까지 함께 보는 곳은 드뭅니다.</p>
       </div>
 
-      {/* 가격 · 보장 */}
+      {/* 가격 — 개별 상품 */}
       <div className="pricebox">
-        <div className="pline"><span>전체 리포트 · 열여덟 장</span><b>12,900원</b></div>
-        <div className="pline sub2"><span>택일팩 · 정밀 사정률 + 이달 길일</span><b>990원</b></div>
-        <div className="passure">✓ 첫 리포트, 만족스럽지 않으면 환불해 드립니다</div>
+        <div className="pline sub2"><span>사정률 · 발주처 · 사업운 캘린더 사주</span><b>각 19,000원</b></div>
+        <div className="pline"><span>대표 사주 진단</span><b>39,000원</b></div>
+        <div className="pline sub2"><span>협정·궁합 · 회사 대운 사주</span><b>각 29,000원</b></div>
+        <div className="passure">✓ 필요한 풀이만 낱개로 · 묶음 없이 상품별</div>
       </div>
 
       {/* FAQ — 반론 처리 */}

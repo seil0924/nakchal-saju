@@ -7,8 +7,8 @@ export const PRICE_FULL = 12900;     // 전체 리포트: 모든 심층 섹션 +
 export type UnlockLevel = 0 | 1 | 2;
 export const LEVEL = { FREE: 0, TAEKIL: 1, FULL: 2 } as const;
 export const SKU = {
-  taekil: { level: 1 as UnlockLevel, price: PRICE_TAEKIL, orderName: '낙찰사주 택일팩' },
-  full:   { level: 2 as UnlockLevel, price: PRICE_FULL,   orderName: '낙찰사주 전체 리포트' },
+  taekil: { level: 1 as UnlockLevel, price: PRICE_TAEKIL, orderName: '낙찰사주 사정률 사주' },
+  full:   { level: 2 as UnlockLevel, price: PRICE_FULL,   orderName: '낙찰사주 리포트' },
 } as const;
 export type Sku = keyof typeof SKU;
 

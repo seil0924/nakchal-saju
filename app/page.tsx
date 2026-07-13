@@ -71,11 +71,6 @@ export default function Home() {
           <div className="bd5"><div className="t">사업운 캘린더 <small>事業運 月曆</small></div><div className="d">이달 — 계약·채용·발표에 좋은 날, 갈등·지출 조심할 날</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/full">
-          <div className="gz" style={{ color: '#9a2a20' }}>全</div>
-          <div className="bd5"><div className="t">전체 리포트 <small>十八章</small></div><div className="d">큰 건만 비껴가는 이유 — 열여덟 장으로 통째로</div></div>
-          <div className="rt"><div className="pz paid">자세히</div><div className="arw">→</div></div>
-        </Link>
       </div>
 
       {/* 통점 위로 랜딩 */}

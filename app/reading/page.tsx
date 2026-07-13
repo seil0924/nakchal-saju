@@ -5,7 +5,7 @@ import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
 import { CLIENTS } from '@/lib/clients';
-import { CAT_INFO, isCatKey } from '@/lib/report-categories';
+import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
@@ -171,6 +171,40 @@ export default function Reading() {
     } catch { setErr('리포트를 뽑는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
     finally { setBusy(false); setProg(false); }
   }
+
+  // 개별 상품(묶음 없음): 잠긴 섹션 → 그 섹션을 파는 카테고리 상품으로 리포트를 좁혀 다시 뽑는다.
+  async function openProduct(catKey: string) {
+    if (busy) return;
+    setCat(catKey); setErr(''); setBusy(true); setLevel(0);
+    try {
+      const tg = (k: RelKind) => targets.find(t => t.kind === k);
+      const body = {
+        name: f.name, birth: f.birth, time: f.timeMode === 'N' ? null : effTime,
+        cal: f.cal, leap: f.leap,
+        legal: f.legal || null, legalName: f.company || undefined,
+        client: tg('client')?.date || null, clientName: tg('client')?.name,
+        partner: tg('partner')?.date || null, partnerName: tg('partner')?.name,
+        ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
+        situation, worry: f.worry, cat: catKey,
+      };
+      const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
+      if (!resp.ok) throw new Error();
+      const r = await resp.json();
+      setRes(r);
+      recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
+      setTimeout(() => document.getElementById('rep')?.scrollIntoView({ behavior: 'smooth' }), 60);
+    } catch { setErr('상품을 여는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
+    finally { setBusy(false); }
+  }
+  // 이 리포트에서 낱개로 살 수 있는 상품(잠긴 섹션 소속) — 중복 제거
+  const lockedProducts = useMemo(() => {
+    if (!res) return [] as { key: string; name: string; hanja: string; price: number; lead: string }[];
+    const seen = new Set<string>(); const out: any[] = [];
+    res.sections.forEach(s => {
+      if ((RANK[s.tier] ?? 2) > level) { const p = productOfMk(s.mk); if (p && !seen.has(p.key)) { seen.add(p.key); out.push(p); } }
+    });
+    return out;
+  }, [res, level]);
 
   async function pay(chosen: 'taekil' | 'full') {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
@@ -416,13 +450,16 @@ export default function Reading() {
                 const rank = RANK[sec.tier] ?? 2;
                 const open = rank <= level && !!sec.html;
                 const locked = rank > level;
-                const openThis = () => { setErr(''); setSku(sec.tier === 'taekil' ? 'taekil' : 'full'); setModal(true); };
+                const prod = productOfMk(sec.mk);
+                const pPrice = catInfo ? catInfo.price : (prod?.price ?? 0);
+                const pName = catInfo ? catInfo.name : (prod?.name ?? '개별 상품');
+                const openThis = () => { setErr(''); if (catInfo) setModal(true); else if (prod) openProduct(prod.key); };
                 return (
                   <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                     <div className="hd" onClick={locked ? openThis : undefined}>
                       <div className="mk">{sec.mk}</div>
                       <div className="ti">{sec.t}</div>
-                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {won(catInfo ? catInfo.price : (sec.tier === 'taekil' ? PRICE_TAEKIL : PRICE_FULL))}</span>}
+                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {won(pPrice)}</span>}
                       <div className="cv">▾</div>
                     </div>
                     <div className="bd">
@@ -431,7 +468,7 @@ export default function Reading() {
                           <div className="teaser">
                             <div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
                             <button className="tunlock" onClick={openThis}>
-                              {catInfo ? `${catInfo.name} 열기 · ${won(catInfo.price)}` : (sec.tier === 'taekil' ? `택일팩으로 지금 열기 · ${won(PRICE_TAEKIL)}` : `전체 리포트로 지금 열기 · ${won(PRICE_FULL)}`)} →
+                              {`${pName} 열기 · ${won(pPrice)}`} →
                             </button>
                           </div>
                         )}
@@ -440,16 +477,27 @@ export default function Reading() {
                 );
               })}
             </div>
-            {level < 2 && (
+            {level < 2 && (catInfo ? (
               <>
-                <div className="readyline">{catInfo ? <><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목</> : <>전체 <b>{res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목</b></>} 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
-                <div className="cta" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
-                  {catInfo ? `${catInfo.name} 전체 열기` : (level === 0 ? '잠긴 리포트 전체 열기' : '전체 리포트로 업그레이드')}
-                  <small>{catInfo ? `${catInfo.lead} · ${won(catInfo.price)}` : (level === 0 ? `잠긴 심층 해석 · 궁합 · 이달 택일 · 정밀 사정률까지 · ${won(PRICE_FULL)}` : `남은 심층 섹션까지 모두 열기 · ${won(PRICE_FULL)}`)}</small>
+                <div className="readyline"><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
+                <div className="cta" onClick={() => { setErr(''); setModal(true); }}>
+                  {catInfo.name} 열기
+                  <small>{catInfo.lead} · {won(catInfo.price)}</small>
                 </div>
-                <div className="ctaassure">✓ 첫 리포트 만족 환불 · 카카오페이/토스로 30초</div>
+                <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
               </>
-            )}
+            ) : lockedProducts.length > 0 ? (
+              <div className="prodmenu">
+                <div className="pmhd"><span className="pmh">필요한 것만 낱개로 여십시오</span><span className="pms">묶음 없이 상품별로 — 대표님께 필요한 풀이만 고르세요</span></div>
+                {lockedProducts.map(p => (
+                  <button key={p.key} className="pmrow" onClick={() => openProduct(p.key)} disabled={busy}>
+                    <span className="pmseal">{p.hanja}</span>
+                    <span className="pmtx"><b>{p.name}</b><em>{p.lead}</em></span>
+                    <span className="pmpp">{won(p.price)} →</span>
+                  </button>
+                ))}
+              </div>
+            ) : null)}
             {level >= 1 && res.gauge.precise && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
             )}
@@ -480,10 +528,10 @@ export default function Reading() {
       )}
 
       {/* 스크롤 스티키 CTA (전체 미열람 시) */}
-      {res && level < 2 && sticky && !modal && !prog && (
-        <div className="stickycta no-print" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
-          <span className="sl"><b>{catInfo ? `${catInfo.name} 열기` : '전체 리포트 열기'}</b><em>산출 완료 · 열람만 잠금</em></span>
-          <span className="sr">{won(catInfo ? catInfo.price : PRICE_FULL)} →</span>
+      {res && level < 2 && catInfo && sticky && !modal && !prog && (
+        <div className="stickycta no-print" onClick={() => { setErr(''); setModal(true); }}>
+          <span className="sl"><b>{catInfo.name} 열기</b><em>산출 완료 · 열람만 잠금</em></span>
+          <span className="sr">{won(catInfo.price)} →</span>
         </div>
       )}
 
@@ -525,29 +573,16 @@ export default function Reading() {
               </>
             ) : (
               <>
-                <h3>어디까지 열어 볼까요?</h3>
-                <div className="plans">
-                  <button className={'plan2' + (sku === 'taekil' ? ' on' : '')} onClick={() => setSku('taekil')}>
-                    <div className="pn">택일팩</div>
-                    <div className="pp">{won(PRICE_TAEKIL)}</div>
-                    <div className="pd">오늘 정밀 사정률 + 이번 달 투찰 길일 캘린더. 오늘 당장 쓰는 완결판.</div>
-                  </button>
-                  <button className={'plan2' + (sku === 'full' ? ' on' : '')} onClick={() => setSku('full')}>
-                    <div className="pbest">추천</div>
-                    <div className="pn">전체 리포트</div>
-                    <div className="pp">{won(PRICE_FULL)}</div>
-                    <div className="pd">잠긴 심층 해석 전부 · 발주처·동업·협정 궁합 · 택일 · 정밀값까지.</div>
-                  </button>
-                </div>
+                <h3>이 상품을 여시겠어요?</h3>
+                <div className="catbuy"><div className="catbuy-lead">필요한 풀이만 낱개로 여는 개별 상품입니다.</div></div>
               </>
             )}
-            <div className="guarantee">✓ 첫 리포트, 만족스럽지 않으면 환불해 드립니다 — 안심하고 확인하세요</div>
             <div className="pay kakao on2">카카오페이</div>
             <div className="pay toss">토스페이</div>
             <div className="pay">신용/체크카드</div>
             <label className="consent">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
-              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회가 제한될 수 있으며, 위 만족 환불 정책과 별개로 관련 법령이 적용됩니다.)</span>
+              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있으며, 관련 법령이 적용됩니다.)</span>
             </label>
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(unlockPrice)} 결제하기`}</button>

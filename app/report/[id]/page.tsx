@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
-import { CAT_INFO, isCatKey } from '@/lib/report-categories';
+import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
@@ -93,22 +93,25 @@ export default function ReportView({ params }: { params: { id: string } }) {
               const rank = RANK[sec.tier] ?? 2;
               const open = rank <= level && !!sec.html;
               const locked = rank > level;
-              const openThis = () => { setErr(''); setSku(sec.tier === 'taekil' ? 'taekil' : 'full'); setModal(true); };
+              const prod = productOfMk(sec.mk);
+              const pPrice = catInfo ? catInfo.price : (prod?.price ?? 0);
+              const pName = catInfo ? catInfo.name : (prod?.name ?? '개별 상품');
+              const openThis = () => { setErr(''); if (catInfo) setModal(true); else location.href = prod ? `/reading?cat=${prod.key}` : '/reading'; };
               return (
                 <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                   <div className="hd" onClick={locked ? openThis : undefined}><div className="mk">{sec.mk}</div><div className="ti">{sec.t}</div>
-                    {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {won(catInfo ? catInfo.price : (sec.tier === 'taekil' ? PRICE_TAEKIL : PRICE_FULL))}</span>}<div className="cv">▾</div></div>
+                    {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {won(pPrice)}</span>}<div className="cv">▾</div></div>
                   <div className="bd">{sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
                     : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
-                      <button className="tunlock" onClick={openThis}>{catInfo ? `${catInfo.name} 열기 · ${won(catInfo.price)}` : (sec.tier === 'taekil' ? `택일팩으로 지금 열기 · ${won(PRICE_TAEKIL)}` : `전체 리포트로 지금 열기 · ${won(PRICE_FULL)}`)} →</button></div>)}</div>
+                      <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button></div>)}</div>
                 </div>
               );
             })}
-            {level < 2 && (
+            {level < 2 && catInfo && (
               <>
-                <div className="readyline">{catInfo ? <><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목</> : <>전체 <b>{res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목</b></>} 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
-                <div className="cta" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>{catInfo ? `${catInfo.name} 전체 열기` : (level === 0 ? '잠긴 리포트 전체 열기' : '전체 리포트로 업그레이드')}<small>{catInfo ? `${catInfo.lead} · ${won(catInfo.price)}` : (level === 0 ? `잠긴 심층 해석 · 궁합 · 이달 택일 · 정밀 사정률까지 · ${won(PRICE_FULL)}` : `남은 심층 섹션까지 모두 · ${won(PRICE_FULL)}`)}</small></div>
-                <div className="ctaassure">✓ 첫 리포트 만족 환불 · 카카오페이/토스로 30초</div>
+                <div className="readyline"><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
+                <div className="cta" onClick={() => { setErr(''); setModal(true); }}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
+                <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
               </>
             )}
             {level >= 1 && res.gauge?.precise && <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b></div>}
@@ -122,7 +125,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장
             </button>
-            {level < 2 && <div className="no-print" style={{ textAlign: 'center', fontSize: 11.5, color: '#a99f88', marginTop: 6 }}>전체 리포트를 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
+            {level < 2 && <div className="no-print" style={{ textAlign: 'center', fontSize: 11.5, color: '#a99f88', marginTop: 6 }}>상품을 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
             </div>
           </div>
         )}
@@ -134,10 +137,10 @@ export default function ReportView({ params }: { params: { id: string } }) {
           <div className="sealbox"><video className="sealvid" autoPlay muted playsInline poster="/openseal-poster.jpg"><source src="/openseal.mp4" type="video/mp4" /></video><div className="sealtxt">봉인 해제 — 잠긴 섹션이 열렸습니다</div></div>
         </div>
       )}
-      {res && level < 2 && sticky && !modal && (
-        <div className="stickycta no-print" onClick={() => { setErr(''); setSku('full'); setModal(true); }}>
-          <span className="sl"><b>{catInfo ? `${catInfo.name} 열기` : '전체 리포트 열기'}</b><em>산출 완료 · 열람만 잠금</em></span>
-          <span className="sr">{won(catInfo ? catInfo.price : PRICE_FULL)} →</span>
+      {res && level < 2 && catInfo && sticky && !modal && (
+        <div className="stickycta no-print" onClick={() => { setErr(''); setModal(true); }}>
+          <span className="sl"><b>{catInfo.name} 열기</b><em>산출 완료 · 열람만 잠금</em></span>
+          <span className="sr">{won(catInfo.price)} →</span>
         </div>
       )}
 
@@ -155,20 +158,10 @@ export default function ReportView({ params }: { params: { id: string } }) {
               </>
             ) : (
               <>
-                <h3>어디까지 열어 볼까요?</h3>
-                <div className="plans">
-                  <button className={'plan2' + (sku === 'taekil' ? ' on' : '')} onClick={() => setSku('taekil')}>
-                    <div className="pn">택일팩</div><div className="pp">{won(PRICE_TAEKIL)}</div>
-                    <div className="pd">오늘 정밀 사정률 + 이번 달 투찰 길일 캘린더.</div>
-                  </button>
-                  <button className={'plan2' + (sku === 'full' ? ' on' : '')} onClick={() => setSku('full')}>
-                    <div className="pbest">추천</div><div className="pn">전체 리포트</div><div className="pp">{won(PRICE_FULL)}</div>
-                    <div className="pd">잠긴 심층 해석 전부 · 궁합 · 택일 · 정밀값까지.</div>
-                  </button>
-                </div>
+                <h3>이 상품을 여시겠어요?</h3>
+                <div className="catbuy"><div className="catbuy-lead">필요한 풀이만 낱개로 여는 개별 상품입니다.</div></div>
               </>
             )}
-            <div className="guarantee">✓ 첫 리포트, 만족스럽지 않으면 환불해 드립니다</div>
             <div className="pay kakao on2">카카오페이</div><div className="pay toss">토스페이</div><div className="pay">신용/체크카드</div>
             <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한 가능)</span></label>
             {err && <div className="errbox">{err}</div>}

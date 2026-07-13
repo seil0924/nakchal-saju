@@ -661,6 +661,19 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .readyline{text-align:center;font-size:13px;color:#8a8270;font-weight:600;margin:14px 0 8px;line-height:1.6}
 .readyline b{color:var(--red)}
 .ctaassure{text-align:center;font-size:11.5px;color:#2f6b42;font-weight:700;margin-top:9px}
+/* 개별 상품 메뉴 (묶음 없음) — 잠긴 섹션을 낱개로 여는 카드 목록 */
+.prodmenu{margin-top:16px;border:1px solid #eadfc6;border-radius:16px;background:linear-gradient(180deg,#fffdf7,#fbf5e8);padding:14px 14px 8px;box-shadow:0 6px 20px rgba(60,45,20,.06)}
+.pmhd{display:flex;flex-direction:column;gap:3px;padding:2px 4px 12px}
+.pmhd .pmh{font-family:var(--serif);font-weight:900;font-size:16px;color:var(--ink,#2b2119)}
+.pmhd .pms{font-size:12px;color:#8a8270;font-weight:600}
+.pmrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid #efe6d2;border-radius:13px;padding:12px 13px;margin-bottom:8px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s}
+.pmrow:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(60,45,20,.10);border-color:var(--gold,#c9a24a)}
+.pmrow:disabled{opacity:.55;cursor:default}
+.pmseal{flex:none;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:20px;color:#7a5c1e;background:linear-gradient(150deg,#faf2e0,#f1e3c4);border:1px solid #e6d5aa}
+.pmtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.pmtx b{font-family:var(--serif);font-weight:800;font-size:15.5px;color:var(--ink,#2b2119)}
+.pmtx em{font-style:normal;font-size:12px;color:#8a8270;font-weight:500;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pmpp{flex:none;font-family:var(--serif);font-weight:900;font-size:15px;color:var(--red,#9a2a20);white-space:nowrap}
 
 /* 스크롤 스티키 CTA */
 .stickycta{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:60;width:min(440px,calc(100% - 24px));display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#181b21,#232833);color:#f2ede0;border:1px solid var(--gold2);border-radius:14px;padding:12px 16px;box-shadow:0 14px 34px rgba(0,0,0,.38);cursor:pointer;animation:ctain .35s cubic-bezier(.2,.7,.3,1)}

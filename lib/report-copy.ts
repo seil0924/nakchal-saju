@@ -583,7 +583,7 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
       `<div class="sinsal">`+
       ss.map((x,i)=>`<div class="ssrow"><div class="sshan" style="background:${['#7a1f1f','#22406b'][i%2]}">${x.hanja.slice(0,2)}</div>`+
         `<div class="ssbody"><div class="sshead">${x.head}</div>`+
-        ((i===0||unlocked)?`<p class="sstxt">${x.body}</p>`:`<p class="sstxt lockt">🔒 전체 리포트에서 <b>${x.name}(${x.hanja})</b>의 풀이가 열립니다.</p>`)+
+        ((i===0||unlocked)?`<p class="sstxt">${x.body}</p>`:`<p class="sstxt lockt">🔒 <b>대표 사주</b> 상품에서 <b>${x.name}(${x.hanja})</b>의 풀이가 열립니다.</p>`)+
       `</div></div>`).join('')+
       `</div>`+
       `<p style="margin-top:10px">신살(神殺)은 여느 사람 사주엔 잘 안 드는 특수 부호입니다. 대표님껜 <b>${ss.map(x=>x.name).join('·')}</b>이(가) 함께 앉아, 남다른 승부 기질로 여기까지 오신 것입니다.</p>`});
