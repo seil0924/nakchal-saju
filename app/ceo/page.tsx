@@ -16,6 +16,7 @@ type Twin = {
   myPills: string; myDist: number[]; level: 'twin' | 'near' | 'none'; count: number; matched: string[];
   tycoon: { name: string; en: string; co: string; born: string }; tyPills: string; tyEl: number;
   tyDist: number[]; story: string;
+  profile: { rep: string; field: string; life: string; scale: string; arc: string } | null;
 };
 const ELC = ['木', '火', '土', '金', '水'];
 
@@ -198,10 +199,31 @@ export default function CeoTwin() {
                 <div className="tco">{res.tycoon.co}</div>
               </div>
             </div>
+
+            {/* 거장 프로필 — 상징·분야·전성기 규모·연혁 (이미지처럼 각인) */}
+            {res.profile && (
+              <div className="typrof">
+                <div className="tprep">“{res.profile.rep}”</div>
+                <div className="tpmeta">
+                  <span className="tpm"><i>분야</i>{res.profile.field}</span>
+                  <span className="tpm"><i>활동</i>{res.profile.life}</span>
+                </div>
+                <div className="tpscale">
+                  <span className="tpsl">전성기 · 이룬 것</span>
+                  <p>{res.profile.scale}</p>
+                </div>
+                <div className="tparc">
+                  <span className="tpsl">연혁</span>
+                  <p>{res.profile.arc}</p>
+                </div>
+              </div>
+            )}
+
             <div className="myeong">
               <div className="myl">命 · {res.type} — {res.typeDesc} 명</div>
               <p>{res.myeong}</p>
-              <p className="mys"><b>{res.tycoon.name}</b>이 바로 이 명(命)이었습니다. {res.story}</p>
+              <p className="mys">이 거장을 일으킨 것은 재능이나 운이 아니라 <b>바로 이 명(命)</b>이었습니다. <b>{res.tycoon.name}</b> — {res.story}</p>
+              <p className="mys2">맨손에서 시작해 <b>무(無)에서 유(有)를 이룬 사람</b>. 그 뿌리에 있던 기운이, 지금부터 말씀드릴 대표님의 여덟 글자와 같은 것입니다.</p>
             </div>
 
             {/* 2막 — 근거: 명식 대조 (오행이 몇 자씩) */}

@@ -23,6 +23,7 @@ export async function POST(req: Request) {
       level: tm.level, count: tm.count, matched: tm.matched,
       tycoon: tm.tycoon, tyPills: tm.pills, tyEl: tm.el,
       tyDist: tm.tyDist, story: tm.story,      // 인물 삼주 오행 분포 + 성장 서사
+      profile: tm.profile,                     // 상징·분야·연대·전성기 규모·연혁
     });
   } catch {
     return NextResponse.json({ error: 'compute_failed' }, { status: 400 });

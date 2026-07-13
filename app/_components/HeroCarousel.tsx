@@ -1,6 +1,8 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+
+const useIso = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 type Slide = { src: string; poster: string; kick: string; title: string; href: string };
 
@@ -11,13 +13,13 @@ const BASE_SLIDES: Slide[] = [
   { src: '/hero-4.mp4', poster: '/hero-4-poster.jpg', kick: '運 · 대표님께', title: '그 일, 대표님<br><b>잘못</b>이 아닙니다', href: '/why' },
 ];
 
-const DUR = 5000;
+const DUR = 3800;
 
 export default function HeroCarousel() {
   const [i, setI] = useState(0);
   const [SLIDES, setSlides] = useState(BASE_SLIDES);
-  // 진입할 때마다 슬라이드 순서 랜덤 (하이드레이션 불일치 방지 위해 마운트 후 셔플)
-  useEffect(() => {
+  // 진입할 때마다 슬라이드 순서 랜덤. paint 직전(useLayoutEffect)에 셔플해 항상 hero-1이 먼저 보이는 문제를 없앰.
+  useIso(() => {
     const a = [...BASE_SLIDES];
     for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
     setSlides(a); setI(0);

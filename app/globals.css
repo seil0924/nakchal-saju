@@ -417,6 +417,17 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .twincard .tnm{font-family:var(--serif);font-weight:800;font-size:19px;color:#20242c}
 .twincard .ten{font-size:12px;color:#8a8270;font-weight:600;margin-top:2px}
 .twincard .tco{font-size:11.5px;color:var(--red);font-weight:700;margin-top:3px;letter-spacing:.02em}
+/* 거장 프로필 — 상징·분야·전성기 규모·연혁 */
+.typrof{margin-top:10px;background:#fbf9f3;border:1px solid #e7e0cf;border-radius:13px;padding:15px 16px}
+.typrof .tprep{font-family:var(--serif);font-weight:800;font-size:15px;color:#2a2114;line-height:1.5;word-break:keep-all}
+.typrof .tpmeta{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.typrof .tpm{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#4f4a3d;background:#f2ecdd;border:1px solid #e3dbc7;border-radius:999px;padding:5px 11px}
+.typrof .tpm i{font-style:normal;font-size:10px;font-weight:800;color:#a5862f;letter-spacing:.03em}
+.typrof .tpscale,.typrof .tparc{margin-top:12px}
+.typrof .tpsl{display:block;font-size:10.5px;font-weight:800;color:#a5862f;letter-spacing:.06em;margin-bottom:4px}
+.typrof .tpscale p,.typrof .tparc p{font-size:12.5px;color:#57523f;line-height:1.7;font-weight:500;word-break:keep-all}
+.typrof .tpscale{padding-top:12px;border-top:1px dashed #e0d7c0}
+.myeong .mys2{margin-top:9px;color:#6a5f45;font-size:12.5px;line-height:1.7;word-break:keep-all}
 .twinchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
 .twinchips .twc{font-size:11.5px;font-weight:700;color:#7a5c1e;background:#f4e6c2;border:1px solid var(--gold);border-radius:999px;padding:5px 11px}
 .twcount{margin-top:10px;font-size:12.5px;color:#6f6a5c;font-weight:600}
@@ -892,8 +903,8 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5 .hero5.vhero .wm{display:none}
 
 /* ═══════════ 홈 롤링 히어로 배너 ═══════════ */
-.home5 .herocar{position:relative;height:372px;overflow:hidden;background:#181b21;isolation:isolate}
-@media(min-width:560px){.home5 .herocar{height:392px}}
+.home5 .herocar{position:relative;height:328px;overflow:hidden;background:#181b21;isolation:isolate}
+@media(min-width:560px){.home5 .herocar{height:348px}}
 .home5 .hcslide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:44px 24px 40px;text-decoration:none;opacity:0;visibility:hidden;transition:opacity .8s ease}
 .home5 .hcslide.on{opacity:1;visibility:visible}
 .home5 .hcslide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}

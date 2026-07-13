@@ -61,6 +61,7 @@ export default function Reading() {
   const [seal, setSeal] = useState(false);     // 결제 후 개봉 연출
   const [sticky, setSticky] = useState(false); // 스크롤 스티키 CTA
   const [cat, setCat] = useState('');           // 카테고리(대표·사정률·발주처·궁합·대운)
+  const [bp, setBp] = useState({ y: 0, m: 0, d: 0 }); // 생년월일 3분할 선택 누적
   const catInfo = isCatKey(cat) ? CAT_INFO[cat] : null;
   // 카테고리 개별 결제가 (카테고리 모드면 단일가, 아니면 sku 기준가)
   const unlockPrice = catInfo ? catInfo.price : (sku === 'taekil' ? PRICE_TAEKIL : PRICE_FULL);
@@ -96,7 +97,7 @@ export default function Reading() {
       }
       // 닮은 CEO(/ceo)에서 넘어온 경우 대표 생년월일·성함 프리필
       const b = p.get('b'), n = p.get('n');
-      if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) setF(s => ({ ...s, birth: b, name: n || s.name }));
+      if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
       const ct = p.get('cat'); if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
     } catch {}
   }, []);
@@ -135,6 +136,10 @@ export default function Reading() {
   async function submit() {
     setErr('');
     if (!f.birth) { setErr('대표님 생년월일을 입력해 주세요.'); return; }
+    // 카테고리별 필수 입력 안내
+    if (cat === 'daeun' && !f.legal) { setErr('회사 대운은 법인 설립일이 필요합니다. 아래 「회사 정보」에 설립일을 넣어주세요.'); document.getElementById('cocard')?.scrollIntoView({ behavior: 'smooth' }); return; }
+    if (cat === 'balju' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 추가해 주세요.'); return; }
+    if (cat === 'gunghap' && !targets.some(t => t.kind === 'partner' || t.kind === 'ally')) { setErr('동업 또는 협정 상대를 먼저 추가해 주세요.'); return; }
     setConfirm(true); // 사주아이식 — 입력 확인 모달 먼저
   }
 
@@ -201,8 +206,15 @@ export default function Reading() {
   }
 
   const seg = (on: boolean) => 'seg-b' + (on ? ' on' : '');
-  const by = f.birth ? +f.birth.slice(0, 4) : 0, bm = f.birth ? +f.birth.slice(5, 7) : 0, bd = f.birth ? +f.birth.slice(8, 10) : 0;
-  const setB = (y: number, m: number, d: number) => { if (y && m && d) set('birth', `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`); };
+  const by = bp.y, bm = bp.m, bd = bp.d;
+  // 년/월/일 3분할 — 부분 선택을 상태에 누적하고, 셋이 다 차면 birth를 세팅한다.
+  const setB = (part: { y?: number; m?: number; d?: number }) => {
+    setBp(prev => {
+      const nx = { ...prev, ...part };
+      if (nx.y && nx.m && nx.d) set('birth', `${nx.y}-${String(nx.m).padStart(2, '0')}-${String(nx.d).padStart(2, '0')}`);
+      return nx;
+    });
+  };
 
   return (
     <div className="app">
@@ -246,9 +258,9 @@ export default function Reading() {
           )}
           <label>생년월일</label>
           <div className="bdate">
-            <select required value={by || ''} onChange={e => setB(+e.target.value, bm, bd)}><option value="" disabled>년</option>{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
-            <select required value={bm || ''} onChange={e => setB(by, +e.target.value, bd)}><option value="" disabled>월</option>{MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}</select>
-            <select required value={bd || ''} onChange={e => setB(by, bm, +e.target.value)}><option value="" disabled>일</option>{DAYS.map(d => <option key={d} value={d}>{d}일</option>)}</select>
+            <select required value={by || ''} onChange={e => setB({ y: +e.target.value })}><option value="" disabled>년</option>{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
+            <select required value={bm || ''} onChange={e => setB({ m: +e.target.value })}><option value="" disabled>월</option>{MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}</select>
+            <select required value={bd || ''} onChange={e => setB({ d: +e.target.value })}><option value="" disabled>일</option>{DAYS.map(d => <option key={d} value={d}>{d}일</option>)}</select>
           </div>
           <label>성별</label>
           <div className="seg">
@@ -294,13 +306,13 @@ export default function Reading() {
         </div>
 
         {/* 3. 회사 정보 */}
-        <div className="card reveal" style={{ display: (f.birth && (!cat || cat === 'daepyo' || cat === 'daeun' || cat === 'sajeong')) ? undefined : 'none' }}>
-          <div className="st"><span className="l"><span className="b" />회사 정보</span><span className="chip free">회사 사주</span></div>
+        <div id="cocard" className="card reveal" style={{ display: (f.birth && (!cat || cat === 'daepyo' || cat === 'daeun' || cat === 'sajeong')) ? undefined : 'none' }}>
+          <div className="st"><span className="l"><span className="b" />회사 정보</span><span className={'chip ' + (cat === 'daeun' ? 'paid' : 'free')}>{cat === 'daeun' ? '필수' : '회사 사주'}</span></div>
           <label>회사명 <span className="opt">(선택)</span></label>
           <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
-          <label>법인 설립일 <span className="opt">· 법인 운세 + 통합 사정률</span></label>
+          <label>법인 설립일 {cat === 'daeun' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 사정률</span>}</label>
           <input type="date" value={f.legal} onChange={e => set('legal', e.target.value)} />
-          <div className="note">※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.</div>
+          <div className="note">{cat === 'daeun' ? '※ 회사 대운은 법인 설립일을 기준으로 연도별 큰 흐름(세운)을 산출합니다. 사업자등록증의 「개업연월일」을 넣어주세요.' : '※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.'}</div>
         </div>
 
         {/* 4. 관계·궁합 */}

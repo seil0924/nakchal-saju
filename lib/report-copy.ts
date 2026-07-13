@@ -19,9 +19,14 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[]){
       `<div class="tinfo"><div class="tnm">${t.name}</div>`+
       `<div class="ten">${t.en}</div><div class="tco">${t.co}</div></div>`+
     `</div>`+
+    (tm.profile?`<div class="typrof"><div class="tprep">“${tm.profile.rep}”</div>`+
+      `<div class="tpmeta"><span class="tpm"><i>분야</i>${tm.profile.field}</span><span class="tpm"><i>활동</i>${tm.profile.life}</span></div>`+
+      `<div class="tpscale"><span class="tpsl">전성기 · 이룬 것</span><p>${tm.profile.scale}</p></div>`+
+      `<div class="tparc"><span class="tpsl">연혁</span><p>${tm.profile.arc}</p></div></div>`:'')+
     `<div class="myeong"><div class="myl">命 · ${TYPE_NAME[me]} — ${TYPE_DESC[me]} 명</div>`+
       `<p>${TYPE_MYEONG[me]}</p>`+
-      `<p class="mys"><b>${t.name}</b>이 바로 이 명(命)이었습니다. ${tm.story}</p></div>`+
+      `<p class="mys">이 거장을 일으킨 것은 재능이나 운이 아니라 <b>바로 이 명(命)</b>이었습니다. <b>${t.name}</b> — ${tm.story}</p>`+
+      `<p class="mys2">맨손에서 시작해 <b>무(無)에서 유(有)를 이룬 사람</b>. 그 뿌리의 기운이, 대표님 여덟 글자와 같은 것입니다.</p></div>`+
     `<p class="twbasis">대표님 명식 <b>${dl(myDist)}</b> · ${t.name} 삼주 <b>${dl(tm.tyDist)}</b> — `+
     (tm.count?`두 명식에서 <b>${tm.matched.join('</b>·<b>')}</b>, 여섯 부호 중 ${tm.count}가지가 겹칩니다.`:`구조의 결이 닿습니다.`)+`</p>`+
     chips+
