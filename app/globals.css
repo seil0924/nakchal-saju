@@ -134,8 +134,8 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 @media(hover:hover){.home5 .foot .bokquiet:hover{opacity:1;color:#8a8272}}
 /* 복채 페이지 — 먹빛 다크 프리미엄 (은밀·정적·품격) */
 .bokpage{position:relative;max-width:560px;margin:0 auto;min-height:100dvh;background:radial-gradient(120% 70% at 50% 30%,#241a10 0%,#160f07 60%,#0e0a05 100%);display:flex;align-items:center;justify-content:center;overflow:hidden;isolation:isolate}
-.bokbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.5}
-.bokscrim{position:absolute;inset:0;z-index:-1;background:radial-gradient(60% 44% at 50% 34%,rgba(70,44,16,.35),transparent 70%),linear-gradient(180deg,rgba(14,10,5,.62),rgba(14,10,5,.82))}
+.bokbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.42}
+.bokscrim{position:absolute;inset:0;z-index:-1;background:radial-gradient(58% 42% at 50% 33%,rgba(70,44,16,.32),transparent 68%),linear-gradient(180deg,rgba(14,10,5,.66) 0%,rgba(14,10,5,.6) 46%,rgba(12,9,4,.86) 82%,rgba(10,7,3,.95) 100%)}
 .bokwrap{width:100%;padding:52px 32px 58px;text-align:center;position:relative}
 .bokseal{width:72px;height:72px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:37px;color:#f6e7c8;background:linear-gradient(135deg,#a5241f,#6f1512);border:1.5px solid var(--gold2);border-radius:17px;box-shadow:0 0 0 6px rgba(197,145,74,.08),0 12px 34px rgba(0,0,0,.5)}
 .bokkick{font-family:var(--serif);font-weight:800;font-size:12px;letter-spacing:.5em;color:#c9a961;margin-bottom:10px;padding-left:.5em}

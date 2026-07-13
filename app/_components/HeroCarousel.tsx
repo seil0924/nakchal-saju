@@ -11,6 +11,7 @@ const BASE_SLIDES: Slide[] = [
   { src: '/hero-2.mp4', poster: '/hero-2-poster.jpg', kick: '鏡 · 닮은 사주', title: '나와 닮은<br><b>세계적 CEO</b>는 누구일까', href: '/ceo' },
   { src: '/hero-3.mp4', poster: '/hero-3-poster.jpg', kick: '擇 · 오늘의 택일', title: '오늘 이 투찰,<br><b>유리한 날</b>인가', href: '/reading' },
   { src: '/hero-4.mp4', poster: '/hero-4-poster.jpg', kick: '運 · 대표님께', title: '그 일, 대표님<br><b>잘못</b>이 아닙니다', href: '/why' },
+  { src: '/hero-5.mp4', poster: '/hero-5-poster.jpg', kick: '曆 · 사업운 캘린더', title: '이달, <b>언제 움직일까</b><br>계약·채용·발표의 날', href: '/reading?cat=calendar' },
 ];
 
 const DUR = 3800;
