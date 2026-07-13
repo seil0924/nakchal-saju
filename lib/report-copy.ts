@@ -601,6 +601,31 @@ function jinHtml(c:Chart,seun?,selYear?){
 }
 function argmaxRC(a:number[]){let x=0;for(let i=1;i<a.length;i++)if(a[i]>a[x])x=i;return x;}
 // 언락 레벨: 0 무료 · 1 택일팩 · 2 전체
+// ── 무료 고도화: 오늘의 한마디(一言) + 이번 주 7일 흐름 ──────────
+const ILEON:Record<string,string[]>={
+  in:['오늘은 귀인이 드는 날 — 미뤄둔 연락, 먼저 손 내미십시오.','받쳐주는 기운이 도는 날입니다. 도움을 청하기 좋은 하루입니다.'],
+  bi:['같은 기운이 힘을 보태는 날 — 밀어붙일 일은 오늘 밀어붙이십시오.','추진력이 붙는 날입니다. 다만 혼자 다 지려 하지 마십시오.'],
+  jae:['실리가 잡히는 날 — 계약·수금 이야기를 꺼내기 좋습니다.','거둬들일 것을 챙기는 날입니다. 벌이기보다 마무리에 두십시오.'],
+  sik:['말과 결과물로 승부하는 날 — 다만 말이 앞서지 않게 하십시오.','에너지를 밖으로 쏟는 날입니다. 과속·지출을 한 박자 늦추십시오.'],
+  gwan:['눌리는 기운이 도는 날 — 큰 결정은 하루 미루는 편이 낫습니다.','조여지는 하루입니다. 서두른 저가·과속 투찰을 삼가십시오.']};
+function ileonHtml(c:Chart,today:{gan:number;zhi:number;el:number}){
+  const rel=relation(c.dayMasterEl,today.el);const pool=ILEON[rel]||ILEON.bi;
+  const idx=(today.gan*7+today.zhi*3)%pool.length;
+  return `<div class="ileon"><span class="ilk">오늘의 한마디 · 一言</span><p>${pool[idx]}</p></div>`;
+}
+function weekAheadHtml(c:Chart,y:number,m:number,d:number){
+  const wn=['일','월','화','수','목','금','토'];let cells='';
+  for(let i=0;i<7;i++){const dt=new Date(Date.UTC(y,m-1,d+i));
+    const yy=dt.getUTCFullYear(),mm=dt.getUTCMonth()+1,dd=dt.getUTCDate();
+    const tp=todayPillar(yy,mm,dd);const rel=relation(c.dayMasterEl,tp.el);
+    const strong=(rel==='in'||rel==='bi');const up=strong||rel==='jae';
+    const col=strong?'#177f5e':up?'#7a8a3a':(rel==='gwan'?'#b5402f':'#8a7a5a');
+    const lab=strong?'유리':up?'무난':(rel==='gwan'?'주의':'관망');
+    const h=strong?26:up?19:(rel==='gwan'?24:14);
+    cells+=`<div class="wacell${i===0?' now':''}"><span class="wad">${mm}/${dd}</span><span class="waw">${wn[dt.getUTCDay()]}</span><span class="watk"><span class="wabar" style="height:${h}px;background:${col}"></span></span><span class="wal" style="color:${col}">${lab}</span></div>`;}
+  return `<div class="weekhd">이번 주 7일 흐름<span>· 무료</span></div><div class="weekahead">${cells}</div>`+
+    `<p class="wanote">오늘부터 이레간, 대표님께 <b>유리한 날</b>과 <b>조심할 날</b>의 방향입니다. 각 날의 정밀 사정률·유리한 시간대·투찰 길일은 아래에서 이어집니다.</p>`;
+}
 const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
 function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear?,seunSelf?,clientCore?){
   names=names||{};
@@ -634,7 +659,8 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
       `<p style="margin-top:10px">신살(神殺)은 여느 사람 사주엔 잘 안 드는 특수 부호입니다. 대표님껜 <b>${ss.map(x=>x.name).join('·')}</b>이(가) 함께 앉아, 남다른 승부 기질로 여기까지 오신 것입니다.</p>`});
   }
   // ── 무료 정점(率) → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
-  let rateHtml=gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c);
+  let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c);
+  if(nowYMD){rateHtml+=weekAheadHtml(c,nowYMD.y,nowYMD.m,nowYMD.d);}
   if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
     rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 바로 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
   secs.push({mk:'率',tier:'free',t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});

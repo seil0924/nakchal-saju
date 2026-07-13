@@ -181,7 +181,7 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 /* ===== 메인 홈 (v5 정본 01) — .home 스코프 ===== */
 .home .topbar{background:var(--navy2);display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
 .home .topbar .logo{font-family:var(--serif);font-weight:900;color:#fff;font-size:17px;display:flex;align-items:center;gap:6px}
-.home .topbar .logo .s{width:24px;height:24px;border-radius:7px;border:1px solid var(--gold2);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:13px}
+.home .topbar .logo .s{width:25px;height:25px;border-radius:7px;background:linear-gradient(180deg,#b23a2b,#7d1d12);border:1px solid #5c140b;box-shadow:inset 0 0 0 1px rgba(230,198,128,.7);color:#f7ecd4;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
 .home .topbar .ic svg{width:19px;height:19px;stroke:#c7d2e6;fill:none;stroke-width:1.7}
 .home .hero{position:relative;padding:17px 18px;background:linear-gradient(180deg,#23262e,#15171c);text-align:center}
 .home .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}
@@ -428,7 +428,7 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 /* 공통 상단바 (홈 외 페이지: 발주처·보관함·부적·더보기) */
 .topbar{background:var(--navy2);display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
 .topbar .logo{font-family:var(--serif);font-weight:900;color:#fff;font-size:17px;display:flex;align-items:center;gap:6px}
-.topbar .logo .s{width:24px;height:24px;border-radius:7px;border:1px solid var(--gold2);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:13px}
+.topbar .logo .s{width:25px;height:25px;border-radius:7px;background:linear-gradient(180deg,#b23a2b,#7d1d12);border:1px solid #5c140b;box-shadow:inset 0 0 0 1px rgba(230,198,128,.7);color:#f7ecd4;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
 .topbar .ic svg{width:20px;height:20px;stroke:#c7d2e6;fill:none;stroke-width:1.8}
 
 /* ===== 사주팔자 원국(元局) 판 ===== */
@@ -735,6 +735,23 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .bizyear .myg{flex:none;width:18px;text-align:center;font-family:var(--serif);font-weight:900;font-size:15px}
 .bizyear .mytag{flex:none;color:#fff;font-family:var(--serif);font-weight:800;font-size:11px;border-radius:6px;padding:2px 8px}
 .bizyear .myd{flex:1;min-width:0;font-size:12.5px;color:#5a5346;font-weight:600}
+/* 무료 — 오늘의 한마디(一言) */
+.ileon{margin:2px 0 14px;padding:13px 15px;border-radius:13px;background:linear-gradient(150deg,#2b2119,#181109);border:1px solid #4a3a1e;box-shadow:0 6px 18px rgba(20,12,4,.22)}
+.ileon .ilk{display:block;font-family:var(--serif);font-weight:800;font-size:11.5px;letter-spacing:2px;color:var(--gold2,#e3c27a);margin-bottom:6px}
+.ileon p{margin:0 !important;font-family:var(--serif);font-weight:600;font-size:15.5px;line-height:1.6;color:#f6eeda !important}
+/* 무료 — 이번 주 7일 흐름 */
+.weekhd{display:flex;align-items:baseline;gap:8px;font-family:var(--serif);font-weight:800;font-size:14.5px;color:var(--ink,#2b2119);margin:16px 0 10px}
+.weekhd span{font-family:var(--sans);font-size:11px;font-weight:700;color:#2f6b42}
+.weekahead{display:flex;gap:5px;padding:12px 8px;border:1px solid #e7dcc2;border-radius:14px;background:linear-gradient(180deg,#fffdf7,#faf3e6)}
+.weekahead .wacell{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 2px;border-radius:9px}
+.weekahead .wacell.now{background:#f3e6c8;box-shadow:inset 0 0 0 1px #e6d5aa}
+.weekahead .wad{font-family:var(--serif);font-weight:800;font-size:12px;color:var(--ink,#2b2119)}
+.weekahead .waw{font-size:10px;color:#8a8270;font-weight:700}
+.weekahead .watk{height:28px;display:flex;align-items:flex-end}
+.weekahead .wabar{width:9px;border-radius:3px;display:block}
+.weekahead .wal{font-size:10.5px;font-weight:800;font-family:var(--serif)}
+.wanote{margin-top:10px;font-size:12.5px;color:#6a6252;line-height:1.6}
+.wanote b{color:var(--red,#9a2a20)}
 
 /* 스크롤 스티키 CTA */
 .stickycta{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:60;width:min(440px,calc(100% - 24px));display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#181b21,#232833);color:#f2ede0;border:1px solid var(--gold2);border-radius:14px;padding:12px 16px;box-shadow:0 14px 34px rgba(0,0,0,.38);cursor:pointer;animation:ctain .35s cubic-bezier(.2,.7,.3,1)}
@@ -866,8 +883,9 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5 .mast{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 15px;border-bottom:1px solid var(--h-line)}
 .home5 .mast .mb{display:flex;align-items:center;gap:12px}
 .home5 .mast .s{width:34px;height:34px;border:1.5px solid var(--h-red);color:var(--h-red);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:19px}
-.home5 .mast .n{font-family:var(--serif);font-weight:800;font-size:18px;color:#1e2129;line-height:1}
-.home5 .mast .n em{display:block;font-style:normal;font-family:var(--sans);font-weight:600;font-size:9.5px;letter-spacing:.26em;color:var(--h-mut);margin-top:5px}
+.home5 .mast .brandseal{flex:none;display:flex;line-height:0;filter:drop-shadow(0 2px 4px rgba(122,29,18,.28))}
+.home5 .mast .n{font-family:var(--serif);font-weight:800;font-size:19px;color:#1e2129;line-height:1;letter-spacing:.01em}
+.home5 .mast .n em{display:block;font-style:normal;font-family:var(--sans);font-weight:600;font-size:9.5px;letter-spacing:.22em;color:var(--h-mut);margin-top:6px}
 .home5 .mast .ham{display:flex;flex-direction:column;gap:4px;padding:6px 0}
 .home5 .mast .ham i{width:20px;height:1.5px;background:#3c3a33}
 

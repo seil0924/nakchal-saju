@@ -9,10 +9,22 @@ export default function Home() {
       {/* 마스트헤드 */}
       <div className="mast">
         <div className="mb">
-          <div className="s">士</div>
-          <div className="n">낙찰사주<em>會社 사주 전문</em></div>
+          <span className="brandseal" aria-label="낙찰사주">
+            <svg viewBox="0 0 40 40" width="38" height="38">
+              <defs>
+                <linearGradient id="inju" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#b23a2b" /><stop offset="1" stopColor="#7d1d12" />
+                </linearGradient>
+              </defs>
+              <rect x="2" y="2" width="36" height="36" rx="9" fill="url(#inju)" />
+              <rect x="2" y="2" width="36" height="36" rx="9" fill="none" stroke="#5c140b" strokeWidth="1" />
+              <rect x="5" y="5" width="30" height="30" rx="6.5" fill="none" stroke="#e6c680" strokeWidth="1" opacity="0.9" />
+              <text x="20" y="21.5" textAnchor="middle" dominantBaseline="central" fontFamily="'Noto Serif KR',serif" fontWeight="900" fontSize="21" fill="#f7ecd4">士</text>
+            </svg>
+          </span>
+          <div className="n">낙찰사주<em>落札四柱 · 會社 사주 전문</em></div>
         </div>
-        <div className="ham"><i /><i /><i /></div>
+        <Link href="/more" className="ham" aria-label="메뉴 · 더보기"><i /><i /><i /></Link>
       </div>
 
       {/* 히어로 — 자동 넘김 롤링 배너 (4장) */}
