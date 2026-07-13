@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { EL_HEX } from '@/lib/preview';
+import { sealSvg } from '@/lib/seal';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
 
@@ -213,6 +214,11 @@ export default function CeoTwin() {
               대표님의 명(命)을 세계 거장 100인과 견줬습니다.<br />
               가장 <b>{LV(res.level)}</b>는 이 사람 — <b>{res.tycoon.name}</b>입니다.
             </div>
+            <div className="sealcmp"><div className="scin">
+              <div className="scside"><div className="scwrap" dangerouslySetInnerHTML={{ __html: sealSvg(res.myDist, res.myPills?.[0] || ELC[res.me], 132) }} /><div className="scnm">대표님</div><div className="scr">{ELC[res.me]} 기운</div></div>
+              <div className="scmid"><div className="scpct">{res.count ? Math.round(52 + res.count / 6 * 46) : 68}<em>%</em></div><div className="scpl">닮음</div></div>
+              <div className="scside"><div className="scwrap" dangerouslySetInnerHTML={{ __html: sealSvg(res.tyDist, res.tyPills?.[0] || ELC[res.tyEl], 132) }} /><div className="scnm">{res.tycoon.name}</div><div className="scr">{ELC[res.tyEl]} 기운</div></div>
+            </div><div className="sccap">얼굴이 아니라 <b>명식(命式)의 문양</b>입니다 — 두 인장의 오행 비율이 이만큼 겹칩니다</div></div>
             <div className="twincard">
               <div className="tface" style={{ background: EL_HEX[res.tyEl] }}>{res.tyPills}</div>
               <div className="tinfo">

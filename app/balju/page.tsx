@@ -25,12 +25,12 @@ export default function Balju() {
         {list.length === 0 && <div className="balnote">‘{q}’에 맞는 발주처가 아직 없습니다. 더 많은 발주처를 계속 추가하고 있어요.</div>}
         {list.map((c, i) => (
           <Link key={i} className="li" href={`/reading?ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`}>
-            <div className="t"><b>{c.name}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat}</span></div>
-            <div className="r">궁합 보기 ›</div>
+            <div className="t"><b>{c.name} {c.core && <span className="corelock">封 핵심</span>}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat}</span></div>
+            <div className="r" style={c.core ? undefined : { background: '#eaf3ec', color: '#2f6b42' }}>{c.core ? '🔒 궁합 보기' : '무료 궁합'} ›</div>
           </Link>
         ))}
       </div>
-      <div className="balnote">설립일은 공개 연혁 기준의 자체 구축 DB입니다.<br />더 많은 발주처가 계속 추가됩니다.</div>
+      <div className="balnote"><b>封</b> 표시된 <b>핵심 발주처</b>(LH·조달청·도로공사 등 큰 판)의 궁합은 유료입니다. 일반 발주처 궁합은 무료로 열립니다.<br />설립일은 공개 연혁 기준의 자체 구축 DB이며, 더 많은 발주처가 계속 추가됩니다.</div>
 
       <div className="tab">
         <Link className="" href="/"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</Link>

@@ -1,6 +1,6 @@
 // lib/report-categories.ts — 카테고리별 개별 상품(사주아이식)
 // 각 카테고리는 자기 섹션(mk)만 보여주고, 자기 가격으로 개별 결제된다.
-export type CatKey = 'daepyo' | 'sajeong' | 'balju' | 'gunghap' | 'daeun' | 'calendar';
+export type CatKey = 'daepyo' | 'sajeong' | 'balju' | 'gunghap' | 'daeun' | 'calendar' | 'calendar_year';
 
 export type CatInfo = {
   name: string; hanja: string; oh: 'mok' | 'hwa' | 'to' | 'geum' | 'su';
@@ -42,10 +42,16 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
     kicker: '會社 大運', lead: '회사가 대표님을 밀어주는가 — 법인의 그릇과 년도별 큰 흐름.',
   },
   calendar: {
-    name: '사업운 캘린더', hanja: '曆', oh: 'hwa',
+    name: '사업운 캘린더 · 이달', hanja: '曆', oh: 'hwa',
     mks: ['曆'],
     price: 39000, needs: [],
-    kicker: '事業運 月曆', lead: '이달 — 계약·채용·투자·발표에 좋은 날과, 갈등·지출을 조심할 날을 달력에 짚어 드립니다.',
+    kicker: '事業運 月曆', lead: '오늘부터 앞으로 한 달 — 계약·채용·투자·발표에 좋은 날과, 갈등·지출을 조심할 날을 달력에 짚어 드립니다.',
+  },
+  calendar_year: {
+    name: '사업운 캘린더 · 연간', hanja: '曆', oh: 'hwa',
+    mks: ['曆年'],
+    price: 129000, needs: [],
+    kicker: '事業運 年曆', lead: '올 한 해 12개월 — 밀어주는 달과 조여지는 달을 미리 갈라, 큰 계약·발표·정비의 때를 한눈에 잡아 드립니다.',
   },
 };
 

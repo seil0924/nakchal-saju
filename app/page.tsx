@@ -68,7 +68,12 @@ export default function Home() {
         </Link>
         <Link className="li5" href="/reading?cat=calendar">
           <div className="gz" style={{ color: '#d15c4a' }}>曆</div>
-          <div className="bd5"><div className="t">사업운 캘린더 <small>事業運 月曆</small></div><div className="d">이달 — 계약·채용·발표에 좋은 날, 갈등·지출 조심할 날</div></div>
+          <div className="bd5"><div className="t">사업운 캘린더 · 이달 <small>事業運 月曆</small></div><div className="d">오늘부터 한 달 — 계약·채용·발표에 좋은 날, 조심할 날</div></div>
+          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
+        </Link>
+        <Link className="li5" href="/reading?cat=calendar_year">
+          <div className="gz" style={{ color: '#c98b4a' }}>曆</div>
+          <div className="bd5"><div className="t">사업운 캘린더 · 연간 <small>事業運 年曆</small></div><div className="d">올 한 해 12개월 — 밀어주는 달, 조여지는 달을 한눈에</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
       </div>

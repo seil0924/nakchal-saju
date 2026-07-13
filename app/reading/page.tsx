@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
-import { CLIENTS } from '@/lib/clients';
+import { CLIENTS, isCoreClient } from '@/lib/clients';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
@@ -116,6 +116,25 @@ export default function Reading() {
   const quickFill = (t: Target) => { setAddKind(t.kind); setAddName(t.name); setAddDate(t.date); };
   const kindLabel = (k: RelKind) => REL_KINDS.find(r => r.key === k)!.label;
 
+  // 로그인/이 기기 저장 — 대표·법인 프로필을 한 번 넣으면 다음부터 골라 쓴다 (사주아이식)
+  const SELF_KEY = 'nakchal_self_v1', LEGAL_KEY = 'nakchal_legal_v1';
+  const [savedSelf, setSavedSelf] = useState<any[]>([]);
+  const [savedLegal, setSavedLegal] = useState<any[]>([]);
+  useEffect(() => { try { const a = localStorage.getItem(SELF_KEY); if (a) setSavedSelf(JSON.parse(a)); const b = localStorage.getItem(LEGAL_KEY); if (b) setSavedLegal(JSON.parse(b)); } catch {} }, []);
+  function saveSelfProfile() {
+    if (!f.birth) return;
+    const p = { name: f.name, birth: f.birth, gender: f.gender, cal: f.cal, leap: f.leap, timeMode: f.timeMode, time: f.time, sijin: f.sijin };
+    setSavedSelf(prev => { const nx = [p, ...prev.filter(x => !(x.birth === p.birth && x.name === p.name))].slice(0, 8); try { localStorage.setItem(SELF_KEY, JSON.stringify(nx)); } catch {} return nx; });
+  }
+  function saveLegalProfile() {
+    if (!f.legal) return;
+    const p = { company: f.company, legal: f.legal };
+    setSavedLegal(prev => { const nx = [p, ...prev.filter(x => !(x.legal === p.legal && x.company === p.company))].slice(0, 8); try { localStorage.setItem(LEGAL_KEY, JSON.stringify(nx)); } catch {} return nx; });
+  }
+  function loadSelf(p: any) { setF(s => ({ ...s, name: p.name || '', birth: p.birth, gender: p.gender || 'M', cal: p.cal || 'solar', leap: !!p.leap, timeMode: p.timeMode || 'N', time: p.time || '09:20', sijin: p.sijin ?? 3 })); const [yy, mm, dd] = String(p.birth).split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
+  function loadLegalProfile(p: any) { setF(s => ({ ...s, company: p.company || '', legal: p.legal })); }
+  const yr2 = (d: string) => (d || '').slice(2);
+
   const effTime = f.timeMode === 'Y' ? f.time : f.timeMode === 'grid' ? SIJIN_MID[f.sijin] : null;
   const situation = [f.bidType, f.condition].filter(Boolean).join(' · ');
 
@@ -153,7 +172,7 @@ export default function Reading() {
         name: f.name, birth: f.birth, time: f.timeMode === 'N' ? null : effTime,
         cal: f.cal, leap: f.leap,
         legal: f.legal || null, legalName: f.company || undefined,
-        client: tg('client')?.date || null, clientName: tg('client')?.name,
+        client: tg('client')?.date || null, clientName: tg('client')?.name, clientCore: isCoreClient(tg('client')?.name),
         partner: tg('partner')?.date || null, partnerName: tg('partner')?.name,
         ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
         situation, worry: f.worry, cat: cat || undefined,
@@ -168,6 +187,7 @@ export default function Reading() {
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
       fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: 'self', name: f.name, birth_date: f.birth, birth_time: f.timeMode === 'N' ? null : effTime, calendar: f.cal, is_leap: f.leap }) }).catch(() => {});
       targets.forEach(t => fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: t.kind, name: t.name, birth_date: t.date }) }).catch(() => {}));
+      saveSelfProfile(); if (f.legal) saveLegalProfile();
       setTimeout(() => document.getElementById('rep')?.scrollIntoView({ behavior: 'smooth' }), 60);
     } catch { setErr('리포트를 뽑는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
     finally { setBusy(false); setProg(false); }
@@ -183,7 +203,7 @@ export default function Reading() {
         name: f.name, birth: f.birth, time: f.timeMode === 'N' ? null : effTime,
         cal: f.cal, leap: f.leap,
         legal: f.legal || null, legalName: f.company || undefined,
-        client: tg('client')?.date || null, clientName: tg('client')?.name,
+        client: tg('client')?.date || null, clientName: tg('client')?.name, clientCore: isCoreClient(tg('client')?.name),
         partner: tg('partner')?.date || null, partnerName: tg('partner')?.name,
         ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
         situation, worry: f.worry, cat: catKey,
@@ -215,6 +235,7 @@ export default function Reading() {
     });
     return out;
   }, [res, level]);
+  const anyLocked = !!res && res.sections.some(s => (RANK[s.tier] ?? 2) > level && !s.html);
 
   async function pay(chosen: 'taekil' | 'full') {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
@@ -289,6 +310,11 @@ export default function Reading() {
         {/* 2. 대표님 정보 */}
         <div className="card reveal" style={{ display: ((cat && cat !== 'sajeong') || f.bidType || f.birth) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />대표님 정보</span></div>
+          {savedSelf.length > 0 && (
+            <div className="savedrow"><span className="srl">저장된 대표님 <span className="opt">(눌러서 불러오기)</span></span>
+              <div className="srchips">{savedSelf.map((p, i) => <button key={i} type="button" className="srchip" onClick={() => loadSelf(p)}>{p.name || '대표'} · {yr2(p.birth)}</button>)}</div>
+            </div>
+          )}
           <label>성함 <span className="opt">(선택)</span></label>
           <input value={f.name} maxLength={12} placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
           <label>달력</label>
@@ -354,6 +380,11 @@ export default function Reading() {
         {/* 3. 회사 정보 */}
         <div id="cocard" className="card reveal" style={{ display: (f.birth && (!cat || cat === 'daepyo' || cat === 'daeun' || cat === 'sajeong')) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />회사 정보</span><span className={'chip ' + (cat === 'daeun' ? 'paid' : 'free')}>{cat === 'daeun' ? '필수' : '회사 사주'}</span></div>
+          {savedLegal.length > 0 && (
+            <div className="savedrow"><span className="srl">저장된 회사 <span className="opt">(눌러서 불러오기)</span></span>
+              <div className="srchips">{savedLegal.map((p, i) => <button key={i} type="button" className="srchip" onClick={() => loadLegalProfile(p)}>{p.company || '회사'} · {yr2(p.legal)}</button>)}</div>
+            </div>
+          )}
           <label>회사명 <span className="opt">(선택)</span></label>
           <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
           <label>법인 설립일 {cat === 'daeun' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 사정률</span>}</label>
@@ -395,7 +426,7 @@ export default function Reading() {
                       <button key={i} type="button" className="cbxop"
                         onMouseDown={e => e.preventDefault()}
                         onClick={() => { setAddName(c.name); setAddDate(c.date); setCbOpen(false); }}>
-                        <b>{c.name}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat}</span>
+                        <b>{c.name} {c.core && <span className="corelock">封</span>}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat} · {c.core ? '핵심 · 유료 궁합' : '무료 궁합'}</span>
                       </button>
                     ))}
                     {hits.length > 0
@@ -488,7 +519,7 @@ export default function Reading() {
                 );
               })}
             </div>
-            {level < 2 && (catInfo ? (
+            {level < 2 && anyLocked && (catInfo ? (
               <>
                 <div className="readyline"><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
                 <div className="cta" onClick={() => { setErr(''); setModal(true); }}>
@@ -539,7 +570,7 @@ export default function Reading() {
       )}
 
       {/* 스크롤 스티키 CTA (전체 미열람 시) */}
-      {res && level < 2 && catInfo && sticky && !modal && !prog && (
+      {res && level < 2 && catInfo && anyLocked && sticky && !modal && !prog && (
         <div className="stickycta no-print" onClick={() => { setErr(''); setModal(true); }}>
           <span className="sl"><b>{catInfo.name} 열기</b><em>산출 완료 · 열람만 잠금</em></span>
           <span className="sr">{won(catInfo.price)} →</span>

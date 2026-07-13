@@ -703,6 +703,38 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .cyear .cyd{font-size:13px;color:#4a453b;font-weight:600}
 .cyear .cyd b{font-family:var(--serif)}
 .cyear .cyd em{font-style:normal;font-size:12px;color:#8a8270;font-weight:600}
+/* 사주 인장 겹침 카드 (닮은 CEO · 鏡) */
+.sealcmp{margin:12px 0 4px;background:linear-gradient(150deg,#241a10,#15100a);border:1px solid #4a3a1e;border-radius:20px;padding:20px 14px 16px;box-shadow:0 12px 34px rgba(20,12,4,.32)}
+.sealcmp .scin{display:flex;align-items:flex-start;justify-content:center;gap:6px}
+.sealcmp .scside{flex:1;min-width:0;text-align:center}
+.sealcmp .scwrap{display:flex;justify-content:center}
+.sealcmp .scwrap svg{filter:drop-shadow(0 3px 6px rgba(70,30,20,.28))}
+.sealcmp .scnm{font-family:var(--serif);font-weight:800;font-size:13.5px;color:#f4ecda;margin-top:8px;word-break:keep-all}
+.sealcmp .scr{font-size:11px;color:#b8ad92;font-weight:600;margin-top:1px}
+.sealcmp .scmid{flex:none;align-self:center;text-align:center;padding:0 2px}
+.sealcmp .scpct{font-family:var(--serif);font-weight:900;font-size:30px;color:var(--gold2,#e3c27a);line-height:1}
+.sealcmp .scpct em{font-style:normal;font-size:15px}
+.sealcmp .scpl{font-size:10.5px;color:#c9bfa6;font-weight:700;margin-top:2px}
+.sealcmp .sccap{text-align:center;font-size:12px;color:#c9bfa6;line-height:1.55;margin-top:14px}
+.sealcmp .sccap b{color:var(--gold2,#e3c27a)}
+/* 핵심 발주처 자물쇠(封) 배지 */
+.corelock{display:inline-block !important;font-family:var(--serif);font-weight:800 !important;font-size:10px !important;color:#fff !important;background:linear-gradient(135deg,#b23a2b,#7a1f1f);border-radius:5px;padding:1px 6px !important;margin:0 0 0 5px !important;vertical-align:middle;letter-spacing:.5px;line-height:1.6;box-shadow:0 1px 2px rgba(122,31,31,.3)}
+/* 저장된 프로필 불러오기 (대표·회사) */
+.savedrow{margin:2px 0 12px;padding:10px 11px;border:1px solid #e7dcc2;border-radius:11px;background:linear-gradient(180deg,#fffdf7,#f9f2e3)}
+.savedrow .srl{display:block;font-size:12px;font-weight:700;color:#6a5c3a;margin-bottom:7px}
+.savedrow .srchips{display:flex;flex-wrap:wrap;gap:6px}
+.savedrow .srchip{border:1px solid #e0d3b6;background:#fff;color:#4a453b;border-radius:9px;padding:7px 11px;font-size:13px;font-weight:700;cursor:pointer;transition:all .12s}
+.savedrow .srchip:hover{border-color:var(--gold,#c9a24a);background:#fbf5e9}
+/* 사업운 캘린더 · 연간 12개월 흐름 */
+.bizyear{border:1px solid #e7dcc2;border-radius:14px;overflow:hidden;background:#fffdf7}
+.bizyear .byhd{background:linear-gradient(135deg,#2b2119,#181109);color:#f4cf80;font-family:var(--serif);font-weight:800;font-size:13.5px;padding:11px 13px;letter-spacing:.5px}
+.bizyear .myrow{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid #f0e7d3}
+.bizyear .myrow.now{background:#fbf3e2}
+.bizyear .mym{flex:none;width:64px;font-family:var(--serif);font-weight:800;font-size:14px;color:var(--ink,#2b2119);display:flex;align-items:baseline;gap:4px}
+.bizyear .mym em{font-style:normal;font-size:9.5px;font-weight:700;color:#b08a3a}
+.bizyear .myg{flex:none;width:18px;text-align:center;font-family:var(--serif);font-weight:900;font-size:15px}
+.bizyear .mytag{flex:none;color:#fff;font-family:var(--serif);font-weight:800;font-size:11px;border-radius:6px;padding:2px 8px}
+.bizyear .myd{flex:1;min-width:0;font-size:12.5px;color:#5a5346;font-weight:600}
 
 /* 스크롤 스티키 CTA */
 .stickycta{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:60;width:min(440px,calc(100% - 24px));display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#181b21,#232833);color:#f2ede0;border:1px solid var(--gold2);border-radius:14px;padding:12px 16px;box-shadow:0 14px 34px rgba(0,0,0,.38);cursor:pointer;animation:ctain .35s cubic-bezier(.2,.7,.3,1)}

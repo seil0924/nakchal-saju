@@ -11,6 +11,7 @@ export type ReportInput = {
   cal?: 'solar' | 'lunar';
   leap?: boolean;
   client?: string | null;        // 발주처 설립일
+  clientCore?: boolean;          // 핵심 발주처(큰 판) 여부 — true면 발주처 궁합 유료
   legal?: string | null;         // 법인 설립일
   partner?: string | null;       // 동업 상대 생년월일
   ally?: string | null;          // 협정 상대 회사 설립일
@@ -69,10 +70,11 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   // 카테고리 섹션 필터 (해당 카테고리 섹션만 노출)
   const mks = catMks(input.cat);
   const filt = (arr: Section[]) => mks ? arr.filter(x => mks.includes(x.mk)) : arr;
-  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf));
+  const cc = !!input.clientCore;
+  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf, cc));
 
   // 분량 앵커: 전체(레벨 2) 기준 장·항목 수를 산출해 노출 (텍스트는 미전송 — 숫자만)
-  const fullSecs = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2, selYear, seunSelf));
+  const fullSecs = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2, selYear, seunSelf, cc));
   const items = fullSecs.reduce((n, sec) => n + (sec.html.match(/<p|<div class="cbrow|<div class="ssrow/g) || []).length, 0);
   const meta = { chapters: fullSecs.length, items };
 
