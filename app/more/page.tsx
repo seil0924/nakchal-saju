@@ -1,11 +1,9 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { supabaseBrowser } from '@/lib/supabase/client';
 
 // 19 · 더보기 · 설정 (프로필 · 회사 · 구독 · 알림)
 const NK = 'nakchal_notify_v1';
-const AUTH_ON = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 export default function More() {
   const [notify, setNotify] = useState(true);
@@ -14,19 +12,17 @@ export default function More() {
   const [authReady, setAuthReady] = useState(false);
 
   async function logout() {
-    try { await supabaseBrowser().auth.signOut(); } catch {}
+    try { await fetch('/api/auth/signout', { method: 'POST' }); } catch {}
     setAcct(null);
-    if (typeof window !== 'undefined') window.location.reload();
+    if (typeof window !== 'undefined') window.location.href = '/';
   }
 
   useEffect(() => {
-    if (AUTH_ON) {
-      supabaseBrowser().auth.getUser().then(({ data }) => {
-        const u = data?.user;
-        if (u) setAcct({ email: u.email, name: (u.user_metadata as any)?.name || (u.user_metadata as any)?.full_name });
-        setAuthReady(true);
-      }).catch(() => setAuthReady(true));
-    } else { setAuthReady(true); }
+    // 로그인 상태는 서버가 쿠키를 읽어 판정 (httpOnly여도 확실)
+    fetch('/api/auth/me').then(r => r.json()).then(d => {
+      if (d?.loggedIn) setAcct({ email: d.email, name: d.name });
+      setAuthReady(true);
+    }).catch(() => setAuthReady(true));
     try { setNotify(localStorage.getItem(NK) !== '0'); } catch {}
     try {
       const raw = localStorage.getItem('nakchal_saved_targets_v1');

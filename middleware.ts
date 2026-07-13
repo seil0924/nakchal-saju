@@ -19,5 +19,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  // auth/callback은 코드 교환을 방해하지 않도록 미들웨어에서 제외
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|auth/callback).*)'],
 };
