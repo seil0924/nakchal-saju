@@ -5,7 +5,7 @@ import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
 import { CLIENTS, isCoreClient } from '@/lib/clients';
-import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
+import { CAT_INFO, isCatKey, productOfMk, catUI } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
@@ -80,6 +80,7 @@ export default function Reading() {
   const [cat, setCat] = useState('');           // 카테고리(대표·사정률·발주처·궁합·대운)
   const [bp, setBp] = useState({ y: 0, m: 0, d: 0 }); // 생년월일 3분할 선택 누적
   const catInfo = isCatKey(cat) ? CAT_INFO[cat] : null;
+  const ui = catUI(cat);   // 카테고리별 UI 스키마(단일 소스)
   // 카테고리 개별 결제가 (카테고리 모드면 단일가, 아니면 sku 기준가)
   const unlockPrice = catInfo ? catInfo.price : (sku === 'taekil' ? PRICE_TAEKIL : PRICE_FULL);
   const set = (k: string, v: any) => setF(s => ({ ...s, [k]: v }));
@@ -185,9 +186,10 @@ export default function Reading() {
     setErr('');
     if (!f.birth) { setErr('대표님 생년월일을 입력해 주세요.'); return; }
     // 카테고리별 필수 입력 안내
-    if (cat === 'daeun' && !f.legal) { setErr('회사 대운은 법인 설립일이 필요합니다. 아래 「회사 정보」에 설립일을 넣어주세요.'); document.getElementById('cocard')?.scrollIntoView({ behavior: 'smooth' }); return; }
-    if (cat === 'balju' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 추가해 주세요.'); return; }
-    if (cat === 'gunghap' && !targets.some(t => t.kind === 'partner' || t.kind === 'ally')) { setErr('동업 또는 협정 상대를 먼저 추가해 주세요.'); return; }
+    const req = ui.requires;   // 카테고리 필수 입력(스키마 기반)
+    if (req === 'legal' && !f.legal) { setErr('회사 대운은 법인 설립일이 필요합니다. 아래 「회사 정보」에 설립일을 넣어주세요.'); document.getElementById('cocard')?.scrollIntoView({ behavior: 'smooth' }); return; }
+    if (req === 'client' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 추가해 주세요.'); return; }
+    if (req === 'partnerOrAlly' && !targets.some(t => t.kind === 'partner' || t.kind === 'ally')) { setErr('동업 또는 협정 상대를 먼저 추가해 주세요.'); return; }
     setConfirm(true); // 사주아이식 — 입력 확인 모달 먼저
   }
 
@@ -327,7 +329,7 @@ export default function Reading() {
           </div>
         )}
         {/* 0-2. 사업운 캘린더 — 기간 선택(이달/연간 한 경로) */}
-        {(cat === 'calendar' || cat === 'calendar_year') && (
+        {ui.calToggle && (
           <div className="card">
             <div className="st"><span className="l"><span className="b" />기간 선택</span><span className="opt">이달 · 연간</span></div>
             <div className="perntog">
@@ -341,7 +343,7 @@ export default function Reading() {
           </div>
         )}
         {/* 1. 상황 (사정률·통합에서만) */}
-        {(!cat || cat === 'sajeong') && (<div className="card">
+        {ui.situation && (<div className="card">
           <div className="st"><span className="l"><span className="b" />지금 어떤 입찰을 앞두고 계세요?</span></div>
           <div className="chips">
             {BID_TYPES.map(t => <button key={t} className={'chip2' + (f.bidType === t ? ' on' : '')} onClick={() => set('bidType', f.bidType === t ? '' : t)}>{t}</button>)}
@@ -357,7 +359,7 @@ export default function Reading() {
         </div>)}
 
         {/* 2. 대표님 정보 */}
-        <div className="card reveal" style={{ display: ((cat && cat !== 'sajeong') || f.bidType || f.birth) ? undefined : 'none' }}>
+        <div className="card reveal" style={{ display: (ui.selfImmediate || f.bidType || f.birth) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />대표님 정보</span></div>
           {savedSelf.length > 0 && (
             <div className="savedrow"><span className="srl">저장된 대표님 <span className="opt">(눌러서 불러오기)</span></span>
@@ -427,8 +429,8 @@ export default function Reading() {
         </div>
 
         {/* 3. 회사 정보 */}
-        <div id="cocard" className="card reveal" style={{ display: (f.birth && (!cat || cat === 'daeun')) ? undefined : 'none' }}>
-          <div className="st"><span className="l"><span className="b" />회사 정보</span><span className={'chip ' + (cat === 'daeun' ? 'paid' : 'free')}>{cat === 'daeun' ? '필수' : '회사 사주'}</span></div>
+        <div id="cocard" className="card reveal" style={{ display: (f.birth && ui.legal !== 'hidden') ? undefined : 'none' }}>
+          <div className="st"><span className="l"><span className="b" />회사 정보</span><span className={'chip ' + (ui.legal === 'required' ? 'paid' : 'free')}>{ui.legal === 'required' ? '필수' : '회사 사주'}</span></div>
           {savedLegal.length > 0 && (
             <div className="savedrow"><span className="srl">저장된 회사 <span className="opt">(눌러서 불러오기)</span></span>
               <div className="srchips">{savedLegal.map((p, i) => <button key={i} type="button" className="srchip" onClick={() => loadLegalProfile(p)}>{p.company || '회사'} · {yr2(p.legal)}</button>)}</div>
@@ -436,13 +438,13 @@ export default function Reading() {
           )}
           <label>회사명 <span className="opt">(선택)</span></label>
           <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
-          <label>법인 설립일 {cat === 'daeun' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 사정률</span>}</label>
+          <label>법인 설립일 {ui.legal === 'required' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 사정률</span>}</label>
           <DateSelect value={f.legal} onChange={v => set('legal', v)} yearFrom={1945} yearTo={2026} />
-          <div className="note">{cat === 'daeun' ? '※ 회사 대운은 법인 설립일을 기준으로 연도별 큰 흐름(세운)을 산출합니다. 사업자등록증의 「개업연월일」을 넣어주세요.' : '※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.'}</div>
+          <div className="note">{ui.legal === 'required' ? '※ 회사 대운은 법인 설립일을 기준으로 연도별 큰 흐름(세운)을 산출합니다. 사업자등록증의 「개업연월일」을 넣어주세요.' : '※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.'}</div>
         </div>
 
         {/* 4. 관계·궁합 */}
-        {cat === 'balju' && (() => {
+        {ui.baljuCard && (() => {
           const t = targets.find(x => x.kind === 'client');
           return (
             <div className="card reveal">
@@ -462,7 +464,7 @@ export default function Reading() {
             </div>
           );
         })()}
-        <div className="card reveal" style={{ display: (f.birth && (!cat || cat === 'gunghap')) ? undefined : 'none' }}>
+        <div className="card reveal" style={{ display: (f.birth && ui.relation.length > 0) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />관계·궁합</span><span className="opt">선택</span></div>
           <div className="chips">
             {REL_KINDS.map(k => <button key={k.key} className={'chip2' + (addKind === k.key ? ' on' : '')} onClick={() => setAddKind(k.key)}>{k.label}</button>)}
@@ -547,7 +549,7 @@ export default function Reading() {
             </div>
             <div className="rright">
             <div className="rephd">{res.title}</div>
-            {res.selYear && cat !== 'sajeong' && cat !== 'calendar' && cat !== 'calendar_year' && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
+            {res.selYear && ui.yearBar && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
                 <div className="rprog">
@@ -609,7 +611,7 @@ export default function Reading() {
                 ))}
               </div>
             ) : null)}
-            {level >= 1 && res.gauge.precise && (!cat || cat === 'sajeong') && (
+            {level >= 1 && res.gauge.precise && ui.gauge && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
             )}
             <button className="sharebtn no-print" onClick={share}>결과 이미지로 공유 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>

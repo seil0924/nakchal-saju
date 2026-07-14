@@ -70,3 +70,41 @@ export const catOfMk = (mk: string): CatKey | null => _MK2CAT[mk] ?? null;
 export const productOfMk = (mk: string): (CatInfo & { key: CatKey }) | null => {
   const k = _MK2CAT[mk]; return k ? { ...CAT_INFO[k], key: k } : null;
 };
+
+// ── 카테고리별 입력/결과 UI 스키마 (reading 폼 단일 소스) ─────────
+// 각 카테고리가 "어떤 입력 카드를 보이고 / 무엇을 필수로 요구하고 /
+// 결과에서 무엇을 보일지"를 한 곳에서 선언한다.
+// 예전엔 reading/page.tsx에 cat=== 조건이 10곳 넘게 흩어져 있었다.
+// key '' = 통합(카테고리 미선택) 기본값.
+export type LegalMode = 'hidden' | 'show' | 'required';
+export type CatRelKind = 'client' | 'partner' | 'ally';
+export type CatUI = {
+  calToggle: boolean;        // 사업운 캘린더 기간(이달/연간) 토글 카드
+  situation: boolean;        // 상황 카드(입찰유형·고민)
+  selfImmediate: boolean;    // 대표정보 카드를 birth/bidType 이전에도 노출
+  legal: LegalMode;          // 회사정보 카드: 숨김 / 표시 / 필수
+  baljuCard: boolean;        // 발주처 선택 카드
+  relation: CatRelKind[];    // 관계·궁합 카드 대상(빈 배열이면 카드 숨김)
+  yearBar: boolean;          // 결과: 연도(세운) 전환 바
+  gauge: boolean;            // 결과: 소수점 정밀 사정률 노출
+  requires: 'legal' | 'client' | 'partnerOrAlly' | null; // 제출 필수 조건
+};
+
+const CAT_UI_DEFAULT: CatUI = {
+  calToggle: false, situation: true, selfImmediate: false, legal: 'show',
+  baljuCard: false, relation: ['client', 'partner', 'ally'],
+  yearBar: true, gauge: true, requires: null,
+};
+
+export const CAT_UI: Record<string, CatUI> = {
+  '':             { calToggle: false, situation: true,  selfImmediate: false, legal: 'show',     baljuCard: false, relation: ['client', 'partner', 'ally'], yearBar: true,  gauge: true,  requires: null },
+  daepyo:         { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: true,  gauge: false, requires: null },
+  sajeong:        { calToggle: false, situation: true,  selfImmediate: false, legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: true,  requires: null },
+  balju:          { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: true,  relation: [],                             yearBar: true,  gauge: false, requires: 'client' },
+  gunghap:        { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: ['partner', 'ally'],            yearBar: true,  gauge: false, requires: 'partnerOrAlly' },
+  daeun:          { calToggle: false, situation: false, selfImmediate: true,  legal: 'required', baljuCard: false, relation: [],                             yearBar: true,  gauge: false, requires: 'legal' },
+  calendar:       { calToggle: true,  situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
+  calendar_year:  { calToggle: true,  situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
+};
+
+export const catUI = (cat?: string): CatUI => CAT_UI[cat ?? ''] ?? CAT_UI_DEFAULT;
