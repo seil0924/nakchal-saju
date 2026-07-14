@@ -10,11 +10,6 @@ export default function TrustStrip() {
         <div className="trm"><b>음·양력 자동 변환</b><span>1900~2100 음력·윤달을 자동 환산 — 입력만 하면 됩니다</span></div>
         <div className="trm"><b>스스로 복기하는 구조</b><span>공개 개찰 결과와 대조해 예측을 되짚는 구조 — 근거 없는 장담 대신 검증을 지향합니다</span></div>
       </div>
-      <div className="trstat">
-        <span>명리 감수 <em>표기 준비 중</em></span>
-        <span>실사용 후기 <em>동의된 후기만 게재</em></span>
-        <span>실측 복기 <em>체계 구축</em></span>
-      </div>
       <div className="trdisc">명리 기반 <b>참고 정보</b>입니다 · 투찰금액 산정 근거가 아닙니다</div>
     </div>
   );
