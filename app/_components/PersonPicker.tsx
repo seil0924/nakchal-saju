@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import DateSelect from '@/app/_components/DateSelect';
 import { peopleOf, savePerson, removePerson, migrateLegacy, KIND_LABEL, KIND_HANJA, KIND_DATELABEL, type Person, type PersonKind } from '@/lib/people';
 
@@ -13,9 +14,11 @@ export default function PersonPicker({ open, kind, title, onPick, onClose }: {
   const [f, setF] = useState<{ name: string; date: string; gender: 'M' | 'F'; cal: 'solar' | 'lunar'; leap: boolean; time: string; timeMode: 'Y' | 'grid' | 'N' }>(
     { name: '', date: '', gender: 'M', cal: 'solar', leap: false, time: '09:20', timeMode: 'N' });
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const refresh = () => { migrateLegacy(); setList(peopleOf(kind)); };
   useEffect(() => { if (open) { refresh(); setAdding(false); } }, [open, kind]);
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
   const isSelf = kind === 'self';
   const heading = title || `${KIND_LABEL[kind]} 선택`;
@@ -29,7 +32,7 @@ export default function PersonPicker({ open, kind, title, onPick, onClose }: {
   };
   const del = (e: React.MouseEvent, id: string) => { e.stopPropagation(); removePerson(id); refresh(); };
 
-  return (
+  return createPortal(
     <div className="pp-ov" onClick={e => { if ((e.target as HTMLElement).classList.contains('pp-ov')) onClose(); }}>
       <div className="pp-sheet">
         <div className="pp-hd"><span className="pp-seal">{KIND_HANJA[kind]}</span><b>{heading}</b><button className="pp-x" onClick={onClose} aria-label="닫기">✕</button></div>
@@ -92,6 +95,7 @@ export default function PersonPicker({ open, kind, title, onPick, onClose }: {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
