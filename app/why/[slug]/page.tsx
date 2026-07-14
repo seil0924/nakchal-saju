@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { PAINS, painBySlug } from '@/lib/pains';
+import { PAINS, painBySlug, PAIN_CAT } from '@/lib/pains';
 import { PAIN_OH, OHAENG } from '@/lib/categories';
 
 export function generateStaticParams() {
@@ -72,15 +72,9 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
         {p.gives.map(([t, d], i) => <div key={i} className="drow"><b>{t}</b><span>{d}</span></div>)}
       </div>
 
-      {/* 가격 + CTA */}
-      <div className="pricebox" style={{ marginTop: 20 }}>
-        <div className="pline sub2"><span>사정률 · 사업운 캘린더 사주</span><b>각 39,000원</b></div>
-        <div className="pline sub2"><span>발주처 · 협정·궁합 · 회사 대운 사주</span><b>각 69,000원</b></div>
-        <div className="pline"><span>대표 사주 진단 · 열여덟 장</span><b>190,000원</b></div>
-        <div className="passure">✓ 필요한 풀이만 낱개로 · 묶음 없이 상품별</div>
-      </div>
+      {/* CTA — 가격 노출 없음 · 무료 진입 */}
       <div style={{ padding: '16px 24px 0' }}>
-        <Link className="fullcta" href="/reading">{p.cta} <small>생년월일만 · 30초 · 무료로 시작</small></Link>
+        <Link className="fullcta" href={`/reading${PAIN_CAT[p.slug] ? `?cat=${PAIN_CAT[p.slug]}` : ''}`}>{p.cta} <small>생년월일만 · 30초 · 무료로 시작</small></Link>
       </div>
 
       <div className="foot">

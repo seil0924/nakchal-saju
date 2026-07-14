@@ -137,4 +137,8 @@ export const PAINS: Pain[] = [
   },
 ];
 
+// 통점 페이지 CTA가 이동할 리딩 카테고리 (haha=사정률, losing-streak=회사 대운 …)
+export const PAIN_CAT: Record<string, string> = {
+  haha: 'sajeong', 'losing-streak': 'daeun', 'big-miss': 'daepyo', partner: 'gunghap', gwanjae: 'sajeong',
+};
 export const painBySlug = (slug: string) => PAINS.find(p => p.slug === slug) || null;
