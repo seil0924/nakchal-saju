@@ -367,6 +367,24 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 @keyframes introup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes introrule{from{width:0;opacity:0}to{width:64px;opacity:1}}
 @media (prefers-reduced-motion: reduce){.intro{display:none}}
+/* 페이지 진입 '팡~' */
+.pagein{animation:pagein .5s cubic-bezier(.2,.8,.25,1) both}
+@keyframes pagein{0%{opacity:0;transform:translateY(16px) scale(.988)}60%{opacity:1}100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.pagein{animation:none}}
+/* 탭 버스트 '팡~' (금빛) */
+.tapfx{position:fixed;z-index:150;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(230,198,128,.85),rgba(230,198,128,0) 68%);animation:tapfx .5s cubic-bezier(.2,.7,.3,1) forwards}
+.tapfx i{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(230,198,128,.7);animation:tapring .55s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes tapfx{0%{transform:scale(.35);opacity:.95}100%{transform:scale(3.6);opacity:0}}
+@keyframes tapring{0%{transform:scale(.5);opacity:.8}100%{transform:scale(5);opacity:0}}
+/* 누름 스프링 */
+button:active,.li5:active,.li:active,.cta:active,.go:active,.tcta:active,.pay:active,.paygo:active,.lgbtn:active,.tunlock:active,.bokgo:active,.hcta:active,.pmrow:active,.perntog button:active,.baljupick:active{transform:scale(.965)}
+button,.cta,.go,.tcta,.pay,.paygo,.lgbtn,.tunlock,.bokgo,.hcta,.pmrow,.perntog button,.baljupick{transition:transform .13s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,filter .2s,background .2s,border-color .2s}
+/* 프로그레스 바 고급화 — 진행 셔머 + 완료 광 */
+.rprog .rpbar i,.rite .rbar i{position:relative;overflow:hidden;box-shadow:0 0 8px rgba(58,90,140,.0)}
+.rprog .rpbar i::after,.rite .rbar i::after{content:"";position:absolute;top:0;left:0;bottom:0;width:60%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(-160%);animation:barshine 1.5s ease-in-out infinite}
+.rite .rbar i{box-shadow:0 0 10px rgba(227,194,122,.5)}
+@keyframes barshine{0%{transform:translateX(-160%)}100%{transform:translateX(320%)}}
+@media (prefers-reduced-motion: reduce){.tapfx,.rprog .rpbar i::after,.rite .rbar i::after{animation:none;display:none}}
 /* 스크롤 진입 리빌 */
 [data-reveal]{transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
 .reveal-on [data-reveal]:not(.in){opacity:0;transform:translateY(22px)}
