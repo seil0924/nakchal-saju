@@ -1376,3 +1376,15 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .axdots i.on{background:linear-gradient(90deg,var(--gold),var(--gold2))}
 .axsc{flex:none;font-family:var(--serif);font-weight:900;font-size:19px;color:var(--navy)}
 .axsc em{font-size:11px;font-weight:700;color:var(--sub);font-style:normal;margin-left:1px}
+
+/* ── 고급화 패스: 임원 리포트 감성 (CSS-only, 추가형) ───────── */
+/* 리포트 제목 아래 금박 괘선 — A4 임원 리포트 느낌 */
+.rephd{position:relative;padding-bottom:12px}
+.rephd::after{content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:54px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+/* 잠긴(유료) 섹션을 '봉인된 프리미엄'으로 — 은은한 온기 배경 + 금박 실선 + 封 워터마크 */
+.sec.locked{position:relative;border-color:#e7d9b6;background:linear-gradient(180deg,#fffdf7,#fbf5e9)}
+.sec.locked::after{content:"封";position:absolute;top:9px;right:12px;font-family:var(--serif);font-weight:900;font-size:26px;color:rgba(165,36,31,.10);pointer-events:none}
+.sec.locked .mk{background:linear-gradient(135deg,var(--red),#7f1a17);color:#f3e6cf}
+.teaser .ttx::before{background:linear-gradient(180deg,var(--gold),var(--gold2))}
+/* 열린 섹션 헤더에 얇은 금박 밑줄 — 격 */
+.sec.open .hd{border-bottom:1px solid #f0e9da}
