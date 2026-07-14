@@ -1388,3 +1388,27 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .teaser .ttx::before{background:linear-gradient(180deg,var(--gold),var(--gold2))}
 /* 열린 섹션 헤더에 얇은 금박 밑줄 — 격 */
 .sec.open .hd{border-bottom:1px solid #f0e9da}
+
+/* ── 실행 요약: 핵심 3가지 ─────────────────────────────── */
+.execsum{margin-top:10px;border:1px solid #e7d9b6;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#20242c,#171a20)}
+.esrow{display:flex;gap:11px;align-items:flex-start;padding:12px 14px;border-bottom:1px solid rgba(227,194,122,.14)}
+.esrow:last-child{border-bottom:0}
+.esn{flex:none;width:23px;height:23px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#20242c;font-family:var(--serif);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+.estx{min-width:0}
+.estx b{display:block;font-family:var(--serif);font-weight:800;color:var(--gold2);font-size:13px;margin-bottom:2px}
+.estx p{color:#e8e4da;font-size:14px;line-height:1.6;font-weight:500}
+
+/* ── 프리미엄 A4 PDF (print) ───────────────────────────── */
+@media print{
+  @page{size:A4;margin:15mm 14mm}
+  .execsum{background:#faf7ef !important;border:1px solid #d9cba5 !important}
+  .esn{background:#b58a2f !important;color:#fff !important}
+  .estx b{color:#8a6a2a !important}
+  .estx p{color:#20242c !important}
+  .axiscard{background:#faf7ef !important;border:1px solid #e0d6bd !important;break-inside:avoid}
+  .axseal{background:#2b2119 !important;color:#f6e7c8 !important}
+  .axdots i.on{background:#b58a2f !important}
+  .rephd{font-size:20px !important}
+  .rephd::after{background:#b58a2f !important}
+  .sec.locked::after{display:none !important}
+}

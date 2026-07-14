@@ -13,7 +13,7 @@ export type CatInfo = {
 export const CAT_INFO: Record<CatKey, CatInfo> = {
   daepyo: {
     name: '대표 사주', hanja: '代', oh: 'mok',
-    mks: ['器', '鏡', '診', '軸', '符', '五', '決', '人', '財', '方', '士'],
+    mks: ['核', '器', '鏡', '診', '軸', '符', '五', '決', '人', '財', '方', '士'],
     price: 190000, needs: [],
     kicker: '代表 四柱', lead: '대표님이 어떤 그릇으로 태어났는지 — 성정·승부 기질·재물·사람까지 낱낱이.',
   },

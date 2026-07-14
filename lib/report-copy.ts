@@ -760,10 +760,25 @@ function scorecardHtml(axes:any[], selYear?:number){
     `</div>`+
     `<p style="margin-top:11px">${selYear?selYear+'년 기준, ':''}대표님의 가장 두터운 축은 <b>${hi.label}(${hi.key})</b> — 여기서 승부가 납니다. 반대로 <b>${lo.label}(${lo.key})</b>는 약점이 아니라 <b>보완 설계 대상</b>입니다. 낮은 축을 사람·시스템으로 메우면 그릇이 완성됩니다.</p>`;
 }
+
+// ── 실행 요약: 이 리포트의 핵심 3가지 (무료 최상단) ─────────
+function summaryHtml(c:Chart, s:any, seun?:any, selYear?:number){
+  const axes=scoreAxes(c,seun);
+  const hi=axes.reduce((a,b)=>b.score>a.score?b:a);
+  const lo=axes.reduce((a,b)=>b.score<a.score?b:a);
+  const flow = (s&&s.tilt>0) ? '나설 만한 흐름' : '서두르기보다 관망이 유리한 흐름';
+  const rows=[
+    ['가장 강한 무기', `${hi.label}(${hi.key}) — 여기서 승부가 납니다.`],
+    ['지금의 흐름', `오늘은 ${s&&s.up?'기운이 위로 뻗는':'기운이 눌리는'} 날 — ${flow}입니다.`],
+    ['올해의 보완점', `${lo.label}(${lo.key})을(를) 사람·시스템으로 메우면 그릇이 완성됩니다.`],
+  ];
+  return `<div class="execsum">`+rows.map((r,i)=>`<div class="esrow"><span class="esn">${i+1}</span><div class="estx"><b>${r[0]}</b><p>${r[1]}</p></div></div>`).join('')+`</div>`;
+}
 // [代 器鏡診符] 카테고리 섹션 빌더
 function secDaepyoIntro(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
   const out:any[]=[];
+  out.push({mk:'核',tier:'free',t:`${selYear?selYear+'년 ':''}이 리포트의 핵심 3가지`,html:summaryHtml(c,s,seunSelf,selYear)});
   out.push({mk:'器',tier:'free',t:T1[me],html:P([
     `대표님은 <b>${NAT[me]}</b> 그릇입니다. ${DMc[me]}`,
     `${DM_D1[me]}`,

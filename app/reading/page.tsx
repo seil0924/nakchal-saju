@@ -42,6 +42,10 @@ const REL_KINDS = [
 type RelKind = 'client' | 'partner' | 'ally';
 type Target = { kind: RelKind; name: string; date: string };
 const LS_KEY = 'nakchal_saved_targets_v1';
+// 길일(.ics) — 날짜의 일간 오행 × 대표 일간 관계로 유리한 날 판정 (서버 정의와 동일: in/bi/jae/sik)
+const DAY_GAN_EL = [0,0,1,1,2,2,3,3,4,4];
+function dayElOf(y:number,m:number,d:number){ const a=Math.floor((14-m)/12),yy=y+4800-a,mm=m+12*a-3; const j=d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045; return DAY_GAN_EL[(((j+49)%60+60)%60)%10]; }
+function relCat(me:number,td:number){ if(td===me)return'bi'; if((td+1)%5===me)return'in'; if((me+1)%5===td)return'sik'; if((me+2)%5===td)return'jae'; if((td+2)%5===me)return'gwan'; return'bi'; }
 // 카테고리별 '혹하게 하는' 컨셉 훅 — 입력 화면 상단에서 몰입을 잡는다.
 const HOOK: Record<string, { seal: string; t: string; d: string }> = {
   daepyo:  { seal: '鏡', t: '잡스·록펠러와 같은 그릇일지 모릅니다', d: '타고난 승부 기질·재물·사람 다루는 법을 여덟 글자로 낱낱이 — 위기에 드러나는 그 약점까지.' },
@@ -301,6 +305,24 @@ export default function Reading() {
     } catch {}
   }
 
+  function exportIcs() {
+    if (!chart) return;
+    const me = chart.dayMasterEl;
+    const now = new Date();
+    const days: string[] = [];
+    for (let i = 0; i < 30; i++) {
+      const dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+      const rel = relCat(me, dayElOf(dt.getFullYear(), dt.getMonth() + 1, dt.getDate()));
+      if (rel === 'in' || rel === 'bi' || rel === 'jae' || rel === 'sik')
+        days.push(`${dt.getFullYear()}${String(dt.getMonth() + 1).padStart(2, '0')}${String(dt.getDate()).padStart(2, '0')}`);
+    }
+    let ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//nakchal-saju//gilil//KR\r\nCALSCALE:GREGORIAN\r\n';
+    for (const d of days) ics += `BEGIN:VEVENT\r\nUID:${d}-${Math.random().toString(36).slice(2)}@nakchal\r\nDTSTART;VALUE=DATE:${d}\r\nSUMMARY:\u5409\u65e5 \u2014 \ud22c\ucc30\u00b7\uacc4\uc57d\uc5d0 \uc720\ub9ac\r\nDESCRIPTION:\ub099\ucc30\uc0ac\uc8fc \u00b7 \ub300\ud45c\ub2d8 \uc77c\uac04\uc744 \uc0b4\ub9ac\ub294 \ub0a0\r\nEND:VEVENT\r\n`;
+    ics += 'END:VCALENDAR\r\n';
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a');
+    a.href = url; a.download = 'nakchal-gilil.ics'; a.click(); URL.revokeObjectURL(url);
+  }
   const seg = (on: boolean) => 'seg-b' + (on ? ' on' : '');
   const by = bp.y, bm = bp.m, bd = bp.d;
   // 년/월/일 3분할 — 부분 선택을 상태에 누적하고, 셋이 다 차면 birth를 세팅한다.
@@ -618,6 +640,9 @@ export default function Reading() {
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장
+            </button>
+            <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={exportIcs}>
+              이달 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
             </button>
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
             </div>
