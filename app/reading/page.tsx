@@ -411,7 +411,27 @@ export default function Reading() {
         </div>
 
         {/* 4. 관계·궁합 */}
-        <div className="card reveal" style={{ display: (f.birth && (!cat || cat === 'balju' || cat === 'gunghap')) ? undefined : 'none' }}>
+        {cat === 'balju' && (() => {
+          const t = targets.find(x => x.kind === 'client');
+          return (
+            <div className="card reveal">
+              <div className="st"><span className="l"><span className="b" />발주처 선택</span><span className="opt">궁합 대상</span></div>
+              {t ? (
+                <div className="baljusel">
+                  <div className="bjinfo"><b>{t.name} {isCoreClient(t.name) && <span className="corelock">封 핵심</span>}</b><span>{t.date.slice(0, 4)} 설립 · 대표님과의 궁합</span></div>
+                  <Link href="/balju" className="bjchg">다른 발주처 ›</Link>
+                </div>
+              ) : (
+                <Link href="/balju" className="baljupick">
+                  <span className="bpseal">宮</span>
+                  <span className="bptx"><b>발주처를 먼저 고르세요</b><em>목록에서 발주처를 선택하면 이 자리에 들어옵니다</em></span>
+                  <span className="bpgo">고르기 ›</span>
+                </Link>
+              )}
+            </div>
+          );
+        })()}
+        <div className="card reveal" style={{ display: (f.birth && (!cat || cat === 'gunghap')) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />관계·궁합</span><span className="opt">선택</span></div>
           <div className="chips">
             {REL_KINDS.map(k => <button key={k.key} className={'chip2' + (addKind === k.key ? ' on' : '')} onClick={() => setAddKind(k.key)}>{k.label}</button>)}

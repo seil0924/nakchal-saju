@@ -24,7 +24,7 @@ export default function Balju() {
       <div className="balist">
         {list.length === 0 && <div className="balnote">‘{q}’에 맞는 발주처가 아직 없습니다. 더 많은 발주처를 계속 추가하고 있어요.</div>}
         {list.map((c, i) => (
-          <Link key={i} className="li" href={`/reading?ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`}>
+          <Link key={i} className="li" href={`/reading?cat=balju&ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`}>
             <div className="t"><b>{c.name} {c.core && <span className="corelock">封 핵심</span>}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat}</span></div>
             <div className="r" style={c.core ? undefined : { background: '#eaf3ec', color: '#2f6b42' }}>{c.core ? '🔒 궁합 보기' : '무료 궁합'} ›</div>
           </Link>

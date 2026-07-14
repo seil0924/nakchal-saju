@@ -12,6 +12,7 @@ const BASE_SLIDES: Slide[] = [
   { src: '/hero-3.mp4', poster: '/hero-3-poster.jpg', kick: '擇 · 오늘의 택일', title: '오늘 이 투찰,<br><b>유리한 날</b>인가', href: '/reading' },
   { src: '/hero-4.mp4', poster: '/hero-4-poster.jpg', kick: '運 · 대표님께', title: '그 일, 대표님<br><b>잘못</b>이 아닙니다', href: '/why' },
   { src: '/hero-5.mp4', poster: '/hero-5-poster.jpg', kick: '曆 · 사업운 캘린더', title: '이달, <b>언제 움직일까</b><br>계약·채용·발표의 날', href: '/reading?cat=calendar' },
+  { src: '/hero-1.mp4', poster: '/hero-1-poster.jpg', kick: '正 · 정통 만세력', title: '한 줄의 사정률을 위해,<br><b>십 년</b>을 다듬었습니다', href: '/reading' },
 ];
 
 const DUR = 3800;

@@ -351,14 +351,18 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .bizhint{margin-top:12px;background:linear-gradient(135deg,#fbf1d9,#f4e6c2);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7a5c1e;font-weight:600;line-height:1.6}
 .bizhint b{color:var(--red)}
 .rhero .num.numtx{font-size:30px;line-height:1.25;margin:12px 0 4px}
-/* 홈 정통성 브랜드 밴드 */
-.home5 .trust{margin:16px 24px 0;border:1px solid #e4dcc8;border-radius:14px;background:linear-gradient(180deg,#fffef9,#f8f1e2);padding:15px 16px}
-.home5 .trust .trhd{display:flex;align-items:center;gap:12px}
-.home5 .trust .trseal{flex:none;width:38px;height:38px;border:1.5px solid var(--h-red);color:var(--h-red);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:20px;border-radius:2px}
-.home5 .trust .trtx b{display:block;font-family:var(--serif);font-weight:800;font-size:14.5px;color:#211c16;line-height:1.4;letter-spacing:-.01em}
-.home5 .trust .trtx em{display:block;font-style:normal;font-size:11.5px;color:#7f766a;font-weight:600;margin-top:4px;line-height:1.5}
-.home5 .trust .trchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid #ece3d0}
-.home5 .trust .trchips span{font-size:11px;font-weight:700;color:#7a5c1e;background:#f3e6c8;border:1px solid #e6d5aa;border-radius:999px;padding:4px 10px}
+/* 발주처 선택 카드 (목록에서 고른 발주처 표시 / 고르러 가기) */
+.baljusel{display:flex;align-items:center;gap:12px;background:#faf6ec;border:1px solid var(--gold);border-radius:13px;padding:14px 15px}
+.baljusel .bjinfo{flex:1;min-width:0}
+.baljusel .bjinfo b{display:block;font-family:var(--serif);font-weight:800;font-size:16px;color:#20242c}
+.baljusel .bjinfo span{display:block;font-size:12px;color:#8a7f68;font-weight:600;margin-top:3px}
+.baljusel .bjchg{flex:none;font-size:13px;font-weight:800;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;text-decoration:none}
+.baljupick{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,#2b2119,#181209);border:1px solid var(--gold2);border-radius:13px;padding:15px;text-decoration:none}
+.baljupick .bpseal{flex:none;width:40px;height:40px;border:1.5px solid var(--gold2);color:var(--gold2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:20px}
+.baljupick .bptx{flex:1;min-width:0}
+.baljupick .bptx b{display:block;font-family:var(--serif);font-weight:800;font-size:15px;color:#f6ecd7}
+.baljupick .bptx em{display:block;font-style:normal;font-size:11.5px;color:#c3b898;font-weight:500;margin-top:3px;line-height:1.5}
+.baljupick .bpgo{flex:none;font-size:13px;font-weight:800;color:var(--gold2)}
 .bizlist{margin-top:14px;display:flex;flex-direction:column;gap:8px}
 .bizrow{display:flex;gap:10px;align-items:flex-start;background:#f7f4ec;border:1px solid var(--line);border-radius:11px;padding:10px 12px}
 .bizrow .bztag{flex:0 0 auto;color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:1px}
