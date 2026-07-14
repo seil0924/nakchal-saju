@@ -733,6 +733,33 @@ function weekAheadHtml(c:Chart,y:number,m:number,d:number){
     `<p class="wanote">오늘부터 이레간, 대표님께 <b>유리한 날</b>과 <b>조심할 날</b>의 방향입니다. 각 날의 정밀 사정률·유리한 시간대·투찰 길일은 아래에서 이어집니다.</p>`;
 }
 const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
+// ── 대표 경영 스코어카드 (6대 축) — 진단 프레임워크 IP 시각화 ───────
+// 명식(십성·오행)에서 6축을 5점 척도로 환산. 재미로 보는 참고 지표.
+function axisScore(n:number){ return n<=0?1 : n===1?2 : n===2?3 : n===3?4 : 5; }
+function scoreAxes(c:Chart, seun?:any){
+  const sipA=sipsung(c);           // [비겁,식상,재성,관성,인성]
+  const self=sipA[0]+sipA[4];      // 신강도(자기 + 자기를 돕는 기운)
+  const tilt=seun&&typeof seun.tilt==='number'?seun.tilt:0;
+  return [
+    {key:'일간', hanja:'日', label:'그릇·지속력', score: self<=1?2:self<=2?3:self<=3?4:5 },
+    {key:'관성', hanja:'官', label:'권위·통솔',   score: axisScore(sipA[3]) },
+    {key:'재성', hanja:'財', label:'자금·조달',   score: axisScore(sipA[2]) },
+    {key:'식상', hanja:'食', label:'기획·실행',   score: axisScore(sipA[1]) },
+    {key:'인성', hanja:'印', label:'판단·방어',   score: axisScore(sipA[4]) },
+    {key:'운로', hanja:'運', label:'올해의 때',   score: Math.max(1,Math.min(5,tilt+3)) },
+  ];
+}
+function scorecardHtml(axes:any[], selYear?:number){
+  const hi=axes.reduce((a,b)=>b.score>a.score?b:a);
+  const lo=axes.reduce((a,b)=>b.score<a.score?b:a);
+  const dots=(n:number)=>Array.from({length:5},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('');
+  return `<div class="axiscard">`+
+    axes.map(a=>`<div class="axrow"><div class="axseal">${a.hanja}</div>`+
+      `<div class="axmid"><div class="axlb">${a.label}<span>${a.key}</span></div><div class="axdots">${dots(a.score)}</div></div>`+
+      `<div class="axsc">${a.score}<em>/5</em></div></div>`).join('')+
+    `</div>`+
+    `<p style="margin-top:11px">${selYear?selYear+'년 기준, ':''}대표님의 가장 두터운 축은 <b>${hi.label}(${hi.key})</b> — 여기서 승부가 납니다. 반대로 <b>${lo.label}(${lo.key})</b>는 약점이 아니라 <b>보완 설계 대상</b>입니다. 낮은 축을 사람·시스템으로 메우면 그릇이 완성됩니다.</p>`;
+}
 // [代 器鏡診符] 카테고리 섹션 빌더
 function secDaepyoIntro(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
@@ -748,6 +775,7 @@ function secDaepyoIntro(x:any):any[]{
   out.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me,c.dist,GAN[c.dGan])});
   // 診 · 대표 유형 진단 (4유형 + 4축 + 위기 약점) — 무료 훅
   out.push({mk:'診',tier:'free',t:`${selYear?selYear+'년 ':''}대표님은 어떤 유형의 대표인가 — ${TYPE4[me]}`,html:jinHtml(c,seunSelf,selYear)});
+  out.push({mk:'軸',tier:'free',t:`${selYear?selYear+'년 ':''}대표 경영 스코어카드 — 6대 축`,html:scorecardHtml(scoreAxes(c,seunSelf),selYear)});
   const ss=sinsal(c);
   if(ss.length){
     out.push({mk:'符',tier:'free',t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:

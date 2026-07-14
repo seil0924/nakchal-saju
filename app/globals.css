@@ -1362,3 +1362,17 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .bdate select{width:100%;-webkit-appearance:none;appearance:none;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238a8270' stroke-width='1.6'/></svg>") no-repeat right 12px center;border:1px solid var(--line);border-radius:12px;color:var(--ink);font-weight:600}
 .bdate select:invalid{color:#b7b1a3}
 @media(prefers-reduced-motion:reduce){.reveal{animation:none}}
+
+/* ── 대표 경영 스코어카드 (6대 축) ─────────────────────── */
+.axiscard{margin-top:10px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#fffdf8,#fbf7ee)}
+.axrow{display:flex;align-items:center;gap:11px;padding:10px 13px;border-bottom:1px solid #efe9dc}
+.axrow:last-child{border-bottom:0}
+.axseal{flex:none;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:15px;color:#f6e7c8;background:linear-gradient(135deg,var(--navy),var(--navy2));border:1px solid var(--gold2);border-radius:8px}
+.axmid{flex:1;min-width:0}
+.axlb{font-family:var(--serif);font-weight:800;color:var(--navy);font-size:13.5px;display:flex;align-items:baseline;gap:7px}
+.axlb span{font-family:var(--sans);font-weight:600;font-size:11px;color:var(--sub)}
+.axdots{display:flex;gap:5px;margin-top:6px}
+.axdots i{width:14px;height:6px;border-radius:3px;background:#e7e0d0}
+.axdots i.on{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.axsc{flex:none;font-family:var(--serif);font-weight:900;font-size:19px;color:var(--navy)}
+.axsc em{font-size:11px;font-weight:700;color:var(--sub);font-style:normal;margin-left:1px}
