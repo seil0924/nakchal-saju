@@ -351,6 +351,45 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .bizhint{margin-top:12px;background:linear-gradient(135deg,#fbf1d9,#f4e6c2);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7a5c1e;font-weight:600;line-height:1.6}
 .bizhint b{color:var(--red)}
 .rhero .num.numtx{font-size:30px;line-height:1.25;margin:12px 0 4px}
+/* 사이트 진입 인트로 — 인장 스탬프 */
+.intro{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 80% at 50% 40%,#241a10 0%,#160f07 55%,#0d0904 100%);animation:introbg .5s ease both}
+.intro.leave{animation:introout .55s cubic-bezier(.4,0,.2,1) forwards}
+.intro .introin{text-align:center;transform:translateZ(0)}
+.intro .introseal{display:inline-flex;line-height:0;filter:drop-shadow(0 12px 34px rgba(0,0,0,.55));animation:introstamp .7s cubic-bezier(.2,1.5,.4,1) both}
+.intro .introseal .introring{transform-box:fill-box;transform-origin:center;animation:introspin .9s cubic-bezier(.2,.7,.3,1) .15s both}
+.intro .introttl{margin-top:22px;font-family:var(--serif);font-weight:900;font-size:30px;letter-spacing:.06em;color:#f5ecd6;opacity:0;animation:introup .6s cubic-bezier(.2,.7,.3,1) .42s both}
+.intro .introsub{margin-top:9px;font-size:12px;letter-spacing:.24em;color:#c9a961;font-weight:600;opacity:0;animation:introup .6s cubic-bezier(.2,.7,.3,1) .58s both}
+.intro .introrule{width:0;height:1.5px;margin:20px auto 0;background:linear-gradient(90deg,transparent,var(--gold2),transparent);animation:introrule .7s ease .7s both}
+@keyframes introbg{from{opacity:0}to{opacity:1}}
+@keyframes introout{from{opacity:1}to{opacity:0;visibility:hidden}}
+@keyframes introstamp{0%{opacity:0;transform:scale(1.8) rotate(-8deg)}55%{opacity:1;transform:scale(.94) rotate(0)}100%{transform:scale(1)}}
+@keyframes introspin{from{stroke-dasharray:120;stroke-dashoffset:120;opacity:0}to{stroke-dashoffset:0;opacity:.9}}
+@keyframes introup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes introrule{from{width:0;opacity:0}to{width:64px;opacity:1}}
+@media (prefers-reduced-motion: reduce){.intro{display:none}}
+/* 스크롤 진입 리빌 */
+[data-reveal]{transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.reveal-on [data-reveal]:not(.in){opacity:0;transform:translateY(22px)}
+[data-reveal].in{opacity:1;transform:none}
+.home5 .list [data-reveal]:nth-child(2){transition-delay:.05s}
+.home5 .list [data-reveal]:nth-child(3){transition-delay:.10s}
+.home5 .list [data-reveal]:nth-child(4){transition-delay:.15s}
+.home5 .list [data-reveal]:nth-child(5){transition-delay:.20s}
+.home5 .list [data-reveal]:nth-child(6){transition-delay:.25s}
+@media (prefers-reduced-motion: reduce){.reveal-on [data-reveal]:not(.in){opacity:1;transform:none}}
+/* 리스트/카드 인터랙션 고급화 */
+.home5 .li5{transition:transform .18s cubic-bezier(.2,.7,.3,1),box-shadow .22s,border-color .22s,background .22s}
+.home5 .li5 .gz,.home5 .li5 .arw{transition:transform .2s cubic-bezier(.2,.7,.3,1)}
+@media(hover:hover){
+  .home5 .li5:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(30,28,20,.11);border-color:#e2d6bb}
+  .home5 .li5:hover .gz{transform:scale(1.1) rotate(-3deg)}
+  .home5 .li5:hover .arw{transform:translateX(4px)}
+  .baljupick:hover .bpgo,.baljusel .bjchg:hover{transform:translateX(3px)}
+  .perntog button:hover{border-color:var(--gold)}
+}
+.home5 .li5:active{transform:translateY(0) scale(.994)}
+.chook .chseal{animation:chpulse 3.4s ease-in-out infinite}
+@keyframes chpulse{0%,100%{box-shadow:0 0 0 0 rgba(227,194,122,0)}50%{box-shadow:0 0 0 4px rgba(227,194,122,.12)}}
 /* 카테고리 컨셉 훅 배너 (입력 화면 상단) */
 .chook{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,#2b2119,#181209);border:1px solid var(--gold2);border-radius:15px;padding:15px 16px;margin-bottom:13px;position:relative;overflow:hidden}
 .chook::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}

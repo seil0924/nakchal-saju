@@ -1,11 +1,15 @@
 import Link from 'next/link';
 import TodayChip from '@/app/_components/TodayChip';
 import HeroCarousel from '@/app/_components/HeroCarousel';
+import IntroSplash from '@/app/_components/IntroSplash';
+import ScrollReveal from '@/app/_components/ScrollReveal';
 
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
 export default function Home() {
   return (
     <div className="app home5">
+      <IntroSplash />
+      <ScrollReveal />
       {/* 마스트헤드 */}
       <div className="mast">
         <div className="mb">
@@ -31,7 +35,7 @@ export default function Home() {
       <HeroCarousel />
 
       {/* 닮은 CEO — 바이럴 입구 */}
-      <Link className="ceoband" href="/ceo">
+      <Link data-reveal className="ceoband" href="/ceo">
         <span className="cbseal">鏡</span>
         <span className="cbtx"><b>나와 닮은 세계적 CEO는?</b><em>잡스·록펠러·샤넬 … 거장 100인 × 내 사주 · 30초</em></span>
         <span className="cbgo">무료 →</span>
@@ -53,32 +57,32 @@ export default function Home() {
       {/* 해설 보기 — 카테고리별 개별 사주 (사주아이식) */}
       <div className="lab"><i /><span>사주별로 골라 보기</span></div>
       <div className="list">
-        <Link className="li5" href="/reading?cat=daepyo">
+        <Link data-reveal className="li5" href="/reading?cat=daepyo">
           <div className="gz" style={{ color: '#46a07d' }}>代</div>
           <div className="bd5"><div className="t">대표 사주 <small>代表 四柱</small></div><div className="d">대표님이 어떤 그릇인가 — 성정·승부 기질·재물·사람까지</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/reading?cat=sajeong">
+        <Link data-reveal className="li5" href="/reading?cat=sajeong">
           <div className="gz" style={{ color: '#3f8f80' }}>率</div>
           <div className="bd5"><div className="t">사정률 사주 <small>査定率</small></div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/balju">
+        <Link data-reveal className="li5" href="/balju">
           <div className="gz" style={{ color: '#46a07d' }}>宮</div>
           <div className="bd5"><div className="t">발주처 사주 <small>發注處 宮合</small></div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/reading?cat=gunghap">
+        <Link data-reveal className="li5" href="/reading?cat=gunghap">
           <div className="gz" style={{ color: '#d15c4a' }}>合</div>
           <div className="bd5"><div className="t">협정·궁합 사주 <small>同業 · 協定</small></div><div className="d">손잡기 전에, 깨질 궁합인지부터</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/reading?cat=daeun">
+        <Link data-reveal className="li5" href="/reading?cat=daeun">
           <div className="gz" style={{ color: '#cfa64e' }}>運</div>
           <div className="bd5"><div className="t">회사 대운 <small>會社 大運</small></div><div className="d">회사가 대표님을 밀어주는가 — 년도별 큰 흐름</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
-        <Link className="li5" href="/reading?cat=calendar">
+        <Link data-reveal className="li5" href="/reading?cat=calendar">
           <div className="gz" style={{ color: '#d15c4a' }}>曆</div>
           <div className="bd5"><div className="t">사업운 캘린더 <small>事業運 曆</small></div><div className="d">이달·연간 — 계약·채용·발표에 좋은 날, 조심할 날</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
@@ -86,14 +90,14 @@ export default function Home() {
       </div>
 
       {/* 통점 위로 랜딩 */}
-      <Link className="ceoband" href="/why" style={{ marginTop: 26 }}>
+      <Link data-reveal className="ceoband" href="/why" style={{ marginTop: 26 }}>
         <span className="cbseal" style={{ borderColor: '#c98b4a', color: '#e3c27a' }}>運</span>
         <span className="cbtx"><b>하한가·연패·큰 건… 대표님 잘못이 아닙니다</b><em>그 고민, 실력이 아니라 흐름의 문제일 수 있습니다</em></span>
         <span className="cbgo">→</span>
       </Link>
 
       {/* 복채(福債) — 콜로폰 위, 조용한 감사 한 줄 */}
-      <Link className="bokline" href="/bokchae">
+      <Link data-reveal className="bokline" href="/bokchae">
         <span className="blseal">福</span>
         <span className="bltx"><b>복채 청산</b><em>받은 풀이에, 스스로 놓고 가는 마음 — 정해진 값은 없습니다</em></span>
         <span className="blgo">›</span>
