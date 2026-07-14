@@ -1,11 +1,22 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { CLIENTS } from '@/lib/clients';
 import ScrollReveal from '@/app/_components/ScrollReveal';
+import PersonPicker from '@/app/_components/PersonPicker';
+import { type Person } from '@/lib/people';
 
 export default function Balju() {
   const [q, setQ] = useState('');
+  const router = useRouter();
+  const [pick, setPick] = useState<{ name: string; date: string } | null>(null); // 선택된 발주처
+  // 발주처 고른 뒤 '본인(대표)' 선택 → 리딩으로 (양쪽 프리필)
+  function onSelf(self: Person) {
+    if (!pick) return;
+    const qs = new URLSearchParams({ cat: 'balju', ck: 'client', cn: pick.name, cd: pick.date, b: self.date, n: self.name || '' });
+    router.push(`/reading?${qs.toString()}`);
+  }
   const list = CLIENTS.filter(c => c.name.includes(q) || c.cat.includes(q));
 
   return (
@@ -26,10 +37,10 @@ export default function Balju() {
       <div className="balist">
         {list.length === 0 && <div className="balnote">‘{q}’에 맞는 발주처가 아직 없습니다. 더 많은 발주처를 계속 추가하고 있어요.</div>}
         {list.map((c, i) => (
-          <Link key={i} data-reveal className="li" href={`/reading?cat=balju&ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`}>
+          <button key={i} data-reveal className="li" onClick={() => setPick({ name: c.name, date: c.date })}>
             <div className="t"><b>{c.name} {c.core && <span className="corelock">封 핵심</span>}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat}</span></div>
             <div className="r" style={c.core ? undefined : { background: '#eaf3ec', color: '#2f6b42' }}>{c.core ? '🔒 궁합 보기' : '무료 궁합'} ›</div>
-          </Link>
+          </button>
         ))}
       </div>
       <div className="balnote"><b>封</b> 표시된 <b>핵심 발주처</b>(LH·조달청·도로공사 등 큰 판)의 궁합은 유료입니다. 일반 발주처 궁합은 무료로 열립니다.<br />설립일은 공개 연혁 기준의 자체 구축 DB이며, 더 많은 발주처가 계속 추가됩니다.</div>
@@ -41,6 +52,7 @@ export default function Balju() {
         <Link href="/vault"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3" /></svg>보관함</Link>
         <Link href="/more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>더보기</Link>
       </div>
+      <PersonPicker open={!!pick} kind="self" title="궁합 볼 대표를 고르세요" onPick={onSelf} onClose={() => setPick(null)} />
     </div>
   );
 }

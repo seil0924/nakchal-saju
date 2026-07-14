@@ -1412,3 +1412,49 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
   .rephd::after{background:#b58a2f !important}
   .sec.locked::after{display:none !important}
 }
+
+/* ── 통합 사람/업체 선택 바텀시트 (PersonPicker · 먹빛·금박) ─── */
+.pp-ov{position:fixed;inset:0;z-index:120;background:rgba(20,17,12,.55);display:flex;align-items:flex-end;justify-content:center;animation:ppfade .18s ease}
+@keyframes ppfade{from{opacity:0}to{opacity:1}}
+.pp-sheet{width:100%;max-width:460px;background:#fbf7ef;border-radius:20px 20px 0 0;overflow:hidden;box-shadow:0 -10px 40px rgba(20,17,12,.35);animation:ppup .24s cubic-bezier(.2,.8,.2,1)}
+@keyframes ppup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.pp-hd{display:flex;align-items:center;gap:10px;padding:15px 16px;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#f6ecd4}
+.pp-hd b{font-family:var(--serif);font-weight:800;font-size:16px;flex:1}
+.pp-seal{width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:16px;color:#f6e7c8;border:1.4px solid var(--gold2);border-radius:8px}
+.pp-x{background:transparent;border:0;color:#e8dcc0;font-size:16px;cursor:pointer;padding:4px 6px}
+.pp-body{padding:14px 16px 22px;max-height:66vh;overflow-y:auto}
+.pp-add{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:#fff;border:1.5px dashed var(--gold);color:var(--navy);border-radius:13px;font-family:var(--serif);font-weight:800;font-size:14.5px;cursor:pointer}
+.pp-add:active{background:#fbf3e2}
+.pp-plus{color:var(--red);font-weight:900;font-size:18px;line-height:1}
+.pp-empty{text-align:center;color:#a99f88;font-size:13px;padding:22px 0 6px;line-height:1.7}
+.pp-list{margin-top:12px;display:flex;flex-direction:column;gap:9px}
+.pp-row{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:13px 40px 13px 14px;background:#fff;border:1px solid var(--line);border-radius:13px;cursor:pointer;text-align:left}
+.pp-row:active{border-color:var(--gold);background:#fffdf7}
+.pp-nm{font-family:var(--serif);font-weight:800;color:var(--navy);font-size:15px}
+.pp-tags{display:flex;flex-wrap:wrap;gap:6px}
+.pp-tags em{font-style:normal;font-size:11px;font-weight:700;color:#8a6a2a;background:#f3ead6;padding:2px 8px;border-radius:999px}
+.pp-del{position:absolute;top:50%;right:12px;transform:translateY(-50%);color:#c8bfa8;font-size:13px;padding:6px}
+.pp-del:active{color:var(--red)}
+.pp-l{display:block;font-size:12px;color:var(--sub);font-weight:700;margin:13px 0 6px}
+.pp-opt{color:#b3ab97;font-weight:500}
+.pp-in{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;font-size:15px;background:#fff}
+.pp-seg{display:flex;gap:8px}
+.pp-seg button{flex:1;padding:11px;border:1px solid var(--line);background:#fff;border-radius:11px;font-weight:700;font-size:14px;color:var(--ink);cursor:pointer}
+.pp-seg button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pp-btns{display:flex;gap:9px;margin-top:18px}
+.pp-btns button{flex:1;padding:13px;border-radius:12px;border:1px solid var(--line);background:#fff;font-family:var(--serif);font-weight:800;font-size:14px;color:var(--sub);cursor:pointer}
+.pp-btns .pp-ok{flex:1.6;background:linear-gradient(135deg,var(--red),#7f1a17);color:#fff;border-color:var(--gold2)}
+.pp-btns .pp-ok:disabled{opacity:.5}
+
+/* ── 사람/업체 선택 트리거 버튼 (reading·balju 공용) ──────── */
+.pkgrid{display:flex;flex-direction:column;gap:9px}
+.pickbtn{width:100%;display:flex;align-items:center;gap:11px;padding:13px;background:#fff;border:1px solid var(--line);border-radius:13px;cursor:pointer;text-align:left;margin-top:2px}
+.pickbtn:active{border-color:var(--gold);background:#fffdf7}
+.pkseal{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:16px;color:#f6e7c8;background:linear-gradient(135deg,var(--navy),var(--navy2));border:1px solid var(--gold2);border-radius:9px}
+.pktx{flex:1;min-width:0}
+.pktx b{display:block;font-family:var(--serif);font-weight:800;color:var(--navy);font-size:14.5px;line-height:1.3}
+.pktx em{display:block;font-style:normal;font-size:11.5px;color:var(--sub);margin-top:2px}
+.pkgo{flex:none;color:var(--gold);font-size:20px;font-weight:700}
+
+/* balju 리스트 항목이 button일 때 */
+button.li{font:inherit;text-align:left;cursor:pointer}

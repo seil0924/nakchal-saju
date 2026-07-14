@@ -9,6 +9,8 @@ import { CAT_INFO, isCatKey, productOfMk, catUI } from '@/lib/report-categories'
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
+import PersonPicker from '@/app/_components/PersonPicker';
+import { type Person, type PersonKind } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
 
 // 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
@@ -83,6 +85,7 @@ export default function Reading() {
   const [sticky, setSticky] = useState(false); // 스크롤 스티키 CTA
   const [cat, setCat] = useState('');           // 카테고리(대표·사정률·발주처·궁합·대운)
   const [bp, setBp] = useState({ y: 0, m: 0, d: 0 }); // 생년월일 3분할 선택 누적
+  const [picker, setPicker] = useState<{ open: boolean; kind: PersonKind }>({ open: false, kind: 'self' });
   const catInfo = isCatKey(cat) ? CAT_INFO[cat] : null;
   const ui = catUI(cat);   // 카테고리별 UI 스키마(단일 소스)
   // 카테고리 개별 결제가 (카테고리 모드면 단일가, 아니면 sku 기준가)
@@ -165,6 +168,17 @@ export default function Reading() {
   }
   function loadSelf(p: any) { setF(s => ({ ...s, name: p.name || '', birth: p.birth, gender: p.gender || 'M', cal: p.cal || 'solar', leap: !!p.leap, timeMode: p.timeMode || 'N', time: p.time || '09:20', sijin: p.sijin ?? 3 })); const [yy, mm, dd] = String(p.birth).split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
   function loadLegalProfile(p: any) { setF(s => ({ ...s, company: p.company || '', legal: p.legal })); }
+  // 통합 사람/업체 시트에서 선택 → 해당 슬롯 채우기
+  function handlePick(pp: Person) {
+    if (pp.kind === 'self') {
+      setF(s => ({ ...s, name: pp.name || '', birth: pp.date, gender: pp.gender || 'M', cal: pp.cal || 'solar', leap: !!pp.leap, timeMode: (pp.timeMode as any) || (pp.time ? 'Y' : 'N'), time: pp.time || '09:20' }));
+      const [yy, mm, dd] = String(pp.date).split('-').map(Number); setBp({ y: yy, m: mm, d: dd });
+    } else if (pp.kind === 'legal') {
+      setF(s => ({ ...s, company: pp.name || '', legal: pp.date }));
+    } else {
+      setTargets(prev => [...prev.filter(x => x.kind !== pp.kind), { kind: pp.kind as RelKind, name: pp.name || kindLabel(pp.kind as RelKind), date: pp.date }]);
+    }
+  }
   const yr2 = (d: string) => (d || '').slice(2);
 
   const effTime = f.timeMode === 'Y' ? f.time : f.timeMode === 'grid' ? SIJIN_MID[f.sijin] : null;
@@ -383,11 +397,11 @@ export default function Reading() {
         {/* 2. 대표님 정보 */}
         <div className="card reveal" style={{ display: (ui.selfImmediate || f.bidType || f.birth) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />대표님 정보</span></div>
-          {savedSelf.length > 0 && (
-            <div className="savedrow"><span className="srl">저장된 대표님 <span className="opt">(눌러서 불러오기)</span></span>
-              <div className="srchips">{savedSelf.map((p, i) => <button key={i} type="button" className="srchip" onClick={() => loadSelf(p)}>{p.name || '대표'} · {yr2(p.birth)}</button>)}</div>
-            </div>
-          )}
+          <button type="button" className="pickbtn" onClick={() => setPicker({ open: true, kind: 'self' })}>
+            <span className="pkseal">代</span>
+            <span className="pktx"><b>{f.birth ? `${f.name || '대표'} · ${yr2(f.birth)}` : '저장된 대표 선택 · 새로 추가'}</b><em>사람 목록에서 고르거나 새로 추가</em></span>
+            <span className="pkgo">›</span>
+          </button>
           <label>성함 <span className="opt">(선택)</span></label>
           <input value={f.name} maxLength={12} placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
           <label>달력</label>
@@ -453,11 +467,11 @@ export default function Reading() {
         {/* 3. 회사 정보 */}
         <div id="cocard" className="card reveal" style={{ display: (f.birth && ui.legal !== 'hidden') ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />회사 정보</span><span className={'chip ' + (ui.legal === 'required' ? 'paid' : 'free')}>{ui.legal === 'required' ? '필수' : '회사 사주'}</span></div>
-          {savedLegal.length > 0 && (
-            <div className="savedrow"><span className="srl">저장된 회사 <span className="opt">(눌러서 불러오기)</span></span>
-              <div className="srchips">{savedLegal.map((p, i) => <button key={i} type="button" className="srchip" onClick={() => loadLegalProfile(p)}>{p.company || '회사'} · {yr2(p.legal)}</button>)}</div>
-            </div>
-          )}
+          <button type="button" className="pickbtn" onClick={() => setPicker({ open: true, kind: 'legal' })}>
+            <span className="pkseal">法</span>
+            <span className="pktx"><b>{f.legal ? `${f.company || '회사'} · ${yr2(f.legal)}` : '저장된 법인 선택 · 새로 추가'}</b><em>업체 목록에서 고르거나 새로 추가</em></span>
+            <span className="pkgo">›</span>
+          </button>
           <label>회사명 <span className="opt">(선택)</span></label>
           <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
           <label>법인 설립일 {ui.legal === 'required' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 사정률</span>}</label>
@@ -488,53 +502,15 @@ export default function Reading() {
         })()}
         <div className="card reveal" style={{ display: (f.birth && ui.relation.length > 0) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />관계·궁합</span><span className="opt">선택</span></div>
-          <div className="chips">
-            {REL_KINDS.map(k => <button key={k.key} className={'chip2' + (addKind === k.key ? ' on' : '')} onClick={() => setAddKind(k.key)}>{k.label}</button>)}
+          <div className="pkgrid">
+            {REL_KINDS.filter(k => ui.relation.includes(k.key as any)).map(k => (
+              <button key={k.key} type="button" className="pickbtn" onClick={() => setPicker({ open: true, kind: k.key })}>
+                <span className="pkseal">{k.key === 'client' ? '宮' : k.key === 'partner' ? '同' : '協'}</span>
+                <span className="pktx"><b>{k.label} 선택 · 추가</b><em>{k.sub} 기준 · 목록에서 고르거나 새로 추가</em></span>
+                <span className="pkgo">›</span>
+              </button>
+            ))}
           </div>
-          {saved.filter(t => t.kind === addKind).length > 0 && (
-            <div>
-              <div className="qh" style={{ fontSize: 12 }}>저장된 대상 <span className="opt">(눌러서 불러오기)</span></div>
-              <div className="chips">
-                {saved.filter(t => t.kind === addKind).map((t, i) => (
-                  <button key={i} className="chip2" onClick={() => quickFill(t)}>{t.name} · {t.date.slice(2)}</button>
-                ))}
-              </div>
-            </div>
-          )}
-          <label style={{ marginTop: 12 }}>{kindLabel(addKind)} 대상 이름 <span className="opt">(선택)</span></label>
-          {addKind === 'client' ? (() => {
-            const q = addName.trim();
-            const hits = CLIENTS.filter(c => !q || c.name.includes(q) || c.cat.includes(q));
-            return (
-              <div className="cbx">
-                <input value={addName} maxLength={20} placeholder="발주처 검색 — 예) 도로공사, LH"
-                  onChange={e => { setAddName(e.target.value); setCbOpen(true); }}
-                  onFocus={() => setCbOpen(true)}
-                  onBlur={() => setTimeout(() => setCbOpen(false), 150)}
-                  onKeyDown={e => { if (e.key === 'Escape') setCbOpen(false); }} />
-                <span className={'cbxi' + (cbOpen ? ' up' : '')} onMouseDown={e => { e.preventDefault(); setCbOpen(v => !v); }}>▾</span>
-                {cbOpen && (
-                  <div className="cbxdd">
-                    {hits.map((c, i) => (
-                      <button key={i} type="button" className="cbxop"
-                        onMouseDown={e => e.preventDefault()}
-                        onClick={() => { setAddName(c.name); setAddDate(c.date); setCbOpen(false); }}>
-                        <b>{c.name} {c.core && <span className="corelock">封</span>}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat} · {c.core ? '핵심 · 유료 궁합' : '무료 궁합'}</span>
-                      </button>
-                    ))}
-                    {hits.length > 0
-                      ? <div className="cbxhint">고르면 설립일이 자동으로 채워집니다 · 목록에 없으면 그대로 직접 입력</div>
-                      : <div className="cbxnone">‘{q}’ — 아직 DB에 없는 발주처입니다. 이대로 쓰시고 아래 설립일만 직접 넣어주세요.</div>}
-                  </div>
-                )}
-              </div>
-            );
-          })() : (
-            <input value={addName} maxLength={20} placeholder={REL_KINDS.find(k => k.key === addKind)!.ph} onChange={e => setAddName(e.target.value)} />
-          )}
-          <label>{REL_KINDS.find(k => k.key === addKind)!.sub}</label>
-          <DateSelect value={addDate} onChange={v => setAddDate(v)} yearFrom={1930} yearTo={2026} />
-          <button className="go" style={{ marginTop: 12, padding: 12, fontSize: 14, background: 'linear-gradient(135deg,#2b2119,#181209)' }} onClick={addTarget}>+ {kindLabel(addKind)} 추가</button>
 
           {targets.length > 0 && (
             <div style={{ marginTop: 12 }}>
@@ -649,6 +625,8 @@ export default function Reading() {
           </div>
         )}
       </div>
+
+      <PersonPicker open={picker.open} kind={picker.kind} onPick={handlePick} onClose={() => setPicker(pp => ({ ...pp, open: false }))} />
 
       {/* 로딩 리추얼 */}
       <RiteProgress open={prog} title="만세력을 폅니다" steps={RITE_STEPS} stepMs={410} />
