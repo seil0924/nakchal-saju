@@ -81,7 +81,7 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
         <div className="crule" />
         <div className="colo">士</div>
         명리 기반 참고 정보입니다 · 투찰금액 산정 근거가 아닙니다<br />
-        <Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보처리방침</Link>
+        <Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보처리방침</Link> · <Link href="/refund">청약철회·환불</Link>
       </div>
     </div>
   );

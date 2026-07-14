@@ -702,7 +702,7 @@ export default function Reading() {
             <div className="pay">신용/체크카드</div>
             <label className="consent">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
-              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있으며, 관련 법령이 적용됩니다.)</span>
+              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
             </label>
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(unlockPrice)} 결제하기`}</button>

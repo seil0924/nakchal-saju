@@ -171,7 +171,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               </>
             )}
             <div className="pay kakao on2">카카오페이</div><div className="pay toss">토스페이</div><div className="pay">신용/체크카드</div>
-            <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한 가능)</span></label>
+            <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(catInfo ? catInfo.price : (sku === 'taekil' ? PRICE_TAEKIL : PRICE_FULL))} 결제하기`}</button>
             <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
