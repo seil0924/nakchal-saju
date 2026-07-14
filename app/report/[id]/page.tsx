@@ -122,7 +122,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
               </>
             )}
-            {level >= 1 && res.gauge?.precise && <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b></div>}
+            {level >= 1 && res.gauge?.precise && res.sections?.some((s: any) => s.mk === '率') && <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b></div>}
             {/* 바이럴 루프 — 공유받은 사람의 입구 */}
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 14 }}>
               <div className="bi">鏡</div>

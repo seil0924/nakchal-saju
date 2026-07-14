@@ -609,7 +609,7 @@ export default function Reading() {
                 ))}
               </div>
             ) : null)}
-            {level >= 1 && res.gauge.precise && (
+            {level >= 1 && res.gauge.precise && (!cat || cat === 'sajeong') && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
             )}
             <button className="sharebtn no-print" onClick={share}>결과 이미지로 공유 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>

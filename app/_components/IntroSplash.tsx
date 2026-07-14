@@ -4,7 +4,15 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 // 사이트 진입 인트로 — 士 인장이 찍히고 상호가 드러난 뒤 사라진다. 세션당 1회. 전체 화면(레이아웃 최상단에서 렌더).
 // 인트로 영상이 준비되면 아래 INTRO_VIDEO 를 '/intro.mp4' 로 바꾸면 영상이 탁 재생됩니다.
 const INTRO_VIDEO: string | null = null;
-const DURATION = INTRO_VIDEO ? 3400 : 2200; // 영상이면 좀 더 길게
+const DURATION = INTRO_VIDEO ? 3400 : 2600; // 영상이면 좀 더 길게
+
+// 금빛 입자 (고정 좌표 — SSR 하이드레이션 일치)
+const PARTICLES = [
+  { x: 12, d: 0.2, u: 3.2, s: 4 }, { x: 26, d: 0.9, u: 3.8, s: 3 }, { x: 38, d: 0.4, u: 3.0, s: 5 },
+  { x: 47, d: 1.2, u: 4.0, s: 3 }, { x: 55, d: 0.1, u: 3.4, s: 4 }, { x: 63, d: 0.7, u: 3.9, s: 5 },
+  { x: 72, d: 1.0, u: 3.1, s: 3 }, { x: 84, d: 0.35, u: 3.7, s: 4 }, { x: 91, d: 0.8, u: 4.1, s: 3 },
+  { x: 19, d: 1.4, u: 3.5, s: 3 }, { x: 68, d: 1.5, u: 3.3, s: 4 }, { x: 33, d: 1.7, u: 3.6, s: 3 },
+];
 
 const useIso = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -37,6 +45,14 @@ export default function IntroSplash() {
           <source src={INTRO_VIDEO} type="video/mp4" />
         </video>
       )}
+      <div className="introfx">
+        <div className="introrays" />
+        <div className="introglow" />
+        <div className="introflash" />
+        {PARTICLES.map((p, i) => (
+          <span key={i} className="introp" style={{ left: p.x + '%', animationDelay: p.d + 's', animationDuration: p.u + 's', width: p.s + 'px', height: p.s + 'px' }} />
+        ))}
+      </div>
       <div className="introin">
         <span className="introseal">
           <svg viewBox="0 0 40 40" width="88" height="88">

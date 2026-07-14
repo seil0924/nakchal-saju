@@ -350,6 +350,25 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .bizweek .bwm.mv{background:#e6f2ec;color:#2f7d5b}.bizweek .bwm.av{background:#f7e4e0;color:#b5402f}
 .bizhint{margin-top:12px;background:linear-gradient(135deg,#fbf1d9,#f4e6c2);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7a5c1e;font-weight:600;line-height:1.6}
 .bizhint b{color:var(--red)}
+/* 롤링 캘린더 — 창밖 날짜/월표기/오늘 */
+.bizcal .bcd.out{background:transparent;border:1px dashed #ece7db;opacity:.4}
+.bizcal .bcd.out .bcn{color:#b3ab98}
+.bizcal .bcd.now{background:#fbefd7;border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.bizcal .bcmo{display:block;font-style:normal;font-size:8px;font-weight:800;color:var(--red);letter-spacing:-.02em}
+/* 유료 상세 — 핵심 3일 / 섹션 / 주차 */
+.bzsec{margin-top:14px}
+.bzsh{font-family:var(--serif);font-weight:800;font-size:13.5px;color:#7a5c1e;margin-bottom:9px}
+.bztop{display:flex;align-items:center;gap:11px;background:#faf6ec;border:1px solid #e6d5aa;border-radius:12px;padding:11px 13px;margin-bottom:8px}
+.bztop .bztn{flex:none;width:22px;height:22px;border-radius:50%;background:var(--red);color:#f6ead2;font-family:var(--serif);font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center}
+.bztop .bztseal{flex:none;min-width:40px;text-align:center;color:#fff;font-weight:800;font-size:12px;border-radius:8px;padding:6px 8px}
+.bztop .bztbd{min-width:0}
+.bztop .bztbd b{display:block;font-family:var(--serif);font-weight:800;font-size:14.5px;color:#20242c}
+.bztop .bztbd em{display:block;font-style:normal;font-size:12px;color:#7f766a;font-weight:500;margin-top:2px;line-height:1.5}
+.bzwks{display:flex;flex-direction:column;gap:7px}
+.bzwk{display:flex;align-items:center;gap:11px;background:#f7f4ec;border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+.bzwk .bzwkk{flex:none;font-family:var(--serif);font-weight:900;font-size:13px;color:var(--red);min-width:30px}
+.bzwk .bzwkbd b{display:block;font-weight:800;font-size:13px;color:#20242c}
+.bzwk .bzwkbd em{display:block;font-style:normal;font-size:11.5px;color:#8a7f68;font-weight:500;margin-top:2px;line-height:1.5}
 .rhero .num.numtx{font-size:30px;line-height:1.25;margin:12px 0 4px}
 /* 사이트 진입 인트로 — 인장 스탬프 */
 .intro{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 80% at 50% 40%,#241a10 0%,#160f07 55%,#0d0904 100%);animation:introbg .5s ease both}
@@ -359,7 +378,19 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .intro .introin{position:relative;z-index:2;text-align:center;transform:translateZ(0)}
 .intro .introseal{display:inline-flex;line-height:0;filter:drop-shadow(0 12px 34px rgba(0,0,0,.55));animation:introstamp .7s cubic-bezier(.2,1.5,.4,1) both}
 .intro .introseal .introring{transform-box:fill-box;transform-origin:center;animation:introspin .9s cubic-bezier(.2,.7,.3,1) .15s both}
-.intro .introttl{margin-top:22px;font-family:var(--serif);font-weight:900;font-size:30px;letter-spacing:.06em;color:#f5ecd6;opacity:0;animation:introup .6s cubic-bezier(.2,.7,.3,1) .42s both}
+/* 휘황찬란 — 금빛 광선·블룸·입자·플래시 */
+.intro .introfx{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.intro .introrays{position:absolute;left:50%;top:41%;width:1100px;height:1100px;transform:translate(-50%,-50%);background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(230,198,128,0) 0deg,rgba(230,198,128,.10) 5deg,rgba(230,198,128,0) 11deg);mix-blend-mode:screen;opacity:0;animation:rayspin 14s linear infinite,rayfade 1s ease .25s forwards}
+.intro .introglow{position:absolute;left:50%;top:41%;width:460px;height:460px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(230,198,128,.30),rgba(230,198,128,.06) 45%,transparent 66%);animation:glowpulse 2.2s ease-in-out infinite}
+.intro .introflash{position:absolute;left:50%;top:41%;width:340px;height:340px;transform:translate(-50%,-50%) scale(.4);border-radius:50%;background:radial-gradient(circle,rgba(255,244,214,.9),rgba(255,244,214,0) 62%);opacity:0;animation:introflash .7s ease-out .1s}
+.intro .introp{position:absolute;bottom:26%;border-radius:50%;background:radial-gradient(circle,#f6e4ac,rgba(246,228,172,0) 70%);opacity:0;animation-name:pfloat;animation-timing-function:ease-in;animation-iteration-count:infinite}
+@keyframes rayspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes rayfade{to{opacity:.5}}
+@keyframes glowpulse{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.96)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+@keyframes introflash{0%{opacity:0;transform:translate(-50%,-50%) scale(.35)}30%{opacity:.95}100%{opacity:0;transform:translate(-50%,-50%) scale(2.1)}}
+@keyframes pfloat{0%{transform:translateY(0) scale(.5);opacity:0}22%{opacity:.95}100%{transform:translateY(-260px) scale(1);opacity:0}}
+.intro .introttl{position:relative;margin-top:22px;font-family:var(--serif);font-weight:900;font-size:30px;letter-spacing:.06em;opacity:0;animation:introup .6s cubic-bezier(.2,.7,.3,1) .42s both;background:linear-gradient(100deg,#e8d09a 0%,#fff6df 42%,#f0d89f 50%,#c9a24e 60%,#e8d09a 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:introup .6s cubic-bezier(.2,.7,.3,1) .42s both,titlesheen 2.6s ease .7s infinite}
+@keyframes titlesheen{0%{background-position:180% 0}100%{background-position:-80% 0}}
 .intro .introsub{margin-top:9px;font-size:12px;letter-spacing:.24em;color:#c9a961;font-weight:600;opacity:0;animation:introup .6s cubic-bezier(.2,.7,.3,1) .58s both}
 .intro .introrule{width:0;height:1.5px;margin:20px auto 0;background:linear-gradient(90deg,transparent,var(--gold2),transparent);animation:introrule .7s ease .7s both}
 @keyframes introbg{from{opacity:0}to{opacity:1}}
