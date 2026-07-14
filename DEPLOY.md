@@ -33,9 +33,8 @@ git push -u origin main
 2. **Environment Variables**에 `.env.example`의 값들을 채워 넣기:
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
    - `NEXT_PUBLIC_PORTONE_STORE_ID`, `NEXT_PUBLIC_PORTONE_CHANNEL_KEY`, `PORTONE_API_SECRET`, `PORTONE_WEBHOOK_SECRET`
-   - (선택) `DATA_GO_KR_KEY`
    - ⚠️ `SERVICE_ROLE_KEY`·`API_SECRET`·`WEBHOOK_SECRET`은 절대 `NEXT_PUBLIC_` 접두사 금지.
-3. Deploy. `vercel.json`의 크론이 매일 09:00 자동 채점을 돌립니다.
+3. Deploy. (Next.js 자동 감지 — 별도 크론 없음.)
 
 ## 5. 동작 방식 (환경변수에 따라 자동 전환)
 
