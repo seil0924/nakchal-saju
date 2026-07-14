@@ -26,7 +26,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   balju: {
     name: '발주처 사주', hanja: '宮', oh: 'mok',
     mks: ['處'],
-    price: 69000, needs: ['client'],
+    price: 29000, needs: ['client'],
     kicker: '發注處 宮合', lead: '그 발주처, 나와 맞는 판인가 — 설립일 사주로 상성을 봅니다.',
   },
   gunghap: {
