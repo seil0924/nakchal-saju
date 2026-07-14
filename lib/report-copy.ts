@@ -361,6 +361,19 @@ function legalReport(meChart,legalChart){
      `법인에 부족한 <b>${EL[weak]}</b>는 상호·로고 색(<b>${COLOR_EL[weak]}</b>), 사무실 방위(<b>${DIR_EL[weak]}</b>), 행운 숫자(<b>${NUM_EL[weak]}</b>)로 채우면 회사의 기운이 균형을 찾습니다. 새 지점·법인을 낼 때도 이 방위를 참고하십시오.`]};
 }
 function argmax(a){let x=0;for(let i=1;i<a.length;i++)if(a[i]>a[x])x=i;return x;}
+// 일지(日支) 12지지별 성정 — 오행 5분류를 넘어 개인화 한 스푼
+const DZHI_TRAIT=['머리 회전이 빠르고 물처럼 상황에 맞춰 흐르되 속을 잘 안 내보이는 분',
+ '느려 보여도 한번 물면 끝을 보는 우직한 뚝심',
+ '앞장서 판을 여는 개척형 — 가만히 못 있고 먼저 움직이는 분',
+ '부드럽게 파고들어 끝내 사람을 얻는 유연함',
+ '큰 판을 통째로 품는 그릇 — 야심과 포용이 함께 큰 분',
+ '겉은 침착해도 속으로 뜨겁게 계산하는 전략형',
+ '화통하게 드러내고 정면으로 밀어붙이는 추진력',
+ '참고 쌓으며 제 때를 기다릴 줄 아는 인내형',
+ '재빠르고 수완 좋아 남보다 먼저 기회를 채가는 순발력',
+ '매섭게 가르고 다듬는 결단과 정밀함',
+ '의리와 원칙을 끝까지 지키는 우직한 관리자형',
+ '넓게 품고 멀리 내다보는 포용·직관형'];
 function gaugeHtml(s,worryTxt,unlocked){
   const up=s.tilt>0;
   const clamp=(v)=>Math.max(0,Math.min(100,v));
@@ -384,7 +397,7 @@ function gaugeHtml(s,worryTxt,unlocked){
       `<span class="gpk">${unlocked?'소수점 정밀값':'🔒 소수점 정밀값'}</span>`+
       (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">이달 사정률(39,000원)에서 열립니다</span>`)+
     `</div></div>`+
-    `<p class="gbridge">${s.bridge}</p>${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
+    `<p class="gbridge">${s.bridge}</p>`+`<p class="gnote">※ 명식과 오늘 일진(日辰)의 상성으로 낸 <b>택일·의사결정 참고 지표</b>입니다 — 실제 낙찰가나 당락을 예측하지 않습니다.</p>`+`${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
 }
 function distHtml(c){const tot=c.dist.reduce((a,b)=>a+b,0);
   return `<div class="dist">${EL.map((e,i)=>`<div class="d"><div class="c" style="color:${EL_HEX[i]}">${e}</div><div class="bar"><div class="fill" style="height:${Math.max(8,Math.round(c.dist[i]/tot*100))}%;background:${EL_HEX[i]}"></div></div><div class="n">${c.dist[i]}</div></div>`).join('')}</div>`;}
@@ -794,6 +807,7 @@ function secDaepyoIntro(x:any):any[]{
   out.push({mk:'器',tier:'free',t:T1[me],html:P([
     `대표님은 <b>${NAT[me]}</b> 그릇입니다. ${DMc[me]}`,
     `${DM_D1[me]}`,
+    `무엇보다 일지(日支) <b>${ZHI[c.dZhi]}</b>가 말해주듯, 대표님은 ${DZHI_TRAIT[c.dZhi]}입니다.`,
     `이는 일간 <b>${gan}(${EL[me]})</b>에 <b>${SIP[dom]}</b>의 기운이 두텁게 실려, ${SIP_MEAN[dom]} 사주이기 때문입니다. 일지(日支) <b>${ZHI[c.dZhi]}</b>가 그 밑을 받쳐, 겉으로 드러나는 모습보다 속이 더 단단한 구조입니다.`,
     `전체로 보면 <b>${EL[strong]}</b>의 기운이 무기이고, ${zero?`<b>${EL[weak]}</b>의 기운이 통째로 비어`:`<b>${EL[weak]}</b>의 기운이 옅어`} 그 자리가 평생의 숙제였습니다.`,
     `${DMs[me]}`,

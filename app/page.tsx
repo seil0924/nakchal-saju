@@ -2,6 +2,7 @@ import Link from 'next/link';
 import TodayChip from '@/app/_components/TodayChip';
 import HeroCarousel from '@/app/_components/HeroCarousel';
 import ScrollReveal from '@/app/_components/ScrollReveal';
+import TrustStrip from '@/app/_components/TrustStrip';
 
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
 export default function Home() {
@@ -100,6 +101,8 @@ export default function Home() {
         <span className="bltx"><b>복채 청산</b><em>받은 풀이에, 스스로 놓고 가는 마음 — 정해진 값은 없습니다</em></span>
         <span className="blgo">›</span>
       </Link>
+
+      <div data-reveal style={{ margin: '0 0 4px' }}><TrustStrip /></div>
 
       {/* 콜로폰 */}
       <div className="foot">

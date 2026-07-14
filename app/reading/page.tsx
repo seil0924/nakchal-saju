@@ -12,6 +12,7 @@ import DateSelect from '@/app/_components/DateSelect';
 import PersonPicker from '@/app/_components/PersonPicker';
 import { type Person, type PersonKind } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
+import TrustStrip from '@/app/_components/TrustStrip';
 
 // 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
 const RITE_STEPS = [
@@ -622,6 +623,7 @@ export default function Reading() {
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={exportIcs}>
               이달 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
             </button>
+            <TrustStrip />
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
             </div>
           </div>
