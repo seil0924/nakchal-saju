@@ -38,7 +38,6 @@ export default function Login() {
           </svg>
         </div>
         <h1 className="logintitle">낙찰사주</h1>
-        <p className="loginsub">대표님의 사주와 회사 정보를 <b>계정에 저장</b>하고,<br />기기가 바뀌어도 리포트를 이어 보세요.</p>
 
         <div className="loginbtns">
           <button className="lgbtn kakao" onClick={() => oauth('kakao')} disabled={!!busy}>
