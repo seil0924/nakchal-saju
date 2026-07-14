@@ -14,7 +14,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   daepyo: {
     name: '대표 사주', hanja: '代', oh: 'mok',
     mks: ['核', '器', '鏡', '診', '軸', '符', '五', '決', '人', '財', '方', '士'],
-    price: 190000, needs: [],
+    price: 59000, needs: [],
     kicker: '代表 四柱', lead: '대표님이 어떤 그릇으로 태어났는지 — 성정·승부 기질·재물·사람까지 낱낱이.',
   },
   sajeong: {
@@ -44,13 +44,13 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   calendar: {
     name: '사업운 캘린더 · 이달', hanja: '曆', oh: 'hwa',
     mks: ['曆', '曆詳'],
-    price: 39000, needs: [],
+    price: 20000, needs: [],
     kicker: '事業運 月曆', lead: '오늘부터 앞으로 한 달 — 계약·채용·투자·발표에 좋은 날과, 갈등·지출을 조심할 날을 달력에 짚어 드립니다.',
   },
   calendar_year: {
     name: '사업운 캘린더 · 연간', hanja: '曆', oh: 'hwa',
     mks: ['曆年'],
-    price: 129000, needs: [],
+    price: 100000, needs: [],
     kicker: '事業運 年曆', lead: '올 한 해 12개월 — 밀어주는 달과 조여지는 달을 미리 갈라, 큰 계약·발표·정비의 때를 한눈에 잡아 드립니다.',
   },
 };
