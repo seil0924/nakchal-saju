@@ -733,16 +733,11 @@ function weekAheadHtml(c:Chart,y:number,m:number,d:number){
     `<p class="wanote">오늘부터 이레간, 대표님께 <b>유리한 날</b>과 <b>조심할 날</b>의 방향입니다. 각 날의 정밀 사정률·유리한 시간대·투찰 길일은 아래에서 이어집니다.</p>`;
 }
 const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
-function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear?,seunSelf?,clientCore?){
-  names=names||{};
-  const unlocked = level>=2; // 전체(신살 2번째 등 유료 내부 요소)
-  const preciseOn = level>=1; // 택일팩부터 정밀값 공개
-  const me=c.dayMasterEl,gan=GAN[c.dGan],sip=sipsung(c),dom=argmax(sip);
-  let strong=0,weak=0;for(let i=1;i<5;i++){if(c.dist[i]>c.dist[strong])strong=i;if(c.dist[i]<c.dist[weak])weak=i;}
-  const zero=c.dist[weak]===0;
-  const P=a=>a.map(x=>`<p>${x}</p>`).join('');
-  const secs=[];
-  secs.push({mk:'器',tier:'free',t:T1[me],html:P([
+// [代 器鏡診符] 카테고리 섹션 빌더
+function secDaepyoIntro(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
+  out.push({mk:'器',tier:'free',t:T1[me],html:P([
     `대표님은 <b>${NAT[me]}</b> 그릇입니다. ${DMc[me]}`,
     `${DM_D1[me]}`,
     `이는 일간 <b>${gan}(${EL[me]})</b>에 <b>${SIP[dom]}</b>의 기운이 두텁게 실려, ${SIP_MEAN[dom]} 사주이기 때문입니다. 일지(日支) <b>${ZHI[c.dZhi]}</b>가 그 밑을 받쳐, 겉으로 드러나는 모습보다 속이 더 단단한 구조입니다.`,
@@ -750,12 +745,12 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     `${DMs[me]}`,
     `${DM_D2[me]}`])});
   const tm=matchTycoon(c);
-  secs.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me,c.dist,GAN[c.dGan])});
+  out.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me,c.dist,GAN[c.dGan])});
   // 診 · 대표 유형 진단 (4유형 + 4축 + 위기 약점) — 무료 훅
-  secs.push({mk:'診',tier:'free',t:`${selYear?selYear+'년 ':''}대표님은 어떤 유형의 대표인가 — ${TYPE4[me]}`,html:jinHtml(c,seunSelf,selYear)});
+  out.push({mk:'診',tier:'free',t:`${selYear?selYear+'년 ':''}대표님은 어떤 유형의 대표인가 — ${TYPE4[me]}`,html:jinHtml(c,seunSelf,selYear)});
   const ss=sinsal(c);
   if(ss.length){
-    secs.push({mk:'符',tier:'free',t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
+    out.push({mk:'符',tier:'free',t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
       `<div class="sinsal">`+
       ss.map((x,i)=>`<div class="ssrow"><div class="sshan" style="background:${['#7a1f1f','#22406b'][i%2]}">${x.hanja.slice(0,2)}</div>`+
         `<div class="ssbody"><div class="sshead">${x.head}</div>`+
@@ -764,6 +759,12 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
       `</div>`+
       `<p style="margin-top:10px">신살(神殺)은 여느 사람 사주엔 잘 안 드는 특수 부호입니다. 대표님껜 <b>${ss.map(x=>x.name).join('·')}</b>이(가) 함께 앉아, 남다른 승부 기질로 여기까지 오신 것입니다.</p>`});
   }
+  return out;
+}
+// [率 사정률] 카테고리 섹션 빌더
+function secSajeong(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
   // ── 무료 정점(率) → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
   let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c);
   if(nowYMD){
@@ -773,17 +774,35 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
   }
   if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
     rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 바로 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
-  secs.push({mk:'率',tier:'free',t:nowYMD?`이번 달 ${nowYMD.m}월 사정률 — 오늘은 어느 쪽인가`:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
+  out.push({mk:'率',tier:'free',t:nowYMD?`이번 달 ${nowYMD.m}월 사정률 — 오늘은 어느 쪽인가`:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
   if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
-    secs.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 길일 <b>${gc0}일</b>의 정확한 날짜가 이미 산출되어 있습니다 — 이달이 가기 전에 확인하십시오.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
+    out.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 길일 <b>${gc0}일</b>의 정확한 날짜가 이미 산출되어 있습니다 — 이달이 가기 전에 확인하십시오.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
+  return out;
+}
+// [曆 이달] 카테고리 섹션 빌더
+function secCalendarMonth(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
   // 曆 · 사업운 캘린더 (그리드는 무료 노출, 날짜별 상세는 결제 후)
   if(nowYMD){
-    secs.push({mk:'曆',tier:'free',t:`오늘부터 한 달 — 사업운 캘린더`,html:bizGrid(c,nowYMD.y,nowYMD.m,nowYMD.d)+bizFreeLead(c,nowYMD.y,nowYMD.m,nowYMD.d)});
-    secs.push({mk:'曆詳',tier:'full',teaser:`오늘부터 <b>30일</b> — 계약에 최적인 <b>핵심 3일</b>, 카테고리별(계약·채용·발표·영업) 정확한 날짜, <b>주차별 4주 전략</b>과 피해야 할 날까지. 어느 날에 무엇을 하고 어느 날을 접어야 하는지가 여기 담깁니다.`,t:`오늘부터 30일 상세 — 핵심 3일·주차별 전략`,html:bizMonthDetail(c,nowYMD.y,nowYMD.m,nowYMD.d)});
+    out.push({mk:'曆',tier:'free',t:`오늘부터 한 달 — 사업운 캘린더`,html:bizGrid(c,nowYMD.y,nowYMD.m,nowYMD.d)+bizFreeLead(c,nowYMD.y,nowYMD.m,nowYMD.d)});
+    out.push({mk:'曆詳',tier:'full',teaser:`오늘부터 <b>30일</b> — 계약에 최적인 <b>핵심 3일</b>, 카테고리별(계약·채용·발표·영업) 정확한 날짜, <b>주차별 4주 전략</b>과 피해야 할 날까지. 어느 날에 무엇을 하고 어느 날을 접어야 하는지가 여기 담깁니다.`,t:`오늘부터 30일 상세 — 핵심 3일·주차별 전략`,html:bizMonthDetail(c,nowYMD.y,nowYMD.m,nowYMD.d)});
   }
+  return out;
+}
+// [曆 연간] 카테고리 섹션 빌더
+function secCalendarYear(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
   {const yy=selYear||(nowYMD?nowYMD.y:2026); const cm=(nowYMD&&nowYMD.y===yy)?nowYMD.m:0;
-   secs.push({mk:'曆年',tier:'full',teaser:`올 한 해 <b>12개월</b>의 흐름 — 밀어주는 달과 조여지는 달이 이미 갈라져 있습니다. 큰 계약·발표·정비의 때를 한 해 단위로 잡으십시오.`,t:`${yy}년 12개월 사업운 흐름 — 밀어주는 달, 조여지는 달`,html:bizYearHtml(c,yy,cm)});}
-  secs.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>으로 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
+   out.push({mk:'曆年',tier:'full',teaser:`올 한 해 <b>12개월</b>의 흐름 — 밀어주는 달과 조여지는 달이 이미 갈라져 있습니다. 큰 계약·발표·정비의 때를 한 해 단위로 잡으십시오.`,t:`${yy}년 12개월 사업운 흐름 — 밀어주는 달, 조여지는 달`,html:bizYearHtml(c,yy,cm)});}
+  return out;
+}
+// [代 五決人財] 카테고리 섹션 빌더
+function secDaepyoStrength(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
+  out.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>으로 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
     distHtml(c)+P([
     `여덟 글자의 오행은 ${EL.map((e,i)=>`${e}${c.dist[i]}`).join(' · ')} — ${zero?'한쪽으로 크게 쏠린 극단적 구성':'다소 치우친 구성'}입니다.`,
     `<b>${EL[strong]}</b>이 강하다는 것은 ${STRONG_MEAN[strong]}는 뜻입니다. 다만 지나치면 ${STRONG_RISK[strong]}.`,
@@ -791,51 +810,99 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
     `${zero?`비어 있는 <b>${EL[weak]}</b>의 자리 — ${LACK[weak]} 늘 아쉬우셨을 것입니다.`:`옅은 <b>${EL[weak]}</b>를 채울수록 사주가 균형을 찾습니다.`}`,
     `${FIVE_W[weak]}`,
     `개운으로는 <b>${DIR_EL[weak]}</b> 방향, 행운 숫자 <b>${NUM_EL[weak]}</b>, 색 <b>${COLOR_EL[weak]}</b> — 부족한 기운을 일상에서 채우십시오.`])});
-  secs.push({mk:'決',tier:'full',teaser:`대표님의 승부 기질은 <b>${DEC_A[me]}</b> 쪽 — 이 힘이 큰 건을 따내지만, 투찰·계약에서 독이 되는 순간과 반드시 지켜야 할 한 가지가 아직 가려져 있습니다.`,t:DEC_T[me],html:P([
+  out.push({mk:'決',tier:'full',teaser:`대표님의 승부 기질은 <b>${DEC_A[me]}</b> 쪽 — 이 힘이 큰 건을 따내지만, 투찰·계약에서 독이 되는 순간과 반드시 지켜야 할 한 가지가 아직 가려져 있습니다.`,t:DEC_T[me],html:P([
     `대표님의 승부 기질은 <b>${DEC_A[me]}</b> 쪽입니다.`,
     `일지 <b>${ZHI[c.dZhi]}</b>와 <b>${SIP[dom]}</b>의 기운이 겹쳐, 판단이 서면 좀처럼 되돌리지 않습니다.`,
     `${DEC_X1[me]}`,
     `그 힘이 큰 건을 따내지만, 지나치면 ${DEC_R[me]}.`,
     `투찰과 계약에서는 ${DEC_V[me]}.`,
     `${DEC_X2[me]}`])});
-  secs.push({mk:'人',tier:'full',teaser:`직원과 파트너가 대표님을 <b>${CL_MIS[me]}</b>고 오해하기 쉬운 이유, 그리고 곁에 사람을 남기는 법이 여기 있습니다.`,t:PPL_T[me],html:P([
+  out.push({mk:'人',tier:'full',teaser:`직원과 파트너가 대표님을 <b>${CL_MIS[me]}</b>고 오해하기 쉬운 이유, 그리고 곁에 사람을 남기는 법이 여기 있습니다.`,t:PPL_T[me],html:P([
     `대표님은 <b>${PPL_A[me]}</b> 유형이라, 직원과 파트너에게 ${PPL_E[me]}.`,
     `${dom===1?'특히 식상이 강해 말이 날카로워, 옳은 말도 상처가 되기 쉽습니다.':dom===3?'특히 관성이 강해 책임을 홀로 짊어지다 지치기 쉽습니다.':dom===2?'실리를 앞세워 사람보다 성과를 먼저 보기 쉽습니다.':'사람을 쓰는 데 본인만의 엄격한 기준이 섭니다.'}`,
     `그 기준이 조직을 세우지만, 선을 넘은 이는 가차 없이 잘라 홀로 남기도 합니다.`,
     `사람을 남기려면 ${PPL_V[me]}.`,
     `${PPL_X1[me]}`,
     `${PPL_X2[me]}`])});
-  secs.push({mk:'財',tier:'full',teaser:`대표님의 재물운은 <b>${['새 판을 벌여 키우는 확장형','크게 벌고 크게 쓰는 기복형','천천히 쌓는 축적형','끊고 맺어 남기는 결실형','굴려서 불리는 순환형'][me]}</b> — 언제 쥐고 언제 풀지, 어디서 새는지가 가려져 있습니다.`,t:WL_T[me],html:P([
+  out.push({mk:'財',tier:'full',teaser:`대표님의 재물운은 <b>${['새 판을 벌여 키우는 확장형','크게 벌고 크게 쓰는 기복형','천천히 쌓는 축적형','끊고 맺어 남기는 결실형','굴려서 불리는 순환형'][me]}</b> — 언제 쥐고 언제 풀지, 어디서 새는지가 가려져 있습니다.`,t:WL_T[me],html:P([
     `대표님의 재물운은 <b>${['새 판을 벌여 키우는 확장형','크게 벌고 크게 쓰는 기복형','천천히 쌓는 축적형','끊고 맺어 남기는 결실형','굴려서 불리는 순환형'][me]}</b>입니다.`,
     `사주에 재성(財)의 기운이 <b>${sip[2]}</b>로 ${sip[2]>=2?'분명해':'옅어'}, ${WL_A[me]} 버는 구조입니다.`,
     `${WL_R[me]}.`,
     `${WL_X1[me]}`,
     `${WL_X2[me]}`,
     `수주와 자금은 ${WL_V[me]}.`])});
+  return out;
+}
+// [運 법인·대운] 카테고리 섹션 빌더
+function secDaeun(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
   if(legalChart){const lr=legalReport(c,legalChart);const nm=names.legal?`${names.legal} — `:'';
-    secs.push({mk:'法',tier:'full',teaser:`<b>${names.legal||'법인'}</b> 설립일 사주로 본 회사의 그릇과 대표님의 궁합 — 지금 회사가 대표님을 받치는지 누르는지가 여기서 드러납니다.`,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
+    out.push({mk:'法',tier:'full',teaser:`<b>${names.legal||'법인'}</b> 설립일 사주로 본 회사의 그릇과 대표님의 궁합 — 지금 회사가 대표님을 받치는지 누르는지가 여기서 드러납니다.`,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
       `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});
     if(daeunMeta&&daeunMeta.foundYear){const d=daeun(legalChart,daeunMeta.foundYear,daeunMeta.curYear);
-      secs.push({mk:'運',tier:'full',teaser:`<b>${names.legal||'회사'}</b>는 지금 대운의 어느 길목에 있는지, 다음 10년 확장·정비의 때가 언제인지가 가려져 있습니다.`,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal,daeunMeta.curYear)});}}
+      out.push({mk:'運',tier:'full',teaser:`<b>${names.legal||'회사'}</b>는 지금 대운의 어느 길목에 있는지, 다음 10년 확장·정비의 때가 언제인지가 가려져 있습니다.`,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal,daeunMeta.curYear)});}}
+  return out;
+}
+// [宮 발주처] 카테고리 섹션 빌더
+function secBalju(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
   if(clientChart){const cm=compat(c,clientChart,seunSelf);const nm=names.client?`${names.client} — `:'';
     // 핵심 발주처(core)만 유료(封). 일반 발주처는 궁합 무료로 풀어 체험시킨다.
-    secs.push({mk:'處',tier:clientCore?'full':'free',teaser:`<b>${names.client||'발주처'}</b>는 핵심 발주처입니다 — 대표님과의 궁합 점수와, 이 큰 판을 어떻게 대해야 유리한지가 여기 담깁니다.`,t:`${nm}${cm.t}`,html:compatBlock(cm,c,names.client||'발주처','client','이 발주처를 대하는 3계(計)')});}
+    out.push({mk:'處',tier:clientCore?'full':'free',teaser:`<b>${names.client||'발주처'}</b>는 핵심 발주처입니다 — 대표님과의 궁합 점수와, 이 큰 판을 어떻게 대해야 유리한지가 여기 담깁니다.`,t:`${nm}${cm.t}`,html:compatBlock(cm,c,names.client||'발주처','client','이 발주처를 대하는 3계(計)')});}
+  return out;
+}
+// [合 동업·협정] 카테고리 섹션 빌더
+function secGunghap(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
   if(partnerChart){const cm=compatWith(c,partnerChart,DONGUP,'대표님','동업 상대',seunSelf);
-    secs.push({mk:'同',tier:'full',teaser:`<b>${names.partner||'상대 대표'}</b>와의 동업 궁합 — 지분·역할·최종 결정권을 어떻게 나눠야 깨지지 않는지가 가려져 있습니다.`,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대','partner','깨지지 않게 나누는 3계(計)')});}
+    out.push({mk:'同',tier:'full',teaser:`<b>${names.partner||'상대 대표'}</b>와의 동업 궁합 — 지분·역할·최종 결정권을 어떻게 나눠야 깨지지 않는지가 가려져 있습니다.`,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대','partner','깨지지 않게 나누는 3계(計)')});}
   if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사',seunSelf);
-    secs.push({mk:'協',tier:'full',teaser:`<b>${names.ally||'상대 회사'}</b>와의 협정(공동도급) 궁합 — 주관사·지분·관재수까지, 계약 전 반드시 짚을 점이 여기 있습니다.`,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사','ally','계약 전 반드시 짚을 3계(計)')});}
-  secs.push({mk:'方',tier:'full',teaser:`대표님께 기운을 돋우는 방면과 피해야 할 방면 — 현장·발주처·사무실 택지의 기준이 가려져 있습니다.`,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
+    out.push({mk:'協',tier:'full',teaser:`<b>${names.ally||'상대 회사'}</b>와의 협정(공동도급) 궁합 — 주관사·지분·관재수까지, 계약 전 반드시 짚을 점이 여기 있습니다.`,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사','ally','계약 전 반드시 짚을 3계(計)')});}
+  return out;
+}
+// [代 方士] 카테고리 섹션 빌더
+function secDaepyoPlace(x:any):any[]{
+  const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn}=x;
+  const out:any[]=[];
+  out.push({mk:'方',tier:'full',teaser:`대표님께 기운을 돋우는 방면과 피해야 할 방면 — 현장·발주처·사무실 택지의 기준이 가려져 있습니다.`,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
     `사주에 <b>${EL[weak]}</b>가 ${zero?'비어':'옅어'}, 그 기운이 채워지는 <b>${DIR_EL[weak]}</b> 현장·발주처가 유리합니다.`,
     `${DIR_X[weak]}`,
     `반대 방면은 예민함을 키우니, 그쪽 큰 건은 한 박자 신중히 보십시오.`,
     `사무실·현장 택지에도 같은 원리를 적용하십시오.`])});
-  secs.push({mk:'士',tier:'full',teaser:`홀로 벼려온 그 날카로움을, 이제 무기로 바꾸는 마지막 한마디가 여기 있습니다.`,t:`홀로 벼려온 그 날카로움이, 결국 대표님의 무기입니다`,html:P([
+  out.push({mk:'士',tier:'full',teaser:`홀로 벼려온 그 날카로움을, 이제 무기로 바꾸는 마지막 한마디가 여기 있습니다.`,t:`홀로 벼려온 그 날카로움이, 결국 대표님의 무기입니다`,html:P([
     `남들은 대표님을 <b>${CL_MIS[me]}</b>고 볼지 모르나, 그 뒤에 홀로 짊어진 무게를 저는 압니다.`,
     `${SA_X[me]}`,
     `타고난 <b>${EL[strong]}</b>의 힘으로 여기까지 오셨으니, 이제 그 기운을 ${CL_TURN[me]} 쓰실 때입니다.`,
     `행운 숫자 <b>${NUM_EL[weak]}</b>, 색 <b>${COLOR_EL[weak]}</b>, 방위 <b>${DIR_EL[weak]}</b> — 부족한 <b>${EL[weak]}</b>를 곁에 두십시오.`,
     `오늘도 그 마지막 한 끗을 살피는 참모 士가, 대표님의 길을 함께 봅니다.`])});
+  return out;
+}
+
+function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear?,seunSelf?,clientCore?){
+  names=names||{};
+  const unlocked = level>=2; // 전체(신살 2번째 등 유료 내부 요소)
+  const preciseOn = level>=1; // 택일팩부터 정밀값 공개
+  const me=c.dayMasterEl,gan=GAN[c.dGan],sip=sipsung(c),dom=argmax(sip);
+  let strong=0,weak=0;for(let i=1;i<5;i++){if(c.dist[i]>c.dist[strong])strong=i;if(c.dist[i]<c.dist[weak])weak=i;}
+  const zero=c.dist[weak]===0;
+  const P=a=>a.map(x=>`<p>${x}</p>`).join('');
+  // 카테고리별 섹션 빌더를 원래 순서대로 조립 — 통합 리포트 순서 보존
+  const x:any={c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn};
+  const secs=[
+    ...secDaepyoIntro(x),    // 器 鏡 診 符
+    ...secSajeong(x),        // 率 擇
+    ...secCalendarMonth(x),  // 曆 曆詳
+    ...secCalendarYear(x),   // 曆年
+    ...secDaepyoStrength(x), // 五 決 人 財
+    ...secDaeun(x),          // 法 運
+    ...secBalju(x),          // 處
+    ...secGunghap(x),        // 同 協
+    ...secDaepyoPlace(x),    // 方 士
+  ];
   // ★레벨 게이팅: 잠긴 섹션은 html 제거(teaser만 남겨 갈증 유발), 정밀 텍스트 미전송
   return secs.map((sec:any)=>({
     mk:sec.mk, tier:sec.tier, free:sec.tier==='free', t:sec.t,
