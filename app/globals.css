@@ -1458,3 +1458,9 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 
 /* balju 리스트 항목이 button일 때 */
 button.li{font:inherit;text-align:left;cursor:pointer;width:calc(100% - 26px);box-sizing:border-box}
+
+/* 세운 표 — 연도별 상세 설명 2줄 */
+.syrow{align-items:flex-start}
+.syrow .syy,.syrow .syg,.syrow .sytag{margin-top:1px}
+.syd .syd1{display:block;color:#4a4636;font-weight:600}
+.syd .syd2{display:block;margin-top:3px;color:#8a8474;font-size:11px;line-height:1.5;font-weight:500}

@@ -438,13 +438,25 @@ const SEUN_REL={in:['도움運','회사를 밖에서 밀어주는 해 — 자금
  sik:['소모運','힘을 밖으로 쏟는 해 — 실적은 나되 지출·소모가 크니 관리가 관건','#b5402f'],
  gwan:['시련運','눌리고 조여지는 해 — 무리한 확장을 접고 시스템·내실을 다질 때','#22406b']};
 function seunYear(y:number){const g=((y-4)%10+10)%10, z=((y-4)%12+12)%12; return {g,z,el:GAN_ELc[g]};}
+// 세운 각 해의 상세 설명 — 그해 간지·오행을 반영해 년마다 구체적으로
+function seunDetail(rel:string, sy:{g:number;z:number;el:number}){
+  const gz=GAN[sy.g]+ZHI[sy.z], en=EL[sy.el];
+  const M:Record<string,string>={
+    in:`${gz}(${en})의 해 — ${en} 기운이 회사를 밖에서 밀어줍니다. 자금 조달·수주·귀인이 붙는 흐름이니, 미뤄둔 큰 건과 확장·투자를 이 해에 여십시오.`,
+    bi:`${gz}(${en})의 해 — 같은 ${en}이 겹쳐 힘은 세나 경쟁·내부 분란이 잦습니다. 지분·역할·결정권을 명확히 하고, 과속 확장 대신 실속을 지키십시오.`,
+    jae:`${gz}(${en})의 해 — ${en}이 회사의 재물 자리를 채웁니다. 벌이기보다 굵직한 수금·정산·계약 마무리를 이 해에 몰아 실속을 굳히십시오.`,
+    sik:`${gz}(${en})의 해 — 회사가 ${en}으로 힘을 밖에 쏟습니다. 실적은 나되 지출·소모가 크니, 마진·원가·현금흐름 관리를 최우선에 두십시오.`,
+    gwan:`${gz}(${en})의 해 — ${en}이 회사를 조입니다. 신규 확장·차입은 미루고 시스템·인력·내실을 다지는 '정비의 해'로 쓰면 다음 상승을 크게 탑니다.`,
+  };
+  return M[rel]||M.bi;
+}
 function seunHtml(d,legalName,curYear){
   let rows='';
   for(let i=0;i<8;i++){const y=curYear+i;const sy=seunYear(y);const rel=relation(d.me,sy.el);const info=SEUN_REL[rel];
     rows+=`<div class="syrow${i===0?' now':''}"><span class="syy">${y}<em>${i===0?'올해':'+' +i}</em></span>`+
       `<span class="syg" style="color:${EL_HEX[sy.el]}">${GAN[sy.g]}${ZHI[sy.z]}</span>`+
       `<span class="sytag" style="background:${info[2]}">${info[0]}</span>`+
-      `<span class="syd">${info[1]}</span></div>`;}
+      `<span class="syd"><b class="syd1">${info[1]}</b><span class="syd2">${seunDetail(rel,sy)}</span></span></div>`;}
   return `<div class="seunhd">연도별 큰 흐름 — 앞으로 8년 세운(歲運)</div><div class="seun">${rows}</div>`+
     `<p style="margin-top:11px">위 표는 <b>${legalName||'회사'}</b> 명식에 그해 간지를 대조해, 밀어주는 해와 조여지는 해를 갈라 놓은 것입니다. <b>도움運·결실運</b>의 해에 큰 건과 확장을, <b>시련運</b>의 해엔 내실과 정비를 두시면 회사의 10년이 달라집니다.</p>`;
 }
