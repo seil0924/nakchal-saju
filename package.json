@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "golden": "node scripts/golden.mjs"
   },
   "dependencies": {
     "@portone/browser-sdk": "0.0.9",
