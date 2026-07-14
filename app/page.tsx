@@ -80,12 +80,7 @@ export default function Home() {
         </Link>
         <Link className="li5" href="/reading?cat=calendar">
           <div className="gz" style={{ color: '#d15c4a' }}>曆</div>
-          <div className="bd5"><div className="t">사업운 캘린더 · 이달 <small>事業運 月曆</small></div><div className="d">오늘부터 한 달 — 계약·채용·발표에 좋은 날, 조심할 날</div></div>
-          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
-        </Link>
-        <Link className="li5" href="/reading?cat=calendar_year">
-          <div className="gz" style={{ color: '#c98b4a' }}>曆</div>
-          <div className="bd5"><div className="t">사업운 캘린더 · 연간 <small>事業運 年曆</small></div><div className="d">올 한 해 12개월 — 밀어주는 달, 조여지는 달을 한눈에</div></div>
+          <div className="bd5"><div className="t">사업운 캘린더 <small>事業運 曆</small></div><div className="d">이달·연간 — 계약·채용·발표에 좋은 날, 조심할 날</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
       </div>
@@ -97,13 +92,19 @@ export default function Home() {
         <span className="cbgo">→</span>
       </Link>
 
+      {/* 복채(福債) — 콜로폰 위, 조용한 감사 한 줄 */}
+      <Link className="bokline" href="/bokchae">
+        <span className="blseal">福</span>
+        <span className="bltx"><b>복채 청산</b><em>받은 풀이에, 스스로 놓고 가는 마음 — 정해진 값은 없습니다</em></span>
+        <span className="blgo">›</span>
+      </Link>
+
       {/* 콜로폰 */}
       <div className="foot">
         <div className="crule" />
         <div className="colo">士</div>
         명리 기반 참고 정보입니다 · 투찰금액 산정 근거가 아닙니다<br />
         <Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보처리방침</Link>
-        <Link className="bokquiet" href="/bokchae"><span>福</span>복채 청산</Link>
       </div>
 
       {/* 하단 내비 */}

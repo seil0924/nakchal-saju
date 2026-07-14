@@ -42,6 +42,16 @@ const REL_KINDS = [
 type RelKind = 'client' | 'partner' | 'ally';
 type Target = { kind: RelKind; name: string; date: string };
 const LS_KEY = 'nakchal_saved_targets_v1';
+// 카테고리별 '혹하게 하는' 컨셉 훅 — 입력 화면 상단에서 몰입을 잡는다.
+const HOOK: Record<string, { seal: string; t: string; d: string }> = {
+  daepyo:  { seal: '鏡', t: '잡스·록펠러와 같은 그릇일지 모릅니다', d: '타고난 승부 기질·재물·사람 다루는 법을 여덟 글자로 낱낱이 — 위기에 드러나는 그 약점까지.' },
+  sajeong: { seal: '率', t: '오늘 넣을까 미룰까 — 30초면 방향이 섭니다', d: '오늘의 사정률이 상단인지 하단인지, 이달 어느 날이 유리한지 한눈에 짚어 드립니다.' },
+  balju:   { seal: '宮', t: '그 발주처, 애초에 나와 맞는 판입니까', d: '설립일 사주 × 대표님 사주 궁합 점수 — 큰 판에 손대기 전에 확인하십시오.' },
+  gunghap: { seal: '合', t: '손잡기 전에, 깨질 궁합인지부터', d: '지분·역할·최종 결정권을 어떻게 나눠야 안 깨지는지 — 계약 전에 봐야 할 궁합.' },
+  daeun:   { seal: '運', t: '회사가 대표님을 밀어줍니까, 누릅니까', d: '법인 설립일로 본 회사의 그릇과 10년 대운의 길목 — 지금이 확장기인지 정비기인지.' },
+  calendar:{ seal: '曆', t: '이달, 언제 움직이고 언제 멈출까', d: '계약·채용·발표에 좋은 날과 갈등·지출을 조심할 날을 달력에 짚어 드립니다.' },
+  calendar_year: { seal: '曆', t: '올 한 해, 밀어주는 달에 큰 판을 거십시오', d: '12개월 월운(月運)을 밀어주는 달·조여지는 달로 갈라 — 한 해 농사의 밑그림.' },
+};
 function dedupe<T>(arr: T[], keyFn: (x: T) => string): T[] {
   const seen = new Set<string>(); const out: T[] = [];
   for (const x of arr) { const k = keyFn(x); if (!seen.has(k)) { seen.add(k); out.push(x); } }
@@ -309,6 +319,27 @@ export default function Reading() {
       </div>
       <div className="wrap">
         {!res && (<>
+        {/* 0. 컨셉 훅 — 카테고리별 몰입 배너 */}
+        {cat && HOOK[cat] && (
+          <div className="chook">
+            <span className="chseal">{HOOK[cat].seal}</span>
+            <div className="chtx"><b>{HOOK[cat].t}</b><em>{HOOK[cat].d}</em></div>
+          </div>
+        )}
+        {/* 0-2. 사업운 캘린더 — 기간 선택(이달/연간 한 경로) */}
+        {(cat === 'calendar' || cat === 'calendar_year') && (
+          <div className="card">
+            <div className="st"><span className="l"><span className="b" />기간 선택</span><span className="opt">이달 · 연간</span></div>
+            <div className="perntog">
+              <button type="button" className={cat === 'calendar' ? 'on' : ''} onClick={() => setCat('calendar')}>
+                <b>이달</b><em>오늘부터 한 달</em><span className="pp">{won(CAT_INFO.calendar.price)}</span>
+              </button>
+              <button type="button" className={cat === 'calendar_year' ? 'on' : ''} onClick={() => setCat('calendar_year')}>
+                <b>연간</b><em>올 한 해 12개월</em><span className="pp">{won(CAT_INFO.calendar_year.price)}</span>
+              </button>
+            </div>
+          </div>
+        )}
         {/* 1. 상황 (사정률·통합에서만) */}
         {(!cat || cat === 'sajeong') && (<div className="card">
           <div className="st"><span className="l"><span className="b" />지금 어떤 입찰을 앞두고 계세요?</span></div>
@@ -396,7 +427,7 @@ export default function Reading() {
         </div>
 
         {/* 3. 회사 정보 */}
-        <div id="cocard" className="card reveal" style={{ display: (f.birth && (!cat || cat === 'daepyo' || cat === 'daeun' || cat === 'sajeong')) ? undefined : 'none' }}>
+        <div id="cocard" className="card reveal" style={{ display: (f.birth && (!cat || cat === 'daeun')) ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />회사 정보</span><span className={'chip ' + (cat === 'daeun' ? 'paid' : 'free')}>{cat === 'daeun' ? '필수' : '회사 사주'}</span></div>
           {savedLegal.length > 0 && (
             <div className="savedrow"><span className="srl">저장된 회사 <span className="opt">(눌러서 불러오기)</span></span>

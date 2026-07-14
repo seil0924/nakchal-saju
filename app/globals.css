@@ -351,6 +351,27 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .bizhint{margin-top:12px;background:linear-gradient(135deg,#fbf1d9,#f4e6c2);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7a5c1e;font-weight:600;line-height:1.6}
 .bizhint b{color:var(--red)}
 .rhero .num.numtx{font-size:30px;line-height:1.25;margin:12px 0 4px}
+/* 카테고리 컨셉 훅 배너 (입력 화면 상단) */
+.chook{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,#2b2119,#181209);border:1px solid var(--gold2);border-radius:15px;padding:15px 16px;margin-bottom:13px;position:relative;overflow:hidden}
+.chook::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}
+.chook .chseal{flex:none;width:44px;height:44px;border:1.5px solid var(--gold2);color:var(--gold2);border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:23px}
+.chook .chtx{min-width:0}
+.chook .chtx b{display:block;font-family:var(--serif);font-weight:800;font-size:16px;color:#f6ecd7;line-height:1.4;letter-spacing:-.01em}
+.chook .chtx em{display:block;font-style:normal;font-size:12px;color:#c3b898;font-weight:500;margin-top:5px;line-height:1.6}
+/* 사업운 캘린더 기간 선택 토글 */
+.perntog{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.perntog button{background:#f7f4ec;border:1.5px solid var(--line);border-radius:13px;padding:14px 12px;text-align:center;cursor:pointer;font-family:inherit;transition:border-color .15s,background .15s}
+.perntog button.on{background:#fbefd7;border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.perntog button b{display:block;font-family:var(--serif);font-weight:900;font-size:17px;color:#20242c}
+.perntog button em{display:block;font-style:normal;font-size:11.5px;color:#8a7f68;font-weight:600;margin-top:3px}
+.perntog button .pp{display:block;font-family:var(--serif);font-weight:800;font-size:14px;color:var(--red);margin-top:7px;font-variant-numeric:tabular-nums}
+/* 복채 조용한 감사 줄 (홈 하단) */
+.home5 .bokline{display:flex;align-items:center;gap:12px;margin:26px 24px 0;padding:14px 16px;background:#fbf7ec;border:1px solid #e4dcc8;border-radius:13px;text-decoration:none}
+.home5 .bokline .blseal{flex:none;width:36px;height:36px;border:1.5px solid #c9a961;color:#a5862f;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:18px}
+.home5 .bokline .bltx{flex:1;min-width:0}
+.home5 .bokline .bltx b{display:block;font-family:var(--serif);font-weight:800;font-size:14px;color:#5f5230}
+.home5 .bokline .bltx em{display:block;font-style:normal;font-size:11px;color:#948a72;font-weight:500;margin-top:3px;line-height:1.5}
+.home5 .bokline .blgo{flex:none;color:#a5862f;font-weight:800;font-size:16px}
 /* 발주처 선택 카드 (목록에서 고른 발주처 표시 / 고르러 가기) */
 .baljusel{display:flex;align-items:center;gap:12px;background:#faf6ec;border:1px solid var(--gold);border-radius:13px;padding:14px 15px}
 .baljusel .bjinfo{flex:1;min-width:0}
