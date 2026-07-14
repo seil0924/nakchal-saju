@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import TodayChip from '@/app/_components/TodayChip';
 import HeroCarousel from '@/app/_components/HeroCarousel';
-import IntroSplash from '@/app/_components/IntroSplash';
 import ScrollReveal from '@/app/_components/ScrollReveal';
 
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
 export default function Home() {
   return (
     <div className="app home5">
-      <IntroSplash />
       <ScrollReveal />
       {/* 마스트헤드 */}
       <div className="mast">

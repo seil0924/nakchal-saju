@@ -1,7 +1,11 @@
 'use client';
 import { useEffect, useLayoutEffect, useState } from 'react';
 
-// 사이트 진입 인트로 — 士 인장이 찍히고 상호가 드러난 뒤 사라진다. 세션당 1회.
+// 사이트 진입 인트로 — 士 인장이 찍히고 상호가 드러난 뒤 사라진다. 세션당 1회. 전체 화면(레이아웃 최상단에서 렌더).
+// 인트로 영상이 준비되면 아래 INTRO_VIDEO 를 '/intro.mp4' 로 바꾸면 영상이 탁 재생됩니다.
+const INTRO_VIDEO: string | null = null;
+const DURATION = INTRO_VIDEO ? 3400 : 2200; // 영상이면 좀 더 길게
+
 const useIso = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export default function IntroSplash() {
@@ -19,14 +23,20 @@ export default function IntroSplash() {
 
   useEffect(() => {
     if (!show) return;
-    const t1 = setTimeout(() => setLeave(true), 1600);
-    const t2 = setTimeout(() => setShow(false), 2200);
+    const t1 = setTimeout(() => setLeave(true), DURATION - 600);
+    const t2 = setTimeout(() => setShow(false), DURATION);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [show]);
 
   if (!show) return null;
   return (
-    <div className={'intro' + (leave ? ' leave' : '')} aria-hidden onClick={() => { setLeave(true); setTimeout(() => setShow(false), 450); }}>
+    <div className={'intro' + (leave ? ' leave' : '') + (INTRO_VIDEO ? ' hasvid' : '')} aria-hidden
+      onClick={() => { setLeave(true); setTimeout(() => setShow(false), 450); }}>
+      {INTRO_VIDEO && (
+        <video className="introvid" autoPlay muted playsInline preload="auto">
+          <source src={INTRO_VIDEO} type="video/mp4" />
+        </video>
+      )}
       <div className="introin">
         <span className="introseal">
           <svg viewBox="0 0 40 40" width="88" height="88">

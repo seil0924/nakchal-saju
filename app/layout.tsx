@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import DesktopSidebar from '@/app/_components/DesktopSidebar';
 import TapFX from '@/app/_components/TapFX';
+import IntroSplash from '@/app/_components/IntroSplash';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nakchal-saju.example.com'),
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body>
+        <IntroSplash />
         <TapFX />
         <div className="shell">
           <DesktopSidebar />
