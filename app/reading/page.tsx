@@ -372,10 +372,10 @@ export default function Reading() {
             <div className="st"><span className="l"><span className="b" />기간 선택</span><span className="opt">이달 · 연간</span></div>
             <div className="perntog">
               <button type="button" className={cat === 'calendar' ? 'on' : ''} onClick={() => setCat('calendar')}>
-                <b>이달</b><em>오늘부터 한 달</em><span className="pp">{won(CAT_INFO.calendar.price)}</span>
+                <b>이달</b><em>오늘부터 한 달</em>
               </button>
               <button type="button" className={cat === 'calendar_year' ? 'on' : ''} onClick={() => setCat('calendar_year')}>
-                <b>연간</b><em>올 한 해 12개월</em><span className="pp">{won(CAT_INFO.calendar_year.price)}</span>
+                <b>연간</b><em>올 한 해 12개월</em>
               </button>
             </div>
           </div>

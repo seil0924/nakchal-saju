@@ -133,21 +133,7 @@ export default function FullIntro() {
         <div className="fscap">🔒 실제 리포트에서는 각 장이 이 깊이로, 대표님 명식에 맞춰 펼쳐집니다</div>
       </div>
 
-      {/* 가격 앵커 */}
-      <div className="lab"><i /><span>값어치</span></div>
-      <div className="anchorbox">
-        <div className="acmp"><span className="al">청담·강남 대면 사주 상담</span><span className="ar old">수십만 원</span></div>
-        <div className="acmp"><span className="al">낙찰사주 <em>필요한 풀이만 낱개로</em></span><span className="ar now">39,000원부터</span></div>
-        <p className="anout">입찰 한 건 앞에서, 이 값은 반올림 오차입니다. 게다가 회사(법인) 사주까지 함께 보는 곳은 드뭅니다.</p>
-      </div>
-
-      {/* 가격 — 개별 상품 */}
-      <div className="pricebox">
-        <div className="pline sub2"><span>사정률 · 사업운 캘린더 사주</span><b>각 39,000원</b></div>
-        <div className="pline sub2"><span>발주처 · 협정·궁합 · 회사 대운 사주</span><b>각 69,000원</b></div>
-        <div className="pline"><span>대표 사주 진단 · 열여덟 장</span><b>190,000원</b></div>
-        <div className="passure">✓ 필요한 풀이만 낱개로 · 묶음 없이 상품별</div>
-      </div>
+      {/* 가격 비노출 — 무료 진입 후 결과 페이월에서만 노출 */}
 
       {/* FAQ — 반론 처리 */}
       <div className="lab"><i /><span>자주 묻는 질문</span></div>

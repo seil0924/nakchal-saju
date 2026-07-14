@@ -46,12 +46,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         {p.gives.map(([t, d], i) => <div key={i} className="drow"><b>{t}</b><span>{d}</span></div>)}
       </div>
 
-      <div className="pricebox">
-        <div className="pline sub2"><span>사정률 · 사업운 캘린더 사주</span><b>각 39,000원</b></div>
-        <div className="pline sub2"><span>발주처 · 협정·궁합 · 회사 대운 사주</span><b>각 69,000원</b></div>
-        <div className="pline"><span>대표 사주 진단 · 열여덟 장</span><b>190,000원</b></div>
-        <div className="passure">✓ 필요한 풀이만 낱개로 · 묶음 없이 상품별</div>
-      </div>
+      {/* 가격 비노출 — 결과 페이월에서만 */}
 
       <div style={{ padding: '16px 24px 0' }}>
         <Link className="fullcta" href={p.href}>{p.cta} <small>생년월일만 · 30초 · 무료로 시작</small></Link>
