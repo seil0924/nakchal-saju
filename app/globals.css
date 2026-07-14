@@ -907,7 +907,10 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5{--h-ink:#211c16;--h-inktx:#f2ede0;--h-hanji:#ffffff;--h-panel:#fff;--h-line:#e7e4db;
   --h-tx:#22252c;--h-mut:#7f786c;--h-mut2:#a39c8e;--h-red:#9a2a20;--h-gold:#a5862f;--h-goldlt:#d8b25f;
   background:var(--h-hanji);min-height:100vh;display:flex;flex-direction:column}
-@media(min-width:900px){.dmain .app.home5{max-width:560px}}
+/* 데스크톱: 홈(랜딩)을 비율 그대로 크게 — zoom으로 확대 (오버플로 안전 폭 유지) */
+@media(min-width:900px){.dmain .app.home5{max-width:560px;zoom:1.14}}
+@media(min-width:1180px){.dmain .app.home5{zoom:1.45}}
+@media(min-width:1440px){.dmain .app.home5{zoom:1.6}}
 
 /* 마스트헤드 */
 .home5 .mast{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 15px;border-bottom:1px solid var(--h-line)}
