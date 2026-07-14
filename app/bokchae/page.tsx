@@ -8,6 +8,7 @@ const PRESETS = [50000, 100000, 200000, 500000, 1000000];
 
 export default function Bokchae() {
   const [amt, setAmt] = useState(0);
+  const [custom, setCustom] = useState(false); // '직접' 입력 모드
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState('');
@@ -57,13 +58,14 @@ export default function Bokchae() {
             </p>
             <div className="bokamts">
               {PRESETS.map(a => (
-                <button key={a} className={'bokamt' + (amt === a ? ' on' : '')} onClick={() => setAmt(a)}>{won(a)}</button>
+                <button key={a} className={'bokamt' + (!custom && amt === a ? ' on' : '')} onClick={() => { setCustom(false); setAmt(a); }}>{won(a)}</button>
               ))}
-              <button className={'bokamt' + (amt === -1 ? ' on' : '')} onClick={() => setAmt(-1)}>직접</button>
+              <button className={'bokamt' + (custom ? ' on' : '')} onClick={() => { setCustom(true); setAmt(0); }}>직접</button>
             </div>
-            {amt === -1 && (
-              <input className="bokcustom" type="number" min={1000} max={1000000} step={1000} placeholder="복채 금액 (원)"
-                onChange={e => setAmt(Math.max(0, Math.min(1000000, +e.target.value)))} />
+            {custom && (
+              <input className="bokcustom" type="number" min={1000} max={1000000} step={1000} placeholder="복채 금액 (원)" autoFocus
+                value={amt || ''}
+                onChange={e => setAmt(Math.max(0, Math.min(1000000, Math.floor(+e.target.value) || 0)))} />
             )}
             {err && <div className="errbox" style={{ marginTop: 12 }}>{err}</div>}
             <button className="bokgo" disabled={busy || amt <= 0} onClick={() => pay(amt)}>

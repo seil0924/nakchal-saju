@@ -43,7 +43,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   },
   calendar: {
     name: '사업운 캘린더 · 이달', hanja: '曆', oh: 'hwa',
-    mks: ['曆'],
+    mks: ['曆', '曆詳'],
     price: 39000, needs: [],
     kicker: '事業運 月曆', lead: '오늘부터 앞으로 한 달 — 계약·채용·투자·발표에 좋은 날과, 갈등·지출을 조심할 날을 달력에 짚어 드립니다.',
   },

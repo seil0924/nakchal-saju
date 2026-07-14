@@ -30,6 +30,15 @@ export default function Home() {
       {/* 히어로 — 자동 넘김 롤링 배너 (4장) */}
       <HeroCarousel />
 
+      {/* 정통성 — 브랜드 신뢰 밴드 */}
+      <div className="trust">
+        <div className="trhd">
+          <span className="trseal">正</span>
+          <div className="trtx"><b>한 줄의 사정률을 위해, 십 년을 다듬었습니다</b><em>정통 만세력을 그대로 — 계산만큼은 타협하지 않았습니다</em></div>
+        </div>
+        <div className="trchips"><span>절기 천문계산</span><span>진태양시 보정</span><span>경도 127.5° 기준</span></div>
+      </div>
+
       {/* 닮은 CEO — 바이럴 입구 */}
       <Link className="ceoband" href="/ceo">
         <span className="cbseal">鏡</span>

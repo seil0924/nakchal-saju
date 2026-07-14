@@ -1,7 +1,7 @@
 // lib/report.ts — 명식 입력 → 섹션 리포트 (서버 전용)
 import 'server-only';
 import { chartFromBirth, compute, todayPillar, sajeong, wonguk, seunOf, type Chart, type Pillar, type Seun } from './engine';
-import { buildTiered, reportHero, type Section } from './report-copy';
+import { buildTiered, reportHeroFor, type Section, type Hero } from './report-copy';
 import { catMks } from './report-categories';
 
 export type ReportInput = {
@@ -32,7 +32,7 @@ export type ReportResult = {
   dayMaster: number;
   wonguk: Pillar[];              // 사주팔자 원국 (무료 · 만세력 신뢰)
   gauge: { dir: string; band: [string, string]; pos: number; precise?: string };
-  hero: { score: number; label: string; headline: string; sub: string; up: boolean };
+  hero: Hero;
   sections: Section[];
   meta: { chapters: number; items: number }; // 분량 앵커 — 전체 리포트 장(章)·항목 수
   selYear: number;              // 이 리포트가 기준으로 삼은 해 (세운)
@@ -83,7 +83,7 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
     ? { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos, precise: s.precise }
     : { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos };
 
-  const hero = reportHero(c, s); // 큰 점수 + 후킹 제목 (무료 · 방향 기반)
+  const hero = reportHeroFor(input.cat, { c, s, nowYMD, cli, legal, partner, ally, seunSelf: seunSelf }); // 카테고리별 히어로
   const title = `士가 읽는 ${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
   return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta,
     selYear, seun: { hanja: seunSelf.hanja, rel: seunSelf.rel, tilt: seunSelf.tilt } };

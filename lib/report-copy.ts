@@ -382,7 +382,7 @@ function gaugeHtml(s,worryTxt,unlocked){
     `<div class="gscale"><span>98.0<em>下限</em></span><span class="mid">基準 100.0</span><span>102.0<em>上限</em></span></div>`+
     `<div class="gprec">`+
       `<span class="gpk">${unlocked?'소수점 정밀값':'🔒 소수점 정밀값'}</span>`+
-      (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">택일팩(990원)부터 열립니다</span>`)+
+      (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">이달 사정률(39,000원)에서 열립니다</span>`)+
     `</div></div>`+
     `<p class="gbridge">${s.bridge}</p>${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
 }
@@ -401,14 +401,16 @@ function compatScore(rel,otherChart,boost=0){
   return Math.max(31,Math.min(97,COMPAT_SCORE[rel]+j+boost));
 }
 // 결과 히어로 (큰 점수 + 후킹 제목) — 무료(방향 기반)
-const REL_SCORE={in:88,bi:74,jae:70,sik:56,gwan:44};
+// ★ 점수를 게이지 바늘 위치(pos)에 직접 연동해, 좌측 점수와 우측 게이지가 같은 이야기를 하게 한다.
+const REL_B:Record<string,number>={in:6,bi:2,jae:0,sik:-3,gwan:-7};
 function heroFor(c,s){
-  const score=Math.max(22,Math.min(96,Math.round(REL_SCORE[s.rel]+(s.pos-50)*0.3)));
   const up=s.tilt>0;
+  const score=Math.max(30,Math.min(92,Math.round(46+(s.pos-50)*0.7+(REL_B[s.rel]??0))));
   const headline=up
     ? '오늘, 대표님의 기운이 사정률을 <b>위로</b> 끌어올립니다'
     : '오늘은 기운이 눌리는 날 — <b>서두르지 않는 자</b>가 잡습니다';
-  return {score,label:'오늘 낙찰 유리도',headline,sub:`${s.dir} · ${up?'상승 흐름':'관망 흐름'}`,up};
+  return {score,label:'오늘 사정률 유리도',headline,
+    sub:`${up?'상단':'하단'} 흐름 · 기준 100 대비 ${s.bandLo}~${s.bandHi}%`,up};
 }
 // 회사의 대운 (설립일 사주 기준 10년 주기 · 근사)
 function daeun(legalChart,foundYear,curYear){
@@ -520,6 +522,49 @@ function bizCalHtml(c:Chart,y:number,m:number,unlocked:boolean){
   return grid+`<div class="bizlist">${list}</div>`+
     `<p style="margin-top:12px">※ 일진(日辰)과 대표님 일간(${GAN[c.dGan]})의 상성으로 산출한 참고 흐름입니다. 큰 계약·채용·발표는 표시된 좋은 날에, 무리한 결정은 주의·휴식일을 피해 잡으십시오.</p>`;
 }
+// ── 사업운 캘린더: 그리드(무료) / 무료 미리보기 리드 / 이달 상세(유료) 분리 ──
+function bizGrid(c:Chart,y:number,m:number){
+  const me=c.dayMasterEl;
+  const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();
+  const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  let cells='';
+  for(let i=0;i<first;i++) cells+='<div class="bcd mute"></div>';
+  for(let d=1;d<=days;d++){const key=dayBizKey(me,y,m,d); const t=BIZ_TYPE[key];
+    cells+=`<div class="bcd"><span class="bcn">${d}</span><span class="bcm" style="background:${t.c}" title="${t.lb}"></span></div>`;}
+  const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="bch">${x}</div>`).join('');
+  const legend=Object.values(BIZ_TYPE).map(t=>`<span class="blg"><i style="background:${t.c}"></i>${t.lb}</span>`).join('');
+  return `<div class="bizcal">${dh}${cells}</div><div class="bizleg">${legend}</div>`;
+}
+// 무료 미리보기: 이달 요약(움직일 날/조심할 날 수) + 이번 주 구체 날짜
+function bizFreeLead(c:Chart,y:number,m:number,today:number){
+  const me=c.dayMasterEl; const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const cnt:Record<string,number>={};
+  for(let d=1;d<=days;d++){const k=dayBizKey(me,y,m,d);cnt[k]=(cnt[k]||0)+1;}
+  const good=(cnt.jae||0)+(cnt.in||0)+(cnt.bi||0)+(cnt.sik||0), care=(cnt.gwanY||0), rest=(cnt.gwanE||0);
+  const move:{d:number;k:string}[]=[], avoid:number[]=[];
+  for(let d=today; d<today+7 && d<=days; d++){const k=dayBizKey(me,y,m,d);
+    if(k==='gwanY') avoid.push(d); else if(k!=='gwanE') move.push({d,k});}
+  const moveList=move.length?move.map(o=>`<b>${o.d}일</b> ${BIZ_TYPE[o.k].k}`).join(' · '):'이번 주엔 두드러진 길일이 없습니다';
+  const avoidList=avoid.length?avoid.map(d=>`<b>${d}일</b>`).join(' · '):'이번 주엔 특별히 조심할 날이 없습니다';
+  return `<div class="bizsum"><div class="bsc"><span class="bsk mv">움직일 날</span><span class="bsv">${good}일</span></div>`+
+    `<div class="bsc"><span class="bsk av">조심할 날</span><span class="bsv">${care}일</span></div>`+
+    `<div class="bsc"><span class="bsk rt">재정비</span><span class="bsv">${rest}일</span></div></div>`+
+    `<div class="bizweek"><div class="bwhd">이번 주 미리보기<span>· 무료</span></div>`+
+    `<p class="bwl"><span class="bwm mv">움직일 날</span>${moveList}</p>`+
+    `<p class="bwl"><span class="bwm av">조심할 날</span>${avoidList}</p></div>`+
+    `<p class="bizhint">이달 <b>${m}월 전체</b>의 계약·채용·발표·주의 날짜와 <b>그날의 이유</b>는 아래 <b>이달 상세</b>에서 한 번에 열립니다.</p>`;
+}
+// 이달 상세(유료): 날짜별 무엇을 할지 전체
+function bizMonthDetail(c:Chart,y:number,m:number){
+  const me=c.dayMasterEl; const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const buckets:Record<string,number[]>={};
+  for(let d=1;d<=days;d++){const k=dayBizKey(me,y,m,d);(buckets[k]=buckets[k]||[]).push(d);}
+  const order=['jae','in','bi','sik','gwanY','gwanE'];
+  const list=order.filter(k=>buckets[k]&&buckets[k].length).map(k=>{const t=BIZ_TYPE[k];
+    return `<div class="bizrow"><span class="bztag" style="background:${t.c}">${t.k}</span><div class="bzbd"><div class="bzdays">${buckets[k].join(' · ')}일</div><div class="bzdesc">${t.full}</div></div></div>`;}).join('');
+  return `<div class="bizlist">${list}</div>`+
+    `<p style="margin-top:12px">※ 일진(日辰)과 대표님 일간(${GAN[c.dGan]})의 상성으로 산출한 이달 전체 흐름입니다. 큰 계약·채용·발표는 좋은 날에, 무리한 결정은 주의·휴식일을 피해 잡으십시오.</p>`;
+}
 function gilCount(c:Chart,y:number,m:number){
   const days=new Date(Date.UTC(y,m,0)).getUTCDate();let n=0;
   for(let d=1;d<=days;d++){const rel=relation(c.dayMasterEl,todayPillar(y,m,d).el);if(rel==='in'||rel==='bi')n++;}
@@ -613,6 +658,35 @@ function ileonHtml(c:Chart,today:{gan:number;zhi:number;el:number}){
   const idx=(today.gan*7+today.zhi*3)%pool.length;
   return `<div class="ileon"><span class="ilk">오늘의 한마디 · 一言</span><p>${pool[idx]}</p></div>`;
 }
+// ── 이번 달 사정률 캘린더 — 하루하루 상단/하단 흐름. 무료는 오늘·이번 주만 열고 나머지는 잠금.
+function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolean){
+  const me=c.dayMasterEl;
+  const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();
+  const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const upDays:number[]=[];
+  let cells='';
+  for(let i=0;i<first;i++) cells+='<div class="scd mute"></div>';
+  for(let d=1;d<=days;d++){
+    const rel=relation(me,todayPillar(y,m,d).el);
+    const strong=(rel==='in'||rel==='bi'); const up=strong||rel==='jae';
+    const col=strong?'#177f5e':up?'#7a8a3a':(rel==='gwan'?'#b5402f':'#8a7f68');
+    const mark=strong?'▲':up?'△':(rel==='gwan'?'▼':'·');
+    if(strong) upDays.push(d);
+    const inWin = d>=today && d<today+7;       // 오늘~이번 주(7일)
+    const reveal = unlocked || inWin;
+    const past = d<today;
+    const cls = d===today?' now':past?' past':reveal?'':' lock';
+    cells+=`<div class="scd${cls}"><span class="scn">${d}</span>`+
+      (reveal?`<span class="scm" style="color:${col}">${mark}</span>`:`<span class="scm lockm">·</span>`)+`</div>`;
+  }
+  const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="sch">${x}</div>`).join('');
+  const leg=`<div class="sajleg"><span><i style="background:#177f5e"></i>상단(유리)</span><span><i style="background:#7a8a3a"></i>무난</span><span><i style="background:#b5402f"></i>주의(하단)</span></div>`;
+  const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`;
+  if(!unlocked){
+    return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 사정률이 이미 산출됐습니다 — 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 상단·하단 흐름은 <b>이달 사정률(39,000원)</b>에서 한 번에 열립니다.</p>`;
+  }
+  return grid+`<p style="margin-top:11px">이달 <b>상단(유리) 흐름</b> 날: <b>${upDays.join(' · ')}일</b> — 큰 건 투찰·계약은 이 날들에 무게를 두십시오. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가십시오.</p>`;
+}
 function weekAheadHtml(c:Chart,y:number,m:number,d:number){
   const wn=['일','월','화','수','목','금','토'];let cells='';
   for(let i=0;i<7;i++){const dt=new Date(Date.UTC(y,m-1,d+i));
@@ -660,14 +734,21 @@ function buildReport(c,today,s,worryTxt,clientChart,legalChart,partnerChart,ally
   }
   // ── 무료 정점(率) → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
   let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c);
-  if(nowYMD){rateHtml+=weekAheadHtml(c,nowYMD.y,nowYMD.m,nowYMD.d);}
+  if(nowYMD){
+    rateHtml+=`<div class="sajmonhd"><span class="smk">曆</span>이번 달 <b>${nowYMD.m}월</b> 사정률 — 날마다 어느 쪽인가</div>`;
+    rateHtml+=sajeongMonthHtml(c,nowYMD.y,nowYMD.m,nowYMD.d,preciseOn);
+    rateHtml+=weekAheadHtml(c,nowYMD.y,nowYMD.m,nowYMD.d);
+  }
   if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
     rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 바로 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
-  secs.push({mk:'率',tier:'free',t:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
+  secs.push({mk:'率',tier:'free',t:nowYMD?`이번 달 ${nowYMD.m}월 사정률 — 오늘은 어느 쪽인가`:`오늘, 당신의 사정률은 어느 쪽으로 뽑혔나`,html:rateHtml,gauge:true});
   if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
     secs.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 길일 <b>${gc0}일</b>의 정확한 날짜가 이미 산출되어 있습니다 — 이달이 가기 전에 확인하십시오.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
   // 曆 · 사업운 캘린더 (그리드는 무료 노출, 날짜별 상세는 결제 후)
-  if(nowYMD){secs.push({mk:'曆',tier:'free',t:`${nowYMD.m}월 사업운 캘린더 — 이달, 언제 움직일까`,html:bizCalHtml(c,nowYMD.y,nowYMD.m,level>=2)});}
+  if(nowYMD){
+    secs.push({mk:'曆',tier:'free',t:`${nowYMD.m}월 사업운 캘린더 — 이달, 언제 움직일까`,html:bizGrid(c,nowYMD.y,nowYMD.m)+bizFreeLead(c,nowYMD.y,nowYMD.m,nowYMD.d)});
+    secs.push({mk:'曆詳',tier:'full',teaser:`이달 <b>${nowYMD.m}월</b>의 <b>계약·채용·발표·주의</b> 날짜가 이미 산출됐습니다 — 어느 날에 무엇을 하고 어느 날을 피해야 하는지, 정확한 날짜와 그 이유가 여기 담깁니다.`,t:`${nowYMD.m}월 이달 상세 — 날짜별 무엇을 할까`,html:bizMonthDetail(c,nowYMD.y,nowYMD.m)});
+  }
   {const yy=selYear||(nowYMD?nowYMD.y:2026); const cm=(nowYMD&&nowYMD.y===yy)?nowYMD.m:0;
    secs.push({mk:'曆年',tier:'full',teaser:`올 한 해 <b>12개월</b>의 흐름 — 밀어주는 달과 조여지는 달이 이미 갈라져 있습니다. 큰 계약·발표·정비의 때를 한 해 단위로 잡으십시오.`,t:`${yy}년 12개월 사업운 흐름 — 밀어주는 달, 조여지는 달`,html:bizYearHtml(c,yy,cm)});}
   secs.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>으로 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
@@ -735,7 +816,47 @@ export type Section = { mk:string; free:boolean; tier:'free'|'taekil'|'full'; t:
 export type RelNames = { client?:string; legal?:string; partner?:string; ally?:string };
 export type DaeunMeta = { foundYear?:number; curYear:number };
 export type NowYMD = { y:number; m:number; d:number };
+export type Hero = { score:number; big?:string; unit?:string; label:string; headline:string; sub:string; up:boolean };
 export function reportHero(c:Chart, s:Sajeong){ return heroFor(c,s); }
+// 카테고리별 히어로 — 각 상품에 맞는 좌측 요약 카드. (사정률만 사정률 점수, 나머지는 제 성격에 맞게)
+export function reportHeroFor(cat:string|undefined, ctx:any):Hero{
+  const {c,s,nowYMD,cli,legal,partner,ally,seunSelf}=ctx;
+  const me=c.dayMasterEl;
+  const base=heroFor(c,s); // 사정률 기본(점수 있음)
+  if(cat==='calendar'||cat==='calendar_year'){
+    const y=nowYMD?.y, m=nowYMD?.m;
+    if(cat==='calendar_year'){
+      return {score:0,big:'12',unit:'개월',label:'올해 사업운 흐름',
+        headline:'올 한 해, <b>밀어주는 달</b>에 큰 판을 거십시오',
+        sub:'밀어주는 달·조여지는 달을 미리 가릅니다',up:true};
+    }
+    let good=0,care=0;
+    if(m){const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+      for(let d=1;d<=days;d++){const rel=relation(me,todayPillar(y,m,d).el);
+        if(rel==='in'||rel==='bi'||rel==='jae'||rel==='sik')good++;
+        else if(rel==='gwan'&&todayPillar(y,m,d).gan%2===0)care++;}}
+    return {score:0,big:String(good),unit:'일',label:`이달 움직일 날`,
+      headline:'이달, <b>좋은 날</b>에 움직이고 궂은 날을 피하십시오',
+      sub:`이달 움직일 날 ${good}일 · 조심할 날 ${care}일`,up:true};
+  }
+  if(cat==='daepyo'){
+    return {score:0,big:TYPE4[me],unit:'',label:'대표 유형',
+      headline:`대표님은 <b>${TYPE4[me]}</b> 대표입니다`,
+      sub:`${NAT[me]} · 일간 ${GAN[c.dGan]}(${EL[me]})`,up:true};
+  }
+  if(cat==='balju'&&cli){const cm=compat(c,cli,seunSelf);
+    return {score:0,big:String(cm.score2),unit:'점',label:'발주처 궁합',
+      headline:`이 발주처, 대표님과 <b>${cm.grade}</b>`,sub:`${cm.grade} · ${cm.score}`,up:cm.score2>=60};}
+  if(cat==='gunghap'){const oc=partner||ally; const tbl=partner?DONGUP:HYEOPJEONG;
+    if(oc){const cm=compatWith(c,oc,tbl,'대표님',partner?'동업 상대':'상대 회사',seunSelf);
+      return {score:0,big:String(cm.score2),unit:'점',label:partner?'동업 궁합':'협정 궁합',
+        headline:`손잡기 전 궁합 — <b>${cm.grade}</b>`,sub:`${cm.grade} · ${cm.score}`,up:cm.score2>=60};}}
+  if(cat==='daeun'&&legal){const lr=legalReport(c,legal);
+    const relKo=['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]||'';
+    return {score:0,big:EL[lr.strong],unit:' 체질',label:'회사의 그릇',
+      headline:`회사가 대표님을 <b>${relKo}</b>으로 받칩니다`,sub:`법인 ${EL[lr.strong]} 체질 · ${lr.pills}`,up:true};}
+  return base; // 사정률·전체
+}
 // 레벨(0 무료 · 1 택일팩 · 2 전체)로 섹션 생성. 유료 html은 서버에서 결제 검증 후에만 채워짐.
 export function buildTiered(
   c:Chart, today:any, s:Sajeong, worry:string,

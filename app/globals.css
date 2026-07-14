@@ -317,6 +317,48 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .bizleg{display:flex;flex-wrap:wrap;gap:8px 12px;margin:11px 0 2px}
 .bizleg .blg{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#5b5545}
 .bizleg .blg i{width:11px;height:6px;border-radius:999px;flex:none}
+/* 이번 달 사정률 캘린더 */
+.sajmonhd{display:flex;align-items:center;gap:8px;margin:16px 0 9px;font-family:var(--serif);font-weight:800;font-size:14.5px;color:#20242c}
+.sajmonhd .smk{flex:none;width:24px;height:24px;border-radius:7px;background:#f3ead6;color:#8a6a2a;font-family:var(--serif);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+.sajmonhd b{color:var(--red)}
+.sajcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:2px 0 4px}
+.sajcal .sch{text-align:center;font-size:10.5px;font-weight:800;color:#a49b88;padding:2px 0}
+.sajcal .scd{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f7f4ec;border:1px solid var(--line);border-radius:9px;min-height:44px;padding:5px 1px}
+.sajcal .scd.mute{background:transparent;border:none}
+.sajcal .scd.now{background:#fbefd7;border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.sajcal .scd.past{opacity:.5}
+.sajcal .scd.lock{background:repeating-linear-gradient(135deg,#f2eee3,#f2eee3 5px,#ece7db 5px,#ece7db 10px)}
+.sajcal .scn{font-size:12px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.sajcal .scm{font-size:13px;font-weight:900;line-height:1;margin-top:3px}
+.sajcal .scm.lockm{color:#c3bca8}
+.sajleg{display:flex;flex-wrap:wrap;gap:8px 12px;margin:10px 0 2px}
+.sajleg span{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:#5b5545}
+.sajleg i{width:10px;height:6px;border-radius:999px;flex:none}
+.sajlock{margin-top:12px;background:linear-gradient(135deg,#fbf1d9,#f4e6c2);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7a5c1e;font-weight:600;line-height:1.6}
+.sajlock b{color:var(--red)}
+/* 사업운 캘린더 무료 미리보기 */
+.bizsum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 4px}
+.bizsum .bsc{background:#f7f4ec;border:1px solid var(--line);border-radius:11px;padding:10px 6px;text-align:center}
+.bizsum .bsk{display:block;font-size:11px;font-weight:800;margin-bottom:5px}
+.bizsum .bsk.mv{color:#2f7d5b}.bizsum .bsk.av{color:#b5402f}.bizsum .bsk.rt{color:#8a8272}
+.bizsum .bsv{font-family:var(--serif);font-weight:900;font-size:20px;color:#20242c;font-variant-numeric:tabular-nums}
+.bizweek{margin-top:12px;border:1px solid #e7dcc2;border-radius:13px;background:linear-gradient(180deg,#fffdf7,#faf3e6);padding:12px 14px}
+.bizweek .bwhd{font-family:var(--serif);font-weight:800;font-size:13.5px;color:#20242c;margin-bottom:8px}
+.bizweek .bwhd span{font-size:11px;color:#177f5e;font-weight:700;margin-left:6px}
+.bizweek .bwl{font-size:12.5px;color:#4b4636;line-height:1.7;margin-top:5px}
+.bizweek .bwm{display:inline-block;font-weight:800;font-size:11px;padding:1px 7px;border-radius:999px;margin-right:7px}
+.bizweek .bwm.mv{background:#e6f2ec;color:#2f7d5b}.bizweek .bwm.av{background:#f7e4e0;color:#b5402f}
+.bizhint{margin-top:12px;background:linear-gradient(135deg,#fbf1d9,#f4e6c2);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7a5c1e;font-weight:600;line-height:1.6}
+.bizhint b{color:var(--red)}
+.rhero .num.numtx{font-size:30px;line-height:1.25;margin:12px 0 4px}
+/* 홈 정통성 브랜드 밴드 */
+.home5 .trust{margin:16px 24px 0;border:1px solid #e4dcc8;border-radius:14px;background:linear-gradient(180deg,#fffef9,#f8f1e2);padding:15px 16px}
+.home5 .trust .trhd{display:flex;align-items:center;gap:12px}
+.home5 .trust .trseal{flex:none;width:38px;height:38px;border:1.5px solid var(--h-red);color:var(--h-red);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:20px;border-radius:2px}
+.home5 .trust .trtx b{display:block;font-family:var(--serif);font-weight:800;font-size:14.5px;color:#211c16;line-height:1.4;letter-spacing:-.01em}
+.home5 .trust .trtx em{display:block;font-style:normal;font-size:11.5px;color:#7f766a;font-weight:600;margin-top:4px;line-height:1.5}
+.home5 .trust .trchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid #ece3d0}
+.home5 .trust .trchips span{font-size:11px;font-weight:700;color:#7a5c1e;background:#f3e6c8;border:1px solid #e6d5aa;border-radius:999px;padding:4px 10px}
 .bizlist{margin-top:14px;display:flex;flex-direction:column;gap:8px}
 .bizrow{display:flex;gap:10px;align-items:flex-start;background:#f7f4ec;border:1px solid var(--line);border-radius:11px;padding:10px 12px}
 .bizrow .bztag{flex:0 0 auto;color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:1px}

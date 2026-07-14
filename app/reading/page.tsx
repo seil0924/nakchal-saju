@@ -24,7 +24,7 @@ const RITE_STEPS = [
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
-type Hero = { score: number; label: string; headline: string; sub: string; up: boolean };
+type Hero = { score: number; big?: string; unit?: string; label: string; headline: string; sub: string; up: boolean };
 type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
@@ -488,7 +488,7 @@ export default function Reading() {
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
-                <div className="num" style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.score}<span style={{ fontSize: 20 }}>점</span></div>
+                <div className={'num' + (res.hero.big && (res.hero.big as any).length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 20 }}>{res.hero.unit ?? '점'}</span></div>
                 <div className="lab">{res.hero.label}</div>
                 <div className="sub2">{res.hero.sub}</div>
               </div>
@@ -496,13 +496,13 @@ export default function Reading() {
             </div>
             <div className="rright">
             <div className="rephd">{res.title}</div>
-            {res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
+            {res.selYear && cat !== 'sajeong' && cat !== 'calendar' && cat !== 'calendar_year' && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
                 <div className="rprog">
                   <span className="rpl">열람 <b>{opened}</b> / {total} 섹션</span>
                   <span className="rpbar"><i style={{ width: Math.round(opened / total * 100) + '%' }} /></span>
-                  <span className="rpr">{level >= 2 ? '전체 열람' : level === 1 ? '택일팩' : '무료 열람'}</span>
+                  <span className="rpr">{level >= 2 ? '전체 열람' : level === 1 ? '부분 열람' : '무료 열람'}</span>
                 </div>
               ); })()}
             <div id="acc">
