@@ -13,6 +13,7 @@ const PUBLIC_EXACT = new Set<string>([
 const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/'];
 
 function isPublicPath(path: string): boolean {
+  if (/\.[^/]+$/.test(path)) return true;   // 정적 파일(.mp4·.jpg·.png·.svg 등)은 게이트 제외
   if (PUBLIC_EXACT.has(path)) return true;
   return PUBLIC_PREFIX.some((p) => path.startsWith(p));
 }
@@ -42,5 +43,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|auth/callback).*)'],
+  // 정적 자산(경로에 . 포함)·_next·auth/callback 은 미들웨어 자체를 태우지 않음
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|auth/callback|.*\\..*).*)'],
 };

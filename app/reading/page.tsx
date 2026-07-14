@@ -124,6 +124,8 @@ export default function Reading() {
       const b = p.get('b'), n = p.get('n');
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
       const ct = p.get('cat'); if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
+      // 사주아이식: 진입하자마자 대표 선택 시트를 띄운다 (본인이 프리필 안 됐을 때)
+      if (!p.get('b')) setTimeout(() => setPicker({ open: true, kind: 'self' }), 380);
     } catch {}
   }, []);
   function persistSaved(list: Target[]) { setSaved(list); try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch {} }
