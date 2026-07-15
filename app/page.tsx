@@ -30,12 +30,14 @@ export default function Home() {
         <Link href="/more" className="ham" aria-label="메뉴 · 더보기"><i /><i /><i /></Link>
       </div>
 
+      <p className="hometag">공공입찰·수주 대표를 위한 <b>회사 사주</b> — 오늘의 사정률·발주처 궁합·투찰 택일을 30초, <b>무료</b>로.</p>
+
       {/* 히어로 — 자동 넘김 롤링 배너 (4장) */}
       <HeroCarousel />
 
       {/* 닮은 CEO — 바이럴 입구 */}
       <Link data-reveal className="ceoband" href="/ceo">
-        <span className="cbseal">鏡</span>
+        <span aria-hidden="true" className="cbseal">鏡</span>
         <span className="cbtx"><b>나와 닮은 세계적 CEO는?</b><em>잡스·록펠러·샤넬 … 거장 100인 × 내 사주 · 30초</em></span>
         <span className="cbgo">무료 →</span>
       </Link>
@@ -44,7 +46,7 @@ export default function Home() {
       <div className="lab"><i /><span>오늘의 사정률 전망</span><TodayChip /></div>
       <div className="today">
         <div className="in">
-          <div className="stamp">封</div>
+          <div aria-hidden="true" className="stamp">封</div>
           <div>
             <h3>오늘 이 투찰,<br />나에게 유리한 날인가</h3>
             <p>좋은 날만 말씀드리지 않습니다 — <b style={{ color: '#9a2a20' }}>피해야 할 날</b>도 짚어드립니다.</p>
@@ -57,32 +59,32 @@ export default function Home() {
       <div className="lab"><i /><span>사주별로 골라 보기</span></div>
       <div className="list">
         <Link data-reveal className="li5" href="/reading?cat=daepyo">
-          <div className="gz" style={{ color: '#46a07d' }}>代</div>
+          <div aria-hidden="true" className="gz" style={{ color: '#46a07d' }}>代</div>
           <div className="bd5"><div className="t">대표 사주 <small>代表 四柱</small></div><div className="d">대표님이 어떤 그릇인가 — 성정·승부 기질·재물·사람까지</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link data-reveal className="li5" href="/reading?cat=sajeong">
-          <div className="gz" style={{ color: '#3f8f80' }}>率</div>
+          <div aria-hidden="true" className="gz" style={{ color: '#3f8f80' }}>率</div>
           <div className="bd5"><div className="t">사정률 사주 <small>査定率</small></div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
           <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
         </Link>
         <Link data-reveal className="li5" href="/balju">
-          <div className="gz" style={{ color: '#46a07d' }}>宮</div>
+          <div aria-hidden="true" className="gz" style={{ color: '#46a07d' }}>宮</div>
           <div className="bd5"><div className="t">발주처 사주 <small>發注處 宮合</small></div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link data-reveal className="li5" href="/reading?cat=gunghap">
-          <div className="gz" style={{ color: '#d15c4a' }}>合</div>
+          <div aria-hidden="true" className="gz" style={{ color: '#d15c4a' }}>合</div>
           <div className="bd5"><div className="t">협정·궁합 사주 <small>同業 · 協定</small></div><div className="d">손잡기 전에, 깨질 궁합인지부터</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link data-reveal className="li5" href="/reading?cat=daeun">
-          <div className="gz" style={{ color: '#cfa64e' }}>運</div>
+          <div aria-hidden="true" className="gz" style={{ color: '#cfa64e' }}>運</div>
           <div className="bd5"><div className="t">회사 대운 <small>會社 大運</small></div><div className="d">회사가 대표님을 밀어주는가 — 년도별 큰 흐름</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link data-reveal className="li5" href="/reading?cat=calendar">
-          <div className="gz" style={{ color: '#d15c4a' }}>曆</div>
+          <div aria-hidden="true" className="gz" style={{ color: '#d15c4a' }}>曆</div>
           <div className="bd5"><div className="t">사업운 캘린더 <small>事業運 曆</small></div><div className="d">이달·연간 — 계약·채용·발표에 좋은 날, 조심할 날</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
@@ -90,14 +92,14 @@ export default function Home() {
 
       {/* 통점 위로 랜딩 */}
       <Link data-reveal className="ceoband" href="/why" style={{ marginTop: 26 }}>
-        <span className="cbseal" style={{ borderColor: '#c98b4a', color: '#e3c27a' }}>運</span>
+        <span aria-hidden="true" className="cbseal" style={{ borderColor: '#c98b4a', color: '#e3c27a' }}>運</span>
         <span className="cbtx"><b>하한가·연패·큰 건… 대표님 잘못이 아닙니다</b><em>그 고민, 실력이 아니라 흐름의 문제일 수 있습니다</em></span>
         <span className="cbgo">→</span>
       </Link>
 
       {/* 복채(福債) — 콜로폰 위, 조용한 감사 한 줄 */}
       <Link data-reveal className="bokline" href="/bokchae">
-        <span className="blseal">福</span>
+        <span aria-hidden="true" className="blseal">福</span>
         <span className="bltx"><b>복채 청산</b><em>받은 풀이에, 스스로 놓고 가는 마음 — 정해진 값은 없습니다</em></span>
         <span className="blgo">›</span>
       </Link>
@@ -107,7 +109,7 @@ export default function Home() {
       {/* 콜로폰 */}
       <div className="foot">
         <div className="crule" />
-        <div className="colo">士</div>
+        <div aria-hidden="true" className="colo">士</div>
         명리 기반 참고 정보입니다 · 투찰금액 산정 근거가 아닙니다<br />
         <Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보처리방침</Link> · <Link href="/refund">청약철회·환불</Link>
       </div>

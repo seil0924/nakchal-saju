@@ -1499,3 +1499,11 @@ button.li{font:inherit;text-align:left;cursor:pointer;width:calc(100% - 26px);bo
 .surow:last-child{border-bottom:0}
 .sun{flex:none;width:21px;height:21px;border-radius:50%;background:linear-gradient(135deg,var(--red),#7f1a17);color:#f3e6cf;font-family:var(--serif);font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .sux{font-size:13.5px;color:#4a4636;line-height:1.6;font-weight:500;word-break:keep-all}
+
+/* 홈 첫인상 — 1초 요약 태그라인 */
+.home5 .hometag{margin:2px 24px 14px;text-align:center;font-size:13px;line-height:1.6;color:#8a8474;font-weight:500;word-break:keep-all}
+.home5 .hometag b{color:var(--gold);font-weight:800}
+
+/* 접근성 — 키보드 포커스 가시화 */
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:5px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}

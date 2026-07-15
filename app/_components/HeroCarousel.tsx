@@ -51,7 +51,7 @@ export default function HeroCarousel() {
     <div className="herocar" onTouchStart={onStart} onTouchEnd={onEnd}>
       {SLIDES.map((s, k) => (
         <Link key={k} href={s.href} className={'hcslide' + (k === i ? ' on' : '')} tabIndex={k === i ? 0 : -1} aria-hidden={k !== i}>
-          <video ref={el => { vids.current[k] = el; }} muted loop playsInline preload="metadata" poster={s.poster}>
+          <video ref={el => { vids.current[k] = el; }} muted loop playsInline preload="none" poster={s.poster}>
             <source src={s.src} type="video/mp4" />
           </video>
           <div className="hcin">
