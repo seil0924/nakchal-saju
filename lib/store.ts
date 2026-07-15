@@ -92,7 +92,8 @@ export async function createOrder(reportId: string, amount: number, level: numbe
   const c = sb();
   const paymentId = 'pay_' + (g.__seq ? g.__seq++ : Math.floor(performance.now()));
   if (c) {
-    const { error } = await c.from('payments').insert({ payment_id: paymentId, report_id: reportId, amount, level, status: 'pending' });
+    const isPass = reportId.startsWith('pass:');
+    const { error } = await c.from('payments').insert({ payment_id: paymentId, report_id: isPass ? null : reportId, pass_key: isPass ? reportId : null, amount, level, status: 'pending' });
     if (error) throw error;
     return { paymentId, reportId, amount, level, status: 'pending' };
   }
@@ -108,7 +109,8 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
     const { data: o } = await c.from('payments').select('*').eq('payment_id', paymentId).maybeSingle();
     if (!o || paidAmount !== o.amount) return null;      // ★금액 재검증
     await c.from('payments').update({ status: 'paid', paid_at: new Date().toISOString() }).eq('payment_id', paymentId);
-    if (String(o.report_id).startsWith('pass:')) { await c.from('entitlements').upsert({ key: o.report_id }); return { paymentId, reportId: o.report_id, amount: o.amount, level: o.level ?? 1, status: 'paid' }; }
+    const key = o.report_id ?? o.pass_key;
+    if (String(key).startsWith('pass:')) { await c.from('entitlements').upsert({ key }); return { paymentId, reportId: key, amount: o.amount, level: o.level ?? 1, status: 'paid' }; }
     const lvl = o.level ?? 2;
     const { data: cur } = await c.from('reports').select('unlock_level').eq('id', o.report_id).maybeSingle();
     const next = Math.max(cur?.unlock_level ?? 0, lvl);   // 상위 레벨은 유지 (다운그레이드 방지)
@@ -127,7 +129,7 @@ export async function getOrder(paymentId: string): Promise<Order | null> {
   const c = sb();
   if (c) {
     const { data } = await c.from('payments').select('*').eq('payment_id', paymentId).maybeSingle();
-    return data ? { paymentId, reportId: data.report_id, amount: data.amount, level: data.level ?? 2, status: data.status } : null;
+    return data ? { paymentId, reportId: data.report_id ?? data.pass_key, amount: data.amount, level: data.level ?? 2, status: data.status } : null;
   }
   return memOrders.get(paymentId) ?? null;
 }
