@@ -17,6 +17,21 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image', title: '낙찰사주 — 會社 사주 전문', description: '오늘의 낙찰 사정률을 사주로 짚다', images: ['/api/og'] },
   robots: { index: true, follow: true },
+  alternates: { canonical: '/' },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ? { 'naver-site-verification': process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION } : {},
+  },
+};
+
+// 구조화 데이터(JSON-LD) — 검색·AI가 서비스 정체를 정확히 이해하도록
+const LD = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Organization', '@id': 'https://nakchal-saju.vercel.app/#org', name: '낙찰사주', url: 'https://nakchal-saju.vercel.app', description: '공공입찰·수주 대표를 위한 회사 사주 전문 서비스.' },
+    { '@type': 'WebSite', '@id': 'https://nakchal-saju.vercel.app/#site', url: 'https://nakchal-saju.vercel.app', name: '낙찰사주', inLanguage: 'ko', publisher: { '@id': 'https://nakchal-saju.vercel.app/#org' } },
+    { '@type': 'Service', name: '낙찰사주 — 회사 사주·사정률·발주처 궁합·투찰 택일', serviceType: '사주명리 기반 비즈니스 의사결정 참고 서비스', provider: { '@id': 'https://nakchal-saju.vercel.app/#org' }, areaServed: 'KR', description: '대표와 법인의 사주로 오늘의 낙찰 사정률, 발주처·동업·협정 궁합, 회사 대운, 투찰 택일을 만세력으로 짚어드립니다. 참고·오락용.' },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -31,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(LD) }} />
         <IntroSplash />
         <TapFX />
         <div className="shell">
