@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { sget } from '@/lib/scope';
 
 // 19 · 더보기 · 설정 (프로필 · 회사 · 구독 · 알림)
 // 로그인 상태(initial)는 서버가 쿠키를 읽어 미리 판정 → 첫 페인트에 로그아웃/로그인 버튼 즉시 표시(지연 팝인 제거)
@@ -22,7 +23,7 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
   useEffect(() => {
     try { setNotify(localStorage.getItem(NK) !== '0'); } catch {}
     try {
-      const raw = localStorage.getItem('nakchal_saved_targets_v1');
+      const raw = sget('nakchal_saved_targets_v1');
       if (raw) {
         const arr = JSON.parse(raw);
         const rep = Array.isArray(arr) ? arr.find((t: any) => t.kind === 'legal' || t.corp) : null;

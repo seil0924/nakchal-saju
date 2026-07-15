@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { listVault, removeVault, type VaultItem } from '@/lib/vault';
+import { sget } from '@/lib/scope';
 
 const KIND_LABEL: Record<string, string> = { self: '대표 사주', legal: '법인', client: '발주처', partner: '동업 상대', ally: '상대 회사' };
 type Saved = { kind: string; name: string; date: string };
@@ -21,7 +22,7 @@ export default function Vault() {
       setItems([...map.values()].sort((a, b) => b.when - a.when));
     }).catch(() => {});
     // 저장된 대상
-    try { const s = localStorage.getItem('nakchal_saved_targets_v1'); if (s) setSaved(JSON.parse(s)); } catch {}
+    try { const s = sget('nakchal_saved_targets_v1'); if (s) setSaved(JSON.parse(s)); } catch {}
   }, []);
 
   const del = (id: string) => { removeVault(id); setItems(listVault()); };

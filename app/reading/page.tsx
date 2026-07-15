@@ -14,6 +14,7 @@ import { type Person, type PersonKind } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
 import TrustStrip from '@/app/_components/TrustStrip';
 import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
+import { sget, sset } from '@/lib/scope';
 
 // 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
 const RITE_STEPS = [
@@ -113,7 +114,7 @@ export default function Reading() {
   const [addDate, setAddDate] = useState('');
   const [saved, setSaved] = useState<Target[]>([]);
   const [cbOpen, setCbOpen] = useState(false); // 발주처 검색 셀렉트 열림
-  useEffect(() => { try { const s = localStorage.getItem(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
+  useEffect(() => { try { const s = sget(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
   // 발주처 탭에서 넘어온 경우 프리필 (?ck=client&cn=이름&cd=날짜)
   useEffect(() => {
     try {
@@ -131,7 +132,7 @@ export default function Reading() {
       if (!p.get('b')) setTimeout(() => setPicker({ open: true, kind: 'self' }), 380);
     } catch {}
   }, []);
-  function persistSaved(list: Target[]) { setSaved(list); try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch {} }
+  function persistSaved(list: Target[]) { setSaved(list); try { sset(LS_KEY, JSON.stringify(list)); } catch {} }
   function addTarget() {
     if (!addDate) { setErr('대상의 날짜를 넣어주세요.'); return; }
     setErr('');
@@ -148,7 +149,7 @@ export default function Reading() {
   const SELF_KEY = 'nakchal_self_v1', LEGAL_KEY = 'nakchal_legal_v1';
   const [savedSelf, setSavedSelf] = useState<any[]>([]);
   const [savedLegal, setSavedLegal] = useState<any[]>([]);
-  useEffect(() => { try { const a = localStorage.getItem(SELF_KEY); if (a) setSavedSelf(JSON.parse(a)); const b = localStorage.getItem(LEGAL_KEY); if (b) setSavedLegal(JSON.parse(b)); } catch {} }, []);
+  useEffect(() => { try { const a = sget(SELF_KEY); if (a) setSavedSelf(JSON.parse(a)); const b = sget(LEGAL_KEY); if (b) setSavedLegal(JSON.parse(b)); } catch {} }, []);
   // 로그인 계정에 저장된 사주/대상 불러오기 (기기가 바뀌어도 이어짐 · 사주아이식)
   useEffect(() => {
     fetch('/api/charts').then(r => r.json()).then(d => {
@@ -164,12 +165,12 @@ export default function Reading() {
   function saveSelfProfile() {
     if (!f.birth) return;
     const p = { name: f.name, birth: f.birth, gender: f.gender, cal: f.cal, leap: f.leap, timeMode: f.timeMode, time: f.time, sijin: f.sijin };
-    setSavedSelf(prev => { const nx = [p, ...prev.filter(x => !(x.birth === p.birth && x.name === p.name))].slice(0, 8); try { localStorage.setItem(SELF_KEY, JSON.stringify(nx)); } catch {} return nx; });
+    setSavedSelf(prev => { const nx = [p, ...prev.filter(x => !(x.birth === p.birth && x.name === p.name))].slice(0, 8); try { sset(SELF_KEY, JSON.stringify(nx)); } catch {} return nx; });
   }
   function saveLegalProfile() {
     if (!f.legal) return;
     const p = { company: f.company, legal: f.legal };
-    setSavedLegal(prev => { const nx = [p, ...prev.filter(x => !(x.legal === p.legal && x.company === p.company))].slice(0, 8); try { localStorage.setItem(LEGAL_KEY, JSON.stringify(nx)); } catch {} return nx; });
+    setSavedLegal(prev => { const nx = [p, ...prev.filter(x => !(x.legal === p.legal && x.company === p.company))].slice(0, 8); try { sset(LEGAL_KEY, JSON.stringify(nx)); } catch {} return nx; });
   }
   function loadSelf(p: any) { setF(s => ({ ...s, name: p.name || '', birth: p.birth, gender: p.gender || 'M', cal: p.cal || 'solar', leap: !!p.leap, timeMode: p.timeMode || 'N', time: p.time || '09:20', sijin: p.sijin ?? 3 })); const [yy, mm, dd] = String(p.birth).split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
   function loadLegalProfile(p: any) { setF(s => ({ ...s, company: p.company || '', legal: p.legal })); }

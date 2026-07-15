@@ -2,12 +2,13 @@
 // 데모: 이 기기(localStorage). 로그인 연결 시 서버(/api/reports/mine)가 계정별로 대체.
 'use client';
 export type VaultItem = { id: string; label: string; when: number; unlocked: boolean };
+import { scopedKey } from './scope';
 const KEY = 'nakchal_vault_v1';
 
 export function listVault(): VaultItem[] {
-  try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; }
+  try { return JSON.parse(localStorage.getItem(scopedKey(KEY)) || '[]'); } catch { return []; }
 }
-function save(list: VaultItem[]) { try { localStorage.setItem(KEY, JSON.stringify(list.slice(0, 50))); } catch {} }
+function save(list: VaultItem[]) { try { localStorage.setItem(scopedKey(KEY), JSON.stringify(list.slice(0, 50))); } catch {} }
 
 export function recordReport(item: VaultItem) {
   const list = listVault().filter(x => x.id !== item.id);
