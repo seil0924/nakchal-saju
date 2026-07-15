@@ -139,6 +139,8 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .pay.kakao{background:#FEE500;border-color:#FEE500;color:#191600}
 .pay.toss{background:#0064FF;border-color:#0064FF;color:#fff}
 .pay.on2{outline:2.5px solid var(--navy);outline-offset:-2px}
+.paymethods{display:block;width:100%;padding:11px;border-radius:11px;border:1px solid #e6dfce;background:#faf6ec;color:#6b6350;font-size:12.5px;font-weight:700;text-align:center;margin-bottom:9px;font-family:var(--sans)}
+.paymethods span{color:#a99f88;font-weight:600}
 .paygo{width:100%;margin-top:6px;padding:15px;background:linear-gradient(135deg,var(--red),#7f1a17);color:#fff;border:1px solid var(--gold2);border-radius:13px;font-family:var(--serif);font-weight:900;font-size:16px;cursor:pointer}
 .paygo:disabled{opacity:.6}
 .mclose{text-align:center;margin-top:12px;font-size:12.5px;color:#9a917a;font-weight:600;cursor:pointer}
@@ -924,6 +926,18 @@ button,.cta,.go,.tcta,.pay,.paygo,.lgbtn,.tunlock,.bokgo,.hcta,.pmrow,.perntog b
 .lgbtn .lgic{display:flex;align-items:center}
 .lgbtn.kakao{background:#FEE500;color:#191600}
 .lgbtn.google{background:#fff;color:#2b2119;border:1px solid #e2d6bb}
+.lgbtn.guest{background:rgba(255,255,255,.06);color:#f1ead9;border:1px solid #4a3c25}
+.lgbtn.guest:hover{background:rgba(255,255,255,.1)}
+.lgbtn.email{background:linear-gradient(135deg,var(--red,#9a2a20),#7f1a17);color:#fff;border:1px solid var(--gold2,#e3c27a)}
+.logindiv{display:flex;align-items:center;gap:10px;margin:16px 0 4px;color:#8a806a;font-size:12px}
+.logindiv::before,.logindiv::after{content:"";flex:1;height:1px;background:#3a2e1c}
+.loginemail{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.lgin{width:100%;padding:14px;border-radius:12px;border:1px solid #4a3c25;background:rgba(255,255,255,.05);color:#f1ead9;font-size:15px;font-family:var(--sans);outline:none}
+.lgin::placeholder{color:#8a806a}
+.lgin:focus{border-color:var(--gold2,#e3c27a);background:rgba(255,255,255,.08)}
+.loginswitch{margin-top:12px;font-size:12.5px;color:#a99f88}
+.loginswitch button{background:none;border:none;color:var(--gold2,#e3c27a);font-weight:800;cursor:pointer;font-size:12.5px;padding:0;text-decoration:underline}
+.loginok{margin-top:14px;font-size:12.5px;line-height:1.6;color:#cdeacb;background:rgba(80,160,90,.1);border:1px solid #3a5a3a;border-radius:11px;padding:11px 13px}
 .loginnote{margin-top:16px;font-size:12.5px;line-height:1.6;color:#a99f88;background:rgba(255,255,255,.04);border:1px solid #3a2e1c;border-radius:11px;padding:11px 13px}
 .loginnote b{color:var(--gold2,#e3c27a)}
 .loginterms{margin-top:20px;font-size:11.5px;color:#8a8270;line-height:1.6}

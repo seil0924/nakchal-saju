@@ -740,9 +740,7 @@ export default function Reading() {
                 <div className="catbuy"><div className="catbuy-lead">필요한 풀이만 낱개로 여는 개별 상품입니다.</div></div>
               </>
             )}
-            <div className="pay kakao on2">카카오페이</div>
-            <div className="pay toss">토스페이</div>
-            <div className="pay">신용/체크카드</div>
+            <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
             <label className="consent">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
               <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
@@ -750,7 +748,7 @@ export default function Reading() {
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => (passMode ? payPass() : pay(sku))} disabled={busy}>{busy ? '결제 처리중…' : `${won(passMode ? PRICE_BALJU_PASS : unlockPrice)} 결제하기`}</button>
             <div className="mclose" onClick={() => { setModal(false); setPassMode(false); }}>다음에 볼게요</div>
-            <div className="msec">🔒 데모: 결제 확정을 서버에서 시뮬레이션 · 실서비스는 포트원 웹훅 재검증</div>
+            <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>
           </div>
         </div>
       )}
