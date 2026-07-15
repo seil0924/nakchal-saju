@@ -1,6 +1,6 @@
 // POST /api/payment/mock-confirm — [데모 전용] 결제 완료 시뮬레이션
-// 실서비스에서는 이 라우트 대신 포트원 웹훅(/api/payment/webhook)이
-// 포트원 단건조회로 금액을 재검증한 뒤 confirmOrder를 호출합니다.
+// 실서비스에서는 이 라우트 대신 KCP 승인(/api/payment/kcp/approve)이
+// KCP 승인응답의 금액을 재검증한 뒤 confirmOrder를 호출합니다.
 import { NextResponse } from 'next/server';
 import { confirmOrder, getOrder } from '@/lib/store';
 

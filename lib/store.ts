@@ -102,7 +102,7 @@ export async function createOrder(reportId: string, amount: number, level: numbe
   return o;
 }
 
-// 실서비스: 포트원 단건조회로 검증한 실제 금액을 paidAmount로 넘김
+// 실서비스: KCP 승인응답으로 검증한 실제 금액을 paidAmount로 넘김
 export async function confirmOrder(paymentId: string, paidAmount: number): Promise<Order | null> {
   const c = sb();
   if (c) {

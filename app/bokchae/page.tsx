@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { won } from '@/lib/constants';
+import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
 
 // 복채(福債) — 홈 최하단에만 조용히 두는 자율 감사·기원 결제. 리포트/결제 흐름엔 등장하지 않는다.
 const PRESETS = [50000, 100000, 200000, 500000, 1000000];
@@ -18,11 +19,12 @@ export default function Bokchae() {
     setBusy(true); setErr('');
     try {
       const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ bokchae: true, amount }) }).then(x => x.json());
-      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID, channelKey = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY;
-      if (storeId && channelKey) {
-        const PortOne = (await import('@portone/browser-sdk/v2')).default;
-        const r = await PortOne.requestPayment({ storeId, channelKey, paymentId: prep.paymentId, orderName: prep.orderName ?? '낙찰사주 복채', totalAmount: prep.amount, currency: 'CURRENCY_KRW', payMethod: 'EASY_PAY' });
-        if (r?.code) { setBusy(false); setErr('복채 결제가 취소되었습니다.'); return; }
+      if (KCP_CLIENT_ENABLED) {
+        const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 복채' });
+        if (kres === 'redirect') return;
+        if (!kres) { setBusy(false); setErr('복채 결제가 취소되었습니다.'); return; }
+        const ap = await fetch('/api/payment/kcp/approve', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId, enc_data: kres.enc_data, enc_info: kres.enc_info, tran_cd: kres.tran_cd }) }).then(x => x.json());
+        if (!ap?.ok) { setBusy(false); setErr('복채 결제 승인에 실패했습니다. 다시 시도해 주세요.'); return; }
       } else {
         await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
       }
