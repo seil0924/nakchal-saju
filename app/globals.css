@@ -1513,7 +1513,7 @@ button.li{font:inherit;text-align:left;cursor:pointer;width:calc(100% - 26px);bo
 .sux{font-size:13.5px;color:#4a4636;line-height:1.6;font-weight:500;word-break:keep-all}
 
 /* 홈 첫인상 — 1초 요약 태그라인 */
-.home5 .hometag{margin:2px 24px 14px;text-align:center;font-size:13px;line-height:1.6;color:#8a8474;font-weight:500;word-break:keep-all}
+.home5 .hometag{margin:2px 24px 14px;text-align:center;font-size:13px;line-height:1.6;color:#8a8474;font-weight:500;word-break:keep-all;text-wrap:balance}
 .home5 .hometag b{color:var(--gold);font-weight:800}
 
 /* 접근성 — 키보드 포커스 가시화 */

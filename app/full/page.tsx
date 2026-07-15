@@ -53,10 +53,10 @@ export default function FullIntro() {
   return (
     <div className="app home5">
       <div className="mast">
-        <div className="mb">
-          <Link href="/" className="s" style={{ textDecoration: 'none' }}>士</Link>
+        <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <span className="s">士</span>
           <div className="n">전체 리포트<em>大 全 書 · 十八章</em></div>
-        </div>
+        </Link>
         <Link href="/" style={{ fontSize: 12, color: '#7f786c', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
       </div>
 
