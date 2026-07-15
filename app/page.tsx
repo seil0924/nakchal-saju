@@ -11,7 +11,7 @@ export default function Home() {
       <ScrollReveal />
       {/* 마스트헤드 */}
       <div className="mast">
-        <div className="mb">
+        <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
           <span className="brandseal" aria-label="낙찰사주">
             <svg viewBox="0 0 40 40" width="38" height="38">
               <defs>
@@ -26,7 +26,7 @@ export default function Home() {
             </svg>
           </span>
           <div className="n">낙찰사주<em>落札四柱 · 會社 사주 전문</em></div>
-        </div>
+        </Link>
         <Link href="/more" className="ham" aria-label="메뉴 · 더보기"><i /><i /><i /></Link>
       </div>
 

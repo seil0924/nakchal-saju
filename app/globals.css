@@ -1507,3 +1507,7 @@ button.li{font:inherit;text-align:left;cursor:pointer;width:calc(100% - 26px);bo
 /* 접근성 — 키보드 포커스 가시화 */
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:5px}
 a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* 줄바꿈 다듬기 — 고아 단어·어색한 분배 방지 (전역) */
+h1,h2,h3,h4,.hctitle,.hero h1,.hero h2{text-wrap:balance}
+p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.trm span,.sux,.axdesc{text-wrap:pretty}

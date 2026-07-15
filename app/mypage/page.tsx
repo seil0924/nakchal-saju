@@ -22,7 +22,7 @@ export default async function MyPage() {
   const provKo: Record<string, string> = { kakao: '카카오', naver: '네이버', google: '구글' };
   return (
     <div className="app home">
-      <div className="topbar"><div className="logo"><span className="s">士</span>마이페이지</div><div className="ic"><Gear /></div></div>
+      <div className="topbar"><Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>마이페이지</Link><div className="ic"><Gear /></div></div>
       <div style={{ padding: '0 16px 24px' }}>
         <div className="profcard" style={{ marginTop: 14 }}>
           <div className="pav">士</div>
