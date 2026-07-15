@@ -926,8 +926,6 @@ button,.cta,.go,.tcta,.pay,.paygo,.lgbtn,.tunlock,.bokgo,.hcta,.pmrow,.perntog b
 .lgbtn .lgic{display:flex;align-items:center}
 .lgbtn.kakao{background:#FEE500;color:#191600}
 .lgbtn.google{background:#fff;color:#2b2119;border:1px solid #e2d6bb}
-.lgbtn.guest{background:rgba(255,255,255,.06);color:#f1ead9;border:1px solid #4a3c25}
-.lgbtn.guest:hover{background:rgba(255,255,255,.1)}
 .lgbtn.email{background:linear-gradient(135deg,var(--red,#9a2a20),#7f1a17);color:#fff;border:1px solid var(--gold2,#e3c27a)}
 .logindiv{display:flex;align-items:center;gap:10px;margin:16px 0 4px;color:#8a806a;font-size:12px}
 .logindiv::before,.logindiv::after{content:"";flex:1;height:1px;background:#3a2e1c}

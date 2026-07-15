@@ -30,18 +30,6 @@ export default function Login() {
     } catch { setErr('로그인 처리 중 문제가 생겼습니다.'); setBusy(''); }
   }
 
-  // 비회원(게스트) — 익명 세션으로 바로 시작. 결제·저장은 이 세션에 귀속됩니다.
-  async function guest() {
-    if (!AUTH_ON) { window.location.href = nextPath(); return; }
-    setErr(''); setMsg(''); setBusy('guest');
-    try {
-      const sb = supabaseBrowser();
-      const { error } = await sb.auth.signInAnonymously();
-      if (error) { setErr('비회원 시작에 실패했습니다. 잠시 후 다시 시도해 주세요.'); setBusy(''); return; }
-      window.location.href = nextPath();
-    } catch { setErr('비회원 시작 중 문제가 생겼습니다.'); setBusy(''); }
-  }
-
   // 이메일 자체 로그인/가입
   async function emailAuth(e: React.FormEvent) {
     e.preventDefault();
@@ -83,9 +71,6 @@ export default function Login() {
               <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#000" d="M12 3C6.48 3 2 6.48 2 10.8c0 2.77 1.9 5.2 4.76 6.57-.2.72-.72 2.62-.83 3.03-.13.5.18.5.39.36.16-.11 2.6-1.77 3.66-2.49.63.09 1.28.13 1.95.13 5.52 0 10-3.48 10-7.8S17.52 3 12 3z" /></svg>
             </span>
             {busy === 'kakao' ? '카카오로 이동 중…' : '카카오로 3초 만에 시작'}
-          </button>
-          <button className="lgbtn guest" onClick={guest} disabled={!!busy}>
-            {busy === 'guest' ? '시작하는 중…' : '비회원으로 바로 시작'}
           </button>
         </div>
 
