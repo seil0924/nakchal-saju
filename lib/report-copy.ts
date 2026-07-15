@@ -778,6 +778,18 @@ function weekAheadHtml(c:Chart,y:number,m:number,d:number){
     `<p class="wanote">오늘부터 이레간, 대표님께 <b>유리한 날</b>과 <b>조심할 날</b>의 방향입니다. 각 날의 정밀 사정률·유리한 시간대·투찰 길일은 아래에서 이어집니다.</p>`;
 }
 const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
+// 대표 유형별 입찰·경영 실전 수칙 3 (행동형 마무리) — me: 일간 오행 0木1火2土3金4水
+const SUCHIK:string[][]=[
+ ['새 판을 벌이기 전 「이번 분기 집중할 1건」을 못 박아, 확장 욕구를 한 곳에 모으십시오.','투찰은 벌인 판이 많을수록 실무자에게 위임하되, 하한선만은 대표님이 직접 숫자로 정하십시오.','신규 발주처·신사업은 3개월 검증 기간을 두고, 되는 것만 키우십시오.'],
+ ['개찰 당일 아침의 자신감을 경계하고, 전날 정한 투찰가를 당일에 올리지 마십시오.','말이 앞서기 쉬우니, 발주처·파트너와의 약속은 반드시 문서로 남기십시오.','큰 건일수록 하루 묵혀 결정하는 「1일 룰」을 두십시오.'],
+ ['확실한 것만 좇다 기회를 놓치기 쉬우니, 분기마다 「한 건은 새 도전」을 배정하십시오.','원가·현금흐름 관리가 강점이니, 그 데이터로 투찰 하한선을 과학적으로 잡으십시오.','결정이 느려지는 순간을 위해 「자료 90%면 간다」는 기준을 미리 정하십시오.'],
+ ['원칙을 지키다 때를 놓치니, 마감 D-2에는 「완결 못 해도 제출」을 규칙으로 두십시오.','사람을 쳐내기 전 한 번 더 기회를 주는 절차를 두어 인재 이탈을 막으십시오.','강한 승부 기질을 저가 경쟁이 아니라 기술·품질 점수로 돌리십시오.'],
+ ['정보를 모으다 결정을 미루니, 「언제까지 결정」 데드라인을 먼저 못 박으십시오.','유연함이 우유부단으로 보이지 않게, 팀엔 방향을 분명한 한 문장으로 전달하십시오.','자금·계약을 굴리는 강점을 살려, 발주 주기를 읽고 선제적으로 준비하십시오.'],
+];
+function suchikHtml(me:number){
+  return `<div class="suchik"><div class="sut">이 유형 대표의 입찰·경영 실전 수칙 3</div>`+
+    SUCHIK[me].map((r,i)=>`<div class="surow"><span class="sun">${i+1}</span><span class="sux">${r}</span></div>`).join('')+`</div>`;
+}
 // ── 대표 경영 스코어카드 (6대 축) — 진단 프레임워크 IP 시각화 ───────
 // 명식(십성·오행)에서 6축을 5점 척도로 환산. 재미로 보는 참고 지표.
 function axisScore(n:number){ return n<=0?1 : n===1?2 : n===2?3 : n===3?4 : 5; }
@@ -835,7 +847,7 @@ function secDaepyoIntro(x:any):any[]{
   const tm=matchTycoon(c);
   out.push({mk:'鏡',tier:'free',t:`대표님과 ${tm.level==='twin'?'닮은':tm.level==='near'?'가까운':'결이 비슷한'} 사주 — ${tm.tycoon.name}`,html:twinHtml(tm,me,c.dist,GAN[c.dGan])});
   // 診 · 대표 유형 진단 (4유형 + 4축 + 위기 약점) — 무료 훅
-  out.push({mk:'診',tier:'free',t:`${selYear?selYear+'년 ':''}대표님은 어떤 유형의 대표인가 — ${TYPE4[me]}`,html:jinHtml(c,seunSelf,selYear)});
+  out.push({mk:'診',tier:'free',t:`${selYear?selYear+'년 ':''}대표님은 어떤 유형의 대표인가 — ${TYPE4[me]}`,html:jinHtml(c,seunSelf,selYear)+suchikHtml(me)});
   out.push({mk:'軸',tier:'free',t:`${selYear?selYear+'년 ':''}대표 경영 스코어카드 — 6대 축`,html:scorecardHtml(scoreAxes(c,seunSelf),selYear)});
   const ss=sinsal(c);
   if(ss.length){

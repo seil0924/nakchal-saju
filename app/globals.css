@@ -1491,3 +1491,11 @@ button.li{font:inherit;text-align:left;cursor:pointer;width:calc(100% - 26px);bo
 .btip .btv{font-size:13px;color:#5a5648;line-height:1.55;font-weight:500;word-break:keep-all}
 .baljulock{margin-top:12px;background:linear-gradient(180deg,#fffdf7,#faf5e9);border:1px dashed var(--gold);border-radius:12px;padding:12px 13px;font-size:13px;color:#6f6858;line-height:1.6}
 .baljulock b{color:var(--navy);font-weight:800}
+
+/* 대표 유형별 실전 수칙 3 */
+.suchik{margin-top:12px;border:1px solid #e7d9b6;border-radius:13px;overflow:hidden;background:linear-gradient(180deg,#fffdf7,#fbf5e9)}
+.suchik .sut{padding:10px 13px;font-family:var(--serif);font-weight:800;color:var(--navy);font-size:13.5px;background:#f7efdd;border-bottom:1px solid #ecdfc0}
+.surow{display:flex;gap:10px;align-items:flex-start;padding:10px 13px;border-bottom:1px solid #efe7d6}
+.surow:last-child{border-bottom:0}
+.sun{flex:none;width:21px;height:21px;border-radius:50%;background:linear-gradient(135deg,var(--red),#7f1a17);color:#f3e6cf;font-family:var(--serif);font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.sux{font-size:13.5px;color:#4a4636;line-height:1.6;font-weight:500;word-break:keep-all}

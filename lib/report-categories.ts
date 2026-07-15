@@ -32,13 +32,13 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   gunghap: {
     name: '협정·궁합 사주', hanja: '合', oh: 'hwa',
     mks: ['同', '協'],
-    price: 69000, needs: ['partner', 'ally'],
+    price: 49000, needs: ['partner', 'ally'],
     kicker: '同業 · 協定 宮合', lead: '손잡기 전에, 깨질 궁합인지부터 — 대표×대표, 회사×회사.',
   },
   daeun: {
     name: '회사 대운', hanja: '運', oh: 'to',
     mks: ['法', '運'],
-    price: 69000, needs: ['legal'],
+    price: 49000, needs: ['legal'],
     kicker: '會社 大運', lead: '회사가 대표님을 밀어주는가 — 법인의 그릇과 년도별 큰 흐름.',
   },
   calendar: {
