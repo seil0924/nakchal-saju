@@ -3,6 +3,7 @@ import TodayChip from '@/app/_components/TodayChip';
 import HeroCarousel from '@/app/_components/HeroCarousel';
 import ScrollReveal from '@/app/_components/ScrollReveal';
 import TrustStrip from '@/app/_components/TrustStrip';
+import { bizFooterLine } from '@/lib/bizinfo';
 
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
 export default function Home() {
@@ -111,7 +112,8 @@ export default function Home() {
         <div className="crule" />
         <div aria-hidden="true" className="colo">士</div>
         명리 기반 참고 정보입니다 · 투찰금액 산정 근거가 아닙니다<br />
-        <Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보처리방침</Link> · <Link href="/refund">청약철회·환불</Link>
+        <Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보처리방침</Link> · <Link href="/refund">청약철회·환불</Link> · <Link href="/pricing">이용안내·요금</Link>
+        <div className="bizinfo">{bizFooterLine()}</div>
       </div>
 
       {/* 하단 내비 */}

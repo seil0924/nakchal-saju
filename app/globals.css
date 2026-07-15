@@ -1511,3 +1511,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 /* 줄바꿈 다듬기 — 고아 단어·어색한 분배 방지 (전역) */
 h1,h2,h3,h4,.hctitle,.hero h1,.hero h2{text-wrap:balance}
 p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.trm span,.sux,.axdesc{text-wrap:pretty}
+
+/* 이용안내·요금 */
+.pricelist{margin-top:6px;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.pricerow{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid #efe9dc}
+.pricerow:last-child{border-bottom:0}
+.prn{flex:1;min-width:0}
+.prn b{display:block;font-family:var(--serif);font-weight:800;color:var(--navy);font-size:14.5px}
+.prn span{display:block;font-size:12.5px;color:#6f6858;line-height:1.55;margin-top:3px;word-break:keep-all}
+.prp{flex:none;font-family:var(--serif);font-weight:900;font-size:16px;color:var(--red);white-space:nowrap}
+.foot .bizinfo,.dfoot-biz{margin-top:8px;font-size:10.5px;color:#8d8672;line-height:1.6;word-break:keep-all}

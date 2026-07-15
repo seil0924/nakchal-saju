@@ -4,7 +4,7 @@ import { PRODUCTS } from '@/lib/categories';
 const BASE = 'https://nakchal-saju.vercel.app';
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/full', '/bokchae', '/ritual', '/terms', '/privacy', '/refund'];
+  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/full', '/bokchae', '/ritual', '/pricing', '/terms', '/privacy', '/refund'];
   const urls = [
     ...staticUrls,
     ...PAINS.map(p => `/why/${p.slug}`),

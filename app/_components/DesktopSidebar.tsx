@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { bizFooterLine } from '@/lib/bizinfo';
 import { usePathname } from 'next/navigation';
 
 // 데스크톱(≥900px) 전용 좌측 내비. 모바일에서는 CSS로 숨김.
@@ -29,7 +30,8 @@ export default function DesktopSidebar() {
       <div className="dfoot">
         <div className="dkick">運 七 技 三</div>
         명리 기반 참고 정보입니다.<br />투찰금액 산정 근거가 아닙니다.
-        <div className="dlinks"><Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보</Link></div>
+        <div className="dlinks"><Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보</Link> · <Link href="/refund">청약철회·환불</Link> · <Link href="/pricing">이용안내</Link></div>
+        <div className="dfoot-biz">{bizFooterLine()}</div>
       </div>
     </aside>
   );

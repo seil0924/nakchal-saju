@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { bizFooterLine } from '@/lib/bizinfo';
 export const metadata = { title: '이용약관 · 낙찰사주' };
 
 const SECTIONS: [string, string][] = [
@@ -27,7 +28,7 @@ export default function Terms() {
             <p key={i} style={{ marginTop: i ? 14 : 0 }}><b style={{ color: 'var(--navy)' }}>{h}</b><br />{b}</p>
           ))}
           <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6ddc9', fontSize: 12, color: '#6f6a5c' }}>
-            「상호」 · 대표자 [ ] · 사업자등록번호 [ ] · 통신판매업 신고번호 [ ] · 주소 [ ] · 고객센터 [이메일/전화]
+            {bizFooterLine()}
           </p>
           <p style={{ marginTop: 12, color: '#a5241f', fontSize: 12, fontWeight: 600 }}>※ 배포용 초안입니다. 시행 전 사업자 정보 기입 및 법률 검토가 필요합니다.</p>
         </div>
