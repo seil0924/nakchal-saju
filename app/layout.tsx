@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   alternates: { canonical: '/' },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
-    other: process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ? { 'naver-site-verification': process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION } : {},
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '0qBkF3KE6jGqkm5dOBP2lhKzyHDqTGRwqm2ZNgQVn5Y',
+    other: { 'naver-site-verification': process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION || 'f94787169f669346cdee3a077a5a78d1479458ba' },
   },
 };
 
