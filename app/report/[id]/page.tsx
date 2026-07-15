@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
 import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
@@ -52,11 +53,12 @@ export default function ReportView({ params }: { params: { id: string } }) {
     setErr(''); setBusy(true);
     try {
       const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: id, sku: chosen }) }).then(x => x.json());
-      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID, channelKey = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY;
-      if (storeId && channelKey) {
-        const PortOne = (await import('@portone/browser-sdk/v2')).default;
-        const r = await PortOne.requestPayment({ storeId, channelKey, paymentId: prep.paymentId, orderName: prep.orderName ?? '낙찰사주 리포트', totalAmount: prep.amount, currency: 'CURRENCY_KRW', payMethod: 'EASY_PAY' });
-        if (r?.code) { setBusy(false); setErr('결제가 취소되었습니다.'); return; }
+      if (KCP_CLIENT_ENABLED) {
+        const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
+        if (kres === 'redirect') return;
+        if (!kres) { setBusy(false); setErr('결제가 취소되었습니다.'); return; }
+        const ap = await fetch('/api/payment/kcp/approve', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId, enc_data: kres.enc_data, enc_info: kres.enc_info, tran_cd: kres.tran_cd }) }).then(x => x.json());
+        if (!ap?.ok) { setBusy(false); setErr('결제 승인에 실패했습니다. 다시 시도해 주세요.'); return; }
       } else {
         await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
       }
