@@ -66,7 +66,7 @@ export default function Home() {
         <Link data-reveal className="li5" href="/reading?cat=sajeong">
           <div aria-hidden="true" className="gz" style={{ color: '#3f8f80' }}>率</div>
           <div className="bd5"><div className="t">사정률 사주 <small>査定率</small></div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
-          <div className="rt"><div className="pz free">무료</div><div className="arw">→</div></div>
+          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link data-reveal className="li5" href="/balju">
           <div aria-hidden="true" className="gz" style={{ color: '#46a07d' }}>宮</div>
