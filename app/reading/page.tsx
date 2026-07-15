@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
+import { PRICE_TAEKIL, PRICE_FULL, PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
 import { CLIENTS, isCoreClient } from '@/lib/clients';
@@ -24,7 +24,7 @@ const RITE_STEPS = [
   '리포트 봉인 — 섹션 산출',
 ];
 
-type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
+type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string; passLock?: boolean };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
 type Hero = { score: number; big?: string; unit?: string; label: string; headline: string; sub: string; up: boolean };
@@ -78,6 +78,7 @@ export default function Reading() {
   const [sku, setSku] = useState<'taekil' | 'full'>('full');
   const [confirm, setConfirm] = useState(false);
   const [modal, setModal] = useState(false);
+  const [passMode, setPassMode] = useState(false);   // 발주처 프리미엄 패스 결제 모드
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [consent, setConsent] = useState(false);
@@ -287,6 +288,7 @@ export default function Reading() {
     return out;
   }, [res, level]);
   const anyLocked = !!res && res.sections.some(s => (RANK[s.tier] ?? 2) > level && !s.html);
+  const anyPass = !!res && res.sections.some(s => (s as any).passLock);   // 발주처 프리미엄 잠금 존재
 
   async function pay(chosen: 'taekil' | 'full') {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
@@ -308,6 +310,29 @@ export default function Reading() {
       setRes({ ...res, ...full }); setLevel(full.level ?? (chosen === 'taekil' ? 1 : 2)); setModal(false);
       markUnlocked(res.reportId);
       setSeal(true); setTimeout(() => setSeal(false), 2600); // 개봉(開) 연출 — 절정으로 마무리
+    } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
+    finally { setBusy(false); }
+  }
+
+  async function payPass() {
+    if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
+    if (!res) return;
+    setErr(''); setBusy(true);
+    try {
+      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: 'baljuPass' }) }).then(x => x.json());
+      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID, channelKey = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY;
+      if (storeId && channelKey) {
+        const PortOne = (await import('@portone/browser-sdk/v2')).default;
+        const r = await PortOne.requestPayment({ storeId, channelKey, paymentId: prep.paymentId, orderName: prep.orderName ?? '발주처 프리미엄 패스', totalAmount: prep.amount, currency: 'CURRENCY_KRW', payMethod: 'EASY_PAY' });
+        if (r?.code) { setBusy(false); setErr('결제가 취소되었습니다.'); return; }
+      } else {
+        await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
+      }
+      let full: any = null;
+      for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
+      if (!full) throw new Error();
+      setRes({ ...res, ...full }); setModal(false); setPassMode(false);
+      setSeal(true); setTimeout(() => setSeal(false), 2600);
     } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
     finally { setBusy(false); }
   }
@@ -612,6 +637,13 @@ export default function Reading() {
                 ))}
               </div>
             ) : null)}
+            {anyPass && (<>
+              <div className="cta" onClick={() => { setErr(''); setPassMode(true); setModal(true); }}>
+                발주처 프리미엄 패스 열기
+                <small>한 번 결제로 43곳 모든 발주처 상세 · {won(PRICE_BALJU_PASS)}</small>
+              </div>
+              <div className="ctaassure">✓ 카카오페이·토스로 30초 · 한 번 열면 모든 발주처</div>
+            </>)}
             {level >= 1 && res.gauge.precise && ui.gauge && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
             )}
@@ -683,7 +715,15 @@ export default function Reading() {
         <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setModal(false); }}>
           <div className="sheet">
             <div className="grip" />
-            {catInfo ? (
+            {passMode ? (
+              <>
+                <h3>발주처 프리미엄 패스</h3>
+                <div className="catbuy">
+                  <div className="catbuy-hd"><span className="catbuy-seal">宮</span><div><div className="catbuy-nm">발주처 프리미엄 패스</div><div className="catbuy-kick">發注處 프리미엄</div></div><div className="catbuy-pp">{won(PRICE_BALJU_PASS)}</div></div>
+                  <div className="catbuy-lead">한 번 결제로 <b>43곳 모든 발주처</b>의 3계·실전 시나리오·주의신호·연도 세운이 열립니다.</div>
+                </div>
+              </>
+            ) : catInfo ? (
               <>
                 <h3>{catInfo.name} 전체 열기</h3>
                 <div className="catbuy">
@@ -705,8 +745,8 @@ export default function Reading() {
               <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
             </label>
             {err && <div className="errbox">{err}</div>}
-            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(unlockPrice)} 결제하기`}</button>
-            <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
+            <button className="paygo" onClick={() => (passMode ? payPass() : pay(sku))} disabled={busy}>{busy ? '결제 처리중…' : `${won(passMode ? PRICE_BALJU_PASS : unlockPrice)} 결제하기`}</button>
+            <div className="mclose" onClick={() => { setModal(false); setPassMode(false); }}>다음에 볼게요</div>
             <div className="msec">🔒 데모: 결제 확정을 서버에서 시뮬레이션 · 실서비스는 포트원 웹훅 재검증</div>
           </div>
         </div>

@@ -1484,3 +1484,10 @@ button.li{font:inherit;text-align:left;cursor:pointer;width:calc(100% - 26px);bo
 .trstat em{font-style:normal;color:#a08a52;font-weight:600;margin-left:4px}
 .trdisc{padding:10px 14px;text-align:center;font-size:11px;color:#8d8672;font-weight:500;background:#fff}
 .trdisc b{color:var(--navy);font-weight:700}
+
+/* 발주처 무료 기본 — 기관 특성 + 프리미엄 잠금 */
+.btip{margin:10px 0 4px;background:#f7f4ec;border:1px solid #e7dcc2;border-radius:11px;padding:10px 12px}
+.btip .btl{display:block;font-family:var(--serif);font-weight:800;color:var(--navy);font-size:12.5px;margin-bottom:3px}
+.btip .btv{font-size:13px;color:#5a5648;line-height:1.55;font-weight:500;word-break:keep-all}
+.baljulock{margin-top:12px;background:linear-gradient(180deg,#fffdf7,#faf5e9);border:1px dashed var(--gold);border-radius:12px;padding:12px 13px;font-size:13px;color:#6f6858;line-height:1.6}
+.baljulock b{color:var(--navy);font-weight:800}

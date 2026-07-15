@@ -1,9 +1,10 @@
 // POST /api/payment/prepare — 결제 사전등록
 // 서버가 금액을 확정합니다. 카테고리 리포트면 카테고리 개별가, 아니면 sku(택일팩/전체).
 import { NextResponse } from 'next/server';
-import { getReport, createOrder } from '@/lib/store';
-import { SKU, type Sku } from '@/lib/constants';
+import { getReport, createOrder, BALJU_PASS_KEY } from '@/lib/store';
+import { SKU, type Sku, PRICE_BALJU_PASS } from '@/lib/constants';
 import { isCatKey, CAT_INFO } from '@/lib/report-categories';
+import { requireUser } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
   const { reportId, sku, bokchae, amount } = await req.json();
@@ -12,6 +13,12 @@ export async function POST(req: Request) {
     const amt = Math.max(1000, Math.min(1000000, Math.round(Number(amount) || 0)));
     const order = await createOrder(reportId || 'bokchae', amt, 0);   // level 0 — 언락과 무관
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 복채(福債)', sku: 'bokchae' });
+  }
+  // 발주처 프리미엄 패스 — 사용자 계정 단위 권한(리포트와 무관)
+  if (sku === 'baljuPass') {
+    const user = await requireUser();
+    const order = await createOrder(BALJU_PASS_KEY(user?.id), PRICE_BALJU_PASS, 1);
+    return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 발주처 프리미엄 패스', sku: 'baljuPass' });
   }
   const input = await getReport(reportId);
   if (!reportId || !input) {

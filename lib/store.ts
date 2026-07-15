@@ -25,6 +25,7 @@ type SavedChart = { id: string; kind: string; name?: string; birth_date: string;
 const memReports: Map<string, MemReport> = g.__reports ?? (g.__reports = new Map());
 const memOrders: Map<string, Order> = g.__orders ?? (g.__orders = new Map());
 const memUnlockLvl: Map<string, number> = g.__unlockLvl ?? (g.__unlockLvl = new Map()); // reportId → 0/1/2
+const memPasses: Set<string> = g.__passes ?? (g.__passes = new Set());   // 사용자 권한(패스) 키 집합
 const memCharts: Map<string, SavedChart[]> = g.__charts ?? (g.__charts = new Map()); // userId('demo') → charts
 if (g.__seq === undefined) g.__seq = 1000;
 const uid = (u?: string | null) => u || 'demo';
@@ -107,6 +108,7 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
     const { data: o } = await c.from('payments').select('*').eq('payment_id', paymentId).maybeSingle();
     if (!o || paidAmount !== o.amount) return null;      // ★금액 재검증
     await c.from('payments').update({ status: 'paid', paid_at: new Date().toISOString() }).eq('payment_id', paymentId);
+    if (String(o.report_id).startsWith('pass:')) { await c.from('entitlements').upsert({ key: o.report_id }); return { paymentId, reportId: o.report_id, amount: o.amount, level: o.level ?? 1, status: 'paid' }; }
     const lvl = o.level ?? 2;
     const { data: cur } = await c.from('reports').select('unlock_level').eq('id', o.report_id).maybeSingle();
     const next = Math.max(cur?.unlock_level ?? 0, lvl);   // 상위 레벨은 유지 (다운그레이드 방지)
@@ -116,7 +118,8 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
   const o = memOrders.get(paymentId);
   if (!o || paidAmount !== o.amount) return null;
   o.status = 'paid';
-  memUnlockLvl.set(o.reportId, Math.max(memUnlockLvl.get(o.reportId) ?? 0, o.level));
+  if (o.reportId.startsWith('pass:')) memPasses.add(o.reportId);
+  else memUnlockLvl.set(o.reportId, Math.max(memUnlockLvl.get(o.reportId) ?? 0, o.level));
   return o;
 }
 
@@ -140,4 +143,15 @@ export async function unlockLevel(reportId: string): Promise<number> {
 }
 export async function isUnlocked(reportId: string): Promise<boolean> {
   return (await unlockLevel(reportId)) >= 1;
+}
+
+// ── 사용자 단위 권한(패스) ────────────────────────────────
+export const BALJU_PASS_KEY = (userId?: string | null) => 'pass:balju:' + uid(userId);
+export async function hasEntitlement(key: string): Promise<boolean> {
+  const c = sb();
+  if (c) { const { data } = await c.from('entitlements').select('key').eq('key', key).maybeSingle(); return !!data; }
+  return memPasses.has(key);
+}
+export async function hasBaljuPass(userId?: string | null): Promise<boolean> {
+  return hasEntitlement(BALJU_PASS_KEY(userId));
 }

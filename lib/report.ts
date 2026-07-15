@@ -41,7 +41,7 @@ export type ReportResult = {
 
 // level: 0 무료 · 1 택일팩(정밀값+택일) · 2 전체. (boolean 하위호환: true→2, false→0)
 // year: 세운 기준 연도(대표·회사·궁합을 그 해 것으로) — 없으면 올해
-export function computeReport(input: ReportInput, unlockedFlag: boolean | number, year?: number): ReportResult {
+export function computeReport(input: ReportInput, unlockedFlag: boolean | number, year?: number, baljuPremium: boolean = false): ReportResult {
   const level = typeof unlockedFlag === 'number' ? unlockedFlag : (unlockedFlag ? 2 : 0);
   const c = chartFromBirth(input.birth, input.time ?? null, input.cal ?? 'solar', input.leap ?? false);
   const now = new Date();
@@ -71,10 +71,10 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   const mks = catMks(input.cat);
   const filt = (arr: Section[]) => mks ? arr.filter(x => mks.includes(x.mk)) : arr;
   const cc = !!input.clientCore;
-  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf, cc));
+  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf, cc, baljuPremium));
 
   // 분량 앵커: 전체(레벨 2) 기준 장·항목 수를 산출해 노출 (텍스트는 미전송 — 숫자만)
-  const fullSecs = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2, selYear, seunSelf, cc));
+  const fullSecs = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2, selYear, seunSelf, cc, true));
   const items = fullSecs.reduce((n, sec) => n + (sec.html.match(/<p|<div class="cbrow|<div class="ssrow/g) || []).length, 0);
   const meta = { chapters: fullSecs.length, items };
 
