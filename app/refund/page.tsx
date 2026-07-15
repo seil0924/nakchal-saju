@@ -25,7 +25,6 @@ export default function Refund() {
             {bizFooterLine()}
           </p>
           <p style={{ marginTop: 10, fontSize: 12, color: '#6f6a5c' }}>자세한 내용은 <Link href="/terms" style={{ color: 'var(--navy)' }}>이용약관</Link> 제6·7조를 따릅니다.</p>
-          <p style={{ marginTop: 12, color: '#a5241f', fontSize: 12, fontWeight: 600 }}>※ 배포용 초안입니다. 시행 전 사업자 정보 기입 및 결제대행사·법률 검토가 필요합니다.</p>
         </div>
       </div>
     </div>

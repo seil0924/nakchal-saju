@@ -46,7 +46,6 @@ export default function Pricing() {
           <div className="st"><span className="l"><span className="b" />사업자 정보</span></div>
           <p style={{ fontSize: 13, lineHeight: 1.9, color: '#4a4636' }}>{bizFooterLine()}</p>
           <p className="note">홈페이지 제작: 자체제작(독립몰)</p>
-          <p style={{ marginTop: 10, color: '#a5241f', fontSize: 12, fontWeight: 600 }}>※ 배포용 초안 — 시행 전 사업자 정보 기입 필요.</p>
         </div>
       </div>
     </div>
