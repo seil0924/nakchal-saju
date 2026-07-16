@@ -22,7 +22,14 @@ async function payPC(p: { paymentId: string; amount: number; goodName: string })
     const add = (n: string, v: string) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = n; i.value = v; form.appendChild(i); };
     add('site_cd', SITE_CD); add('site_name', '낙찰사주'); add('pay_method', '110000000000'); add('currency', 'WON'); // 1=카드,2=계좌이체
     add('ordr_idxx', p.paymentId); add('good_name', p.goodName); add('good_mny', String(p.amount));
-    add('res_cd', ''); add('res_msg', ''); add('enc_data', ''); add('enc_info', ''); add('tran_cd', '');
+    // KCP PC 표준결제 필수/권장 필드 — 누락 시 결제창이 '진행중'에서 멈춤
+    add('escw_used', 'N');            // 에스크로 미사용
+    add('quotaopt', '0');             // 일시불(할부개월 옵션)
+    add('shop_user_id', p.paymentId); // 상점 사용자 식별(주문번호로 대체)
+    add('buyr_name', '고객');          // 구매자명(빈값 방지)
+    add('buyr_tel1', '');
+    add('buyr_mail', '');
+    add('res_cd', ''); add('res_msg', ''); add('enc_data', ''); add('enc_info', ''); add('tran_cd', ''); add('ordr_chk', ''); add('use_pay_method', '');
     document.body.appendChild(form);
     const gv = (n: string) => (form.querySelector(`[name="${n}"]`) as HTMLInputElement | null)?.value || '';
     (window as any).m_Completepayment = () => {
