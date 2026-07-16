@@ -3,8 +3,13 @@
 // KCP 승인응답의 금액을 재검증한 뒤 confirmOrder를 호출합니다.
 import { NextResponse } from 'next/server';
 import { confirmOrder, getOrder } from '@/lib/store';
+import { KCP_ENABLED } from '@/lib/kcp';
 
 export async function POST(req: Request) {
+  // ★보안: 운영 환경 또는 KCP 실결제 구성 시 데모 언락 전면 차단(무결제 언락 방지)
+  if (process.env.NODE_ENV === 'production' || KCP_ENABLED) {
+    return NextResponse.json({ error: 'not_available' }, { status: 403 });
+  }
   const { paymentId } = await req.json();
   const order = await getOrder(paymentId);
   if (!order) return NextResponse.json({ error: 'order_not_found' }, { status: 400 });

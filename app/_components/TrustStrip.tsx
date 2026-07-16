@@ -3,7 +3,7 @@
 export default function TrustStrip() {
   return (
     <div className="trust no-print">
-      <div className="trhd"><span className="trseal">士</span><b>낙찰사주를 믿어도 되나요</b></div>
+      <div className="trhd"><span className="trseal" aria-hidden="true">士</span><b>낙찰사주를 믿어도 되나요</b></div>
       <div className="trmethod">
         <div className="trm"><b>천문(天文) 절기 계산</b><span>입춘·12절을 고정표가 아니라 태양황경으로 판정 — 경계에 태어난 사주도 정확히 가릅니다</span></div>
         <div className="trm"><b>시(時) 정밀 보정</b><span>진태양시(경도)·서머타임 이력·야자시까지 반영해 시주를 바로잡습니다</span></div>

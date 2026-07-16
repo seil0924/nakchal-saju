@@ -5,7 +5,7 @@ export default async function AdminMembers() {
   const mems = await listMembers();
   return (
     <>
-      <div className="atop"><div><h1>회원 관리</h1><div className="sub">전체 {won(mems.length)}명 표시</div></div></div>
+      <div className="atop"><div><h1>회원 관리</h1><div className="sub">전체 {mems.length.toLocaleString('ko-KR')}명 표시</div></div></div>
       <div className="abody">
         <div className="filters">
           <div className="fx on">전체</div><div className="fx">유료</div><div className="fx">무료</div><div className="fx">카카오·구글</div>

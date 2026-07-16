@@ -148,7 +148,7 @@ export default function FullIntro() {
 
       {/* 감정의 핵 — 버팀목 (외로움을 긁고, 동행으로 갚는다) */}
       <div className="emocore">
-        <video className="emovid" autoPlay muted loop playsInline poster="/why-losing-streak-poster.jpg"><source src="/why-losing-streak.mp4" type="video/mp4" /></video>
+        <video className="emovid" autoPlay muted loop playsInline poster="/herobg-poster.jpg"><source src="/why-losing-streak.mp4" type="video/mp4" /></video>
         <div className="emk">士</div>
         <p>대표님, 이 자리까지 <b>혼자</b> 오셨죠.</p>
         <p>직원도 가족도 대표님만 봅니다. 그런데 정작 대표님은 — 누구한테 기대십니까.</p>

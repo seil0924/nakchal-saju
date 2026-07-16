@@ -77,9 +77,9 @@ export default function Login() {
         <div className="logindiv"><span>또는 이메일로</span></div>
 
         <form className="loginemail" onSubmit={emailAuth}>
-          <input className="lgin" type="email" inputMode="email" autoComplete="email" placeholder="이메일 주소"
+          <input className="lgin" type="email" inputMode="email" autoComplete="email" aria-label="이메일 주소" placeholder="이메일 주소"
             value={email} onChange={e => setEmail(e.target.value)} disabled={!!busy} />
-          <input className="lgin" type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} placeholder="비밀번호 (6자 이상)"
+          <input className="lgin" type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} aria-label="비밀번호" placeholder="비밀번호 (6자 이상)"
             value={pw} onChange={e => setPw(e.target.value)} disabled={!!busy} />
           <button className="lgbtn email" type="submit" disabled={!!busy}>
             {busy === 'email' ? '처리 중…' : mode === 'signup' ? '이메일로 가입하기' : '이메일로 로그인'}
