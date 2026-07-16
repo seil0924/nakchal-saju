@@ -1104,7 +1104,7 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5 .lab{display:flex;align-items:baseline;gap:11px;padding:32px 24px 2px}
 .home5 .lab i{width:17px;height:2px;background:var(--h-red);transform:translateY(-3px)}
 .home5 .lab span{font-size:11.5px;letter-spacing:.2em;font-weight:800;color:#6b6249}
-.home5 .lab .m{margin-left:auto;font-size:10.5px;letter-spacing:.08em;color:var(--h-mut2);font-weight:600}
+.home5 .lab .m{margin-left:auto;align-self:center;font-size:11.5px;letter-spacing:.04em;color:#f4e7c4;font-weight:700;background:linear-gradient(135deg,var(--navy),var(--navy2));border:1px solid var(--gold2);padding:5px 11px;border-radius:999px;box-shadow:0 2px 7px rgba(20,17,12,.18);white-space:nowrap}
 
 /* 오늘의 전망 패널 — 封 인장 + 먹 CTA */
 .home5 .today{margin:14px 24px 0;background:var(--h-panel);border:1px solid var(--h-line)}
