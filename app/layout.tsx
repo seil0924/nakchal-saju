@@ -8,8 +8,8 @@ import { requireUser } from '@/lib/supabase/server';
 export const metadata: Metadata = {
   metadataBase: new URL('https://nakchal-saju.vercel.app'),
   title: { default: '낙찰사주 — 대표와 회사의 사주, 오늘의 낙찰 사정률부터', template: '%s · 낙찰사주' },
-  description: '대표와 회사(법인)의 사주를 봐드리는 회사 사주 전문 서비스. 오늘의 낙찰 사정률·법인 운세·발주처/동업/협정 궁합·투찰 택일을 만세력으로 짚어드립니다.',
-  keywords: ['회사 사주', '법인 사주', '낙찰사주', '사정률', '입찰', '조달', '만세력', '발주처 궁합', '법인 운세'],
+  description: '입찰·경매·조달 수주 대표를 위한 회사 사주 전문 서비스. 오늘의 낙찰 사정률·법인 운세·발주처/동업/협정 궁합·투찰 택일을 만세력으로 짚어드립니다.',
+  keywords: ['회사 사주', '법인 사주', '낙찰사주', '사정률', '입찰', '경매', '공매', '법원경매', '조달', '수주', '만세력', '발주처 궁합', '법인 운세', '입찰 택일'],
   openGraph: {
     title: '낙찰사주 — 대표와 회사의 사주 전문',
     description: '재주는 갖추셨습니다. 그 운칠(運七)을 짚어드립니다. 오늘의 낙찰 사정률부터 회사 운세·궁합까지.',
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
 const LD = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'Organization', '@id': 'https://nakchal-saju.vercel.app/#org', name: '낙찰사주', url: 'https://nakchal-saju.vercel.app', description: '공공입찰·수주 대표를 위한 회사 사주 전문 서비스.' },
+    { '@type': 'Organization', '@id': 'https://nakchal-saju.vercel.app/#org', name: '낙찰사주', url: 'https://nakchal-saju.vercel.app', description: '공공입찰·경매·수주 대표를 위한 회사 사주 전문 서비스.' },
     { '@type': 'WebSite', '@id': 'https://nakchal-saju.vercel.app/#site', url: 'https://nakchal-saju.vercel.app', name: '낙찰사주', inLanguage: 'ko', publisher: { '@id': 'https://nakchal-saju.vercel.app/#org' } },
-    { '@type': 'Service', name: '낙찰사주 — 회사 사주·사정률·발주처 궁합·투찰 택일', serviceType: '사주명리 기반 비즈니스 의사결정 참고 서비스', provider: { '@id': 'https://nakchal-saju.vercel.app/#org' }, areaServed: 'KR', description: '대표와 법인의 사주로 오늘의 낙찰 사정률, 발주처·동업·협정 궁합, 회사 대운, 투찰 택일을 만세력으로 짚어드립니다. 참고·오락용.' },
+    { '@type': 'Service', name: '낙찰사주 — 회사 사주·사정률·발주처 궁합·투찰 택일', serviceType: '사주명리 기반 비즈니스 의사결정 참고 서비스', provider: { '@id': 'https://nakchal-saju.vercel.app/#org' }, areaServed: 'KR', description: '대표와 법인의 사주로 오늘의 낙찰 사정률, 발주처·동업·협정 궁합, 회사 대운, 투찰·경매 택일을 만세력으로 짚어드립니다. 입찰·경매·조달 수주 참고·오락용.' },
   ],
 };
 

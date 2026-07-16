@@ -1371,7 +1371,7 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 @keyframes rvup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 /* 생년월일 3단 셀렉트 */
 .bdate{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px}
-.bdate select{width:100%;-webkit-appearance:none;appearance:none;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238a8270' stroke-width='1.6'/></svg>") no-repeat right 12px center;border:1px solid var(--line);border-radius:12px;color:var(--ink);font-weight:600}
+.bdate select{width:100%;-webkit-appearance:none;appearance:none;padding:13px 30px 13px 13px;min-height:48px;font-size:15px;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%238a8270' stroke-width='1.6'/></svg>") no-repeat right 11px center;border:1px solid var(--line);border-radius:12px;color:var(--ink);font-weight:600;box-sizing:border-box}
 .bdate select:invalid{color:#b7b1a3}
 @media(prefers-reduced-motion:reduce){.reveal{animation:none}}
 
@@ -1407,8 +1407,8 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .esrow:last-child{border-bottom:0}
 .esn{flex:none;width:23px;height:23px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#20242c;font-family:var(--serif);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
 .estx{min-width:0}
-.estx b{display:block;font-family:var(--serif);font-weight:800;color:var(--gold2);font-size:13px;margin-bottom:2px}
-.estx p{color:#e8e4da;font-size:14px;line-height:1.6;font-weight:500}
+.execsum .estx b{display:block;font-family:var(--serif);font-weight:800;color:var(--gold2);font-size:13px;margin-bottom:2px}
+.execsum .estx p{color:#f4efe3;font-size:14px;line-height:1.6;font-weight:500}
 
 /* ── 프리미엄 A4 PDF (print) ───────────────────────────── */
 @media print{
@@ -1460,8 +1460,8 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 
 /* ── 사람/업체 선택 트리거 버튼 (reading·balju 공용) ──────── */
 .pkgrid{display:flex;flex-direction:column;gap:9px}
-.pickbtn{width:100%;display:flex;align-items:center;gap:11px;padding:13px;background:#fff;border:1px solid var(--line);border-radius:13px;cursor:pointer;text-align:left;margin-top:2px}
-.pickbtn:active{border-color:var(--gold);background:#fffdf7}
+.pickbtn{width:100%;display:flex;align-items:center;gap:11px;padding:14px;background:linear-gradient(180deg,#fbf6ea,#f6efdd);border:1.5px solid #e2cd97;border-radius:13px;cursor:pointer;text-align:left;margin-top:2px;box-shadow:0 1px 5px rgba(120,90,20,.07)}
+.pickbtn:active{border-color:var(--gold);background:#f2e8cf}
 .pkseal{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:16px;color:#f6e7c8;background:linear-gradient(135deg,var(--navy),var(--navy2));border:1px solid var(--gold2);border-radius:9px}
 .pktx{flex:1;min-width:0}
 .pktx b{display:block;font-family:var(--serif);font-weight:800;color:var(--navy);font-size:14.5px;line-height:1.3}

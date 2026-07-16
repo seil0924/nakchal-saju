@@ -97,7 +97,7 @@ const CAT_UI_DEFAULT: CatUI = {
 };
 
 export const CAT_UI: Record<string, CatUI> = {
-  '':             { calToggle: false, situation: true,  selfImmediate: false, legal: 'show',     baljuCard: false, relation: ['client', 'partner', 'ally'], yearBar: true,  gauge: true,  requires: null },
+  '':             { calToggle: false, situation: true,  selfImmediate: false, legal: 'show',     baljuCard: false, relation: [],                             yearBar: true,  gauge: true,  requires: null },
   daepyo:         { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: true,  gauge: false, requires: null },
   sajeong:        { calToggle: false, situation: true,  selfImmediate: false, legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: true,  requires: null },
   balju:          { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: true,  relation: [],                             yearBar: true,  gauge: false, requires: 'client' },

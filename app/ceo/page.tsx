@@ -179,7 +179,7 @@ export default function CeoTwin() {
         {!res && (<>
         <div className="card">
           <label>성함 <span className="opt">(선택)</span></label>
-          <input value={f.name} maxLength={12} placeholder="예) 오세일" onChange={e => set('name', e.target.value)} />
+          <input value={f.name} maxLength={12} placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
           <label>달력</label>
           <div className="seg">
             <button className={seg(f.cal === 'solar')} onClick={() => set('cal', 'solar')}>양력</button>

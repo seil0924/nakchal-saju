@@ -31,7 +31,7 @@ export default function Home() {
         <Link href="/more" className="ham" aria-label="메뉴 · 더보기"><i /><i /><i /></Link>
       </div>
 
-      <p className="hometag">공공입찰·수주 대표를 위한 <b>회사 사주</b> — 오늘의 사정률·발주처 궁합·투찰 택일을 30초, <b>무료</b>로.</p>
+      <p className="hometag">공공입찰·경매·수주 대표를 위한 <b>회사 사주</b> — 오늘의 사정률·발주처 궁합·투찰 택일을 30초, <b>무료</b>로.</p>
 
       {/* 히어로 — 자동 넘김 롤링 배너 (4장) */}
       <HeroCarousel />
