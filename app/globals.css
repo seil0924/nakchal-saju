@@ -1104,7 +1104,12 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .home5 .lab{display:flex;align-items:baseline;gap:11px;padding:32px 24px 2px}
 .home5 .lab i{width:17px;height:2px;background:var(--h-red);transform:translateY(-3px)}
 .home5 .lab span{font-size:11.5px;letter-spacing:.2em;font-weight:800;color:#6b6249}
-.home5 .lab .m{margin-left:auto;align-self:center;font-size:11.5px;letter-spacing:.04em;color:#f4e7c4;font-weight:700;background:linear-gradient(135deg,var(--navy),var(--navy2));border:1px solid var(--gold2);padding:5px 11px;border-radius:999px;box-shadow:0 2px 7px rgba(20,17,12,.18);white-space:nowrap}
+.todayband{display:flex;align-items:center;gap:13px;margin:11px 24px 2px;padding:13px 16px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:1px solid var(--gold2);border-radius:13px;box-shadow:0 3px 12px rgba(20,17,12,.2)}
+.todayband .tb-gz{font-family:var(--serif);font-size:21px;font-weight:800;color:#f4e2b0;line-height:1;letter-spacing:.04em;flex:none}
+.todayband .tb-mid{display:flex;flex-direction:column;gap:2px;min-width:0}
+.todayband .tb-date{font-size:14px;color:#efe6d2;font-weight:600}
+.todayband .tb-sub{font-size:11px;letter-spacing:.05em;color:#b9a97e}
+.todayband .tb-k{margin-left:auto;flex:none;font-family:var(--serif);font-size:11px;color:#c9a24a;border:1px solid rgba(201,162,74,.5);border-radius:6px;padding:3px 7px}
 
 /* 오늘의 전망 패널 — 封 인장 + 먹 CTA */
 .home5 .today{margin:14px 24px 0;background:var(--h-panel);border:1px solid var(--h-line)}

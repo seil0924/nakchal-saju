@@ -44,7 +44,8 @@ export default function Home() {
       </Link>
 
       {/* 오늘의 사정률 전망 */}
-      <div className="lab"><i /><span>오늘의 사정률 전망</span><TodayChip /></div>
+      <div className="lab"><i /><span>오늘의 사정률 전망</span></div>
+      <TodayChip />
       <div className="today">
         <div className="in">
           <div aria-hidden="true" className="stamp">封</div>
