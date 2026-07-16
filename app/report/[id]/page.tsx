@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
-import { PRICE_TAEKIL, PRICE_FULL, won } from '@/lib/constants';
+import { won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
@@ -166,16 +166,11 @@ export default function ReportView({ params }: { params: { id: string } }) {
                   <div className="catbuy-lead">{catInfo.lead}</div>
                 </div>
               </>
-            ) : (
-              <>
-                <h3>이 상품을 여시겠어요?</h3>
-                <div className="catbuy"><div className="catbuy-lead">필요한 풀이만 낱개로 여는 개별 상품입니다.</div></div>
-              </>
-            )}
-            <div className="pay kakao on2">카카오페이</div><div className="pay toss">토스페이</div><div className="pay">신용/체크카드</div>
+            ) : null}
+            <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
             <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
             {err && <div className="errbox">{err}</div>}
-            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(catInfo ? catInfo.price : (sku === 'taekil' ? PRICE_TAEKIL : PRICE_FULL))} 결제하기`}</button>
+            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(catInfo ? catInfo.price : 0)} 결제하기`}</button>
             <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
           </div>
         </div>
