@@ -20,7 +20,7 @@ async function payPC(p: { paymentId: string; amount: number; goodName: string })
   return new Promise((resolve) => {
     const form = document.createElement('form'); form.setAttribute('name', 'order_info'); form.method = 'post'; form.style.display = 'none';
     const add = (n: string, v: string) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = n; i.value = v; form.appendChild(i); };
-    add('site_cd', SITE_CD); add('site_name', '낙찰사주'); add('pay_method', '100000000000'); add('currency', 'WON');
+    add('site_cd', SITE_CD); add('site_name', '낙찰사주'); add('pay_method', '110000000000'); add('currency', 'WON'); // 1=카드,2=계좌이체
     add('ordr_idxx', p.paymentId); add('good_name', p.goodName); add('good_mny', String(p.amount));
     add('res_cd', ''); add('res_msg', ''); add('enc_data', ''); add('enc_info', ''); add('tran_cd', '');
     document.body.appendChild(form);
@@ -40,6 +40,7 @@ async function payMobile(p: { paymentId: string; amount: number; goodName: strin
   const form = document.createElement('form'); form.setAttribute('name', 'order_info'); form.method = 'post';
   form.action = reg.PayUrl.substring(0, reg.PayUrl.lastIndexOf('/')) + '/jsp/encodingFilter/encodingFilter.jsp';
   const add = (n: string, v: string) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = n; i.value = v; form.appendChild(i); };
+  // TODO: 모바일 계좌이체 오픈 시 KCP 모바일 pay_method 규격 확인 후 확장
   add('site_cd', reg.siteCd || SITE_CD); add('pay_method', 'CARD'); add('currency', '410'); add('shop_name', '낙찰사주');
   add('Ret_URL', location.origin + '/api/payment/kcp/mobile-return'); add('approval_key', reg.approvalKey); add('PayUrl', reg.PayUrl);
   add('ordr_idxx', p.paymentId); add('good_name', p.goodName); add('good_mny', String(p.amount));
