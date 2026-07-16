@@ -2,7 +2,7 @@
 // 서버가 금액을 확정합니다. 카테고리 리포트면 카테고리 개별가, 아니면 sku(택일팩/전체).
 import { NextResponse } from 'next/server';
 import { getReport, createOrder, BALJU_PASS_KEY } from '@/lib/store';
-import { SKU, type Sku, PRICE_BALJU_PASS } from '@/lib/constants';
+import { PRICE_BALJU_PASS } from '@/lib/constants';
 import { isCatKey, CAT_INFO } from '@/lib/report-categories';
 import { requireUser } from '@/lib/supabase/server';
 
@@ -30,9 +30,7 @@ export async function POST(req: Request) {
     const order = await createOrder(reportId, c.price, 2);   // 단일 언락(레벨2)
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: `낙찰사주 ${c.name}`, sku: 'full' });
   }
-  // 통합 리포트 (하위호환)
-  const key: Sku = (sku === 'taekil' || sku === 'full') ? sku : 'full';
-  const { price, level, orderName } = SKU[key];
-  const order = await createOrder(reportId, price, level);
-  return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName, sku: key });
+  // 카테고리 전용 정책 — 카테고리 없는 통합 리포트의 '전체 열기'(구 12,900원)는 폐지.
+  // 열람은 개별 카테고리 상품(대표·사정률·발주처·협정·대운·캘린더)으로만 결제한다.
+  return NextResponse.json({ error: 'category_required' }, { status: 400 });
 }

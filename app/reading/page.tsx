@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { PRICE_TAEKIL, PRICE_FULL, PRICE_BALJU_PASS, won } from '@/lib/constants';
+import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
 import { CLIENTS, isCoreClient } from '@/lib/clients';
@@ -93,7 +93,7 @@ export default function Reading() {
   const catInfo = isCatKey(cat) ? CAT_INFO[cat] : null;
   const ui = catUI(cat);   // 카테고리별 UI 스키마(단일 소스)
   // 카테고리 개별 결제가 (카테고리 모드면 단일가, 아니면 sku 기준가)
-  const unlockPrice = catInfo ? catInfo.price : (sku === 'taekil' ? PRICE_TAEKIL : PRICE_FULL);
+  const unlockPrice = catInfo ? catInfo.price : 0;   // 카테고리 전용 — 무카테고리는 개별 상품으로만 결제
   const set = (k: string, v: any) => setF(s => ({ ...s, [k]: v }));
 
   // 잠긴 섹션을 지나 스크롤하면 슬림 CTA 노출 (결과 없거나 전체 열람이면 숨김)
@@ -735,12 +735,7 @@ export default function Reading() {
                   <div className="catbuy-lead">{catInfo.lead}</div>
                 </div>
               </>
-            ) : (
-              <>
-                <h3>이 상품을 여시겠어요?</h3>
-                <div className="catbuy"><div className="catbuy-lead">필요한 풀이만 낱개로 여는 개별 상품입니다.</div></div>
-              </>
-            )}
+            ) : null}
             <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
             <label className="consent">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
