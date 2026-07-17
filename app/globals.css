@@ -1591,6 +1591,13 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,label.consent:fo
   .lgbtn{transition:filter .18s ease,box-shadow .2s ease}
   .lgbtn:hover{filter:brightness(1.04);box-shadow:var(--elev-1)}
   .loginswitch button:hover{color:var(--gold);text-decoration:underline}
+  /* 더보기/마이 — 계정 버튼 · 로그인 연동 배너 */
+  .acctbtn{transition:filter .18s ease,border-color .18s ease}
+  .acctbtn:hover{filter:brightness(1.04)}
+  .loginpromo{transition:transform .16s ease,box-shadow .2s ease,border-color .2s ease}
+  .loginpromo:hover{transform:translateY(-2px);box-shadow:var(--elev-2);border-color:var(--gold)}
+  .loginpromo .lpg{transition:transform .16s ease}
+  .loginpromo:hover .lpg{transform:translateX(3px)}
 }
 /* 텍스트 선택색 — 금박 톤 */
 ::selection{background:rgba(185,143,63,.28)}
