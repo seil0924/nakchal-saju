@@ -55,3 +55,20 @@
 - 43c8b0d baseline / f1e4ea4 build-green runbook
 - 800a36f 엔진·만세력·스코프 테스트 (47)
 - 42a7598 결제·인증 테스트 + CI (72)
+
+## 3차 확장 — 커버리지 대폭 확대 (135 테스트)
+전체 라인 커버리지 14% → **92%** (함수 91%, 분기 75%).
+| 배치 | 모듈 | 누적 |
+|------|------|------|
+| 1 | preview(engine 교차검증)·tycoon·constants·clients·categories·pains·bizinfo | 104 |
+| 2 | people·vault 저장소·kcp 게이트웨이(fetch 목) | 120 |
+| 3 | report(computeReport 오케스트레이터)·admin-data·migrateLegacy | 135 |
+- report-copy.ts(1079줄)도 computeReport 경유로 94% 커버
+- 남은 저커버(store 45%·middleware 41%·admin-data 51%)=Supabase 라이브 DB 분기(자격증명 필요)
+- **커버리지 게이트 추가**: vitest thresholds(stmts/lines/funcs 88%, branches 70%),
+  CI 를 `npm run test:cov` 로 전환 → 회귀 시 자동 차단
+- CI green 확인 (Node 20)
+
+## 알려진 한계 (자격증명 필요·불가)
+- 실제 KCP 결제창 end-to-end / Supabase 라이브 DB 경로
+- golden 회귀는 날짜 의존이라 CI 제외 (로컬 도구)

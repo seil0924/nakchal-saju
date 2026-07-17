@@ -19,6 +19,14 @@ export default defineConfig({
       include: ['lib/**/*.ts', 'middleware.ts'],
       exclude: ['lib/**/*.test.ts', 'lib/supabase/**', 'test-stubs/**'],
       reporter: ['text', 'text-summary'],
+      // 회귀 방지 게이트 — 현재 라인/함수 ~92%, 분기 ~75%. 여유를 둔 보수적 하한.
+      // 남은 미커버는 대부분 Supabase 라이브 DB 분기(자격증명 필요).
+      thresholds: {
+        statements: 88,
+        lines: 88,
+        functions: 88,
+        branches: 70,
+      },
     },
   },
 });
