@@ -22,6 +22,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
   const [sku, setSku] = useState<'taekil' | 'full'>('full');
   const [seal, setSeal] = useState(false);
   const [sticky, setSticky] = useState(false);
+  const [anchor, setAnchor] = useState<{ x: number; y: number } | null>(null);
   const level = res?.level ?? (res?.unlocked ? 2 : 0);
   const catInfo = isCatKey(res?.cat) ? CAT_INFO[res!.cat as string] : null;
 
@@ -69,6 +70,20 @@ export default function ReportView({ params }: { params: { id: string } }) {
     finally { setBusy(false); }
   }
 
+  function openModal(e?: any) {
+    setErr('');
+    if (e && typeof window !== 'undefined' && window.matchMedia('(min-width:721px)').matches) setAnchor({ x: e.clientX, y: e.clientY });
+    else setAnchor(null);
+    setModal(true);
+  }
+  // 데스크톱: 클릭한 결제 버튼 부근에 다이얼로그를 앵커링(뷰포트 내로 클램프). 모바일(anchor=null)은 하단 시트.
+  const sheetStyle = anchor ? (() => {
+    const W = 432, H = 360, M = 16;
+    const left = Math.max(M, Math.min(anchor.x - W / 2, window.innerWidth - W - M));
+    const top = Math.max(M, Math.min(anchor.y - 24, window.innerHeight - H - M));
+    return { position: 'fixed' as const, left, top, margin: 0 };
+  })() : undefined;
+
   return (
     <div className="app">
       <div className="hero"><div className="k">運 七 技 三</div><h1>{catInfo ? catInfo.name : '사주 리포트'}</h1>
@@ -106,7 +121,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               const prod = productOfMk(sec.mk);
               const pPrice = catInfo ? catInfo.price : (prod?.price ?? 0);
               const pName = catInfo ? catInfo.name : (prod?.name ?? '개별 상품');
-              const openThis = () => { setErr(''); if (catInfo) setModal(true); else location.href = prod ? `/reading?cat=${prod.key}` : '/reading'; };
+              const openThis = (e?: any) => { if (catInfo) openModal(e); else { setErr(''); location.href = prod ? `/reading?cat=${prod.key}` : '/reading'; } };
               return (
                 <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                   <div className="hd" onClick={locked ? openThis : undefined}><div className="mk">{sec.mk}</div><div className="ti">{sec.t}</div>
@@ -120,7 +135,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {level < 2 && catInfo && (
               <>
                 <div className="readyline"><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
-                <div className="cta" onClick={() => { setErr(''); setModal(true); }}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
+                <div className="cta" onClick={(e) => openModal(e)}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
                 <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
               </>
             )}
@@ -148,7 +163,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
         </div>
       )}
       {res && level < 2 && catInfo && sticky && !modal && (
-        <div className="stickycta no-print" onClick={() => { setErr(''); setModal(true); }}>
+        <div className="stickycta no-print" onClick={(e) => openModal(e)}>
           <span className="sl"><b>{catInfo.name} 열기</b><em>산출 완료 · 열람만 잠금</em></span>
           <span className="sr">{won(catInfo.price)} →</span>
         </div>
@@ -156,7 +171,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
 
       {modal && (
         <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setModal(false); }}>
-          <div className="sheet">
+          <div className="sheet" style={sheetStyle}>
             <div className="grip" />
             {catInfo ? (
               <>
