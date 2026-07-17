@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "golden": "node scripts/golden.mjs"
+    "golden": "node scripts/golden.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage"
   },
   "dependencies": {
     "@supabase/ssr": "0.4.0",
@@ -19,6 +22,9 @@
   "devDependencies": {
     "@types/node": "20.14.10",
     "@types/react": "18.3.3",
-    "typescript": "5.5.3"
+    "@vitest/coverage-v8": "^2.1.9",
+    "jsdom": "^29.1.1",
+    "typescript": "5.5.3",
+    "vitest": "^2.1.9"
   }
 }
