@@ -1567,6 +1567,20 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,label.consent:fo
   .tcta:hover{filter:brightness(1.05)}
   /* 하단 내비 아이템 호버 */
   .nav5 a:not(.on):not(.c):hover{color:var(--gold)}
+  /* 리스트 항목(vault·balju·more의 .li) — 링크형만 상승, 정적 행 제외 */
+  .li{transition:transform .16s ease,box-shadow .2s ease,border-color .2s ease}
+  a.li:hover{transform:translateY(-2px);box-shadow:var(--elev-2);border-color:var(--gold)}
+  a.li:hover .r{transform:translateX(2px)}
+  .li .r{transition:transform .16s ease}
+  .ebcta:hover{filter:brightness(1.05)}
+  /* 폼 토글(양/음력 등) · 공유 버튼 · 브리지 카드 (ceo·reading·balju 공용) */
+  .seg-b{transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+  .seg-b:not(.on):hover{border-color:var(--gold);color:var(--ink)}
+  .sharebtn{transition:filter .18s ease,box-shadow .2s ease,border-color .18s ease}
+  .sharebtn:hover{filter:brightness(1.03);box-shadow:var(--elev-1)}
+  .bridge:hover{transform:translateY(-2px);box-shadow:var(--elev-2)}
+  .bridge .ba{transition:transform .16s ease}
+  .bridge:hover .ba{transform:translateX(3px)}
 }
 /* 텍스트 선택색 — 금박 톤 */
 ::selection{background:rgba(185,143,63,.28)}
