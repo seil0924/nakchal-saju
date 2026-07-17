@@ -67,4 +67,13 @@ describe('people — 사람/업체 저장소', () => {
     const P = await import('../people');
     expect(P.loadPeople()).toEqual([]);
   });
+
+  it('migrateLegacy: 레거시 분산 저장(self)을 통합 키로 이관', async () => {
+    const scope = await import('../scope');
+    localStorage.setItem(scope.scopedKey('nakchal_self_v1'), JSON.stringify([{ name: '대표', birth: '1990-01-01' }]));
+    const P = await import('../people');
+    expect(P.loadPeople()).toHaveLength(0); // 이관 전
+    P.migrateLegacy();
+    expect(P.loadPeople().some((p) => p.kind === 'self' && p.name === '대표')).toBe(true);
+  });
 });
