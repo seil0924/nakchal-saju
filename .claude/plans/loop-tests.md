@@ -30,15 +30,28 @@
 - 전체 커버리지 7.6%는 report-copy.ts(1079줄)·tycoon.ts 등
   정적 텍스트/데이터 파일 미테스트 때문 (로직 아님)
 
+## 2차 확장 — 로그인·결제 로직 + CI
+| 모듈 | 라인 커버리지 | 검증 내용 |
+|------|--------------|-----------|
+| store.ts | 45% (보안경로 100%) | 금액 위변조 거부·다운그레이드 방지·패스 권한 |
+| middleware.ts | isPublicPath 100% | 로그인 게이트 판정 |
+| seal.ts | 100% | 인장 SVG 렌더 |
+| report-categories.ts | 높음 | 가격·부호매핑·UI스키마 |
+- store.ts 미커버 구간 = Supabase DB 분기(라이브 DB 필요, 자격증명 없음)
+- server-only/client-only 를 vitest 에서 빈 모듈로 alias (test-stubs/empty.ts)
+- CI: .github/workflows/ci.yml (push/PR → test + build + golden)
+- 앱 부팅 확인: npm run dev → HTTP 200 (데모 모드)
+
 ## 진행 로그
 - [x] Vitest + coverage + jsdom 설치
-- [x] vitest.config.ts + package.json 스크립트
-- [x] manse-core 테스트 (17)
-- [x] engine 테스트 (26)
-- [x] scope 격리 테스트 (4)
-- [x] 47 테스트 green, 핵심 모듈 89~100% 커버
-- [ ] (선택) report.ts/tycoon.ts 등 확장
+- [x] manse-core(17) engine(26) scope(4) 테스트
+- [x] store/payment(8) middleware(4) seal(6) report-categories(7) 테스트
+- [x] 총 72 테스트 green
+- [x] CI 워크플로 추가
+- [x] 앱 부팅 검증 (dev 서버 200)
+- [ ] GitHub 푸시 — 원격 저장소 + 인증 필요 (사용자 선택 대기)
 
-## 남은 확장 후보 (원하면)
-- report.ts: computeReport — 이미 scripts/golden.mjs 스냅샷 검증 존재
-- tycoon.ts(512줄), pains.ts, categories.ts — 데이터/규칙 로직
+## 커밋
+- 43c8b0d baseline / f1e4ea4 build-green runbook
+- 800a36f 엔진·만세력·스코프 테스트 (47)
+- 42a7598 결제·인증 테스트 + CI (72)
