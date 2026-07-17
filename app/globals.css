@@ -1455,6 +1455,36 @@ button,.lb,.chip,.chip2,.pz,.twc,.cbk,.rpr,.cbgo{white-space:nowrap}
 .pp-l{display:block;font-size:12px;color:var(--sub);font-weight:700;margin:13px 0 6px}
 .pp-opt{color:#b3ab97;font-weight:500}
 .pp-in{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;font-size:15px;background:#fff}
+
+/* ══════════════════════════════════════════════════════════════════
+   프리미엄·신뢰 레이어 (오버라이드) — 기존 규칙 삭제 없이 깊이·질감·금속 금색을
+   더한다. 전 페이지 공통(globals) 상향. 텍스트 대비·터치 타깃은 낮추지 않음.
+   ══════════════════════════════════════════════════════════════════ */
+:root{
+  --gold-grad:linear-gradient(135deg,#e8cf8a,#b98f3f 46%,#8f6a26);
+  --elev-1:0 1px 2px rgba(40,33,20,.05),0 4px 14px rgba(40,33,20,.06);
+  --elev-2:0 2px 4px rgba(40,33,20,.06),0 12px 30px rgba(40,33,20,.09);
+  --ring-gold:0 0 0 3px rgba(185,143,63,.20);
+}
+/* 세리프 제목 광학 정렬 — 큰 글자일수록 조여 고급감 */
+.hero h1,.rephd,.st,.sec .ti,.catbuy-nm,.plan2 .pp{letter-spacing:-.02em}
+/* 히어로 — 다층 그라데이션 + 은은한 상단 광채 + 금속 금색 하단선 */
+.hero{background:radial-gradient(120% 100% at 50% 0,#2c3038 0,#20242c 46%,#14161b 100%)}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 12%,rgba(227,194,122,.10),transparent 70%);pointer-events:none}
+.hero>*{position:relative}
+.hero::after{height:2px;background:var(--gold-grad);box-shadow:0 0 14px rgba(197,145,74,.40)}
+.hero .k{letter-spacing:.26em}
+/* 카드/섹션 — 층진 그림자로 종이 위 부양감 */
+.card,.sec{box-shadow:var(--elev-1)}
+.card{border-color:#efe9dc}
+/* 주요 CTA — 금속 테두리 + 내부 하이라이트 + 깊은 그림자 */
+.go,.cta{background:linear-gradient(135deg,#b12a24,#7f1a17);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 6px 18px rgba(122,26,23,.28);border-color:#e3c27a}
+/* 입력 포커스 — 금색 링(신뢰의 디테일) */
+input:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:var(--ring-gold)}
+/* 단일상품 결제 카드 — 금색 실선 강조 + 깊은 부양 */
+.catbuy{box-shadow:var(--elev-2),0 0 0 1px rgba(197,145,74,.15)}
+/* 인장·배지 — 금속 광택(입체) */
+.catbuy-seal,.gvseal,.compat .grade{box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 4px 14px rgba(0,0,0,.18)}
 .pp-seg{display:flex;gap:8px}
 .pp-seg button{flex:1;padding:11px;border:1px solid var(--line);background:#fff;border-radius:11px;font-weight:700;font-size:14px;color:var(--ink);cursor:pointer}
 .pp-seg button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
