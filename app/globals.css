@@ -129,6 +129,13 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .modal.on{display:flex}
 .sheet{width:100%;max-width:480px;background:#fff;border-radius:22px 22px 0 0;padding:22px 20px 26px;box-shadow:0 -10px 40px rgba(0,0,0,.3);animation:up .28s ease}
 @keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+/* 데스크톱: 하단 시트 대신 화면 중앙 다이얼로그 (모바일은 위 하단 시트 유지) */
+@media(min-width:721px){
+  .modal{align-items:center;background:rgba(20,18,12,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding:24px}
+  .sheet{border-radius:20px;max-width:432px;max-height:88vh;overflow-y:auto;padding:26px 28px 30px;box-shadow:0 26px 80px rgba(0,0,0,.42),0 0 0 1px rgba(230,223,206,.9) inset;animation:pop .24s cubic-bezier(.2,.9,.3,1.15)}
+  .sheet .grip{display:none}
+}
+@keyframes pop{from{transform:translateY(12px) scale(.97);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
 .sheet .grip{width:38px;height:4px;background:#e2dccb;border-radius:2px;margin:0 auto 16px}
 .sheet h3{font-family:var(--serif);font-weight:900;font-size:17px;color:var(--ink);text-align:center}
 .sheet .price{text-align:center;margin:14px 0 4px}
