@@ -1536,6 +1536,51 @@ button.li{font:inherit;text-align:left;cursor:pointer;width:calc(100% - 26px);bo
 .trstat{display:flex;flex-wrap:wrap;gap:7px;padding:11px 14px;border-top:1px solid #efe7d6;background:#fbf6ec}
 .trstat span{font-size:11px;color:var(--navy);font-weight:700;background:#fff;border:1px solid #e7dcc2;border-radius:999px;padding:4px 9px}
 .trstat em{font-style:normal;color:#a08a52;font-weight:600;margin-left:4px}
+
+/* ══════════════════════════════════════════════════════════════════
+   상호작용·접근성 폴리시 (globals) — 전 페이지 공통, 가산적(기존 규칙 미삭제).
+   키보드 포커스 링 · 부드러운 전이 · 눌림 촉감 · 호버 상승 · 선택색 · 모션 감쇠.
+   ══════════════════════════════════════════════════════════════════ */
+/* 키보드 포커스만 금색 링(마우스 클릭엔 안 뜸) — 접근성 + 고급 디테일 */
+a:focus-visible,button:focus-visible,[role="button"]:focus-visible,
+input:focus-visible,textarea:focus-visible,select:focus-visible,label.consent:focus-within{
+  outline:2px solid transparent;outline-offset:2px;
+  box-shadow:var(--ring-gold),0 0 0 1px rgba(185,143,63,.55);border-radius:9px
+}
+/* 주요 인터랙션 요소 부드러운 전이 */
+.cta,.go,.pay,.paygo,.pickbtn,.dnavi,.dcta,.pp-row,.pp-add,.bridge,
+.sharebtn,.stickycta,.tunlock,.reinput,.sec .hd,.pp-btns button,.pp-seg button{
+  transition:transform .16s ease,box-shadow .2s ease,background-color .2s ease,border-color .2s ease,filter .2s ease
+}
+/* 클릭 순간 살짝 눌리는 촉감(과하지 않게) */
+.cta:active,.go:active,.paygo:active,.pickbtn:active,.tunlock:active,.stickycta:active,.pay:active{transform:translateY(1px) scale(.997)}
+/* 데스크톱 호버 상승감(터치 기기엔 미적용) */
+@media(hover:hover){
+  .card:hover,.catbuy:hover{box-shadow:var(--elev-2)}
+  .cta:hover,.go:hover,.paygo:hover{filter:brightness(1.045)}
+  .bridge:hover,.pickbtn:hover{border-color:var(--gold)}
+}
+/* 텍스트 선택색 — 금박 톤 */
+::selection{background:rgba(185,143,63,.28)}
+/* 모바일 탭 하이라이트 제거(자체 촉감 피드백 존재) */
+a,button,[role="button"]{-webkit-tap-highlight-color:transparent}
+/* 데스크톱 슬림 스크롤바(브랜드 톤) */
+@media(min-width:900px){
+  html{scrollbar-width:thin;scrollbar-color:#c8bfa8 transparent}
+  ::-webkit-scrollbar{width:11px;height:11px}
+  ::-webkit-scrollbar-thumb{background:#c8bfa8;border-radius:8px;border:3px solid transparent;background-clip:content-box}
+  ::-webkit-scrollbar-thumb:hover{background:#b0a487;background-clip:content-box}
+}
+/* 접근성: 모션 최소화 선호 시 애니메이션·전이 감쇠 */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+}
+/* 데스크톱: PersonPicker 선택 시트도 결제 모달과 동일하게 중앙 다이얼로그로 통일 */
+@media(min-width:721px){
+  .pp-ov{align-items:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding:24px}
+  .pp-sheet{max-width:440px;border-radius:18px;max-height:84vh;box-shadow:0 26px 80px rgba(20,17,12,.42);animation:pppop .22s cubic-bezier(.2,.9,.3,1.15)}
+}
+@keyframes pppop{from{transform:translateY(12px) scale(.97);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
 .trdisc{padding:10px 14px;text-align:center;font-size:11px;color:#8d8672;font-weight:500;background:#fff}
 .trdisc b{color:var(--navy);font-weight:700}
 
