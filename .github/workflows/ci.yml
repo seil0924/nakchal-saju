@@ -27,5 +27,8 @@ jobs:
       - name: Production build (Next.js)
         run: npm run build
 
-      - name: Golden regression (report snapshots)
-        run: npm run golden
+      # 참고: `npm run golden` 은 CI 게이트에서 제외한다.
+      # 리포트의 '오늘의 택일 신호'(gauge/hero)는 report.ts 의 new Date() 로
+      # 매일 바뀌는 정상 기능이라, 스냅샷 베이스라인이 생성일에만 일치한다.
+      # 날짜 고정 클럭을 주입하기 전까지 재현 가능한 CI 검증이 될 수 없다.
+      # 로컬 회귀 확인용 도구로만 사용:  npm run golden  /  npm run golden -- --update
