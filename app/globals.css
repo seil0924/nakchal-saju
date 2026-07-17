@@ -1559,6 +1559,14 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,label.consent:fo
   .card:hover,.catbuy:hover{box-shadow:var(--elev-2)}
   .cta:hover,.go:hover,.paygo:hover{filter:brightness(1.045)}
   .bridge:hover,.pickbtn:hover{border-color:var(--gold)}
+  /* 홈 — 카테고리 카드/배너/CTA 호버 인터랙션 */
+  .li5,.ceoband,.bokline,.tcta,.li5 .arw,.ceoband .cbgo{transition:transform .16s ease,box-shadow .2s ease,border-color .2s ease,filter .2s ease}
+  .li5:hover,.ceoband:hover{transform:translateY(-2px);box-shadow:var(--elev-2);border-color:var(--gold)}
+  .li5:hover .arw,.ceoband:hover .cbgo{transform:translateX(3px)}
+  .bokline:hover{border-color:var(--gold)}
+  .tcta:hover{filter:brightness(1.05)}
+  /* 하단 내비 아이템 호버 */
+  .nav5 a:not(.on):not(.c):hover{color:var(--gold)}
 }
 /* 텍스트 선택색 — 금박 톤 */
 ::selection{background:rgba(185,143,63,.28)}
