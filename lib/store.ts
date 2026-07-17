@@ -108,6 +108,9 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
   if (c) {
     const { data: o } = await c.from('payments').select('*').eq('payment_id', paymentId).maybeSingle();
     if (!o || paidAmount !== o.amount) return null;      // ★금액 재검증
+    if (o.status === 'paid') {                            // ★멱등: 이미 처리된 주문은 재처리 없이 반환(재생 방어)
+      return { paymentId, reportId: o.report_id ?? o.pass_key, amount: o.amount, level: o.level ?? 1, status: 'paid' };
+    }
     await c.from('payments').update({ status: 'paid', paid_at: new Date().toISOString() }).eq('payment_id', paymentId);
     const key = o.report_id ?? o.pass_key;
     if (String(key).startsWith('pass:')) { await c.from('entitlements').upsert({ key }); return { paymentId, reportId: key, amount: o.amount, level: o.level ?? 1, status: 'paid' }; }
@@ -119,6 +122,7 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
   }
   const o = memOrders.get(paymentId);
   if (!o || paidAmount !== o.amount) return null;
+  if (o.status === 'paid') return o;                     // ★멱등: 재생/중복 승인 방어
   o.status = 'paid';
   if (o.reportId.startsWith('pass:')) memPasses.add(o.reportId);
   else memUnlockLvl.set(o.reportId, Math.max(memUnlockLvl.get(o.reportId) ?? 0, o.level));

@@ -69,4 +69,12 @@ describe('store — 결제/주문 로직 (인메모리 백엔드)', () => {
     expect(BALJU_PASS_KEY()).toBe('pass:balju:demo');
     expect(BALJU_PASS_KEY(null)).toBe('pass:balju:demo');
   });
+
+  it('★멱등: 같은 주문 두 번 승인해도 안전(재생 방어)', async () => {
+    const o = await createOrder('rpt-idem', 39000, 2);
+    expect((await confirmOrder(o.paymentId, 39000))?.status).toBe('paid');
+    // 재생: 같은 결제 재승인 → 재처리 없이 paid, 레벨 안 꼬임
+    expect((await confirmOrder(o.paymentId, 39000))?.status).toBe('paid');
+    expect(await unlockLevel('rpt-idem')).toBe(2);
+  });
 });
