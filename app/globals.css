@@ -1581,6 +1581,16 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,label.consent:fo
   .bridge:hover{transform:translateY(-2px);box-shadow:var(--elev-2)}
   .bridge .ba{transition:transform .16s ease}
   .bridge:hover .ba{transform:translateX(3px)}
+  /* 마이페이지 설정 행 · product 전체보기 CTA */
+  .setrow a{transition:background-color .16s ease,color .16s ease}
+  .setrow a:hover{color:var(--navy);background:#fbf7ee}
+  .setrow a:hover .r{color:var(--gold)}
+  .fullcta{transition:filter .18s ease,box-shadow .2s ease}
+  .fullcta:hover{filter:brightness(1.05);box-shadow:var(--elev-2)}
+  /* 로그인 — 소셜/이메일 버튼 · 모드 전환 링크 */
+  .lgbtn{transition:filter .18s ease,box-shadow .2s ease}
+  .lgbtn:hover{filter:brightness(1.04);box-shadow:var(--elev-1)}
+  .loginswitch button:hover{color:var(--gold);text-decoration:underline}
 }
 /* 텍스트 선택색 — 금박 톤 */
 ::selection{background:rgba(185,143,63,.28)}
