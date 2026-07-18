@@ -1599,6 +1599,24 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,label.consent:fo
   .loginpromo .lpg{transition:transform .16s ease}
   .loginpromo:hover .lpg{transform:translateX(3px)}
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   관리자(/admin) 인터랙션 폴리시 — .adminroot 하위, 가산적. 내부 운영 화면.
+   ══════════════════════════════════════════════════════════════════ */
+.adminroot .anav{transition:background-color .16s ease,color .16s ease,border-color .16s ease}
+.adminroot .anav svg{transition:stroke .16s ease}
+.adminroot .kpi{transition:box-shadow .2s ease,border-color .2s ease}
+.adminroot .acard .h a{transition:color .16s ease}
+.adminroot .fx{transition:background-color .16s ease,border-color .16s ease,color .16s ease}
+.adminroot tbody tr{transition:background-color .12s ease}
+@media(hover:hover){
+  .adminroot .anav:not(.on):hover{background:#20242e;color:#e7e9ef}
+  .adminroot .anav:not(.on):hover svg{stroke:#c4c9d4}
+  .adminroot .kpi:hover{box-shadow:0 6px 20px rgba(30,28,20,.09);border-color:#d8d3c6}
+  .adminroot .acard .h a:hover{color:var(--red)}
+  .adminroot .fx:not(.on):hover{border-color:#171a20;color:#171a20}
+  .adminroot tbody tr:hover td{background:#faf9f6}
+}
 /* 텍스트 선택색 — 금박 톤 */
 ::selection{background:rgba(185,143,63,.28)}
 /* 모바일 탭 하이라이트 제거(자체 촉감 피드백 존재) */
