@@ -13,7 +13,7 @@ import PersonPicker from '@/app/_components/PersonPicker';
 import { type Person, type PersonKind } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
 import TrustStrip from '@/app/_components/TrustStrip';
-import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
+import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 import { sget, sset } from '@/lib/scope';
 
 // 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
@@ -114,6 +114,7 @@ export default function Reading() {
   const [addDate, setAddDate] = useState('');
   const [saved, setSaved] = useState<Target[]>([]);
   const [cbOpen, setCbOpen] = useState(false); // 발주처 검색 셀렉트 열림
+  useEffect(() => { preloadKcp(); }, []);
   useEffect(() => { try { const s = sget(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
   // 발주처 탭에서 넘어온 경우 프리필 (?ck=client&cn=이름&cd=날짜)
   useEffect(() => {

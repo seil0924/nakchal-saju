@@ -6,18 +6,26 @@ export const KCP_CLIENT_ENABLED = !!SITE_CD;
 const PC_JS = TEST ? 'https://testspay.kcp.co.kr/plugin/kcp_spay_hub.js' : 'https://spay.kcp.co.kr/plugin/kcp_spay_hub.js';
 const isMobile = () => typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 
+let scriptPromise: Promise<void> | null = null;
 function loadScript(src: string): Promise<void> {
   return new Promise((res, rej) => {
     if (document.querySelector(`script[src="${src}"]`)) return res();
     const s = document.createElement('script'); s.src = src; s.onload = () => res(); s.onerror = () => rej(new Error('script')); document.head.appendChild(s);
   });
 }
+// ★페이지 로드 시 미리 호출 → 결제창 클릭 때 스크립트 대기(await) 없이 즉시 팝업 오픈(팝업 차단 방지)
+export function preloadKcp(): void {
+  if (!KCP_CLIENT_ENABLED || typeof window === 'undefined' || isMobile()) return;
+  if (!scriptPromise) scriptPromise = loadScript(PC_JS).catch(() => { scriptPromise = null; });
+}
 
 type Auth = { enc_data: string; enc_info: string; tran_cd: string };
 
 async function payPC(p: { paymentId: string; amount: number; goodName: string }): Promise<Auth | null> {
-  await loadScript(PC_JS);
+  // 사전 로드돼 있으면 resolved 프라미스(마이크로태스크) → 사용자 클릭 활성 유지된 채 팝업 오픈
+  if (scriptPromise) { await scriptPromise; } else { await loadScript(PC_JS); }
   return new Promise((resolve) => {
+    if (typeof (window as any).KCP_Pay_Execute_Web !== 'function') { resolve(null); return; } // 스크립트 미준비 → 무한대기 방지
     const form = document.createElement('form'); form.setAttribute('name', 'order_info'); form.method = 'post'; form.style.display = 'none';
     const add = (n: string, v: string) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = n; i.value = v; form.appendChild(i); };
     add('site_cd', SITE_CD); add('site_name', '낙찰사주'); add('pay_method', '110000000000'); add('currency', 'WON'); // 1=카드,2=계좌이체
@@ -54,7 +62,7 @@ async function payMobile(p: { paymentId: string; amount: number; goodName: strin
   document.body.appendChild(form); form.submit();   // 전체 페이지 이동 → 결과는 서버 mobile-return이 처리
 }
 
-// PC면 인증결과(enc) 반환, 모바일이면 'redirect'(페이지 이동), 취소면 null
+// PC면 인증결과(enc) 반환, 모바일이면 'redirect'(페이지 이동), 취소/실패면 null
 export async function openKcpPay(p: { paymentId: string; amount: number; goodName: string }): Promise<Auth | null | 'redirect'> {
   if (isMobile()) { await payMobile(p); return 'redirect'; }
   return await payPC(p);

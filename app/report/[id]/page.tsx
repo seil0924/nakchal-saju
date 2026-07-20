@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
+import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 import { won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
@@ -13,6 +13,7 @@ type Result = { reportId: string; title: string; unlocked: boolean; level?: numb
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
+  useEffect(() => { preloadKcp(); }, []);
   const id = params.id;
   const [res, setRes] = useState<Result | null>(null);
   const [modal, setModal] = useState(false);

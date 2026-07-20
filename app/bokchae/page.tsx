@@ -1,13 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { won } from '@/lib/constants';
-import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
+import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 
 // 복채(福債) — 홈 최하단에만 조용히 두는 자율 감사·기원 결제. 리포트/결제 흐름엔 등장하지 않는다.
 const PRESETS = [50000, 100000, 200000, 500000, 1000000];
 
 export default function Bokchae() {
+  useEffect(() => { preloadKcp(); }, []);
   const [amt, setAmt] = useState(0);
   const [custom, setCustom] = useState(false); // '직접' 입력 모드
   const [busy, setBusy] = useState(false);
