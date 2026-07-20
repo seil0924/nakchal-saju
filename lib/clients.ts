@@ -54,3 +54,7 @@ export const CLIENTS: Client[] = [
 ];
 export const isCoreClient = (name?: string | null) => !!CLIENTS.find(c => c.name === name)?.core;
 export const clientTip = (name?: string | null) => (name ? CLIENTS.find(c => c.name === name)?.tip : undefined);
+
+// SEO 랜딩용 — 발주처명 → URL slug(괄호·공백 제거, 한글 유지) 및 역조회
+export const clientSlug = (name: string) => name.replace(/\([^)]*\)/g, '').replace(/\s+/g, '').trim();
+export const clientBySlug = (slug: string) => CLIENTS.find(c => clientSlug(c.name) === decodeURIComponent(slug));
