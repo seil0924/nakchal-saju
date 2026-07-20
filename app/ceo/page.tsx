@@ -140,16 +140,10 @@ export default function CeoTwin() {
 
   async function share() {
     if (!res) return;
-    const url = `${location.origin}/ceo`;
-    const blob = await drawCard();
-    const file = blob ? new File([blob], 'nakchal-ceo.png', { type: 'image/png' }) : null;
+    const url = `${location.origin}/ceo`;   // 이미지 카드 대신 URL(링크) 공유 — 받은 사람이 열어 '나도 보기'
     try {
       const nav: any = navigator;
-      if (file && nav.canShare && nav.canShare({ files: [file] })) {
-        await nav.share({ title: '낙찰사주 · 나와 닮은 CEO', text: shareText, url, files: [file] });
-        return;
-      }
-      if (nav.share) { await nav.share({ title: '낙찰사주', text: shareText, url }); return; }
+      if (nav.share) { await nav.share({ title: '낙찰사주 · 나와 닮은 CEO', text: shareText, url }); return; }
       await navigator.clipboard.writeText(shareText + ' ' + url);
       alert('공유 문구와 링크를 복사했어요. 카톡에 붙여넣어 보내세요.');
     } catch {}
@@ -303,7 +297,7 @@ export default function CeoTwin() {
             </div>
 
             <div className="sharewrap">
-              <button className="sharebtn primary" onClick={share}>결과 카드 공유<span style={{ fontWeight: 500, fontSize: 11.5, display: 'block', marginTop: 2 }}>카카오톡 · 인스타</span></button>
+              <button className="sharebtn primary" onClick={share}>결과 링크 공유<span style={{ fontWeight: 500, fontSize: 11.5, display: 'block', marginTop: 2 }}>카카오톡 · 문자</span></button>
               <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 11.5, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
             </div>
 

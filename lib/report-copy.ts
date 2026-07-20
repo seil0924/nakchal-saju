@@ -348,15 +348,16 @@ function baljuHtml(cm:any,c:any,otherLabel:string,tip:string|undefined,premium:b
     `<div class="cvs"><div class="cnm">${otherLabel}</div><div class="cpl" style="background:${otCol}">${cm.pills}</div></div>`+
   `</div>`;
   const tipHtml = tip?`<div class="btip"><span class="btl">${otherLabel} 발주 특성</span><span class="btv">${tip}</span></div>`:'';
-  const basic = verdict + tipHtml + `<p>${cm.paras[0]}</p>`;
-  if(!premium){
-    return basic + `<div class="baljulock"><b>발주처 프리미엄</b> — 이 발주처를 대하는 <b>3계</b>(언제·어떻게·무엇을)·실전 시나리오·주의신호·연도별 세운이 잠겨 있습니다. 한 번 열면 <b>모든 발주처</b>가 열립니다.</div>`;
-  }
   const P=(a:string[])=>a.map(x=>`<p>${x}</p>`).join('');
+  // 무료: 궁합 점수 + 발주 특성 + 이 발주처를 대하는 법(전체 문단). 대뜸 잠그지 않고 조언을 충분히 준다.
+  const basic = verdict + tipHtml + P(cm.paras);
+  if(!premium){
+    return basic + `<div class="baljulock">여기까지가 <b>이 발주처를 대하는 큰 방향</b>입니다. <b>발주처 프리미엄</b>을 열면 — 이 발주처만의 <b>3계(언제·어떻게·무엇을) 실전 시나리오</b>, <b>주의신호</b>, <b>연도별 세운(올해 밀어주는 해/조이는 해)</b>까지 손에 잡히게 이어집니다. 한 번 열면 <b>43곳 모든 발주처</b>가 함께 열립니다.</div>`;
+  }
   const yearLine = cm.seun ? `<div class="cyear"><span class="cyl">${cm.seun.year}년 기준</span><span class="cyd">바탕 ${cm.base} → 올해 <b style="color:${cm.gc}">${cm.score2}</b> <em>${cm.score2>cm.base?'▲ 세운이 밀어주는 해':cm.score2<cm.base?'▼ 세운이 조이는 해':'· 평이한 해'}</em></span></div>` : '';
   const X=CO_X[cm.rel];
   const deep = X ? `<p>${X[0]}</p><div class="threekye"><div class="tkt">이 발주처를 대하는 3계(計)</div>`+X[1].map((s2:string)=>`<div class="tkrow"><span class="tkdot"></span><span class="tktx">${s2}</span></div>`).join('')+`</div><p class="cwarn">${X[2]}</p>` : '';
-  return basic + P(cm.paras.slice(1)) + yearLine + deep;
+  return basic + yearLine + deep;
 }
 // 법인 운세 (설립일 사주 × 대표)
 const LEGREL={
