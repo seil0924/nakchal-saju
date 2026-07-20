@@ -351,11 +351,15 @@ function baljuHtml(cm:any,c:any,otherLabel:string,tip:string|undefined,premium:b
   const P=(a:string[])=>a.map(x=>`<p>${x}</p>`).join('');
   // 무료: 궁합 점수 + 발주 특성 + 이 발주처를 대하는 법(전체 문단). 대뜸 잠그지 않고 조언을 충분히 준다.
   const basic = verdict + tipHtml + P(cm.paras);
+  const X=CO_X[cm.rel];
   if(!premium){
-    return basic + `<div class="baljulock">여기까지가 <b>이 발주처를 대하는 큰 방향</b>입니다. <b>발주처 프리미엄</b>을 열면 — 이 발주처만의 <b>3계(언제·어떻게·무엇을) 실전 시나리오</b>, <b>주의신호</b>, <b>연도별 세운(올해 밀어주는 해/조이는 해)</b>까지 손에 잡히게 이어집니다. 한 번 열면 <b>43곳 모든 발주처</b>가 함께 열립니다.</div>`;
+    // 흥미 훅 — 실전 3계 중 '첫 계(언제)'를 무료 미리보기로 맛보이고, 나머지는 프리미엄으로.
+    const taste = X ? `<p>${X[0]}</p><div class="threekye"><div class="tkt">이 발주처를 대하는 3계(計) <span class="tkfree">첫 계 미리보기</span></div>`+
+      `<div class="tkrow"><span class="tkdot"></span><span class="tktx">${X[1][0]}</span></div>`+
+      `<div class="tkrow tklock"><span class="tkdot"></span><span class="tktx"><b>어떻게 · 무엇을</b> — 나머지 두 계는 프리미엄에서 이어집니다</span></div></div>` : '';
+    return basic + taste + `<div class="baljulock">방금 <b>첫 계(언제)</b>까지 맛보셨습니다. <b>발주처 프리미엄</b>을 열면 — 나머지 <b>2계(어떻게·무엇을) 실전 시나리오</b>, <b>주의신호</b>, <b>연도별 세운(올해 밀어주는 해/조이는 해)</b>까지 손에 잡히게 이어지고, 한 번 열면 <b>43곳 모든 발주처</b>가 함께 열립니다.</div>`;
   }
   const yearLine = cm.seun ? `<div class="cyear"><span class="cyl">${cm.seun.year}년 기준</span><span class="cyd">바탕 ${cm.base} → 올해 <b style="color:${cm.gc}">${cm.score2}</b> <em>${cm.score2>cm.base?'▲ 세운이 밀어주는 해':cm.score2<cm.base?'▼ 세운이 조이는 해':'· 평이한 해'}</em></span></div>` : '';
-  const X=CO_X[cm.rel];
   const deep = X ? `<p>${X[0]}</p><div class="threekye"><div class="tkt">이 발주처를 대하는 3계(計)</div>`+X[1].map((s2:string)=>`<div class="tkrow"><span class="tkdot"></span><span class="tktx">${s2}</span></div>`).join('')+`</div><p class="cwarn">${X[2]}</p>` : '';
   return basic + yearLine + deep;
 }
