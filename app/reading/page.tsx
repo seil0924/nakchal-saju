@@ -270,7 +270,7 @@ export default function Reading() {
       const r = await resp.json();
       setRes(r);
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
-      setTimeout(() => document.getElementById('rep')?.scrollIntoView({ behavior: 'smooth' }), 60);
+      // (스크롤 점프 제거 — 잠긴 항목 클릭 시 화면이 위로 튀지 않도록 제자리 갱신)
     } catch { setErr('상품을 여는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
     finally { setBusy(false); }
   }
@@ -605,7 +605,7 @@ export default function Reading() {
                     <div className="hd" onClick={locked ? openThis : undefined}>
                       <div className="mk">{sec.mk}</div>
                       <div className="ti">{sec.t}</div>
-                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {won(pPrice)}</span>}
+                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒</span>}
                       <div className="cv">▾</div>
                     </div>
                     <div className="bd">
@@ -614,7 +614,7 @@ export default function Reading() {
                           <div className="teaser">
                             <div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
                             <button className="tunlock" onClick={openThis}>
-                              {`${pName} 열기 · ${won(pPrice)}`} →
+                              {`${pName} 열기`} →
                             </button>
                           </div>
                         )}
@@ -630,7 +630,7 @@ export default function Reading() {
                   {catInfo.name} 열기
                   <small>{catInfo.lead} · {won(catInfo.price)}</small>
                 </div>
-                <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
+                <div className="ctaassure">✓ 30초 · 결제 즉시 열람</div>
               </>
             ) : lockedProducts.length > 0 ? (
               <div className="prodmenu">
@@ -649,7 +649,7 @@ export default function Reading() {
                 발주처 프리미엄 패스 열기
                 <small>한 번 결제로 43곳 모든 발주처 상세 · {won(PRICE_BALJU_PASS)}</small>
               </div>
-              <div className="ctaassure">✓ 카카오페이·토스로 30초 · 한 번 열면 모든 발주처</div>
+              <div className="ctaassure">✓ 30초 · 한 번 열면 모든 발주처</div>
             </>)}
             {level >= 1 && res.gauge.precise && ui.gauge && (
               <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
@@ -659,9 +659,10 @@ export default function Reading() {
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장
             </button>
+            {res.sections.some((s2: any) => s2.mk === '曆' || s2.mk === '曆詳' || s2.mk === '曆年') && (
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={exportIcs}>
               이달 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
-            </button>
+            </button>)}
             <TrustStrip />
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
             </div>
