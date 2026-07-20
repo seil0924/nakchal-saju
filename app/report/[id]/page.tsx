@@ -141,8 +141,12 @@ export default function ReportView({ params }: { params: { id: string } }) {
               </>
             )}
             {level >= 1 && res.gauge?.precise && res.sections?.some((s: any) => s.mk === '率') && <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b></div>}
+            {/* 나도 보기 — 공유받은 사람이 자기 결과를 바로 보는 입구 */}
+            <Link className="cta no-print" href="/reading" style={{ marginTop: 14 }}>
+              나도 보기 — 무료로 시작<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 사정률</small>
+            </Link>
             {/* 바이럴 루프 — 공유받은 사람의 입구 */}
-            <Link className="bridge no-print" href="/ceo" style={{ marginTop: 14 }}>
+            <Link className="bridge no-print" href="/ceo" style={{ marginTop: 10 }}>
               <div className="bi">鏡</div>
               <div className="bt"><b>나도 30초 만에 — 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 100인 중 내 사주와 닮은 대표 · 무료</span></div>
               <div className="ba">→</div>
