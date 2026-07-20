@@ -58,3 +58,12 @@ export const clientTip = (name?: string | null) => (name ? CLIENTS.find(c => c.n
 // SEO 랜딩용 — 발주처명 → URL slug(괄호·공백 제거, 한글 유지) 및 역조회
 export const clientSlug = (name: string) => name.replace(/\([^)]*\)/g, '').replace(/\s+/g, '').trim();
 export const clientBySlug = (slug: string) => CLIENTS.find(c => clientSlug(c.name) === decodeURIComponent(slug));
+
+// 조사 자동 선택 — 받침 유무로 은/는·이/가·와/과·을/를 (괄호 영문은 제외하고 한글 기준)
+export function josa(word: string, withBatchim: string, noBatchim: string): string {
+  const base = word.replace(/\([^)]*\)/g, '').trim();
+  const ch = base.charCodeAt(base.length - 1);
+  const isHangul = ch >= 0xac00 && ch <= 0xd7a3;
+  const hasBatchim = isHangul && (ch - 0xac00) % 28 !== 0;
+  return hasBatchim ? withBatchim : noBatchim;
+}

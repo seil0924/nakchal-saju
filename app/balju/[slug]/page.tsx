@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CLIENTS, clientSlug, clientBySlug } from '@/lib/clients';
+import { CLIENTS, clientSlug, clientBySlug, josa } from '@/lib/clients';
 
 const BASE = 'https://nakchal-saju.vercel.app';
 
@@ -68,13 +68,13 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
         <div style={card}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>설립일 사주 × 대표 사주</div>
           <p style={{ fontSize: 14.5, lineHeight: 1.75, color: '#4a4636', margin: 0, fontWeight: 500 }}>
-            {c.name}은(는) <b>{c.date} 설립</b>입니다. 낙찰사주는 이 <b>설립일 사주</b>를 대표님 사주와 맞춰,
+            {c.name}{josa(c.name, '은', '는')} <b>{c.date} 설립</b>입니다. 낙찰사주는 이 <b>설립일 사주</b>를 대표님 사주와 맞춰,
             이 발주처와 <b>애초에 맞는 판인지</b> — 언제 나서고 어떻게 대해야 유리한지를 짚어드립니다.
           </p>
         </div>
 
         <Link href={readingUrl} style={cta}>
-          {c.name}과 내 궁합 보기 →
+          {c.name}{josa(c.name, '과', '와')} 내 궁합 보기 →
           <span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>대표님 생년월일만 · 30초 무료로 시작</span>
         </Link>
 
