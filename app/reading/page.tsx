@@ -1,6 +1,7 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { createPortal } from 'react-dom';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
@@ -114,7 +115,8 @@ export default function Reading() {
   const [addDate, setAddDate] = useState('');
   const [saved, setSaved] = useState<Target[]>([]);
   const [cbOpen, setCbOpen] = useState(false); // 발주처 검색 셀렉트 열림
-  useEffect(() => { preloadKcp(); }, []);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); preloadKcp(); }, []);
   useEffect(() => { try { const s = sget(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
   // 발주처 탭에서 넘어온 경우 프리필 (?ck=client&cn=이름&cd=날짜)
   useEffect(() => {
@@ -693,7 +695,7 @@ export default function Reading() {
       )}
 
       {/* 입력 확인 모달 (사주아이식) */}
-      {confirm && (
+      {confirm && mounted && createPortal(
         <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setConfirm(false); }}>
           <div className="sheet">
             <div className="grip" />
@@ -713,10 +715,10 @@ export default function Reading() {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* 결제 모달 */}
-      {modal && (
+      {modal && mounted && createPortal(
         <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setModal(false); }}>
           <div className="sheet">
             <div className="grip" />
@@ -748,7 +750,7 @@ export default function Reading() {
             <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 }
