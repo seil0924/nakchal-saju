@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { GUIDES, REGIONS } from '@/lib/seo-landings';
+import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import TodayChip from '@/app/_components/TodayChip';
 import HeroCarousel from '@/app/_components/HeroCarousel';
 import ScrollReveal from '@/app/_components/ScrollReveal';
@@ -114,8 +114,10 @@ export default function Home() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {GUIDES.map(g => (<Link key={g.slug} href={`/guide/${g.slug}`} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{g.keywords[0]}</Link>))}
           {REGIONS.map(r => (<Link key={r.slug} href={`/region/${r.slug}`} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{r.name} 입찰</Link>))}
+          {INDUSTRIES.map(x => (<Link key={x.slug} href={`/industry/${x.slug}`} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{x.name}</Link>))}
           <Link href="/faq" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>자주 묻는 질문</Link>
           <Link href="/why" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>대표 고민별</Link>
+          <Link href="/samples" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>샘플 리포트</Link>
         </div>
       </nav>
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GUIDES, REGIONS } from '../seo-landings';
+import { GUIDES, REGIONS, INDUSTRIES } from '../seo-landings';
 import { CONCEPTS } from '../seo-concepts';
 import { FAQ_MAIN, GUIDE_FAQS } from '../faq';
 
@@ -29,6 +29,14 @@ describe('seo-landings: REGIONS', () => {
       expect(r.name && r.intro && r.industry).toBeTruthy();
       expect(Array.isArray(r.clients)).toBe(true);
     }
+  });
+});
+
+describe('seo-landings: INDUSTRIES', () => {
+  it('슬러그 고유 + 필수 필드', () => {
+    expect(INDUSTRIES.length).toBeGreaterThan(0);
+    expect(uniq(INDUSTRIES.map(x => x.slug))).toBe(true);
+    for (const x of INDUSTRIES) { expect(x.name && x.intro && x.trait && x.myeong).toBeTruthy(); expect(x.keywords.length).toBeGreaterThan(0); }
   });
 });
 

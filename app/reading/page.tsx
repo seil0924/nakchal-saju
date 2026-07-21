@@ -366,7 +366,7 @@ export default function Reading() {
         days.push(`${dt.getFullYear()}${String(dt.getMonth() + 1).padStart(2, '0')}${String(dt.getDate()).padStart(2, '0')}`);
     }
     let ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//nakchal-saju//gilil//KR\r\nCALSCALE:GREGORIAN\r\n';
-    for (const d of days) ics += `BEGIN:VEVENT\r\nUID:${d}-${Math.random().toString(36).slice(2)}@nakchal\r\nDTSTART;VALUE=DATE:${d}\r\nSUMMARY:\u5409\u65e5 \u2014 \ud22c\ucc30\u00b7\uacc4\uc57d\uc5d0 \uc720\ub9ac\r\nDESCRIPTION:\ub099\ucc30\uc0ac\uc8fc \u00b7 \ub300\ud45c\ub2d8 \uc77c\uac04\uc744 \uc0b4\ub9ac\ub294 \ub0a0\r\nEND:VEVENT\r\n`;
+    for (const d of days) ics += `BEGIN:VEVENT\r\nUID:${d}-${Math.random().toString(36).slice(2)}@nakchal\r\nDTSTART;VALUE=DATE:${d}\r\nSUMMARY:\u5409\u65e5 \u2014 \ud22c\ucc30\u00b7\uacc4\uc57d\uc5d0 \uc720\ub9ac\r\nDESCRIPTION:\ub099\ucc30\uc0ac\uc8fc \u00b7 \ub300\ud45c\ub2d8 \uc77c\uac04\uc744 \uc0b4\ub9ac\ub294 \ub0a0\r\nBEGIN:VALARM\r\nACTION:DISPLAY\r\nTRIGGER:PT9H\r\nDESCRIPTION:\ub099\ucc30\uc0ac\uc8fc \u2014 \uc624\ub298\uc740 \ud22c\ucc30\u00b7\uacc4\uc57d\uc5d0 \uc720\ub9ac\ud55c \ub0a0\r\nEND:VALARM\r\nEND:VEVENT\r\n`;
     ics += 'END:VCALENDAR\r\n';
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
     const url = URL.createObjectURL(blob); const a = document.createElement('a');
@@ -584,6 +584,7 @@ export default function Reading() {
             <div className="rright">
             <div className="rephd">{res.title}</div>
             <button className="topshare no-print" onClick={share} aria-label="결과 링크 공유">↗ 결과 공유</button>
+            {res.hero && <a className="topshare no-print" href={`/api/og/card?score=${encodeURIComponent(String(res.hero.big ?? res.hero.score))}&unit=${encodeURIComponent(res.hero.unit ?? '점')}&type=${encodeURIComponent(res.hero.label)}&note=${encodeURIComponent(res.hero.sub || '')}&up=${res.hero.up ? '1' : '0'}`} target="_blank" rel="noopener" style={{ marginLeft: 6 }}>🖼 카드 저장</a>}
             {res.selYear && ui.yearBar && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (

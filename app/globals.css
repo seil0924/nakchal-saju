@@ -1683,3 +1683,11 @@ p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.
 
 .topshare{display:inline-flex;align-items:center;gap:4px;margin:2px 0 10px;padding:6px 12px;font-size:12.5px;font-weight:700;color:var(--navy);background:#faf6ec;border:1px solid #e2cd97;border-radius:999px;cursor:pointer;font-family:var(--sans)}
 .topshare:active{transform:scale(.97)}
+
+.favstar{flex:0 0 auto;font-size:18px;line-height:1;color:#c8bfa6;padding:2px 6px 2px 0;cursor:pointer;align-self:center}
+.favstar.on{color:#e0a92e}
+.favbal{margin:0 13px 10px;background:#fbf7ee;border:1px solid #ecdfbf;border-radius:14px;padding:11px 13px}
+.favbal-h{font-size:12.5px;font-weight:800;color:#9a7b28;margin-bottom:8px}
+.favbal-chips{display:flex;flex-wrap:wrap;gap:6px}
+.favbal-chip{font-size:12.5px;font-weight:700;color:var(--navy);background:#fff;border:1px solid #e2cd97;border-radius:999px;padding:6px 11px;cursor:pointer;font-family:var(--sans)}
+.favbal-chip:active{transform:scale(.97)}

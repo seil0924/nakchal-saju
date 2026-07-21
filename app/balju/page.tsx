@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CLIENTS, clientSlug } from '@/lib/clients';
@@ -17,6 +17,12 @@ export default function Balju() {
     const qs = new URLSearchParams({ cat: 'balju', ck: 'client', cn: pick.name, cd: pick.date, b: self.date, n: self.name || '' });
     router.push(`/reading?${qs.toString()}`);
   }
+  // 발주처 즐겨찾기 (localStorage) — 자주 보는 기관을 저장해 재방문 때 바로
+  const [fav, setFav] = useState<string[]>([]);
+  useEffect(() => { try { const s = localStorage.getItem('nakchal_fav_balju'); if (s) setFav(JSON.parse(s)); } catch { /* noop */ } }, []);
+  const toggleFav = (name: string, e: React.MouseEvent) => { e.stopPropagation(); e.preventDefault(); setFav(prev => { const next = prev.includes(name) ? prev.filter(x => x !== name) : [...prev, name]; try { localStorage.setItem('nakchal_fav_balju', JSON.stringify(next)); } catch { /* noop */ } return next; }); };
+  const favClients = CLIENTS.filter(c => fav.includes(c.name));
+
   // 핵심(封) 발주처를 상단으로 정렬 + 검색 필터
   const list = CLIENTS.filter(c => c.name.includes(q) || c.cat.includes(q)).slice().sort((a, b) => (b.core ? 1 : 0) - (a.core ? 1 : 0));
 
@@ -35,10 +41,21 @@ export default function Balju() {
         <input value={q} onChange={e => setQ(e.target.value)} placeholder="발주처 이름·분야로 검색" />
       </div>
 
+      {favClients.length > 0 && !q && (
+        <div className="favbal">
+          <div className="favbal-h">★ 즐겨찾는 발주처</div>
+          <div className="favbal-chips">
+            {favClients.map(c => (
+              <button key={c.name} className="favbal-chip" onClick={() => setPick({ name: c.name, date: c.date })}>{c.name}</button>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="balist">
         {list.length === 0 && <div className="balnote">‘{q}’에 맞는 발주처가 아직 없습니다. 더 많은 발주처를 계속 추가하고 있어요.</div>}
         {list.map((c, i) => (
           <button key={i} data-reveal className="li" onClick={() => setPick({ name: c.name, date: c.date })}>
+            <span className={'favstar' + (fav.includes(c.name) ? ' on' : '')} role="button" aria-label="즐겨찾기" onClick={(e) => toggleFav(c.name, e)}>{fav.includes(c.name) ? '★' : '☆'}</span>
             <div className="t"><b>{c.name} {c.core && <span className="corelock">封 핵심</span>}</b><span>{c.date.slice(0, 4)} 설립 · {c.cat}</span></div>
             <div className="r" style={c.core ? undefined : { background: '#eaf3ec', color: '#2f6b42' }}>{c.core ? '🔒 궁합 보기' : '무료 궁합'} ›</div>
           </button>
