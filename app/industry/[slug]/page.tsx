@@ -23,10 +23,17 @@ export default function IndustryPage({ params }: { params: { slug: string } }) {
   const r = bySlug(params.slug);
   if (!r) return notFound();
   const rel = CLIENTS.filter(c => r.clients.includes(c.name));
-  const ld = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
-    { '@type': 'ListItem', position: 1, name: '업종별 입찰', item: `${BASE}/` },
-    { '@type': 'ListItem', position: 2, name: `${r.name} 입찰`, item: `${BASE}/industry/${r.slug}` },
-  ] };
+  const faqs = [
+    { q: `${r.name} 입찰에 사주가 도움이 되나요?`, a: `${r.name} 입찰은 면허·실적과 적격심사 정량 배점이 당락을 가르므로 서류 완결성이 최우선입니다. 사주는 낙찰을 예측하는 게 아니라, 큰 건을 어느 날 던질지와 어떤 발주처가 대표님과 맞는지의 참고로 곁들이는 것입니다.` },
+    { q: `${r.name} 대표는 어떤 기질이 유리한가요?`, a: r.myeong },
+  ];
+  const ld: any[] = [
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '업종별 입찰', item: `${BASE}/` },
+      { '@type': 'ListItem', position: 2, name: `${r.name} 입찰`, item: `${BASE}/industry/${r.slug}` },
+    ] },
+    { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+  ];
   return (
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
@@ -54,6 +61,10 @@ export default function IndustryPage({ params }: { params: { slug: string } }) {
           ))}
         </div></>)}
 
+        <div style={{ ...h, margin: '22px 0 10px' }}>자주 묻는 질문</div>
+        {faqs.map((x, i) => (
+          <div key={i} style={card}><div style={{ ...h, fontSize: 14.5, marginBottom: 6 }}>Q. {x.q}</div><p style={p}>{x.a}</p></div>
+        ))}
         <div style={{ ...h, margin: '18px 0 10px' }}>다른 업종</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 22 }}>
           {INDUSTRIES.filter(x => x.slug !== r.slug).map(x => (<Link key={x.slug} href={`/industry/${x.slug}`} style={chip}>{x.name}</Link>))}

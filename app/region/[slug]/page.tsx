@@ -24,10 +24,17 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
   const r = bySlug(params.slug);
   if (!r) return notFound();
   const localClients = CLIENTS.filter(c => r.clients.includes(c.name));
-  const ld = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
-    { '@type': 'ListItem', position: 1, name: '지역 입찰', item: `${BASE}/` },
-    { '@type': 'ListItem', position: 2, name: `${r.name} 입찰`, item: `${BASE}/region/${r.slug}` },
-  ] };
+  const faqs = [
+    { q: `${r.name} 지역 입찰은 어떤 특성이 있나요?`, a: r.industry },
+    { q: `${r.name}에서 대표에게 유리한 발주처는 어디인가요?`, a: `${r.clients.join('·')} 등 ${r.name} 주요 발주처와 대표님 사주(설립일)의 궁합을 견줘, 그 판이 대표님과 맞는지 참고합니다. 지역제한·지역 가점을 함께 챙기면 유리합니다.` },
+  ];
+  const ld: any[] = [
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '지역 입찰', item: `${BASE}/` },
+      { '@type': 'ListItem', position: 2, name: `${r.name} 입찰`, item: `${BASE}/region/${r.slug}` },
+    ] },
+    { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+  ];
   return (
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
@@ -58,6 +65,8 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
         </div>
 
         <Link href="/reading?cat=sajeong" style={cta}>오늘의 사정률 무료로 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>{r.name} 입찰, 오늘 넣을까 미룰까 · 30초</span></Link>
+        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
+        {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 14.5, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
 
         <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, margin: '18px 0 20px' }}>※ 발주처 설립일은 공개 연혁 기준 자체 DB이며, 명리 기반 참고·오락용 정보입니다. 실제 투찰 판단의 근거로 사용할 수 없습니다.</p>
       </div>

@@ -21,12 +21,17 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
   const c = bySlug(params.slug);
   if (!c) return notFound();
   const siblings = CONCEPTS.filter(x => x.group === c.group && x.slug !== c.slug);
-  const ld = [
+  const faqs = [
+    { q: `${c.label} 대표는 어떤 유형인가요?`, a: c.lead },
+    { q: `${c.label} 대표가 입찰·경영에서 유리하려면?`, a: c.sections[0]?.p ?? c.lead },
+  ];
+  const ld: any[] = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: c.h1, description: c.lead, publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE }, mainEntityOfPage: `${BASE}/사주/${c.slug}` },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: '사주', item: `${BASE}/` },
       { '@type': 'ListItem', position: 2, name: c.label, item: `${BASE}/사주/${c.slug}` },
     ] },
+    { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
   ];
   return (
     <div className="app home">
@@ -46,6 +51,8 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
           </div>
         ))}
         <Link href="/reading?cat=daepyo" style={cta}>내 일간·오행으로 대표 사주 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료 · 6대 축 스코어카드</span></Link>
+        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
+        {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 14.5, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14, color: 'var(--navy)', margin: '20px 0 10px' }}>다른 {c.group} 보기</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
           {siblings.map(x => (<Link key={x.slug} href={`/사주/${x.slug}`} style={chip}>{x.label}</Link>))}

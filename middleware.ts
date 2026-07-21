@@ -8,9 +8,9 @@ import { createServerClient } from '@supabase/ssr';
 // 로그인 없이 접근 가능한 공개 경로.
 const PUBLIC_EXACT = new Set<string>([
   '/', '/login', '/terms', '/privacy', '/more',
-  '/reading', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/refund', '/pricing',
+  '/reading', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/glossary', '/method', '/refund', '/pricing',
 ]);
-const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/사주/'];
+const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/사주/'];
 
 export function isPublicPath(path: string): boolean {
   if (/\.[^/]+$/.test(path)) return true;   // 정적 파일(.mp4·.jpg·.png·.svg 등)은 게이트 제외

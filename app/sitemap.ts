@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { PAINS } from '@/lib/pains';
+import { GLOSSARY } from '@/lib/glossary';
 import { PRODUCTS } from '@/lib/categories';
 import { CLIENTS, clientSlug } from '@/lib/clients';
 import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
@@ -8,10 +9,11 @@ import { CONCEPTS } from '@/lib/seo-concepts';
 const BASE = 'https://nakchal-saju.vercel.app';
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/full', '/bokchae', '/ritual', '/pricing', '/terms', '/privacy', '/refund'];
+  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/full', '/bokchae', '/ritual', '/pricing', '/terms', '/privacy', '/refund'];
   const urls = [
     ...staticUrls,
     ...PAINS.map(p => `/why/${p.slug}`),
+    ...GLOSSARY.map(t => `/glossary/${t.slug}`),
     ...PRODUCTS.map(p => `/product/${p.slug}`),
     ...CLIENTS.map(c => `/balju/${clientSlug(c.name)}`),
     ...TYCOONS.map(t => `/ceo/${tycoonSlug(t.name)}`),

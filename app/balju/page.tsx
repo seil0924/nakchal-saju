@@ -26,8 +26,11 @@ export default function Balju() {
   // 핵심(封) 발주처를 상단으로 정렬 + 검색 필터
   const list = CLIENTS.filter(c => c.name.includes(q) || c.cat.includes(q)).slice().sort((a, b) => (b.core ? 1 : 0) - (a.core ? 1 : 0));
 
+  const itemListLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: '공공 발주처 궁합 목록', numberOfItems: CLIENTS.length,
+    itemListElement: CLIENTS.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `https://nakchal-saju.vercel.app/balju/${clientSlug(c.name)}` })) };
   return (
     <div className="app home">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <ScrollReveal />
       <div className="topbar"><Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>발주처</Link><Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link></div>
 

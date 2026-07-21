@@ -1,7 +1,8 @@
 import { FAQ_MAIN, GUIDE_FAQS } from '@/lib/faq';
-import { GUIDES, REGIONS } from '@/lib/seo-landings';
+import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import { CLIENTS } from '@/lib/clients';
+import { GLOSSARY } from '@/lib/glossary';
 
 export const dynamic = 'force-static';
 
@@ -40,6 +41,12 @@ export function GET() {
   parts.push('아래 100곳의 설립일을 사전으로 두고 대표 사주와의 상성 및 조달 특성을 제공한다.');
   for (const c of CLIENTS) parts.push(`- ${c.name} (설립 ${c.date}, ${c.cat})${c.tip ? ' — ' + c.tip : ''}`);
   parts.push('');
+
+  parts.push('## 입찰·명리 용어 정의');
+  for (const t of GLOSSARY) { parts.push(`### ${t.term} (${t.cat})`); parts.push(t.def); parts.push(''); }
+
+  parts.push('## 업종별 입찰');
+  for (const r of INDUSTRIES) { parts.push(`### ${r.name} 대표`); parts.push(r.intro); parts.push(`- 적격심사 특성: ${r.trait}`); parts.push(`- 명리 관점: ${r.myeong}`); parts.push(''); }
 
   parts.push('## 지역별 입찰');
   parts.push(REGIONS.map(r => `${r.name}(${BASE}/region/${r.slug})`).join(' · '));

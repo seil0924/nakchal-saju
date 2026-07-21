@@ -25,6 +25,10 @@
 - 대표·사장 고민별 상담(17): https://nakchal-saju.vercel.app/why (하한가·연패·자금난·직원 이탈·매출 정체·번아웃·승계·결단·확장·배신·재물 누수·건강·운때·창업시기·관재수·동업)
 - 명리 개념 사전(16): https://nakchal-saju.vercel.app/사주/갑목-일간 (일간 10·오행 5, 경영·입찰 관점 해설)
 - 지역별 입찰(17개 시·도): https://nakchal-saju.vercel.app/region/서울
+- 업종별 입찰(8): https://nakchal-saju.vercel.app/industry/전기공사 (통신·시설관리·건설·소방·기계설비·조경·청소경비)
+- 입찰·명리 용어사전(47): https://nakchal-saju.vercel.app/glossary (사정률·적격심사·일간·대운·관재수 등 정의)
+- 계산 방법론(E-E-A-T): https://nakchal-saju.vercel.app/method (절기 천문계산·진태양시·야자시 보정)
+- 샘플 리포트: https://nakchal-saju.vercel.app/samples
 
 ## 고지
 사주명리 이론에 기반한 참고·오락 정보입니다. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다.

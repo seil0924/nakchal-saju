@@ -118,6 +118,8 @@ export default function Home() {
           <Link href="/faq" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>자주 묻는 질문</Link>
           <Link href="/why" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>대표 고민별</Link>
           <Link href="/samples" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>샘플 리포트</Link>
+          <Link href="/glossary" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>용어사전</Link>
+          <Link href="/method" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>계산 방법</Link>
         </div>
       </nav>
 
