@@ -38,13 +38,16 @@ async function payPC(p: { paymentId: string; amount: number; goodName: string })
     add('buyr_tel1', '');
     add('buyr_mail', '');
     add('res_cd', ''); add('res_msg', ''); add('enc_data', ''); add('enc_info', ''); add('tran_cd', ''); add('ordr_chk', ''); add('use_pay_method', '');
+    // KCP 표준: 인증 성공 시 order_info 폼을 서버로 submit → 서버(pc-return)가 승인 API 호출 후 리다이렉트
+    form.action = location.origin + '/api/payment/kcp/pc-return';
     document.body.appendChild(form);
     const gv = (n: string) => (form.querySelector(`[name="${n}"]`) as HTMLInputElement | null)?.value || '';
+    // KCP 완료 콜백: res_cd 0000이면 폼 submit(전체 페이지 이동 → 서버가 승인·리다이렉트), 그 외는 취소로 처리
     (window as any).m_Completepayment = () => {
-      const res_cd = gv('res_cd');
-      const out = res_cd === '0000' ? { enc_data: gv('enc_data'), enc_info: gv('enc_info'), tran_cd: gv('tran_cd') } : null;
-      form.remove(); resolve(out);
+      if (gv('res_cd') === '0000') { form.submit(); return; }   // 승인은 pc-return에서 — 여기선 resolve하지 않음(페이지 이동)
+      form.remove(); resolve(null);                              // 인증 실패
     };
+    (window as any).m_Cancelpayment = () => { form.remove(); resolve(null); };   // 사용자 취소
     try { (window as any).KCP_Pay_Execute_Web(form); } catch { /* 정상 종료 시 throw */ }
   });
 }
