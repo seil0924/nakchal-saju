@@ -37,9 +37,11 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '4px 0 10px' }}>{r.name} 입찰 — 지역 발주처와 내 궁합</h1>
-        <p style={{ fontSize: 15.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>{r.intro}</p>
+        <p style={{ fontSize: 15.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 14px' }}>{r.intro}</p>
+        <div style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{r.name} 입찰·조달 특성</div><p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{r.industry}</p></div>
 
-        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '4px 0 10px' }}>{r.name} 주요 발주처</div>
+        {localClients.length > 0 && (<>
+        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '14px 0 10px' }}>{r.name} 주요 발주처</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 18 }}>
           {localClients.map(c => (
             <Link key={c.name} href={`/balju/${clientSlug(c.name)}`} style={row}>
@@ -48,6 +50,7 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
             </Link>
           ))}
         </div>
+        </>)}
 
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '4px 0 10px' }}>전국 공통 핵심 발주처</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18 }}>
@@ -61,6 +64,7 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
     </div>
   );
 }
+const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
 const row: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 3, background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '12px 14px', textDecoration: 'none' };
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none' };
 const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
