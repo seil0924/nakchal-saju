@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import { getReport, createOrder, BALJU_PASS_KEY } from '@/lib/store';
 import { PRICE_BALJU_PASS } from '@/lib/constants';
 import { isCatKey, CAT_INFO } from '@/lib/report-categories';
-import { requireUser } from '@/lib/supabase/server';
+import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
  try {
@@ -18,6 +18,7 @@ export async function POST(req: Request) {
   // 발주처 프리미엄 패스 — 사용자 계정 단위 권한(리포트와 무관)
   if (sku === 'baljuPass') {
     const user = await requireUser();
+    if (authEnabled() && !user?.id) return NextResponse.json({ error: 'login_required' }, { status: 401 });
     const order = await createOrder(BALJU_PASS_KEY(user?.id), PRICE_BALJU_PASS, 1);
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 발주처 프리미엄 패스', sku: 'baljuPass' });
   }
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
   return NextResponse.json({ error: 'category_required' }, { status: 400 });
  } catch (e: any) {
   // 진단: DB/스키마 오류 등 서버 예외 메시지를 표면화(운영 500 원인 파악용)
-  console.error('[payment/prepare]', e?.message, e);
-  return NextResponse.json({ error: 'prepare_failed', detail: String(e?.message ?? e), code: e?.code, hint: e?.hint }, { status: 500 });
+  console.error('[payment/prepare]', e?.code, e?.message, e);
+  return NextResponse.json({ error: 'prepare_failed', code: e?.code ?? null }, { status: 500 });
  }
 }
