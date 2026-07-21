@@ -7,6 +7,7 @@ import { isCatKey, CAT_INFO } from '@/lib/report-categories';
 import { requireUser } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
+ try {
   const { reportId, sku, bokchae, amount } = await req.json();
   // 복채(福債) — 리포트와 무관한 자율 감사·기원 결제. 서버가 금액 범위만 clamp.
   if (bokchae) {
@@ -33,4 +34,9 @@ export async function POST(req: Request) {
   // 카테고리 전용 정책 — 카테고리 없는 통합 리포트의 '전체 열기'(구 12,900원)는 폐지.
   // 열람은 개별 카테고리 상품(대표·사정률·발주처·협정·대운·캘린더)으로만 결제한다.
   return NextResponse.json({ error: 'category_required' }, { status: 400 });
+ } catch (e: any) {
+  // 진단: DB/스키마 오류 등 서버 예외 메시지를 표면화(운영 500 원인 파악용)
+  console.error('[payment/prepare]', e?.message, e);
+  return NextResponse.json({ error: 'prepare_failed', detail: String(e?.message ?? e), code: e?.code, hint: e?.hint }, { status: 500 });
+ }
 }

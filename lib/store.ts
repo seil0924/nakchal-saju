@@ -93,7 +93,9 @@ export async function createOrder(reportId: string, amount: number, level: numbe
   const paymentId = 'pay_' + (g.__seq ? g.__seq++ : Math.floor(performance.now()));
   if (c) {
     const isPass = reportId.startsWith('pass:');
-    const { error } = await c.from('payments').insert({ payment_id: paymentId, report_id: isPass ? null : reportId, pass_key: isPass ? reportId : null, amount, level, status: 'pending' });
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(reportId);
+    // report_id는 uuid(reports FK)만 허용 — 복채('bokchae') 등 비-uuid는 null 처리(invalid uuid 500 방지)
+    const { error } = await c.from('payments').insert({ payment_id: paymentId, report_id: (isPass || !isUuid) ? null : reportId, pass_key: isPass ? reportId : null, amount, level, status: 'pending' });
     if (error) throw error;
     return { paymentId, reportId, amount, level, status: 'pending' };
   }
