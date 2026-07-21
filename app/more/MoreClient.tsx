@@ -70,6 +70,11 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
           <Link href="/vault">보관함 · 내 리포트<span className="r">›</span></Link>
         </div>
 
+        <div className="sechd"><span className="t"><span className="b" />읽을거리</span></div>
+        <div className="setrow">
+          <Link href="/column">사주 칼럼<span className="r">입찰·수주 명리 이야기 ›</span></Link>
+        </div>
+
         <div className="sechd"><span className="t"><span className="b" />기타</span></div>
         <div className="setrow">
           <Link href="/terms">이용약관 · 면책<span className="r">›</span></Link>

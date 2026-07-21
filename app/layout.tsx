@@ -73,6 +73,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <script dangerouslySetInnerHTML={{ __html: `window.__NK_SCOPE__=${JSON.stringify(scopeId)}` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(LD) }} />
+        {/* Vercel Web Analytics — 대시보드에서 Analytics 활성화 시 조회수·유입경로 수집 */}
+        <script defer src="/_vercel/insights/script.js" />
         <ScrollTop />
         <IntroSplash />
         <TapFX />
