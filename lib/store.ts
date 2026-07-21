@@ -90,7 +90,12 @@ export async function getReportOwner(id: string): Promise<string | null> {
 
 export async function createOrder(reportId: string, amount: number, level: number = 2): Promise<Order> {
   const c = sb();
-  const paymentId = 'pay_' + (g.__seq ? g.__seq++ : Math.floor(performance.now()));
+  // 결제ID는 전역 유니크해야 함(payments.payment_id UNIQUE). 서버리스에서 performance.now()는
+  // 워커 시작후 경과시간이라 호출간 충돌 → 중복키(23505). crypto.randomUUID로 항상 유니크 생성.
+  const rid = (globalThis.crypto && 'randomUUID' in globalThis.crypto)
+    ? globalThis.crypto.randomUUID()
+    : Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 12);
+  const paymentId = 'pay_' + rid;
   if (c) {
     const isPass = reportId.startsWith('pass:');
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(reportId);
