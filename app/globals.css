@@ -1749,3 +1749,11 @@ p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.
 .home5 .prose blockquote.verdict cite{display:block;font-style:normal;font-family:var(--sans);font-size:11px;color:var(--h-goldlt);font-weight:600;margin-top:15px;letter-spacing:.02em}
 /* 면책 ※ */
 .home5 .prose .disc{background:#faf6ec;border:1px solid #ece2c8;border-radius:10px;padding:12px 14px;font-size:11.5px;color:#8a7c58;line-height:1.7;font-weight:500;margin-top:26px}
+/* 바이라인 (E-E-A-T) */
+.home5 .colby{margin-top:9px;font-size:11.5px;color:#9a917a;font-weight:600;letter-spacing:.01em}
+/* 자주 묻는 질문 (FAQPage) */
+.home5 .colfaq{margin-top:40px;border-top:1px solid var(--h-line);padding-top:24px}
+.home5 .colfaq>h2{font-family:var(--serif);font-weight:800;font-size:19px;color:var(--h-ink);margin-bottom:6px}
+.home5 .colfaq-item{padding:16px 0;border-bottom:1px solid var(--h-line)}
+.home5 .colfaq-item .q{font-family:var(--serif);font-weight:800;font-size:15px;color:var(--h-ink);line-height:1.6}
+.home5 .colfaq-item .a{margin-top:8px;font-size:14px;color:#4a463c;line-height:1.85;font-weight:450;word-break:keep-all}

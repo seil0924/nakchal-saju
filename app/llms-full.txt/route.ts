@@ -3,6 +3,7 @@ import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import { CLIENTS } from '@/lib/clients';
 import { GLOSSARY } from '@/lib/glossary';
+import { getAllColumns } from '@/lib/column';
 
 export const dynamic = 'force-static';
 
@@ -51,6 +52,15 @@ export function GET() {
   parts.push('## 지역별 입찰');
   parts.push(REGIONS.map(r => `${r.name}(${BASE}/region/${r.slug})`).join(' · '));
   parts.push('');
+
+  parts.push('## 사주 칼럼 (연재)');
+  for (const c of getAllColumns()) {
+    parts.push(`### ${c.title}`);
+    parts.push(c.description);
+    for (const f of c.faq ?? []) parts.push(`- Q. ${f.q} → ${f.a}`);
+    parts.push(`(${BASE}/column/${c.slug})`);
+    parts.push('');
+  }
 
   parts.push('## 고지');
   parts.push('사주명리 이론에 기반한 참고·오락용 정보. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정 근거로 사용할 수 없음.');

@@ -53,9 +53,21 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
     keywords: p.tags.join(', '),
   };
 
+  // FAQPage 구조화데이터 — FAQ가 있는 글이면 검색 리치결과·AI(GEO) 인용에 사용
+  const faqLd = p.faq && p.faq.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: p.faq.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  } : null;
+
   return (
     <div className="app home5 colpost">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
 
       <div className="mast">
         <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -68,11 +80,23 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
       <article className="colbody">
         <div className="colmeta">{fmtDate(p.date)} · {p.readingMin}분 읽기</div>
         <h1>{p.title}</h1>
+        <div className="colby">글 · 낙찰사주 편집팀 · 만세력(萬歲曆) 천문 계산 기반</div>
         {p.tags.length > 0 && (
           <div className="coltags">{p.tags.map(t => <span key={t}>#{t}</span>)}</div>
         )}
         <div className="rule" />
         <div className="prose" dangerouslySetInnerHTML={{ __html: p.html }} />
+        {p.faq && p.faq.length > 0 && (
+          <section className="colfaq">
+            <h2>자주 묻는 질문</h2>
+            {p.faq.map((f, i) => (
+              <div className="colfaq-item" key={i}>
+                <p className="q">Q. {f.q}</p>
+                <p className="a">{f.a}</p>
+              </div>
+            ))}
+          </section>
+        )}
       </article>
 
       {/* 유입 → 전환: 무료 진입 CTA */}

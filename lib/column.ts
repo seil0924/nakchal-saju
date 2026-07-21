@@ -9,6 +9,7 @@ import { marked } from 'marked';
 
 const COLUMN_DIR = path.join(process.cwd(), 'content', 'column');
 
+export type ColumnFaq = { q: string; a: string };
 export type ColumnMeta = {
   slug: string;
   title: string;
@@ -17,7 +18,18 @@ export type ColumnMeta = {
   tags: string[];
   cover?: string;         // 대표 이미지 경로 (선택)
   readingMin: number;     // 예상 읽는 시간(분)
+  faq?: ColumnFaq[];      // (선택) FAQPage 구조화데이터 + 본문 하단 노출용
 };
+
+// frontmatter faq: [{ q, a }] 파싱 — 구조화데이터/GEO용. 형식 어긋난 항목은 버림.
+function parseFaq(v: unknown): ColumnFaq[] | undefined {
+  if (!Array.isArray(v)) return undefined;
+  const items = v
+    .map((f) => (f && typeof f === 'object' ? (f as Record<string, unknown>) : {}))
+    .map((f) => ({ q: String(f.q ?? '').trim(), a: String(f.a ?? '').trim() }))
+    .filter((f) => f.q && f.a);
+  return items.length ? items : undefined;
+}
 export type ColumnPost = ColumnMeta & { html: string };
 
 // 한국어 기준 분당 약 500자로 읽는 시간 추정
@@ -47,6 +59,7 @@ function parseFile(file: string): { meta: ColumnMeta; body: string } | null {
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     cover: data.cover ? String(data.cover) : undefined,
     readingMin: estimateReadingMin(content),
+    faq: parseFaq(data.faq),
   };
   return { meta, body: content };
 }
