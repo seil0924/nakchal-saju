@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import DesktopSidebar from '@/app/_components/DesktopSidebar';
 import TapFX from '@/app/_components/TapFX';
 import IntroSplash from '@/app/_components/IntroSplash';
+import ScrollTop from '@/app/_components/ScrollTop';
 import { requireUser } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -72,6 +73,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <script dangerouslySetInnerHTML={{ __html: `window.__NK_SCOPE__=${JSON.stringify(scopeId)}` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(LD) }} />
+        <ScrollTop />
         <IntroSplash />
         <TapFX />
         <div className="shell">

@@ -94,7 +94,6 @@ export default function ReportView({ params }: { params: { id: string } }) {
         {res && (
           <div className="rcols" id="rep">
             <div className="rleft">
-            {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
@@ -102,6 +101,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 <div className="lab">{res.hero.label}</div><div className="sub2">{res.hero.sub}</div>
               </div>
             )}
+            {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             </div>
             <div className="rright">
             <div className="rephd">{res.title}</div>

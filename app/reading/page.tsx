@@ -570,7 +570,7 @@ export default function Reading() {
         {res && (
           <div id="rep" className="rcols" style={{ marginTop: 6 }}>
             <div className="rleft">
-            {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
+            {/* 결론(오늘 넣어도 되나)을 맨 앞으로, 명리 원국은 그 아래로 */}
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
@@ -579,9 +579,11 @@ export default function Reading() {
                 <div className="sub2">{res.hero.sub}</div>
               </div>
             )}
+            {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             </div>
             <div className="rright">
             <div className="rephd">{res.title}</div>
+            <button className="topshare no-print" onClick={share} aria-label="결과 링크 공유">↗ 결과 공유</button>
             {res.selYear && ui.yearBar && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
