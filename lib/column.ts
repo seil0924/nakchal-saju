@@ -43,14 +43,26 @@ function readFileNames(): string[] {
   return fs.readdirSync(COLUMN_DIR).filter(f => f.endsWith('.md'));
 }
 
+// frontmatter date(KST)가 현재 시각을 지났는지 판정. 'YYYY-MM-DD' 또는 'YYYY-MM-DD HH:mm'.
+// 예약발행: 지정 시각(한국시간)이 지나야 공개된다. 실제 반영은 그 시각 이후의 재빌드가 필요(크론이 처리).
+function isPublishedKST(dateStr: string): boolean {
+  const m = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+  if (!m) return true;
+  const [, y, mo, d, hh, mi] = m;
+  const scheduledUtcMs =
+    Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(hh ?? 0), Number(mi ?? 0)) - 9 * 60 * 60 * 1000;
+  return Date.now() >= scheduledUtcMs;
+}
+
 function parseFile(file: string): { meta: ColumnMeta; body: string } | null {
   const slug = file.replace(/\.md$/, '');
   const raw = fs.readFileSync(path.join(COLUMN_DIR, file), 'utf8');
   const { data, content } = matter(raw);
   if (data.draft === true) return null;                         // 초안 숨김
-  const date = String(data.date ?? '');
-  // 미래 날짜(예약발행): 오늘 이후면 아직 비공개. (반영은 재배포 필요)
-  if (date && date > new Date().toISOString().slice(0, 10)) return null;
+  const rawDate = String(data.date ?? '');
+  // 예약발행: 지정 시각(KST)이 아직 안 됐으면 비공개
+  if (rawDate && !isPublishedKST(rawDate)) return null;
+  const date = rawDate.slice(0, 10);   // 표시·sitemap용 날짜(시간 제외)
   const meta: ColumnMeta = {
     slug,
     title: String(data.title ?? slug),
