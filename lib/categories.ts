@@ -81,4 +81,7 @@ export const PAIN_OH: Record<string, keyof typeof OHAENG> = {
   'big-miss': 'geum',    // 큰 건 — 결실·재물(金)
   partner: 'hwa',        // 동업 — 사람(火)
   gwanjae: 'mok',        // 관재수 — 관계·풀림(木)
+  jamin: 'geum', staff: 'hwa', slump: 'to', burnout: 'su', succession: 'mok',
+  decision: 'geum', expand: 'hwa', betray: 'hwa', 'money-leak': 'geum',
+  health: 'su', timing: 'to', start: 'hwa',
 };

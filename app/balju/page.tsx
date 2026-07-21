@@ -17,7 +17,8 @@ export default function Balju() {
     const qs = new URLSearchParams({ cat: 'balju', ck: 'client', cn: pick.name, cd: pick.date, b: self.date, n: self.name || '' });
     router.push(`/reading?${qs.toString()}`);
   }
-  const list = CLIENTS.filter(c => c.name.includes(q) || c.cat.includes(q));
+  // 핵심(封) 발주처를 상단으로 정렬 + 검색 필터
+  const list = CLIENTS.filter(c => c.name.includes(q) || c.cat.includes(q)).slice().sort((a, b) => (b.core ? 1 : 0) - (a.core ? 1 : 0));
 
   return (
     <div className="app home">
