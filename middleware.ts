@@ -10,7 +10,7 @@ const PUBLIC_EXACT = new Set<string>([
   '/', '/login', '/terms', '/privacy', '/more',
   '/reading', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/refund', '/pricing',
 ]);
-const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/'];
+const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/'];
 
 export function isPublicPath(path: string): boolean {
   if (/\.[^/]+$/.test(path)) return true;   // 정적 파일(.mp4·.jpg·.png·.svg 등)은 게이트 제외
