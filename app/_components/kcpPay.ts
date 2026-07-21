@@ -44,20 +44,27 @@ async function payPC(p: { paymentId: string; amount: number; goodName: string })
     const gv = (n: string) => (form.querySelector(`[name="${n}"]`) as HTMLInputElement | null)?.value || '';
     // KCP 완료 콜백. KCP hub 버전에 따라 결과를 (1)폼에 직접 채우거나 (2)인자로 넘긴다 →
     // 인자가 오면 폼에 반영한 뒤 res_cd를 판정. 0000이면 pc-return으로 submit(서버가 승인).
-    const setv = (n: string, v: any) => { const el = form.querySelector(`[name="${n}"]`) as HTMLInputElement | null; if (el && v != null) el.value = String(v); };
+    const setv = (n: string, v: string) => { const el = form.querySelector(`[name="${n}"]`) as HTMLInputElement | null; if (el) el.value = v; };
+    // KCP hub는 인증 결과를 m_Completepayment(폼/객체)로 넘긴다. 각 필드가 문자열이 아니라
+    // input 요소(예: result.res_cd → HTMLInputElement)일 수 있어 .value로 안전하게 추출한다.
+    const readv = (o: any, k: string): string => {
+      const v = o == null ? undefined : o[k];
+      if (v == null) return '';
+      if (typeof v === 'object' && 'value' in v) return String((v as any).value ?? '');   // input 요소
+      return String(v);                                                                     // 이미 문자열
+    };
+    const KFIELDS = ['res_cd', 'res_msg', 'enc_data', 'enc_info', 'tran_cd', 'use_pay_method', 'ordr_chk', 'pay_method'];
     (window as any).m_Completepayment = (result?: any) => {
-      if (result && typeof result === 'object') {
-        for (const k of ['res_cd', 'res_msg', 'enc_data', 'enc_info', 'tran_cd', 'use_pay_method', 'ordr_chk', 'pay_method']) {
-          if (result[k] != null) setv(k, result[k]);
-        }
-      }
+      // 결과 원본: 인자로 오면 그것, 아니면 KCP가 우리 폼을 직접 채운 경우 → 우리 폼
+      const src = (result && typeof result === 'object') ? result : form;
+      for (const k of KFIELDS) { const val = readv(src, k); if (val !== '') setv(k, val); }   // 실제 문자열 값을 우리 폼(pc-return submit용)에 반영
       const rc = gv('res_cd');
-      if (rc === '0000') { form.submit(); return; }                // 정상 인증 → 서버 승인으로 이동(페이지 전환)
-      // 인증 실패/미인증 — 사유를 노출해 원인 파악(hang 대신)
+      if (rc === '0000') { form.submit(); return; }                // 정상 인증 → pc-return으로 submit(서버 승인)
+      // 인증 실패/미인증 — 사유(문자열)를 노출해 원인 파악(조용한 hang 방지)
       const msg = gv('res_msg');
-      try { (window as any).__kcpLastRes = { res_cd: rc, res_msg: msg, arg: result ?? null }; console.error('[KCP m_Completepayment] res_cd=', rc, 'res_msg=', msg, 'arg=', result); } catch { /* noop */ }
+      try { (window as any).__kcpLastRes = { res_cd: rc, res_msg: msg }; console.error('[KCP m_Completepayment] res_cd=', rc, 'res_msg=', msg); } catch { /* noop */ }
       form.remove();
-      if (rc) { try { alert('결제 인증 응답: [' + rc + '] ' + (msg || '') + '\n(0000이 아니면 KCP 상점 설정/승인 문제입니다)'); } catch { /* noop */ } }
+      if (rc) { try { alert('결제 인증 응답: [' + rc + '] ' + (msg || '')); } catch { /* noop */ } }
       resolve(null);
     };
     (window as any).m_Cancelpayment = () => { form.remove(); resolve(null); };   // 사용자 취소
