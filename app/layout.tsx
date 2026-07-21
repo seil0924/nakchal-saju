@@ -29,9 +29,30 @@ export const metadata: Metadata = {
 const LD = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'Organization', '@id': 'https://nakchal-saju.vercel.app/#org', name: '낙찰사주', url: 'https://nakchal-saju.vercel.app', description: '공공입찰·경매·수주 대표를 위한 회사 사주 전문 서비스.' },
-    { '@type': 'WebSite', '@id': 'https://nakchal-saju.vercel.app/#site', url: 'https://nakchal-saju.vercel.app', name: '낙찰사주', inLanguage: 'ko', publisher: { '@id': 'https://nakchal-saju.vercel.app/#org' } },
-    { '@type': 'Service', name: '낙찰사주 — 회사 사주·사정률·발주처 궁합·투찰 택일', serviceType: '사주명리 기반 비즈니스 의사결정 참고 서비스', provider: { '@id': 'https://nakchal-saju.vercel.app/#org' }, areaServed: 'KR', description: '대표와 법인의 사주로 오늘의 낙찰 사정률, 발주처·동업·협정 궁합, 회사 대운, 투찰·경매 택일을 만세력으로 짚어드립니다. 입찰·경매·조달 수주 참고·오락용.' },
+    {
+      '@type': 'Organization', '@id': 'https://nakchal-saju.vercel.app/#org',
+      name: '낙찰사주', alternateName: 'nakchal-saju', url: 'https://nakchal-saju.vercel.app',
+      logo: 'https://nakchal-saju.vercel.app/og.png',
+      slogan: '재주는 갖추셨습니다. 그 운칠(運七)을 짚어드립니다.',
+      description: '공공입찰·경매·수주 사업을 하는 기업 대표와 법인을 위한 사주명리(만세력) 기반 비즈니스 의사결정 참고 서비스. 오늘의 낙찰 사정률, 대표 사주, 발주처·동업·협정 궁합, 회사 대운, 투찰·개업 택일을 제공한다.',
+      knowsAbout: ['사주명리', '만세력', '공공입찰', '조달', '나라장터', '낙찰', '투찰 택일', '발주처 궁합', '법인 설립일 사주', '회사 대운', '십성', '오행', '일간', '관재수', '동업 궁합'],
+      areaServed: { '@type': 'Country', name: '대한민국' },
+    },
+    {
+      '@type': 'WebSite', '@id': 'https://nakchal-saju.vercel.app/#site',
+      url: 'https://nakchal-saju.vercel.app', name: '낙찰사주', inLanguage: 'ko',
+      description: '입찰·조달·수주 대표를 위한 회사 사주 전문 서비스',
+      publisher: { '@id': 'https://nakchal-saju.vercel.app/#org' },
+      potentialAction: { '@type': 'SearchAction', target: { '@type': 'EntryPoint', urlTemplate: 'https://nakchal-saju.vercel.app/balju?q={search_term_string}' }, 'query-input': 'required name=search_term_string' },
+    },
+    {
+      '@type': 'Service', '@id': 'https://nakchal-saju.vercel.app/#service',
+      name: '낙찰사주 — 회사 사주·사정률·발주처 궁합·투찰 택일',
+      serviceType: '사주명리 기반 비즈니스 의사결정 참고 서비스',
+      provider: { '@id': 'https://nakchal-saju.vercel.app/#org' }, areaServed: 'KR',
+      audience: { '@type': 'BusinessAudience', name: '공공입찰·조달·수주 사업 기업 대표' },
+      description: '대표와 법인의 사주로 오늘의 낙찰 사정률, 발주처·동업·협정 궁합, 회사 대운, 투찰·경매 택일을 만세력으로 짚어드립니다. 입찰·경매·조달 수주 참고·오락용.',
+    },
   ],
 };
 
