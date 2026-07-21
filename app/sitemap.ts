@@ -6,10 +6,12 @@ import { CLIENTS, clientSlug } from '@/lib/clients';
 import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
 import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import { CONCEPTS } from '@/lib/seo-concepts';
+import { getAllColumns } from '@/lib/column';
 const BASE = 'https://nakchal-saju.vercel.app';
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/full', '/bokchae', '/ritual', '/pricing', '/terms', '/privacy', '/refund'];
+  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/full', '/bokchae', '/ritual', '/pricing', '/column', '/terms', '/privacy', '/refund'];
+  const columns = getAllColumns();
   const urls = [
     ...staticUrls,
     ...PAINS.map(p => `/why/${p.slug}`),
@@ -22,5 +24,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...INDUSTRIES.map(r => `/industry/${r.slug}`),
     ...CONCEPTS.map(c => `/사주/${c.slug}`),
   ];
-  return urls.map(u => ({ url: BASE + u, lastModified: now, changeFrequency: 'weekly' as const, priority: u === '' ? 1 : 0.7 }));
+  const base = urls.map(u => ({ url: BASE + u, lastModified: now, changeFrequency: 'weekly' as const, priority: u === '' ? 1 : 0.7 }));
+  // 칼럼 글은 개별 발행일을 lastModified로 — 검색엔진 신선도 신호
+  const posts = columns.map(p => ({ url: `${BASE}/column/${p.slug}`, lastModified: p.date ? new Date(p.date) : now, changeFrequency: 'monthly' as const, priority: 0.6 }));
+  return [...base, ...posts];
 }

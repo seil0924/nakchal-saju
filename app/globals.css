@@ -1691,3 +1691,61 @@ p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.
 .favbal-chips{display:flex;flex-wrap:wrap;gap:6px}
 .favbal-chip{font-size:12.5px;font-weight:700;color:var(--navy);background:#fff;border:1px solid #e2cd97;border-radius:999px;padding:6px 11px;cursor:pointer;font-family:var(--sans)}
 .favbal-chip:active{transform:scale(.97)}
+
+/* ── 사주 칼럼(/column) ─────────────────────────────────────── */
+.home5 .colhead{padding:40px 24px 26px;border-bottom:1px solid var(--h-line)}
+.home5 .colhead .kick{font-size:11px;letter-spacing:.34em;color:var(--h-red);font-weight:700;font-family:var(--serif)}
+.home5 .colhead h1{font-family:var(--serif);font-weight:900;font-size:27px;line-height:1.42;color:var(--h-ink);margin-top:14px;letter-spacing:-.012em}
+.home5 .colhead .sub{font-size:12.5px;color:#8a8575;line-height:1.8;font-weight:500;margin-top:12px}
+.home5 .colempty{padding:48px 24px;text-align:center;color:#9a917a;font-size:13px;font-weight:600}
+.home5 .collist{list-style:none;padding:8px 16px 0;margin:0}
+.home5 .colcard{margin:0 0 12px}
+.home5 .colcard>a{display:block;padding:18px 18px 16px;background:#fff;border:1px solid var(--h-line);border-radius:14px;text-decoration:none;color:inherit;transition:transform .18s cubic-bezier(.2,.7,.3,1),box-shadow .22s,border-color .22s}
+@media(hover:hover){.home5 .colcard>a:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(30,28,20,.10);border-color:#e2d6bb}}
+.home5 .colcard>a:active{transform:translateY(0) scale(.995)}
+.home5 .colmeta{font-size:11px;color:#a29a86;font-weight:700;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.home5 .colcard h2{font-family:var(--serif);font-weight:800;font-size:17px;line-height:1.45;color:var(--h-ink);margin:8px 0 6px;letter-spacing:-.01em}
+.home5 .colcard p{font-size:12.5px;color:#6f6a5c;line-height:1.7;font-weight:500}
+.home5 .coltags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.home5 .coltags span{font-size:10.5px;color:#8a7b52;background:#fbf7ec;border:1px solid #e7dcc2;border-radius:999px;padding:3px 9px;font-weight:700}
+/* 본문 */
+.home5 .colbody{padding:34px 24px 8px}
+.home5 .colbody>.colmeta{margin-bottom:10px}
+.home5 .colbody h1{font-family:var(--serif);font-weight:900;font-size:26px;line-height:1.46;color:var(--h-ink);letter-spacing:-.014em}
+.home5 .colbody .coltags{margin:14px 0 0}
+.home5 .colbody .rule{width:40px;height:1px;background:var(--h-gold);margin:22px 0 6px}
+/* 마크다운 → prose */
+.home5 .prose{font-size:15px;line-height:1.95;color:#2c2a24;font-weight:450;word-break:keep-all}
+.home5 .prose>*+*{margin-top:18px}
+.home5 .prose h2{font-family:var(--serif);font-weight:800;font-size:20px;line-height:1.5;color:var(--h-ink);margin-top:36px;padding-top:4px;letter-spacing:-.01em}
+.home5 .prose h3{font-family:var(--serif);font-weight:800;font-size:16.5px;color:var(--h-ink);margin-top:28px}
+.home5 .prose p{margin-top:16px}
+.home5 .prose strong,.home5 .prose b{font-weight:800;color:var(--h-ink)}
+.home5 .prose a{color:var(--h-red);text-decoration:underline;text-underline-offset:2px;font-weight:600}
+.home5 .prose ul,.home5 .prose ol{margin-top:16px;padding-left:22px}
+.home5 .prose li{margin-top:8px}
+.home5 .prose ul li{list-style:none;position:relative}
+.home5 .prose ul li::before{content:"·";position:absolute;left:-16px;color:var(--h-gold);font-weight:900}
+.home5 .prose ol{counter-reset:c}
+.home5 .prose ol li{list-style:none;counter-increment:c;position:relative}
+.home5 .prose ol li::before{content:counter(c);position:absolute;left:-22px;top:1px;width:17px;height:17px;background:var(--h-ink);color:#f2e6c8;border-radius:50%;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;font-family:var(--serif)}
+.home5 .prose blockquote{margin-top:22px;padding:14px 18px;background:#fbf7ec;border-left:3px solid var(--h-gold);border-radius:0 10px 10px 0;color:#5f5230;font-size:14px;line-height:1.85}
+.home5 .prose blockquote p{margin:0}
+.home5 .prose hr{border:0;height:1px;background:var(--h-line);margin:30px 0}
+.home5 .prose em{font-style:normal;color:#8a8575;font-size:12.5px}
+.home5 .prose code{background:#f2eee2;padding:2px 6px;border-radius:5px;font-size:13px;font-family:ui-monospace,monospace}
+
+/* ── 칼럼 본문 사주 블록 (마크다운 내 HTML) ─────────────────── */
+.home5 .prose h2::before{content:"";display:block;width:26px;height:2px;background:var(--h-gold);margin-bottom:13px}
+/* 다크 계산 배너 (節氣·眞太陽時·夜子時) */
+.home5 .prose .calcrow{display:flex;gap:0;margin-top:20px;background:var(--h-ink);border-radius:13px;padding:18px 8px;overflow:hidden}
+.home5 .prose .calcrow>div{flex:1;text-align:center;padding:4px 8px;border-right:1px solid rgba(255,255,255,.09)}
+.home5 .prose .calcrow>div:last-child{border-right:0}
+.home5 .prose .calcrow b{display:block;font-family:var(--serif);font-weight:900;font-size:16px;color:var(--h-goldlt);letter-spacing:.05em}
+.home5 .prose .calcrow span{display:block;font-size:10px;color:#9298a4;margin-top:7px;line-height:1.5;font-weight:500;word-break:keep-all}
+/* 판결 인용구 (오늘의 사정률 신호) */
+.home5 .prose blockquote.verdict{background:var(--h-ink);border:0;border-left:0;border-radius:14px;padding:28px 22px;text-align:center;color:#f4efe3;font-family:var(--serif);font-weight:800;font-size:18px;line-height:1.65;margin-top:24px;position:relative;overflow:hidden}
+.home5 .prose blockquote.verdict::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold))}
+.home5 .prose blockquote.verdict cite{display:block;font-style:normal;font-family:var(--sans);font-size:11px;color:var(--h-goldlt);font-weight:600;margin-top:15px;letter-spacing:.02em}
+/* 면책 ※ */
+.home5 .prose .disc{background:#faf6ec;border:1px solid #ece2c8;border-radius:10px;padding:12px 14px;font-size:11.5px;color:#8a7c58;line-height:1.7;font-weight:500;margin-top:26px}
