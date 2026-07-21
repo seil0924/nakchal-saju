@@ -510,3 +510,7 @@ export function matchTycoon(userChart: Chart): TyMatch {
     tyDist: best.c.dist, story: best.t.story, profile: tyProfile(best.t.en),
   };
 }
+
+// SEO 랜딩용 — 거장명 → slug(공백 제거, 한글/영문 유지) 및 역조회
+export const tycoonSlug = (name: string) => name.replace(/\s+/g, '').replace(/\./g, '');
+export const tycoonBySlug = (slug: string) => TYCOONS.find(t => tycoonSlug(t.name) === decodeURIComponent(slug));

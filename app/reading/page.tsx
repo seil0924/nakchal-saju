@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
@@ -592,7 +592,7 @@ export default function Reading() {
                 </div>
               ); })()}
             <div id="acc">
-              {res.sections.map((sec, i) => {
+              {(() => { const firstLockedIdx = res.sections.findIndex((s2: any) => (RANK[s2.tier] ?? 2) > level && !s2.html); return res.sections.map((sec, i) => {
                 const rank = RANK[sec.tier] ?? 2;
                 const open = rank <= level && !!sec.html;
                 const locked = rank > level;
@@ -601,7 +601,15 @@ export default function Reading() {
                 const pName = catInfo ? catInfo.name : (prod?.name ?? '개별 상품');
                 const openThis = () => { setErr(''); if (catInfo) setModal(true); else if (prod) openProduct(prod.key); };
                 return (
-                  <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
+                  <React.Fragment key={i}>
+                    {catInfo && level < 2 && i === firstLockedIdx && (
+                      <>
+                        <div className="readyline"><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
+                        <div className="cta" onClick={() => { setErr(''); setModal(true); }}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
+                        <div className="ctaassure">✓ 30초 · 결제 즉시 열람</div>
+                      </>
+                    )}
+                  <div className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                     <div className="hd" onClick={locked ? openThis : undefined}>
                       <div className="mk">{sec.mk}</div>
                       <div className="ti">{sec.t}</div>
@@ -620,19 +628,11 @@ export default function Reading() {
                         )}
                     </div>
                   </div>
+                  </React.Fragment>
                 );
-              })}
+              }); })()}
             </div>
-            {level < 2 && anyLocked && (catInfo ? (
-              <>
-                <div className="readyline"><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
-                <div className="cta" onClick={() => { setErr(''); setModal(true); }}>
-                  {catInfo.name} 열기
-                  <small>{catInfo.lead} · {won(catInfo.price)}</small>
-                </div>
-                <div className="ctaassure">✓ 30초 · 결제 즉시 열람</div>
-              </>
-            ) : lockedProducts.length > 0 ? (
+            {level < 2 && anyLocked && (catInfo ? null : lockedProducts.length > 0 ? (
               <div className="prodmenu">
                 <div className="pmhd"><span className="pmh">필요한 것만 낱개로 여십시오</span><span className="pms">묶음 없이 상품별로 — 대표님께 필요한 풀이만 고르세요</span></div>
                 {lockedProducts.map(p => (

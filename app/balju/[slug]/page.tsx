@@ -29,15 +29,13 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
   const readingUrl = `/reading?cat=balju&ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`;
   const others = CLIENTS.filter((x) => x.name !== c.name).slice(0, 12);
 
-  const ld = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: `${c.name} 입찰, 대표님과 맞는 발주처일까`,
-    about: c.name,
-    description: c.tip ?? `${c.name} 입찰·조달 특성 분석`,
-    publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE },
-    mainEntityOfPage: `${BASE}/balju/${clientSlug(c.name)}`,
-  };
+  const ld = [
+    { '@context': 'https://schema.org', '@type': 'Article', headline: `${c.name} 입찰, 대표님과 맞는 발주처일까`, about: c.name, description: c.tip ?? `${c.name} 입찰·조달 특성 분석`, publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE }, mainEntityOfPage: `${BASE}/balju/${clientSlug(c.name)}` },
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '발주처', item: `${BASE}/balju` },
+      { '@type': 'ListItem', position: 2, name: c.name, item: `${BASE}/balju/${clientSlug(c.name)}` },
+    ] },
+  ];
 
   return (
     <div className="app home">
