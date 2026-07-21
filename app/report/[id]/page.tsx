@@ -9,7 +9,7 @@ import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import YearBar from '@/app/_components/YearBar';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
-type Result = { reportId: string; title: string; unlocked: boolean; level?: number; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
+type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
@@ -98,7 +98,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
-                <div className="num" style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.score}<span style={{ fontSize: 20 }}>점</span></div>
+                <div className={'num' + (res.hero.big && res.hero.big.length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 20 }}>{res.hero.unit ?? '점'}</span></div>
                 <div className="lab">{res.hero.label}</div><div className="sub2">{res.hero.sub}</div>
               </div>
             )}
@@ -141,16 +141,17 @@ export default function ReportView({ params }: { params: { id: string } }) {
               </>
             )}
             {level >= 1 && res.gauge?.precise && res.sections?.some((s: any) => s.mk === '率') && <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b></div>}
-            {/* 나도 보기 — 공유받은 사람이 자기 결과를 바로 보는 입구 */}
+            {/* 나도 보기 / CEO 브리지 — 공유받은 비소유자에게만 노출(본인 유료 리포트엔 숨김) */}
+            {!res.mine && (<>
             <Link className="cta no-print" href="/reading" style={{ marginTop: 14 }}>
               나도 보기 — 무료로 시작<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 사정률</small>
             </Link>
-            {/* 바이럴 루프 — 공유받은 사람의 입구 */}
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 10 }}>
               <div className="bi">鏡</div>
               <div className="bt"><b>나도 30초 만에 — 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 100인 중 내 사주와 닮은 대표 · 무료</span></div>
               <div className="ba">→</div>
             </Link>
+            </>)}
             <button className="sharebtn no-print" style={{ marginTop: 12 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장

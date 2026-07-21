@@ -18,5 +18,5 @@ export async function GET(req: Request) {
   const bpass = isOwner ? await hasBaljuPass(user?.id) : false;
   const year = Number(new URL(req.url).searchParams.get('year')) || undefined;
   const rep = computeReport(input, level, year, bpass);
-  return NextResponse.json({ reportId: id, unlocked: level >= 1, level, cat: input.cat ?? null, ...rep });
+  return NextResponse.json({ reportId: id, unlocked: level >= 1, level, mine: isOwner, cat: input.cat ?? null, ...rep });
 }

@@ -131,8 +131,8 @@ export default function Reading() {
       const b = p.get('b'), n = p.get('n');
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
       const ct = p.get('cat'); if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
-      // 사주아이식: 진입하자마자 대표 선택 시트를 띄운다 (본인이 프리필 안 됐을 때)
-      if (!p.get('b')) setTimeout(() => setPicker({ open: true, kind: 'self' }), 380);
+      // 저장된 대표가 있는 재방문자에게만 선택 시트를 자동으로 띄운다. 신규 방문자는 폼을 바로 보게 한다.
+      if (!p.get('b')) { try { const s = sget('nakchal_self_v1'); const has = !!s && (JSON.parse(s)?.length > 0); if (has) setTimeout(() => setPicker({ open: true, kind: 'self' }), 380); } catch { /* noop */ } }
     } catch {}
   }, []);
   function persistSaved(list: Target[]) { setSaved(list); try { sset(LS_KEY, JSON.stringify(list)); } catch {} }

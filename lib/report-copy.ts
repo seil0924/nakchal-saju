@@ -6,6 +6,9 @@ import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, TYPE
 import { sealSvg } from './seal';
 import { clientTip } from './clients';
 
+// 인명 조사(받침 유무) 자동 보정 — '아사 캔들러을' 같은 오류 방지
+const josaEB = (w: string, withB: string, noB: string): string => { const s = (w||'').replace(/\([^)]*\)/g, '').trim(); const ch = s.charCodeAt(s.length - 1); const h = ch >= 0xac00 && ch <= 0xd7a3; return (h && (ch - 0xac00) % 28 !== 0) ? withB : noB; };
+
 // 鏡 — 해외 거장(작고) 닮은 사주 (무료 바이럴 훅)
 function twinHtml(tm:TyMatch, me:number, myDist:number[], myGan?:string){
   const lv = tm.level==='twin' ? '닮은 사주' : tm.level==='near' ? '가까운 사주' : '결이 비슷한 사주';
@@ -42,7 +45,7 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[], myGan?:string){
     (tm.count?`두 명식에서 <b>${tm.matched.join('</b>·<b>')}</b>, 여섯 부호 중 ${tm.count}가지가 겹칩니다.`:`구조의 결이 닿습니다.`)+`</p>`+
     chips+
     `<div class="mecard"><div class="mel">그리고 — 대표님이 그 명(命)입니다</div>`+
-      `<p class="mep">${t.name}을 일으킨 그 <b>${EL[me]}의 기운</b>이, 대표님 여덟 글자에 같은 뼈대로 앉아 있습니다.</p>`+
+      `<p class="mep">${t.name}${josaEB(t.name,'을','를')} 일으킨 그 <b>${EL[me]}의 기운</b>이, 대표님 여덟 글자에 같은 뼈대로 앉아 있습니다.</p>`+
       `<p class="mep">${TYPE_USER[me]}</p>`+
       `<div class="merule"></div>`+
       `<p class="mep">${TYPE_BIZ[me]}</p></div>`+
