@@ -6,10 +6,18 @@ import { kcpApprove } from '@/lib/kcp';
 
 export async function POST(req: Request) {
   const origin = new URL(req.url).origin;
-  // 실패 시 사유(why)를 쿼리에 실어 원인 파악 가능하게. reportId 없으면(복채 등) 홈으로.
+  // 결제 결과에 따른 도착지: 리포트 구매→리포트, 복채/패스 등 언락無→결제완료 페이지, 실패→홈.
+  const dest = (ok: boolean, reportId?: string | null) => {
+    const rid = reportId ? String(reportId) : '';
+    if (ok && !rid) return `${origin}/thanks?kind=bokchae`;      // 복채(福債) 등 리포트와 무관한 결제
+    if (ok && rid.startsWith('pass:')) return `${origin}/thanks`; // 발주처 패스 등 이용권
+    if (rid && !rid.startsWith('pass:')) return `${origin}/report/${rid}`;
+    return `${origin}/`;
+  };
   const back = (ok: boolean, reportId?: string | null, why?: string) => {
-    const base = reportId ? `${origin}/report/${reportId}` : `${origin}/`;
-    const q = `?paid=${ok ? '1' : '0'}${why ? `&why=${encodeURIComponent(why)}` : ''}`;
+    const base = dest(ok, reportId);
+    const sep = base.includes('?') ? '&' : '?';
+    const q = `${sep}paid=${ok ? '1' : '0'}${why ? `&why=${encodeURIComponent(why)}` : ''}`;
     return NextResponse.redirect(base + q, 303);
   };
 
