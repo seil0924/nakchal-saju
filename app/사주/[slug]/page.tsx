@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CONCEPTS } from '@/lib/seo-concepts';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => CONCEPTS.find(c => c.slug === decodeURIComponent(slug));
 
 export function generateStaticParams() { return CONCEPTS.map(c => ({ slug: c.slug })); }
