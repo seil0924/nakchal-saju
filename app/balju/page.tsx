@@ -27,7 +27,7 @@ export default function Balju() {
   const list = CLIENTS.filter(c => c.name.includes(q) || c.cat.includes(q)).slice().sort((a, b) => (b.core ? 1 : 0) - (a.core ? 1 : 0));
 
   const itemListLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: '공공 발주처 궁합 목록', numberOfItems: CLIENTS.length,
-    itemListElement: CLIENTS.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `https://nakchal-saju.vercel.app/balju/${clientSlug(c.name)}` })) };
+    itemListElement: CLIENTS.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `https://nakchalsaju.com/balju/${clientSlug(c.name)}` })) };
   return (
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
