@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQ_MAIN } from '@/lib/faq';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 
 export const metadata: Metadata = {
   title: '자주 묻는 질문 — 입찰 사주·발주처 궁합·투찰 택일 | 낙찰사주',
