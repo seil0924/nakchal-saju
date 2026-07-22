@@ -14,21 +14,21 @@
 - 절기(節氣)를 천문(태양황경) 계산으로 판정, 진태양시·서머타임·야자시 보정, 음·양력 자동 변환으로 명식 산출
 
 ## 주요 페이지
-- 홈: https://nakchal-saju.vercel.app/
-- 오늘의 사정률(무료): https://nakchal-saju.vercel.app/reading
-- 발주처 궁합(공공 발주처 100곳): https://nakchal-saju.vercel.app/balju
-- 자주 묻는 질문(FAQ): https://nakchal-saju.vercel.app/faq
-- 나와 닮은 세계적 CEO(무료): https://nakchal-saju.vercel.app/ceo
+- 홈: https://nakchalsaju.com/
+- 오늘의 사정률(무료): https://nakchalsaju.com/reading
+- 발주처 궁합(공공 발주처 100곳): https://nakchalsaju.com/balju
+- 자주 묻는 질문(FAQ): https://nakchalsaju.com/faq
+- 나와 닮은 세계적 CEO(무료): https://nakchalsaju.com/ceo
 
 ## 콘텐츠 허브
-- 입찰 사주 가이드(11): https://nakchal-saju.vercel.app/guide/입찰-사주 (낙찰 운세·법인 설립일 사주·투찰 길일·관재수·동업 궁합·대표 사주·조달청 입찰·개업일 택일·발주처 궁합·신년 사업운)
-- 대표·사장 고민별 상담(17): https://nakchal-saju.vercel.app/why (하한가·연패·자금난·직원 이탈·매출 정체·번아웃·승계·결단·확장·배신·재물 누수·건강·운때·창업시기·관재수·동업)
-- 명리 개념 사전(16): https://nakchal-saju.vercel.app/사주/갑목-일간 (일간 10·오행 5, 경영·입찰 관점 해설)
-- 지역별 입찰(17개 시·도): https://nakchal-saju.vercel.app/region/서울
-- 업종별 입찰(8): https://nakchal-saju.vercel.app/industry/전기공사 (통신·시설관리·건설·소방·기계설비·조경·청소경비)
-- 입찰·명리 용어사전(47): https://nakchal-saju.vercel.app/glossary (사정률·적격심사·일간·대운·관재수 등 정의)
-- 계산 방법론(E-E-A-T): https://nakchal-saju.vercel.app/method (절기 천문계산·진태양시·야자시 보정)
-- 샘플 리포트: https://nakchal-saju.vercel.app/samples
+- 입찰 사주 가이드(11): https://nakchalsaju.com/guide/입찰-사주 (낙찰 운세·법인 설립일 사주·투찰 길일·관재수·동업 궁합·대표 사주·조달청 입찰·개업일 택일·발주처 궁합·신년 사업운)
+- 대표·사장 고민별 상담(17): https://nakchalsaju.com/why (하한가·연패·자금난·직원 이탈·매출 정체·번아웃·승계·결단·확장·배신·재물 누수·건강·운때·창업시기·관재수·동업)
+- 명리 개념 사전(16): https://nakchalsaju.com/사주/갑목-일간 (일간 10·오행 5, 경영·입찰 관점 해설)
+- 지역별 입찰(17개 시·도): https://nakchalsaju.com/region/서울
+- 업종별 입찰(8): https://nakchalsaju.com/industry/전기공사 (통신·시설관리·건설·소방·기계설비·조경·청소경비)
+- 입찰·명리 용어사전(47): https://nakchalsaju.com/glossary (사정률·적격심사·일간·대운·관재수 등 정의)
+- 계산 방법론(E-E-A-T): https://nakchalsaju.com/method (절기 천문계산·진태양시·야자시 보정)
+- 샘플 리포트: https://nakchalsaju.com/samples
 
 ## 고지
 사주명리 이론에 기반한 참고·오락 정보입니다. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다.
