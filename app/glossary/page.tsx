@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { GLOSSARY, glossaryByCat } from '@/lib/glossary';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 const slugify = (s: string) => s;
 
 export const metadata: Metadata = {
