@@ -29,12 +29,12 @@ describe('preview — 클라 명식이 서버 engine 과 일치 (교차검증)',
 
 describe('chartFromInput — 입력 가드', () => {
   it('빈 문자열/형식 오류는 null', () => {
-    expect(chartFromInput('')).toBeNull();
-    expect(chartFromInput('not-a-date')).toBeNull();
-    expect(chartFromInput('2000-13')).toBeNull(); // dd 없음 → NaN
+    expect(chartFromInput('', null)).toBeNull();
+    expect(chartFromInput('not-a-date', null)).toBeNull();
+    expect(chartFromInput('2000-13', null)).toBeNull(); // dd 없음 → NaN
   });
   it('정상 입력은 명식 반환', () => {
-    expect(chartFromInput('2000-06-15')).not.toBeNull();
+    expect(chartFromInput('2000-06-15', null)).not.toBeNull();
   });
 });
 
