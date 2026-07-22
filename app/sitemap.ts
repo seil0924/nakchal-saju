@@ -7,7 +7,7 @@ import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
 import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import { getAllColumns } from '@/lib/column';
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/full', '/bokchae', '/ritual', '/pricing', '/column', '/terms', '/privacy', '/refund'];
