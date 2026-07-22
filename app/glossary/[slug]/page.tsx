@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { GLOSSARY, glossaryBySlug } from '@/lib/glossary';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 
 export function generateStaticParams() { return GLOSSARY.map(t => ({ slug: t.slug })); }
 
