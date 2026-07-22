@@ -10,7 +10,7 @@ const PUBLIC_EXACT = new Set<string>([
   '/', '/login', '/terms', '/privacy', '/more', '/thanks', '/saeobunse',
   '/reading', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/glossary', '/method', '/refund', '/pricing', '/column',
 ]);
-const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/사주/', '/column/', '/saeobunse/'];
+const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/saju/', '/column/', '/saeobunse/'];
 
 export function isPublicPath(rawPath: string): boolean {
   let path = rawPath; try { path = decodeURIComponent(rawPath); } catch {}
