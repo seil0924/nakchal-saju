@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { REGIONS } from '@/lib/seo-landings';
 import { CLIENTS, clientSlug } from '@/lib/clients';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => REGIONS.find(r => r.slug === decodeURIComponent(slug));
 const NATIONAL = ['한국도로공사', '한국토지주택공사(LH)', '조달청', '한국전력공사(KEPCO)'];
 
