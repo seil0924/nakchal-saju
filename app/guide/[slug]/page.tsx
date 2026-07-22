@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { GUIDES } from '@/lib/seo-landings';
 import { GUIDE_FAQS } from '@/lib/faq';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => GUIDES.find(g => g.slug === decodeURIComponent(slug));
 
 export function generateStaticParams() { return GUIDES.map(g => ({ slug: g.slug })); }
