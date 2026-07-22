@@ -12,7 +12,8 @@ const PUBLIC_EXACT = new Set<string>([
 ]);
 const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/사주/', '/column/'];
 
-export function isPublicPath(path: string): boolean {
+export function isPublicPath(rawPath: string): boolean {
+  let path = rawPath; try { path = decodeURIComponent(rawPath); } catch {}
   if (/\.[^/]+$/.test(path)) return true;   // 정적 파일(.mp4·.jpg·.png·.svg 등)은 게이트 제외
   if (PUBLIC_EXACT.has(path)) return true;
   return PUBLIC_PREFIX.some((p) => path.startsWith(p));
