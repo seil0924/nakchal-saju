@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getColumn, getAllColumnSlugs } from '@/lib/column';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 
 export function generateStaticParams() {
   return getAllColumnSlugs().map(slug => ({ slug }));
