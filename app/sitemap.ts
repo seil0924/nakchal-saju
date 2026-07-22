@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...GUIDES.map(g => `/guide/${g.slug}`),
     ...REGIONS.map(r => `/region/${r.slug}`),
     ...INDUSTRIES.map(r => `/industry/${r.slug}`),
-    ...CONCEPTS.map(c => `/사주/${c.slug}`),
+    ...CONCEPTS.map(c => `/saju/${c.slug}`),
   ];
   const base = urls.map(u => ({ url: BASE + u, lastModified: now, changeFrequency: 'weekly' as const, priority: u === '' ? 1 : 0.7 }));
   // 칼럼 글은 개별 발행일을 lastModified로 — 검색엔진 신선도 신호
