@@ -24,7 +24,7 @@ export async function GET(req: Request) {
         </div>
         <div style={{ color: '#fff', fontSize: 40, fontWeight: 700, marginTop: 18 }}>{type}</div>
         <div style={{ color: '#d8cdb4', fontSize: 28, marginTop: 20, textAlign: 'center', maxWidth: 760, lineHeight: 1.4 }}>{note}</div>
-        <div style={{ color: '#8a7f66', fontSize: 24, marginTop: 34 }}>nakchal-saju.vercel.app · 내 오늘 흐름도 보기</div>
+        <div style={{ color: '#8a7f66', fontSize: 24, marginTop: 34 }}>nakchalsaju.com · 내 오늘 흐름도 보기</div>
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 10, background: 'linear-gradient(90deg,#a5862f,#e3c27a,#a5862f)' }} />
       </div>
     ),
