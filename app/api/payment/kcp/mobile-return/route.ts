@@ -21,6 +21,12 @@ export async function POST(req: Request) {
   const r = await kcpApprove({ enc_data, enc_info, tran_cd, ordr_mony: order.amount, ordr_no: paymentId });
   if (!r.ok) { console.error('[mobile-return] approve fail', r.res_cd, r.res_msg, r.raw); return back(false, order.reportId, `approve:${r.res_cd || '?'}:${(r.res_msg || '').slice(0, 40)}`); }
   if (r.amount !== order.amount) return back(false, order.reportId, `amount:${r.amount}!=${order.amount}`);
-  await confirmOrder(paymentId, order.amount);
+  // 승인 성공(돈 이동 완료). 확정 저장이 실패해도 500 대신 사유를 노출한다(pc-return과 동일).
+  try {
+    await confirmOrder(paymentId, order.amount);
+  } catch (e: any) {
+    console.error('[mobile-return] confirm fail', e);
+    return back(true, order.reportId, `confirm:${(e?.message || e?.code || String(e)).slice(0, 90)}`);
+  }
   return back(true, order.reportId);
 }

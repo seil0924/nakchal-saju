@@ -124,14 +124,25 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
     if (o.status === 'paid') {                            // ★멱등: 이미 처리된 주문은 재처리 없이 반환(재생 방어)
       return { paymentId, reportId: o.report_id ?? o.pass_key, amount: o.amount, level: o.level ?? 1, status: 'paid' };
     }
-    { const { error: e1 } = await c.from('payments').update({ status: 'paid', paid_at: new Date().toISOString() }).eq('payment_id', paymentId); if (e1) throw e1; }
+    // ★언락/이용권 부여를 '먼저', payments=paid 표시는 '마지막'에.
+    // 언락 쓰기가 실패하면 status는 'pending'으로 남아 재시도가 전부 재실행된다(Math.max·upsert 멱등).
+    // 최악의 경우도 '언락됐지만 paid 미표시'(안전, 재시도로 수렴)이지 '결제됐는데 영구 미언락'(위험)이 아니다.
+    const markPaid = async () => { const { error: ep } = await c.from('payments').update({ status: 'paid', paid_at: new Date().toISOString() }).eq('payment_id', paymentId); if (ep) throw ep; };
     const key = o.report_id ?? o.pass_key;
-    if (key && String(key).startsWith('pass:')) { await c.from('entitlements').upsert({ key }); return { paymentId, reportId: key, amount: o.amount, level: o.level ?? 1, status: 'paid' }; }
-    if (!o.report_id) { return { paymentId, reportId: null, amount: o.amount, level: o.level ?? 0, status: 'paid' }; }
+    if (key && String(key).startsWith('pass:')) {
+      const { error: e3 } = await c.from('entitlements').upsert({ key }); if (e3) throw e3;   // ★에러 확인(조용한 실패 차단)
+      await markPaid();
+      return { paymentId, reportId: key, amount: o.amount, level: o.level ?? 1, status: 'paid' };
+    }
+    if (!o.report_id) {   // 복채 등 언락 대상 없음 — 확정만
+      await markPaid();
+      return { paymentId, reportId: null, amount: o.amount, level: o.level ?? 0, status: 'paid' };
+    }
     const lvl = o.level ?? 2;
     const { data: cur } = await c.from('reports').select('unlock_level').eq('id', o.report_id).maybeSingle();
     const next = Math.max(cur?.unlock_level ?? 0, lvl);   // 상위 레벨은 유지 (다운그레이드 방지)
     { const { error: e2 } = await c.from('reports').update({ unlock_level: next }).eq('id', o.report_id); if (e2) throw e2; }
+    await markPaid();
     return { paymentId, reportId: o.report_id, amount: o.amount, level: lvl, status: 'paid' };
   }
   const o = memOrders.get(paymentId);
