@@ -10,7 +10,7 @@ import { getAllColumns } from '@/lib/column';
 const BASE = 'https://nakchalsaju.com';
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/full', '/bokchae', '/ritual', '/pricing', '/column', '/terms', '/privacy', '/refund'];
+  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/사업운세', '/full', '/bokchae', '/ritual', '/pricing', '/column', '/terms', '/privacy', '/refund'];
   const columns = getAllColumns();
   const urls = [
     ...staticUrls,
