@@ -24,7 +24,7 @@ export const backend = () => (sb() ? 'supabase' : 'memory');
 
 // ── 인메모리 백엔드 (폴백) ───────────────────────────────
 const g = globalThis as any;
-type MemReport = { input: ReportInput; userId: string | null; label?: string; created: number };
+type MemReport = { input: ReportInput; userId: string | null; label?: string; created: number; token?: string };
 type SavedChart = { id: string; kind: string; name?: string; birth_date: string; birth_time?: string | null; calendar?: string; is_leap?: boolean };
 const memReports: Map<string, MemReport> = g.__reports ?? (g.__reports = new Map());
 const memOrders: Map<string, Order> = g.__orders ?? (g.__orders = new Map());
@@ -37,16 +37,24 @@ const uid = (u?: string | null) => u || 'demo';
 const genId = (p: string) => p + ((globalThis.crypto && 'randomUUID' in globalThis.crypto) ? globalThis.crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2, 12));
 
 // ── 공개 API (async) ─────────────────────────────────────
-export async function saveReport(input: ReportInput, userId?: string, label?: string): Promise<string> {
+export async function saveReport(input: ReportInput, userId?: string, label?: string): Promise<{ id: string; token: string }> {
   const c = sb();
+  // 접근 토큰(비회원 리포트 IDOR 방어). 소유자 아니면 이 토큰(?t=)이 있어야 열람 가능.
+  const token = (globalThis.crypto && 'randomUUID' in globalThis.crypto)
+    ? globalThis.crypto.randomUUID()
+    : Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
   if (c) {
-    const { data, error } = await c.from('reports').insert({ input, user_id: userId ?? null, label }).select('id').single();
-    if (error) throw error;
-    return data.id as string;
+    // access_token 컬럼 포함 insert를 먼저 시도. 컬럼이 아직 없으면(마이그레이션 전) 실패하므로
+    // 컬럼 없이 재시도 → 리포트 생성은 절대 깨지지 않음(순서 안전). 이땐 토큰 미저장(레거시 폴백).
+    const withTok = await c.from('reports').insert({ input, user_id: userId ?? null, label, access_token: token }).select('id').single();
+    if (!withTok.error) return { id: withTok.data.id as string, token };
+    const base = await c.from('reports').insert({ input, user_id: userId ?? null, label }).select('id').single();
+    if (base.error) throw base.error;
+    return { id: base.data.id as string, token };
   }
   const id = genId('r');
-  memReports.set(id, { input, userId: userId ?? null, label, created: g.__seq });
-  return id;
+  memReports.set(id, { input, userId: userId ?? null, label, created: g.__seq, token });
+  return { id, token };
 }
 
 // 보관함: 내 리포트 목록
@@ -92,6 +100,21 @@ export async function getReportOwner(id: string): Promise<string | null> {
     return (data?.user_id as string) ?? null;
   }
   return memReports.get(id)?.userId ?? null;
+}
+
+// 소유자 + 접근토큰 조회. access_token 컬럼이 없으면(마이그레이션 전) token=null → 라우트가 기존 동작으로 폴백.
+export async function getReportAccess(id: string): Promise<{ owner: string | null; token: string | null }> {
+  const c = sb();
+  if (c) {
+    const { data } = await c.from('reports').select('user_id').eq('id', id).maybeSingle();
+    const owner = (data?.user_id as string) ?? null;
+    let token: string | null = null;
+    const t = await c.from('reports').select('access_token').eq('id', id).maybeSingle(); // 컬럼 없으면 error→token null
+    if (!t.error) token = (t.data?.access_token as string) ?? null;
+    return { owner, token };
+  }
+  const r = memReports.get(id);
+  return { owner: r?.userId ?? null, token: r?.token ?? null };
 }
 
 export async function createOrder(reportId: string, amount: number, level: number = 2): Promise<Order> {

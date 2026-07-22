@@ -16,6 +16,7 @@ import YearBar from '@/app/_components/YearBar';
 import TrustStrip from '@/app/_components/TrustStrip';
 import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 import { sget, sset } from '@/lib/scope';
+import { setTok, tokParam } from '@/lib/rtok';
 
 // 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
 const RITE_STEPS = [
@@ -237,6 +238,7 @@ export default function Reading() {
       const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
       if (!resp.ok) throw new Error();
       const r = await resp.json();
+      setTok(r.reportId, r.token);   // 접근토큰 로컬 보관(비회원 리포트 IDOR 방어)
       await minWait;
       setRes(r);
       // 보관함 기록 (이 기기 · 로그인 시 계정) + 저장된 사주/대상 서버 기록(best-effort)
@@ -268,6 +270,7 @@ export default function Reading() {
       const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
       if (!resp.ok) throw new Error();
       const r = await resp.json();
+      setTok(r.reportId, r.token);   // 접근토큰 로컬 보관(비회원 리포트 IDOR 방어)
       setRes(r);
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
       // (스크롤 점프 제거 — 잠긴 항목 클릭 시 화면이 위로 튀지 않도록 제자리 갱신)
@@ -279,7 +282,7 @@ export default function Reading() {
     if (!res || busy) return;
     setBusy(true);
     try {
-      const r = await fetch(`/api/report/get?id=${res.reportId}&year=${y}`).then(x => x.json());
+      const r = await fetch(`/api/report/get?id=${res.reportId}&year=${y}&t=${encodeURIComponent(tokParam(res.reportId))}`).then(x => x.json());
       if (r && r.sections) setRes(prev => (prev ? { ...prev, ...r } : r));
     } catch {} finally { setBusy(false); }
   }
@@ -311,7 +314,7 @@ export default function Reading() {
         await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
       }
       let full: any = null;
-      for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
+      for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId + '&t=' + encodeURIComponent(tokParam(res.reportId))); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
       if (!full) throw new Error();
       setRes({ ...res, ...full }); setLevel(full.level ?? (chosen === 'taekil' ? 1 : 2)); setModal(false);
       markUnlocked(res.reportId);
@@ -336,7 +339,7 @@ export default function Reading() {
         await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
       }
       let full: any = null;
-      for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
+      for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId + '&t=' + encodeURIComponent(tokParam(res.reportId))); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
       if (!full) throw new Error();
       setRes({ ...res, ...full }); setModal(false); setPassMode(false);
       setSeal(true); setTimeout(() => setSeal(false), 2600);
@@ -346,7 +349,7 @@ export default function Reading() {
 
   async function share() {
     if (!res) return;
-    const url = `${location.origin}/report/${res.reportId}`;
+    const url = `${location.origin}/report/${res.reportId}?t=${encodeURIComponent(tokParam(res.reportId))}`;
     const text = `[낙찰사주] 오늘 낙찰 유리도 ${res.hero?.score ?? ''}점 — ${res.hero?.sub ?? ''}. 대표와 회사 사주로 오늘의 사정률을 짚어 봤습니다. 대표님도 한번 보시죠:`;
     try {
       if (navigator.share) await navigator.share({ title: '낙찰사주', text, url });

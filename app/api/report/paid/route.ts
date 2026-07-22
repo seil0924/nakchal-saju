@@ -3,19 +3,22 @@
 // 유료 텍스트는 여기서 처음 생성됩니다.
 import { NextResponse } from 'next/server';
 import { computeReport } from '@/lib/report';
-import { getReport, getReportOwner, unlockLevel, hasBaljuPass } from '@/lib/store';
+import { getReport, getReportAccess, unlockLevel, hasBaljuPass } from '@/lib/store';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
   const id = new URL(req.url).searchParams.get('id');
   if (!id) return NextResponse.json({ error: 'id_required' }, { status: 400 });
 
-  // 소유권 확인 (인증이 켜져 있을 때만) — reportId만 알아도 남의 리포트를 못 열게
+  // 소유권/토큰 확인 — reportId(UUID)만 알아도 남의 리포트를 못 열게.
+  // 소유자(user_id 일치) 또는 접근토큰(?t=) 일치만 허용. token=null(마이그레이션 전)은 기존 동작 폴백(안전).
+  const t = new URL(req.url).searchParams.get('t');
   const user = authEnabled() ? await requireUser() : null;
   if (authEnabled()) {
-    if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-    const owner = await getReportOwner(id);
-    if (owner && owner !== user.id) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
+    const { owner, token } = await getReportAccess(id);
+    const isOwner = !!user && !!owner && owner === user.id;
+    const hasToken = !!token && !!t && t === token;
+    if (token !== null && !isOwner && !hasToken) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   }
 
   const level = await unlockLevel(id);           // 0 무료 · 1 택일팩 · 2 전체

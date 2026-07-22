@@ -12,6 +12,6 @@ export async function POST(req: Request) {
   const bpass = await hasBaljuPass(user?.id);              // 발주처 프리미엄 패스 보유 여부
   const free = computeReport(input, false, undefined, bpass); // unlocked=false → 유료 텍스트/정밀값 제거
   const label = `${input.name ? input.name + ' 대표님' : '대표님'} · ${free.gauge.dir}${input.legalName ? ' · ' + input.legalName : ''}`;
-  const reportId = await saveReport(input, user?.id, label); // 원장 보관(+소유자+라벨)
-  return NextResponse.json({ reportId, label, ...free });
+  const { id: reportId, token } = await saveReport(input, user?.id, label); // 원장 보관(+소유자+라벨+접근토큰)
+  return NextResponse.json({ reportId, token, label, ...free });
 }

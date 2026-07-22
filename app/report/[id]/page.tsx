@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 import { won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
+import { tokParam } from '@/lib/rtok';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import YearBar from '@/app/_components/YearBar';
@@ -38,7 +39,8 @@ export default function ReportView({ params }: { params: { id: string } }) {
   }, [res, level]);
 
   async function load() {
-    const r = await fetch('/api/report/get?id=' + id);
+    const t = tokParam(id, new URLSearchParams(location.search).get('t'));
+    const r = await fetch('/api/report/get?id=' + id + '&t=' + encodeURIComponent(t));
     if (!r.ok) { setErr('리포트를 찾을 수 없습니다.'); return; }
     setRes(await r.json());
   }
@@ -46,7 +48,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
 
   async function switchYear(y: number) {
     if (busy) return; setBusy(true);
-    try { const r = await fetch(`/api/report/get?id=${id}&year=${y}`); if (r.ok) { const d = await r.json(); if (d?.sections) setRes(prev => (prev ? { ...prev, ...d } : d)); } }
+    try { const t = tokParam(id, new URLSearchParams(location.search).get('t')); const r = await fetch(`/api/report/get?id=${id}&year=${y}&t=${encodeURIComponent(t)}`); if (r.ok) { const d = await r.json(); if (d?.sections) setRes(prev => (prev ? { ...prev, ...d } : d)); } }
     catch {} finally { setBusy(false); }
   }
 
