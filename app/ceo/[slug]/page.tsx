@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TYCOONS, tycoonSlug, tycoonBySlug } from '@/lib/tycoon';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 
 export function generateStaticParams() {
   return TYCOONS.map((t) => ({ slug: tycoonSlug(t.name) }));
