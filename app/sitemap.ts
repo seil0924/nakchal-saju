@@ -10,10 +10,11 @@ import { getAllColumns } from '@/lib/column';
 const BASE = 'https://nakchalsaju.com';
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/saeobunse', '/full', '/bokchae', '/ritual', '/pricing', '/column', '/terms', '/privacy', '/refund'];
+  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/full', '/bokchae', '/ritual', '/pricing', '/column', '/terms', '/privacy', '/refund'];
   const columns = getAllColumns();
   const urls = [
     ...staticUrls,
+    ...Array.from({ length: 10 }, (_, i) => `/saeobunse/${2026 + i}`),
     ...PAINS.map(p => `/why/${p.slug}`),
     ...GLOSSARY.map(t => `/glossary/${t.slug}`),
     ...PRODUCTS.map(p => `/product/${p.slug}`),
