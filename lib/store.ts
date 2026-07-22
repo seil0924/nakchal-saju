@@ -126,7 +126,8 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
     }
     { const { error: e1 } = await c.from('payments').update({ status: 'paid', paid_at: new Date().toISOString() }).eq('payment_id', paymentId); if (e1) throw e1; }
     const key = o.report_id ?? o.pass_key;
-    if (String(key).startsWith('pass:')) { await c.from('entitlements').upsert({ key }); return { paymentId, reportId: key, amount: o.amount, level: o.level ?? 1, status: 'paid' }; }
+    if (key && String(key).startsWith('pass:')) { await c.from('entitlements').upsert({ key }); return { paymentId, reportId: key, amount: o.amount, level: o.level ?? 1, status: 'paid' }; }
+    if (!o.report_id) { return { paymentId, reportId: null, amount: o.amount, level: o.level ?? 0, status: 'paid' }; }
     const lvl = o.level ?? 2;
     const { data: cur } = await c.from('reports').select('unlock_level').eq('id', o.report_id).maybeSingle();
     const next = Math.max(cur?.unlock_level ?? 0, lvl);   // 상위 레벨은 유지 (다운그레이드 방지)
