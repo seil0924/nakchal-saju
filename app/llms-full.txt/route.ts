@@ -7,7 +7,7 @@ import { getAllColumns } from '@/lib/column';
 
 export const dynamic = 'force-static';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 
 export function GET() {
   const parts: string[] = [];
