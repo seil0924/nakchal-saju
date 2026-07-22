@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 
 export const metadata: Metadata = {
   title: '계산 방법론 — 절기 천문계산·진태양시·야자시 보정 | 낙찰사주',
