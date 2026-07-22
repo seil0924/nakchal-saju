@@ -7,7 +7,7 @@ import { createServerClient } from '@supabase/ssr';
 
 // 로그인 없이 접근 가능한 공개 경로.
 const PUBLIC_EXACT = new Set<string>([
-  '/', '/login', '/terms', '/privacy', '/more',
+  '/', '/login', '/terms', '/privacy', '/more', '/thanks', '/사업운세',
   '/reading', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/glossary', '/method', '/refund', '/pricing', '/column',
 ]);
 const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/사주/', '/column/'];
