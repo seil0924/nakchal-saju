@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CLIENTS, clientSlug, clientBySlug, josa } from '@/lib/clients';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 
 export function generateStaticParams() {
   return CLIENTS.map((c) => ({ slug: clientSlug(c.name) }));
