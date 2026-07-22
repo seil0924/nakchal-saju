@@ -1757,3 +1757,7 @@ p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.
 .home5 .colfaq-item{padding:16px 0;border-bottom:1px solid var(--h-line)}
 .home5 .colfaq-item .q{font-family:var(--serif);font-weight:800;font-size:15px;color:var(--h-ink);line-height:1.6}
 .home5 .colfaq-item .a{margin-top:8px;font-size:14px;color:#4a463c;line-height:1.85;font-weight:450;word-break:keep-all}
+
+
+/* list row: keep name left-aligned next to star */
+.li .t{margin-right:auto;margin-left:10px}
