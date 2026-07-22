@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { INDUSTRIES } from '@/lib/seo-landings';
 import { CLIENTS, clientSlug } from '@/lib/clients';
 
-const BASE = 'https://nakchal-saju.vercel.app';
+const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => INDUSTRIES.find(r => r.slug === decodeURIComponent(slug));
 
 export function generateStaticParams() { return INDUSTRIES.map(r => ({ slug: r.slug })); }
