@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CLIENTS, clientSlug, clientBySlug, josa } from '@/lib/clients';
+import { baljuContent } from '@/lib/balju-content';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -12,29 +13,32 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const c = clientBySlug(params.slug);
   if (!c) return { title: '발주처 · 낙찰사주' };
+  const ct = baljuContent(c);
   const title = `${c.name} 입찰, 대표님과 맞는 발주처일까 — 낙찰사주`;
-  const description = `${c.name}(${c.date.slice(0, 4)} 설립·${c.cat}) 입찰·조달 특성과 대표님 사주 궁합. ${c.tip ?? ''} 설립일 사주 × 대표 사주로 30초 무료 진단.`;
+  const description = `${c.name}(${c.date.slice(0, 4)} 설립·${ct.sector}) 입찰 방식과 준비 포인트, 대표님 사주 궁합. ${ct.bid} 설립일 사주 × 대표 사주로 30초 무료 진단.`;
   const url = `${BASE}/balju/${clientSlug(c.name)}`;
   return {
     title, description,
     alternates: { canonical: `/balju/${clientSlug(c.name)}` },
     openGraph: { title, description, url, type: 'article', siteName: '낙찰사주' },
-    keywords: [c.name, `${c.name} 입찰`, `${c.name} 조달`, `${c.name} 낙찰`, c.cat, '발주처 궁합', '입찰 사주', '낙찰사주'],
+    keywords: [c.name, `${c.name} 입찰`, `${c.name} 조달`, `${c.name} 낙찰`, `${c.name} 입찰 방식`, ct.sector, c.cat, '발주처 궁합', '입찰 사주', '낙찰사주'],
   };
 }
 
 export default function BaljuLanding({ params }: { params: { slug: string } }) {
   const c = clientBySlug(params.slug);
   if (!c) return notFound();
+  const ct = baljuContent(c);
   const readingUrl = `/reading?cat=balju&ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`;
   const others = CLIENTS.filter((x) => x.name !== c.name).slice(0, 12);
 
   const ld = [
-    { '@context': 'https://schema.org', '@type': 'Article', headline: `${c.name} 입찰, 대표님과 맞는 발주처일까`, about: c.name, description: c.tip ?? `${c.name} 입찰·조달 특성 분석`, publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE }, mainEntityOfPage: `${BASE}/balju/${clientSlug(c.name)}` },
+    { '@context': 'https://schema.org', '@type': 'Article', headline: `${c.name} 입찰, 대표님과 맞는 발주처일까`, about: c.name, description: ct.intro, publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE }, mainEntityOfPage: `${BASE}/balju/${clientSlug(c.name)}` },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: '발주처', item: `${BASE}/balju` },
       { '@type': 'ListItem', position: 2, name: c.name, item: `${BASE}/balju/${clientSlug(c.name)}` },
     ] },
+    { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: ct.faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
   ];
 
   return (
@@ -59,16 +63,25 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
         </div>
 
         <div style={card}>
-          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>이 발주처, 어떻게 대해야 하나</div>
-          <p style={{ fontSize: 15, lineHeight: 1.75, color: '#33383f', margin: 0, fontWeight: 500 }}>{c.tip ?? `${c.name}의 입찰·조달 특성을 대표님 사주와 맞춰 분석합니다.`}</p>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{c.name}, 어떤 발주처인가</div>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: '#33383f', margin: 0, fontWeight: 500 }}>{ct.intro}</p>
+        </div>
+
+        <div style={card}>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{ct.sector} · 입찰은 이렇게 진행됩니다</div>
+          <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#33383f', margin: 0, fontWeight: 500 }}>{ct.bid}</p>
+        </div>
+
+        <div style={card}>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 8 }}>{c.name} 입찰, 먼저 챙길 것</div>
+          <ol style={{ margin: 0, paddingLeft: 18, fontSize: 14.5, lineHeight: 1.8, color: '#33383f', fontWeight: 500 }}>
+            {ct.prep.map((p, i) => <li key={i} style={{ marginBottom: 4 }}>{p}</li>)}
+          </ol>
         </div>
 
         <div style={card}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>설립일 사주 × 대표 사주</div>
-          <p style={{ fontSize: 14.5, lineHeight: 1.75, color: '#4a4636', margin: 0, fontWeight: 500 }}>
-            {c.name}{josa(c.name, '은', '는')} <b>{c.date} 설립</b>입니다. 낙찰사주는 이 <b>설립일 사주</b>를 대표님 사주와 맞춰,
-            이 발주처와 <b>애초에 맞는 판인지</b> — 언제 나서고 어떻게 대해야 유리한지를 짚어드립니다.
-          </p>
+          <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#4a4636', margin: 0, fontWeight: 500 }}>{ct.founding}</p>
         </div>
 
         <Link href={readingUrl} style={cta}>
@@ -78,6 +91,16 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
 
         <div style={{ fontSize: 12, color: '#a99f88', textAlign: 'center', margin: '10px 0 20px', lineHeight: 1.6 }}>
           {c.core ? '핵심 발주처 상세 궁합은 유료입니다. 먼저 무료로 방향을 보실 수 있어요.' : '이 발주처 궁합은 무료로 열립니다.'}
+        </div>
+
+        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '20px 0 10px' }}>자주 묻는 질문</div>
+        <div style={{ marginBottom: 24 }}>
+          {ct.faqs.map(([q, a], i) => (
+            <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '13px 15px', marginBottom: 9 }}>
+              <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--ink)', marginBottom: 5 }}>Q. {q}</div>
+              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#4a4636', margin: 0, fontWeight: 500 }}>{a}＞</p>
+            </div>
+          ))}
         </div>
 
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14, color: 'var(--navy)', margin: '18px 0 10px' }}>다른 발주처와의 궁합도 보기</div>
