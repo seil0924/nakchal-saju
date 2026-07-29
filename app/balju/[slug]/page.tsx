@@ -98,7 +98,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           {ct.faqs.map(([q, a], i) => (
             <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '13px 15px', marginBottom: 9 }}>
               <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--ink)', marginBottom: 5 }}>Q. {q}</div>
-              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#4a4636', margin: 0, fontWeight: 500 }}>{a}＞</p>
+              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#4a4636', margin: 0, fontWeight: 500 }}>{a}</p>
             </div>
           ))}
         </div>
