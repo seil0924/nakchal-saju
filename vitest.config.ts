@@ -9,6 +9,7 @@ export default defineConfig({
       // 서버/클라 전용 가드는 테스트(node)에서 무력화 — RSC 밖 import 시 throw 방지
       'server-only': empty,
       'client-only': empty,
+      '@': fileURLToPath(new URL('.', import.meta.url)),
     },
   },
   test: {
