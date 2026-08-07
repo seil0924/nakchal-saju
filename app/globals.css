@@ -1,3 +1,24 @@
+/* typography upgrade: reading rhythm (screen) */
+.rephd{font-size:21px!important;line-height:1.4!important;letter-spacing:-.01em!important}
+.sec .ti{font-size:17px!important;line-height:1.52!important;letter-spacing:-.01em!important}
+.sec .bd p{font-size:16.5px!important;color:#2c2a24!important;line-height:1.95!important;font-weight:450!important;margin-top:18px!important}
+.sec .bd b,.sec .bd strong{font-weight:800!important;color:#1c1a16!important}
+.gbridge{font-size:15.5px!important;line-height:1.95!important;color:#2c2a24!important;font-weight:450!important}
+.teaser .ttx,.twinlead,.tystory p,.myeong p,.mecard .mep,.dcs{line-height:1.95!important}
+.whymatch .wmsum{line-height:1.9!important}
+.whymatch .wmv{line-height:1.8!important}
+.jin .crisis p{line-height:1.85!important}
+.jin .axdesc{line-height:1.72!important}
+.typrof .tpscale p,.typrof .tparc p{line-height:1.82!important}
+.myeong .mys2{line-height:1.82!important}
+.cheobang .cbv{line-height:1.75!important}
+.prole .prline{line-height:1.78!important}
+.threekye .tktx{line-height:1.72!important}
+.cwarn{line-height:1.78!important}
+.persona p{line-height:1.7!important}
+.distcmp .dcs{line-height:1.82!important}
+.twbasis{line-height:1.85!important}
+
 
 :root{--bg:#ffffff;--card:#fff;--ink:#20242c;--sub:#6f6a5c;--line:#ece7db;--navy:#2b2119;--navy2:#211c15;--gold:#b98f3f;--gold2:#e3c27a;--red:#a5241f;--good:#177f5e;--serif:"Noto Serif KR","Noto Serif CJK KR",serif;--sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;}
 *{box-sizing:border-box;margin:0;padding:0}
