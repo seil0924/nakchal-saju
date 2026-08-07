@@ -1,9 +1,9 @@
 /* typography upgrade: reading rhythm (screen) */
 .rephd{font-size:21px!important;line-height:1.4!important;letter-spacing:-.01em!important}
 .sec .ti{font-size:17px!important;line-height:1.52!important;letter-spacing:-.01em!important}
-.sec .bd p{font-size:16.5px!important;color:#2c2a24!important;line-height:1.95!important;font-weight:450!important;margin-top:18px!important}
-.sec .bd b,.sec .bd strong{font-weight:800!important;color:#1c1a16!important}
-.gbridge{font-size:15.5px!important;line-height:1.95!important;color:#2c2a24!important;font-weight:450!important}
+.sec .bd p{font-size:16.5px!important;;line-height:1.95!important;font-weight:450!important;margin-top:18px!important}
+.sec .bd b,.sec .bd strong{font-weight:800!important;}
+.gbridge{font-size:15.5px!important;line-height:1.95!important;;font-weight:450!important}
 .teaser .ttx,.twinlead,.tystory p,.myeong p,.mecard .mep,.dcs{line-height:1.95!important}
 .whymatch .wmsum{line-height:1.9!important}
 .whymatch .wmv{line-height:1.8!important}
