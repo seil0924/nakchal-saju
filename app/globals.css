@@ -1,3 +1,6 @@
+/* typography: restore compact special cards over the !important base */
+.sec .bd .execsum .estx p{font-size:14px!important;line-height:1.6!important;font-weight:500!important;margin-top:0!important}
+.sec .bd .ileon p{font-size:15.5px!important;line-height:1.6!important;font-weight:600!important;margin-top:0!important}
 /* typography upgrade: reading rhythm (screen) */
 .rephd{font-size:21px!important;line-height:1.4!important;letter-spacing:-.01em!important}
 .sec .ti{font-size:17px!important;line-height:1.52!important;letter-spacing:-.01em!important}
