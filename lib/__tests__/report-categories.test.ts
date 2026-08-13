@@ -12,8 +12,8 @@ describe('report-categories — 카테고리 상품 로직', () => {
     expect(isCatKey(123)).toBe(false);
   });
   it('catPrice: 카테고리 개별가, 무효면 0', () => {
-    expect(catPrice('daepyo')).toBe(59000);
-    expect(catPrice('calendar')).toBe(20000);
+    expect(catPrice('daepyo')).toBe(990);
+    expect(catPrice('calendar')).toBe(990);
     expect(catPrice('xxx')).toBe(0);
     expect(catPrice(undefined)).toBe(0);
   });
@@ -32,7 +32,7 @@ describe('report-categories — 카테고리 상품 로직', () => {
   it('productOfMk: 부호로 상품정보(+key) 조회', () => {
     const p = productOfMk('率');
     expect(p?.key).toBe('sajeong');
-    expect(p?.price).toBe(39000);
+    expect(p?.price).toBe(990);
     expect(productOfMk('X')).toBeNull();
   });
   it('catUI: 카테고리별 UI 스키마, 미지정은 기본값', () => {
