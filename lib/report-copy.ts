@@ -423,7 +423,7 @@ function gaugeHtml(s,worryTxt,unlocked){
     `<div class="gscale"><span>98.0<em>下限</em></span><span class="mid">基準 100.0</span><span>102.0<em>上限</em></span></div>`+
     `<div class="gprec">`+
       `<span class="gpk">${unlocked?'정밀 택일 지표':'🔒 정밀 택일 지표'}</span>`+
-      (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">이달 사정률(39,000원)에서 열립니다</span>`)+
+      (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">이달 사정률(990원)에서 열립니다</span>`)+
     `</div></div>`+
     `<p class="gbridge">${s.bridge}</p>`+`<p class="gnote">※ 명식과 오늘 일진(日辰)의 상성으로 낸 <b>택일·의사결정 참고 지표</b>입니다 — 실제 낙찰가나 당락을 예측하지 않습니다.</p>`+`${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
 }
@@ -768,7 +768,7 @@ function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolea
   const leg=`<div class="sajleg"><span><i style="background:#177f5e"></i>상단(유리)</span><span><i style="background:#7a8a3a"></i>무난</span><span><i style="background:#b5402f"></i>주의(하단)</span></div>`;
   const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`;
   if(!unlocked){
-    return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 사정률이 이미 산출됐습니다 — 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 상단·하단 흐름은 <b>이달 사정률(39,000원)</b>에서 한 번에 열립니다.</p>`;
+    return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 사정률이 이미 산출됐습니다 — 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 상단·하단 흐름은 <b>이달 사정률(990원)</b>에서 한 번에 열립니다.</p>`;
   }
   return grid+`<p style="margin-top:11px">이달 <b>상단(유리) 흐름</b> 날: <b>${upDays.join(' · ')}일</b> — 큰 건 투찰·계약은 이 날들에 무게를 두십시오. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가십시오.</p>`;
 }
