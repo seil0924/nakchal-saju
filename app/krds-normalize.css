@@ -1,3 +1,18 @@
+
+/* === remaining dark areas -> blue (sweep 2) === */
+.ceoband,.home5 .ceoband{background:linear-gradient(135deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
+.ceoband .cbseal{border-color:#d9e4fb!important;color:#fff!important}
+.ceoband .cbgo{color:#fff!important}
+.ceoband .cbtx b{color:#fff!important}
+.ceoband .cbtx em{color:#d9e4fb!important}
+.ceoband::before{color:rgba(255,255,255,.08)!important}
+.sealcmp,.loginpromo{background:linear-gradient(150deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
+.bizyear .byhd{background:#3f6be0!important;color:#fff!important}
+.ileon{background:linear-gradient(150deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
+.acctbtn,.sheet .sumbtns button.ok,.chook,.baljupick,.donebar{background:#3f6be0!important;border-color:#3f6be0!important;color:#fff!important}
+.ybchip.on{background:#3f6be0!important;color:#fff!important;border-color:#2f56c4!important}
+.hero{background:linear-gradient(180deg,#3f6be0,#2f56c4)!important}
+.bokpage{background:linear-gradient(160deg,#2f56c4,#2646a3)!important}
 /* KRDS normalize - 낙찰사주. KRDS(krds.go.kr) foundation token 적용 레이어.
    globals.css 뒤에 로드되어 색/라운드/그림자/버튼/입력/스플래시를 KRDS 규격으로 정규화. 롤링배너(.home .hero, HeroCarousel)는 제외. */
 :root{
