@@ -19,8 +19,8 @@ export default function DesktopSidebar() {
   if (hideShell) return null;
   return (
     <aside className="dsidebar">
-      <Link href="/" className="dbrand"><span className="ds">士</span><span className="dbt">낙찰사주<small>會社 사주 전문</small></span></Link>
-      <Link href="/reading" className="dcta"><span className="dci">士</span> 오늘의 사정률 전망</Link>
+      <Link href="/" className="dbrand"><span className="ds"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#1f2d4d"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#f2ede0"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#f2ede0"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#f2ede0"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#f2ede0"/><circle cx="29.9" cy="8.2" r="2.6" fill="#b3382c"/></svg></span><span className="dbt">낙찰사주<small>會社 사주 전문</small></span></Link>
+      <Link href="/reading" className="dcta"><span className="dci">擇</span> 오늘의 사정률 전망</Link>
       <nav className="dnav">
         {NAV.map(n => (
           <Link key={n.href} href={n.href} className={'dnavi' + (active(n.href) ? ' on' : '')}>
