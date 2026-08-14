@@ -1,0 +1,64 @@
+/* KRDS normalize - 낙찰사주. KRDS(krds.go.kr) foundation token 적용 레이어.
+   globals.css 뒤에 로드되어 색/라운드/그림자/버튼/입력/스플래시를 KRDS 규격으로 정규화. 롤링배너(.home .hero, HeroCarousel)는 제외. */
+:root{
+  /* KRDS gray */
+  --krds-gray-0:#fff;--krds-gray-5:#f4f5f6;--krds-gray-10:#e6e8ea;--krds-gray-20:#cdd1d5;--krds-gray-30:#b1b8be;--krds-gray-40:#8a949e;--krds-gray-50:#6d7882;--krds-gray-60:#58616a;--krds-gray-70:#464c53;--krds-gray-80:#33363d;--krds-gray-90:#1e2124;--krds-gray-95:#131416;
+  /* primary=감청 remap, point=주 */
+  --krds-primary-5:#eef1f6;--krds-primary-10:#d5dcea;--krds-primary-40:#3a4f7a;--krds-primary-50:#1f2d4d;--krds-primary-60:#16213a;--krds-primary-70:#0f1728;
+  --krds-point-5:#f7e9e6;--krds-point-50:#b3382c;--krds-point-60:#8f2b21;
+  /* radius / height / spacing / motion */
+  --krds-radius-s:4px;--krds-radius-m:6px;--krds-radius-l:8px;--krds-radius-xl:12px;--krds-radius-max:999px;
+  --krds-lh:1.5;--krds-tr:.4s ease-in-out;
+  --krds-shadow-focus:0 0 0 3px rgba(31,45,77,.25);
+  /* site vars re-point */
+  --ink:var(--krds-gray-90);--sub:var(--krds-gray-60);--line:var(--krds-gray-10);
+  --navy:var(--krds-primary-50);--navy2:var(--krds-primary-60);
+  --red:var(--krds-point-50);--gold:#8a7a56;--gold2:#b5a789;
+  --gold-grad:var(--krds-primary-50);--ring-gold:var(--krds-shadow-focus);
+  --elev-1:0 1px 2px rgba(30,33,36,.06);--elev-2:0 2px 8px rgba(30,33,36,.08);
+}
+/* base */
+body{letter-spacing:0;line-height:var(--krds-lh)}
+/* radius normalize (banner 제외) */
+.card,.sec,.li,.li5,.today,.metric,.plan2,.catbuy,.compat,.sheet,.teaser,.gverdict,.tsnote,.unlocked-note{border-radius:var(--krds-radius-l)!important}
+.go,.cta,.tcta,.pay,.paygo,.lgbtn,.tunlock,.bokgo,.hcta,.btn-login,.seg button,input[type=date],input[type=time],textarea,select{border-radius:var(--krds-radius-m)!important}
+.pil .g,.pil .z,.gvseal,.catbuy-seal,.sec .mk{border-radius:var(--krds-radius-m)!important}
+/* flat: gradient CTA -> solid KRDS primary */
+.go,.cta,.paygo,.bokgo{background:var(--krds-primary-50)!important;border:1px solid var(--krds-primary-50)!important;color:#fff!important;box-shadow:none!important}
+.go:hover,.cta:hover,.paygo:hover,.bokgo:hover{background:var(--krds-primary-60)!important}
+.tcta{background:var(--krds-primary-50)!important;border:0!important;color:#fff!important}
+.tunlock{border-color:var(--krds-point-50)!important;color:var(--krds-point-60)!important;background:#fff!important}
+.catbuy{border-color:var(--krds-point-50)!important;box-shadow:none!important}
+.catbuy-seal{background:var(--krds-point-50)!important;border:0!important;color:#fff!important}
+/* cards: hairline + subtle */
+.card,.sec,.li,.li5,.today,.plan2,.compat{border:1px solid var(--krds-gray-10)!important;box-shadow:var(--elev-1)!important}
+.home5 .li5:hover{box-shadow:var(--elev-2)!important;border-color:var(--krds-gray-20)!important;transform:translateY(-1px)!important}
+/* inputs: KRDS field */
+input[type=date],input[type=time],textarea,select{border:1px solid var(--krds-gray-20)!important;background:#fff!important}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:none!important;box-shadow:var(--krds-shadow-focus)!important}
+.seg button{border:1px solid var(--krds-gray-20)!important;color:var(--krds-gray-60)!important}
+.seg button.on{background:var(--krds-primary-50)!important;border-color:var(--krds-primary-50)!important;color:#fff!important}
+/* hero gold strip -> navy hairline (배너 하단 라인만 정리) */
+.hero::after,.home .hero::after{background:var(--krds-primary-50)!important;height:2px!important}
+/* progress shimmer off */
+.rprog .rpbar i::after,.rite .rbar i::after{display:none!important}
+.rite .rbar i{box-shadow:none!important}
+/* tap fx -> navy, subtle */
+.tapfx{background:radial-gradient(circle,rgba(31,45,77,.35),rgba(31,45,77,0) 68%)!important}
+.tapfx i{border-color:rgba(31,45,77,.4)!important}
+/* Intro splash: flat KRDS */
+.intro{background:var(--krds-primary-60)!important}
+.intro .introrays,.intro .introglow,.intro .introflash,.intro .introp{display:none!important}
+.intro .introttl{background:none!important;-webkit-text-fill-color:#fff!important;color:#fff!important;letter-spacing:.02em!important}
+.intro .introsub{color:var(--krds-primary-10)!important;letter-spacing:.18em!important}
+.intro .introrule{background:var(--krds-point-50)!important;height:2px!important}
+.intro .introseal{filter:none!important}
+/* brand seal shadow off */
+.home5 .mast .brandseal{filter:none!important}
+/* sidebar brand box: navy frame */
+.dbrand .ds{border:0!important;background:transparent!important}
+.dcta{background:var(--krds-point-50)!important;border:0!important}
+/* badges/labels tone */
+.sec .lb.free{color:#177f5e!important;background:#e7f4ee!important}
+.pz.free{color:var(--krds-primary-50)!important}
+
