@@ -1785,3 +1785,17 @@ p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.
 
 /* list row: keep name left-aligned next to star */
 .li .t{margin-right:auto;margin-left:10px}
+/* === 낙찰사주 감청(紺) 테마 — KRDS 기반 전역 색 리맵 (2026-08) === */
+:root{
+  --ink:#1e2124; --sub:#58616a; --line:#e6e8ea;
+  --navy:#1f2d4d; --navy2:#16213a;
+  --gold:#a58a4e; --gold2:#c6b07d;
+  --red:#b3382c;
+  --gold-grad:linear-gradient(135deg,#c6b07d,#a58a4e 46%,#7d6532);
+  --ring-gold:0 0 0 3px rgba(31,45,77,.22);
+}
+.home5{
+  --h-ink:#16213a; --h-inktx:#eef1f6; --h-line:#e6e8ea;
+  --h-tx:#1e2124; --h-mut:#58616a; --h-mut2:#8a949e;
+  --h-red:#b3382c; --h-gold:#a58a4e; --h-goldlt:#c6b07d;
+}
