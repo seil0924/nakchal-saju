@@ -4,12 +4,12 @@
   /* KRDS gray */
   --krds-gray-0:#fff;--krds-gray-5:#f4f5f6;--krds-gray-10:#e6e8ea;--krds-gray-20:#cdd1d5;--krds-gray-30:#b1b8be;--krds-gray-40:#8a949e;--krds-gray-50:#6d7882;--krds-gray-60:#58616a;--krds-gray-70:#464c53;--krds-gray-80:#33363d;--krds-gray-90:#1e2124;--krds-gray-95:#131416;
   /* primary=감청 remap, point=주 */
-  --krds-primary-5:#eef1f6;--krds-primary-10:#d5dcea;--krds-primary-40:#3a4f7a;--krds-primary-50:#1f2d4d;--krds-primary-60:#16213a;--krds-primary-70:#0f1728;
+  --krds-primary-5:#eef3fe;--krds-primary-10:#d9e4fb;--krds-primary-40:#6b93f0;--krds-primary-50:#3f6be0;--krds-primary-60:#2f56c4;--krds-primary-70:#2646a3;
   --krds-point-5:#f7e9e6;--krds-point-50:#b3382c;--krds-point-60:#8f2b21;
   /* radius / height / spacing / motion */
   --krds-radius-s:4px;--krds-radius-m:6px;--krds-radius-l:8px;--krds-radius-xl:12px;--krds-radius-max:999px;
   --krds-lh:1.5;--krds-tr:.4s ease-in-out;
-  --krds-shadow-focus:0 0 0 3px rgba(31,45,77,.25);
+  --krds-shadow-focus:0 0 0 3px rgba(63,107,224,.3);
   /* site vars re-point */
   --ink:var(--krds-gray-90);--sub:var(--krds-gray-60);--line:var(--krds-gray-10);
   --navy:var(--krds-primary-50);--navy2:var(--krds-primary-60);
@@ -44,8 +44,8 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:none!import
 .rprog .rpbar i::after,.rite .rbar i::after{display:none!important}
 .rite .rbar i{box-shadow:none!important}
 /* tap fx -> navy, subtle */
-.tapfx{background:radial-gradient(circle,rgba(31,45,77,.35),rgba(31,45,77,0) 68%)!important}
-.tapfx i{border-color:rgba(31,45,77,.4)!important}
+.tapfx{background:radial-gradient(circle,rgba(63,107,224,.35),rgba(63,107,224,0) 68%)!important}
+.tapfx i{border-color:rgba(63,107,224,.4)!important}
 /* Intro splash: flat KRDS */
 .intro{background:var(--krds-primary-60)!important}
 .intro .introrays,.intro .introglow,.intro .introflash,.intro .introp{display:none!important}
@@ -58,6 +58,7 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:none!import
 /* sidebar brand box: navy frame */
 .dbrand .ds{border:0!important;background:transparent!important}
 .dcta{background:var(--krds-point-50)!important;border:0!important}
+.home5{--h-ink:#2f56c4}
 /* badges/labels tone */
 .sec .lb.free{color:#177f5e!important;background:#e7f4ee!important}
 .pz.free{color:var(--krds-primary-50)!important}
