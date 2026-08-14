@@ -18,11 +18,11 @@ export default function Home() {
             <svg viewBox="0 0 40 40" width="38" height="38">
               <defs>
                 <linearGradient id="inju" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor="#2b3d63" /><stop offset="1" stopColor="#16213a" />
+                  <stop offset="0" stopColor="#5c85ea" /><stop offset="1" stopColor="#3f6be0" />
                 </linearGradient>
               </defs>
               <rect x="2" y="2" width="36" height="36" rx="9" fill="url(#inju)" />
-              <rect x="2" y="2" width="36" height="36" rx="9" fill="none" stroke="#0f1728" strokeWidth="1" />
+              <rect x="2" y="2" width="36" height="36" rx="9" fill="none" stroke="#2f56c4" strokeWidth="1" />
               <rect x="5" y="5" width="30" height="30" rx="6.5" fill="none" stroke="#c6b07d" strokeWidth="0.8" opacity="0.3" />
               <g><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#f2ede0"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#f2ede0"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#f2ede0"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#f2ede0"/><circle cx="29.9" cy="8.2" r="2.6" fill="#b3382c"/></g>
             </svg>
