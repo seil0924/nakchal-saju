@@ -39,13 +39,13 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
   return (
     <div className="app home">
       <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>더보기</Link>
+        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s"><svg viewBox="0 0 40 40" width="20" height="20" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#fff"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#fff"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#fff"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#fff"/><circle cx="29.9" cy="8.2" r="2.6" fill="#ffd2ca"/></svg></span>더보기</Link>
         <div className="ic"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1l-.3-2.5h-4l-.3 2.5a7 7 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7 7 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5a7 7 0 0 0 .1-1z" /></svg></div>
       </div>
 
       <div style={{ padding: '0 16px 24px' }}>
         <div className="profcard" style={{ marginTop: 14 }}>
-          <div className="pav">士</div>
+          <div className="pav" style={{background:'#3f6be0',border:0}}><svg viewBox="0 0 40 40" width="26" height="26" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#fff"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#fff"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#fff"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#fff"/><circle cx="29.9" cy="8.2" r="2.6" fill="#ffd2ca"/></svg></div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="pn">{acct?.name ? `${acct.name} 대표님` : prof.name ? `${prof.name} 대표님` : '대표님'}</div>
             <div className="ps">{acct?.email ? acct.email : (prof.corp || '회사 정보 미입력')} · 무료 이용중</div>
@@ -89,7 +89,7 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
       <div className="tab">
         <Link href="/"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</Link>
         <Link href="/balju"><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5" /></svg>발주처</Link>
-        <Link className="fab" href="/reading"><span className="fi">士</span><span className="fl">오늘 전망</span></Link>
+        <Link className="fab" href="/reading"><span className="fi">擇</span><span className="fl">오늘 전망</span></Link>
         <Link href="/vault"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3" /></svg>보관함</Link>
         <a className="on"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>더보기</a>
       </div>
