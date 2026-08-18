@@ -1,3 +1,18 @@
+/* === sweep5: 투어 발견 — CTA 텍스트/신뢰패널/복채/발주처 pill/핵심배지 === */
+.home5 .today .tcta b{color:#fff!important}
+.home5 .today .tcta b .a{color:rgba(255,255,255,.8)!important}
+.home5 .today .tcta em{color:rgba(255,255,255,.75)!important}
+.trust{border-color:#e6e8ea!important;background:#fff!important}
+.trhd{color:#fff!important}
+.trm{border-bottom-color:#e6e8ea!important}
+.trm span{color:#58616a!important}
+.trft,.trust .trft{background:#f4f5f6!important;color:#58616a!important}
+.home5 .bokline .blseal{border-color:#3f6be0!important;color:#3f6be0!important;background:#eef3fe!important}
+.home5 .bokline .bltx b{color:#1e2124!important}
+.home5 .foot .bokquiet{border-color:#d9e4fb!important;background:#eef3fe!important;color:#2f56c4!important}
+.home5 .foot .bokquiet span{color:#2f56c4!important}
+.li .r{color:#2f56c4!important;background:#fff!important;border:1px solid #3f6be0!important}
+.corelock{background:#b3382c!important;box-shadow:none!important}
 /* === sweep4: 사이드바 하단 링크 + 사람선택 모달 베이지 제거 === */
 .dfoot{color:rgba(255,255,255,.6)!important;border-top-color:rgba(255,255,255,.22)!important}
 .dfoot .dkick{color:rgba(255,255,255,.78)!important}
