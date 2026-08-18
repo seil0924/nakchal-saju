@@ -1,3 +1,25 @@
+/* === sweep3: 가독성 — 금색 은퇴(파랑 위=흰색, 흰 배경=잉크+파랑), 베이지→흰색 === */
+:root{--gold:#5b82e8;--gold2:#ffffff}
+@media(min-width:900px){body{background:#ffffff!important}}
+.dnavi{color:rgba(255,255,255,.78)!important}
+.dnavi svg{stroke:rgba(255,255,255,.78)!important}
+.dnavi:hover{background:rgba(255,255,255,.14)!important;color:#fff!important}
+.dnavi.on{background:rgba(255,255,255,.2)!important;color:#fff!important;border-left-color:#fff!important}
+.dnavi.on svg{stroke:#fff!important}
+.hero .k,.home .hero .kick{color:rgba(255,255,255,.85)!important}
+.chook .chtx b{color:#fff!important}
+.chook .chtx em{color:rgba(255,255,255,.85)!important}
+.chook::after{background:rgba(255,255,255,.35)!important;height:1px!important}
+.chook .chseal{border-color:rgba(255,255,255,.9)!important;color:#fff!important}
+.ceoband .cbseal{border-color:rgba(255,255,255,.9)!important}
+.pickbtn{background:#eef3fe!important;border:1.5px solid #d9e4fb!important;box-shadow:none!important}
+.pkseal{background:#3f6be0!important;border:0!important;color:#fff!important}
+.pktx b{color:#1e2124!important}
+.teaser .ttx::before{background:#3f6be0!important}
+.sec .mk{background:#eef3fe!important;color:#2f56c4!important}
+.subhd{color:#2f56c4!important;border-top:1px dashed #d9e4fb!important}
+.home5 .foot .bokquiet span{color:#58616a!important}
+.trseal{border-color:#3f6be0!important;color:#3f6be0!important;background:#eef3fe!important}
 
 /* === remaining dark areas -> blue (sweep 2) === */
 .ceoband,.home5 .ceoband{background:linear-gradient(135deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
@@ -28,7 +50,7 @@
   /* site vars re-point */
   --ink:var(--krds-gray-90);--sub:var(--krds-gray-60);--line:var(--krds-gray-10);
   --navy:var(--krds-primary-50);--navy2:var(--krds-primary-60);
-  --red:var(--krds-point-50);--gold:#8a7a56;--gold2:#b5a789;
+  --red:var(--krds-point-50);--gold:#5b82e8;--gold2:#ffffff;
   --gold-grad:var(--krds-primary-50);--ring-gold:var(--krds-shadow-focus);
   --elev-1:0 1px 2px rgba(30,33,36,.06);--elev-2:0 2px 8px rgba(30,33,36,.08);
 }
