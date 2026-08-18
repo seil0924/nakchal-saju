@@ -1,3 +1,19 @@
+/* === sweep4: 사이드바 하단 링크 + 사람선택 모달 베이지 제거 === */
+.dfoot{color:rgba(255,255,255,.6)!important;border-top-color:rgba(255,255,255,.22)!important}
+.dfoot .dkick{color:rgba(255,255,255,.78)!important}
+.dfoot .dlinks a{color:rgba(255,255,255,.85)!important}
+.dfoot .dfoot-biz{color:rgba(255,255,255,.55)!important}
+.foot .bizinfo{color:#8a949e!important}
+.pp-sheet{background:#fff!important}
+.pp-hd{color:#fff!important}
+.pp-seal{color:#fff!important;border-color:rgba(255,255,255,.85)!important}
+.pp-x{color:rgba(255,255,255,.85)!important}
+.pp-add:active{background:#eef3fe!important}
+.pp-empty{color:#8a949e!important}
+.pp-row:active{border-color:#3f6be0!important;background:#eef3fe!important}
+.pp-tags em{color:#2f56c4!important;background:#eef3fe!important}
+.pp-del{color:#b1b8be!important}
+.pp-opt{color:#8a949e!important}
 /* === sweep3: 가독성 — 금색 은퇴(파랑 위=흰색, 흰 배경=잉크+파랑), 베이지→흰색 === */
 :root{--gold:#5b82e8;--gold2:#ffffff}
 @media(min-width:900px){body{background:#ffffff!important}}
