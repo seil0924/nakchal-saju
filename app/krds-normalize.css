@@ -1,3 +1,14 @@
+/* === sweep9: 퍼널①② — 홈 순서(배너→카테고리→나머지) === */
+html .home5>*{order:6}
+html .home5>.mast{order:1}
+html .home5>.hometag{order:2}
+html .home5>.herocar{order:3}
+html .home5>.lab{order:5}
+html .home5>.lab:has(+.list){order:4}
+html .home5>.list{order:4}
+html .home5>.todayband{order:5}
+html .home5>.today{order:5}
+html .home5>.ceoband{order:5}
 /* === sweep8b: 배너 전환 즉각화 — 플랫 배경에서 빈화면 구간 제거 === */
 html .home5 .hcslide{transition:opacity .22s ease!important}
 html .home5 .hcslide.on .hckick{animation-duration:.25s!important;animation-delay:0s!important}
