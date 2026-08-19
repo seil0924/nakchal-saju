@@ -1,3 +1,7 @@
+/* === sweep8b: 배너 전환 즉각화 — 플랫 배경에서 빈화면 구간 제거 === */
+html .home5 .hcslide{transition:opacity .22s ease!important}
+html .home5 .hcslide.on .hckick{animation-duration:.25s!important;animation-delay:0s!important}
+html .home5 .hcslide.on .hctitle{animation-duration:.3s!important;animation-delay:.05s!important}
 /* === sweep8: 히어로 — 정보형 플랫 배너(영상 off, 건설넷 구조 x KRDS 블루) === */
 html .home5 .herocar{background:linear-gradient(150deg,#3f6be0,#2646a3)!important;height:290px!important}
 @media(min-width:560px){html .home5 .herocar{height:310px!important}}
