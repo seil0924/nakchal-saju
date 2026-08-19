@@ -1,8 +1,8 @@
 // lib/constants.ts — 가격/문구 단일 소스 (서버·클라이언트 공용)
 // 단건(구독 없음). 무료 훅 → 택일팩(완결형 미끼) → 전체 리포트(심층) 사다리.
-export const PRICE_TAEKIL = 990;     // 택일팩: 정밀 사정률 + 이번 달 투찰 길일 캘린더
-export const PRICE_FULL = 990;     // 전체 리포트: 모든 심층 섹션 + 궁합 + 택일 + 정밀값
-export const PRICE_BALJU_PASS = 990; // 발주처 프리미엄 패스: 한 번 결제로 모든 발주처 상세 열람
+export const PRICE_TAEKIL = 9900;     // 택일팩: 정밀 사정률 + 이번 달 투찰 길일 캘린더
+export const PRICE_FULL = 19900;     // 전체 리포트: 모든 심층 섹션 + 궁합 + 택일 + 정밀값
+export const PRICE_BALJU_PASS = 39000; // 발주처 프리미엄 패스: 한 번 결제로 모든 발주처 상세 열람
 
 // 언락 레벨: 0 무료 · 1 택일팩 · 2 전체
 export type UnlockLevel = 0 | 1 | 2;
