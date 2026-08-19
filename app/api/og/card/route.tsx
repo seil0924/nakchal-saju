@@ -2,7 +2,7 @@
 // 개인정보(이름·생일·입찰명) 없이 오늘 점수/유형/주의 한마디만 노출.
 import { ImageResponse } from 'next/og';
 export const runtime = 'edge';
-const FONT = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/public/static/Pretendard-Bold.ttf';
+const FONT = 'https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-Bold.otf';
 
 export async function GET(req: Request) {
   const p = new URL(req.url).searchParams;
