@@ -1,3 +1,6 @@
+/* === sweep7: 히어로 카루셀 자막 — 금색 은퇴(영상은 유지) === */
+html .home5 .hckick{color:rgba(255,255,255,.82)!important}
+html .home5 .hctitle b{color:#9ab7f5!important}
 /* === sweep6: 밸런스 — 사이드바 화이트 플립(파랑=포인트만). html 프리픽스로 우선순위 확보 === */
 html .dsidebar{background:#fff!important;color:#1e2124!important;border-right:1px solid #e6e8ea!important}
 html .dbrand{border-bottom-color:#e6e8ea!important}
