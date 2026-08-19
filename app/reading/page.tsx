@@ -133,7 +133,7 @@ export default function Reading() {
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
       const ct = p.get('cat'); if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
       // 저장된 대표가 있는 재방문자에게만 선택 시트를 자동으로 띄운다. 신규 방문자는 폼을 바로 보게 한다.
-      if (!p.get('b')) { try { const s = sget('nakchal_self_v1'); const has = !!s && (JSON.parse(s)?.length > 0); if (has) setTimeout(() => setPicker({ open: true, kind: 'self' }), 380); } catch { /* noop */ } }
+      if (!p.get('b')) { try { const s = sget('nakchal_self_v1'); const has = !!s && (JSON.parse(s)?.length > 0); void has; /* 퍼널②: 자동 모달 제거 — 사용자가 직접 열 때만 */ } catch { /* noop */ } }
     } catch {}
   }, []);
   function persistSaved(list: Target[]) { setSaved(list); try { sset(LS_KEY, JSON.stringify(list)); } catch {} }
