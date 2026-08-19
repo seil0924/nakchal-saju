@@ -767,7 +767,7 @@ function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolea
   const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="sch">${x}</div>`).join('');
   const leg=`<div class="sajleg"><span><i style="background:#177f5e"></i>상단(유리)</span><span><i style="background:#7a8a3a"></i>무난</span><span><i style="background:#b5402f"></i>주의(하단)</span></div>`;
   const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`;
-  if(!unlocked){Page_DownPage_Down
+  if(!unlocked){
     return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 사정률이 이미 산출됐습니다 — 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 상단·하단 흐름은 <b>이달 사정률(9,900원)</b>에서 한 번에 열립니다.</p>`;
   }
   return grid+`<p style="margin-top:11px">이달 <b>상단(유리) 흐름</b> 날: <b>${upDays.join(' · ')}일</b> — 큰 건 투찰·계약은 이 날들에 무게를 두십시오. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가십시오.</p>`;
