@@ -423,7 +423,7 @@ function gaugeHtml(s,worryTxt,unlocked){
     `<div class="gscale"><span>98.0<em>下限</em></span><span class="mid">基準 100.0</span><span>102.0<em>上限</em></span></div>`+
     `<div class="gprec">`+
       `<span class="gpk">${unlocked?'정밀 택일 지표':'🔒 정밀 택일 지표'}</span>`+
-      (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">이달 사정률(990원)에서 열립니다</span>`)+
+      (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">이달 사정률(9,900원)에서 열립니다</span>`)+
     `</div></div>`+
     `<p class="gbridge">${s.bridge}</p>`+`<p class="gnote">※ 명식과 오늘 일진(日辰)의 상성으로 낸 <b>택일·의사결정 참고 지표</b>입니다 — 실제 낙찰가나 당락을 예측하지 않습니다.</p>`+`${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
 }
@@ -767,8 +767,8 @@ function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolea
   const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="sch">${x}</div>`).join('');
   const leg=`<div class="sajleg"><span><i style="background:#177f5e"></i>상단(유리)</span><span><i style="background:#7a8a3a"></i>무난</span><span><i style="background:#b5402f"></i>주의(하단)</span></div>`;
   const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`;
-  if(!unlocked){
-    return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 사정률이 이미 산출됐습니다 — 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 상단·하단 흐름은 <b>이달 사정률(990원)</b>에서 한 번에 열립니다.</p>`;
+  if(!unlocked){Page_DownPage_Down
+    return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 사정률이 이미 산출됐습니다 — 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 상단·하단 흐름은 <b>이달 사정률(9,900원)</b>에서 한 번에 열립니다.</p>`;
   }
   return grid+`<p style="margin-top:11px">이달 <b>상단(유리) 흐름</b> 날: <b>${upDays.join(' · ')}일</b> — 큰 건 투찰·계약은 이 날들에 무게를 두십시오. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가십시오.</p>`;
 }
@@ -843,7 +843,7 @@ function summaryHtml(c:Chart, s:any, seun?:any, selYear?:number){
 function secDaepyoIntro(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn,baljuPremium}=x;
   const out:any[]=[];
-  out.push({mk:'核',tier:'free',t:`${selYear?selYear+'년 ':''}이 리포트의 핵심 3가지`,html:summaryHtml(c,s,seunSelf,selYear)});
+  /* 核→유료 직전 이동(퍼널④) */
   out.push({mk:'器',tier:'free',t:T1[me],html:P([
     `대표님은 <b>${NAT[me]}</b> 그릇입니다. ${DMc[me]}`,
     `${DM_D1[me]}`,
@@ -911,6 +911,7 @@ function secCalendarYear(x:any):any[]{
 function secDaepyoStrength(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn,baljuPremium}=x;
   const out:any[]=[];
+  out.push({mk:'核',tier:'free',t:`${selYear?selYear+'년 ':''}이 리포트의 핵심 3가지 — 미리보기`,html:summaryHtml(c,s,seunSelf,selYear)});
   out.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>으로 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
     distHtml(c)+P([
     `여덟 글자의 오행은 ${EL.map((e,i)=>`${e}${c.dist[i]}`).join(' · ')} — ${zero?'한쪽으로 크게 쏠린 극단적 구성':'다소 치우친 구성'}입니다.`,
@@ -1085,3 +1086,4 @@ export function buildTiered(
 ):Section[]{
   return buildReport(c,today,s,worry,cli,legal,partner,ally,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,baljuPremium) as Section[];
 }
+Page_UpPage_UpPage_UpPage_Up
