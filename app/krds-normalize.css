@@ -1,3 +1,12 @@
+/* === sweep8: 히어로 — 정보형 플랫 배너(영상 off, 건설넷 구조 x KRDS 블루) === */
+html .home5 .herocar{background:linear-gradient(150deg,#3f6be0,#2646a3)!important;height:290px!important}
+@media(min-width:560px){html .home5 .herocar{height:310px!important}}
+html .home5 .hcslide video{display:none!important}
+html .home5 .hcslide{justify-content:center!important;padding:36px 30px!important}
+html .home5 .hctitle{text-shadow:none!important}
+html .home5 .hcgo{background:#fff!important;color:#2f56c4!important;border:0!important}
+html .home5 .herocar::after{content:"";position:absolute;right:26px;bottom:34px;width:150px;height:190px;z-index:0;pointer-events:none;opacity:.28;background:linear-gradient(#fff,#fff) 0 100%/26px 115px no-repeat,linear-gradient(#fff,#fff) 41px 100%/26px 165px no-repeat,linear-gradient(#fff,#fff) 82px 100%/26px 140px no-repeat,linear-gradient(#fff,#fff) 123px 100%/26px 190px no-repeat}
+html .home5 .herocar::before{content:"";position:absolute;right:26px;bottom:236px;width:22px;height:22px;border-radius:50%;background:#ffb4a8;opacity:.75;z-index:0;pointer-events:none}
 /* === sweep7: 히어로 카루셀 자막 — 금색 은퇴(영상은 유지) === */
 html .home5 .hckick{color:rgba(255,255,255,.82)!important}
 html .home5 .hctitle b{color:#9ab7f5!important}
