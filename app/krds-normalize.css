@@ -1,3 +1,19 @@
+/* === sweep6: 밸런스 — 사이드바 화이트 플립(파랑=포인트만). html 프리픽스로 우선순위 확보 === */
+html .dsidebar{background:#fff!important;color:#1e2124!important;border-right:1px solid #e6e8ea!important}
+html .dbrand{border-bottom-color:#e6e8ea!important}
+html .dbrand .dbt{color:#1e2124!important}
+html .dbrand .dbt small{color:#8a949e!important}
+html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!important;color:#fff!important}
+html .dcta:hover{background:#2f56c4!important}
+html .dnavi{color:#464c53!important}
+html .dnavi svg{stroke:#6d7882!important}
+html .dnavi:hover{background:#f4f5f6!important;color:#1e2124!important}
+html .dnavi.on{background:#eef3fe!important;color:#2f56c4!important;border-left-color:#3f6be0!important}
+html .dnavi.on svg{stroke:#2f56c4!important}
+html .dfoot{color:#8a949e!important;border-top-color:#e6e8ea!important}
+html .dfoot .dkick{color:#6d7882!important}
+html .dfoot .dlinks a{color:#58616a!important}
+html .dfoot .dfoot-biz{color:#8a949e!important}
 /* === sweep5: 투어 발견 — CTA 텍스트/신뢰패널/복채/발주처 pill/핵심배지 === */
 .home5 .today .tcta b{color:#fff!important}
 .home5 .today .tcta b .a{color:rgba(255,255,255,.8)!important}
