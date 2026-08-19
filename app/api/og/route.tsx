@@ -1,7 +1,7 @@
 // GET /api/og — 동적 OG 카드 (먹빛·금박). ?seal=&k=&t=&s= 로 개인화.
 import { ImageResponse } from 'next/og';
 export const runtime = 'edge';
-const FONT = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/public/static/Pretendard-Bold.ttf';
+const FONT = 'https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-Bold.otf';
 
 export async function GET(req: Request) {
   const p = new URL(req.url).searchParams;
