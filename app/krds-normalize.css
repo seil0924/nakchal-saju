@@ -34,6 +34,14 @@ html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!impor
 html .dcta:hover{background:#2f56c4!important}
 html .dnavi{color:#464c53!important}
 html .dnavi svg{stroke:#6d7882!important}
+/* === sweep13: 띠는 먹빛, 버튼은 파랑 — 배너 색 위계 통일 === */
+html .hero,html .chook,html .ceoband,html .home5 .ceoband,html .sealcmp,html .loginpromo,html .ileon,html .bokpage,html .bizyear .byhd,html .trhd,html .todayband{background:#202022!important;background-image:none!important;border-color:#2e2e31!important;box-shadow:none!important}
+html .ceoband::before{color:rgba(255,255,255,.05)!important}
+html .todayband .tb-gz,html .todayband .tb-k{color:#e6ded0!important}
+html .todayband .tb-k{border-color:rgba(230,222,208,.4)!important}
+html .todayband .tb-date{color:#eee9e0!important}
+html .todayband .tb-sub{color:rgba(238,233,224,.62)!important}
+
 /* === sweep11: 텍스트는 먹빛으로 — 파랑은 인터랙티브 요소에만 === */
 html .st,html .subhd,html .qh,html .compat .gt,html .home .sechd .t,html .cheobang .cbt,html .suchik .sut,html .btip .btl,html .axlb,html .axsc,html .pp-nm,html .mychips .c .v,html .trstat span{color:#1e2124!important}
 html .sec .bd p b,html .teaser .ttx b,html .twinlead b,html .myeong p b,html .baljulock b,html .distcmp .dcs b,html .fcline b,html .gauge .gnote b,html .pktx b,html .prn b,html .trdisc b,html .trm b,html .twbasis b{color:#1e2124!important}
