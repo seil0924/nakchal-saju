@@ -1,9 +1,22 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getColumn, getAllColumnSlugs } from '@/lib/column';
+import { getColumn, getAllColumnSlugs, getAllColumns } from '@/lib/column';
 
 const BASE = 'https://nakchalsaju.com';
+
+// 같은 태그를 많이 공유하는 칼럼을 관련글로 고른다.
+// 94편이 서로 링크되면 내부 링크 그래프가 생겨 크롤러가 목록 페이지 없이도 깊이 들어온다.
+function relatedColumns(slug: string, tags: string[], limit = 4) {
+  const mine = new Set(tags);
+  return getAllColumns()
+    .filter(c => c.slug !== slug)
+    .map(c => ({ c, score: c.tags.reduce((n, t) => n + (mine.has(t) ? 1 : 0), 0) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score || (a.c.date < b.c.date ? 1 : -1))
+    .slice(0, limit)
+    .map(x => x.c);
+}
 
 export function generateStaticParams() {
   return getAllColumnSlugs().map(slug => ({ slug }));
