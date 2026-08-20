@@ -34,6 +34,27 @@ html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!impor
 html .dcta:hover{background:#2f56c4!important}
 html .dnavi{color:#464c53!important}
 html .dnavi svg{stroke:#6d7882!important}
+/* === sweep14: 가독성 — WCAG AA 미달 전수 교정 === */
+/* 다크 컨테이너 강조 텍스트 복구 (sweep11 역침범 차단) */
+html .mecard.mecard b,html .mecard.mecard .mep b,html .hero b,html .chook b,html .ceoband b,html .sealcmp b,html .loginpromo b,html .ileon b,html .bokpage b,html .todayband b,html .trhd b,html .herocar b{color:#ffffff!important}
+html .mecard{background:#202022!important;background-image:none!important;border-color:#33332f!important}
+html .mecard .mep{color:rgba(243,238,228,.88)!important}
+html .mecard .mep.dim{color:rgba(243,238,228,.72)!important}
+html .mecard .mel{color:#ffffff!important}
+html .mecard .merule{background:rgba(243,238,228,.42)!important}
+html .mecard::before{color:rgba(255,255,255,.05)!important}
+/* 흐린 회색 → AA 통과 */
+html .axhd span,html .sbnote,html .ten,html .trdisc,html .disc,html .readyline{color:#58616a!important}
+html .dfoot,html .dfoot .dlinks,html .dfoot .dlinks a,html .dfoot .dfoot-biz,html .dbrand .dbt small{color:#6d7882!important}
+/* 금색 잔재 → 먹빛 계열 */
+html .tpsl,html .jintag,html .tpm i,html .rpr{color:#5b5344!important}
+html .sbl .sbk{background:#7d5f1f!important}
+/* 파랑 위 보조 텍스트 / 경계 항목 */
+html .cta small,html .tcta small{color:#ffffff!important}
+html .trseal,html .topshare.topshare{color:#2646a3!important}
+html .wgnote{color:#b9c2d6!important}
+html .lb.free,html .sec .lb.free{color:#0f6b4f!important}
+
 /* === sweep13: 띠는 먹빛, 버튼은 파랑 — 배너 색 위계 통일 === */
 html .hero,html .chook,html .ceoband,html .home5 .ceoband,html .sealcmp,html .loginpromo,html .ileon,html .bokpage,html .bizyear .byhd,html .trhd,html .todayband{background:#202022!important;background-image:none!important;border-color:#2e2e31!important;box-shadow:none!important}
 html .ceoband::before{color:rgba(255,255,255,.05)!important}
