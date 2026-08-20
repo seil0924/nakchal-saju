@@ -34,6 +34,16 @@ html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!impor
 html .dcta:hover{background:#2f56c4!important}
 html .dnavi{color:#464c53!important}
 html .dnavi svg{stroke:#6d7882!important}
+/* === sweep15: 관련 칼럼 — 내부 링크 카드 === */
+html .colrel{margin:22px 24px 4px;padding-top:18px;border-top:1px solid #e6e8ea}
+html .colrel-hd{font-family:var(--serif);font-weight:800;font-size:14px;color:#1e2124;margin-bottom:10px;letter-spacing:-.01em}
+html .colrel ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+html .colrel li{margin:0}
+html .colrel a{display:flex;flex-direction:column;gap:3px;padding:12px 14px;background:#fff;border:1px solid #e6e8ea;border-radius:9px;text-decoration:none}
+html .colrel .crt{font-size:14px;font-weight:700;color:#1e2124;line-height:1.5;word-break:keep-all}
+html .colrel .crd{font-size:11.5px;color:#6d7882}
+@media(hover:hover){html .colrel a:hover{border-color:#3f6be0;background:#f7f9ff}}
+
 /* === sweep14: 가독성 — WCAG AA 미달 전수 교정 === */
 /* 다크 컨테이너 강조 텍스트 복구 (sweep11 역침범 차단) */
 html .mecard.mecard b,html .mecard.mecard .mep b,html .hero b,html .chook b,html .ceoband b,html .sealcmp b,html .loginpromo b,html .ileon b,html .bokpage b,html .todayband b,html .trhd b,html .herocar b{color:#ffffff!important}
