@@ -1,32 +1,59 @@
 import type { MetadataRoute } from 'next';
 import { PAINS } from '@/lib/pains';
-import { GLOSSARY } from '@/lib/glossary';
 import { PRODUCTS } from '@/lib/categories';
-import { CLIENTS, clientSlug } from '@/lib/clients';
-import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
-import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import { getAllColumns } from '@/lib/column';
+
 const BASE = 'https://nakchalsaju.com';
+
+// 크롤링 예산 집중 전략.
+// 신생 도메인에 450개 URL을 한꺼번에 제출하니 구글이 "발견됨 - 색인 생성 안 됨"으로 252개를 방치했다.
+// 자동 생성 페이지(발주처·인물·용어·지역/업종 랜딩)는 사이트맵에서 제외해
+// 사람이 직접 쓴 칼럼과 핵심 상품 페이지에 크롤링을 몰아준다.
+// 제외한 페이지도 살아 있고 내부 링크로 접근 가능하므로 색인에서 강제로 빠지지 않는다.
+// 색인률이 회복되면 단계적으로 다시 편입한다.
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticUrls = ['', '/reading', '/ceo', '/balju', '/why', '/faq', '/samples', '/glossary', '/method', '/full', '/bokchae', '/ritual', '/pricing', '/column', '/terms', '/privacy', '/refund'];
-  const columns = getAllColumns();
-  const urls = [
-    ...staticUrls,
-    ...Array.from({ length: 10 }, (_, i) => `/saeobunse/${2026 + i}`),
-    ...PAINS.map(p => `/why/${p.slug}`),
-    ...GLOSSARY.map(t => `/glossary/${t.slug}`),
-    ...PRODUCTS.map(p => `/product/${p.slug}`),
-    ...CLIENTS.map(c => `/balju/${clientSlug(c.name)}`),
-    ...TYCOONS.map(t => `/ceo/${tycoonSlug(t.name)}`),
-    ...GUIDES.map(g => `/guide/${g.slug}`),
-    ...REGIONS.map(r => `/region/${r.slug}`),
-    ...INDUSTRIES.map(r => `/industry/${r.slug}`),
-    ...CONCEPTS.map(c => `/saju/${c.slug}`),
+
+  // 1순위 — 전환이 일어나는 페이지
+  const primary = ['', '/reading', '/column', '/full', '/pricing', '/balju', '/ceo'];
+  // 2순위 — 신뢰·전환 보조
+  const secondary = ['/why', '/faq', '/samples', '/method', '/bokchae', '/ritual', '/glossary'];
+  // 3순위 — 법적 고지
+  const legal = ['/terms', '/privacy', '/refund'];
+
+  const entries: MetadataRoute.Sitemap = [
+    ...primary.map(u => ({
+      url: BASE + u, lastModified: now,
+      changeFrequency: 'daily' as const, priority: u === '' ? 1 : 0.9,
+    })),
+    ...PRODUCTS.map(p => ({
+      url: `${BASE}/product/${p.slug}`, lastModified: now,
+      changeFrequency: 'weekly' as const, priority: 0.9,
+    })),
+    // 사람이 쓴 칼럼 — 색인 최우선 대상
+    ...getAllColumns().map(p => ({
+      url: `${BASE}/column/${p.slug}`,
+      lastModified: p.date ? new Date(p.date) : now,
+      changeFrequency: 'monthly' as const, priority: 0.8,
+    })),
+    ...PAINS.map(p => ({
+      url: `${BASE}/why/${p.slug}`, lastModified: now,
+      changeFrequency: 'monthly' as const, priority: 0.6,
+    })),
+    ...CONCEPTS.map(c => ({
+      url: `${BASE}/saju/${c.slug}`, lastModified: now,
+      changeFrequency: 'monthly' as const, priority: 0.6,
+    })),
+    ...secondary.map(u => ({
+      url: BASE + u, lastModified: now,
+      changeFrequency: 'weekly' as const, priority: 0.5,
+    })),
+    ...legal.map(u => ({
+      url: BASE + u, lastModified: now,
+      changeFrequency: 'yearly' as const, priority: 0.2,
+    })),
   ];
-  const base = urls.map(u => ({ url: BASE + u, lastModified: now, changeFrequency: 'weekly' as const, priority: u === '' ? 1 : 0.7 }));
-  // 칼럼 글은 개별 발행일을 lastModified로 — 검색엔진 신선도 신호
-  const posts = columns.map(p => ({ url: `${BASE}/column/${p.slug}`, lastModified: p.date ? new Date(p.date) : now, changeFrequency: 'monthly' as const, priority: 0.6 }));
-  return [...base, ...posts];
+
+  return entries;
 }
