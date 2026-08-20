@@ -4,15 +4,15 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 const useIso = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-type Slide = { src: string; poster: string; kick: string; title: string; href: string };
+type Slide = { src: string; poster: string; kick: string; title: string; href: string; cta: string };
 
 const BASE_SLIDES: Slide[] = [
-  { src: '/hero-1.mp4', poster: '/hero-1-poster.jpg', kick: '運七技三 · 會社 사주 전문', title: '대표와 회사의 사주,<br>그 <b>운칠(運七)</b>을 짚어드립니다', href: '/reading' },
-  { src: '/hero-2.mp4', poster: '/hero-2-poster.jpg', kick: '鏡 · 닮은 사주', title: '나와 닮은<br><b>세계적 CEO</b>는 누구일까', href: '/ceo' },
-  { src: '/hero-3.mp4', poster: '/hero-3-poster.jpg', kick: '擇 · 오늘의 택일', title: '오늘 이 투찰,<br><b>유리한 날</b>인가', href: '/reading' },
-  { src: '/hero-4.mp4', poster: '/hero-4-poster.jpg', kick: '運 · 대표님께', title: '그 일, 대표님<br><b>잘못</b>이 아닙니다', href: '/why' },
-  { src: '/hero-5.mp4', poster: '/hero-5-poster.jpg', kick: '曆 · 사업운 캘린더', title: '이달, <b>언제 움직일까</b><br>계약·채용·발표의 날', href: '/reading?cat=calendar' },
-  { src: '/hero-1.mp4', poster: '/hero-1-poster.jpg', kick: '正 · 정통 만세력', title: '한 줄의 사정률을 위해,<br><b>십 년</b>을 다듬었습니다', href: '/reading' },
+  { src: '/hero-1.mp4', poster: '/hero-1-poster.jpg', kick: '運七技三 · 會社 사주 전문', title: '대표와 회사의 사주,<br>그 <b>운칠(運七)</b>을 짚어드립니다', href: '/reading', cta: '대표 사주 보기' },
+  { src: '/hero-2.mp4', poster: '/hero-2-poster.jpg', kick: '鏡 · 닮은 사주', title: '나와 닮은<br><b>세계적 CEO</b>는 누구일까', href: '/ceo', cta: '닮은 CEO 찾기' },
+  { src: '/hero-3.mp4', poster: '/hero-3-poster.jpg', kick: '擇 · 오늘의 택일', title: '오늘 이 투찰,<br><b>유리한 날</b>인가', href: '/reading', cta: '오늘의 택일 보기' },
+  { src: '/hero-4.mp4', poster: '/hero-4-poster.jpg', kick: '運 · 대표님께', title: '그 일, 대표님<br><b>잘못</b>이 아닙니다', href: '/why', cta: '이유 확인하기' },
+  { src: '/hero-5.mp4', poster: '/hero-5-poster.jpg', kick: '曆 · 사업운 캘린더', title: '이달, <b>언제 움직일까</b><br>계약·채용·발표의 날', href: '/reading?cat=calendar', cta: '이달 캘린더 열기' },
+  { src: '/hero-1.mp4', poster: '/hero-1-poster.jpg', kick: '正 · 정통 만세력', title: '한 줄의 사정률을 위해,<br><b>십 년</b>을 다듬었습니다', href: '/reading', cta: '사정률 전망 보기' },
 ];
 
 const DUR = 3800;
@@ -57,7 +57,7 @@ export default function HeroCarousel() {
           <div className="hcin">
             <div className="hckick">{s.kick}</div>
             <h2 className="hctitle" dangerouslySetInnerHTML={{ __html: s.title }} />
-            <div className="hcgo">열기 →</div>
+            <div className="hcgo">{s.cta} →</div>
           </div>
         </Link>
       ))}
