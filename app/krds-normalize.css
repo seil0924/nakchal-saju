@@ -1,22 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&display=swap');
-/* === sweep10: 오늘의 명식판(命式) — A-1안(오행 5색 + 명조 한자) === */
-html .home5 .msboard{order:4!important;margin:12px 24px 4px;background:#fff;border:1px solid #e6e8ea;border-radius:10px;padding:16px 15px 14px;box-shadow:0 1px 2px rgba(30,33,36,.05)}
-html .home5 .msboard:empty{display:none}
-html .msboard .mshd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
-html .msboard .mshd b{font-family:'Noto Serif TC',serif;font-weight:900;font-size:15px;color:#1e2124}
-html .msboard .mshd span{font-size:11.5px;color:#8a949e}
-html .msboard .mspil{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-html .msboard .mscol{text-align:center}
-html .msboard .mscap{font-family:'Noto Serif TC',serif;font-size:11px;color:#8a949e;margin-bottom:5px;letter-spacing:.05em}
-html .msboard .msgz{border-radius:9px;padding:9px 0 8px;color:#fff;line-height:1.08;font-family:'Noto Serif TC','Noto Serif SC',serif;font-weight:900}
-html .msboard .msgz span{display:block;font-size:26px}
-html .msboard .msgz span+span{margin-top:2px}
-html .msboard .msgz.dim{background:#eef3fe!important;color:#2646a3;border:1px dashed #b9cbf5}
-html .msboard .msgz.now{outline:2px solid #b3382c;outline-offset:2px}
-html .msboard .msel{font-family:'Noto Serif TC',serif;font-size:10.5px;color:#58616a;margin-top:5px}
-html .msboard .msflow{display:flex;gap:8px;align-items:flex-start;margin-top:13px;padding-top:12px;border-top:1px solid #e6e8ea;font-size:12.5px;color:#58616a;line-height:1.65}
-html .msboard .msflow i{width:8px;height:8px;border-radius:50%;background:#b3382c;flex:none;margin-top:6px}
-html .msboard .msflow b{color:#1e2124;font-family:'Noto Serif TC',serif;font-weight:700}
 /* === sweep9: 퍼널①② — 홈 순서(배너→카테고리→나머지) === */
 html .home5>*{order:6}
 html .home5>.mast{order:1}
