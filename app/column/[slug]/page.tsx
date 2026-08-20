@@ -49,6 +49,7 @@ function fmtDate(d: string): string {
 export default function ColumnPost({ params }: { params: { slug: string } }) {
   const p = getColumn(params.slug);
   if (!p) notFound();
+  const rel = relatedColumns(p.slug, p.tags);
 
   // Article 구조화 데이터 — 구글이 발행일·제목·저자를 정확히 인식
   const ld = {
@@ -111,6 +112,23 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
           </section>
         )}
       </article>
+
+      {/* 관련 칼럼 — 내부 링크 그래프. 크롤러 진입 경로이자 체류 시간 확보 */}
+      {rel.length > 0 && (
+        <nav className="colrel" aria-label="관련 칼럼">
+          <div className="colrel-hd">이어서 읽어볼 글</div>
+          <ul>
+            {rel.map(r => (
+              <li key={r.slug}>
+                <Link href={`/column/${r.slug}`}>
+                  <span className="crt">{r.title}</span>
+                  <span className="crd">{fmtDate(r.date)} · {r.readingMin}분</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       {/* 유입 → 전환: 무료 진입 CTA */}
       <div style={{ padding: '8px 24px 0' }}>
