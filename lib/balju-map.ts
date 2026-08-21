@@ -8,6 +8,9 @@ const GAN_OH = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];      // 목화토금수
 export const OH_NAME = ['목', '화', '토', '금', '수'] as const;
 export const OH_HANJA = ['木', '火', '土', '金', '水'] as const;
 export const OH_COLOR = ['#2f7d5b', '#c0392b', '#c79a3a', '#8a949e', '#2e5aa8'];
+// 위 색은 어두운 지도 위 '점' 전용이다. 흰 배경 글자에 그대로 쓰면
+// 金(#8a949e)이 3.08:1까지 떨어져 안 읽힌다. 글자에는 아래 값을 쓴다(전부 흰 배경에서 AA 통과).
+export const OH_TEXT = ['#24684a', '#a8321f', '#84621a', '#556069', '#26508f'];
 
 export type Sipsung =
   | '비견' | '겁재' | '식신' | '상관' | '편재'
