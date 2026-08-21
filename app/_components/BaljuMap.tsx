@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { CLIENTS } from '@/lib/clients';
 import { chartFromInput } from '@/lib/preview';
 import { sget } from '@/lib/scope';
+import { migrateLegacy, peopleOf } from '@/lib/people';
 import {
   rankBalju, splitForMap, dominantOh, fitOf,
   OH_COLOR, OH_HANJA, OH_NAME, type BaljuFit,
@@ -17,15 +18,24 @@ const GOLDEN = Math.PI * (3 - Math.sqrt(5));
 
 type Me = { gan: number; ji: number; name: string };
 
+// 저장소가 두 벌이다. 통합본(nakchal_people_v1, date)이 정본이고
+// 구버전(nakchal_self_v1, birth)은 아직 남아 있는 기기가 있다. 둘 다 본다.
 function readMe(): Me | null {
   try {
+    migrateLegacy();
+    const self = peopleOf('self')[0];
+    if (self?.date) {
+      const c = chartFromInput(self.date, self.time ?? null, self.cal ?? 'solar', !!self.leap);
+      if (c) return { gan: c.dGan, ji: c.dZhi, name: (self.name || '대표님').trim() };
+    }
     const raw = sget('nakchal_self_v1');
     if (!raw) return null;
     const list = JSON.parse(raw);
     if (!Array.isArray(list) || !list.length) return null;
     const p = list[0];
-    if (!p?.date) return null;
-    const c = chartFromInput(p.date, p.time ?? null, p.cal ?? 'solar', !!p.isLeap);
+    const date = p?.date || p?.birth;          // 구버전은 birth 로 저장돼 있다
+    if (!date) return null;
+    const c = chartFromInput(date, p.time ?? null, p.cal ?? 'solar', !!(p.leap ?? p.isLeap));
     if (!c) return null;
     return { gan: c.dGan, ji: c.dZhi, name: (p.name || '대표님').trim() };
   } catch { return null; }
