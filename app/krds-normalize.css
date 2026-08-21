@@ -34,6 +34,37 @@ html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!impor
 html .dcta:hover{background:#2f56c4!important}
 html .dnavi{color:#464c53!important}
 html .dnavi svg{stroke:#6d7882!important}
+/* === sweep19: 홈 명암비 마감 — 하단 네비·푸터·금색 잔재 ===
+   ⚠ 이 파일의 스윕은 물리적 순서가 번호순이 아니다(웹 에디터 가상화로 삽입 위치가 밀렸다).
+   그래서 순서에 기대지 않고 클래스를 중복(.dfoot.dfoot)해 특이도로 이긴다. */
+/* 하단 네비 — 파란 바탕 위 회색/금색이라 1.59:1 까지 떨어져 있었다 */
+html .home5 .nav5 a{color:rgba(255,255,255,.82)!important}
+html .home5 .nav5 a svg{stroke:rgba(255,255,255,.82)!important}
+html .home5 .nav5 a.on{color:#ffffff!important}
+html .home5 .nav5 a.on svg{stroke:#ffffff!important}
+html .home5 .nav5 .c .cl{color:rgba(255,255,255,.9)!important}
+/* 푸터 — sweep14가 앞쪽에 놓여 sweep6에 덮였다. 중복 클래스로 확정 */
+html .dfoot.dfoot{color:#6d7882!important}
+html .dfoot .dfoot-biz.dfoot-biz{color:#6d7882!important}
+html .dbrand .dbt small{color:#6d7882!important}
+html .app>.foot.foot{color:#6d7882!important}
+html .foot .bizinfo.bizinfo{color:#6d7882!important}
+html .app>.foot a,html .foot a{color:#58616a!important}
+/* 금색 잔재 */
+html .home5 .li5 .arw{color:#6d7882!important}
+html .home5 .li5 .t small{color:#6d7882!important}
+html .home5 .bokline .bltx em{color:#58616a!important}
+html .home5 .bokline .blgo{color:#58616a!important}
+html .home5 .hometag{color:#58616a!important}
+/* 파란 CTA 위 보조문구 */
+html .home5 .today .tcta em{color:#ffffff!important}
+html .home5 .today .tcta .a{color:#ffffff!important}
+/* 하단 SEO 링크 — 베이지 배경 위라 한 단계 진하게 */
+html .home5 nav a{color:#2646a3!important}
+/* 라이브 띠 자체 보정 */
+html .tlive .tw-dw{color:rgba(239,234,224,.68)!important}
+html .tlive .tl-stamp{color:rgba(239,234,224,.6)!important}
+
 /* === sweep18: 이번 주 택일 + 최근 발행 === */
 html .tlive .tl-week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(239,234,224,.16)}
 html .tlive .tw-d{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;border-radius:7px;background:rgba(239,234,224,.06);border:1px solid transparent}
