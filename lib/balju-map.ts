@@ -26,8 +26,8 @@ export function sipsungOf(me: number, td: number): Sipsung {
 
 // 십성을 입찰 언어로. 정인·편관 같은 한자를 그대로 두면 대표님들이 안 읽는다.
 // 점수는 절대 평가가 아니라 대표님 기준 '상대 적합도'다.
-// 상한을 92로 두고 실제 최고치가 80대에 머물게 잡았다 — 상위권이 죄다 99로 뜨면
-// 계산이 아니라 광고로 읽혀서 오히려 신뢰를 잃는다. 동점이 생기는 편이 자연스럽다.
+// 상한 92로 두되 실제 최고치가 80대에 머물게 잡았다 — 상위권이 죄다 99로 뜨면
+// 계산이 아니라 광고로 읽혀 오히려 신뢰를 잃는다. 동점이 생기는 편이 자연스럽다.
 type Meta = { base: number; label: string; desc: string; color: string };
 export const SIP_META: Record<Sipsung, Meta> = {
   정인: { base: 78, label: '물꼬', desc: '나를 살려주는 자리', color: '#2f7d5b' },
@@ -37,18 +37,18 @@ export const SIP_META: Record<Sipsung, Meta> = {
   식신: { base: 60, label: '마당', desc: '내 힘이 편히 뻗는 자리', color: '#2f7d5b' },
   편재: { base: 55, label: '판돈', desc: '크게 벌리는 자리', color: '#9a7a2e' },
   비견: { base: 51, label: '동무', desc: '결이 같아 말이 통하는 곳', color: '#2f56c4' },
-  상관: { base: 65, label: '맞불', desc: '실력은 통하나 마찰이 있는 곳', color: '#b3382c' },
-  겁재: { base: 60, label: '경합', desc: '경쟁자가 몰리는 자리', color: '#b3382c' },
-  편관: { base: 55, label: '고비', desc: '나를 시험하는 큰 판', color: '#b3382c' },
+  상관: { base: 45, label: '맞불', desc: '실력은 통하나 마찰이 있는 곳', color: '#b3382c' },
+  겁재: { base: 40, label: '경합', desc: '경쟁자가 몰리는 자리', color: '#b3382c' },
+  편관: { base: 34, label: '고비', desc: '나를 시험하는 큰 판', color: '#b3382c' },
 };
 
 // 년지 합충 — 같은 십성이라도 지지가 붙고 부딪히는 정도로 갈린다.
 export function jiModifier(a: number, b: number): { delta: number; name: string } {
   const d = ((b - a) % 12 + 12) % 12;
-  if (d === 6) return { delta: -9, name: '충(沖)' };
-  if (d === 4 || d === 8) return { delta: 6, name: '삼합' };
-  if ((a + b) % 12 === 1) return { delta: 5, name: '육합' };
-  if (d === 3 || d === 9) return { delta: -4, name: '형(刑)' };
+  if (d === 6) return { delta: -10, name: '충(沖)' };
+  if (d === 4 || d === 8) return { delta: 7, name: '삼합' };
+  if ((a + b) % 12 === 1) return { delta: 6, name: '육합' };
+  if (d === 3 || d === 9) return { delta: -5, name: '형(刑)' };
   return { delta: 0, name: '' };
 }
 
@@ -69,7 +69,7 @@ export function fitOf(me: { gan: number; ji: number }, c: Client): BaljuFit {
   const sip = sipsungOf(me.gan, gi);
   const m = SIP_META[sip];
   const jm = jiModifier(me.ji, ji);
-  const score = Math.max(38, Math.min(99, m.base + jm.delta + (c.core ? 3 : 0)));
+  const score = Math.max(20, Math.min(92, m.base + jm.delta + (c.core ? 2 : 0)));
   return {
     name: c.name, slug: clientSlug(c.name), cat: c.cat, core: !!c.core,
     year, ganji: GAN_H[gi] + JI_H[ji], oh: GAN_OH[gi],
