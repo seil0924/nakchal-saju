@@ -432,3 +432,17 @@ html .balnote{color:#58616a!important}
 html .li5 .t b,html a.li .t b{color:#1e2124!important}
 /* 파란 CTA 안의 화살표 — b 안에 있어 앞선 규칙이 못 닿았다 */
 html .home5 .today .tcta b .a{color:#ffffff!important}
+
+/* === sweep23: 칼럼 페이지 — 여태 감사 대상이 아니어서 금색이 통째로 남아 있었다 === */
+/* 파란 CTA 위에 금색 글자(3.05:1)였다. 버튼은 가장 잘 보여야 한다 */
+html .fullcta{color:#ffffff!important}
+html .fullcta small{color:rgba(255,255,255,.92)!important}
+/* 메타·바이라인·태그 */
+html .colmeta{color:#58616a!important}
+html .colby{color:#58616a!important}
+html .coltags span{color:#58616a!important}
+html .colpost .colo{color:#6d7882!important}
+/* 상단 '목록 ›' 링크 */
+html .colpost .mast a[href="/column"]{color:#2646a3!important}
+/* 하단 SEO 링크 — .home5 에만 걸어 둬서 .home(발주처 등)은 안 닿았다 */
+html .home nav a,html .app nav a:not(.dnavi):not(.nav5 a){color:#2646a3!important}
