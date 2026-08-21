@@ -420,3 +420,15 @@ html .bmap svg>g.bm-fl{animation:bmfl var(--d) ease-in-out infinite;animation-de
   html .bmap svg g circle[stroke="#b3382c"]{animation:none}
   html .home5 .li5:hover,html .tl-recent .trc-i:hover,html .colrel a:hover,html .bm-rk:not(.lk):hover{transform:none}
 }
+
+/* === sweep22: 검토에서 나온 명암비 잔여 === */
+/* 잠긴 줄 배경(#fbfafa) 위에서 4.33:1 로 살짝 모자랐다 */
+html .bm-rk.lk .rkn,html .bm-rk.lk .rkd,html .bm-rk.lk .rks{color:#58616a!important}
+/* 즐겨찾기 별 — 1.83:1 이라 켜졌는지 꺼졌는지 구분이 안 됐다 */
+html .favstar{color:#6d7882!important}
+html .favstar.on{color:#b3382c!important}
+/* 발주처 안내문·목록 링크 */
+html .balnote{color:#58616a!important}
+html .li5 .t b,html a.li .t b{color:#1e2124!important}
+/* 파란 CTA 안의 화살표 — b 안에 있어 앞선 규칙이 못 닿았다 */
+html .home5 .today .tcta b .a{color:#ffffff!important}
