@@ -34,6 +34,32 @@ html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!impor
 html .dcta:hover{background:#2f56c4!important}
 html .dnavi{color:#464c53!important}
 html .dnavi svg{stroke:#6d7882!important}
+/* === sweep16: 오늘의 라이브 띠 — 일진·절기 D-day·택일 === */
+html .home5>.tlive{order:5;margin:12px 24px 2px;background:#202022;border-radius:11px;padding:14px 15px 12px;color:#efeae0}
+html .tlive:empty{display:none;min-height:0}
+html .tlive .tl-top{display:flex;align-items:center;gap:13px}
+html .tlive .tl-gz{font-family:var(--serif);font-size:22px;font-weight:900;line-height:1;letter-spacing:.04em;flex:none;color:#efeae0}
+html .tlive .tl-mid{display:flex;flex-direction:column;gap:2px;min-width:0}
+html .tlive .tl-date{font-size:14.5px;font-weight:700;color:#f4f0e8}
+html .tlive .tl-sub{font-size:11px;letter-spacing:.04em;color:rgba(239,234,224,.6)}
+html .tlive .tl-term{margin-left:auto;flex:none;font-size:11.5px;color:rgba(239,234,224,.72);border:1px solid rgba(239,234,224,.34);border-radius:6px;padding:4px 8px;white-space:nowrap}
+html .tlive .tl-term b{font-family:var(--serif);font-weight:800;color:#efeae0;margin-right:3px}
+html .tlive .tl-tk{display:flex;gap:11px;align-items:flex-start;margin-top:12px;padding-top:12px;border-top:1px solid rgba(239,234,224,.16)}
+html .tlive .tl-k{flex:none;width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:18px;color:#fff}
+html .tlive .tl-tk.v-good .tl-k{background:#1f7a55}
+html .tlive .tl-tk.v-ok .tl-k{background:#4a5058}
+html .tlive .tl-tk.v-bad .tl-k{background:#b3382c}
+html .tlive .tl-tx{display:flex;flex-direction:column;gap:3px;min-width:0}
+html .tlive .tl-tx b{font-size:13.5px;font-weight:700;color:#f4f0e8}
+html .tlive .tl-tx span{font-size:12.5px;line-height:1.6;color:rgba(239,234,224,.76);word-break:keep-all}
+html .tlive .tl-stamp{margin-top:10px;font-size:10.5px;color:rgba(239,234,224,.45);letter-spacing:.01em}
+/* 이어보기 — 재방문자 전용 */
+html .home5>.tl-resume{order:5;display:flex;align-items:center;gap:10px;margin:8px 24px 2px;padding:12px 14px;background:#fff;border:1px solid #3f6be0;border-radius:10px;text-decoration:none}
+html .tl-resume .tlr-k{flex:none;width:28px;height:28px;border-radius:6px;background:#eef3fe;color:#2646a3;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:15px}
+html .tl-resume .tlr-t{font-size:13.5px;color:#1e2124;min-width:0}
+html .tl-resume .tlr-t b{font-weight:800}
+html .tl-resume .tlr-go{margin-left:auto;flex:none;color:#2646a3;font-size:15px}
+
 /* === sweep15: 관련 칼럼 — 내부 링크 카드 === */
 html .colrel{margin:22px 24px 4px;padding-top:18px;border-top:1px solid #e6e8ea}
 html .colrel-hd{font-family:var(--serif);font-weight:800;font-size:14px;color:#1e2124;margin-bottom:10px;letter-spacing:-.01em}
