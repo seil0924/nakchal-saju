@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import TodayChip from '@/app/_components/TodayChip';
+import CountUp from '@/app/_components/CountUp';
 import HeroCarousel from '@/app/_components/HeroCarousel';
 import ScrollReveal from '@/app/_components/ScrollReveal';
 import TrustStrip from '@/app/_components/TrustStrip';
@@ -66,7 +67,7 @@ export default function Home() {
         <div className="sc-row">
           {scale.map(s => (
             <div className="sc-i" key={s.t}>
-              <span className="sc-n">{s.n}<em>{s.u}</em></span>
+              <span className="sc-n"><CountUp n={s.n} /><em>{s.u}</em></span>
               <span className="sc-t">{s.t}</span>
             </div>
           ))}
