@@ -34,6 +34,17 @@ html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!impor
 html .dcta:hover{background:#2f56c4!important}
 html .dnavi{color:#464c53!important}
 html .dnavi svg{stroke:#6d7882!important}
+/* === sweep17: 수록 규모 — 처음 온 사람에게 축적을 보여준다 === */
+html .home5>.scale{order:4;margin:14px 24px 2px;padding:15px 16px 13px;background:#fff;border:1px solid #e6e8ea;border-radius:11px}
+html .scale .sc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+html .scale .sc-i{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;position:relative}
+html .scale .sc-i+.sc-i::before{content:"";position:absolute;left:-3px;top:5px;bottom:5px;width:1px;background:#eceef0}
+html .scale .sc-n{font-family:var(--serif);font-weight:900;font-size:22px;color:#1e2124;line-height:1.1;letter-spacing:-.02em}
+html .scale .sc-n em{font-style:normal;font-family:var(--sans);font-weight:700;font-size:11.5px;color:#58616a;margin-left:2px}
+html .scale .sc-t{font-size:11px;color:#6d7882;letter-spacing:-.01em;word-break:keep-all}
+html .scale .sc-note{margin-top:12px;padding-top:11px;border-top:1px solid #eceef0;font-size:11.5px;line-height:1.6;color:#58616a;word-break:keep-all}
+@media(max-width:359px){html .scale .sc-n{font-size:19px}html .scale .sc-t{font-size:10.5px}}
+
 /* === sweep16: 오늘의 라이브 띠 — 일진·절기 D-day·택일 === */
 html .home5>.tlive{order:5;margin:12px 24px 2px;background:#202022;border-radius:11px;padding:14px 15px 12px;color:#efeae0}
 html .tlive:empty{display:none;min-height:0}
