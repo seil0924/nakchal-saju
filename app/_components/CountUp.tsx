@@ -22,17 +22,28 @@ export default function CountUp({ n, ms = 1100 }: Props) {
     if (reduce || !('IntersectionObserver' in window)) { setV(n); return; }
 
     let raf = 0;
+    let finished = false;
+    const settle = () => { finished = true; setV(n); };
+
     const run = () => {
       if (done.current) return;
       done.current = true;
+      // 백그라운드 탭에서는 rAF 가 멈춘다. 세다 만 숫자가 0으로 굳으면 안 되니
+      // 숨은 상태로 시작하면 애니메이션 없이 최종값을 바로 넣는다.
+      if (document.visibilityState === 'hidden') { settle(); return; }
       const t0 = performance.now();
       const step = (now: number) => {
+        if (finished) return;
         const p = Math.min(1, (now - t0) / ms);
         setV(Math.round(n * ease(p)));
-        if (p < 1) raf = requestAnimationFrame(step);
+        if (p < 1) raf = requestAnimationFrame(step); else finished = true;
       };
       raf = requestAnimationFrame(step);
     };
+
+    // 도중에 탭을 벗어났다가 돌아와도 숫자가 어정쩡하게 남지 않게 한다.
+    const onHide = () => { if (done.current && !finished && document.visibilityState === 'hidden') settle(); };
+    document.addEventListener('visibilitychange', onHide);
 
     const io = new IntersectionObserver((ents) => {
       for (const e of ents) if (e.isIntersecting) { run(); io.disconnect(); }
@@ -43,7 +54,11 @@ export default function CountUp({ n, ms = 1100 }: Props) {
     const r = node.getBoundingClientRect();
     if (r.top < window.innerHeight && r.bottom > 0) { run(); io.disconnect(); }
 
-    return () => { cancelAnimationFrame(raf); io.disconnect(); };
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onHide);
+    };
   }, [n, ms]);
 
   return <span ref={ref}>{v}</span>;
