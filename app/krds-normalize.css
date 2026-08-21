@@ -366,3 +366,57 @@ html .bm-cta small{display:block;font-weight:400;font-size:11.5px;color:#e4ecff;
 html .bm-cta.pay small{color:rgba(239,234,224,.72)}
 html .bm-disc{margin-top:9px;font-size:11px;line-height:1.6;color:#6d7882;word-break:keep-all}
 html .bm-disc b{color:#58616a;font-weight:700}
+
+/* === sweep21: 모션 패스 — 목적이 있는 움직임만 ===
+   ScrollReveal(진입)은 이미 있다. 여기는 '주변 모션'이다.
+   전부 prefers-reduced-motion 을 존중하고, 한 화면에 동시에 뛰는 요소가 겹치지 않게 뒀다. */
+
+/* 수록 규모 — 숫자가 올라오는 동안 살짝 커졌다 제자리로 */
+@keyframes scpop{0%{transform:translateY(6px);opacity:0}60%{transform:translateY(-2px);opacity:1}100%{transform:none;opacity:1}}
+html .scale .sc-n{display:inline-block;animation:scpop .7s cubic-bezier(.2,.7,.3,1) both}
+html .scale .sc-i:nth-child(2) .sc-n{animation-delay:.09s}
+html .scale .sc-i:nth-child(3) .sc-n{animation-delay:.18s}
+html .scale .sc-i:nth-child(4) .sc-n{animation-delay:.27s}
+
+/* 오늘의 택일 — 오늘 칸이 천천히 숨쉰다. 어제와 다른 날이라는 신호다 */
+@keyframes twnow{0%,100%{box-shadow:0 0 0 0 rgba(239,234,224,.34)}50%{box-shadow:0 0 0 5px rgba(239,234,224,0)}}
+html .tlive .tw-d.now{animation:twnow 2.8s ease-out infinite}
+
+/* 일진 간지 — 띠가 뜰 때 한 번 흘러 들어온다 */
+@keyframes gzin{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+html .tlive .tl-gz{animation:gzin .55s cubic-bezier(.2,.7,.3,1) both}
+html .tlive .tl-term{animation:gzin .55s cubic-bezier(.2,.7,.3,1) .12s both}
+
+/* 주요 CTA 화살표 — 아주 짧게 밀었다 돌아온다(누르라는 신호) */
+@keyframes nudge{0%,72%,100%{transform:translateX(0)}82%{transform:translateX(4px)}}
+html .today .tcta .a,html .bm-cta:not(.pay)::after{display:inline-block;animation:nudge 3.4s ease-in-out infinite}
+
+/* 카드 — 데스크톱에서만 살짝 뜬다 */
+@media(hover:hover) and (min-width:900px){
+  html .home5 .li5,html .tl-recent .trc-i,html .colrel a,html .bm-rk{transition:transform .18s cubic-bezier(.2,.7,.3,1),box-shadow .18s,border-color .18s}
+  html .home5 .li5:hover,html .tl-recent .trc-i:hover,html .colrel a:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(30,33,36,.09)}
+  html .bm-rk:not(.lk):hover{transform:translateX(3px)}
+}
+
+/* 잠긴 발주처 — 붉은 테두리가 아주 느리게 돈다. "열어달라"는 신호 */
+@keyframes lockspin{to{stroke-dashoffset:-22}}
+html .bmap svg g circle[stroke="#b3382c"]{animation:lockspin 3.6s linear infinite}
+
+/* 관계지도 노드 — 지도가 그려질 때 순차로 맺힌다 */
+@keyframes nodein{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+html .bmap svg>g{transform-box:fill-box;transform-origin:center;animation:nodein .5s cubic-bezier(.2,.7,.3,1) both}
+html .bmap svg>g:nth-child(6n+1){animation-delay:.02s}
+html .bmap svg>g:nth-child(6n+2){animation-delay:.07s}
+html .bmap svg>g:nth-child(6n+3){animation-delay:.12s}
+html .bmap svg>g:nth-child(6n+4){animation-delay:.17s}
+html .bmap svg>g:nth-child(6n+5){animation-delay:.22s}
+html .bmap svg>g:nth-child(6n){animation-delay:.27s}
+/* 떠다니는 노드는 등장 애니메이션을 덮어쓰지 않게 분리 */
+html .bmap svg>g.bm-fl{animation:bmfl var(--d) ease-in-out infinite;animation-delay:var(--dl)}
+
+@media(prefers-reduced-motion:reduce){
+  html .scale .sc-n,html .tlive .tw-d.now,html .tlive .tl-gz,html .tlive .tl-term,
+  html .today .tcta .a,html .bm-cta:not(.pay)::after,html .bmap svg>g,
+  html .bmap svg g circle[stroke="#b3382c"]{animation:none}
+  html .home5 .li5:hover,html .tl-recent .trc-i:hover,html .colrel a:hover,html .bm-rk:not(.lk):hover{transform:none}
+}
