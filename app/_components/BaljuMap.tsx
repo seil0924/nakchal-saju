@@ -10,7 +10,7 @@ import { sget } from '@/lib/scope';
 import { migrateLegacy, peopleOf } from '@/lib/people';
 import {
   rankBalju, splitForMap, dominantOh, fitOf,
-  OH_COLOR, OH_HANJA, OH_NAME, type BaljuFit,
+  OH_COLOR, OH_TEXT, OH_HANJA, OH_NAME, type BaljuFit,
 } from '@/lib/balju-map';
 
 const VB = 460, C = 230;
@@ -159,7 +159,7 @@ export default function BaljuMap() {
 
       {dom && (
         <div className="bm-insight">
-          대표님께는 <b style={{ color: OH_COLOR[dom.oh] }}>{OH_HANJA[dom.oh]}({OH_NAME[dom.oh]})</b> 기운 발주처가 맞습니다 — 상위 {top.length}곳 중 {dom.count}곳이 {OH_NAME[dom.oh]}입니다.
+          대표님께는 <b style={{ color: OH_TEXT[dom.oh] }}>{OH_HANJA[dom.oh]}({OH_NAME[dom.oh]})</b> 기운 발주처가 맞습니다 — 상위 {top.length}곳 중 {dom.count}곳이 {OH_NAME[dom.oh]}입니다.
         </div>
       )}
 
