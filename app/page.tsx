@@ -5,9 +5,20 @@ import HeroCarousel from '@/app/_components/HeroCarousel';
 import ScrollReveal from '@/app/_components/ScrollReveal';
 import TrustStrip from '@/app/_components/TrustStrip';
 import { bizFooterLine } from '@/lib/bizinfo';
+import { CLIENTS } from '@/lib/clients';
+import { TYCOONS } from '@/lib/tycoon';
+import { GLOSSARY } from '@/lib/glossary';
+import { getAllColumns } from '@/lib/column';
 
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
 export default function Home() {
+  // 하드코딩하지 않는다 — 실제 데이터에서 세야 콘텐츠가 늘 때 같이 오른다.
+  const scale = [
+    { n: getAllColumns().length, u: '편', t: '사주 칼럼' },
+    { n: CLIENTS.length, u: '곳', t: '발주처 수록' },
+    { n: TYCOONS.length, u: '인', t: '거장 명식' },
+    { n: GLOSSARY.length, u: '항목', t: '명리 용어' },
+  ];
   return (
     <div className="app home5">
       <ScrollReveal />
@@ -34,8 +45,22 @@ export default function Home() {
 
       <p className="hometag">공공입찰·경매·수주 대표를 위한 <b>회사 사주</b> — 오늘의 사정률·발주처 궁합·투찰 택일을 30초, <b>무료</b>로.</p>
 
+      {/* 수록 규모 — 실제 보유량. 처음 온 사람에게 "여기 진짜 팠구나"를 전한다.
+          숫자를 지어내지 않고 데이터에서 직접 세므로 콘텐츠가 늘면 같이 오른다. */}
       {/* 히어로 — 자동 넘김 롤링 배너 (4장) */}
       <HeroCarousel />
+
+      <div className="scale" data-reveal>
+        <div className="sc-row">
+          {scale.map(s => (
+            <div className="sc-i" key={s.t}>
+              <span className="sc-n">{s.n}<em>{s.u}</em></span>
+              <span className="sc-t">{s.t}</span>
+            </div>
+          ))}
+        </div>
+        <div className="sc-note">절기는 태양황경으로 계산하고 진태양시·야자시를 보정합니다 — 고정 만세력표를 쓰지 않습니다.</div>
+      </div>
 
       {/* 닮은 CEO — 바이럴 입구 */}
       <Link data-reveal className="ceoband" href="/ceo">
