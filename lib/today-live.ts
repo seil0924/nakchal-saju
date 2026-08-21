@@ -20,9 +20,10 @@ export const TERMS_HANJA = [
   '立冬', '小雪', '大雪', '冬至', '小寒', '大寒',
 ] as const;
 
-// 해당 날짜 정오(KST)의 절기 구간 번호. 입춘 구간이 0.
+// 해당 날짜가 '끝나는 시점'(23:59 KST)의 절기 구간 번호. 입춘 구간이 0.
+// 정오로 재면 오후에 시작하는 절기를 하루 늦게 잡는다(입추·백로 등에서 실제로 어긋났다).
 function termIndexOfDay(d: Date): number {
-  const jd = jdn(d.getFullYear(), d.getMonth() + 1, d.getDate()) + (12 - 9 - 12) / 24;
+  const jd = jdn(d.getFullYear(), d.getMonth() + 1, d.getDate()) + (23.9833 - 9 - 12) / 24;
   const lam = sunLong(jd);
   return Math.floor(((((lam - 315) % 360) + 360) % 360) / 15);
 }
