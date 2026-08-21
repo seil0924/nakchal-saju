@@ -1,1 +1,36 @@
+// lib/track.ts — 익명 조회 기록(클라이언트 측).
+// 같은 기기에서 같은 화면을 하루에 여러 번 봐도 1회만 센다.
+// 새로고침·뒤로가기로 숫자가 부풀면 나중에 그 숫자를 쓸 수 없기 때문이다.
+'use client';
 
+type Kind = 'reading' | 'ceo' | 'column' | 'balju' | 'home';
+
+const today = () => {
+  const d = new Date();
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}`;
+};
+
+export function track(kind: Kind, slug?: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    const key = `nv:${kind}:${slug || '-'}:${today()}`;
+    if (localStorage.getItem(key)) return;   // 오늘 이미 셌다
+    localStorage.setItem(key, '1');
+
+    const body = JSON.stringify({ kind, slug });
+    // 페이지를 떠나도 전송이 끊기지 않게 sendBeacon 우선.
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/track', new Blob([body], { type: 'application/json' }));
+      return;
+    }
+    fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    // 계측은 실패해도 조용히 넘어간다.
+  }
+}
