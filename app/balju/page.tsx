@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { CLIENTS, clientSlug } from '@/lib/clients';
 import ScrollReveal from '@/app/_components/ScrollReveal';
 import PersonPicker from '@/app/_components/PersonPicker';
+import BaljuMap from '@/app/_components/BaljuMap';
 import { type Person } from '@/lib/people';
 
 export default function Balju() {
@@ -38,6 +39,9 @@ export default function Balju() {
         <h2 style={{ fontSize: 19 }}>어느 발주처와<br />붙어볼까요</h2>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>발주처 설립일 사주 × 대표님 사주로 궁합을 봅니다</div>
       </div>
+
+      {/* 관계지도 — 목록만 있으면 훑고 나간다. 지도로 먼저 보여주고 목록은 아래 그대로 둔다. */}
+      <BaljuMap />
 
       <div className="searchbar">
         <span className="si"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.2-3.2" /></svg></span>
