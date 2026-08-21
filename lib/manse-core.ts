@@ -25,7 +25,7 @@ export function jdn(y:number,m:number,d:number){
 // ── 절기(節氣): 태양 황경 천문 계산 (Meeus 근사 ~0.01°≈분 단위) ──
 // ⚠️ 고정 근사표를 쓰면 절기가 실제와 하루씩 어긋나 경계 출생자의 년/월주가 틀림.
 //    출생 순간의 태양 황경으로 입춘(315°)·12절(節)을 정확히 판정한다.
-function sunLong(jd:number):number{
+export function sunLong(jd:number):number{
   const T=(jd-2451545)/36525, R=Math.PI/180;
   const L0=280.46646+36000.76983*T+0.0003032*T*T;
   const M=357.52911+35999.05029*T-0.0001537*T*T;
