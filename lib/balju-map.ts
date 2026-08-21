@@ -25,15 +25,18 @@ export function sipsungOf(me: number, td: number): Sipsung {
 }
 
 // 십성을 입찰 언어로. 정인·편관 같은 한자를 그대로 두면 대표님들이 안 읽는다.
+// 점수는 절대 평가가 아니라 대표님 기준 '상대 적합도'다.
+// 상한을 92로 두고 실제 최고치가 80대에 머물게 잡았다 — 상위권이 죄다 99로 뜨면
+// 계산이 아니라 광고로 읽혀서 오히려 신뢰를 잃는다. 동점이 생기는 편이 자연스럽다.
 type Meta = { base: number; label: string; desc: string; color: string };
 export const SIP_META: Record<Sipsung, Meta> = {
-  정인: { base: 96, label: '물꼬', desc: '나를 살려주는 자리', color: '#2f7d5b' },
-  편인: { base: 89, label: '물꼬', desc: '도움이 비스듬히 오는 자리', color: '#2f7d5b' },
-  정관: { base: 87, label: '격식', desc: '제도권에서 인정받는 자리', color: '#2f56c4' },
-  정재: { base: 83, label: '판돈', desc: '꾸준히 취할 수 있는 자리', color: '#9a7a2e' },
-  식신: { base: 79, label: '마당', desc: '내 힘이 편히 뻗는 자리', color: '#2f7d5b' },
-  편재: { base: 74, label: '판돈', desc: '크게 벌리는 자리', color: '#9a7a2e' },
-  비견: { base: 70, label: '동무', desc: '결이 같아 말이 통하는 곳', color: '#2f56c4' },
+  정인: { base: 78, label: '물꼬', desc: '나를 살려주는 자리', color: '#2f7d5b' },
+  편인: { base: 71, label: '물꼬', desc: '도움이 비스듬히 오는 자리', color: '#2f7d5b' },
+  정관: { base: 69, label: '격식', desc: '제도권에서 인정받는 자리', color: '#2f56c4' },
+  정재: { base: 64, label: '판돈', desc: '꾸준히 취할 수 있는 자리', color: '#9a7a2e' },
+  식신: { base: 60, label: '마당', desc: '내 힘이 편히 뻗는 자리', color: '#2f7d5b' },
+  편재: { base: 55, label: '판돈', desc: '크게 벌리는 자리', color: '#9a7a2e' },
+  비견: { base: 51, label: '동무', desc: '결이 같아 말이 통하는 곳', color: '#2f56c4' },
   상관: { base: 65, label: '맞불', desc: '실력은 통하나 마찰이 있는 곳', color: '#b3382c' },
   겁재: { base: 60, label: '경합', desc: '경쟁자가 몰리는 자리', color: '#b3382c' },
   편관: { base: 55, label: '고비', desc: '나를 시험하는 큰 판', color: '#b3382c' },
