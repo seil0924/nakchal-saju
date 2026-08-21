@@ -323,3 +323,46 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:none!import
 .sec .lb.free{color:#177f5e!important;background:#e7f4ee!important}
 .pz.free{color:var(--krds-primary-50)!important}
 
+/* === sweep20: 발주처 관계지도 === */
+html .bmap-wrap{margin:14px 20px 4px}
+html .bmap{background:#202022;border-radius:13px;padding:12px 12px 11px}
+html .bmap svg{display:block;width:100%;height:auto}
+html .bm-cap{margin-top:8px;font-size:11.5px;line-height:1.65;color:rgba(239,234,224,.62);text-align:center}
+html .bm-cap b{color:#efeae0;font-weight:700}
+html .bm-cap b.lk{color:#e6b9b3}
+/* 떠다님 — 노드마다 주기·지연·진폭이 달라 규칙적으로 안 보인다 */
+@keyframes bmfl{0%,100%{transform:translate(0,0)}
+ 25%{transform:translate(var(--a),calc(var(--a)*-.6))}
+ 50%{transform:translate(calc(var(--a)*-.5),calc(var(--a)*.9))}
+ 75%{transform:translate(calc(var(--a)*-.9),calc(var(--a)*-.3))}}
+html .bm-fl{animation:bmfl var(--d) ease-in-out infinite;animation-delay:var(--dl);will-change:transform}
+@keyframes bmpulse{0%,100%{opacity:.45}50%{opacity:.95}}
+html .bm-pulse{animation:bmpulse 2.6s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){html .bm-fl,html .bm-pulse{animation:none}}
+/* 오행 편중 안내 */
+html .bm-insight{margin-top:9px;padding:11px 13px;background:#fff;border:1px solid #e6e8ea;border-radius:10px;font-size:12.5px;line-height:1.6;color:#1e2124;word-break:keep-all}
+html .bm-insight b{font-family:var(--serif);font-weight:800}
+/* 나래비 */
+html .bm-rank{background:#fff;border:1px solid #e6e8ea;border-radius:12px;overflow:hidden;margin-top:9px}
+html .bm-rk{display:flex;align-items:center;gap:10px;padding:11px 13px;border-top:1px solid #f1f3f5;text-decoration:none;color:inherit}
+html .bm-rk:first-child{border-top:0}
+html .bm-rk.lk{background:#fbfafa}
+html .bm-rk .rkn{flex:none;width:18px;text-align:center;font-size:13px;font-weight:800;color:#6d7882}
+html .bm-rk .rkoh{flex:none;width:26px;height:26px;border-radius:7px;color:#fff;font-family:var(--serif);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+html .bm-rk .rkoh.lock{background:#3a3a3d;color:#e6b9b3;border:1px dashed #b3382c}
+html .bm-rk .rkm{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+html .bm-rk .rkm b{font-size:13.5px;font-weight:700;color:#1e2124}
+html .bm-rk .core{font-style:normal;font-family:var(--serif);font-size:10px;color:#fff;background:#b3382c;border-radius:3px;padding:1px 4px;margin-left:4px}
+html .bm-rk .rkt{font-size:11.5px;font-weight:600}
+html .bm-rk .rkt.lkt{color:#b3382c}
+html .bm-rk .rkd{font-size:10.5px;color:#6d7882}
+html .bm-rk .rks{flex:none;font-size:10.5px;color:#6d7882;text-align:right}
+html .bm-rk .rks b{display:block;font-size:15px;color:#1e2124;font-weight:800}
+html .bm-rk .bl{filter:blur(4.5px);user-select:none;opacity:.72}
+/* CTA · 고지 */
+html .bm-cta{display:block;margin-top:10px;background:#3f6be0;color:#fff;text-align:center;font-weight:700;font-size:14.5px;padding:14px;border-radius:9px;text-decoration:none}
+html .bm-cta.pay{background:#202022}
+html .bm-cta small{display:block;font-weight:400;font-size:11.5px;color:#e4ecff;margin-top:3px}
+html .bm-cta.pay small{color:rgba(239,234,224,.72)}
+html .bm-disc{margin-top:9px;font-size:11px;line-height:1.6;color:#6d7882;word-break:keep-all}
+html .bm-disc b{color:#58616a;font-weight:700}
