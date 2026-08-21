@@ -13,6 +13,18 @@ import { getAllColumns } from '@/lib/column';
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
 export default function Home() {
   // 하드코딩하지 않는다 — 실제 데이터에서 세야 콘텐츠가 늘 때 같이 오른다.
+  // 최근 발행 3편 — "이 사이트 지금도 글이 올라오는구나"가 활발함의 가장 정직한 증거다.
+  const recent = getAllColumns().slice(0, 3);
+  const ago = (d: string) => {
+    const t = new Date(d.replace(' ', 'T'));
+    if (isNaN(t.getTime())) return '';
+    const days = Math.floor((Date.now() - t.getTime()) / 86400000);
+    if (days <= 0) return '오늘 발행';
+    if (days === 1) return '어제 발행';
+    if (days < 7) return days + '일 전 발행';
+    if (days < 30) return Math.floor(days / 7) + '주 전 발행';
+    return Math.floor(days / 30) + '개월 전 발행';
+  };
   const scale = [
     { n: getAllColumns().length, u: '편', t: '사주 칼럼' },
     { n: CLIENTS.length, u: '곳', t: '발주처 수록' },
