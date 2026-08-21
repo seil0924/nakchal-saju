@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 // 계측의 핵심은 "하루 1회"다. 새로고침으로 숫자가 부풀면 그 숫자는 못 쓴다.
-// jsdom 없이 node 환경이라 window/localStorage/navigator 를 최소로 세운다.
+// node 환경이라 window/localStorage/navigator 를 최소로 세운다.
+// navigator 는 런타임에 따라 읽기 전용 접근자라 defineProperty 로 덮어야 한다.
 function makeStore() {
   const map = new Map<string, string>();
   return {
@@ -12,26 +13,34 @@ function makeStore() {
   };
 }
 
-let store: ReturnType<typeof makeStore>;
+function setGlobal(name: string, value: unknown) {
+  Object.defineProperty(globalThis, name, { value, configurable: true, writable: true });
+}
+
 let beacons: { url: string; body: string }[];
 
-beforeEach(async () => {
+beforeEach(() => {
   vi.resetModules();
-  store = makeStore();
   beacons = [];
-  (globalThis as any).window = globalThis;
-  (globalThis as any).localStorage = store;
-  (globalThis as any).navigator = {
-    sendBeacon: (url: string, blob: any) => { beacons.push({ url, body: String(blob?.text ?? '') }); return true; },
-  };
-  (globalThis as any).Blob = class { constructor(public parts: any[]) {} get text() { return this.parts.join(''); } };
+  setGlobal('window', globalThis);
+  setGlobal('localStorage', makeStore());
+  setGlobal('navigator', {
+    sendBeacon: (url: string, blob: { text?: string }) => {
+      beacons.push({ url, body: String(blob?.text ?? '') });
+      return true;
+    },
+  });
+  setGlobal('Blob', class {
+    parts: unknown[];
+    constructor(parts: unknown[]) { this.parts = parts; }
+    get text() { return this.parts.join(''); }
+  });
 });
 
 afterEach(() => {
-  delete (globalThis as any).window;
-  delete (globalThis as any).localStorage;
-  delete (globalThis as any).navigator;
-  delete (globalThis as any).Blob;
+  for (const k of ['window', 'localStorage', 'navigator', 'Blob', 'fetch']) {
+    Reflect.deleteProperty(globalThis, k);
+  }
 });
 
 describe('track', () => {
@@ -71,18 +80,21 @@ describe('track', () => {
   });
 
   it('저장소가 막혀 있어도 예외를 밖으로 던지지 않는다', async () => {
-    (globalThis as any).localStorage = {
+    setGlobal('localStorage', {
       getItem: () => { throw new Error('blocked'); },
       setItem: () => { throw new Error('blocked'); },
-    };
+    });
     const { track } = await import('@/lib/track');
     expect(() => track('home')).not.toThrow();
   });
 
   it('sendBeacon 이 없으면 fetch 로 보낸다', async () => {
-    delete (globalThis as any).navigator.sendBeacon;
-    const calls: any[] = [];
-    (globalThis as any).fetch = (url: string, opt: any) => { calls.push({ url, opt }); return Promise.resolve({}); };
+    setGlobal('navigator', {});
+    const calls: { url: string; opt: { method: string; body: string } }[] = [];
+    setGlobal('fetch', (url: string, opt: { method: string; body: string }) => {
+      calls.push({ url, opt });
+      return Promise.resolve({});
+    });
     const { track } = await import('@/lib/track');
     track('balju', 'lh');
     expect(calls).toHaveLength(1);
