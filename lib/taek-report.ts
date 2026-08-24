@@ -114,7 +114,7 @@ export function taekSection(
   P.push('<p class="note">방위는 두 자리의 대권 방위각으로, 택일은 절기로 잡은 월지와 일지의 건제십이신으로 가렸습니다. 대장군방·삼살방은 <b>예부터 조심하라 본 자리</b>일 뿐 금기가 아닙니다. 계약·임대 조건이 먼저이고, 이 글은 그 위에 얹는 참고입니다.</p>');
 
   const teaser = h
-    ? `${h.title} 지금 자리에 둘 물건 ${bibo.length}가지와, 옮길 자리의 방위·거리·이사 택일 ${days.length}일을 함께 봅니다.`
+    ? `${h.title} — 지금 자리에 둘 물건 ${bibo.length}가지와, 옮길 자리의 방위·거리·이사 택일 ${days.length}일을 함께 봅니다.`
     : `옮길 자리의 방위와 거리, 이사에 좋은 날 ${days.length}일, 사무실에 둘 물건까지 짚어 드립니다.`;
 
   return { t: '자리 사주 — 지금 자리와 옮길 자리', html: P.join('\n'), teaser };
