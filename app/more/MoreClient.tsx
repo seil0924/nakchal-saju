@@ -72,6 +72,7 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
 
         <div className="sechd"><span className="t"><span className="b" />읽을거리</span></div>
         <div className="setrow">
+          <Link href="/jari">자리 사주 — 사무실 방위·이전 택일<span className="r">›</span></Link>
           <Link href="/column">사주 칼럼<span className="r">입찰·수주 명리 이야기 ›</span></Link>
         </div>
 
