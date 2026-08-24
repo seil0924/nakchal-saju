@@ -45,7 +45,7 @@ describe('seo-concepts: CONCEPTS', () => {
     expect(CONCEPTS.length).toBeGreaterThanOrEqual(15);
     expect(uniq(CONCEPTS.map(c => c.slug))).toBe(true);
     for (const c of CONCEPTS) {
-      expect(['일간', '오행']).toContain(c.group);
+      expect(['일간', '오행', '십성']).toContain(c.group);
       expect(c.h1 && c.lead && c.title).toBeTruthy();
       expect(c.sections.length).toBeGreaterThan(0);
     }
