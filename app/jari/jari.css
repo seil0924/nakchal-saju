@@ -58,7 +58,8 @@
 .jr-fl input:focus{outline:2px solid #7a5c14;outline-offset:1px;border-color:#7a5c14}
 .jr-go{width:100%;padding:13px 0;border:0;border-radius:3px;background:#1c1c1d;color:#efeae0;
   font-family:var(--serif);font-size:13.5px;font-weight:800;cursor:pointer;margin:3px 0 10px}
-.jr-go:disabled{background:#b9b5ab;color:#fff;cursor:default}
+/* 비활성이라도 글씨는 읽혀야 한다 — 흰 글씨를 회색 위에 얹으면 2:1까지 떨어진다 */
+.jr-go:disabled{background:#e5e1d7;color:#5c5a54;cursor:default}
 .jr-err{padding:10px 12px;border-radius:3px;background:#faf1ef;border-left:3px solid #a8321f;
   font-size:12px;line-height:1.65;color:#7a2417;margin:0 0 10px}
 
