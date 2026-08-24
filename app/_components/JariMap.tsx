@@ -10,6 +10,8 @@ import { sget } from '@/lib/scope';
 import { DIR8, DIR8_HANJA, judgeMove, yearCaution, moveDays, type MoveVerdict } from '@/lib/taek-map';
 import { guaOf, houseHarmony, biboFor, weakElOf, deskAdvice, type Harmony } from '@/lib/taek-house';
 import { OH_HANJA, OH_NAME, OH_TEXT } from '@/lib/balju-map';
+import { CAT_INFO } from '@/lib/report-categories';
+import { won } from '@/lib/constants';
 
 const VB = 400, C = 200;
 const rad = (d: number) => ((d - 90) * Math.PI) / 180;   // 0도 = 북 = 위
@@ -23,7 +25,7 @@ function wedge(i: number, rIn: number, rOut: number) {
 }
 
 type Pt = { lat: number; lng: number; matched: string };
-type Me = { el: number; name: string };
+type Me = { el: number; name: string; date: string };
 
 function readMe(): Me | null {
   try {
@@ -31,7 +33,7 @@ function readMe(): Me | null {
     const self = peopleOf('self')[0];
     if (self?.date) {
       const c = chartFromInput(self.date, self.time ?? null, self.cal ?? 'solar', !!self.leap);
-      if (c) return { el: weakElOf(c), name: (self.name || '대표님').trim() };
+      if (c) return { el: weakElOf(c), name: (self.name || '대표님').trim(), date: self.date };
     }
     const raw = sget('nakchal_self_v1');
     if (!raw) return null;
@@ -42,7 +44,7 @@ function readMe(): Me | null {
     if (!date) return null;
     const c = chartFromInput(date, p.time ?? null, p.cal ?? 'solar', !!(p.leap ?? p.isLeap));
     if (!c) return null;
-    return { el: weakElOf(c), name: (p.name || '대표님').trim() };
+    return { el: weakElOf(c), name: (p.name || '대표님').trim(), date };
   } catch { return null; }
 }
 
@@ -94,6 +96,19 @@ export default function JariMap() {
   const days = useMemo(() => moveDays(new Date(), 60).slice(0, 8), []);
   const advice = me ? deskAdvice(me.el) : null;
   const bibo = me ? biboFor(me.el, harmony ?? undefined) : [];
+
+  // 리딩으로 넘길 때 좌표는 빼고 우리가 낸 방위각·거리만 싣는다.
+  const payHref = (() => {
+    const q = new URLSearchParams({ cat: 'ijeon' });
+    if (verdict) { q.set('dg', String(verdict.deg)); q.set('km', String(verdict.km)); }
+    if (door !== null) q.set('dr', String(door));
+    if (desk !== null) q.set('dk', String(desk));
+    if (addrA.trim()) q.set('pa', addrA.trim().slice(0, 40));
+    if (addrB.trim()) q.set('pb', addrB.trim().slice(0, 40));
+    if (me?.date) q.set('b', me.date);
+    if (me?.name) q.set('n', me.name);
+    return '/reading?' + q.toString();
+  })();
 
   if (!ready) return <div className="jr-wrap" aria-hidden="true" />;
 
@@ -244,6 +259,13 @@ export default function JariMap() {
           ))}
         </ul>
       </section>
+
+      {verdict && (
+        <Link className="jr-cta pay" href={payHref}>
+          자리 사주 정식 리포트 열기
+          <small>지금 자리 진단 · 옮길 자리 판단 · 석 달 치 택일과 시진 · {won(CAT_INFO.ijeon.price)}</small>
+        </Link>
+      )}
 
       <p className="jr-disc">
         방위는 두 좌표의 대권 방위각으로 재고, 택일은 절기로 잡은 월지와 일지의 건제십이신으로 가립니다.
