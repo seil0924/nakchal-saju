@@ -57,10 +57,13 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
         <Link href="/reading?cat=daepyo" style={cta}>내 일간·오행으로 대표 사주 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료 · 6대 축 스코어카드</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
         {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 14.5, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
-        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14, color: 'var(--navy)', margin: '20px 0 10px' }}>다른 {c.group} 보기</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
-          {siblings.map(x => (<Link key={x.slug} href={`/saju/${x.slug}`} style={chip}>{x.label}</Link>))}
-        </div>
+        {/* 같은 갈래가 하나뿐이면 제목만 남고 아래가 빈다. 그럴 땐 통째로 뺀다. */}
+        {siblings.length > 0 && (<>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14, color: 'var(--navy)', margin: '20px 0 10px' }}>다른 {c.group} 보기</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
+            {siblings.map(x => (<Link key={x.slug} href={`/saju/${x.slug}`} style={chip}>{x.label}</Link>))}
+          </div>
+        </>)}
         <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다.</p>
       </div>
     </div>
