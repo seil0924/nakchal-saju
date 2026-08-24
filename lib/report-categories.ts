@@ -1,6 +1,6 @@
 // lib/report-categories.ts — 카테고리별 개별 상품(사주아이식)
 // 각 카테고리는 자기 섹션(mk)만 보여주고, 자기 가격으로 개별 결제된다.
-export type CatKey = 'daepyo' | 'sajeong' | 'balju' | 'gunghap' | 'daeun' | 'calendar' | 'calendar_year';
+export type CatKey = 'daepyo' | 'sajeong' | 'balju' | 'gunghap' | 'daeun' | 'calendar' | 'calendar_year' | 'ijeon';
 
 export type CatInfo = {
   name: string; hanja: string; oh: 'mok' | 'hwa' | 'to' | 'geum' | 'su';
@@ -46,6 +46,12 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
     mks: ['曆', '曆詳'],
     price: 9900, needs: [],
     kicker: '事業運 月曆', lead: '오늘부터 앞으로 한 달 — 계약·채용·투자·발표에 좋은 날과, 갈등·지출을 조심할 날을 달력에 짚어 드립니다.',
+  },
+  ijeon: {
+    name: '자리 사주', hanja: '宅', oh: 'to',
+    mks: ['宅'],
+    price: 29000, needs: [],
+    kicker: '事務室 移轉 方位', lead: '사무실을 옮기기 전에 — 지금 자리의 문·책상 배치와, 옮길 곳의 방위·거리·이사 택일까지.',
   },
   calendar_year: {
     name: '사업운 캘린더 · 연간', hanja: '曆', oh: 'hwa',
@@ -104,6 +110,7 @@ export const CAT_UI: Record<string, CatUI> = {
   gunghap:        { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: ['partner', 'ally'],            yearBar: true,  gauge: false, requires: 'partnerOrAlly' },
   daeun:          { calToggle: false, situation: false, selfImmediate: true,  legal: 'required', baljuCard: false, relation: [],                             yearBar: true,  gauge: false, requires: 'legal' },
   calendar:       { calToggle: true,  situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
+  ijeon:          { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
   calendar_year:  { calToggle: true,  situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
 };
 
