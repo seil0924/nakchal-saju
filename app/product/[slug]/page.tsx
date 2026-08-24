@@ -7,7 +7,8 @@ export function generateStaticParams() { return PRODUCTS.map(p => ({ slug: p.slu
 export function generateMetadata({ params }: { params: { slug: string } }) {
   const p = productBySlug(params.slug);
   if (!p) return { title: '낙찰사주' };
-  return { title: `${p.name} — ${p.title.replace(/\{\/?b\}/g, '')} · 낙찰사주`, description: p.lead };
+  // 레이아웃 템플릿이 ' · 낙찰사주'를 뒤에 붙인다. 여기서 또 붙이면 제목에 두 번 나온다.
+  return { title: `${p.name} — ${p.title.replace(/\{\/?b\}/g, '')}`, description: p.lead };
 }
 
 function T({ s }: { s: string }) {
