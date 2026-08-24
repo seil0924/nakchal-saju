@@ -5,7 +5,8 @@ import JariMap from '@/app/_components/JariMap';
 import ScrollReveal from '@/app/_components/ScrollReveal';
 
 export const metadata: Metadata = {
-  title: '자리 사주 — 사무실 방위와 이전 택일 | 낙찰사주',
+  // 레이아웃 템플릿이 ' · 낙찰사주'를 뒤에 붙인다. 여기서 또 붙이면 두 번 나온다.
+  title: '자리 사주 — 사무실 방위와 이전 택일',
   description: '지금 사무실의 출입문·대표 자리 방위를 팔택으로 보고, 옮길 곳의 방위·거리와 이사에 좋은 날을 짚어 드립니다. 주소만 넣으면 됩니다.',
   alternates: { canonical: 'https://nakchalsaju.com/jari' },
   openGraph: {
