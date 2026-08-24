@@ -104,7 +104,8 @@ export default function JariMap() {
         <svg viewBox={`0 0 ${VB} ${VB}`} role="img" aria-label="사무실 방위 나침반">
           {DIR8.map((_, i) => (
             <path key={'w' + i} d={wedge(i, 74, 150)}
-              fill={i === desk ? 'rgba(199,154,58,.34)' : i === door ? 'rgba(179,56,44,.30)' : 'rgba(255,255,255,.035)'}
+              fill={i === desk ? 'rgba(199,154,58,.34)' : i === door ? 'rgba(179,56,44,.30)'
+                : (i === caution.daejanggun || i === caution.samsal) ? 'rgba(179,56,44,.12)' : 'rgba(255,255,255,.035)'}
               stroke="rgba(239,234,224,.14)" strokeWidth={0.8} />
           ))}
           {DIR8_HANJA.map((h, i) => {
@@ -116,14 +117,6 @@ export default function JariMap() {
                 style={{ fontFamily: 'var(--serif)' }}>{h}</text>
             );
           })}
-          {caution.daejanggun >= 0 && (() => {
-            const [x, y] = px(190, caution.daejanggun * 45);
-            return <text x={x} y={y + 3} textAnchor="middle" fontSize={8.5} fill="#e0a89f">大將軍</text>;
-          })()}
-          {caution.samsal >= 0 && (() => {
-            const [x, y] = px(190, caution.samsal * 45 + (caution.same ? 14 : 0));
-            return <text x={x} y={y + (caution.same ? 14 : 3)} textAnchor="middle" fontSize={8.5} fill="#c9a6a0">三殺</text>;
-          })()}
           {verdict && (() => {
             const [x, y] = px(146, verdict.deg);
             return (
@@ -141,7 +134,11 @@ export default function JariMap() {
         <div className="jr-cap">
           {verdict
             ? <>옮길 자리는 지금 자리에서 <b>{verdict.dirName}쪽 {verdict.deg}°</b>, <b>{verdict.km}km</b> 떨어져 있습니다</>
-            : <>붉은 칸이 <b>출입문</b>, 금빛 칸이 <b>대표 자리</b>입니다 · 바깥 글씨는 {year}년에 예부터 조심하라 본 방면입니다</>}
+            : <>붉은 칸이 <b>출입문</b>, 금빛 칸이 <b>대표 자리</b>입니다</>}
+          <span className="jr-caut">
+            {year}년에 예부터 조심하라 본 방면 — 대장군방 <b>{DIR8[caution.daejanggun]}</b>
+            {caution.same ? <>, 삼살방도 같은 <b>{DIR8[caution.samsal]}</b></> : <>, 삼살방 <b>{DIR8[caution.samsal]}</b></>}
+          </span>
         </div>
       </div>
 
