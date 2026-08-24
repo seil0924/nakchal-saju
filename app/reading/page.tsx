@@ -116,6 +116,9 @@ export default function Reading() {
   const [addDate, setAddDate] = useState('');
   const [saved, setSaved] = useState<Target[]>([]);
   const [cbOpen, setCbOpen] = useState(false); // 발주처 검색 셀렉트 열림
+  // 자리 사주(宅) 핸드오프 — /jari 에서 이미 잰 값만 받는다.
+  // 좌표가 아니라 방위각·거리라서 보관함에 남겨도 브이월드 조건을 어기지 않는다.
+  const [jari, setJari] = useState<{ deg?: number; km?: number; door?: number; desk?: number; from?: string; to?: string } | null>(null);
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); preloadKcp(); }, []);
   useEffect(() => { try { const s = sget(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
@@ -132,6 +135,12 @@ export default function Reading() {
       const b = p.get('b'), n = p.get('n');
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
       const ct = p.get('cat'); if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
+      // /jari → /reading 핸드오프. 숫자만 받고, 범위를 벗어나면 조용히 버린다.
+      const num = (v: string | null, lo: number, hi: number) => { const n = Number(v); return v !== null && Number.isFinite(n) && n >= lo && n <= hi ? n : undefined; };
+      const dg = num(p.get('dg'), 0, 360), km = num(p.get('km'), 0, 20000);
+      const dr = num(p.get('dr'), 0, 7), dk = num(p.get('dk'), 0, 7);
+      const pa = (p.get('pa') || '').slice(0, 40), pb = (p.get('pb') || '').slice(0, 40);
+      if (dg !== undefined || dr !== undefined) setJari({ deg: dg, km, door: dr, desk: dk, from: pa || undefined, to: pb || undefined });
       // 저장된 대표가 있는 재방문자에게만 선택 시트를 자동으로 띄운다. 신규 방문자는 폼을 바로 보게 한다.
       if (!p.get('b')) { try { const s = sget('nakchal_self_v1'); const has = !!s && (JSON.parse(s)?.length > 0); void has; /* 퍼널②: 자동 모달 제거 — 사용자가 직접 열 때만 */ } catch { /* noop */ } }
     } catch {}
@@ -233,6 +242,7 @@ export default function Reading() {
         partner: tg('partner')?.date || null, partnerName: tg('partner')?.name,
         ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
         situation, worry: f.worry, cat: cat || undefined,
+        jari: jari || undefined,
       };
       const minWait = new Promise(r => setTimeout(r, 2500)); // 리추얼 최소 상영 시간
       const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
