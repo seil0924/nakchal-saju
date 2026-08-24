@@ -5,7 +5,7 @@ import { FAQ_MAIN } from '@/lib/faq';
 const BASE = 'https://nakchalsaju.com';
 
 export const metadata: Metadata = {
-  title: '자주 묻는 질문 — 입찰 사주·발주처 궁합·투찰 택일 | 낙찰사주',
+  title: '자주 묻는 질문 — 입찰 사주·발주처 궁합·투찰 택일',
   description: '입찰 사주란 무엇인지, 사주로 낙찰을 예측할 수 있는지, 발주처 궁합·법인 설립일 사주·투찰 길일은 어떻게 보는지 — 낙찰사주에 대해 자주 묻는 질문에 답합니다.',
   alternates: { canonical: '/faq' },
   keywords: ['입찰 사주', '낙찰 사주', '발주처 궁합', '투찰 택일', '법인 설립일 사주', '사주 낙찰', '낙찰사주 FAQ'],
