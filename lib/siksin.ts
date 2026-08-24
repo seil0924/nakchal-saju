@@ -63,16 +63,35 @@ export function starsOf(c: Chart8): Slot[] {
 }
 
 const HELP: Star[] = ['비견', '겁재', '정인', '편인'];
+const helps = (s: Slot) => HELP.includes(s.star);
 
-// 일간이 얼마나 버티는지 — 월지에 두 몫을 준다(득령이 크다는 건 어느 유파나 같다).
-// 격국을 제대로 잡는 계산이 아니다. 감당 여부를 가늠하는 눈금일 뿐이고, 화면에도 그렇게 쓴다.
-export function strengthOf(slots: Slot[]): { help: number; drain: number; strong: boolean } {
-  let help = 1, drain = 0;   // 일간 자신을 한 몫으로 센다
-  for (const s of slots) {
-    const w = (s.pillar === 1 && !s.stem) ? 2 : 1;
-    if (HELP.includes(s.star)) help += w; else drain += w;
-  }
-  return { help, drain, strong: help >= drain };
+export type Strength = {
+  ryeong: boolean;   // 득령 — 태어난 달이 나를 돕는가
+  ji: boolean;       // 득지 — 앉은 자리가 나를 돕는가
+  se: boolean;       // 득세 — 나머지 글자에서 내 편이 절반을 넘는가
+  count: number;     // 셋 중 몇을 얻었나
+  strong: boolean;
+  help: number; drain: number;
+};
+
+// 옛 방식 그대로 득령·득지·득세 셋을 본다. 글자를 저울에 다는 것보다
+// 이 셋이 훨씬 덜 흔들리고, 대표님께 설명하기도 이 편이 낫다.
+// 격국을 제대로 잡는 계산은 아니다 — 감당 여부를 가늠하는 눈금이고, 화면에도 그렇게 쓴다.
+export function strengthOf(slots: Slot[]): Strength {
+  const month = slots.find(s => s.pillar === 1 && !s.stem);
+  const day = slots.find(s => s.pillar === 2 && !s.stem);
+  const rest = slots.filter(s => s !== month && s !== day);
+  const restHelp = rest.filter(helps).length;
+  const ryeong = !!month && helps(month);
+  const ji = !!day && helps(day);
+  const se = rest.length > 0 && restHelp * 2 > rest.length;
+  const count = (ryeong ? 1 : 0) + (ji ? 1 : 0) + (se ? 1 : 0);
+  return {
+    ryeong, ji, se, count,
+    strong: count >= 2,
+    help: slots.filter(helps).length,
+    drain: slots.filter(s => !helps(s)).length,
+  };
 }
 
 export type SiksinKind = '식신생재' | '상관생재' | '식상생재' | null;
@@ -88,7 +107,7 @@ export type Siksin = {
   adjacent: boolean;   // 식상과 재성이 붙어 있다
   bothStem: boolean;   // 둘 다 천간에 드러났다
   doosik: boolean;     // 편인이 천간에서 식신을 친다(도식)
-  strength: { help: number; drain: number; strong: boolean };
+  strength: Strength;
   notes: string[];
 };
 
@@ -111,32 +130,37 @@ export function judgeSiksin(c: Chart8): Siksin {
     : sik.length ? '식신생재' : sang.length ? '상관생재' : null;
 
   const notes: string[] = [];
-  if (!out.length) notes.push('명식에 식신도 상관도 없습니다. 내 손에서 나온 결과물로 버는 형태보다, 자리나 사람을 통해 버는 형태에 가깝습니다.');
-  if (!jae.length) notes.push('명식에 재성이 없습니다. 재주는 있으나 그것이 곧바로 돈으로 이어지는 통로가 원국에 안 보입니다 — 대운·세운에서 재성이 올 때 크게 벌립니다.');
 
   if (!out.length || !jae.length) {
+    if (!out.length) notes.push('명식에 식신도 상관도 없습니다. 내 손에서 나온 결과물로 버는 형태보다, 자리나 사람을 통해 버는 쪽에 가깝습니다.');
+    if (!jae.length) notes.push('명식에 재성이 없습니다. 재주는 있으나 그것이 곧바로 돈으로 이어지는 통로가 원국에 안 보입니다.');
     return {
       kind, level: 'none', score: 0,
       headline: '식신생재는 서 있지 않습니다',
-      body: notes.join(' '),
+      body: '식신생재는 만드는 기운(식상)과 취하는 기운(재성)이 함께 있어야 섭니다. 지금 명식은 한쪽이 비어 있습니다.',
       sik, sang, jae, adjacent: false, bothStem: false, doosik: false, strength, notes,
     };
   }
 
-  let score = sik.length ? 3 : 2;
-  score += 2;                    // 재성이 있다
+  let score = sik.length ? 3 : 2;   // 식신이 상관보다 이 구조에 곧다
+  score += 2;                        // 재성이 있다
   if (adjacent) score += 2;
-  if (bothStem) score += 2;
+  if (bothStem) score += 1;
+  if (jae.length >= 2) score += 1;   // 재성에 뿌리가 있다
   if (doosik) score -= 3;
   if (!strength.strong) score -= 2;
 
-  const level: Level = score >= 8 ? 'clear' : score >= 7 ? 'yes' : score >= 4 ? 'weak' : 'none';
+  const level: Level = score >= 8 ? 'clear' : score >= 6 ? 'yes' : score >= 4 ? 'weak' : 'none';
 
-  if (adjacent) notes.push(`${out[0].where}의 ${kind === '상관생재' ? '상관' : '식신'}과 ${jae[0].where}의 ${jae[0].star}가 가까이 붙어 있어 기운이 건너갑니다.`);
+  const first = out[0];
+  if (adjacent) notes.push(`${first.where}의 ${first.star}과 ${jae[0].where}의 ${jae[0].star}가 가까이 붙어 있어 기운이 건너갑니다.`);
   else notes.push('식상과 재성이 서로 떨어져 있습니다. 재주와 돈벌이가 한 줄로 이어지기까지 시간이 걸리는 편입니다.');
   if (bothStem) notes.push('둘 다 천간에 드러나 있어 남 눈에도 보이는 구조입니다.');
+  if (jae.length >= 2) notes.push('재성이 여럿이라 벌이가 한 갈래로만 오지 않습니다.');
   if (doosik) notes.push('다만 천간의 편인이 식신을 칩니다. 옛말로 도식(倒食) — 벌어들일 판에 생각이 앞서 손을 늦추는 일이 잦습니다.');
-  if (!strength.strong) notes.push('일간이 얇은 편입니다. 벌 구조는 서 있으나 혼자 다 짊어지면 몸이 먼저 상합니다 — 사람을 쓰고 나눠야 남습니다.');
+  notes.push(strength.strong
+    ? `일간이 ${[strength.ryeong && '득령', strength.ji && '득지', strength.se && '득세'].filter(Boolean).join('·')}으로 버팁니다. 벌어들이는 것을 담을 그릇은 됩니다.`
+    : '일간이 얇은 편입니다. 벌 구조는 서 있으나 혼자 다 짊어지면 몸이 먼저 상합니다 — 사람을 쓰고 나눠야 남습니다.');
 
   const HEAD: Record<Level, string> = {
     clear: `${kind}가 뚜렷하게 서 있습니다`,
@@ -152,7 +176,7 @@ export function judgeSiksin(c: Chart8): Siksin {
   };
 
   return {
-    kind, level, score,
+    kind, level,  score,
     headline: HEAD[level], body: BODY[level],
     sik, sang, jae, adjacent, bothStem, doosik, strength, notes,
   };
