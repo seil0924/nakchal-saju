@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { bizFooterLine } from '@/lib/bizinfo';
-export const metadata = { title: '이용약관 · 낙찰사주' };
+export const metadata = { title: '이용약관' };
 
 const SECTIONS: [string, string][] = [
   ['제1조 (목적)', '본 약관은 「나인굿즈」(이하 “회사”)가 제공하는 ‘낙찰사주’ 및 관련 제반 서비스(이하 “서비스”)의 이용과 관련하여 회사와 회원의 권리·의무 및 책임사항, 이용조건 및 절차를 규정함을 목적으로 합니다.'],
