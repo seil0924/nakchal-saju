@@ -8,6 +8,9 @@
 .jr-card svg{display:block;width:100%;height:auto;max-width:360px;margin:0 auto}
 .jr-cap{margin-top:10px;text-align:center;font-size:11.5px;line-height:1.62;color:rgba(239,234,224,.72)}
 .jr-cap b{color:#efeae0;font-weight:800}
+.jr-caut{display:block;margin-top:7px;padding-top:7px;border-top:1px solid rgba(239,234,224,.14);
+  font-size:10.5px;line-height:1.6;color:rgba(224,168,159,.92)}
+.jr-caut b{color:#f0c6bf;font-weight:800}
 
 /* ── 단락 ── */
 .jr-sec{margin:0 0 22px}
