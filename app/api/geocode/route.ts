@@ -11,9 +11,17 @@ import { NextResponse } from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+// 서울 리전에 붙인다. 미국 리전(iad1)에서 부르면 브이월드가 응답 없이 소켓을
+// 끊어버렸다(UND_ERR_SOCKET). 국내 공공 API 는 해외 IP 를 반기지 않는다.
+export const preferredRegion = ['icn1'];
+
 // https 를 먼저 쓰되 http 도 남겨둔다. 공공 API 쪽 인증서 체인이 종종 불완전해
 // 서버런타임 fetch 가 TLS 단계에서 그대로 터지는 일이 있다. 그때 조용히 죽지 않게.
 const ENDPOINTS = ['https://api.vworld.kr/req/address', 'http://api.vworld.kr/req/address'];
+
+// 기본 undici UA 를 그대로 두면 걸러내는 국내 API 가 있다. 사람 흉내가 아니라
+// 정직하게 서비스 이름을 밝히되, 일반적인 브라우저 UA 형태를 갖춰 보낸다.
+const UA = 'Mozilla/5.0 (compatible; NakchalSaju/1.0; +https://nakchalsaju.com)';
 
 type Point = { lat: number; lng: number; matched: string; kind: 'ROAD' | 'PARCEL' };
 type Out = { hit: Point | null; err: string | null };
@@ -28,7 +36,7 @@ async function lookup(address: string, kind: 'ROAD' | 'PARCEL', key: string): Pr
     try {
       const r = await fetch(base + '?' + qs.toString(), {
         cache: 'no-store',
-        headers: { accept: 'application/json' },
+        headers: { accept: 'application/json', 'user-agent': UA, referer: 'https://nakchalsaju.com/' },
         signal: AbortSignal.timeout(6000),
       });
       if (!r.ok) { err = 'http_' + r.status; continue; }
@@ -48,7 +56,7 @@ async function lookup(address: string, kind: 'ROAD' | 'PARCEL', key: string): Pr
       const matched = (res.refined && res.refined.text) || address;
       return { hit: { lat, lng, matched, kind }, err: null };
     } catch (e: any) {
-      err = 'throw:' + (e && (e.cause && e.cause.code || e.name || e.message) || 'unknown');
+      err = 'throw:' + (e && ((e.cause && e.cause.code) || e.name || e.message) || 'unknown');
     }
   }
   return { hit: null, err };
