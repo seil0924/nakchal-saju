@@ -1,0 +1,89 @@
+/* app/jari/jari.css — 자리 사주(宅) 전용. 나침반은 먹빛, 본문은 한지 위 먹글씨. */
+/* 색은 전부 흰/베이지 배경에서 4.5:1 이상 나오는 값만 썼다. 대비는 나중에 고치는 게 아니라 처음부터 지킨다. */
+
+.jr-wrap{padding:0 15px 18px}
+
+/* ── 나침반 ── */
+.jr-card{background:#1c1c1d;border-radius:4px;padding:14px 10px 12px;margin:12px 0 16px}
+.jr-card svg{display:block;width:100%;height:auto;max-width:360px;margin:0 auto}
+.jr-cap{margin-top:10px;text-align:center;font-size:11.5px;line-height:1.62;color:rgba(239,234,224,.72)}
+.jr-cap b{color:#efeae0;font-weight:800}
+
+/* ── 단락 ── */
+.jr-sec{margin:0 0 22px}
+.jr-h{display:flex;align-items:center;gap:8px;margin:0 0 6px;font-family:var(--serif);font-size:15.5px;font-weight:800;color:#1e2124}
+.jr-h em{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:2px;
+  background:#1c1c1d;color:#efeae0;font-style:normal;font-size:11px;font-weight:800}
+.jr-lead{margin:0 0 12px;font-size:12.5px;line-height:1.7;color:#4a5158}
+
+/* ── 방위 고르기 ── */
+.jr-pick{margin:0 0 12px}
+.jr-plab{margin:0 0 6px;font-size:11.5px;font-weight:800;color:#58616a}
+.jr-pbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.jr-pb{padding:9px 0;border:1px solid #ddd6c6;border-radius:3px;background:#fdfbf6;
+  font-size:12.5px;font-weight:700;color:#3a4046;cursor:pointer;transition:transform .12s ease,background .12s ease}
+.jr-pb:hover{transform:translateY(-1px)}
+.jr-pb.on.door{background:#8c2b21;border-color:#8c2b21;color:#fff}
+.jr-pb.on.desk{background:#7a5c14;border-color:#7a5c14;color:#fff}
+
+/* ── 판정 ── */
+.jr-verd{display:block;padding:12px 13px;border-radius:3px;border-left:3px solid #9aa1a8;background:#f6f4ee;margin:4px 0 12px}
+.jr-verd.good{border-left-color:#24684a;background:#f0f6f2}
+.jr-verd.ok{border-left-color:#84621a;background:#f9f5ea}
+.jr-verd.caution{border-left-color:#a8321f;background:#faf1ef}
+.jr-verd b{display:block;font-size:13.5px;font-weight:800;color:#1e2124;margin-bottom:5px}
+.jr-verd span{display:block;font-size:12.5px;line-height:1.72;color:#3a4046}
+.jr-verd em{display:block;margin-top:7px;font-style:normal;font-size:11px;line-height:1.6;color:#5d646b}
+
+.jr-el{padding:11px 13px;border-radius:3px;background:#fdfbf6;border:1px solid #e6dcc4;
+  font-size:12.5px;line-height:1.72;color:#3a4046;margin:0 0 12px}
+.jr-el b{font-weight:800}
+
+/* ── 비보 물건 ── */
+.jr-bibo{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.jr-bibo li{padding:11px 13px;border:1px solid #e7e3d8;border-radius:3px;background:#fff}
+.jr-bibo b{display:block;font-size:13px;font-weight:800;color:#1e2124}
+.jr-bibo span{display:block;margin-top:3px;font-size:11.5px;font-weight:700;color:#84621a}
+.jr-bibo em{display:block;margin-top:4px;font-style:normal;font-size:11.5px;line-height:1.6;color:#4a5158}
+
+/* ── 주소 입력 ── */
+.jr-fl{display:block;margin:0 0 9px}
+.jr-fl span{display:block;margin:0 0 5px;font-size:11.5px;font-weight:800;color:#58616a}
+.jr-fl input{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #ddd6c6;border-radius:3px;
+  background:#fff;font-size:13.5px;color:#1e2124}
+.jr-fl input::placeholder{color:#8b9199}
+.jr-fl input:focus{outline:2px solid #7a5c14;outline-offset:1px;border-color:#7a5c14}
+.jr-go{width:100%;padding:13px 0;border:0;border-radius:3px;background:#1c1c1d;color:#efeae0;
+  font-family:var(--serif);font-size:13.5px;font-weight:800;cursor:pointer;margin:3px 0 10px}
+.jr-go:disabled{background:#b9b5ab;color:#fff;cursor:default}
+.jr-err{padding:10px 12px;border-radius:3px;background:#faf1ef;border-left:3px solid #a8321f;
+  font-size:12px;line-height:1.65;color:#7a2417;margin:0 0 10px}
+
+/* ── 택일 ── */
+.jr-days{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.jr-days li{display:grid;grid-template-columns:52px 26px 1fr auto;align-items:center;gap:9px;
+  padding:10px 12px;border:1px solid #e7e3d8;border-radius:3px;background:#fff}
+.jr-days .jd{font-size:13px;font-weight:800;color:#1e2124}
+.jr-days .jd em{margin-left:3px;font-style:normal;font-size:10.5px;font-weight:700;color:#6b7278}
+.jr-days .jk{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+  border-radius:2px;background:#1c1c1d;color:#efeae0;font-family:var(--serif);font-size:12px;font-weight:800}
+.jr-days .jw{font-size:11.5px;line-height:1.5;color:#4a5158;min-width:0}
+.jr-days .jw b{display:block;font-size:12px;font-weight:800;color:#1e2124}
+.jr-days .jg{font-family:var(--serif);font-size:12px;font-weight:700;color:#84621a}
+
+/* ── 진입 유도 ── */
+.jr-cta{display:block;padding:14px 15px;border-radius:3px;background:#1c1c1d;color:#efeae0;
+  text-decoration:none;font-family:var(--serif);font-size:14px;font-weight:800;text-align:center}
+.jr-cta small{display:block;margin-top:5px;font-family:inherit;font-size:11px;font-weight:500;
+  color:rgba(239,234,224,.72)}
+
+.jr-disc{margin:0;font-size:11px;line-height:1.7;color:#5d646b}
+
+@media (min-width:560px){
+  .jr-pbtns{grid-template-columns:repeat(8,1fr)}
+  .jr-bibo{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .jr-pb{transition:none}
+  .jr-pb:hover{transform:none}
+}
