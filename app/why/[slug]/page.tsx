@@ -11,7 +11,8 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   const p = painBySlug(params.slug);
   if (!p) return { title: '낙찰사주' };
   const plain = p.title.replace(/\{\/?b\}/g, '').replace(/\n/g, ' ');
-  return { title: `${plain} · 낙찰사주`, description: p.lead };
+  // 레이아웃 템플릿이 ' · 낙찰사주'를 뒤에 붙인다. 여기서 또 붙이면 제목에 두 번 나온다.
+  return { title: plain, description: p.lead };
 }
 
 // {b}..{/b} → <b>..</b>
