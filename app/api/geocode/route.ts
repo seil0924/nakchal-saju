@@ -87,3 +87,5 @@ export async function GET(req: Request) {
   const h = hit.hit;
   return NextResponse.json({ ok: true, lat: h.lat, lng: h.lng, matched: h.matched, kind: h.kind });
 }
+
+// 프로젝트 함수 리전을 icn1(서울)로 바꾼 뒤 재배포해야 위 preferredRegion 이 실제로 먹는다.
