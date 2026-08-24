@@ -49,9 +49,9 @@ export function houseHarmony(door: number, desk: number): Harmony {
     : '문과 자리가 다른 사택입니다';
   const body = same
     ? (line
-      ? `출입문 ${d.dir}(${d.gua})과 대표 자리 ${k.dir}(${k.gua})은 같은 ${d.sataek}입니다. 다만 둘이 정면으로 마주 보아, 드나드는 기운이 자리로 곧장 들이칩니다.`
-      : `출입문 ${d.dir}(${d.gua})과 대표 자리 ${k.dir}(${k.gua})이 같은 ${d.sataek}입니다. 팔택에서 가장 무난하게 보는 배치입니다.`)
-    : `출입문은 ${d.sataek}(${d.dir}·${d.gua}), 대표 자리는 ${k.sataek}(${k.dir}·${k.gua})입니다. 문을 옮기기 어렵다면 자리를 같은 사택 쪽으로 돌리는 편이 빠릅니다.`;
+      ? `출입문 ${d.dir}쪽(${d.ko})과 대표 자리 ${k.dir}쪽(${k.ko})은 같은 ${d.sataek}입니다. 다만 둘이 정면으로 마주 보아, 드나드는 기운이 자리로 곧장 들이칩니다.`
+      : `출입문 ${d.dir}쪽(${d.ko})과 대표 자리 ${k.dir}쪽(${k.ko})이 같은 ${d.sataek}입니다. 팔택에서 가장 무난하게 보는 배치입니다.`)
+    : `출입문은 ${d.sataek}(${d.dir}쪽), 대표 자리는 ${k.sataek}(${k.dir}쪽)입니다. 문을 옮기기 어렵다면 자리를 같은 사택 쪽으로 돌리는 편이 빠릅니다.`;
   return { door: d, desk: k, same, line, level, title, body };
 }
 
