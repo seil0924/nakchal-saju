@@ -3,6 +3,8 @@ import 'server-only';
 import { chartFromBirth, compute, todayPillar, sajeong, wonguk, seunOf, type Chart, type Pillar, type Seun } from './engine';
 import { buildTiered, reportHeroFor, type Section, type Hero } from './report-copy';
 import { catMks } from './report-categories';
+import { taekSection, type JariInput } from './taek-report';
+import { weakElOf } from './taek-house';
 
 export type ReportInput = {
   name?: string;
@@ -18,7 +20,9 @@ export type ReportInput = {
   clientName?: string; legalName?: string; partnerName?: string; allyName?: string; // 대상 이름
   situation?: string;            // 상황 칩 요약 (예: "관급 공사 · 저가경쟁 심함")
   worry?: string;
-  cat?: string;                  // 카테고리(daepyo·sajeong·balju·gunghap·daeun) — 섹션 필터
+  cat?: string;                  // 카테고리(daepyo·sajeong·balju·gunghap·daeun·ijeon) — 섹션 필터
+  // 자리 사주(宅). /jari 에서 이미 잰 방위각·거리만 넘어온다 — 좌표는 받지도 남기지도 않는다.
+  jari?: JariInput;
 };
 
 function dateChart(v?: string | null): Chart | null {
@@ -73,8 +77,19 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   const cc = !!input.clientCore;
   const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf, cc, baljuPremium));
 
+  // 자리 사주(宅)는 report-copy 의 티어 빌더 바깥에서 만든다.
+  // 방위·거리는 주소를 넣어야 생기는 값이라, 명식만으로 도는 빌더에 끼워 넣으면 자리가 어색하다.
+  const taek = mks && mks.includes('宅')
+    ? taekSection(input.jari || {}, weakElOf(c), c.dZhi, selYear, now)
+    : null;
+  if (taek) {
+    sections.push({ mk: '宅', free: false, tier: 'full', t: taek.t,
+      html: level >= 2 ? taek.html : '', teaser: taek.teaser });
+  }
+
   // 분량 앵커: 전체(레벨 2) 기준 장·항목 수를 산출해 노출 (텍스트는 미전송 — 숫자만)
   const fullSecs = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2, selYear, seunSelf, cc, true));
+  if (taek) fullSecs.push({ mk: '宅', free: false, tier: 'full', t: taek.t, html: taek.html, teaser: taek.teaser });
   const items = fullSecs.reduce((n, sec) => n + (sec.html.match(/<p|<div class="cbrow|<div class="ssrow/g) || []).length, 0);
   const meta = { chapters: fullSecs.length, items };
 
