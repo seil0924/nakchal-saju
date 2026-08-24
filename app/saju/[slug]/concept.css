@@ -30,16 +30,15 @@
 
 /* 판정 결과 */
 .sk-out{border-radius:3px;padding:14px 14px 12px;background:#fff;border:1px solid #e7e3d8;border-left-width:3px}
-.sk-out.clear{border-left-color:#24684a}
-.sk-out.yes{border-left-color:#84621a}
-.sk-out.weak{border-left-color:#9aa1a8}
-.sk-out.none{border-left-color:#a8321f}
+/* 색은 등급이 아니라 소식의 결을 따른다 — 식신생재는 뚜렷할수록 반갑고, 재다신약은 뚜렷할수록 조심할 일이다 */
+.sk-out.good{border-left-color:#24684a}
+.sk-out.warn{border-left-color:#a8321f}
+.sk-out.flat{border-left-color:#9aa1a8}
 .sk-badge{display:inline-block;padding:3px 9px;border-radius:2px;font-size:11px;font-weight:800;
   background:#efece2;color:#4e565d}
-.sk-out.clear .sk-badge{background:#e3f0e8;color:#1c5238}
-.sk-out.yes .sk-badge{background:#f6efdc;color:#6b5211}
-.sk-out.weak .sk-badge{background:#eeeff1;color:#4e565d}
-.sk-out.none .sk-badge{background:#f8e9e6;color:#8a2718}
+.sk-out.good .sk-badge{background:#e3f0e8;color:#1c5238}
+.sk-out.warn .sk-badge{background:#f8e9e6;color:#8a2718}
+.sk-out.flat .sk-badge{background:#eeeff1;color:#4e565d}
 .sk-out h3{margin:8px 0 6px;font-family:var(--serif);font-size:16px;font-weight:900;color:#1e2124;line-height:1.45}
 .sk-out>p{margin:0 0 12px;font-size:13.5px;line-height:1.78;color:#3a4046}
 
@@ -48,9 +47,9 @@
 .sk-grp{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .sk-gt{min-width:38px;font-size:11.5px;font-weight:800;color:#58616a}
 .sk-chip{padding:4px 9px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid transparent}
-.sk-chip.sik{background:#e8f2ec;color:#1c5238;border-color:#c6ddd0}
-.sk-chip.sang{background:#f6efdc;color:#6b5211;border-color:#e2d3a8}
-.sk-chip.jae{background:#f3eee6;color:#6a4f21;border-color:#ddd0ba}
+.sk-chip.a{background:#e8f2ec;color:#1c5238;border-color:#c6ddd0}
+.sk-chip.b{background:#f6efdc;color:#6b5211;border-color:#e2d3a8}
+.sk-chip.c{background:#f3eee6;color:#6a4f21;border-color:#ddd0ba}
 .sk-chip.none{background:#f2f2f0;color:#5d646b;border-color:#e2e2de}
 
 
