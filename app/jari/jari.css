@@ -81,6 +81,10 @@
 .jr-cta small{display:block;margin-top:5px;font-family:inherit;font-size:11px;font-weight:500;
   color:rgba(239,234,224,.72)}
 
+/* 유료 진입만 인주색 테두리를 두른다 — 무료 진입과 한눈에 갈리게 */
+.jr-cta.pay{background:#7a1f16;margin:4px 0 14px}
+.jr-cta.pay small{color:rgba(250,240,236,.86)}
+
 .jr-disc{margin:0;font-size:11px;line-height:1.7;color:#5d646b}
 
 @media (min-width:560px){
