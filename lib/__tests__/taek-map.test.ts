@@ -29,9 +29,12 @@ describe('bearing / dirOf', () => {
     expect(dirOf(bearing(DJ, SEOUL)).name).toBe('북');
   });
 
-  it('반대로 가면 대략 180도 차이가 난다', () => {
-    const a = bearing(DJ, SEOUL), b = bearing(SEOUL, DJ);
-    expect(Math.abs(((a - b + 540) % 360) - 180)).toBeLessThan(3);
+  it('반대로 가면 거의 180도 차이가 난다', () => {
+    // 지구가 둥글어 정확히 180은 아니다(수렴각). 국내 거리면 1도 안쪽에서 갈린다.
+    const gap = (x: { lat: number; lng: number }, y: { lat: number; lng: number }) =>
+      Math.abs(180 - Math.abs(((bearing(x, y) - bearing(y, x)) % 360 + 360) % 360));
+    expect(gap(DJ, SEOUL)).toBeLessThan(1);
+    expect(gap(DJ, BUSAN)).toBeLessThan(1.5);
   });
 
   it('음수·360 이상 각도도 8방위로 접힌다', () => {
