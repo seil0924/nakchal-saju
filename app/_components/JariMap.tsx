@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { chartFromInput } from '@/lib/preview';
 import { migrateLegacy, peopleOf } from '@/lib/people';
 import { sget } from '@/lib/scope';
-import { DIR8, DIR8_HANJA, judgeMove, yearCaution, moveDays, type MoveVerdict } from '@/lib/taek-map';
+import { DIR8, judgeMove, yearCaution, moveDays, type MoveVerdict } from '@/lib/taek-map';
 import { guaOf, houseHarmony, biboFor, weakElOf, deskAdvice, type Harmony } from '@/lib/taek-house';
 import { OH_HANJA, OH_NAME, OH_TEXT } from '@/lib/balju-map';
 import { CAT_INFO } from '@/lib/report-categories';
@@ -123,11 +123,11 @@ export default function JariMap() {
                 : (i === caution.daejanggun || i === caution.samsal) ? 'rgba(179,56,44,.12)' : 'rgba(255,255,255,.035)'}
               stroke="rgba(239,234,224,.14)" strokeWidth={0.8} />
           ))}
-          {DIR8_HANJA.map((h, i) => {
+          {DIR8.map((h, i) => {
             const [x, y] = px(168, i * 45);
             const on = i === door || i === desk;
             return (
-              <text key={h} x={x} y={y + 4} textAnchor="middle" fontSize={i % 2 ? 11 : 14}
+              <text key={h} x={x} y={y + 4} textAnchor="middle" fontSize={i % 2 ? 11 : 13.5}
                 fontWeight={on ? 900 : 600} fill={on ? '#efeae0' : 'rgba(239,234,224,.5)'}
                 style={{ fontFamily: 'var(--serif)' }}>{h}</text>
             );
@@ -159,7 +159,7 @@ export default function JariMap() {
 
       {/* ── ① 지금 자리 ── */}
       <section className="jr-sec">
-        <h3 className="jr-h"><em>壹</em> 지금 앉은 자리</h3>
+        <h3 className="jr-h"><em>1</em> 지금 앉은 자리</h3>
         <p className="jr-lead">사무실 문이 어느 쪽에 있고, 대표님 책상이 어느 쪽에 놓였는지만 짚어 주세요.</p>
         <div className="jr-pick">
           <div className="jr-plab">출입문 방위</div>
@@ -184,7 +184,7 @@ export default function JariMap() {
           <div className={'jr-verd ' + harmony.level}>
             <b>{harmony.title}</b>
             <span>{harmony.body}</span>
-            <em>{harmony.door.dir} {harmony.door.gua} · {harmony.desk.dir} {harmony.desk.gua}</em>
+            <em>출입문 {harmony.door.dir}쪽 · 대표 자리 {harmony.desk.dir}쪽</em>
           </div>
         )}
 
@@ -211,7 +211,7 @@ export default function JariMap() {
 
       {/* ── ② 옮길 자리 ── */}
       <section className="jr-sec">
-        <h3 className="jr-h"><em>貳</em> 옮길 자리</h3>
+        <h3 className="jr-h"><em>2</em> 옮길 자리</h3>
         <p className="jr-lead">지금 사무실과 옮길 곳 주소를 넣으면 방위와 거리를 재 드립니다.</p>
         <label className="jr-fl"><span>지금 사무실</span>
           <input value={addrA} onChange={e => setAddrA(e.target.value)} placeholder="예) 대전 서구 둔산동 1420" />
@@ -235,8 +235,8 @@ export default function JariMap() {
             </b>
             <span>
               {ptA.matched} → {ptB.matched} · {verdict.dirName} {verdict.deg}° · {verdict.km}km
-              {verdict.isDaejanggun && ' · 대장군방(大將軍方)'}
-              {verdict.isSamsal && ' · 삼살방(三殺方)'}
+              {verdict.isDaejanggun && ' · 대장군방'}
+              {verdict.isSamsal && ' · 삼살방'}
               {verdict.clearYear && ` — 이 방면은 ${verdict.clearYear}년에 풀립니다.`}
             </span>
             <em>대장군방·삼살방은 예부터 조심하라 본 자리일 뿐, 못 간다는 뜻이 아닙니다. 판단은 대표님 몫으로 남깁니다.</em>
@@ -246,13 +246,13 @@ export default function JariMap() {
 
       {/* ── ③ 이사 택일 ── */}
       <section className="jr-sec">
-        <h3 className="jr-h"><em>參</em> 옮기기 좋은 날</h3>
-        <p className="jr-lead">앞으로 60일 중 건제십이신의 만(滿)·정(定)·성(成)·개(開)에 드는 날입니다.</p>
+        <h3 className="jr-h"><em>3</em> 옮기기 좋은 날</h3>
+        <p className="jr-lead">앞으로 60일 중 예부터 이사·입주에 쓰던 <b>만·정·성·개</b> 나흘에 드는 날입니다.</p>
         <ul className="jr-days">
           {days.map(d => (
             <li key={d.ymd}>
               <span className="jd">{d.month}/{d.day}<em>{d.dow}</em></span>
-              <span className="jk">{d.key}</span>
+              <span className="jk">{d.name}</span>
               <span className="jw"><b>{d.name}</b>{d.why}</span>
               <span className="jg">{d.ganji}</span>
             </li>
@@ -268,7 +268,7 @@ export default function JariMap() {
       )}
 
       <p className="jr-disc">
-        방위는 두 좌표의 대권 방위각으로 재고, 택일은 절기로 잡은 월지와 일지의 건제십이신으로 가립니다.
+        방위는 지구를 둥글게 놓고 두 지점 사이의 각을 재서 냅니다. 날은 절기로 잡은 달과 그날의 간지를 맞춰 가립니다.
         주소와 좌표는 방위를 재는 그 순간에만 쓰고 어디에도 저장하지 않습니다.
       </p>
     </div>
