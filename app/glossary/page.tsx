@@ -6,7 +6,7 @@ const BASE = 'https://nakchalsaju.com';
 const slugify = (s: string) => s;
 
 export const metadata: Metadata = {
-  title: '입찰·명리 용어사전 — 사정률·적격심사·일간·대운까지 | 낙찰사주',
+  title: '입찰·명리 용어사전 — 사정률·적격심사·일간·대운까지',
   description: '공공입찰·조달 용어(사정률·낙찰하한율·적격심사·종합심사)와 사주명리 용어(일간·십성·대운·세운·관재수)를 한자리에서 명확히 정의합니다.',
   alternates: { canonical: '/glossary' },
   keywords: ['입찰 용어', '조달 용어', '사정률 뜻', '적격심사 뜻', '사주 용어', '명리 용어', '일간 뜻', '대운 뜻', '낙찰사주'],
