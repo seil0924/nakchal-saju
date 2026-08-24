@@ -3,7 +3,7 @@ import { CAT_INFO } from '@/lib/report-categories';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { bizFooterLine } from '@/lib/bizinfo';
 
-export const metadata = { title: '이용안내·요금 · 낙찰사주', description: '낙찰사주 상품 안내와 판매가, 청약철회·환불 정책, 사업자정보.' };
+export const metadata = { title: '이용안내·요금', description: '낙찰사주 상품 안내와 판매가, 청약철회·환불 정책, 사업자정보.' };
 
 const PRODUCTS: [string, number, string][] = [
   ['대표 사주', CAT_INFO.daepyo.price, '대표님의 그릇·승부 기질·재물·사람·6대 축 경영 스코어카드·유형별 실전 수칙 등 대표 사주 심층 진단(디지털 콘텐츠 열람).'],
