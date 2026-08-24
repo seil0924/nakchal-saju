@@ -35,7 +35,7 @@ export default function Jari() {
         <Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
 
-      <div className="hero"><div className="kick">宅 · 事務室 方位</div>
+      <div className="hero"><div className="kick">宅 · 자 리 사 주</div>
         <h2 style={{ fontSize: 19 }}>사무실을 옮기기 전에,<br />어느 쪽인지부터</h2>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>지금 자리의 문·책상 방위와 옮길 곳의 방위·택일을 함께 봅니다</div>
       </div>
