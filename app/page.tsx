@@ -114,7 +114,12 @@ export default function Home() {
           <div className="bd5"><div className="t">발주처 사주 <small>發注處 宮合</small></div><div className="d">그 발주처, 나와 맞는 판인가 — 손대기 전에</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
-        <Link data-reveal className="li5" href="/reading?cat=gunghap">
+        <Link data-reveal className="li5" href="/jari">
+            <div aria-hidden="true" className="gz" style={{ color: '#cfa64e' }}>宅</div>
+            <div className="bd5"><div className="t">자리 사주 <small>事務室 移轉 方位</small></div><div className="d">사무실을 옮기기 전에, 어느 쪽인지부터</div></div>
+            <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
+          </Link>
+          <Link data-reveal className="li5" href="/reading?cat=gunghap">
           <div aria-hidden="true" className="gz" style={{ color: '#d15c4a' }}>合</div>
           <div className="bd5"><div className="t">협정·궁합 사주 <small>同業 · 協定</small></div><div className="d">손잡기 전에, 깨질 궁합인지부터</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
