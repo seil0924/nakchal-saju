@@ -20,7 +20,9 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image', title: '낙찰사주 — 會社 사주 전문', description: '오늘의 낙찰 사정률을 사주로 짚다', images: ['/api/og'] },
   robots: { index: true, follow: true },
-  alternates: { canonical: '/' },
+  // canonical 은 여기 두면 안 된다. 개별 canonical 이 없는 페이지가 전부 이걸 물려받아
+  // 자기 자신이 아니라 홈을 정본으로 가리키게 된다 — 구글에 "나는 홈의 사본"이라고 말하는 꼴이다.
+  // 홈의 canonical 은 app/page.tsx 가 직접 선언한다. 나머지는 자기 주소로 자동 정본이 된다.
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '0qBkF3KE6jGqkm5dOBP2lhKzyHDqTGRwqm2ZNgQVn5Y',
     other: { 'naver-site-verification': process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION || '276fc75478f167334e1f19c9ddcb64d44d05a6ac' },
