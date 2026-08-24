@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CONCEPTS } from '@/lib/seo-concepts';
+import SiksinCheck from '@/app/_components/SiksinCheck';
+import './concept.css';
 
 const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => CONCEPTS.find(c => c.slug === decodeURIComponent(slug));
@@ -44,6 +46,8 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
         <nav aria-label="위치" style={{ fontSize: 12, color: '#8a806a', marginBottom: 10 }}>{c.group} › {c.label}</nav>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '4px 0 12px' }}>{c.h1}</h1>
         <p style={{ fontSize: 15.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>{c.lead}</p>
+        {/* 검색해서 온 사람은 설명보다 '내 경우'를 먼저 본다. 판정을 글 위에 둔다. */}
+        {c.slug === '식신생재' && <SiksinCheck />}
         {c.sections.map((s, i) => (
           <div key={i} style={card}>
             <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15.5, color: 'var(--navy)', marginBottom: 6 }}>{s.h}</div>
