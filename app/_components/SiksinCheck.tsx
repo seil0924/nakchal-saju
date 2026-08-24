@@ -92,6 +92,12 @@ export default function SiksinCheck() {
             <Chips title="재성" list={r.jae} tone="jae" />
           </div>
 
+          {noTime && (
+            <div className="sk-hint">
+              태어난 시각을 빼고 여섯 글자만 보았습니다. 시각을 알면 두 글자가 더 붙어 <b>판정이 달라질 수 있습니다.</b>
+            </div>
+          )}
+
           <ul className="sk-notes">
             {r.notes.map((n, i) => <li key={i}>{n}</li>)}
           </ul>
