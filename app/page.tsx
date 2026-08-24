@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import TodayChip from '@/app/_components/TodayChip';
@@ -10,6 +11,9 @@ import { CLIENTS } from '@/lib/clients';
 import { TYCOONS } from '@/lib/tycoon';
 import { GLOSSARY } from '@/lib/glossary';
 import { getAllColumns } from '@/lib/column';
+
+// 홈만 스스로를 정본으로 선언한다. 레이아웃에 두면 모든 페이지가 이걸 물려받아 홈을 가리킨다.
+export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
 export default function Home() {
