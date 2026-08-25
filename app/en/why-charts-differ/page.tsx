@@ -99,7 +99,7 @@ export default function WhyPage() {
 
         <h3>So which one is right?</h3>
         <p>For the first three, there is a correct answer and it is arithmetic rather than opinion. For the fourth, there is a real difference of schools. For the fifth, ask which calendar the date came from.</p>
-        <p>If you want to see your own chart with the birthplace taken into account, the <Link href="/en/bazi">calculator is here</Link>. It runs the same engine as <Link href="/" hrefLang="ko">Nakchal Saju</Link>, a Korean service for company owners bidding on public contracts, where getting the hour wrong would show up as a wrong answer on a real decision.</p>
+        <p>If you want to see your own chart with the birthplace taken into account, the <Link href="/en/bazi">calculator is here</Link>. It is free, it asks where you were born, and it will tell you how many minutes the correction came to.</p>
       </section>
     </div>
   );
