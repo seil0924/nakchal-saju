@@ -44,7 +44,7 @@ export default function BaziPage() {
         { '@type': 'Question', name: 'What is BaZi?',
           acceptedAnswer: { '@type': 'Answer', text: 'BaZi, also called the Four Pillars of Destiny, maps a birth moment onto eight characters: a heavenly stem and an earthly branch for the year, month, day and hour. Each character carries one of the five elements, and the relationships between them are what a reading works with.' } },
         { '@type': 'Question', name: 'Why does the birthplace matter?',
-          acceptedAnswer: { '@type': 'Answer', text: 'The hour pillar follows true solar time, not clock time. Clock time is set by a country-wide standard meridian, so a birthplace east or west of that meridian is offset. Madrid runs about 75 minutes behind its clock, and Urumqi more than two hours. Without the birthplace, the hour pillar is a guess.' } },
+          acceptedAnswer: { '@type': 'Answer', text: 'The hour pillar follows true solar time, not clock time. Clock time is set by a country-wide standard meridian, so a birthplace east or west of that meridian is offset. Madrid runs about 75 minutes behind its clock, and Urumqi more than two hours. A calculator that only asks for a date and a time cannot place the hour for anyone born away from their standard meridian.' } },
         { '@type': 'Question', name: 'What if I do not know my birth time?',
           acceptedAnswer: { '@type': 'Answer', text: 'You still get three pillars, year, month and day. The day master, the element balance and most of the ten gods are all readable without the hour. Add the time later if you find it.' } },
       ],
@@ -73,8 +73,9 @@ export default function BaziPage() {
         <h3>The day master is the anchor</h3>
         <p>The stem of the day pillar stands for the person. Everything else is read in relation to it — which characters feed it, which drain it, which it controls. That relationship is what the <b>ten gods</b> name. A Direct Wealth character is not wealth itself; it is the thing your day master takes hold of.</p>
 
-        <h3>Why most calculators get the hour wrong</h3>
-        <p>Clock time is a political convenience. A whole country runs on one standard meridian, so anyone living east or west of it is out of step with the sun. Spain sits west of Greenwich but keeps Central European Time, putting Madrid about <b>75 minutes</b> behind the sun. Xinjiang keeps Beijing time and runs more than <b>two hours</b> out. The hour pillar follows the sun, not the clock — so a calculator that never asks where you were born cannot place it.</p>
+        <h3>Why the hour pillar is where charts disagree</h3>
+        <p>Clock time is a political convenience. A whole country runs on one standard meridian, so anyone living east or west of it is out of step with the sun. Spain sits west of Greenwich but keeps Central European Time, putting Madrid about <b>75 minutes</b> behind the sun. Xinjiang keeps Beijing time and runs more than <b>two hours</b> out. The hour pillar follows the sun, not the clock.</p>
+        <p>Some calculators handle this properly and some never ask for a birthplace at all. If a tool only wants a date and a time, it cannot place the hour for anyone born away from their standard meridian — and that is the single most common reason two sites hand you different charts. We <Link href="/en/why-charts-differ">go through all the reasons here</Link>.</p>
 
         <h3>Solar terms, computed not looked up</h3>
         <p>The month pillar changes at a <b>solar term</b>, the moment the sun reaches a particular apparent longitude. That moment drifts by hours from year to year, so a fixed calendar date gets it wrong for anyone born close to a boundary. This calculator computes the sun&rsquo;s position for the actual date, which is the only way to place those births correctly.</p>
