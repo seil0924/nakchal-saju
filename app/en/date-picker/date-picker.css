@@ -1,5 +1,5 @@
 /* app/en/date-picker/date-picker.css — 영어권 택일. */
-/* bazi.css 의 .bz-lang·.bz-read 를 함께 쓰므로 여기서 다시 정의하지 않는다. */
+/* .bz-read 는 bazi.css 에 있는데 그 파일은 /en/bazi 번들에만 실린다. 여기서 다시 쓴다. */
 /* 색은 전부 흰 배경에서 4.5:1 이상 나오는 값만 썼다. */
 
 .dp{padding:0 15px 6px}
@@ -48,3 +48,11 @@
 @media (min-width:560px){
   .dp-days{grid-template-columns:1fr 1fr}
 }
+
+/* 읽을거리 — bazi.css 와 같은 모양으로 맞춘다 */
+.bz-read{padding:6px 15px 24px}
+.bz-read h3{margin:18px 0 6px;font-family:var(--serif);font-size:15.5px;font-weight:800;color:#1e2124}
+.bz-read p{margin:0;font-size:14.5px;line-height:1.8;color:#33383f;font-weight:500}
+.bz-read b{font-weight:800;color:#1e2124}
+.bz-read i{color:#4a5158}
+.bz-read a{color:#26508f;font-weight:700}
