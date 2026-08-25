@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     // 영어판이 어디 있는지 알려 준다. 자동 리다이렉트 대신 이걸로 구글이 알아서 고른다.
-    languages: { 'ko-KR': '/', 'en': '/en/bazi', 'x-default': '/en/bazi' },
+    languages: { 'ko-KR': '/', 'en': '/en/bazi', 'zh-Hant': '/zh/bazi', 'x-default': '/en/bazi' },
   },
 };
 
