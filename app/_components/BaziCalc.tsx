@@ -6,21 +6,23 @@ import { resolveBirth, corePillars } from '@/lib/manse-core';
 import { CITIES, searchCities, cityKey, type City } from '@/lib/cities';
 import { solarShiftMin } from '@/lib/manse-core';
 import { baziOf, type Cell } from '@/lib/bazi-en';
+import { toZh, BZ_UI, type Lang } from '@/lib/bazi-i18n';
 
 const SEOUL = CITIES[0];
 
-function Glyph({ c, sub }: { c: Cell; sub: string }) {
+function Glyph({ c, sub, yang, yin }: { c: Cell; sub: string; yang: string; yin: string }) {
   return (
     <div className="bz-cell">
       <div className="bz-han" style={{ background: c.hex }}>{c.hanja}</div>
-      <div className="bz-py">{c.pinyin}</div>
-      <div className="bz-el" style={{ color: c.hexText }}>{c.yang ? 'Yang' : 'Yin'} {c.element}</div>
+      {c.pinyin ? <div className="bz-py">{c.pinyin}</div> : null}
+      <div className="bz-el" style={{ color: c.hexText }}>{c.yang ? yang : yin} {c.element}</div>
       <div className="bz-sub">{sub}</div>
     </div>
   );
 }
 
-export default function BaziCalc() {
+export default function BaziCalc({ lang = 'en' }: { lang?: Lang }) {
+  const T = BZ_UI[lang];
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [noTime, setNoTime] = useState(true);
@@ -37,30 +39,31 @@ export default function BaziCalc() {
     const c = corePillars(r.y, r.m, r.d, r.hf, r.yaja);
     const [hh, mm] = (t || '12:00').split(':').map(Number);
     const [yy, mo, dd] = date.split('-').map(Number);
-    return { bazi: baziOf(c), shift: solarShiftMin(place, yy, mo, dd, hh, mm), yaja: r.yaja };
-  }, [date, time, noTime, place]);
+    const chart = baziOf(c);
+    return { bazi: lang === 'zh' ? toZh(chart) : chart, shift: solarShiftMin(place, yy, mo, dd, hh, mm), yaja: r.yaja };
+  }, [date, time, noTime, place, lang]);
 
   const shiftText = (n: number) =>
-    n === 0 ? 'none' : `${n > 0 ? '+' : '−'}${Math.abs(n)} min`;
+    n === 0 ? T.none : `${n > 0 ? '+' : '−'}${Math.abs(n)} ${T.min}`;
 
   return (
-    <section className="bz" lang="en">
+    <section className="bz" lang={T.htmlLang}>
       <div className="bz-form">
-        <label className="bz-fl"><span>Date of birth</span>
+        <label className="bz-fl"><span>{T.dateLabel}</span>
           <input type="date" value={date} min="1900-01-01" max="2100-12-31"
             onChange={e => setDate(e.target.value)} />
         </label>
 
-        <label className="bz-fl"><span>Time of birth</span>
+        <label className="bz-fl"><span>{T.timeLabel}</span>
           <div className="bz-trow">
-            <button type="button" className={'bz-tb' + (noTime ? ' on' : '')} onClick={() => setNoTime(true)}>Unknown</button>
-            <button type="button" className={'bz-tb' + (!noTime ? ' on' : '')} onClick={() => setNoTime(false)}>Known</button>
+            <button type="button" className={'bz-tb' + (noTime ? ' on' : '')} onClick={() => setNoTime(true)}>{T.unknown}</button>
+            <button type="button" className={'bz-tb' + (!noTime ? ' on' : '')} onClick={() => setNoTime(false)}>{T.known}</button>
             {!noTime && <input type="time" value={time} onChange={e => setTime(e.target.value)} />}
           </div>
         </label>
 
-        <label className="bz-fl bz-place"><span>Place of birth</span>
-          <input value={open ? q : cityKey(place)} placeholder="Search a city"
+        <label className="bz-fl bz-place"><span>{T.placeLabel}</span>
+          <input value={open ? q : cityKey(place)} placeholder={T.searchCity}
             onFocus={() => { setOpen(true); setQ(''); }}
             onChange={e => setQ(e.target.value)}
             onBlur={() => setTimeout(() => setOpen(false), 150)} />
@@ -79,9 +82,7 @@ export default function BaziCalc() {
       </div>
 
       <p className="bz-why">
-        Why we ask for the place: the hour pillar is set by <b>true solar time</b>, not by the clock on the wall.
-        Two people born at the same clock time in Madrid and Beijing are more than an hour apart in solar time.
-        If a calculator never asks where you were born, its hour pillar is a guess.
+        {T.why}
       </p>
 
       {result && (
@@ -91,16 +92,16 @@ export default function BaziCalc() {
               {result.bazi.pillars.map(p => (
                 <div className="bz-col" key={p.label}>
                   <div className="bz-lab">{p.label}</div>
-                  <Glyph c={p.stem} sub={p.stem.star ?? 'Day Master'} />
-                  <Glyph c={p.branch} sub={`${p.branch.animal} · ${p.branch.star}`} />
+                  <Glyph c={p.stem} sub={p.stem.star ?? T.dayMasterSub} yang={T.yang} yin={T.yin} />
+                  <Glyph c={p.branch} sub={`${p.branch.animal} · ${p.branch.star}`} yang={T.yang} yin={T.yin} />
                 </div>
               ))}
             </div>
 
             <div className="bz-dm">
-              Day Master <b style={{ color: result.bazi.dayMaster.hex }}>
-                {result.bazi.dayMaster.hanja} {result.bazi.dayMaster.pinyin} —
-                {' '}{result.bazi.dayMaster.yang ? 'Yang' : 'Yin'} {result.bazi.dayMaster.element}</b>
+              {T.dayMaster} <b style={{ color: result.bazi.dayMaster.hex }}>
+                {result.bazi.dayMaster.hanja}{result.bazi.dayMaster.pinyin ? ' ' + result.bazi.dayMaster.pinyin : ''} —
+                {' '}{result.bazi.dayMaster.yang ? T.yang : T.yin} {result.bazi.dayMaster.element}</b>
             </div>
 
             <div className="bz-bal">
@@ -113,23 +114,22 @@ export default function BaziCalc() {
               ))}
             </div>
             <p className="bz-note">
-              Strongest <b>{result.bazi.strongest}</b>, thinnest <b>{result.bazi.weakest}</b>.
-              {' '}Solar correction applied for {place.city}: <b>{shiftText(result.shift)}</b>.
-              {result.yaja ? ' Late-night hour (23:00–01:00) handled as the following day pillar.' : ''}
+              {T.strongest} <b>{result.bazi.strongest}</b>, {T.thinnest} <b>{result.bazi.weakest}</b>.
+              {' '}{T.correctionFor(place.city)}: <b>{shiftText(result.shift)}</b>.
+              {result.yaja ? T.yajaNote : ''}
             </p>
           </div>
 
           {noTime && (
             <div className="bz-hint">
-              Without a birth time we read <b>three pillars</b>. The hour pillar changes the reading, so add the time if you know it.
+              {T.noTimeHint}
             </div>
           )}
         </>
       )}
 
       <p className="bz-disc">
-        Solar terms are computed astronomically from the sun&rsquo;s apparent longitude, not from a fixed calendar date,
-        so births near a term boundary land in the right month. For reflection, not prediction.
+        {T.disc}
       </p>
     </section>
   );
