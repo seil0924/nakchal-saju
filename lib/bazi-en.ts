@@ -15,7 +15,11 @@ export const BRANCH_ANIMAL = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake',
 
 // 오행 차례는 상생(목→화→토→금→수)이다. 코드 전체가 이 순서를 쓴다.
 export const ELEMENT_EN = ['Wood', 'Fire', 'Earth', 'Metal', 'Water'] as const;
-export const ELEMENT_HEX = ['#2f7d5b', '#c0392b', '#c79a3a', '#8a949e', '#2e5aa8'];
+// 색이 두 벌 필요하다.
+// TILE 은 흰 글씨를 얹는 바탕이라 어두워야 하고(土·金이 밝아서 2.6:1 까지 떨어졌다),
+// LIGHT 는 먹빛 배경 위에 얹는 글씨라 밝아야 한다. 한 벌로 돌려쓰면 어느 한쪽이 안 읽힌다.
+export const ELEMENT_TILE = ['#2f7d5b', '#b03426', '#8a6a1e', '#5d666e', '#2e5aa8'];
+export const ELEMENT_LIGHT = ['#7fd3ab', '#f0938a', '#e8c877', '#c2cad2', '#9dbcf0'];
 
 // 십성. 영어권 자료마다 표기가 갈리는데 가장 널리 쓰이는 쪽으로 골랐다.
 export const STAR_EN: Record<Star, string> = {
@@ -36,7 +40,9 @@ export type Chart8 = {
 };
 
 export type Cell = {
-  hanja: string; pinyin: string; element: string; hex: string;
+  hanja: string; pinyin: string; element: string;
+  hex: string;        // 글자를 얹을 바탕색
+  hexText: string;    // 먹빛 위에 쓰는 글씨색
   yang: boolean;
   animal?: string;
   star: string | null;        // 일간 자신은 십성이 없다
@@ -49,7 +55,7 @@ function stemCell(idx: number, me: { el: number; yang: boolean } | null): Cell {
   const star = me ? starOf(me.el, me.yang, el, yang) : null;
   return {
     hanja: STEM_HANJA[idx], pinyin: STEM_PINYIN[idx],
-    element: ELEMENT_EN[el], hex: ELEMENT_HEX[el], yang,
+    element: ELEMENT_EN[el], hex: ELEMENT_TILE[el], hexText: ELEMENT_LIGHT[el], yang,
     star: star ? STAR_EN[star] : null, starHanja: star ? STAR_HANJA[star] : null,
   };
 }
@@ -58,7 +64,7 @@ function branchCell(idx: number, me: { el: number; yang: boolean }): Cell {
   const star = starOf(me.el, me.yang, el, yang);
   return {
     hanja: BRANCH_HANJA[idx], pinyin: BRANCH_PINYIN[idx],
-    element: ELEMENT_EN[el], hex: ELEMENT_HEX[el], yang,
+    element: ELEMENT_EN[el], hex: ELEMENT_TILE[el], hexText: ELEMENT_LIGHT[el], yang,
     animal: BRANCH_ANIMAL[idx],
     star: STAR_EN[star], starHanja: STAR_HANJA[star],
   };
@@ -66,7 +72,7 @@ function branchCell(idx: number, me: { el: number; yang: boolean }): Cell {
 
 export type BaziChart = {
   pillars: Pillar[];          // 시주를 모르면 셋만 나온다
-  dayMaster: { hanja: string; pinyin: string; element: string; hex: string; yang: boolean };
+  dayMaster: { hanja: string; pinyin: string; element: string; hex: string; yang: boolean };  // hex 는 먹빛 위 글씨색
   counts: { element: string; hex: string; n: number }[];
   strongest: string;
   weakest: string;
@@ -88,7 +94,7 @@ export function baziOf(c: Chart8): BaziChart {
     n[ELEMENT_EN.indexOf(p.stem.element as typeof ELEMENT_EN[number])]++;
     n[ELEMENT_EN.indexOf(p.branch.element as typeof ELEMENT_EN[number])]++;
   }
-  const counts = ELEMENT_EN.map((element, i) => ({ element, hex: ELEMENT_HEX[i], n: n[i] }));
+  const counts = ELEMENT_EN.map((element, i) => ({ element, hex: ELEMENT_LIGHT[i], n: n[i] }));
   // 동수일 때 앞의 오행을 택한다 — 새로고침마다 답이 바뀌면 계산이 아니라 뽑기로 보인다.
   let hi = 0, lo = 0;
   for (let i = 1; i < 5; i++) { if (n[i] > n[hi]) hi = i; if (n[i] < n[lo]) lo = i; }
@@ -97,7 +103,7 @@ export function baziOf(c: Chart8): BaziChart {
     pillars,
     dayMaster: {
       hanja: STEM_HANJA[c.dGan], pinyin: STEM_PINYIN[c.dGan],
-      element: ELEMENT_EN[me.el], hex: ELEMENT_HEX[me.el], yang: me.yang,
+      element: ELEMENT_EN[me.el], hex: ELEMENT_LIGHT[me.el], yang: me.yang,
     },
     counts, strongest: ELEMENT_EN[hi], weakest: ELEMENT_EN[lo],
   };
