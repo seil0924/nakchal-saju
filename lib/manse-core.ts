@@ -56,11 +56,45 @@ export function lunarToSolar(y:number,m:number,d:number,isLeap=false){
   return {y:dt.getUTCFullYear(),m:dt.getUTCMonth()+1,d:dt.getUTCDate()};
 }
 
-// 한국 서머타임(일광절약시간) 시행 기간 — 이때 태어난 시각은 −1시간 보정해야 시주가 맞음
-const DST:[number,number][]=[[19480601,19480913],[19490403,19490911],[19500401,19500910],[19510506,19510909],
-  [19550505,19550909],[19560520,19560930],[19570505,19570922],[19580504,19580921],[19590503,19590920],[19600501,19600918],
-  [19870510,19871011],[19880508,19881009]];
-function isDST(y:number,m:number,d:number){const k=y*10000+m*100+d;return DST.some(([a,b])=>k>=a&&k<b);}
+// ── 출생지 ───────────────────────────────────────────
+// 진태양시를 내려면 태어난 곳의 경도와 시간대가 있어야 한다.
+// 예전에는 −30분(한국 경도 127.5°)으로 박아 두었는데, 그러면 한국 밖에서 태어난 사람의 시주가 틀린다.
+export type Birthplace = { lng: number; tz: string; label?: string };
+export const KOREA: Birthplace = { lng: 127.5, tz: 'Asia/Seoul', label: '대한민국' };
+
+// 그 시간대의 그 순간 UTC 오프셋(분). 브라우저·Node 에 들어 있는 tz 자료를 그대로 쓴다 —
+// 나라별 서머타임 이력(한국 1948~1988 포함)이 거기 다 있어 표를 따로 들고 있을 이유가 없다.
+function tzOffsetMin(tz:string, utcMs:number):number{
+  const p=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour12:false,
+    year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'})
+    .formatToParts(new Date(utcMs));
+  const g=(k:string)=>Number(p.find(x=>x.type===k)!.value);
+  const asUTC=Date.UTC(g('year'),g('month')-1,g('day'),g('hour')%24,g('minute'),g('second'));
+  return Math.round((asUTC-utcMs)/60000);
+}
+// 벽시계 시각 → UTC. 오프셋이 그 순간에 달려 있어 한 번 되짚어야 맞는다.
+function wallToUtcMs(y:number,m:number,d:number,hh:number,mi:number,tz:string):number{
+  const naive=Date.UTC(y,m-1,d,hh,mi);
+  const utc=naive-tzOffsetMin(tz,naive)*60000;
+  return naive-tzOffsetMin(tz,utc)*60000;
+}
+// 그 해 그 지역의 '표준시' 오프셋 — 서머타임이 걸리지 않은 쪽.
+// 서머타임은 언제나 시계를 앞으로 돌리므로 둘 중 작은 값이 표준시다(남반구도 같다).
+function stdOffsetMin(tz:string,y:number):number{
+  return Math.min(tzOffsetMin(tz,Date.UTC(y,0,15)),tzOffsetMin(tz,Date.UTC(y,6,15)));
+}
+// 진태양시 보정(분) = (출생지 경도 − 그날 표준자오선) × 4.
+// 표준자오선을 '그날 실제 오프셋'에서 뽑기 때문에 서머타임도 이 식 하나로 같이 풀린다.
+// 한국 평시 −30분, 1988년 서머타임 −90분으로 예전 값과 그대로 맞는다.
+export function solarShiftMin(p:Birthplace,y:number,m:number,d:number,hh:number,mi:number):number{
+  const off=tzOffsetMin(p.tz,wallToUtcMs(y,m,d,hh,mi,p.tz));
+  return Math.round((p.lng-off/4)*4);
+}
+// 그날 서머타임으로 앞당겨진 양(분).
+export function dstShiftMin(p:Birthplace,y:number,m:number,d:number,hh:number,mi:number):number{
+  return tzOffsetMin(p.tz,wallToUtcMs(y,m,d,hh,mi,p.tz))-stdOffsetMin(p.tz,y);
+}
+
 
 // ── 원국(명식) 공통 계산 — 서버 compute()·클라 computePreview() 공용 ──
 export type CorePillars = { yGan:number;yZhi:number;mGan:number;mZhi:number;dGan:number;dZhi:number;hGan:number|null;hZhi:number|null;dayMasterEl:number };
@@ -77,17 +111,21 @@ export function corePillars(y:number,m:number,d:number,hourFloat:number|null,yaj
   return {yGan,yZhi,mGan,mZhi,dGan,dZhi,hGan,hZhi,dayMasterEl:GAN_EL[dGan]};
 }
 // 생일 문자열 → 계산 파라미터(서머타임·진태양시·야자시·음력 보정). null 가드는 호출측에서.
-export function resolveBirth(dateISO:string,timeHHMM:string|null,cal:'solar'|'lunar'='solar',isLeap=false){
+export function resolveBirth(dateISO:string,timeHHMM:string|null,cal:'solar'|'lunar'='solar',isLeap=false,place:Birthplace=KOREA){
   let [y,m,d]=dateISO.split('-').map(Number);
   if(cal==='lunar'){const so=lunarToSolar(y,m,d,isLeap);y=so.y;m=so.m;d=so.d;}
   let hf:number|null=null, yaja=false;
   if(timeHHMM){
     const [hh,mm]=timeHHMM.split(':').map(Number);
-    let total=hh*60+mm-(isDST(y,m,d)?60:0);      // 서머타임 −1시간
-    if(total<0){ total+=1440; const dt=new Date(Date.UTC(y,m-1,d)); dt.setUTCDate(dt.getUTCDate()-1); y=dt.getUTCFullYear();m=dt.getUTCMonth()+1;d=dt.getUTCDate(); }
-    const clock=total/60;
-    yaja = clock>=23;                            // 야자시
-    hf = clock-0.5;                              // 진태양시
+    // 야자시는 예전대로 '표준시'로 가른다. 여기 손대면 이미 나간 리포트의 일주가 바뀌는 사람이 생긴다.
+    yaja=(hh*60+mm-dstShiftMin(place,y,m,d,hh,mm))/60>=23;
+    let total=hh*60+mm+solarShiftMin(place,y,m,d,hh,mm);
+    const roll=(n:number)=>{const dt=new Date(Date.UTC(y,m-1,d));dt.setUTCDate(dt.getUTCDate()+n);y=dt.getUTCFullYear();m=dt.getUTCMonth()+1;d=dt.getUTCDate();};
+    // 자정을 넘나들면 날짜를 옮긴다. 예전에는 음수로 새어 시주가 어긋났다(00:00~00:29 출생).
+    // 전날로 넘어가면 그 날의 야자시가 되므로, 일주는 예전과 같은 자리에 남는다.
+    if(total<0){ total+=1440; roll(-1); yaja=true; }
+    else if(total>=1440){ total-=1440; roll(1); }
+    hf=total/60;                                 // 진태양시
   }
   return {y,m,d,hf,yaja};
 }
