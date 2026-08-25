@@ -32,7 +32,8 @@
 .cd-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .cd-cell{text-align:center;padding:7px 2px;border-radius:3px;background:rgba(255,255,255,.05)}
 .cd-cell.moved{background:#7a1f16;outline:1px solid #e0a89f}
-.cd-lab{display:block;font-size:9.5px;letter-spacing:.12em;color:rgba(239,234,224,.6)}
+/* .6 은 붉게 물든 칸 위에서 4.03:1 까지 떨어졌다. 조금 올린다 */
+.cd-lab{display:block;font-size:9.5px;letter-spacing:.12em;color:rgba(239,234,224,.78)}
 .cd-han{display:block;margin-top:3px;font-family:var(--serif);font-size:19px;font-weight:900;color:#fff}
 .cd-say{display:block;margin-top:1px;font-size:9.5px;color:rgba(239,234,224,.72)}
 
