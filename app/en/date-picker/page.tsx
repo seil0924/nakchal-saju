@@ -56,7 +56,7 @@ export default function DatePickerPage() {
       </div>
 
       <div className="hero"><div className="kick">擇 日 · CHOOSING A DAY</div>
-        <h2 style={{ fontSize: 19 }}>When to start,<br />by the old calendar</h2>
+        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>When to start,<br />by the old calendar</h1>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>Free · no sign-up · the next 90 days</div>
       </div>
 
