@@ -9,8 +9,12 @@ import { createServerClient } from '@supabase/ssr';
 const PUBLIC_EXACT = new Set<string>([
   '/', '/login', '/terms', '/privacy', '/more', '/thanks', '/saeobunse',
   '/reading', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/glossary', '/method', '/refund', '/pricing', '/column',
+  '/jari',
 ]);
-const PUBLIC_PREFIX = ['/auth', '/api', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/saju/', '/column/', '/saeobunse/'];
+// '/en/' 은 통째로 공개다. 영어 페이지를 새로 만들 때마다 여기 적는 걸 잊으면
+// 로그인으로 튕기고, 그 /login 은 robots.txt 가 막고 있어 구글은 "robots.txt 차단"으로 읽는다.
+// 실제로 그렇게 한 번 당했다.
+const PUBLIC_PREFIX = ['/auth', '/api', '/en/', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/saju/', '/column/', '/saeobunse/'];
 
 export function isPublicPath(rawPath: string): boolean {
   let path = rawPath; try { path = decodeURIComponent(rawPath); } catch {}
