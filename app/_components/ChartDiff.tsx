@@ -82,7 +82,7 @@ export default function ChartDiff() {
         <>
           <div className={'cd-verdict ' + (result.any ? 'differ' : 'same')}>
             {result.any
-              ? <>Same birth data, <b>two different charts.</b> The solar correction for {place.city} is <b>{shiftText(result.shift)}</b>, and that is enough to move a pillar.</>
+              ? <>Same birth data, <b>two different charts.</b> Correcting the clock for {place.city} on that date takes <b>{shiftText(result.shift)}</b> — longitude, plus summer time if it was in force — and that is enough to move a pillar.</>
               : <>For this birth the two agree. The correction for {place.city} is <b>{shiftText(result.shift)}</b> — not enough to cross a boundary this time. Try a time near an odd hour.</>}
           </div>
 
@@ -103,7 +103,7 @@ export default function ChartDiff() {
 
             <div className="cd-card solar">
               <div className="cd-cap">True solar time
-                <em>corrected for the longitude of {place.city}</em></div>
+                <em>corrected for the longitude of {place.city}, and for summer time if it applied</em></div>
               <div className="cd-row">
                 {result.solar.map((p, i) => (
                   <div key={i} className={'cd-cell' + (result.diff[i] ? ' moved' : '')}>
