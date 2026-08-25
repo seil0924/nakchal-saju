@@ -38,7 +38,7 @@ const LOC: Record<'en' | 'zh', Loc> = {
     cta: '免費八字排盤', ctaHref: '/zh/bazi',
     nav: [
       { href: '/zh/bazi', label: '八字排盤', d: IC.calc },
-      { href: '/zh/date-picker', label: '擇日', d: IC.cal },
+      { href: '/en/date-picker', label: '擇日 (EN)', d: IC.cal },
       { href: '/zh/why-charts-differ', label: '各家排盤為何不同', d: IC.diff },
     ],
     disc: '僅供參考，非專業建議。',
