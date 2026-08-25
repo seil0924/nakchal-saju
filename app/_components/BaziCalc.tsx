@@ -14,7 +14,7 @@ function Glyph({ c, sub }: { c: Cell; sub: string }) {
     <div className="bz-cell">
       <div className="bz-han" style={{ background: c.hex }}>{c.hanja}</div>
       <div className="bz-py">{c.pinyin}</div>
-      <div className="bz-el" style={{ color: c.hex }}>{c.yang ? 'Yang' : 'Yin'} {c.element}</div>
+      <div className="bz-el" style={{ color: c.hexText }}>{c.yang ? 'Yang' : 'Yin'} {c.element}</div>
       <div className="bz-sub">{sub}</div>
     </div>
   );
