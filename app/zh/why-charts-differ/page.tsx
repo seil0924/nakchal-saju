@@ -4,6 +4,7 @@ import Link from 'next/link';
 import ChartDiff from '@/app/_components/ChartDiff';
 import { solarShiftMin } from '@/lib/manse-core';
 import { findCity } from '@/lib/cities';
+import { cityZh, countryZh } from '@/lib/cities-zh';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -25,31 +26,16 @@ export const metadata: Metadata = {
     title: '為什麼各家八字排盤結果不同？',
     description: '五個原因，加上一組你可以用自己生辰跑一遍的並排對照。',
   },
-};
 
 const SAMPLE = ['Urumqi, China', 'Madrid, Spain', 'Paris, France', 'Seoul, South Korea',
   'Warsaw, Poland', 'Chicago, United States', 'London, United Kingdom', 'New York, United States',
   'Tokyo, Japan', 'Sydney, Australia'];
 
-// 도시 이름은 중국어로 보여 준다. 계산은 영어 키로 찾고 표시만 바꾼다.
-const CITY_ZH: Record<string, [string, string]> = {
-  'Urumqi, China': ['烏魯木齊', '中國'],
-  'Madrid, Spain': ['馬德里', '西班牙'],
-  'Paris, France': ['巴黎', '法國'],
-  'Seoul, South Korea': ['首爾', '韓國'],
-  'Warsaw, Poland': ['華沙', '波蘭'],
-  'Chicago, United States': ['芝加哥', '美國'],
-  'London, United Kingdom': ['倫敦', '英國'],
-  'New York, United States': ['紐約', '美國'],
-  'Tokyo, Japan': ['東京', '日本'],
-  'Sydney, Australia': ['雪梨', '澳洲'],
-};
 
 export default function WhyZhPage() {
   const rows = SAMPLE.map(k => {
     const c = findCity(k)!;
-    const [city, country] = CITY_ZH[k];
-    return { city, country, jan: solarShiftMin(c, 1990, 1, 15, 12, 0) };
+      return { city: cityZh(c), country: countryZh(c), jan: solarShiftMin(c, 1990, 1, 15, 12, 0) };
   }).sort((a, b) => a.jan - b.jan);
 
   const ld = {
