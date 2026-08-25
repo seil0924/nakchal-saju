@@ -127,7 +127,7 @@ export default function ChartDiff({ lang = 'en' }: { lang?: CdLang }) {
                   <div key={i} className="cd-cell">
                     <span className="cd-lab">{L[i]}</span>
                     <span className="cd-han">{pair(p)}</span>
-                    <span className="cd-say">{say(p)}</span>
+                    {zh ? null : <span className="cd-say">{say(p)}</span>}
                   </div>
                 ))}
               </div>
@@ -141,7 +141,7 @@ export default function ChartDiff({ lang = 'en' }: { lang?: CdLang }) {
                   <div key={i} className={'cd-cell' + (result.diff[i] ? ' moved' : '')}>
                     <span className="cd-lab">{L[i]}</span>
                     <span className="cd-han">{pair(p)}</span>
-                    <span className="cd-say">{say(p)}</span>
+                    {zh ? null : <span className="cd-say">{say(p)}</span>}
                   </div>
                 ))}
               </div>
