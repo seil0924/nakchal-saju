@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     canonical: '/en/bazi',
     // 같은 내용의 다른 언어판이 어디 있는지 알려 준다. 자동 리다이렉트 대신 이걸 쓴다 —
     // 구글이 한국 검색자에겐 한국어판을, 영어권엔 이 페이지를 알아서 띄운다.
-    languages: { 'ko-KR': '/', 'en': '/en/bazi', 'x-default': '/en/bazi' },
+    languages: { 'ko-KR': '/', 'en': '/en/bazi', 'zh-Hant': '/zh/bazi', 'x-default': '/en/bazi' },
   },
   openGraph: {
     title: 'BaZi Calculator — Four Pillars with true solar time',
