@@ -124,14 +124,21 @@ describe('출생지 목록', () => {
 });
 
 describe('출생지가 명식을 바꾼다', () => {
-  it('같은 시각이라도 마드리드와 서울은 시주가 갈린다', () => {
+  it('같은 시각이라도 마드리드와 서울은 시주가 갈릴 때가 있다', () => {
+    // 서울 −30분, 마드리드 −75분. 45분 차이라 두 시간짜리 시지 경계를 넘는 시각에서만 갈린다.
+    // 하루를 훑어 갈리는 시각이 실제로 있는지 본다 — 한 시각만 찍으면 우연히 같은 칸에 들어간다.
     const seoul = findCity('Seoul, South Korea')!;
     const madrid = findCity('Madrid, Spain')!;
-    const one = (p: typeof seoul) => {
-      const r = resolveBirth('1990-01-15', '07:10', 'solar', false, p);
+    const hourBranch = (p: typeof seoul, hhmm: string) => {
+      const r = resolveBirth('1990-01-15', hhmm, 'solar', false, p);
       return corePillars(r.y, r.m, r.d, r.hf, r.yaja).hZhi;
     };
-    expect(one(seoul)).not.toBe(one(madrid));
+    let differs = 0;
+    for (let hh = 0; hh < 24; hh++) for (const mm of ['00', '20', '40']) {
+      const t = `${String(hh).padStart(2, '0')}:${mm}`;
+      if (hourBranch(seoul, t) !== hourBranch(madrid, t)) differs++;
+    }
+    expect(differs).toBeGreaterThan(0);
   });
 
   it('목록의 어느 도시로 넣어도 명식이 나온다', () => {
