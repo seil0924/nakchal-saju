@@ -60,7 +60,7 @@ export default function WhyPage() {
       </div>
 
       <div className="hero"><div className="kick">同 日 異 命 · ONE BIRTH, TWO CHARTS</div>
-        <h2 style={{ fontSize: 19 }}>Why do BaZi calculators<br />disagree with each other?</h2>
+        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>Why do BaZi calculators<br />disagree with each other?</h1>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>Five reasons — and a side-by-side you can run yourself</div>
       </div>
 
