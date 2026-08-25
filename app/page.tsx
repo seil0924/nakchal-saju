@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import TodayChip from '@/app/_components/TodayChip';
+import LangNudge from '@/app/_components/LangNudge';
 import CountUp from '@/app/_components/CountUp';
 import HeroCarousel from '@/app/_components/HeroCarousel';
 import ScrollReveal from '@/app/_components/ScrollReveal';
@@ -44,6 +45,7 @@ export default function Home() {
   ];
   return (
     <div className="app home5">
+      <LangNudge />
       <ScrollReveal />
       {/* 마스트헤드 */}
       <div className="mast">
