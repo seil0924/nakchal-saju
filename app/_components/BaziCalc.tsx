@@ -7,6 +7,7 @@ import { CITIES, searchCities, cityKey, type City } from '@/lib/cities';
 import { solarShiftMin } from '@/lib/manse-core';
 import { baziOf, type Cell } from '@/lib/bazi-en';
 import { toZh, BZ_UI, type Lang } from '@/lib/bazi-i18n';
+import { cityKeyZh, cityZh, countryZh, searchCitiesZh } from '@/lib/cities-zh';
 
 const SEOUL = CITIES[0];
 
@@ -30,7 +31,9 @@ export default function BaziCalc({ lang = 'en' }: { lang?: Lang }) {
   const [place, setPlace] = useState<City>(SEOUL);
   const [open, setOpen] = useState(false);
 
-  const hits = useMemo(() => searchCities(q), [q]);
+  const zh = lang === 'zh';
+  const label = (c: City) => (zh ? cityKeyZh(c) : cityKey(c));
+  const hits = useMemo(() => (zh ? searchCitiesZh(q) : searchCities(q)), [q, zh]);
 
   const result = useMemo(() => {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
@@ -63,7 +66,7 @@ export default function BaziCalc({ lang = 'en' }: { lang?: Lang }) {
         </label>
 
         <label className="bz-fl bz-place"><span>{T.placeLabel}</span>
-          <input value={open ? q : cityKey(place)} placeholder={T.searchCity}
+          <input value={open ? q : label(place)} placeholder={T.searchCity}
             onFocus={() => { setOpen(true); setQ(''); }}
             onChange={e => setQ(e.target.value)}
             onBlur={() => setTimeout(() => setOpen(false), 150)} />
@@ -72,7 +75,7 @@ export default function BaziCalc({ lang = 'en' }: { lang?: Lang }) {
               {hits.map(c => (
                 <li key={cityKey(c)}>
                   <button type="button" onMouseDown={() => { setPlace(c); setOpen(false); }}>
-                    {c.city}<em>{c.country}</em>
+                    {zh ? cityZh(c) : c.city}<em>{zh ? countryZh(c) : c.country}</em>
                   </button>
                 </li>
               ))}
@@ -115,7 +118,7 @@ export default function BaziCalc({ lang = 'en' }: { lang?: Lang }) {
             </div>
             <p className="bz-note">
               {T.strongest} <b>{result.bazi.strongest}</b>, {T.thinnest} <b>{result.bazi.weakest}</b>.
-              {' '}{T.correctionFor(place.city)}: <b>{shiftText(result.shift)}</b>.
+              {' '}{T.correctionFor(zh ? cityZh(place) : place.city)}: <b>{shiftText(result.shift)}</b>.
               {result.yaja ? T.yajaNote : ''}
             </p>
           </div>
