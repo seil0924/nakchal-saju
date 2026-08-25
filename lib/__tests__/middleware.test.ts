@@ -6,8 +6,9 @@ describe('isPublicPath — 로그인 게이트 판정', () => {
     for (const p of ['/', '/login', '/reading', '/pricing', '/terms', '/privacy', '/ceo', '/balju'])
       expect(isPublicPath(p)).toBe(true);
   });
-  it('보호 경로는 false (보관함·마이페이지·리포트 열람)', () => {
-    for (const p of ['/vault', '/mypage', '/full'])
+  it('보호 경로는 false (보관함·마이페이지)', () => {
+    // '/full' 은 여기 있었는데 빼냈다. 리포트 본문이 아니라 그것을 파는 랜딩이라 막을 이유가 없다.
+    for (const p of ['/vault', '/mypage'])
       expect(isPublicPath(p)).toBe(false);
   });
   it('정적 파일(확장자 포함)은 게이트 제외', () => {
@@ -46,6 +47,7 @@ describe('나중에 붙일 자리', () => {
 
   it('자리 사주도 열려 있다', () => {
     expect(isPublicPath('/jari')).toBe(true);
+    expect(isPublicPath('/full')).toBe(true);   // 세일즈 랜딩
   });
 
   it('보호해야 할 곳은 그대로 막혀 있다', () => {
