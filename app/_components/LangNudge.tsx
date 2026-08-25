@@ -7,10 +7,24 @@
 //
 // 나라 판정은 서버가 아니라 브라우저에서 한다. Vercel 의 국가 헤더를 읽으면 페이지가 요청마다
 // 새로 그려져 정적 캐시가 깨진다 — 띠 하나 띄우자고 치를 값이 아니다.
-import { useEffect, useState } from 'react';
+// 스타일도 여기 두었다. 이것 하나 때문에 164KB 짜리 전역 CSS 를 건드릴 이유가 없다.
+import { useEffect, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 
 const KEY = 'nakchal_lang_nudge';
+
+const wrap: CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
+  padding: '9px 14px', background: '#1c1c1d', color: '#efeae0',
+  fontSize: 12.5, lineHeight: 1.5,
+};
+const go: CSSProperties = {
+  color: '#f0d79a', fontWeight: 800, textDecoration: 'underline', textUnderlineOffset: 3,
+};
+const x: CSSProperties = {
+  marginLeft: 'auto', border: 0, background: 'none', cursor: 'pointer',
+  color: 'rgba(239,234,224,.7)', fontSize: 17, lineHeight: 1, padding: '2px 4px',
+};
 
 export default function LangNudge() {
   const [show, setShow] = useState(false);
@@ -32,10 +46,10 @@ export default function LangNudge() {
 
   if (!show) return null;
   return (
-    <div className="lnudge" lang="en" role="note">
+    <div style={wrap} lang="en" role="note">
       <span>This page is in Korean. There is an English BaZi calculator.</span>
-      <Link href="/en/bazi" hrefLang="en" onClick={close}>Open it</Link>
-      <button type="button" onClick={close} aria-label="Dismiss">×</button>
+      <Link href="/en/bazi" hrefLang="en" style={go} onClick={close}>Open it</Link>
+      <button type="button" onClick={close} aria-label="Dismiss" style={x}>×</button>
     </div>
   );
 }
