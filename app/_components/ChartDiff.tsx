@@ -9,6 +9,34 @@ import { STEM_HANJA, BRANCH_HANJA, STEM_PINYIN, BRANCH_PINYIN } from '@/lib/bazi
 
 const START = CITIES.find(c => c.city === 'Madrid') ?? CITIES[0];
 const LABELS = ['Year', 'Month', 'Day', 'Hour'];
+const LABELS_ZH = ['年', '月', '日', '時'];
+
+// 화면 문구. 계산은 한 벌이고 이름표만 두 벌이다.
+const CD = {
+  en: {
+    date: 'Date of birth', time: 'Time of birth', place: 'Place of birth', search: 'Search a city',
+    capPlain: 'Clock time as given', subPlain: 'what a calculator does when it never asks where you were born',
+    capSolar: 'True solar time', subSolar: (c: string) => `corrected for the longitude of ${c}, and for summer time if it applied`,
+    note: 'Highlighted pillars are the ones that moved. Neither column is a trick — they are the same engine, run once without the correction and once with it.',
+    vdPre: (c: string) => `Same birth data, two different charts. Correcting the clock for ${c} on that date takes `,
+    vdPost: ' — longitude, plus summer time if it was in force — and that is enough to move a pillar.',
+    vsPre: (c: string) => `For this birth the two agree. The correction for ${c} is `,
+    vsPost: ' — not enough to cross a boundary this time. Try a time near an odd hour.',
+    none: 'none', min: 'min', lang: 'en',
+  },
+  zh: {
+    date: '出生日期', time: '出生時間', place: '出生地', search: '搜尋城市',
+    capPlain: '直接用時鐘時間', subPlain: '不問出生地的排盤工具就是這樣算的',
+    capSolar: '真太陽時', subSolar: (c: string) => `已按${c}的經度校正，夏令時間若適用亦一併校正`,
+    note: '標紅的是移動了的柱。兩欄都不是花招 — 同一套算法，一次不校正，一次校正。',
+    vdPre: (c: string) => `同一組出生資料，兩張不同的命盤。${c} 在該日需要校正 `,
+    vdPost: ' — 經度，若當時實施夏令時間亦一併計入 — 這已足以讓一柱移位。',
+    vsPre: (c: string) => `這組資料兩者一致。${c} 的校正為 `,
+    vsPost: ' — 這次不足以跨過交界。試試接近單數整點的時間。',
+    none: '無', min: '分', lang: 'zh-Hant',
+  },
+} as const;
+export type CdLang = keyof typeof CD;
 
 type Four = { gan: number; zhi: number }[];
 
@@ -22,7 +50,9 @@ function fourOf(c: ReturnType<typeof corePillars>): Four {
 const pair = (p: { gan: number; zhi: number }) => STEM_HANJA[p.gan] + BRANCH_HANJA[p.zhi];
 const say = (p: { gan: number; zhi: number }) => STEM_PINYIN[p.gan] + ' ' + BRANCH_PINYIN[p.zhi];
 
-export default function ChartDiff() {
+export default function ChartDiff({ lang = 'en' }: { lang?: CdLang }) {
+  const T = CD[lang];
+  const L = lang === 'zh' ? LABELS_ZH : LABELS;
   const [date, setDate] = useState('1990-01-15');
   const [time, setTime] = useState('07:40');
   const [q, setQ] = useState('');
@@ -48,19 +78,19 @@ export default function ChartDiff() {
     return { plain, solar, shift, diff, any: diff.some(Boolean) };
   }, [date, time, place]);
 
-  const shiftText = (n: number) => (n === 0 ? 'none' : `${n > 0 ? '+' : '−'}${Math.abs(n)} min`);
+  const shiftText = (n: number) => (n === 0 ? T.none : `${n > 0 ? '+' : '−'}${Math.abs(n)} ${T.min}`);
 
   return (
-    <section className="cd" lang="en">
+    <section className="cd" lang={T.lang}>
       <div className="cd-form">
-        <label className="cd-fl"><span>Date of birth</span>
+        <label className="cd-fl"><span>{T.date}</span>
           <input type="date" value={date} min="1900-01-01" max="2100-12-31" onChange={e => setDate(e.target.value)} />
         </label>
-        <label className="cd-fl"><span>Time of birth</span>
+        <label className="cd-fl"><span>{T.time}</span>
           <input type="time" value={time} onChange={e => setTime(e.target.value)} />
         </label>
-        <label className="cd-fl cd-place"><span>Place of birth</span>
-          <input value={open ? q : cityKey(place)} placeholder="Search a city"
+        <label className="cd-fl cd-place"><span>{T.place}</span>
+          <input value={open ? q : cityKey(place)} placeholder={T.search}
             onFocus={() => { setOpen(true); setQ(''); }}
             onChange={e => setQ(e.target.value)}
             onBlur={() => setTimeout(() => setOpen(false), 150)} />
@@ -82,18 +112,18 @@ export default function ChartDiff() {
         <>
           <div className={'cd-verdict ' + (result.any ? 'differ' : 'same')}>
             {result.any
-              ? <>Same birth data, <b>two different charts.</b> Correcting the clock for {place.city} on that date takes <b>{shiftText(result.shift)}</b> — longitude, plus summer time if it was in force — and that is enough to move a pillar.</>
-              : <>For this birth the two agree. The correction for {place.city} is <b>{shiftText(result.shift)}</b> — not enough to cross a boundary this time. Try a time near an odd hour.</>}
+              ? <>{T.vdPre(place.city)}<b>{shiftText(result.shift)}</b>{T.vdPost}</>
+              : <>{T.vsPre(place.city)}<b>{shiftText(result.shift)}</b>{T.vsPost}</>}
           </div>
 
           <div className="cd-two">
             <div className="cd-card plain">
-              <div className="cd-cap">Clock time as given
-                <em>what a calculator does when it never asks where you were born</em></div>
+              <div className="cd-cap">{T.capPlain}
+                <em>{T.subPlain}</em></div>
               <div className="cd-row">
                 {result.plain.map((p, i) => (
                   <div key={i} className="cd-cell">
-                    <span className="cd-lab">{LABELS[i]}</span>
+                    <span className="cd-lab">{L[i]}</span>
                     <span className="cd-han">{pair(p)}</span>
                     <span className="cd-say">{say(p)}</span>
                   </div>
@@ -102,12 +132,12 @@ export default function ChartDiff() {
             </div>
 
             <div className="cd-card solar">
-              <div className="cd-cap">True solar time
-                <em>corrected for the longitude of {place.city}, and for summer time if it applied</em></div>
+              <div className="cd-cap">{T.capSolar}
+                <em>{T.subSolar(place.city)}</em></div>
               <div className="cd-row">
                 {result.solar.map((p, i) => (
                   <div key={i} className={'cd-cell' + (result.diff[i] ? ' moved' : '')}>
-                    <span className="cd-lab">{LABELS[i]}</span>
+                    <span className="cd-lab">{L[i]}</span>
                     <span className="cd-han">{pair(p)}</span>
                     <span className="cd-say">{say(p)}</span>
                   </div>
@@ -117,8 +147,7 @@ export default function ChartDiff() {
           </div>
 
           <p className="cd-note">
-            Highlighted pillars are the ones that moved. Neither column is a trick — they are the same engine,
-            run once without the correction and once with it.
+            {T.note}
           </p>
         </>
       )}
