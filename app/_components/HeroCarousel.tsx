@@ -56,7 +56,10 @@ export default function HeroCarousel() {
           </video>
           <div className="hcin">
             <div className="hckick">{s.kick}</div>
-            <h2 className="hctitle" dangerouslySetInnerHTML={{ __html: s.title }} />
+            {/* h1은 문서당 하나. 셔플과 무관하게 같은 문구에 붙도록 인덱스가 아니라 내용으로 고른다. */}
+            {s.title === BASE_SLIDES[0].title
+              ? <h1 className="hctitle" dangerouslySetInnerHTML={{ __html: s.title }} />
+              : <h2 className="hctitle" dangerouslySetInnerHTML={{ __html: s.title }} />}
             <div className="hcgo">{s.cta} →</div>
           </div>
         </Link>
