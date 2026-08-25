@@ -21,6 +21,12 @@ export const metadata: Metadata = {
     description: 'Free BaZi chart. True solar time by birthplace, astronomical solar terms.',
     url: BASE + '/en/bazi', type: 'website', locale: 'en', siteName: 'Nakchal Saju',
   },
+  // 트위터 카드는 레이아웃 것이 그대로 물려와 한국어로 나갔다. 영어 페이지에는 영어를 건다.
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BaZi Calculator — Four Pillars with true solar time',
+    description: 'Free BaZi chart. True solar time by birthplace, astronomical solar terms.',
+  },
 };
 
 export default function BaziPage() {
