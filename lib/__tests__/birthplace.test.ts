@@ -78,9 +78,10 @@ describe('한국 밖에서 태어난 경우', () => {
   const URUMQI: Birthplace = { lng: 87.6, tz: 'Asia/Shanghai' };
   const TOKYO: Birthplace = { lng: 139.7, tz: 'Asia/Tokyo' };
 
-  it('뉴욕 겨울은 −4분 남짓, 여름은 서머타임만큼 더 빠진다', () => {
-    expect(solarShiftMin(NY, 1990, 1, 15, 12, 0)).toBe(-4);
-    expect(solarShiftMin(NY, 1990, 7, 15, 12, 0)).toBe(-64);
+  it('뉴욕은 75°W 자오선보다 동쪽이라 겨울 보정이 양수다', () => {
+    expect(solarShiftMin(NY, 1990, 1, 15, 12, 0)).toBe(4);
+    // 여름에는 자오선이 60°W 로 밀려 한 시간 가까이 뒤로 간다.
+    expect(solarShiftMin(NY, 1990, 7, 15, 12, 0)).toBe(-56);
     expect(dstShiftMin(NY, 1990, 7, 15, 12, 0)).toBe(60);
   });
 
