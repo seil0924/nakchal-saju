@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   keywords: ['bazi calculator different results', 'why do bazi charts differ', 'true solar time bazi', 'bazi hour pillar wrong', 'solar term boundary', 'bazi birth time correction'],
   alternates: {
     canonical: '/en/why-charts-differ',
-    languages: { 'en': '/en/why-charts-differ', 'x-default': '/en/why-charts-differ' },
+    languages: { 'en': '/en/why-charts-differ', 'zh-Hant': '/zh/why-charts-differ', 'x-default': '/en/why-charts-differ' },
   },
   openGraph: {
     title: 'Why do BaZi calculators give different charts?',
