@@ -1741,6 +1741,10 @@ p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.
 /* 마크다운 → prose */
 .home5 .prose{font-size:15px;line-height:1.95;color:#2c2a24;font-weight:450;word-break:keep-all}
 .home5 .prose>*+*{margin-top:18px}
+.home5 .prose img{display:block;width:100%;max-width:720px;height:auto;margin:24px auto;border:1px solid var(--h-line);border-radius:16px;box-shadow:0 10px 28px rgba(33,28,22,.10)}
+.home5 .prose .column-visual{width:100%;max-width:720px;margin:24px auto;padding:0}
+.home5 .prose .column-visual img{width:100%;max-width:none;aspect-ratio:16 / 9;object-fit:cover;margin:0}
+.home5 .prose .column-visual figcaption{margin-top:8px;text-align:center;color:#9a917a;font-size:11px;line-height:1.55}
 .home5 .prose h2{font-family:var(--serif);font-weight:800;font-size:20px;line-height:1.5;color:var(--h-ink);margin-top:36px;padding-top:4px;letter-spacing:-.01em}
 .home5 .prose h3{font-family:var(--serif);font-weight:800;font-size:16.5px;color:var(--h-ink);margin-top:28px}
 .home5 .prose p{margin-top:16px}
@@ -1781,6 +1785,12 @@ p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.
 .home5 .colfaq-item{padding:16px 0;border-bottom:1px solid var(--h-line)}
 .home5 .colfaq-item .q{font-family:var(--serif);font-weight:800;font-size:15px;color:var(--h-ink);line-height:1.6}
 .home5 .colfaq-item .a{margin-top:8px;font-size:14px;color:#4a463c;line-height:1.85;font-weight:450;word-break:keep-all}
+
+@media(max-width:599px){
+  .home5 .prose img{margin:20px auto;border-radius:12px}
+  .home5 .prose .column-visual{margin:20px auto}
+  .home5 .prose .column-visual img{border-radius:12px}
+}
 
 
 /* list row: keep name left-aligned next to star */
