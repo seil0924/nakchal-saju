@@ -81,7 +81,7 @@ export default function BaziPage() {
         <p>The month pillar changes at a <b>solar term</b>, the moment the sun reaches a particular apparent longitude. That moment drifts by hours from year to year, so a fixed calendar date gets it wrong for anyone born close to a boundary. This calculator computes the sun&rsquo;s position for the actual date, which is the only way to place those births correctly.</p>
 
         <h3>Where this comes from</h3>
-        <p>This calculator runs the same engine behind <Link href="/" hrefLang="ko">Nakchal Saju</Link>, a Korean service that reads charts for company owners bidding on public contracts. The tradition is shared across East Asia — <i>saju</i> in Korea, <i>bazi</i> in China, <i>shichu suimei</i> in Japan — and the calculation is the same. Only the vocabulary differs.</p>
+        <p>The tradition is shared across East Asia — <i>saju</i> in Korea, <i>bazi</i> in China, <i>shichu suimei</i> in Japan — and the calculation is the same. Only the vocabulary differs. This calculator computes solar terms from the sun&rsquo;s apparent longitude rather than reading them off a table, and it asks where you were born because the hour pillar depends on it.</p>
       </section>
     </div>
   );
