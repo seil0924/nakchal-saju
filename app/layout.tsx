@@ -6,6 +6,7 @@ import TapFX from '@/app/_components/TapFX';
 import IntroSplash from '@/app/_components/IntroSplash';
 import ScrollTop from '@/app/_components/ScrollTop';
 import { requireUser } from '@/lib/supabase/server';
+import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nakchalsaju.com'),
@@ -63,8 +64,11 @@ const LD = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   let scopeId = 'guest';
   try { const u = await requireUser(); if (u?.id) scopeId = u.id; } catch { /* 미인증 */ }
+  // 미들웨어가 넘겨준 경로로 문서 언어를 정한다. 이미 쿠키를 읽어 동적 렌더라 추가 비용은 없다.
+  const path = headers().get('x-nk-path') || '/';
+  const lang = path.startsWith('/zh') ? 'zh-Hant' : path.startsWith('/en') ? 'en' : 'ko';
   return (
-    <html lang="ko">
+    <html lang={lang}>
       <head>
         {/* Google Tag Manager */}
         <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WZR46LPT');` }} />
