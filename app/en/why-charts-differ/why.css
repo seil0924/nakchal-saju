@@ -1,0 +1,65 @@
+/* app/en/why-charts-differ/why.css */
+/* 색은 전부 흰 배경에서 4.5:1 이상 나오는 값만 썼다. */
+
+.cd{padding:0 15px 6px}
+.bz-lang{font-size:12px;font-weight:700;color:#7f786c;text-decoration:none}
+
+.cd-form{display:grid;gap:10px;margin:14px 0 12px}
+.cd-fl{display:block;position:relative}
+.cd-fl>span{display:block;margin:0 0 5px;font-size:11.5px;font-weight:800;color:#58616a}
+.cd-fl input{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #ddd6c6;border-radius:3px;
+  background:#fff;font-size:14px;color:#1e2124}
+.cd-fl input:focus{outline:2px solid #7a5c14;outline-offset:1px;border-color:#7a5c14}
+.cd-place{position:relative}
+.cd-hits{position:absolute;z-index:20;left:0;right:0;top:100%;margin:3px 0 0;padding:4px;list-style:none;
+  background:#fff;border:1px solid #ddd6c6;border-radius:3px;box-shadow:0 6px 18px rgba(0,0,0,.10);max-height:250px;overflow:auto}
+.cd-hits button{display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:8px;
+  padding:9px 10px;border:0;border-radius:2px;background:none;cursor:pointer;text-align:left;
+  font-size:13.5px;font-weight:700;color:#1e2124}
+.cd-hits button:hover{background:#f4f1e8}
+.cd-hits em{font-style:normal;font-size:11.5px;font-weight:600;color:#5d646b}
+
+.cd-verdict{padding:11px 13px;border-radius:3px;margin:0 0 12px;font-size:13px;line-height:1.7;border-left:3px solid}
+.cd-verdict b{font-weight:800;color:#1e2124}
+.cd-verdict.differ{background:#faf1ef;border-left-color:#a8321f;color:#4a3330}
+.cd-verdict.same{background:#f0f6f2;border-left-color:#24684a;color:#2c3d35}
+
+.cd-two{display:grid;gap:10px;margin:0 0 10px}
+.cd-card{border-radius:4px;padding:12px 12px 10px;background:#1c1c1d}
+.cd-card.plain{background:#3a3a3d}
+.cd-cap{font-size:11.5px;font-weight:800;color:#efeae0;margin:0 0 9px}
+.cd-cap em{display:block;margin-top:2px;font-style:normal;font-size:10.5px;font-weight:500;color:rgba(239,234,224,.7)}
+.cd-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.cd-cell{text-align:center;padding:7px 2px;border-radius:3px;background:rgba(255,255,255,.05)}
+.cd-cell.moved{background:#7a1f16;outline:1px solid #e0a89f}
+.cd-lab{display:block;font-size:9.5px;letter-spacing:.12em;color:rgba(239,234,224,.6)}
+.cd-han{display:block;margin-top:3px;font-family:var(--serif);font-size:19px;font-weight:900;color:#fff}
+.cd-say{display:block;margin-top:1px;font-size:9.5px;color:rgba(239,234,224,.72)}
+
+.cd-note{margin:0;font-size:11px;line-height:1.7;color:#5d646b}
+
+/* 도시별 어긋남 표 */
+.why-tbl{margin:14px 0 18px;border:1px solid #e7e3d8;border-radius:4px;overflow:hidden;background:#fff}
+.why-h{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 13px;background:#faf8f2;
+  font-size:11px;font-weight:800;letter-spacing:.06em;color:#58616a}
+.why-r{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:9px 13px;
+  border-top:1px solid #f0ede4;font-size:13.5px;font-weight:700;color:#1e2124}
+.why-r em{margin-left:6px;font-style:normal;font-size:11px;font-weight:600;color:#6b7278}
+.why-n{font-variant-numeric:tabular-nums;font-size:13px;font-weight:800;color:#4a5158}
+.why-n.big{color:#a8321f}
+.why-cap{margin:0;padding:9px 13px;border-top:1px solid #f0ede4;background:#faf8f2;
+  font-size:11px;line-height:1.6;color:#5d646b}
+
+/* 읽을거리 */
+.bz-read{padding:6px 15px 24px}
+.bz-read h3{margin:20px 0 6px;font-family:var(--serif);font-size:16px;font-weight:800;color:#1e2124}
+.bz-read p{margin:0 0 10px;font-size:14.5px;line-height:1.8;color:#33383f;font-weight:500}
+.bz-read b{font-weight:800;color:#1e2124}
+.bz-read a{color:#26508f;font-weight:700}
+
+@media (min-width:560px){
+  .cd-form{grid-template-columns:1fr 1fr}
+  .cd-place{grid-column:1 / -1}
+  .cd-two{grid-template-columns:1fr 1fr}
+  .cd-han{font-size:22px}
+}
