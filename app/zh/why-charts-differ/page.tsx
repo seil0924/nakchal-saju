@@ -26,6 +26,7 @@ export const metadata: Metadata = {
     title: '為什麼各家八字排盤結果不同？',
     description: '五個原因，加上一組你可以用自己生辰跑一遍的並排對照。',
   },
+};
 
 const SAMPLE = ['Urumqi, China', 'Madrid, Spain', 'Paris, France', 'Seoul, South Korea',
   'Warsaw, Poland', 'Chicago, United States', 'London, United Kingdom', 'New York, United States',
