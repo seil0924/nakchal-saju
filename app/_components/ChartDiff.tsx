@@ -7,7 +7,7 @@ import { resolveBirth, corePillars, solarShiftMin } from '@/lib/manse-core';
 import { searchCities, cityKey, CITIES, type City } from '@/lib/cities';
 import { STEM_HANJA, BRANCH_HANJA, STEM_PINYIN, BRANCH_PINYIN } from '@/lib/bazi-en';
 
-const SEOUL = CITIES[0];
+const START = CITIES.find(c => c.city === 'Madrid') ?? CITIES[0];
 const LABELS = ['Year', 'Month', 'Day', 'Hour'];
 
 type Four = { gan: number; zhi: number }[];
@@ -26,7 +26,7 @@ export default function ChartDiff() {
   const [date, setDate] = useState('1990-01-15');
   const [time, setTime] = useState('07:40');
   const [q, setQ] = useState('');
-  const [place, setPlace] = useState<City>(SEOUL);
+  const [place, setPlace] = useState<City>(START);
   const [open, setOpen] = useState(false);
   const hits = useMemo(() => searchCities(q), [q]);
 
