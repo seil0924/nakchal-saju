@@ -16,7 +16,7 @@ const PUBLIC_EXACT = new Set<string>([
 // '/en/' 은 통째로 공개다. 영어 페이지를 새로 만들 때마다 여기 적는 걸 잊으면
 // 로그인으로 튕기고, 그 /login 은 robots.txt 가 막고 있어 구글은 "robots.txt 차단"으로 읽는다.
 // 실제로 그렇게 한 번 당했다.
-const PUBLIC_PREFIX = ['/auth', '/api', '/en/', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/saju/', '/column/', '/saeobunse/'];
+const PUBLIC_PREFIX = ['/auth', '/api', '/en/', '/zh/', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/saju/', '/column/', '/saeobunse/'];
 
 export function isPublicPath(rawPath: string): boolean {
   let path = rawPath; try { path = decodeURIComponent(rawPath); } catch {}
@@ -26,7 +26,11 @@ export function isPublicPath(rawPath: string): boolean {
 }
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next({ request: req });
+  // 루트 레이아웃이 <html lang> 을 맞추려면 현재 경로를 알아야 하는데, 서버 컴포넌트는 pathname 을 못 받는다.
+  // 헤더로 넘긴다. /en, /zh 에 lang="ko" 가 붙어 있으면 스크린리더와 검색엔진 둘 다에게 거짓말이 된다.
+  const fwd = new Headers(req.headers);
+  fwd.set('x-nk-path', req.nextUrl.pathname);
+  const res = NextResponse.next({ request: { headers: fwd } });
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return res; // 인증 미설정(데모) → 게이트 없이 통과
