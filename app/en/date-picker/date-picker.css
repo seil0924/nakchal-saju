@@ -1,0 +1,50 @@
+/* app/en/date-picker/date-picker.css — 영어권 택일. */
+/* bazi.css 의 .bz-lang·.bz-read 를 함께 쓰므로 여기서 다시 정의하지 않는다. */
+/* 색은 전부 흰 배경에서 4.5:1 이상 나오는 값만 썼다. */
+
+.dp{padding:0 15px 6px}
+.bz-lang{font-size:12px;font-weight:700;color:#7f786c;text-decoration:none}
+
+.dp-pick{margin:14px 0 10px}
+.dp-lab{display:block;margin:0 0 6px;font-size:11.5px;font-weight:800;color:#58616a}
+.dp-btns{display:flex;flex-wrap:wrap;gap:6px}
+.dp-b{padding:9px 13px;border:1px solid #ddd6c6;border-radius:3px;background:#fff;
+  font-size:12.5px;font-weight:700;color:#3a4046;cursor:pointer}
+.dp-b.on{background:#1c1c1d;border-color:#1c1c1d;color:#fff}
+
+.dp-blurb{margin:0 0 10px;font-size:12.5px;line-height:1.7;color:#4a5158}
+
+.dp-key{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 12px}
+.dp-chip{padding:4px 9px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid transparent}
+.dp-chip b{font-family:var(--serif);font-size:12.5px}
+.dp-chip.a{background:#e3f0e8;color:#1c5238;border-color:#c6ddd0}
+.dp-chip.b{background:#e8f2ec;color:#24684a;border-color:#cfe2d7}
+.dp-chip.c{background:#f6efdc;color:#6b5211;border-color:#e2d3a8}
+.dp-chip.d{background:#f3eee6;color:#6a4f21;border-color:#ddd0ba}
+
+.dp-days{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.dp-days li{display:grid;grid-template-columns:54px 28px 1fr auto;align-items:center;gap:9px;
+  padding:10px 12px;border:1px solid #e7e3d8;border-radius:3px;background:#fff;border-left-width:3px}
+.dp-days li.a{border-left-color:#24684a}
+.dp-days li.b{border-left-color:#4e8a68}
+.dp-days li.c{border-left-color:#84621a}
+.dp-days li.d{border-left-color:#9aa1a8}
+.dp-days.avoid li{border-left-color:#a8321f;background:#fdf7f6}
+.dp-days .dd{font-size:13px;font-weight:800;color:#1e2124}
+.dp-days .dd em{display:block;font-style:normal;font-size:10.5px;font-weight:700;color:#6b7278}
+.dp-days .dh{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
+  border-radius:2px;background:#1c1c1d;color:#efeae0;font-family:var(--serif);font-size:13px;font-weight:800}
+.dp-days .dw{font-size:11.5px;line-height:1.5;color:#4a5158;min-width:0}
+.dp-days .dw b{display:block;font-size:12.5px;font-weight:800;color:#1e2124}
+.dp-days .dg{font-family:var(--serif);font-size:12.5px;font-weight:700;color:#84621a;text-align:right}
+.dp-days .dg em{display:block;font-family:inherit;font-style:normal;font-size:10px;font-weight:600;color:#6b7278}
+
+.dp-toggle{width:100%;padding:11px 0;border:1px dashed #c8a94e;border-radius:3px;background:#fdfbf6;
+  font-size:12.5px;font-weight:700;color:#4a4130;cursor:pointer;margin:0 0 12px}
+
+.dp-disc{margin:0;font-size:11px;line-height:1.7;color:#5d646b}
+.dp-disc b{font-weight:800;color:#3a4046}
+
+@media (min-width:560px){
+  .dp-days{grid-template-columns:1fr 1fr}
+}
