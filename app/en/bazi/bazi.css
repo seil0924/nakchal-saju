@@ -39,12 +39,13 @@
 .bz-han{display:flex;align-items:center;justify-content:center;height:52px;border-radius:3px;
   font-family:var(--serif);font-size:26px;font-weight:900;color:#fff}
 .bz-py{margin-top:4px;font-size:11.5px;font-weight:800;color:#efeae0}
-.bz-el{margin-top:1px;font-size:10.5px;font-weight:700;filter:brightness(1.5)}
+/* 색은 컴포넌트가 밝은 쪽 팔레트로 직접 준다 — 필터로 눈대중하면 대비가 안 맞는다 */
+.bz-el{margin-top:1px;font-size:10.5px;font-weight:700}
 .bz-sub{margin-top:2px;font-size:10px;line-height:1.35;color:rgba(239,234,224,.66)}
 
 .bz-dm{margin-top:12px;padding-top:10px;border-top:1px solid rgba(239,234,224,.16);
   text-align:center;font-size:12.5px;color:rgba(239,234,224,.78)}
-.bz-dm b{filter:brightness(1.55);font-weight:800}
+.bz-dm b{font-weight:800}
 
 .bz-bal{display:grid;gap:5px;margin-top:12px}
 .bz-bar{display:grid;grid-template-columns:52px 1fr 20px;align-items:center;gap:8px}
