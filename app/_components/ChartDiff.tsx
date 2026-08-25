@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import { resolveBirth, corePillars, solarShiftMin } from '@/lib/manse-core';
 import { searchCities, cityKey, CITIES, type City } from '@/lib/cities';
 import { STEM_HANJA, BRANCH_HANJA, STEM_PINYIN, BRANCH_PINYIN } from '@/lib/bazi-en';
+import { cityKeyZh, cityZh, countryZh, searchCitiesZh } from '@/lib/cities-zh';
 
 const START = CITIES.find(c => c.city === 'Madrid') ?? CITIES[0];
 const LABELS = ['Year', 'Month', 'Day', 'Hour'];
@@ -58,7 +59,8 @@ export default function ChartDiff({ lang = 'en' }: { lang?: CdLang }) {
   const [q, setQ] = useState('');
   const [place, setPlace] = useState<City>(START);
   const [open, setOpen] = useState(false);
-  const hits = useMemo(() => searchCities(q), [q]);
+  const zh = lang === 'zh';
+  const hits = useMemo(() => (zh ? searchCitiesZh(q) : searchCities(q)), [q, zh]);
 
   const result = useMemo(() => {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return null;
@@ -90,7 +92,7 @@ export default function ChartDiff({ lang = 'en' }: { lang?: CdLang }) {
           <input type="time" value={time} onChange={e => setTime(e.target.value)} />
         </label>
         <label className="cd-fl cd-place"><span>{T.place}</span>
-          <input value={open ? q : cityKey(place)} placeholder={T.search}
+          <input value={open ? q : (zh ? cityKeyZh(place) : cityKey(place))} placeholder={T.search}
             onFocus={() => { setOpen(true); setQ(''); }}
             onChange={e => setQ(e.target.value)}
             onBlur={() => setTimeout(() => setOpen(false), 150)} />
@@ -99,7 +101,7 @@ export default function ChartDiff({ lang = 'en' }: { lang?: CdLang }) {
               {hits.map(c => (
                 <li key={cityKey(c)}>
                   <button type="button" onMouseDown={() => { setPlace(c); setOpen(false); }}>
-                    {c.city}<em>{c.country}</em>
+                    {zh ? cityZh(c) : c.city}<em>{zh ? countryZh(c) : c.country}</em>
                   </button>
                 </li>
               ))}
@@ -112,8 +114,8 @@ export default function ChartDiff({ lang = 'en' }: { lang?: CdLang }) {
         <>
           <div className={'cd-verdict ' + (result.any ? 'differ' : 'same')}>
             {result.any
-              ? <>{T.vdPre(place.city)}<b>{shiftText(result.shift)}</b>{T.vdPost}</>
-              : <>{T.vsPre(place.city)}<b>{shiftText(result.shift)}</b>{T.vsPost}</>}
+              ? <>{T.vdPre(zh ? cityZh(place) : place.city)}<b>{shiftText(result.shift)}</b>{T.vdPost}</>
+              : <>{T.vsPre(zh ? cityZh(place) : place.city)}<b>{shiftText(result.shift)}</b>{T.vsPost}</>}
           </div>
 
           <div className="cd-two">
@@ -133,7 +135,7 @@ export default function ChartDiff({ lang = 'en' }: { lang?: CdLang }) {
 
             <div className="cd-card solar">
               <div className="cd-cap">{T.capSolar}
-                <em>{T.subSolar(place.city)}</em></div>
+                <em>{T.subSolar(zh ? cityZh(place) : place.city)}</em></div>
               <div className="cd-row">
                 {result.solar.map((p, i) => (
                   <div key={i} className={'cd-cell' + (result.diff[i] ? ' moved' : '')}>
