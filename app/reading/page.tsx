@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
@@ -84,6 +84,9 @@ export default function Reading() {
   const [modal, setModal] = useState(false);
   const [passMode, setPassMode] = useState(false);   // 발주처 프리미엄 패스 결제 모드
   const [busy, setBusy] = useState(false);
+  // 결제 재진입 가드. setBusy 는 다음 렌더에야 반영돼서 같은 틱에 두 번 들어오는 걸 못 막는다 —
+  // 실제로 버튼 한 번에 /api/payment/prepare 가 두 번 나갔다. ref 는 즉시 바뀐다.
+  const paying = useRef(false);
   const [err, setErr] = useState('');
   const [consent, setConsent] = useState(false);
   const [prog, setProg] = useState(false);     // 로딩 리추얼
@@ -287,7 +290,7 @@ export default function Reading() {
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
       // (스크롤 점프 제거 — 잠긴 항목 클릭 시 화면이 위로 튀지 않도록 제자리 갱신)
     } catch { setErr('상품을 여는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
-    finally { setBusy(false); }
+    finally { setBusy(false); paying.current = false; }
   }
   // 연도(세운) 전환 — 대표·회사·발주처 궁합을 그 해 기준으로 다시 계산
   async function switchYear(y: number) {
@@ -296,7 +299,7 @@ export default function Reading() {
     try {
       const r = await fetch(`/api/report/get?id=${res.reportId}&year=${y}&t=${encodeURIComponent(tokParam(res.reportId))}`).then(x => x.json());
       if (r && r.sections) setRes(prev => (prev ? { ...prev, ...r } : r));
-    } catch {} finally { setBusy(false); }
+    } catch {} finally { setBusy(false); paying.current = false; }
   }
   // 이 리포트에서 낱개로 살 수 있는 상품(잠긴 섹션 소속) — 중복 제거
   const lockedProducts = useMemo(() => {
@@ -312,7 +315,8 @@ export default function Reading() {
 
   async function pay(chosen: 'taekil' | 'full') {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
-    if (!res) return;
+    if (!res || paying.current) return;
+    paying.current = true;
     setErr(''); setBusy(true);
     try {
       const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: chosen }) }).then(x => x.json());
@@ -332,12 +336,13 @@ export default function Reading() {
       markUnlocked(res.reportId);
       setSeal(true); setTimeout(() => setSeal(false), 2600); // 개봉(開) 연출 — 절정으로 마무리
     } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
-    finally { setBusy(false); }
+    finally { setBusy(false); paying.current = false; }
   }
 
   async function payPass() {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
-    if (!res) return;
+    if (!res || paying.current) return;
+    paying.current = true;
     setErr(''); setBusy(true);
     try {
       const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: 'baljuPass' }) }).then(x => x.json());
@@ -356,7 +361,7 @@ export default function Reading() {
       setRes({ ...res, ...full }); setModal(false); setPassMode(false);
       setSeal(true); setTimeout(() => setSeal(false), 2600);
     } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
-    finally { setBusy(false); }
+    finally { setBusy(false); paying.current = false; }
   }
 
   async function share() {
