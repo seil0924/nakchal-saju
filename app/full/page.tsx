@@ -3,6 +3,7 @@ import Link from 'next/link';
 export const metadata = {
   title: '전체 리포트 — 대표의 사주 열여덟 장',
   description: '견적은 틀린 게 없는데 큰 건만 비껴간다면 — 그건 실력이 아니라 명식(命式)의 구조입니다. 대표와 회사의 사주 열여덟 장, 통째로 폅니다.',
+  alternates: { canonical: '/full' },
 };
 
 // 욕구를 긁는 체크리스트 — 40~70대 입찰 대표의 실제 통점
