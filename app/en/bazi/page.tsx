@@ -60,7 +60,7 @@ export default function BaziPage() {
       </div>
 
       <div className="hero"><div className="kick">八 字 · FOUR PILLARS</div>
-        <h2 style={{ fontSize: 19 }}>Your BaZi chart,<br />with the hour done properly</h2>
+        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>Your BaZi chart,<br />with the hour done properly</h1>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>Free · no sign-up · true solar time by birthplace</div>
       </div>
 
