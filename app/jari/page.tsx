@@ -40,7 +40,7 @@ export default function Jari() {
       </div>
 
       <div className="hero"><div className="kick">宅 · 자 리 사 주</div>
-        <h2 style={{ fontSize: 19 }}>사무실을 옮기기 전에,<br />어느 쪽인지부터</h2>
+        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>사무실을 옮기기 전에,<br />어느 쪽인지부터</h1>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>지금 자리의 문·책상 방위와 옮길 곳의 방위·택일을 함께 봅니다</div>
       </div>
 
