@@ -290,7 +290,7 @@ export default function Reading() {
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
       // (스크롤 점프 제거 — 잠긴 항목 클릭 시 화면이 위로 튀지 않도록 제자리 갱신)
     } catch { setErr('상품을 여는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
-    finally { setBusy(false); paying.current = false; }
+    finally { setBusy(false); }
   }
   // 연도(세운) 전환 — 대표·회사·발주처 궁합을 그 해 기준으로 다시 계산
   async function switchYear(y: number) {
@@ -299,7 +299,7 @@ export default function Reading() {
     try {
       const r = await fetch(`/api/report/get?id=${res.reportId}&year=${y}&t=${encodeURIComponent(tokParam(res.reportId))}`).then(x => x.json());
       if (r && r.sections) setRes(prev => (prev ? { ...prev, ...r } : r));
-    } catch {} finally { setBusy(false); paying.current = false; }
+    } catch {} finally { setBusy(false); }
   }
   // 이 리포트에서 낱개로 살 수 있는 상품(잠긴 섹션 소속) — 중복 제거
   const lockedProducts = useMemo(() => {
