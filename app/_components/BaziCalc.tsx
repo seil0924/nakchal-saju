@@ -41,7 +41,7 @@ export default function BaziCalc() {
   }, [date, time, noTime, place]);
 
   const shiftText = (n: number) =>
-    n === 0 ? 'none' : `${n > 0 ? '+' : '\u2212'}${Math.abs(n)} min`;
+    n === 0 ? 'none' : `${n > 0 ? '+' : '−'}${Math.abs(n)} min`;
 
   return (
     <section className="bz" lang="en">
@@ -92,14 +92,14 @@ export default function BaziCalc() {
                 <div className="bz-col" key={p.label}>
                   <div className="bz-lab">{p.label}</div>
                   <Glyph c={p.stem} sub={p.stem.star ?? 'Day Master'} />
-                  <Glyph c={p.branch} sub={`${p.branch.animal} \u00b7 ${p.branch.star}`} />
+                  <Glyph c={p.branch} sub={`${p.branch.animal} · ${p.branch.star}`} />
                 </div>
               ))}
             </div>
 
             <div className="bz-dm">
               Day Master <b style={{ color: result.bazi.dayMaster.hex }}>
-                {result.bazi.dayMaster.hanja} {result.bazi.dayMaster.pinyin} \u2014
+                {result.bazi.dayMaster.hanja} {result.bazi.dayMaster.pinyin} —
                 {' '}{result.bazi.dayMaster.yang ? 'Yang' : 'Yin'} {result.bazi.dayMaster.element}</b>
             </div>
 
@@ -115,7 +115,7 @@ export default function BaziCalc() {
             <p className="bz-note">
               Strongest <b>{result.bazi.strongest}</b>, thinnest <b>{result.bazi.weakest}</b>.
               {' '}Solar correction applied for {place.city}: <b>{shiftText(result.shift)}</b>.
-              {result.yaja ? ' Late-night hour (23:00\u201301:00) handled as the following day pillar.' : ''}
+              {result.yaja ? ' Late-night hour (23:00–01:00) handled as the following day pillar.' : ''}
             </p>
           </div>
 
