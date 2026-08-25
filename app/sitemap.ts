@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   // 1순위 — 전환이 일어나는 페이지
-  const primary = ['', '/reading', '/column', '/full', '/pricing', '/balju', '/ceo', '/jari', '/en/bazi', '/en/date-picker'];
+  const primary = ['', '/reading', '/column', '/full', '/pricing', '/balju', '/ceo', '/jari', '/en/bazi', '/en/date-picker', '/en/why-charts-differ'];
   // 2순위 — 신뢰·전환 보조
   const secondary = ['/why', '/faq', '/samples', '/method', '/bokchae', '/ritual', '/glossary'];
   // 3순위 — 법적 고지
