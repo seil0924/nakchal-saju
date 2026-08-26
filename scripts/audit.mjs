@@ -29,7 +29,10 @@ async function get(url) {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await fetch(url, { redirect: 'follow', headers: { 'user-agent': 'nakchal-audit' } });
-      const body = res.headers.get('content-type')?.includes('text/html') ? await res.text() : '';
+      // 사이트맵은 application/xml 이다. text/html 만 읽게 해 놨더니 본문이 빈 채로 와서
+      // 경로가 0개가 됐고, "경로를 못 찾았다"로 죽었다 — 사이트가 아니라 이 스크립트가 틀렸다.
+      const ct = res.headers.get('content-type') || '';
+      const body = /text\/|xml|json/.test(ct) ? await res.text() : '';
       return { status: res.status, url: res.url, body };
     } catch (e) {
       if (attempt === 2) return { status: 0, url, body: '', error: String(e) };
