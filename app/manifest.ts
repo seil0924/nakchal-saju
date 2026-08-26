@@ -20,9 +20,10 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['business', 'productivity', 'lifestyle'],
     icons: [
       { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
-      { src: '/pwa-icon?size=192', sizes: '192x192', type: 'image/png', purpose: 'any' },
-      { src: '/pwa-icon?size=512', sizes: '512x512', type: 'image/png', purpose: 'any' },
-      { src: '/pwa-icon?size=512&pad=1', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      // ?v=2 — 첫 판이 한쪽으로 쏠려 있었다. 엣지 캐시가 옛 그림을 물고 있어 주소를 바꾼다.
+      { src: '/pwa-icon?size=192&v=2', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/pwa-icon?size=512&v=2', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: '/pwa-icon?size=512&pad=1&v=2', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
     ],
     shortcuts: [
       { name: '오늘의 사정률', short_name: '사정률', url: '/reading' },
