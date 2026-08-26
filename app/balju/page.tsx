@@ -36,7 +36,7 @@ export default function Balju() {
       <div className="topbar"><Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>발주처</Link><Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link></div>
 
       <div className="hero"><div className="kick">發 注 處 宮 合</div>
-        <h2 style={{ fontSize: 19 }}>어느 발주처와<br />붙어볼까요</h2>
+        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>어느 발주처와<br />붙어볼까요</h1>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>발주처 설립일 사주 × 대표님 사주로 궁합을 봅니다</div>
       </div>
 
