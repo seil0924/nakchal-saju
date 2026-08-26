@@ -49,7 +49,8 @@ export default function CeoLayout({ children }: { children: React.ReactNode }) {
         <>
           {/* .app 이 min-height:100vh 라 목록 앞에 355px 짜리 빈 구멍이 생긴다.
               목록이 붙으면 화면은 이미 넘치니 인덱스에서만 풀어 준다. */}
-          <style>{`.app{min-height:auto}`}</style>
+          {/* .home.app 이 0-2-0 이라 .app 하나로는 못 이긴다. 클래스를 겹쳐 특이도를 맞추고 순서로 이긴다. */}
+          <style>{`.home.app,.app.app{min-height:auto}`}</style>
           <TycoonIndex />
         </>
       ) : null}
