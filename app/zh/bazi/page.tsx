@@ -1,4 +1,5 @@
 import '@/app/en/bazi/bazi.css';
+import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import BaziCalc from '@/app/_components/BaziCalc';
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     title: '八字排盤 — 真太陽時四柱計算器',
     description: '免費八字排盤。依出生地校正真太陽時，節氣天文推算。',
     url: BASE + '/zh/bazi', type: 'website', locale: 'zh_TW', siteName: 'Nakchal Saju',
+    images: ogCard({ seal: '命', k: '四柱 · 真太陽時', t: '免費八字排盤', s: '節氣以太陽黃經計算，非查表' }),
   },
   twitter: {
     card: 'summary_large_image',
