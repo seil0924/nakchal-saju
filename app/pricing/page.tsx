@@ -3,7 +3,16 @@ import { CAT_INFO } from '@/lib/report-categories';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { bizFooterLine } from '@/lib/bizinfo';
 
-export const metadata = { title: '이용안내·요금', description: '낙찰사주 상품 안내와 판매가, 청약철회·환불 정책, 사업자정보.' };
+import { ogCard } from '@/lib/og';
+
+export const metadata = {
+  title: '이용안내·요금', description: '낙찰사주 상품 안내와 판매가, 청약철회·환불 정책, 사업자정보.',
+  alternates: { canonical: '/pricing' },
+  openGraph: {
+    url: 'https://nakchalsaju.com/pricing', type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
+    images: ogCard({ seal: '價', k: '利用案內 · 料金', t: '이용안내 · 요금', s: '상품별 가격과 청약철회·환불 정책' }),
+  },
+};
 
 const PRODUCT_LINKS: [string, string][] = [
   ['/product/balju', '발주처 궁합'],
