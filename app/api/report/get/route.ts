@@ -2,7 +2,8 @@
 // 결제된 리포트면 전체, 아니면 무료 게이팅본을 반환.
 import { NextResponse } from 'next/server';
 import { computeReport } from '@/lib/report';
-import { getReport, getReportAccess, unlockLevel, hasBaljuPass } from '@/lib/store';
+import { getReport, getReportAccess } from '@/lib/store';
+import { entitlement, adminBypass } from '@/lib/entitle';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
@@ -19,9 +20,12 @@ export async function GET(req: Request) {
       : ((!!user && !!owner && owner === user.id) || (!!t && t === token)));
   const input = await getReport(id);
   if (!input) return NextResponse.json({ error: 'not_found' }, { status: 404 });
-  const level = isOwner ? await unlockLevel(id) : 0;
-  const bpass = isOwner ? await hasBaljuPass(user?.id) : false;
+  // 관리자는 소유자가 아니어도 전체를 본다 — 문의 응대와 점검 때문에.
+  const admin = await adminBypass();
+  const ent = (isOwner || admin) ? await entitlement(id, user?.id) : { level: 0, bpass: false, admin: false };
+  const level = ent.level;
+  const bpass = ent.bpass;
   const year = Number(new URL(req.url).searchParams.get('year')) || undefined;
   const rep = computeReport(input, level, year, bpass);
-  return NextResponse.json({ reportId: id, unlocked: level >= 1, level, mine: isOwner, cat: input.cat ?? null, ...rep });
+  return NextResponse.json({ reportId: id, unlocked: level >= 1, level, mine: isOwner, admin, cat: input.cat ?? null, ...rep });
 }
