@@ -1,4 +1,5 @@
 import './why.css';
+import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import ChartDiff from '@/app/_components/ChartDiff';
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     title: 'Why do BaZi calculators give different charts?',
     description: 'Five reasons, and a side-by-side you can run on your own birth data.',
     url: BASE + '/en/why-charts-differ', type: 'article', locale: 'en', siteName: 'Nakchal Saju',
+    images: ogCard({ seal: '異', k: 'Why two charts disagree', t: 'Same birthday,\ndifferent chart', s: 'True solar time, borders and the calendar' }),
   },
   twitter: {
     card: 'summary_large_image',
