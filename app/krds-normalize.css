@@ -460,3 +460,25 @@ html .pk{background:#2b6e53!important}
 html .colo{color:#8a7136!important}
 /* 모바일 하단 면책 문구 — 10.5px 에 3.63:1 이었다 */
 html .hdisc{color:#6f6a58!important}
+/* === sweep26: 사이트 전역 2차 감사 — 아직 남아 있던 흐린 색 일괄 정리 ===
+   인라인 style 로 박힌 색은 클래스로 못 잡는다. 속성 선택자로 그 색만 정확히 덮는다.
+   (!important 는 인라인 style 을 이긴다 — 이 파일이 마지막에 실리는 것도 같은 이유) */
+html [style*="color:#a99f88"]{color:#6f6a58!important}
+html [style*="color:#8a806a"]{color:#6f6a58!important}
+html [style*="color:#7f786c"]{color:#6f6a58!important}
+html [style*="color:#8d8672"]{color:#6f6a58!important}
+/* /samples 의 · 구분자 — 이 페이지엔 --gold2 가 정의돼 있지 않아 흰색을 상속받아 아예 안 보였다 */
+html [style*="color:var(--gold2)"]{color:#8a7136!important}
+/* 크림 배경 위 파란 칩 — 4.43:1 로 0.07 모자랐다. CEO 칩과 같은 파랑으로 통일 */
+html [style*="var(--navy)"][style*="#faf6ec"]{color:#2f56c4!important}
+/* /reading 업종 선택 칩 */
+html .chip2{color:#6b6559!important}
+/* /column 머리말 부제 — .sub 는 다른 데서도 쓰여서 colhead 안으로만 좁힌다 */
+html .colhead .sub{color:#6f6a58!important}
+/* /full 표지·필름밴드 — 남색 위 금색이 3.05:1 이었다 */
+html .fsmk,html .home5 h1 b,html .home5 .emocore b,html .filmband .fbt b{color:#eadfc1!important}
+/* /full 목차 셰브런(2.02:1)·캡션·연호 */
+html .fchev,html .fscap{color:#6f6a58!important}
+html .an{color:#8a7136!important}
+/* /bokchae 어두운 카드 위 안내문 — 4.12:1 */
+html .boknote{color:#a89b83!important}
