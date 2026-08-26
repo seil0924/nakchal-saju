@@ -7,6 +7,13 @@ import Link from 'next/link';
 import { TAEKIL, OFFICER_KO, goodDays, badDays, taekilBySlug } from '@/lib/taekil';
 
 const TONE = ['a', 'b', 'c', 'd'];
+// 요일은 영어판 엔진이 Fri·Sun 으로 내준다. 계산을 갈라 놓지 않으려고 그대로 두고,
+// 화면에 쓸 때만 한글로 바꾼다.
+const DOW_KO = ['일', '월', '화', '수', '목', '금', '토'];
+const dowKo = (ymd: string) => {
+  const [y, m, d] = ymd.split('-').map(Number);
+  return DOW_KO[new Date(y, m - 1, d).getDay()];
+};
 
 export default function TaekilPick({ slug, showTabs = false }: { slug: string; showTabs?: boolean }) {
   const [cur, setCur] = useState(slug);
@@ -46,7 +53,7 @@ export default function TaekilPick({ slug, showTabs = false }: { slug: string; s
       <ul className="dp-days">
         {good.map(d => (
           <li key={d.ymd} className={TONE[d.rank] || 'd'}>
-            <span className="dd">{d.month}/{d.day}<em>{d.dow}</em></span>
+            <span className="dd">{d.month}/{d.day}<em>{dowKo(d.ymd)}</em></span>
             <span className="dh">{OFFICER_KO[d.officer].hanja}</span>
             <span className="dw"><b>{OFFICER_KO[d.officer].name}</b>{OFFICER_KO[d.officer].gist}</span>
             <span className="dg">{d.ganji}</span>
@@ -62,7 +69,7 @@ export default function TaekilPick({ slug, showTabs = false }: { slug: string; s
         <ul className="dp-days avoid">
           {bad.map(d => (
             <li key={d.ymd}>
-              <span className="dd">{d.month}/{d.day}<em>{d.dow}</em></span>
+              <span className="dd">{d.month}/{d.day}<em>{dowKo(d.ymd)}</em></span>
               <span className="dh">{OFFICER_KO[d.officer].hanja}</span>
               <span className="dw"><b>{OFFICER_KO[d.officer].name}</b>{OFFICER_KO[d.officer].gist}</span>
               <span className="dg">{d.ganji}</span>
