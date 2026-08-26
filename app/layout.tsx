@@ -5,6 +5,7 @@ import DesktopSidebar from '@/app/_components/DesktopSidebar';
 import TapFX from '@/app/_components/TapFX';
 import IntroSplash from '@/app/_components/IntroSplash';
 import ScrollTop from '@/app/_components/ScrollTop';
+import AddToHome from '@/app/_components/AddToHome';
 import { requireUser } from '@/lib/supabase/server';
 import { headers } from 'next/headers';
 
@@ -89,6 +90,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ScrollTop />
         <IntroSplash />
         <TapFX />
+        <AddToHome />
         <div className="shell">
           <DesktopSidebar />
           <div className="dmain">{children}</div>
