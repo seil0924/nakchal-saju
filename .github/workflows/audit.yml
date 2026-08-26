@@ -6,9 +6,13 @@ name: Audit
 # 만들어질 때부터 404 였고, 14개 경로에 og:image 가 없어 카카오톡에 빈 카드로 떴는데도
 # 내내 초록불이었다. 손으로 브라우저를 연 날에만 발견됐다.
 #
-# 두 겹으로 돈다.
-#  · push  — 로컬 빌드를 띄워 핵심 경로. 배포 전에 막는다.
-#  · 매일 밤 — 운영 사이트 290개 전수. 배포 뒤에만 드러나는 것들(한글 라우트, 로그인 게이트)을 잡는다.
+# 무엇을 언제 도는가:
+#  · push  — 구조 검사(상태코드·h1·og·canonical·중복 제목·깨진 링크). 로컬 빌드를 띄워 배포 전에 막는다.
+#  · 매일 밤 — 운영 사이트 전수 + 명암비.
+#
+# 명암비를 push 에서 뺀 이유: 로컬 빌드에는 실데이터가 없어 화면이 스켈레톤 상태로 굳고,
+# 어두운 자리 표시자를 위반으로 세어 20건이 헛나왔다. 잘못 우는 게이트는 없느니만 못하다.
+# 명암비는 사람이 실제로 보는 화면, 즉 배포본에서 잰다.
 #
 # 서버 기동과 검사는 반드시 같은 스텝에 둔다. 스텝을 갈랐더니 검사할 때 서버가 없어서
 # "경로를 못 찾았다"로 죽었다 — 사이트가 아니라 워크플로가 틀린 것이었다.
@@ -23,7 +27,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  # ── 1. 구조 검사 (의존성 없음, 빠르다) ──────────────
+  # ── 커밋마다: 구조 검사 (의존성 없음, 1~2분) ────────
   pages:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
@@ -35,34 +39,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: 상태코드·h1·og:image·canonical·깨진 링크
+      - name: 상태코드·h1·og:image·canonical·중복 제목·깨진 링크
         run: |
           npm start &
           npx --yes wait-on http://localhost:3000 --timeout 120000
           node scripts/audit.mjs --base=http://localhost:3000 --scope=core
 
-  # ── 2. 명암비 (크로미움이 필요하다) ─────────────────
-  contrast:
-    if: github.event_name != 'schedule'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      # playwright 는 package.json 에 넣지 않는다 — lock 파일을 건드리지 않으려고.
-      - run: npm i --no-save playwright@1.49.1
-      - run: npx playwright install --with-deps chromium
-      - run: npm run build
-      - name: WCAG AA 명암비
-        run: |
-          npm start &
-          npx --yes wait-on http://localhost:3000 --timeout 120000
-          node scripts/audit-contrast.mjs --base=http://localhost:3000 --scope=core
-
-  # ── 3. 매일 밤, 운영 사이트 전수 ───────────────────
+  # ── 매일 밤: 운영 사이트 전수 + 명암비 ──────────────
   production:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -71,10 +54,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      # playwright 는 package.json 에 넣지 않는다 — lock 파일을 건드리지 않으려고.
       - run: npm i --no-save playwright@1.49.1
       - run: npx playwright install --with-deps chromium
       - name: 전 경로 구조 검사
         run: node scripts/audit.mjs --base=https://nakchalsaju.com --scope=all
-      - name: 전 경로 명암비
+      - name: 전 경로 명암비 (WCAG AA)
         if: always()
         run: node scripts/audit-contrast.mjs --base=https://nakchalsaju.com --scope=all
