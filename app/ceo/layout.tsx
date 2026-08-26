@@ -45,7 +45,14 @@ export default function CeoLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
-      {isIndex ? <TycoonIndex /> : null}
+      {isIndex ? (
+        <>
+          {/* .app 이 min-height:100vh 라 목록 앞에 355px 짜리 빈 구멍이 생긴다.
+              목록이 붙으면 화면은 이미 넘치니 인덱스에서만 풀어 준다. */}
+          <style>{`.app{min-height:auto}`}</style>
+          <TycoonIndex />
+        </>
+      ) : null}
     </>
   );
 }
