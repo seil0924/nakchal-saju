@@ -91,7 +91,6 @@ export async function listPayments() {
   if (!adminEnabled()) return [];
   try {
     const sb = supabaseAdmin();
-    const { data: pays } = await sb.from('payments').select('payment_id,amount,status,paid_at,created_at,user_id,report_id').order('created_at', { ascending: false }).limit(50);
     // fail_reason 컬럼이 없는 환경도 있어서, 없으면 그 컬럼만 빼고 다시 읽는다.
     let pays: any[] | null = null;
     {
@@ -106,6 +105,7 @@ export async function listPayments() {
         pays = base.data;
       }
     }
+    const uids = [...new Set((pays ?? []).map((p: any) => p.user_id).filter(Boolean))];
     const rids = [...new Set((pays ?? []).map((p: any) => p.report_id).filter(Boolean))];
     const [profs, reps] = await Promise.all([
       uids.length ? sb.from('profiles').select('id,name,email').in('id', uids) : Promise.resolve({ data: [] } as any),
