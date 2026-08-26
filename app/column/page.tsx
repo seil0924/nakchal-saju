@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import { ogCard } from '@/lib/og';
+
+const CARD = { seal: '筆', k: '會社 사주 칼럼', t: '낙찰사주 칼럼', s: '입찰·경영·명리 — 대표를 위한 글' };
 import type { Metadata } from 'next';
 import { getAllColumns } from '@/lib/column';
 
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '낙찰사주 칼럼 — 會社 사주 이야기',
     description: '입찰·경매·수주 대표를 위한 사주명리 칼럼',
-    type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
+    type: 'website', locale: 'ko_KR', siteName: '낙찰사주', images: ogCard(CARD),
   },
 };
 
