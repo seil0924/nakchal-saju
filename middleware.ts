@@ -25,7 +25,26 @@ export function isPublicPath(rawPath: string): boolean {
   return PUBLIC_PREFIX.some((p) => path.startsWith(p));
 }
 
+// 한글 주소 별칭. app/사업운세 와 app/사주/[slug] 는 소스에 있지만 Next 가 한글 세그먼트를
+// 라우팅하지 못해 배포본에서 404 였다(x-matched-path 가 라우트가 아니라 퍼센트 인코딩 문자열로 잡힌다).
+// 내용은 ASCII 쪽에 그대로 있으므로 여기서 넘긴다. 라우트 파일은 삭제했다.
+const KO_ALIAS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^\/사업운세\/?$/, () => '/saeobunse/2026'],
+  [/^\/사주\/(.+)$/, (m) => '/saju/' + m[1]],
+];
+
 export async function middleware(req: NextRequest) {
+  // 한글 별칭은 인증보다 먼저 처리한다 — 어차피 공개 페이지로 보낼 것이라.
+  let koPath = req.nextUrl.pathname;
+  try { koPath = decodeURIComponent(koPath); } catch { /* 잘못된 인코딩은 그대로 둔다 */ }
+  for (const [re, to] of KO_ALIAS) {
+    const m = koPath.match(re);
+    if (m) {
+      const url = req.nextUrl.clone();
+      url.pathname = to(m);
+      return NextResponse.redirect(url, 308);
+    }
+  }
   // 루트 레이아웃이 <html lang> 을 맞추려면 현재 경로를 알아야 하는데, 서버 컴포넌트는 pathname 을 못 받는다.
   // 헤더로 넘긴다. /en, /zh 에 lang="ko" 가 붙어 있으면 스크린리더와 검색엔진 둘 다에게 거짓말이 된다.
   const fwd = new Headers(req.headers);
