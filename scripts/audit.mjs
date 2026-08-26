@@ -43,7 +43,12 @@ async function get(url) {
 // 목록을 손으로 관리하면 언젠가 빠뜨린다. CEO 100장이 그렇게 빠져 있었다.
 async function pickPaths() {
   const r = await get(BASE + '/sitemap.xml');
-  if (r.status !== 200) { err('/sitemap.xml', `상태 ${r.status}`); return []; }
+  if (r.status !== 200) {
+    console.error(`/sitemap.xml 을 못 읽었다 — 상태 ${r.status}${r.error ? ' ' + r.error : ''}`);
+    console.error('서버가 안 떠 있거나 사이트맵이 500 이다. 사이트가 아니라 검사 환경 문제일 수 있다.');
+    err('/sitemap.xml', `상태 ${r.status}`);
+    return [];
+  }
   const locs = [...r.body.matchAll(/<loc>([^<]+)<\/loc>/g)]
     .map(m => decodeURIComponent(m[1].replace(BASE, '').replace(/^https?:\/\/[^/]+/, '')) || '/');
   if (SCOPE === 'all') return [...new Set(locs)];
@@ -106,7 +111,11 @@ function internalLinks(html) {
 
 async function main() {
   const paths = await pickPaths();
-  if (!paths.length) { console.error('검사할 경로를 못 찾았다.'); process.exit(1); }
+  if (!paths.length) {
+    console.error('검사할 경로를 못 찾았다.');
+    for (const e of errors) console.error('  ' + e);
+    process.exit(1);
+  }
   console.log(`${BASE} · scope=${SCOPE} · ${paths.length}개 경로`);
 
   const linkTargets = new Set();
