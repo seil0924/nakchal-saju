@@ -1,6 +1,15 @@
 import Link from 'next/link';
 import { bizFooterLine } from '@/lib/bizinfo';
-export const metadata = { title: '청약철회·환불 안내' };
+import { ogCard } from '@/lib/og';
+
+export const metadata = {
+  title: '청약철회·환불 안내',
+  alternates: { canonical: '/refund' },
+  openGraph: {
+    url: 'https://nakchalsaju.com/refund', type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
+    images: ogCard({ seal: '還', k: '請約撤回 · 還拂', t: '청약철회 · 환불 안내', s: '낙찰사주 · 나인굿즈' }),
+  },
+};
 
 const SECTIONS: [string, string][] = [
   ['한눈에', '유료 리포트는 디지털 콘텐츠입니다. <열람 전>에는 결제 취소·전액 환불이 가능하고, <열람 후>에는 콘텐츠 특성상 청약철회가 제한됩니다. 결제 전 이 내용을 고지드립니다.'],
