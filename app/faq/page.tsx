@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import { ogCard } from '@/lib/og';
+
+const CARD = { seal: '問', k: '常 問', t: '자주 묻는 질문', s: '정확도 · 결제 · 환불까지 있는 그대로' };
 import Link from 'next/link';
 import { FAQ_MAIN } from '@/lib/faq';
 
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
   description: '입찰 사주란 무엇인지, 사주로 낙찰을 예측할 수 있는지, 발주처 궁합·법인 설립일 사주·투찰 길일은 어떻게 보는지 — 낙찰사주에 대해 자주 묻는 질문에 답합니다.',
   alternates: { canonical: '/faq' },
   keywords: ['입찰 사주', '낙찰 사주', '발주처 궁합', '투찰 택일', '법인 설립일 사주', '사주 낙찰', '낙찰사주 FAQ'],
-  openGraph: { title: '자주 묻는 질문 | 낙찰사주', description: '입찰 사주·발주처 궁합·투찰 택일에 대해 자주 묻는 질문', url: `${BASE}/faq`, type: 'article', siteName: '낙찰사주' },
+  openGraph: { title: '자주 묻는 질문 | 낙찰사주', description: '입찰 사주·발주처 궁합·투찰 택일에 대해 자주 묻는 질문', url: `${BASE}/faq`, type: 'article', siteName: '낙찰사주', images: ogCard(CARD) },
 };
 
 export default function FaqPage() {
