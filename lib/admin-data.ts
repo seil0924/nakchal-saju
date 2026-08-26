@@ -7,6 +7,19 @@ import { CAT_INFO, isCatKey } from './report-categories';
 
 const won = (n: number) => n.toLocaleString('ko-KR');
 
+// 결제가 승인까지 못 간 사유를 사람 말로.
+function whyLabel(reason?: string | null): string {
+  if (!reason) return '';
+  if (reason.startsWith('confirm:')) return '승인됨 · 저장실패(확인 필요)';
+  if (reason.startsWith('approve:')) return '승인 거절';
+  if (reason.startsWith('amount:')) return '금액 불일치';
+  if (reason.startsWith('auth:')) return '인증 실패·취소';
+  if (reason === 'missing_enc') return '인증값 누락';
+  if (reason === 'order_not_found') return '주문 없음';
+  if (reason.startsWith('fatal:')) return '서버 오류';
+  return reason.slice(0, 24);
+}
+
 // 결제 카테고리/금액 → 상품명
 function itemName(cat?: string | null, amount?: number): string {
   if (cat && isCatKey(cat)) return CAT_INFO[cat].name;
@@ -79,7 +92,20 @@ export async function listPayments() {
   try {
     const sb = supabaseAdmin();
     const { data: pays } = await sb.from('payments').select('payment_id,amount,status,paid_at,created_at,user_id,report_id').order('created_at', { ascending: false }).limit(50);
-    const uids = [...new Set((pays ?? []).map((p: any) => p.user_id).filter(Boolean))];
+    // fail_reason 컬럼이 없는 환경도 있어서, 없으면 그 컬럼만 빼고 다시 읽는다.
+    let pays: any[] | null = null;
+    {
+      const withReason = await sb.from('payments')
+        .select('payment_id,amount,status,paid_at,created_at,user_id,report_id,fail_reason')
+        .order('created_at', { ascending: false }).limit(50);
+      if (!withReason.error) pays = withReason.data;
+      else {
+        const base = await sb.from('payments')
+          .select('payment_id,amount,status,paid_at,created_at,user_id,report_id')
+          .order('created_at', { ascending: false }).limit(50);
+        pays = base.data;
+      }
+    }
     const rids = [...new Set((pays ?? []).map((p: any) => p.report_id).filter(Boolean))];
     const [profs, reps] = await Promise.all([
       uids.length ? sb.from('profiles').select('id,name,email').in('id', uids) : Promise.resolve({ data: [] } as any),
@@ -91,7 +117,9 @@ export async function listPayments() {
       id: (p.payment_id ?? '').slice(-6),
       name: pmap[p.user_id]?.name ?? '비회원', email: pmap[p.user_id]?.email ?? '',
       item: itemName(cmap[p.report_id], p.amount), amount: p.amount ?? 0, pay: '간편결제',
-      status: p.status === 'paid' ? '완료' : (p.status === 'cancelled' || p.status === 'refunded' ? '환불' : p.status),
+      status: p.status === 'paid' ? '완료' : (p.status === 'cancelled' || p.status === 'refunded' ? '환불' : (p.status === 'failed' ? '실패' : p.status)),
+      // 왜 승인까지 못 갔는지. confirm:* 는 승인은 났는데 우리 저장이 실패한 것이라 제일 위험하다.
+      why: whyLabel(p.fail_reason),
       at: (p.paid_at ?? p.created_at ?? '').slice(5, 16),
     }));
   } catch { return []; }
