@@ -3,6 +3,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { TAEKIL, OFFICER_KO } from '@/lib/taekil';
 import TaekilPick from '@/app/_components/TaekilPick';
+import { ogCard, ogCardUrl } from '@/lib/og';
+
+const CARD = { seal: '擇', k: '擇日 · 언제 시작할 것인가', t: '개업·설립·계약·이전·입찰\n좋은 날 고르기', s: '건제십이신으로 앞으로 90일 · 무료' };
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -14,8 +17,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: '택일 — 언제 시작할 것인가',
     description: '개업·설립·계약·이전·입찰. 앞으로 90일 중 결이 맞는 날.',
-    url: BASE + '/taekil', type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
+    url: BASE + '/taekil', type: 'website', locale: 'ko_KR', siteName: '낙찰사주', images: ogCard(CARD),
   },
+  twitter: { card: 'summary_large_image', title: '택일 — 언제 시작할 것인가', description: '개업·설립·계약·이전·입찰. 앞으로 90일 중 결이 맞는 날.', images: [ogCardUrl(CARD)] },
 };
 
 export default function TaekilHub() {
