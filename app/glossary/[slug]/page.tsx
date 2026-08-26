@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ogCard, ogCardUrl } from '@/lib/og';
 import { GLOSSARY, glossaryBySlug } from '@/lib/glossary';
 
 const BASE = 'https://nakchalsaju.com';
@@ -16,7 +17,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const desc = (t.lead || t.def).slice(0, 155);
   return { title, description: desc, alternates: { canonical: `/glossary/${t.slug}` },
     keywords: [`${t.term} 뜻`, t.term, `${t.cat} 용어`, '낙찰사주 용어사전'],
-    openGraph: { title: `${title} · 낙찰사주`, description: desc, url: `${BASE}/glossary/${t.slug}`, type: 'article', siteName: '낙찰사주' } };
+    openGraph: { title: `${title} · 낙찰사주`, description: desc, url: `${BASE}/glossary/${t.slug}`, type: 'article', siteName: '낙찰사주',
+      images: ogCard({ seal: '典', k: '用語 辭典', t: title, s: desc.slice(0, 60) }) },
+    twitter: { card: 'summary_large_image', title, description: desc, images: [ogCardUrl({ seal: '典', k: '用語 辭典', t: title, s: desc.slice(0, 60) })] } };
 }
 
 export default function TermPage({ params }: { params: { slug: string } }) {
