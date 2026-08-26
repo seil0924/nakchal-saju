@@ -93,8 +93,9 @@ function dayOf(d: Date): Omit<DayPick, 'rank'> {
 export function officerOf(d: Date): number { return dayOf(d).officer; }
 
 // 그 일에 맞는 날만 골라 앞에서부터 돌려준다.
-export function pickDays(purpose: Purpose, from: Date = new Date(), span = 90): DayPick[] {
-  const good = PURPOSES[purpose].good;
+// 한국어 택일(lib/taekil.ts)도 이 함수를 그대로 쓴다. 언어별로 계산을 새로 짜면
+// 언젠가 같은 날짜에 두 언어가 다른 답을 낸다 — 그 순간 둘 다 못 믿게 된다.
+export function pickWith(good: number[], from: Date = new Date(), span = 90): DayPick[] {
   const base = new Date(from.getFullYear(), from.getMonth(), from.getDate());
   const out: DayPick[] = [];
   for (let k = 1; k <= span; k++) {
@@ -104,6 +105,10 @@ export function pickDays(purpose: Purpose, from: Date = new Date(), span = 90): 
     if (rank >= 0) out.push({ ...info, rank });
   }
   return out;
+}
+
+export function pickDays(purpose: Purpose, from: Date = new Date(), span = 90): DayPick[] {
+  return pickWith(PURPOSES[purpose].good, from, span);
 }
 
 // 피하는 날. 겁주려는 게 아니라 '왜 그날은 빼는지'를 같이 보여주려는 것이다.
