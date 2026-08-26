@@ -49,7 +49,7 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
         <Link className="ic" href="/reading?cat=daepyo" aria-label="대표 사주"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <nav aria-label="위치" style={{ fontSize: 12, color: '#8a806a', marginBottom: 10 }}>{c.group} › {c.label}</nav>
+        <nav aria-label="위치" style={{ fontSize: 12, color: '#6f6a58', marginBottom: 10 }}>{c.group} › {c.label}</nav>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '4px 0 12px' }}>{c.h1}</h1>
         <p style={{ fontSize: 15.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>{c.lead}</p>
         {/* 검색해서 온 사람은 설명보다 '내 경우'를 먼저 본다. 판정을 글 위에 둔다. */}
@@ -70,11 +70,11 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
             {siblings.map(x => (<Link key={x.slug} href={`/saju/${x.slug}`} style={chip}>{x.label}</Link>))}
           </div>
         </>)}
-        <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다.</p>
+        <p style={{ fontSize: 11.5, color: '#6f6a58', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다.</p>
       </div>
     </div>
   );
 }
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: '#2f56c4', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
