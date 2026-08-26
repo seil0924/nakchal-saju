@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
+import { ogCard } from '@/lib/og';
+
+const CARD = { seal: '例', k: 'SAMPLE 四柱', t: '이런 결과가 나옵니다', s: '가상 대표 3인의 예시 리포트' };
 import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: '샘플 리포트 — 이런 결과가 나옵니다',
   description: '낙찰사주 결과가 실제로 어떻게 나오는지 가상 대표 3인의 예시로 미리 보세요. 오늘의 사정률·대표 유형·실전 수칙까지.',
   alternates: { canonical: '/samples' },
-  openGraph: { title: '샘플 리포트 | 낙찰사주', description: '가상 대표 3인 예시로 미리 보는 결과', type: 'article', siteName: '낙찰사주' },
+  openGraph: { title: '샘플 리포트 | 낙찰사주', description: '가상 대표 3인 예시로 미리 보는 결과', type: 'article', siteName: '낙찰사주', images: ogCard(CARD) },
 };
 
 const SAMPLES = [
