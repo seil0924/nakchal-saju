@@ -5,6 +5,7 @@ import { CONCEPTS } from '@/lib/seo-concepts';
 import SipsungCheck from '@/app/_components/SipsungCheck';
 import { type Pattern } from '@/lib/sipsung';
 import './concept.css';
+import { ogCard, ogCardUrl } from '@/lib/og';
 
 const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => CONCEPTS.find(c => c.slug === decodeURIComponent(slug));
@@ -21,7 +22,10 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   if (!c) return { title: '사주 · 낙찰사주' };
   return { title: c.title, description: c.lead.slice(0, 155),
     alternates: { canonical: `/saju/${c.slug}` },
-    openGraph: { title: c.title, description: c.lead.slice(0, 155), url: `${BASE}/saju/${c.slug}`, type: 'article', siteName: '낙찰사주' },
+    openGraph: { title: c.title, description: c.lead.slice(0, 155), url: `${BASE}/saju/${c.slug}`, type: 'article', siteName: '낙찰사주',
+      images: ogCard({ seal: '命', k: c.group, t: c.h1, s: c.lead.slice(0, 60) }) },
+    twitter: { card: 'summary_large_image', title: c.title, description: c.lead.slice(0, 155),
+      images: [ogCardUrl({ seal: '命', k: c.group, t: c.h1, s: c.lead.slice(0, 60) })] },
     keywords: [...c.keywords, '대표 사주', '낙찰사주'] };
 }
 
