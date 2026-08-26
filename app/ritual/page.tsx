@@ -36,7 +36,7 @@ export default function Ritual() {
 
       <div className="bujavid">
         <video autoPlay muted loop playsInline poster="/ritual-poster.jpg"><source src="/ritual-buja.mp4" type="video/mp4" /></video>
-        <div className="bvtx">붉은 기운을 담습니다</div>
+          <h1 className="bvtx" style={{ margin: 0 }}>투찰 직전, 붉은 기운을 담습니다</h1>
       </div>
 
       <div style={{ padding: '0 16px 20px' }}>
