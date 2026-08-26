@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { TYCOONS, tycoonSlug, tycoonBySlug } from '@/lib/tycoon';
 
 const BASE = 'https://nakchalsaju.com';
@@ -24,7 +24,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 
 export default function TycoonLanding({ params }: { params: { slug: string } }) {
   const t = tycoonBySlug(params.slug);
-  if (!t) return notFound();
+  // 목록이 바뀌면서 사라진 이름들이 있다(예: /ceo/워런버핏 — 구글이 색인했고 실제로 클릭도 받던 주소다).
+  // 404 로 버리면 그 클릭이 그냥 날아간다. 인덱스로 넘겨 고를 수 있게 한다.
+  if (!t) redirect('/ceo');
   const others = TYCOONS.filter((x) => x.name !== t.name).slice(0, 14);
 
   const ld = [
