@@ -3,7 +3,8 @@
 // 유료 텍스트는 여기서 처음 생성됩니다.
 import { NextResponse } from 'next/server';
 import { computeReport } from '@/lib/report';
-import { getReport, getReportAccess, unlockLevel, hasBaljuPass } from '@/lib/store';
+import { getReport, getReportAccess } from '@/lib/store';
+import { entitlement, adminBypass } from '@/lib/entitle';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
@@ -14,15 +15,16 @@ export async function GET(req: Request) {
   // 소유자(user_id 일치) 또는 접근토큰(?t=) 일치만 허용. token=null(마이그레이션 전)은 기존 동작 폴백(안전).
   const t = new URL(req.url).searchParams.get('t');
   const user = authEnabled() ? await requireUser() : null;
+  const admin = await adminBypass();
   if (authEnabled()) {
     const { owner, token } = await getReportAccess(id);
     const isOwner = !!user && !!owner && owner === user.id;
     const hasToken = !!token && !!t && t === token;
-    if (token !== null && !isOwner && !hasToken) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
+    // 관리자는 남의 리포트도 연다 — 문의에 답하려면 봐야 한다.
+    if (token !== null && !isOwner && !hasToken && !admin) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   }
 
-  const level = await unlockLevel(id);           // 0 무료 · 1 택일팩 · 2 전체
-  const bpass = await hasBaljuPass(user?.id);     // 발주처 프리미엄 패스
+  const { level, bpass } = await entitlement(id, user?.id);
   if (level < 1 && !bpass) {
     return NextResponse.json({ error: 'payment_required' }, { status: 402 });
   }
@@ -31,5 +33,5 @@ export async function GET(req: Request) {
 
   const year = Number(new URL(req.url).searchParams.get('year')) || undefined;
   const full = computeReport(input, level, year, bpass); // 결제된 레벨 + 패스만큼 공개
-  return NextResponse.json({ ...full, level });
+  return NextResponse.json({ ...full, level, admin });
 }
