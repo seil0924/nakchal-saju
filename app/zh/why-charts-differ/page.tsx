@@ -1,4 +1,5 @@
 import '@/app/en/why-charts-differ/why.css';
+import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import ChartDiff from '@/app/_components/ChartDiff';
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
     title: '為什麼各家八字排盤結果不同？',
     description: '五個原因，加上一組你可以用自己生辰跑一遍的並排對照。',
     url: BASE + '/zh/why-charts-differ', type: 'article', locale: 'zh_TW', siteName: 'Nakchal Saju',
+    images: ogCard({ seal: '異', k: '各家排盤為何不同', t: '同一生日，\n命盤為何不同', s: '真太陽時 · 邊界 · 曆法的差異' }),
   },
   twitter: {
     card: 'summary_large_image',
