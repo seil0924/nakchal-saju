@@ -177,6 +177,29 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
   return o;
 }
 
+// 승인까지 못 간 이유를 행에 적어 둔다.
+//
+// 지금까지 실패 경로가 상태를 안 바꿔서, 결제창을 닫은 것과 손님 돈이 빠져나갔는데
+// 우리가 저장에 실패한 것이 관리자 화면에서 똑같이 'pending' 으로 보였다.
+// 마지막 경우(why 가 confirm:*)는 상태를 pending 으로 남겨 둔다 — 승인은 났고
+// 재시도로 수렴해야 하는 건이라 'failed' 로 덮으면 안 된다.
+export async function failOrder(paymentId: string, why: string): Promise<void> {
+  const approved = why.startsWith('confirm:');
+  const status = approved ? 'pending' : 'failed';
+  const c = sb();
+  if (c) {
+    // fail_reason 컬럼이 아직 없으면(마이그레이션 전) 상태만 남기고 넘어간다.
+    // 진단을 붙이려다 결제 흐름을 깨는 것이 제일 나쁘다.
+    const withReason = await c.from('payments')
+      .update({ status, fail_reason: why.slice(0, 200) }).eq('payment_id', paymentId);
+    if (!withReason.error) return;
+    await c.from('payments').update({ status }).eq('payment_id', paymentId);
+    return;
+  }
+  const o = memOrders.get(paymentId);
+  if (o) (o as any).status = status;
+}
+
 export async function getOrder(paymentId: string): Promise<Order | null> {
   const c = sb();
   if (c) {
