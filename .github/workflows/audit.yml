@@ -9,6 +9,9 @@ name: Audit
 # 두 겹으로 돈다.
 #  · push  — 로컬 빌드를 띄워 핵심 경로. 배포 전에 막는다.
 #  · 매일 밤 — 운영 사이트 290개 전수. 배포 뒤에만 드러나는 것들(한글 라우트, 로그인 게이트)을 잡는다.
+#
+# 서버 기동과 검사는 반드시 같은 스텝에 둔다. 스텝을 갈랐더니 검사할 때 서버가 없어서
+# "경로를 못 찾았다"로 죽었다 — 사이트가 아니라 워크플로가 틀린 것이었다.
 
 on:
   push:
@@ -32,12 +35,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Start
+      - name: 상태코드·h1·og:image·canonical·깨진 링크
         run: |
           npm start &
-          npx --yes wait-on http://localhost:3000 --timeout 90000
-      - name: 상태코드·h1·og:image·canonical·깨진 링크
-        run: node scripts/audit.mjs --base=http://localhost:3000 --scope=core
+          npx --yes wait-on http://localhost:3000 --timeout 120000
+          node scripts/audit.mjs --base=http://localhost:3000 --scope=core
 
   # ── 2. 명암비 (크로미움이 필요하다) ─────────────────
   contrast:
@@ -54,12 +56,11 @@ jobs:
       - run: npm i --no-save playwright@1.49.1
       - run: npx playwright install --with-deps chromium
       - run: npm run build
-      - name: Start
+      - name: WCAG AA 명암비
         run: |
           npm start &
-          npx --yes wait-on http://localhost:3000 --timeout 90000
-      - name: WCAG AA 명암비
-        run: node scripts/audit-contrast.mjs --base=http://localhost:3000 --scope=core
+          npx --yes wait-on http://localhost:3000 --timeout 120000
+          node scripts/audit-contrast.mjs --base=http://localhost:3000 --scope=core
 
   # ── 3. 매일 밤, 운영 사이트 전수 ───────────────────
   production:
@@ -77,4 +78,3 @@ jobs:
       - name: 전 경로 명암비
         if: always()
         run: node scripts/audit-contrast.mjs --base=https://nakchalsaju.com --scope=all
-
