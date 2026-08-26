@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { TAEKIL, OFFICER_KO, taekilBySlug } from '@/lib/taekil';
 import TaekilPick from '@/app/_components/TaekilPick';
+import { ogCard, ogCardUrl } from '@/lib/og';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -18,12 +19,14 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const t = taekilBySlug(slug);
   if (!t) return { title: { absolute: '택일 | 낙찰사주' } };
   const url = BASE + '/taekil/' + encodeURIComponent(t.slug);
+  const card = { seal: '擇', k: t.kicker, t: t.kw, s: t.good.map(o => OFFICER_KO[o].hanja + OFFICER_KO[o].name).join(' · ') + ' — 앞으로 90일' };
   return {
     title: { absolute: t.h1 + ' | 낙찰사주' },
     description: t.lead + ' 건제십이신으로 앞으로 90일을 가립니다. 회원가입 없이 바로 보실 수 있습니다.',
     keywords: [t.kw, t.slug, '택일', '좋은 날', '건제십이신', '길일'],
     alternates: { canonical: '/taekil/' + encodeURIComponent(t.slug) },
-    openGraph: { title: t.h1, description: t.lead, url, type: 'article', locale: 'ko_KR', siteName: '낙찰사주' },
+    openGraph: { title: t.h1, description: t.lead, url, type: 'article', locale: 'ko_KR', siteName: '낙찰사주', images: ogCard(card) },
+    twitter: { card: 'summary_large_image', title: t.h1, description: t.lead, images: [ogCardUrl(card)] },
   };
 }
 
