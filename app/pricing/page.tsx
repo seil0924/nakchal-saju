@@ -5,6 +5,14 @@ import { bizFooterLine } from '@/lib/bizinfo';
 
 export const metadata = { title: '이용안내·요금', description: '낙찰사주 상품 안내와 판매가, 청약철회·환불 정책, 사업자정보.' };
 
+const PRODUCT_LINKS: [string, string][] = [
+  ['/product/balju', '발주처 궁합'],
+  ['/product/dongup', '동업·협정 궁합'],
+  ['/product/beopin', '법인 운세'],
+  ['/product/jari', '자리 사주'],
+];
+const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '8px 13px', textDecoration: 'none' };
+
 const PRODUCTS: [string, number, string][] = [
   ['대표 사주', CAT_INFO.daepyo.price, '대표님의 그릇·승부 기질·재물·사람·6대 축 경영 스코어카드·유형별 실전 수칙 등 대표 사주 심층 진단(디지털 콘텐츠 열람).'],
   ['사정률 사주', CAT_INFO.sajeong.price, '오늘의 투찰 택일 신호 + 이달 흐름 + 투찰 길일. 명식×일진 상성 기반 참고 지표.'],
@@ -34,6 +42,16 @@ export default function Pricing() {
             ))}
           </div>
           <p className="note">※ 표시가는 부가세 포함 최종 결제금액입니다. 결제수단: 신용·체크카드(NHN KCP).</p>
+        </div>
+
+        {/* 상품 소개 랜딩 4장. 사이트맵엔 있는데 사이트 안에서 들어갈 문이 없었다. */}
+        <div className="card">
+          <div className="st"><span className="l"><span className="b" />상품 자세히 보기</span></div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
+            {PRODUCT_LINKS.map(([href, label]) => (
+              <Link key={href} href={href} style={chip}>{label}</Link>
+            ))}
+          </div>
         </div>
 
         <div className="card">
