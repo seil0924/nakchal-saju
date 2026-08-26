@@ -1,0 +1,80 @@
+name: Audit
+
+# 페이지를 실제로 열어서 재는 검사.
+#
+# CI 는 유닛테스트와 빌드만 했다. 페이지를 한 번도 열지 않았다 — 그래서 CEO 100장이
+# 만들어질 때부터 404 였고, 14개 경로에 og:image 가 없어 카카오톡에 빈 카드로 떴는데도
+# 내내 초록불이었다. 손으로 브라우저를 연 날에만 발견됐다.
+#
+# 두 겹으로 돈다.
+#  · push  — 로컬 빌드를 띄워 핵심 경로. 배포 전에 막는다.
+#  · 매일 밤 — 운영 사이트 290개 전수. 배포 뒤에만 드러나는 것들(한글 라우트, 로그인 게이트)을 잡는다.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 18 * * *'   # UTC 18:00 = KST 새벽 3시
+  workflow_dispatch:
+
+jobs:
+  # ── 1. 구조 검사 (의존성 없음, 빠르다) ──────────────
+  pages:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Start
+        run: |
+          npm start &
+          npx --yes wait-on http://localhost:3000 --timeout 90000
+      - name: 상태코드·h1·og:image·canonical·깨진 링크
+        run: node scripts/audit.mjs --base=http://localhost:3000 --scope=core
+
+  # ── 2. 명암비 (크로미움이 필요하다) ─────────────────
+  contrast:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # playwright 는 package.json 에 넣지 않는다 — lock 파일을 건드리지 않으려고.
+      - run: npm i --no-save playwright@1.49.1
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - name: Start
+        run: |
+          npm start &
+          npx --yes wait-on http://localhost:3000 --timeout 90000
+      - name: WCAG AA 명암비
+        run: node scripts/audit-contrast.mjs --base=http://localhost:3000 --scope=core
+
+  # ── 3. 매일 밤, 운영 사이트 전수 ───────────────────
+  production:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm i --no-save playwright@1.49.1
+      - run: npx playwright install --with-deps chromium
+      - name: 전 경로 구조 검사
+        run: node scripts/audit.mjs --base=https://nakchalsaju.com --scope=all
+      - name: 전 경로 명암비
+        if: always()
+        run: node scripts/audit-contrast.mjs --base=https://nakchalsaju.com --scope=all
+
