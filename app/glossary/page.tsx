@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import { ogCard } from '@/lib/og';
+
+const CARD = { seal: '典', k: '用語 辭典', t: '입찰·명리 용어사전', s: '조달 실무 용어와 사주 용어를 한자리에' };
 import Link from 'next/link';
 import { GLOSSARY, glossaryByCat } from '@/lib/glossary';
 import { CONCEPTS } from '@/lib/seo-concepts';
@@ -11,7 +14,7 @@ export const metadata: Metadata = {
   description: '공공입찰·조달 용어(사정률·낙찰하한율·적격심사·종합심사)와 사주명리 용어(일간·십성·대운·세운·관재수)를 한자리에서 명확히 정의합니다.',
   alternates: { canonical: '/glossary' },
   keywords: ['입찰 용어', '조달 용어', '사정률 뜻', '적격심사 뜻', '사주 용어', '명리 용어', '일간 뜻', '대운 뜻', '낙찰사주'],
-  openGraph: { title: '입찰·명리 용어사전 | 낙찰사주', description: '입찰·조달·사주명리 핵심 용어 정의', url: `${BASE}/glossary`, type: 'article', siteName: '낙찰사주' },
+  openGraph: { title: '입찰·명리 용어사전 | 낙찰사주', description: '입찰·조달·사주명리 핵심 용어 정의', url: `${BASE}/glossary`, type: 'article', siteName: '낙찰사주', images: ogCard(CARD) },
 };
 
 const cats: ('입찰·조달' | '명리·사주')[] = ['입찰·조달', '명리·사주'];
