@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { GLOSSARY, glossaryByCat } from '@/lib/glossary';
+import { CONCEPTS } from '@/lib/seo-concepts';
 
 const BASE = 'https://nakchalsaju.com';
 const slugify = (s: string) => s;
@@ -50,10 +51,25 @@ export default function GlossaryPage() {
             </dl>
           </section>
         ))}
+        {/* 일간·오행·십성 풀이 18장. 사이트맵엔 있었지만 사이트 안에서 사람이 닿을 길이 없었다
+            — 서로끼리만 링크돼 고립돼 있었다. 용어사전이 이 개념들의 자연스러운 입구다. */}
+        <section style={{ marginBottom: 18 }}>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '6px 0 6px' }}>일간·오행·십성 풀이</div>
+          <p style={{ fontSize: 13, lineHeight: 1.7, color: '#6f6650', margin: '0 0 10px', fontWeight: 500 }}>
+            내 일간이 무엇이고 어떤 그릇인지, 오행이 치우치면 무엇이 문제인지 낱장으로 풀어 두었습니다.
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+            {CONCEPTS.map(c => (
+              <Link key={c.slug} href={`/saju/${c.slug}`} style={chip}>{c.slug.replace(/-/g, ' ')}</Link>
+            ))}
+          </div>
+        </section>
+
         <Link href="/reading" style={cta}>오늘의 사정률 무료로 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
         <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 명리 용어 해석은 참고·오락용이며, 입찰·조달 용어는 일반적 설명으로 실제 제도는 공고문·관련 법령을 따릅니다.</p>
       </div>
     </div>
   );
 }
+const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: '#2f56c4', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
