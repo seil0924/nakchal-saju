@@ -1,4 +1,5 @@
 import './bazi.css';
+import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import BaziCalc from '@/app/_components/BaziCalc';
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
     title: 'BaZi Calculator — Four Pillars with true solar time',
     description: 'Free BaZi chart. True solar time by birthplace, astronomical solar terms.',
     url: BASE + '/en/bazi', type: 'website', locale: 'en', siteName: 'Nakchal Saju',
+    images: ogCard({ seal: '命', k: 'Four Pillars · true solar time', t: 'Free BaZi calculator', s: 'No sign-up. Solar terms computed, not looked up.' }),
   },
   // 트위터 카드는 레이아웃 것이 그대로 물려와 한국어로 나갔다. 영어 페이지에는 영어를 건다.
   twitter: {
