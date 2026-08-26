@@ -22,7 +22,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/en/bazi', '/en/date-picker', '/en/why-charts-differ',
     '/zh/bazi', '/zh/why-charts-differ'];
   // 2순위 — 신뢰·전환 보조
-  const secondary = ['/why', '/faq', '/samples', '/method', '/bokchae', '/ritual', '/glossary'];
+  // /bokchae 는 뺐다. 결제 화면이라 noindex 인데 사이트맵에 실려 있으면 서로 모순이다.
+  const secondary = ['/why', '/faq', '/samples', '/method', '/ritual', '/glossary'];
   // 3순위 — 법적 고지
   const legal = ['/terms', '/privacy', '/refund'];
 
