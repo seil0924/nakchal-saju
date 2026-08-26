@@ -1,4 +1,5 @@
 import './date-picker.css';
+import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import DayPicker from '@/app/_components/DayPicker';
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     title: 'Auspicious Date Picker — the twelve day officers',
     description: 'Opening, signing, moving, travel or a wedding — the next 90 days, sorted.',
     url: BASE + '/en/date-picker', type: 'website', locale: 'en', siteName: 'Nakchal Saju',
+    images: ogCard({ seal: '擇', k: 'Choosing a day · the twelve officers', t: 'Auspicious Date Picker', s: 'Opening, signing, moving — the next 90 days' }),
   },
   twitter: {
     card: 'summary_large_image',
