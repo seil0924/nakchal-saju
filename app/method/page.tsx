@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import { ogCard } from '@/lib/og';
+
+const CARD = { seal: '法', k: '算出 方法', t: '어떻게 계산하는가', s: '만세력 · 절기 · 진태양시 — 근거를 공개합니다' };
 import Link from 'next/link';
 
 const BASE = 'https://nakchalsaju.com';
@@ -8,7 +11,7 @@ export const metadata: Metadata = {
   description: '낙찰사주가 사주 명식을 세우는 방법: 절기를 태양황경으로 판정하고, 진태양시(경도 -30분)·서머타임·야자시를 보정하며 음·양력을 자동 변환합니다. 해석은 명리 기반 참고용입니다.',
   alternates: { canonical: '/method' },
   keywords: ['사주 계산 방법', '절기 천문계산', '진태양시 보정', '야자시', '만세력 정확도', '낙찰사주 방법론'],
-  openGraph: { title: '계산 방법론 | 낙찰사주', description: '절기 천문계산·진태양시·야자시 보정으로 명식을 세우는 방법', url: `${BASE}/method`, type: 'article', siteName: '낙찰사주' },
+  openGraph: { title: '계산 방법론 | 낙찰사주', description: '절기 천문계산·진태양시·야자시 보정으로 명식을 세우는 방법', url: `${BASE}/method`, type: 'article', siteName: '낙찰사주', images: ogCard(CARD) },
 };
 
 const SEC = [
