@@ -82,11 +82,11 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6 }}>
               {f.dist.map((n, i) => (
                 <div key={i} style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14, color: n ? '#33383f' : '#a29b8c' }}>{ELC[i]}</div>
+                  <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14, color: n ? '#33383f' : '#6f6a58' }}>{ELC[i]}</div>
                   <div style={{ height: 4, borderRadius: 2, background: '#ece7db', margin: '5px 0' }}>
                     <div style={{ width: `${Math.round((n / maxD) * 100)}%`, height: 4, borderRadius: 2, background: n ? '#2f56c4' : 'transparent' }} />
                   </div>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: n ? '#33383f' : '#a29b8c' }}>{n}</div>
+                  <div style={{ fontSize: 12.5, fontWeight: 700, color: n ? '#33383f' : '#6f6a58' }}>{n}</div>
                 </div>
               ))}
             </div>
@@ -114,7 +114,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
 
         {/* 여기까지는 재미다. 회사에 필요한 것은 따로 있다 — 그 다리를 안 놓아서 다 나가고 있었다. */}
         <div style={{ ...card, marginTop: 14, background: '#faf6ec', borderColor: '#e2cd97' }}>
-          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: 'var(--navy)', marginBottom: 6 }}>닮은 사람을 아는 것으로는 오늘이 안 바뀝니다</div>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: '#2f56c4', marginBottom: 6 }}>닮은 사람을 아는 것으로는 오늘이 안 바뀝니다</div>
           <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#4a4636', margin: '0 0 10px' }}>
             같은 유형이라도 <b>오늘 일진</b>은 사람마다 다릅니다. 공공입찰을 하시는 대표님이라면
             오늘의 흐름과 발주처 궁합, 그리고 계약·개업·이전에 맞는 날이 실제로 필요한 것들입니다.
