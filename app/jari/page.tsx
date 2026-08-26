@@ -1,4 +1,7 @@
 import './jari.css';
+import { ogCard } from '@/lib/og';
+
+const CARD = { seal: '宅', k: '事務室 移轉 方位', t: '사무실을 옮기기 전에,\n어느 쪽인지부터', s: '지금 자리 진단 · 옮길 방위 · 이사 택일' };
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import JariMap from '@/app/_components/JariMap';
@@ -16,7 +19,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: '자리 사주 — 사무실 방위와 이전 택일',
     description: '출입문과 대표 자리의 방위, 옮길 곳의 방위와 거리, 이사에 좋은 날까지.',
-    url: 'https://nakchalsaju.com/jari',
+    url: 'https://nakchalsaju.com/jari', type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
+    images: ogCard(CARD),
   },
 };
 
