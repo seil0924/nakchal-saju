@@ -446,3 +446,9 @@ html .colpost .colo{color:#6d7882!important}
 html .colpost .mast a[href="/column"]{color:#2646a3!important}
 /* 하단 SEO 링크 — .home5 에만 걸어 둬서 .home(발주처 등)은 안 닿았다 */
 html .home nav a,html .app nav a:not(.dnavi):not(.nav5 a){color:#2646a3!important}
+/* === sweep24: 흐린 보조 텍스트 명암비 — WCAG AA 미달분 일괄 상향 ===
+   .note 는 3.63:1, .opt 는 2.16:1 이었다. 둘 다 흰 배경 위 12px 이하라 4.5:1 이 필요하다.
+   원본은 globals.css 에 있지만 이 파일이 뒤에 실려 특이도만 맞추면 이긴다.
+   순서에 기대지 말라는 규칙대로 클래스를 겹쳐 특이도를 확보한다. */
+.note.note{color:#6f6a58}
+.opt.opt{color:#6e6858}
