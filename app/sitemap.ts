@@ -4,6 +4,7 @@ import { PRODUCTS } from '@/lib/categories';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import { getAllColumns } from '@/lib/column';
 import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
+import { TAEKIL } from '@/lib/taekil';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -17,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   // 1순위 — 전환이 일어나는 페이지
-  const primary = ['', '/reading', '/column', '/full', '/pricing', '/balju', '/ceo', '/jari',
+  const primary = ['', '/reading', '/column', '/full', '/pricing', '/balju', '/ceo', '/jari', '/taekil',
     '/en/bazi', '/en/date-picker', '/en/why-charts-differ',
     '/zh/bazi', '/zh/why-charts-differ'];
   // 2순위 — 신뢰·전환 보조
@@ -45,6 +46,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...TYCOONS.map(t => ({
       url: `${BASE}/ceo/${tycoonSlug(t.name)}`, lastModified: now,
       changeFrequency: 'monthly' as const, priority: 0.7,
+    })),
+    // 택일 랜딩. 구매 의도가 실린 검색어(개업일·법인설립일·계약일)로 들어오는 자리라
+    // 자동 생성이어도 우선순위를 낮게 두지 않는다. 용어사전을 낮춘 것과 같은 기준이다.
+    ...TAEKIL.map(t => ({
+      url: `${BASE}/taekil/${encodeURIComponent(t.slug)}`, lastModified: now,
+      changeFrequency: 'weekly' as const, priority: 0.8,
     })),
     ...PAINS.map(p => ({
       url: `${BASE}/why/${p.slug}`, lastModified: now,
