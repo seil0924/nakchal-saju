@@ -1,5 +1,5 @@
 # nakchal-saju
-마지막 갱신: 2026-08-25 (3차)
+마지막 갱신: 2026-08-26 (전 라우트 감사 · 명암비 2차)
 
 ## 이게 뭔가
 공공입찰·수주 대표 대상 회사 사주 서비스(nakchalsaju.com). Next.js 14 + Supabase + KCP, Vercel 배포(main push = 프로덕션).
