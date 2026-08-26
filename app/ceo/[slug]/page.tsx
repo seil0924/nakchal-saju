@@ -46,8 +46,8 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
       </div>
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <nav aria-label="위치" style={{ fontSize: 12, color: '#8a806a', marginBottom: 10 }}>
-          <Link href="/ceo" style={{ color: '#8a806a' }}>나와 닮은 CEO</Link> › {t.name}
+        <nav aria-label="위치" style={{ fontSize: 12, color: '#6f6650', marginBottom: 10 }}>
+          <Link href="/ceo" style={{ color: '#6f6650' }}>나와 닮은 CEO</Link> › {t.name}
         </nav>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.35, color: 'var(--ink)', margin: '0 0 8px' }}>
           {t.name} 사주,<br />대표님과 닮았을까
@@ -83,7 +83,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
           ))}
         </div>
 
-        <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>
+        <p style={{ fontSize: 11.5, color: '#6f6650', lineHeight: 1.65, marginBottom: 20 }}>
           ※ 출생일은 공개 기록 기준, 생시 미상은 삼주(三柱)로 계산합니다. 유사도는 명식의 구조적 비교이며 해당 인물의 실제 운세 단정이 아닙니다. 명리 기반 참고·오락용 정보입니다.
         </p>
       </div>
@@ -94,4 +94,4 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
 const tag: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: '#6b6249', background: '#f3ead6', padding: '5px 11px', borderRadius: 999 };
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: '#2f56c4', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
