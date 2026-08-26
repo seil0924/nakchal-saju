@@ -452,3 +452,11 @@ html .home nav a,html .app nav a:not(.dnavi):not(.nav5 a){color:#2646a3!importan
    순서에 기대지 말라는 규칙대로 클래스를 겹쳐 특이도를 확보한다. */
 .note.note{color:#6f6a58}
 .opt.opt{color:#6e6858}
+
+/* === sweep25: 2차 감사에서 나온 잔여분 === */
+/* 상품 페이지 체크 배지 — 크림색 ✓ 가 초록 위에서 2.68:1 이었다. 배지를 어둡게 해서 5.09:1 */
+html .pk{background:#2b6e53!important}
+/* 하단 낙관 도장 士 — 14px 900 인데 3.31:1. 칼럼 페이지 규칙은 위(444줄)에서 따로 잡는다 */
+html .colo{color:#8a7136!important}
+/* 모바일 하단 면책 문구 — 10.5px 에 3.63:1 이었다 */
+html .hdisc{color:#6f6a58!important}
