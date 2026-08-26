@@ -11,12 +11,12 @@ const PUBLIC_EXACT = new Set<string>([
   '/reading', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/glossary', '/method', '/refund', '/pricing', '/column',
   // '/full' 은 리포트 본문이 아니라 그것을 파는 랜딩이다. 사이트맵 1순위에 올려놓고
   // 로그인으로 막고 있었다 — 검색으로 온 사람이 전부 튕겼다.
-  '/jari', '/full',
+  '/jari', '/full', '/taekil',
 ]);
 // '/en/' 은 통째로 공개다. 영어 페이지를 새로 만들 때마다 여기 적는 걸 잊으면
 // 로그인으로 튕기고, 그 /login 은 robots.txt 가 막고 있어 구글은 "robots.txt 차단"으로 읽는다.
 // 실제로 그렇게 한 번 당했다.
-const PUBLIC_PREFIX = ['/auth', '/api', '/en/', '/zh/', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/saju/', '/column/', '/saeobunse/'];
+const PUBLIC_PREFIX = ['/auth', '/api', '/en/', '/zh/', '/product/', '/why/', '/balju/', '/report/', '/ceo/', '/guide/', '/region/', '/industry/', '/glossary/', '/saju/', '/taekil/', '/column/', '/saeobunse/'];
 
 export function isPublicPath(rawPath: string): boolean {
   let path = rawPath; try { path = decodeURIComponent(rawPath); } catch {}
