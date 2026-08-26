@@ -23,13 +23,13 @@ function TycoonIndex() {
       <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '18px 0 4px' }}>
         세계 거장 100인
       </h2>
-      <p style={{ fontSize: 12.5, color: '#8a806a', lineHeight: 1.6, margin: '0 0 12px' }}>
+      <p style={{ fontSize: 12.5, color: '#6f6650', lineHeight: 1.6, margin: '0 0 12px' }}>
         이름을 누르면 그 사람의 명식과 이야기를 볼 수 있습니다. 대표님과 닮은 정도는 위에서 생년월일만 넣으면 30초입니다.
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
         {TYCOONS.map(t => (
           <Link key={t.name} href={`/ceo/${tycoonSlug(t.name)}`}
-            style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#faf6ec',
+            style={{ fontSize: 12.5, fontWeight: 700, color: '#2f56c4', background: '#faf6ec',
               border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' }}>
             {t.name}
           </Link>
