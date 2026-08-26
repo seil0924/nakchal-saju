@@ -3,6 +3,7 @@ import { PAINS } from '@/lib/pains';
 import { PRODUCTS } from '@/lib/categories';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import { getAllColumns } from '@/lib/column';
+import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -38,6 +39,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${BASE}/column/${p.slug}`,
       lastModified: p.date ? new Date(p.date) : now,
       changeFrequency: 'monthly' as const, priority: 0.8,
+    })),
+    // 닮은 CEO 상세 100장. 자동생성이라며 사이트맵에서 빼 뒀는데, 실측해 보니 이 페이지들의 CTR 이
+    // 사이트에서 가장 높다(용어사전 0.3% 대 CEO 75%). 진입점이 없어 구글이 몇 장밖에 못 찾고 있었다.
+    ...TYCOONS.map(t => ({
+      url: `${BASE}/ceo/${tycoonSlug(t.name)}`, lastModified: now,
+      changeFrequency: 'monthly' as const, priority: 0.7,
     })),
     ...PAINS.map(p => ({
       url: `${BASE}/why/${p.slug}`, lastModified: now,
