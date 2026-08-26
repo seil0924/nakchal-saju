@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { TYCOONS, tycoonSlug, tycoonBySlug } from '@/lib/tycoon';
 import { tycoonFacts } from '@/lib/tycoon-facts';
+import { ogCard, ogCardUrl } from '@/lib/og';
 
 const BASE = 'https://nakchalsaju.com';
 const ELC = ['木', '火', '土', '金', '水'];
@@ -17,11 +18,13 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   if (!t) return { title: '나와 닮은 CEO · 낙찰사주' };
   const f = tycoonFacts(t);
   const title = `${t.name} 사주 · 명식 — 일주 ${f.pills}, ${f.type} | 낙찰사주`;
+  const card = { seal: '命', k: `${t.born} 출생 · ${t.co}`, t: `${t.name} 사주 · 명식`, s: `일주 ${f.pills} · 일간 ${f.elName} · ${f.type}` };
   const description = `${t.name}(${t.en}, ${t.co}, ${t.born} 출생)의 명식 — 일주 ${f.pills}, 일간 ${f.elName}(${ELKO[f.el]}), 대표 유형 ${f.type}. 생시 미상이라 삼주로 계산했습니다. 대표님 사주와 얼마나 겹치는지 30초 무료로 대조해 보십시오.`;
   return {
     title, description,
     alternates: { canonical: `/ceo/${tycoonSlug(t.name)}` },
-    openGraph: { title, description, url: `${BASE}/ceo/${tycoonSlug(t.name)}`, type: 'article', siteName: '낙찰사주' },
+    openGraph: { title, description, url: `${BASE}/ceo/${tycoonSlug(t.name)}`, type: 'article', siteName: '낙찰사주', images: ogCard(card) },
+    twitter: { card: 'summary_large_image', title, description, images: [ogCardUrl(card)] },
     keywords: [t.name, `${t.name} 사주`, `${t.name} 명식`, `${t.name} 일주`, t.en, '나와 닮은 CEO', '거장 사주', '사주 궁합', '낙찰사주'],
   };
 }
