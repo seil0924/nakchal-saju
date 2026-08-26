@@ -44,7 +44,9 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
       </div>
 
       <div style={{ padding: '0 16px 24px' }}>
-        <div className="profcard" style={{ marginTop: 14 }}>
+        {/* 이 화면엔 제목 요소가 하나도 없었다. 스크린리더로 오면 어디인지 알 길이 없다. */}
+        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 17, color: 'var(--ink)', margin: '14px 2px 0' }}>더보기 · 설정</h1>
+        <div className="profcard" style={{ marginTop: 10 }}>
           <div className="pav" style={{background:'#3f6be0',border:0}}><svg viewBox="0 0 40 40" width="26" height="26" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#fff"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#fff"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#fff"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#fff"/><circle cx="29.9" cy="8.2" r="2.6" fill="#ffd2ca"/></svg></div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="pn">{acct?.name ? `${acct.name} 대표님` : prof.name ? `${prof.name} 대표님` : '대표님'}</div>
