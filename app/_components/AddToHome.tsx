@@ -60,6 +60,21 @@ export default function AddToHome() {
 
   return (
     <div className="a2hs" role="dialog" aria-label="홈 화면에 추가">
+      <style>{`
+        .a2hs{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;
+          display:flex;align-items:center;gap:11px;padding:11px 12px;background:#fff;
+          border:1px solid #e2cd97;border-radius:14px;box-shadow:0 8px 28px rgba(32,36,44,.16)}
+        @media (min-width:900px){.a2hs{left:auto;right:20px;bottom:20px;max-width:380px}}
+        .a2hs .a2i{flex:none;width:38px;height:38px;border-radius:11px;background:#3f6be0;color:#f2ede0;
+          display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:19px}
+        .a2hs .a2t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+        .a2hs .a2t b{font-size:13px;font-weight:800;color:#20242c;line-height:1.4}
+        .a2hs .a2t span{font-size:11.5px;color:#5f5949;line-height:1.5}
+        .a2hs .a2b{flex:none;border:0;border-radius:9px;background:#2f56c4;color:#fff;
+          font-weight:800;font-size:13px;padding:9px 14px;cursor:pointer}
+        .a2hs .a2x{flex:none;border:0;background:transparent;color:#6f6a58;font-size:14px;
+          padding:6px 4px;cursor:pointer;line-height:1}
+      `}</style>
       <div className="a2i" aria-hidden="true">擇</div>
       <div className="a2t">
         <b>매일 아침 여기부터 보신다면</b>
