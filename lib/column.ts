@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
+import { COLUMN_ENRICHMENTS } from './column-enrichment';
 
 const COLUMN_DIR = path.join(process.cwd(), 'content', 'column');
 
@@ -63,6 +64,8 @@ function parseFile(file: string): { meta: ColumnMeta; body: string } | null {
   // 예약발행: 지정 시각(KST)이 아직 안 됐으면 비공개
   if (rawDate && !isPublishedKST(rawDate)) return null;
   const date = rawDate.slice(0, 10);   // 표시·sitemap용 날짜(시간 제외)
+  const enrichment = COLUMN_ENRICHMENTS[slug];
+  const enrichedContent = enrichment ? `${content}${enrichment.body}` : content;
   const meta: ColumnMeta = {
     slug,
     title: String(data.title ?? slug),
@@ -70,10 +73,10 @@ function parseFile(file: string): { meta: ColumnMeta; body: string } | null {
     date,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     cover: data.cover ? String(data.cover) : undefined,
-    readingMin: estimateReadingMin(content),
-    faq: parseFaq(data.faq),
+    readingMin: estimateReadingMin(enrichedContent),
+    faq: [...(parseFaq(data.faq) ?? []), ...(enrichment?.faq ?? [])],
   };
-  return { meta, body: content };
+  return { meta, body: enrichedContent };
 }
 
 // 목록: 초안·예약글 제외, 최신순
