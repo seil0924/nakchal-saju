@@ -17,7 +17,16 @@ export default async function AdminViews() {
         </div>
       </div>
 
+      {/* 이 경고를 지우지 말 것. 지우면 옛 숫자를 다시 진짜로 착각하게 된다. */}
       <div className="abody">
+        <div className="acard" style={{ background: '#faf6ec', borderColor: '#e2cd97' }}>
+          <div style={{ padding: '13px 15px', fontSize: 12.5, lineHeight: 1.75, color: '#4a4636' }}>
+            <b>2026-08-27 이전 수치에는 검색엔진 크롤러가 섞여 있습니다.</b><br />
+            칼럼 133회·닮은 CEO 116회가 찍혔는데 사이트맵의 그 계열 URL 수가 각각 124개·101개였습니다 —
+            사람이 아니라 크롤러가 사이트맵을 한 번 훑은 자국입니다. 서치콘솔 클릭 수와도 맞지 않았습니다.
+            그날부터 봇을 걸러 저장하지 않습니다. <b>추세는 그 이후 숫자로만 보십시오.</b>
+          </div>
+        </div>
         {!s.ready && (
           <div className="acard">
             <div className="empty">
