@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getColumn, getAllColumnSlugs, getAllColumns } from '@/lib/column';
+import { conceptsFor } from '@/lib/concept-links';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -50,6 +51,7 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
   const p = getColumn(params.slug);
   if (!p) notFound();
   const rel = relatedColumns(p.slug, p.tags);
+  const concepts = conceptsFor(p.title, p.tags);
 
   // Article 구조화 데이터 — 구글이 발행일·제목·저자를 정확히 인식
   const ld = {
@@ -130,6 +132,24 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
         </nav>
       )}
 
+
+      {/* 개념 페이지로 가는 다리. /saju/* 18장은 검색으로 사람이 들어오는데
+          사이트 안에서 그리로 가는 링크가 /glossary 한 곳뿐이라 고아였다. */}
+      {concepts.length > 0 && (
+        <nav className="colrel" aria-label="관련 사주 개념">
+          <div className="colrel-hd">이 글에 나온 개념 바로 보기</div>
+          <ul>
+            {concepts.map(c => (
+              <li key={c.slug}>
+                <Link href={`/saju/${c.slug}`}>
+                  <span className="crt">{c.h1}</span>
+                  <span className="crd">{c.group} · 내 사주로 확인</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
       {/* 유입 → 전환: 무료 진입 CTA */}
       <div style={{ padding: '8px 24px 0' }}>
         <Link className="fullcta" href="/reading">오늘의 낙찰 사정률 보기 <small>생년월일만 · 30초 · 무료로 시작</small></Link>

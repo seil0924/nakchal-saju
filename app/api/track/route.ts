@@ -11,6 +11,7 @@
 //   그래서 여기서 막는다. UA 는 판별에만 쓰고 저장하지 않는다(개인정보는 그대로 안 쌓인다).
 import { NextResponse } from 'next/server';
 import { adminEnabled, supabaseAdmin } from '@/lib/supabase/admin';
+import { isSrc } from '@/lib/track-src';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -44,7 +45,15 @@ export async function POST(req: Request) {
     // 슬러그는 길이·문자를 제한해 쓰레기 값이 쌓이지 않게 한다.
     const slug = rawSlug && rawSlug.length <= 80 && /^[\w가-힣.-]+$/.test(rawSlug) ? rawSlug : null;
 
-    await supabaseAdmin().from('page_views').insert({ kind, slug });
+    // 유입원은 클라이언트가 정해서 보낸다(document.referrer 는 서버에서 볼 수 없다).
+    // 목록에 없는 값은 버린다 — 남이 보내는 값이라 그대로 저장하면 표가 오염된다.
+    const src = isSrc(body?.src) ? body.src : null;
+
+    // src 컬럼은 마이그레이션(supabase/page_views_src.sql)을 돌려야 생긴다.
+    // 아직 없는 환경에서 통째로 실패하면 계측 자체가 멎으므로, 실패하면 src 없이 한 번 더 넣는다.
+    const sb = supabaseAdmin();
+    const { error } = await sb.from('page_views').insert({ kind, slug, src });
+    if (error) await sb.from('page_views').insert({ kind, slug });
     return NextResponse.json({ ok: true });
   } catch {
     // 계측 실패가 사용자 화면에 영향을 주면 안 된다.
