@@ -95,8 +95,8 @@ export default function Home() {
         <span className="cbgo">무료 →</span>
       </Link>
 
-      {/* 오늘의 사정률 전망 */}
-      <div className="lab"><i /><span>오늘의 사정률 전망</span></div>
+      {/* 오늘, 넣을 날인가 — 투찰 택일 */}
+      <div className="lab"><i /><span>오늘, 넣을 날인가</span></div>
       <TodayChip />
       <div className="today">
         <div className="in">
@@ -119,7 +119,7 @@ export default function Home() {
         </Link>
         <Link data-reveal className="li5" href="/reading?cat=sajeong">
           <div aria-hidden="true" className="gz" style={{ color: '#3f8f80' }}>率</div>
-          <div className="bd5"><div className="t">사정률 사주 <small>査定率</small></div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
+          <div className="bd5"><div className="t">투찰 택일 사주 <small>投札 擇日</small></div><div className="d">오늘 넣을까, 미룰까 — 30초면 방향이 나옵니다</div></div>
           <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
         </Link>
         <Link data-reveal className="li5" href="/balju">

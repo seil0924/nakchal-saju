@@ -18,10 +18,10 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
     kicker: '代表 四柱', lead: '대표님이 어떤 그릇으로 태어났는지 — 성정·승부 기질·재물·사람까지 낱낱이.',
   },
   sajeong: {
-    name: '사정률 사주', hanja: '率', oh: 'su',
+    name: '투찰 택일 사주', hanja: '擇', oh: 'su',
     mks: ['率', '擇'],
     price: 9900, needs: [],
-    kicker: '査定率 四柱', lead: '오늘 이 투찰, 나에게 유리한 날인가 — 사정률 방향·시진·이달 택일.',
+    kicker: '投札 擇日', lead: '오늘 이 투찰, 넣을 날인가 미룰 날인가 — 유리·주의 날, 시진, 이달 길일 전체.',
   },
   balju: {
     name: '발주처 사주', hanja: '宮', oh: 'mok',

@@ -142,7 +142,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
               </>
             )}
-            {level >= 1 && res.gauge?.precise && res.sections?.some((s: any) => s.mk === '率') && <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b></div>}
+            {level >= 1 && res.sections?.some((s: any) => s.mk === "率") && <div className="unlocked-note">✓ 결제 확인됨 · 이달 투찰 길일과 유리한 시진이 전부 열렸습니다</div>}
             {/* 나도 보기 / CEO 브리지 — 공유받은 비소유자에게만 노출(본인 유료 리포트엔 숨김) */}
             {!res.mine && (<>
             <Link className="cta no-print" href="/reading" style={{ marginTop: 14 }}>

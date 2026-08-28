@@ -8,7 +8,7 @@ export const PRICE_BALJU_PASS = 39000; // 발주처 프리미엄 패스: 한 번
 export type UnlockLevel = 0 | 1 | 2;
 export const LEVEL = { FREE: 0, TAEKIL: 1, FULL: 2 } as const;
 export const SKU = {
-  taekil: { level: 1 as UnlockLevel, price: PRICE_TAEKIL, orderName: '낙찰사주 사정률 사주' },
+  taekil: { level: 1 as UnlockLevel, price: PRICE_TAEKIL, orderName: '낙찰사주 투찰 택일 사주' },
   full:   { level: 2 as UnlockLevel, price: PRICE_FULL,   orderName: '낙찰사주 리포트' },
 } as const;
 export type Sku = keyof typeof SKU;

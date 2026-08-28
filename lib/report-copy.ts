@@ -421,11 +421,11 @@ function gaugeHtml(s,worryTxt,unlocked){
       `<div class="gmneedle" style="left:${pos}%"></div>`+
     `</div>`+
     `<div class="gscale"><span>98.0<em>下限</em></span><span class="mid">基準 100.0</span><span>102.0<em>上限</em></span></div>`+
-    `<div class="gprec">`+
-      `<span class="gpk">${unlocked?'정밀 택일 지표':'🔒 정밀 택일 지표'}</span>`+
-      (unlocked?`<span class="gpv">${s.precise}%</span>`:`<span class="gphint">이달 사정률(9,900원)에서 열립니다</span>`)+
-    `</div></div>`+
-    `<p class="gbridge">${s.bridge}</p>`+`<p class="gnote">※ 명식과 오늘 일진(日辰)의 상성으로 낸 <b>택일·의사결정 참고 지표</b>입니다 — 실제 낙찰가나 당락을 예측하지 않습니다.</p>`+`${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
+    // 여기에 있던 "🔒 정밀 택일 지표 100.42%" 를 걷어냈다.
+    // 그 소수점 두 자리의 마지막 ±0.2 는 명식·날짜로 시드를 만든 mulberry32 난수다(engine.ts).
+    // 방향(상단/하단)은 명리로 결정되고 그건 무료로 다 준다. 그러면 결제선이 계산이 아니라
+    // 난수 위에 그어져 있던 셈이라, 파는 쪽을 택일(길일 날짜·시진·이달 전체)로 옮겼다.
+    `<p class="gbridge">${s.bridge}</p>`+`<p class="gnote"><b>사정률(査定率) 자체는 추첨입니다.</b> 복수예비가격 15개 중 4개를 뽑아 정하므로 생년월일로 맞힐 수 있는 값이 아닙니다 — 누구도 맞히지 못합니다. 이 지표가 짚는 것은 그 숫자가 아니라 <b>지금이 대표님께 움직일 때인가</b>입니다. 명식과 오늘 일진(日辰)의 상성으로 낸 택일·의사결정 참고 지표이며, 실제 낙찰가나 당락을 예측하지 않습니다.</p>`+`${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
 }
 function distHtml(c){const tot=c.dist.reduce((a,b)=>a+b,0);
   return `<div class="dist">${EL.map((e,i)=>`<div class="d"><div class="c" style="color:${EL_HEX[i]}">${e}</div><div class="bar"><div class="fill" style="height:${Math.max(8,Math.round(c.dist[i]/tot*100))}%;background:${EL_HEX[i]}"></div></div><div class="n">${c.dist[i]}</div></div>`).join('')}</div>`;}
@@ -768,7 +768,7 @@ function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolea
   const leg=`<div class="sajleg"><span><i style="background:#177f5e"></i>상단(유리)</span><span><i style="background:#7a8a3a"></i>무난</span><span><i style="background:#b5402f"></i>주의(하단)</span></div>`;
   const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`;
   if(!unlocked){
-    return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 사정률이 이미 산출됐습니다 — 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 상단·하단 흐름은 <b>이달 사정률(9,900원)</b>에서 한 번에 열립니다.</p>`;
+    return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 흐름이 이미 산출됐습니다 — 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 유리·주의 날은 <b>투찰 택일 사주(9,900원)</b>에서 한 번에 열립니다.</p>`;
   }
   return grid+`<p style="margin-top:11px">이달 <b>상단(유리) 흐름</b> 날: <b>${upDays.join(' · ')}일</b> — 큰 건 투찰·계약은 이 날들에 무게를 두십시오. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가십시오.</p>`;
 }
@@ -783,7 +783,7 @@ function weekAheadHtml(c:Chart,y:number,m:number,d:number){
     const h=strong?26:up?19:(rel==='gwan'?24:14);
     cells+=`<div class="wacell${i===0?' now':''}"><span class="wad">${mm}/${dd}</span><span class="waw">${wn[dt.getUTCDay()]}</span><span class="watk"><span class="wabar" style="height:${h}px;background:${col}"></span></span><span class="wal" style="color:${col}">${lab}</span></div>`;}
   return `<div class="weekhd">이번 주 7일 흐름<span>· 무료</span></div><div class="weekahead">${cells}</div>`+
-    `<p class="wanote">오늘부터 이레간, 대표님께 <b>유리한 날</b>과 <b>조심할 날</b>의 방향입니다. 각 날의 정밀 사정률·유리한 시간대·투찰 길일은 아래에서 이어집니다.</p>`;
+    `<p class="wanote">오늘부터 이레간, 대표님께 <b>유리한 날</b>과 <b>조심할 날</b>의 방향입니다. 각 날의 유리한 시간대와 이달 투찰 길일은 아래에서 이어집니다.</p>`;
 }
 const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
 // 대표 유형별 입찰·경영 실전 수칙 3 (행동형 마무리) — me: 일간 오행 0木1火2土3金4水

@@ -120,7 +120,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
             오늘의 흐름과 발주처 궁합, 그리고 계약·개업·이전에 맞는 날이 실제로 필요한 것들입니다.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-            <Link href="/reading" style={chip}>오늘의 사정률 전망</Link>
+            <Link href="/reading" style={chip}>오늘, 넣을 날인가</Link>
             <Link href="/product/balju" style={chip}>발주처 궁합</Link>
             <Link href="/taekil" style={chip}>택일 — 좋은 날 고르기</Link>
           </div>

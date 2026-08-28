@@ -674,8 +674,8 @@ export default function Reading() {
               </div>
               <div className="ctaassure">✓ 30초 · 한 번 열면 모든 발주처</div>
             </>)}
-            {level >= 1 && res.gauge.precise && ui.gauge && (
-              <div className="unlocked-note">✓ 결제 확인됨 · 소수점 정밀 사정률 <b>{res.gauge.precise}%</b> 공개</div>
+            {level >= 1 && ui.gauge && (
+              <div className="unlocked-note">✓ 결제 확인됨 · 이달 투찰 길일과 유리한 시진이 전부 열렸습니다</div>
             )}
             <button className="sharebtn no-print" onClick={share}>결과 링크 공유하기 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={() => window.print()}>

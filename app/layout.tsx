@@ -12,15 +12,15 @@ import { headers } from 'next/headers';
 export const metadata: Metadata = {
   metadataBase: new URL('https://nakchalsaju.com'),
   title: { default: '낙찰사주 — 대표와 회사의 사주, 오늘의 낙찰 사정률부터', template: '%s · 낙찰사주' },
-  description: '입찰·경매·조달 수주 대표를 위한 회사 사주 전문 서비스. 오늘의 낙찰 사정률·법인 운세·발주처/동업/협정 궁합·투찰 택일을 만세력으로 짚어드립니다.',
+  description: '입찰·경매·조달 수주 대표를 위한 회사 사주 전문 서비스. 오늘 넣을 날인가 미룰 날인가 — 투찰 택일·법인 운세·발주처/동업/협정 궁합을 만세력으로 짚어드립니다.',
   keywords: ['회사 사주', '법인 사주', '낙찰사주', '사정률', '입찰', '경매', '공매', '법원경매', '조달', '수주', '만세력', '발주처 궁합', '법인 운세', '입찰 택일'],
   openGraph: {
     title: '낙찰사주 — 대표와 회사의 사주 전문',
-    description: '재주는 갖추셨습니다. 그 운칠(運七)을 짚어드립니다. 오늘의 낙찰 사정률부터 회사 운세·궁합까지.',
+    description: '재주는 갖추셨습니다. 그 운칠(運七)을 짚어드립니다. 오늘 넣을 날인가 미룰 날인가 — 투찰 택일부터 회사 운세·궁합까지.',
     type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
     images: [{ url: '/api/og', width: 1200, height: 630, alt: '낙찰사주 — 會社 사주 전문' }],
   },
-  twitter: { card: 'summary_large_image', title: '낙찰사주 — 會社 사주 전문', description: '오늘의 낙찰 사정률을 사주로 짚다', images: ['/api/og'] },
+  twitter: { card: 'summary_large_image', title: '낙찰사주 — 會社 사주 전문', description: '오늘, 넣을 날인가 — 투찰 택일을 사주로 짚다', images: ['/api/og'] },
   robots: { index: true, follow: true },
   // canonical 은 여기 두면 안 된다. 개별 canonical 이 없는 페이지가 전부 이걸 물려받아
   // 자기 자신이 아니라 홈을 정본으로 가리키게 된다 — 구글에 "나는 홈의 사본"이라고 말하는 꼴이다.
@@ -40,7 +40,7 @@ const LD = {
       name: '낙찰사주', alternateName: 'nakchal-saju', url: 'https://nakchalsaju.com',
       logo: 'https://nakchalsaju.com/og.png',
       slogan: '재주는 갖추셨습니다. 그 운칠(運七)을 짚어드립니다.',
-      description: '공공입찰·경매·수주 사업을 하는 기업 대표와 법인을 위한 사주명리(만세력) 기반 비즈니스 의사결정 참고 서비스. 오늘의 낙찰 사정률, 대표 사주, 발주처·동업·협정 궁합, 회사 대운, 투찰·개업 택일을 제공한다.',
+      description: '공공입찰·경매·수주 사업을 하는 기업 대표와 법인을 위한 사주명리(만세력) 기반 비즈니스 의사결정 참고 서비스. 투찰 택일, 대표 사주, 발주처·동업·협정 궁합, 회사 대운, 개업 택일을 제공한다. 사정률은 복수예비가격 추첨으로 정해지므로 예측하지 않는다.',
       knowsAbout: ['사주명리', '만세력', '공공입찰', '조달', '나라장터', '낙찰', '투찰 택일', '발주처 궁합', '법인 설립일 사주', '회사 대운', '십성', '오행', '일간', '관재수', '동업 궁합'],
       areaServed: { '@type': 'Country', name: '대한민국' },
     },
@@ -57,7 +57,7 @@ const LD = {
       serviceType: '사주명리 기반 비즈니스 의사결정 참고 서비스',
       provider: { '@id': 'https://nakchalsaju.com/#org' }, areaServed: 'KR',
       audience: { '@type': 'BusinessAudience', name: '공공입찰·조달·수주 사업 기업 대표' },
-      description: '대표와 법인의 사주로 오늘의 낙찰 사정률, 발주처·동업·협정 궁합, 회사 대운, 투찰·경매 택일을 만세력으로 짚어드립니다. 입찰·경매·조달 수주 참고·오락용.',
+      description: '대표와 법인의 사주로 투찰 택일, 발주처·동업·협정 궁합, 회사 대운을 만세력으로 짚어드립니다. 입찰·경매·조달 수주 참고·오락용.',
     },
   ],
 };

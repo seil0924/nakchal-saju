@@ -24,7 +24,7 @@ const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56
 
 const PRODUCTS: [string, number, string][] = [
   ['대표 사주', CAT_INFO.daepyo.price, '대표님의 그릇·승부 기질·재물·사람·6대 축 경영 스코어카드·유형별 실전 수칙 등 대표 사주 심층 진단(디지털 콘텐츠 열람).'],
-  ['사정률 사주', CAT_INFO.sajeong.price, '오늘의 투찰 택일 신호 + 이달 흐름 + 투찰 길일. 명식×일진 상성 기반 참고 지표.'],
+  ['투찰 택일 사주', CAT_INFO.sajeong.price, '오늘 넣을 날인가 미룰 날인가 — 유리·주의 날, 유리한 시진, 이달 투찰 길일 전체. 사정률 숫자를 맞히는 상품이 아닙니다(추첨이라 누구도 맞히지 못합니다).'],
   ['발주처 프리미엄 패스', PRICE_BALJU_PASS, '발주처 궁합 기본(점수·기관 특성)은 무료. 패스 1회 결제로 모든 발주처의 상세(3계·시나리오·주의신호·연도 세운) 무제한 열람.'],
   ['협정·궁합 사주', CAT_INFO.gunghap.price, '동업·협정 상대와의 궁합 — 지분·역할·결정권 배분 지침.'],
   ['자리 사주', CAT_INFO.ijeon.price, '사무실 이전 방위·거리와 지금 자리의 문·책상 배치 진단, 앞으로 석 달 이사 택일과 시진.'],
