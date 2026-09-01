@@ -28,6 +28,16 @@ export function isPublicPath(rawPath: string): boolean {
 // 한글 주소 별칭. app/사업운세 와 app/사주/[slug] 는 소스에 있지만 Next 가 한글 세그먼트를
 // 라우팅하지 못해 배포본에서 404 였다(x-matched-path 가 라우트가 아니라 퍼센트 인코딩 문자열로 잡힌다).
 // 내용은 ASCII 쪽에 그대로 있으므로 여기서 넘긴다. 라우트 파일은 삭제했다.
+
+// 합쳐서 없어진 칼럼 → 합친 글로 301. 같은 주제를 500자씩 쪼개 놓으면 어느 쪽도 안 뜬다
+// (구글은 얇은 중복을 사이트 단위로 본다). 지운 게 아니라 한 편으로 모은 것이라
+// 옛 주소로 들어온 사람도 찾던 내용을 더 자세히 보게 된다.
+export const COLUMN_MERGED: Record<string, string> = {
+  'invalid-performance-certificate': 'performance-certificate',
+  'joint-performance-recognition': 'performance-certificate',
+  'performance-restricted-tender': 'performance-certificate',
+  'recent-performance-period': 'performance-certificate',
+};
 const KO_ALIAS: [RegExp, (m: RegExpMatchArray) => string][] = [
   [/^\/사업운세\/?$/, () => '/saeobunse/2026'],
   [/^\/사주\/(.+)$/, (m) => '/saju/' + m[1]],
@@ -37,6 +47,13 @@ export async function middleware(req: NextRequest) {
   // 한글 별칭은 인증보다 먼저 처리한다 — 어차피 공개 페이지로 보낼 것이라.
   let koPath = req.nextUrl.pathname;
   try { koPath = decodeURIComponent(koPath); } catch { /* 잘못된 인코딩은 그대로 둔다 */ }
+  // 합쳐진 칼럼은 인증보다 먼저 301 로 넘긴다.
+  const cm = koPath.match(/^\/column\/([^/]+)\/?$/);
+  if (cm && COLUMN_MERGED[cm[1]]) {
+    const url = req.nextUrl.clone();
+    url.pathname = '/column/' + COLUMN_MERGED[cm[1]];
+    return NextResponse.redirect(url, 301);
+  }
   for (const [re, to] of KO_ALIAS) {
     const m = koPath.match(re);
     if (m) {

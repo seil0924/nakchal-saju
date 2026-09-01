@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { isPublicPath } from '../../middleware';
+import { isPublicPath, COLUMN_MERGED } from '../../middleware';
+import fs from 'node:fs';
+import path from 'node:path';
 
 describe('isPublicPath — 로그인 게이트 판정', () => {
   it('공개 경로는 true (랜딩·로그인·무료 리딩·세일즈 입구)', () => {
@@ -53,5 +55,23 @@ describe('나중에 붙일 자리', () => {
   it('보호해야 할 곳은 그대로 막혀 있다', () => {
     for (const p of ['/vault', '/mypage', '/admin', '/admin/views'])
       expect(isPublicPath(p)).toBe(false);
+  });
+});
+
+describe('COLUMN_MERGED — 합쳐진 칼럼 301', () => {
+  it('보내는 곳은 실제로 존재하는 칼럼 파일이다', () => {
+    // 목적지가 없으면 301 이 404 로 떨어진다. 지운 글의 주소가 죽는 것보다 나쁘다.
+    const dir = path.join(process.cwd(), 'content', 'column');
+    for (const to of Object.values(COLUMN_MERGED))
+      expect(fs.existsSync(path.join(dir, `${to}.md`)), `${to}.md 없음`).toBe(true);
+  });
+  it('출발지는 파일이 남아 있으면 안 된다', () => {
+    // 파일이 남아 있으면 페이지가 그대로 살아나서 리다이렉트가 안 걸린다 — 중복이 그대로다.
+    const dir = path.join(process.cwd(), 'content', 'column');
+    for (const from of Object.keys(COLUMN_MERGED))
+      expect(fs.existsSync(path.join(dir, `${from}.md`)), `${from}.md 가 아직 있다`).toBe(false);
+  });
+  it('목적지가 다시 출발지이면 안 된다(리다이렉트 사슬)', () => {
+    for (const to of Object.values(COLUMN_MERGED)) expect(COLUMN_MERGED[to]).toBeUndefined();
   });
 });
