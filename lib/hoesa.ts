@@ -43,7 +43,7 @@ export function companyChart(dateISO: string): CompanyChart | null {
   };
 }
 
-export type Phase = 'expand' | 'hold';
+export type Phase = 'expand' | 'harvest' | 'hold';
 export type DaeunBlock = { from: number; to: number; gan: number; zhi: number; el: number; cur: boolean };
 export type CompanyDaeun = {
   age: number; curBlock: number; forward: boolean;
@@ -52,8 +52,16 @@ export type CompanyDaeun = {
   phase: Phase;       // 확장이냐 수성이냐 — 이 화면이 답하는 한 줄
 };
 
-// 관계별 구간 성격. 재성·인성·비겁은 밖으로 미는 때, 관성·식상은 안을 다지는 때로 본다.
-const PHASE_OF: Record<string, Phase> = { in: 'expand', bi: 'expand', jae: 'expand', gwan: 'hold', sik: 'hold' };
+// 관계별 구간 성격.
+// **둘로 가르면 화면이 자기 말과 싸운다.** 재성 구간의 설명은 "벌이는 것보다 챙기고 굳힐 때"인데
+// 이걸 '확장'으로 묶었더니 머리글과 본문이 정반대로 붙었다. 거두는 때는 미는 때와 다르다.
+const PHASE_OF: Record<string, Phase> = {
+  in: 'expand',      // 밖에서 밀어준다 — 유일하게 벌일 때
+  jae: 'harvest',    // 결실 — 벌이는 게 아니라 거두고 굳힌다
+  bi: 'hold',        // 경쟁·과열 — 내실
+  sik: 'hold',       // 소모 — 관리
+  gwan: 'hold',      // 조여진다 — 시스템
+};
 
 /** 회사 대운 — 설립 후 10년 단위 구간. curYear 기준으로 지금 어느 칸인지 표시한다. */
 export function companyDaeun(ch: CompanyChart, curYear: number): CompanyDaeun {
@@ -72,7 +80,12 @@ export function companyDaeun(ch: CompanyChart, curYear: number): CompanyDaeun {
   return { age, curBlock, forward, list, rel, phase: PHASE_OF[rel] ?? 'hold' };
 }
 
-export const PHASE_LABEL: Record<Phase, string> = { expand: '확장 구간', hold: '수성 구간' };
+export const PHASE_LABEL: Record<Phase, string> = { expand: '확장 구간', harvest: '수확 구간', hold: '수성 구간' };
+export const PHASE_HINT: Record<Phase, string> = {
+  expand: '사람과 자금을 태워 벌일 때입니다.',
+  harvest: '새로 벌이기보다 벌여 둔 것을 거둘 때입니다.',
+  hold: '내실·부채정리·핵심에 집중할 때입니다.',
+};
 
 export const DAEUN_LINE: Record<string, string> = {
   in: '회사를 밖에서 밀어주는 기운이 드는 구간입니다 — 자금·수주·인연이 붙습니다.',
@@ -108,3 +121,11 @@ export function elBalance(ch: CompanyChart) {
 export const elName = (i: number) => EL[i];
 export const elHex = (i: number) => EL_HEX[i];
 export const ganjaOf = (g: number, z: number) => GAN[g] + ZHI[z];
+
+/** 은/는 — 회사명이 그대로 문장에 들어가므로 받침을 봐야 한다("대전건설는"이 화면에 찍혔었다). */
+export function eunNeun(word: string): string {
+  const ch = (word || '').trim().slice(-1);
+  const code = ch.charCodeAt(0);
+  if (!ch || code < 0xac00 || code > 0xd7a3) return '는';   // 한글이 아니면 기본값
+  return (code - 0xac00) % 28 === 0 ? '는' : '은';
+}

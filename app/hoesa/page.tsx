@@ -15,7 +15,7 @@ import { ogCard, ogCardUrl } from '@/lib/og';
 import { bizFooterLine } from '@/lib/bizinfo';
 import {
   companyChart, companyDaeun, companySeun, elBalance,
-  PHASE_LABEL, DAEUN_LINE, elName, elHex, ganjaOf,
+  PHASE_LABEL, PHASE_HINT, DAEUN_LINE, elName, elHex, ganjaOf, eunNeun,
 } from '@/lib/hoesa';
 import './hoesa.css';
 
@@ -41,7 +41,7 @@ const FAQ = [
   ['회사에도 사주가 있나요?', '법인은 등기상 설립일을 기준으로 사주를 세웁니다. 사람과 똑같이 오행 균형과 10년 단위 대운이 생겨서, "예전엔 술술 됐는데 요즘 유독 더디다" 같은 흐름이 회사에도 나타납니다.'],
   ['설립 시각은 몰라도 되나요?', '괜찮습니다. 등기 시각을 아는 회사가 거의 없어 시주를 뺀 삼주(여섯 글자)로 봅니다. 회사의 결과 구간을 읽는 데는 충분합니다.'],
   ['개인사업자도 되나요?', '사업자등록일을 넣으시면 됩니다. 법인 설립일과 같은 방식으로 봅니다.'],
-  ['확장 구간과 수성 구간은 뭐가 다른가요?', '확장은 사람과 자금을 태워 벌이는 때이고, 수성은 내실·부채정리·핵심 집중의 때입니다. 계절을 거스르면 탈이 납니다 — 겨울의 무리한 확장과 봄의 과한 몸사림 둘 다 손해입니다.'],
+  ['확장·수확·수성 구간은 뭐가 다른가요?', '확장은 밖에서 밀어주는 때라 사람과 자금을 태워 벌일 때이고, 수확은 새로 벌이기보다 이미 벌여 둔 것을 거두고 굳힐 때이며, 수성은 내실·부채정리·핵심 집중의 때입니다. 계절을 거스르면 탈이 납니다 — 겨울의 무리한 확장과 봄의 과한 몸사림 둘 다 손해입니다.'],
 ];
 
 export default function Hoesa({ searchParams }: { searchParams: { d?: string; n?: string } }) {
@@ -140,9 +140,10 @@ function Result({ ch, label, curYear, raw, name }: {
 
       <div className="card">
         <div className={`hsphase ${d.phase}`}>
-          <div className="k">지금 {label}는</div>
+          <div className="k">지금 {label}{eunNeun(label)}</div>
           <div className="v">{PHASE_LABEL[d.phase]}</div>
           <div className="d">{DAEUN_LINE[d.rel]}</div>
+          <div className="d" style={{ marginTop: 6, fontWeight: 700 }}>{PHASE_HINT[d.phase]}</div>
           <div className="age">설립 {d.age}년차 · {cur.from}~{cur.to}년차 구간 ({ganjaOf(cur.gan, cur.zhi)})</div>
         </div>
         <p className="note">계절을 거스르면 탈이 납니다 — 겨울의 무리한 확장과 봄의 과한 몸사림, 둘 다 손해입니다.</p>

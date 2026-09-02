@@ -24,6 +24,8 @@
 .hsphase { border-radius: 14px; padding: 16px; text-align: center; }
 .hsphase.expand { background: #eef6f1; border: 1px solid #bcdccb; }
 .hsphase.hold { background: #f6f1ea; border: 1px solid #e0d2bc; }
+.hsphase.harvest { background: #f7f2e4; border: 1px solid #e2cd97; }
+.hsphase.harvest .v { color: #7a5c1e; }
 .hsphase .k { font-size: 12px; font-weight: 800; letter-spacing: .04em; color: #57523f; }
 .hsphase .v { font-family: var(--serif); font-size: 26px; font-weight: 900; margin: 6px 0 4px; }
 .hsphase.expand .v { color: #14684c; }
