@@ -14,7 +14,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const r = bySlug(params.slug);
   if (!r) return { title: '낙찰사주' };
   const title = `${r.name} 입찰 사주 — 지역 발주처 궁합과 낙찰 흐름 | 낙찰사주`;
-  const description = `${r.name} 지역 발주처(${r.clients.join('·')})와 대표님 사주의 궁합, 오늘의 사정률·투찰 길일을 30초 무료로. ${r.intro}`;
+  const description = `${r.name} 지역 발주처(${r.clients.join('·')})와 대표님 사주의 궁합, 오늘의 투찰 택일·길일을 30초 무료로. ${r.intro}`;
   return { title, description, alternates: { canonical: `/region/${r.slug}` },
     openGraph: { title, description, url: `${BASE}/region/${r.slug}`, type: 'article', siteName: '낙찰사주' },
     keywords: [`${r.name} 입찰`, `${r.name} 조달`, `${r.name} 발주처`, `${r.name} 입찰 사주`, '지역 입찰', '낙찰사주'] };
@@ -64,7 +64,7 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
           {NATIONAL.map(n => (<Link key={n} href={`/balju/${clientSlug(n)}`} style={chip}>{n}</Link>))}
         </div>
 
-        <Link href="/reading?cat=sajeong" style={cta}>오늘의 사정률 무료로 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>{r.name} 입찰, 오늘 넣을까 미룰까 · 30초</span></Link>
+        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>{r.name} 입찰, 오늘 넣을까 미룰까 · 30초</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
         {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 14.5, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
 

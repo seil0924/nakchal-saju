@@ -10,7 +10,7 @@ import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nakchalsaju.com'),
-  title: { default: '낙찰사주 — 대표와 회사의 사주, 오늘의 낙찰 사정률부터', template: '%s · 낙찰사주' },
+  title: { default: '낙찰사주 — 대표와 회사의 사주, 오늘의 투찰 택일부터', template: '%s · 낙찰사주' },
   description: '입찰·경매·조달 수주 대표를 위한 회사 사주 전문 서비스. 오늘 넣을 날인가 미룰 날인가 — 투찰 택일·법인 운세·발주처/동업/협정 궁합을 만세력으로 짚어드립니다.',
   keywords: ['회사 사주', '법인 사주', '낙찰사주', '사정률', '입찰', '경매', '공매', '법원경매', '조달', '수주', '만세력', '발주처 궁합', '법인 운세', '입찰 택일'],
   openGraph: {
@@ -52,7 +52,7 @@ const LD = {
     },
     {
       '@type': 'Service', '@id': 'https://nakchalsaju.com/#service',
-      name: '낙찰사주 — 회사 사주·사정률·발주처 궁합·투찰 택일',
+      name: '낙찰사주 — 회사 사주·투찰 택일·발주처 궁합',
       serviceType: '사주명리 기반 비즈니스 의사결정 참고 서비스',
       provider: { '@id': 'https://nakchalsaju.com/#org' }, areaServed: 'KR',
       audience: { '@type': 'BusinessAudience', name: '공공입찰·조달·수주 사업 기업 대표' },

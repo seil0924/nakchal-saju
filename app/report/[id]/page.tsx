@@ -116,7 +116,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                   <span className="rpr">{level >= 2 ? '전체 열람' : level === 1 ? '택일팩' : '무료 열람'}</span>
                 </div>
               ); })()}
-            <div className="print-only pfoot" style={{ display: 'none' }}>낙찰사주 · 士가 읽는 사주·사정률 리포트 · 명리 기반 참고 정보</div>
+            <div className="print-only pfoot" style={{ display: 'none' }}>낙찰사주 · 士가 읽는 사주·투찰 택일 리포트 · 명리 기반 참고 정보</div>
             {res.sections.map((sec, i) => {
               const rank = RANK[sec.tier] ?? 2;
               const open = rank <= level && !!sec.html;
@@ -146,7 +146,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {/* 나도 보기 / CEO 브리지 — 공유받은 비소유자에게만 노출(본인 유료 리포트엔 숨김) */}
             {!res.mine && (<>
             <Link className="cta no-print" href="/reading" style={{ marginTop: 14 }}>
-              나도 보기 — 무료로 시작<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 사정률</small>
+              나도 보기 — 무료로 시작<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 투찰 택일</small>
             </Link>
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 10 }}>
               <div className="bi">鏡</div>

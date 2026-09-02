@@ -41,7 +41,7 @@ export default function Pricing() {
       <div className="wrap">
         <div className="card">
           <div className="st"><span className="l"><span className="b" />판매 상품 · 가격</span></div>
-          <p className="note" style={{ marginTop: 0 }}>모든 상품은 사주명리 기반의 <b>참고·오락용 디지털 콘텐츠</b>입니다. 오늘의 사정률·발주처 기본 등 무료 항목으로 먼저 체험하실 수 있습니다.</p>
+          <p className="note" style={{ marginTop: 0 }}>모든 상품은 사주명리 기반의 <b>참고·오락용 디지털 콘텐츠</b>입니다. 오늘의 투찰 택일·발주처 기본 등 무료 항목으로 먼저 체험하실 수 있습니다.</p>
           <div className="pricelist">
             {PRODUCTS.map(([n, p, d]) => (
               <div key={n} className="pricerow">

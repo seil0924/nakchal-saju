@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: '샘플 리포트 — 이런 결과가 나옵니다',
-  description: '낙찰사주 결과가 실제로 어떻게 나오는지 가상 대표 3인의 예시로 미리 보세요. 오늘의 사정률·대표 유형·실전 수칙까지.',
+  description: '낙찰사주 결과가 실제로 어떻게 나오는지 가상 대표 3인의 예시로 미리 보세요. 오늘의 투찰 택일·대표 유형·실전 수칙까지.',
   alternates: { canonical: '/samples' },
   openGraph: { title: '샘플 리포트 | 낙찰사주', description: '가상 대표 3인 예시로 미리 보는 결과', type: 'article', siteName: '낙찰사주', images: ogCard(CARD) },
 };
@@ -33,7 +33,7 @@ export default function SamplesPage() {
       <div style={{ padding: '18px 18px 4px' }}>
         <div style={{ fontSize: 11, letterSpacing: '.28em', color: '#a99f88', fontWeight: 700, marginBottom: 6 }}>SAMPLE 四柱</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 23, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>이런 결과가 나옵니다</h1>
-        <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>가상 대표 3인의 예시입니다. 실제로는 대표님 생년월일로 오늘의 사정률·유형·실전 수칙이 산출됩니다.</p>
+        <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>가상 대표 3인의 예시입니다. 실제로는 대표님 생년월일로 오늘의 투찰 택일·유형·실전 수칙이 산출됩니다.</p>
 
         {SAMPLES.map((s, i) => (
           <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 16, padding: '16px 17px', marginBottom: 13 }}>

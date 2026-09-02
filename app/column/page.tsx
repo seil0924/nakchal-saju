@@ -7,7 +7,7 @@ import { getAllColumns } from '@/lib/column';
 
 export const metadata: Metadata = {
   title: '사주 칼럼 — 입찰·경매·수주 대표를 위한 명리 이야기',
-  description: '오늘의 낙찰 사정률부터 투찰 택일·발주처 궁합까지. 입찰·경매·조달 수주 대표를 위한 사주명리 칼럼을 연재합니다.',
+  description: '오늘의 투찰 택일부터 발주처 궁합·회사 사주까지. 입찰·경매·조달 수주 대표를 위한 사주명리 칼럼을 연재합니다.',
   alternates: { canonical: '/column' },
   openGraph: {
     title: '낙찰사주 칼럼 — 會社 사주 이야기',

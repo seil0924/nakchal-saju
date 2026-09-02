@@ -23,7 +23,7 @@ const RITE_STEPS = [
   '절기(節氣) 천문 계산 — 진태양시 보정',
   '원국(元局) 구성 — 십성·오행 배치',
   '신살(神殺) 대조',
-  '오늘 일진 × 사정률 흐름 대조',
+  '오늘 일진 × 명식 흐름 대조',
   '세계 거장 100인 명식 대조',
   '리포트 봉인 — 섹션 산출',
 ];
@@ -56,7 +56,7 @@ function relCat(me:number,td:number){ if(td===me)return'bi'; if((td+1)%5===me)re
 // 카테고리별 '혹하게 하는' 컨셉 훅 — 입력 화면 상단에서 몰입을 잡는다.
 const HOOK: Record<string, { seal: string; t: string; d: string }> = {
   daepyo:  { seal: '鏡', t: '잡스·록펠러와 같은 그릇일지 모릅니다', d: '타고난 승부 기질·재물·사람 다루는 법을 여덟 글자로 낱낱이 — 위기에 드러나는 그 약점까지.' },
-  sajeong: { seal: '率', t: '오늘 넣을까 미룰까 — 30초면 방향이 섭니다', d: '오늘의 사정률이 상단인지 하단인지, 이달 어느 날이 유리한지 한눈에 짚어 드립니다.' },
+  sajeong: { seal: '率', t: '오늘 넣을까 미룰까 — 30초면 방향이 섭니다', d: '오늘이 나설 날인지 관망할 날인지, 이달 어느 날이 유리한지 한눈에 짚어 드립니다.' },
   balju:   { seal: '宮', t: '그 발주처, 애초에 나와 맞는 판입니까', d: '설립일 사주 × 대표님 사주 궁합 점수 — 큰 판에 손대기 전에 확인하십시오.' },
   gunghap: { seal: '合', t: '손잡기 전에, 깨질 궁합인지부터', d: '지분·역할·최종 결정권을 어떻게 나눠야 안 깨지는지 — 계약 전에 봐야 할 궁합.' },
   daeun:   { seal: '運', t: '회사가 대표님을 밀어줍니까, 누릅니까', d: '법인 설립일로 본 회사의 그릇과 10년 대운의 길목 — 지금이 확장기인지 정비기인지.' },
@@ -367,7 +367,7 @@ export default function Reading() {
   async function share() {
     if (!res) return;
     const url = `${location.origin}/report/${res.reportId}?t=${encodeURIComponent(tokParam(res.reportId))}`;
-    const text = `[낙찰사주] 오늘 낙찰 유리도 ${res.hero?.score ?? ''}점 — ${res.hero?.sub ?? ''}. 대표와 회사 사주로 오늘의 사정률을 짚어 봤습니다. 대표님도 한번 보시죠:`;
+    const text = `[낙찰사주] 오늘 낙찰 유리도 ${res.hero?.score ?? ''}점 — ${res.hero?.sub ?? ''}. 대표와 회사 사주로 오늘의 투찰 택일을 짚어 봤습니다. 대표님도 한번 보시죠:`;
     try {
       if (navigator.share) await navigator.share({ title: '낙찰사주', text, url });
       else { await navigator.clipboard.writeText(text + ' ' + url); alert('공유 문구와 링크를 복사했어요. 카톡에 붙여넣어 보내세요.'); }
@@ -407,7 +407,7 @@ export default function Reading() {
     <div className="app">
       <div className="hero">
         <div className="k">運 七 技 三</div>
-        <h1>{catInfo ? catInfo.name : '회사 사주 · 오늘의 사정률'}</h1>
+        <h1>{catInfo ? catInfo.name : '회사 사주 · 오늘의 투찰 택일'}</h1>
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p>
       </div>
       <div className="wrap">
@@ -529,9 +529,9 @@ export default function Reading() {
           </button>
           <label>회사명 <span className="opt">(선택)</span></label>
           <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
-          <label>법인 설립일 {ui.legal === 'required' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 사정률</span>}</label>
+          <label>법인 설립일 {ui.legal === 'required' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 택일</span>}</label>
           <DateSelect value={f.legal} onChange={v => set('legal', v)} yearFrom={1945} yearTo={2026} />
-          <div className="note">{ui.legal === 'required' ? '※ 회사 대운은 법인 설립일을 기준으로 연도별 큰 흐름(세운)을 산출합니다. 사업자등록증의 「개업연월일」을 넣어주세요.' : '※ 회사 설립일을 넣으면 대표+법인 통합으로 사정률과 회사 운세가 더 정교해집니다.'}</div>
+          <div className="note">{ui.legal === 'required' ? '※ 회사 대운은 법인 설립일을 기준으로 연도별 큰 흐름(세운)을 산출합니다. 사업자등록증의 「개업연월일」을 넣어주세요.' : '※ 회사 설립일을 넣으면 대표+법인 통합으로 택일과 회사 운세가 더 정교해집니다.'}</div>
         </div>
 
         {/* 4. 관계·궁합 */}

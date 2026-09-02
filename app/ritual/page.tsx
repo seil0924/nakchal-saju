@@ -64,7 +64,7 @@ export default function Ritual() {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: 8 }}>
-          <Link href="/reading" style={{ color: 'var(--navy)', fontSize: 13, fontWeight: 700, textDecoration: 'underline' }}>오늘의 사정률 다시 보기 →</Link>
+          <Link href="/reading" style={{ color: 'var(--navy)', fontSize: 13, fontWeight: 700, textDecoration: 'underline' }}>오늘의 투찰 택일 다시 보기 →</Link>
         </div>
       </div>
     </div>

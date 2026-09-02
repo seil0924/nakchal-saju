@@ -69,7 +69,7 @@ export default function Home() {
         <Link href="/more" className="ham" aria-label="메뉴 · 더보기"><i /><i /><i /></Link>
       </div>
 
-      <p className="hometag">공공입찰·경매·수주 대표를 위한 <b>회사 사주</b> — 오늘의 사정률·발주처 궁합·투찰 택일을 30초, <b>무료</b>로.</p>
+      <p className="hometag">공공입찰·경매·수주 대표를 위한 <b>회사 사주</b> — 오늘의 투찰 택일·발주처 궁합·회사 사주를 30초, <b>무료</b>로.</p>
 
       {/* 수록 규모 — 실제 보유량. 처음 온 사람에게 "여기 진짜 팠구나"를 전한다.
           숫자를 지어내지 않고 데이터에서 직접 세므로 콘텐츠가 늘면 같이 오른다. */}

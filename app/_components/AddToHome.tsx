@@ -1,5 +1,5 @@
 'use client';
-// 홈 화면에 추가 권유. '오늘의 사정률'은 매일 볼 이유가 있는 화면인데
+// 홈 화면에 추가 권유. '오늘의 투찰 택일'은 매일 볼 이유가 있는 화면인데
 // 다시 부르는 길이 하나도 없었다 — 알림톡·메일은 계정과 심사가 필요해 당장 못 붙인다.
 //
 // 규칙을 좁게 잡는다. 광고처럼 굴면 그 순간 신뢰를 깎는다.
@@ -78,7 +78,7 @@ export default function AddToHome() {
       <div className="a2i" aria-hidden="true">擇</div>
       <div className="a2t">
         <b>매일 아침 여기부터 보신다면</b>
-        <span>{ios ? '아래 공유 버튼 → 「홈 화면에 추가」 하시면 앱처럼 바로 열립니다.' : '홈 화면에 추가해 두면 오늘의 사정률이 바로 열립니다.'}</span>
+        <span>{ios ? '아래 공유 버튼 → 「홈 화면에 추가」 하시면 앱처럼 바로 열립니다.' : '홈 화면에 추가해 두면 오늘의 투찰 택일이 바로 열립니다.'}</span>
       </div>
       {deferred && <button type="button" className="a2b" onClick={add}>추가</button>}
       <button type="button" className="a2x" onClick={close} aria-label="닫기">✕</button>

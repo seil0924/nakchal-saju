@@ -139,7 +139,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
 
         <div style={{ background: 'linear-gradient(135deg,#2a2622,#1c1916)', border: '1px solid var(--gold2)', borderRadius: 16, padding: '18px 17px', margin: '6px 0 4px' }}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 16, color: '#f6e7c8', marginBottom: 6 }}>년주는 큰 흐름일 뿐입니다</div>
-          <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#d8cdb5', margin: '0 0 12px' }}>같은 해에 태어나도 월·일·시에 따라 사주는 전혀 달라집니다. 대표님의 <b style={{ color: '#f0d9a8' }}>정확한 생년월일</b>로 오늘의 사정률·발주처 궁합·투찰 택일까지 만세력으로 짚어보세요.</p>
+          <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#d8cdb5', margin: '0 0 12px' }}>같은 해에 태어나도 월·일·시에 따라 사주는 전혀 달라집니다. 대표님의 <b style={{ color: '#f0d9a8' }}>정확한 생년월일</b>로 오늘의 투찰 택일·발주처 궁합·회사 사주까지 만세력으로 짚어보세요.</p>
           <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '13px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 15.5, textDecoration: 'none' }}>내 사주로 30초 무료 확인 →</Link>
         </div>
 

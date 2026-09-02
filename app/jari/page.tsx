@@ -53,7 +53,7 @@ export default function Jari() {
       <nav aria-label="함께 보면 좋은 것" style={{ padding: '4px 15px 12px' }}>
         <div style={{ fontSize: 12, fontWeight: 800, color: '#6b6249', margin: '6px 0 8px' }}>함께 보면 좋은 것</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {[['/reading?cat=daeun', '회사 대운 — 지금이 옮길 때인가'], ['/reading?cat=sajeong', '오늘의 사정률'], ['/balju', '발주처 궁합'], ['/column', '칼럼']].map(([h, t]) => (
+          {[['/reading?cat=daeun', '회사 대운 — 지금이 옮길 때인가'], ['/reading?cat=sajeong', '오늘의 투찰 택일'], ['/balju', '발주처 궁합'], ['/column', '칼럼']].map(([h, t]) => (
             <Link key={h} href={h} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{t}</Link>
           ))}
         </div>

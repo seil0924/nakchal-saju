@@ -152,7 +152,7 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
       )}
       {/* 유입 → 전환: 무료 진입 CTA */}
       <div style={{ padding: '8px 24px 0' }}>
-        <Link className="fullcta" href="/reading">오늘의 낙찰 사정률 보기 <small>생년월일만 · 30초 · 무료로 시작</small></Link>
+        <Link className="fullcta" href="/reading">오늘, 넣을 날인가 보기 <small>생년월일만 · 30초 · 무료로 시작</small></Link>
       </div>
 
       <div className="foot">

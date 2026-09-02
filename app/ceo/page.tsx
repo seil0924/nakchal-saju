@@ -306,7 +306,7 @@ export default function CeoTwin() {
               <div className="bridgehd">그 명(命)이 <b>오늘, 이달, 이 발주처</b>에서 어떻게 흐르는지 — 대표님만의 풀이는 따로 있습니다</div>
               <Link className="bridge" href={bridge}>
                 <div className="bi">率</div>
-                <div className="bt"><b>오늘, 나의 사정률은 어느 쪽인가</b><span>같은 {res.type}이라도 오늘 일진은 사람마다 다릅니다 · 무료</span></div>
+                <div className="bt"><b>오늘, 나에게 유리한 날인가</b><span>같은 {res.type}이라도 오늘 일진은 사람마다 다릅니다 · 무료</span></div>
                 <div className="ba">→</div>
               </Link>
               <Link className="bridge" href={bridge}>

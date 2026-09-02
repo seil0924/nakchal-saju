@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const p = new URL(req.url).searchParams;
   const seal = p.get('seal') || '落';
   const kicker = p.get('k') || '運七技三 · 會社 사주 전문';
-  const title = (p.get('t') || '대표와 회사의 사주,\n오늘의 낙찰 사정률부터').replace(/<br\/?>/g, '\n');
+  const title = (p.get('t') || '대표와 회사의 사주,\n오늘의 투찰 택일부터').replace(/<br\/?>/g, '\n');
   const sub = p.get('s') || '만세력으로 짚는 회사 사주 · 30초 무료';
   let fonts: any[] = [];
   try { const d = await fetch(FONT).then(r => r.arrayBuffer()); fonts = [{ name: 'Pretendard', data: d, weight: 700 as const }]; } catch {}

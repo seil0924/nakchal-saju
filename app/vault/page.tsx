@@ -39,7 +39,7 @@ export default function Vault() {
         <div className="emptybox">
           <div className="ebseal">封</div>
           <div className="ebtit">아직 열어본 리포트가 없습니다</div>
-          <div className="ebtx">대표님의 사주와 오늘의 사정률부터<br />무료로 확인해 보세요.</div>
+          <div className="ebtx">대표님의 사주와 오늘의 투찰 택일부터<br />무료로 확인해 보세요.</div>
           <Link className="ebcta" href="/reading">오늘의 전망 열기 <span>· 무료 · 30초 →</span></Link>
         </div>
       )}
