@@ -8,7 +8,7 @@ import { createServerClient } from '@supabase/ssr';
 // 로그인 없이 접근 가능한 공개 경로.
 const PUBLIC_EXACT = new Set<string>([
   '/', '/login', '/terms', '/privacy', '/more', '/thanks', '/saeobunse',
-  '/reading', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/glossary', '/method', '/refund', '/pricing', '/column',
+  '/reading', '/hoesa', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/glossary', '/method', '/refund', '/pricing', '/column',
   // '/full' 은 리포트 본문이 아니라 그것을 파는 랜딩이다. 사이트맵 1순위에 올려놓고
   // 로그인으로 막고 있었다 — 검색으로 온 사람이 전부 튕겼다.
   '/jari', '/full', '/taekil',
