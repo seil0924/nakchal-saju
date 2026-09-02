@@ -306,13 +306,6 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:none!import
 /* tap fx -> navy, subtle */
 .tapfx{background:radial-gradient(circle,rgba(63,107,224,.35),rgba(63,107,224,0) 68%)!important}
 .tapfx i{border-color:rgba(63,107,224,.4)!important}
-/* Intro splash: flat KRDS */
-.intro{background:var(--krds-primary-60)!important}
-.intro .introrays,.intro .introglow,.intro .introflash,.intro .introp{display:none!important}
-.intro .introttl{background:none!important;-webkit-text-fill-color:#fff!important;color:#fff!important;letter-spacing:.02em!important}
-.intro .introsub{color:var(--krds-primary-10)!important;letter-spacing:.18em!important}
-.intro .introrule{background:var(--krds-point-50)!important;height:2px!important}
-.intro .introseal{filter:none!important}
 /* brand seal shadow off */
 .home5 .mast .brandseal{filter:none!important}
 /* sidebar brand box: navy frame */

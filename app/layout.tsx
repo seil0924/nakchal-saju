@@ -3,7 +3,6 @@ import './krds-normalize.css';
 import type { Metadata } from 'next';
 import DesktopSidebar from '@/app/_components/DesktopSidebar';
 import TapFX from '@/app/_components/TapFX';
-import IntroSplash from '@/app/_components/IntroSplash';
 import ScrollTop from '@/app/_components/ScrollTop';
 import AddToHome from '@/app/_components/AddToHome';
 import { requireUser } from '@/lib/supabase/server';
@@ -88,7 +87,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Vercel Web Analytics — 대시보드에서 Analytics 활성화 시 조회수·유입경로 수집 */}
         <script defer src="/_vercel/insights/script.js" />
         <ScrollTop />
-        <IntroSplash />
         <TapFX />
         <AddToHome />
         <div className="shell">
