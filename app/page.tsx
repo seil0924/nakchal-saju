@@ -112,6 +112,13 @@ export default function Home() {
       {/* 해설 보기 — 카테고리별 개별 사주 (사주아이식) */}
       <div className="lab"><i /><span>사주별로 골라 보기</span></div>
       <div className="list">
+        {/* 회사 사주 — 사장만 검색하는 자리라 여기를 상품 목록의 첫 칸으로 올렸다.
+            개인 사주 앱은 법인 개념이 없어 못 하고, 입찰정보 서비스는 사주가 없다. */}
+        <Link data-reveal className="li5" href="/hoesa">
+          <div aria-hidden="true" className="gz" style={{ color: '#2f56c4' }}>會</div>
+          <div className="bd5"><div className="t">회사 사주 <small>會社 四柱</small></div><div className="d">설립일만 넣으면 — 지금 우리 회사가 확장할 때인가, 다질 때인가</div></div>
+          <div className="rt"><div className="pz free">무료로 시작</div><div className="arw">→</div></div>
+        </Link>
         <Link data-reveal className="li5" href="/reading?cat=daepyo">
           <div aria-hidden="true" className="gz" style={{ color: '#46a07d' }}>代</div>
           <div className="bd5"><div className="t">대표 사주 <small>代表 四柱</small></div><div className="d">대표님이 어떤 그릇인가 — 성정·승부 기질·재물·사람까지</div></div>

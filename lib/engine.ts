@@ -1,8 +1,8 @@
 // lib/engine.ts — 낙찰사주 명리 엔진 (서버 전용 로직)
 // 만세력 공통 계산은 ./manse-core 로 분리(중복 제거). 이 파일은 십성·신살·사정률·세운 등
 // 명리 해석과 유료 정밀값 산출을 담당한다.
-import { GAN, ZHI, EL, EL_HEX, SIP, pil, GAN_EL, ZHI_EL, jdn, lunarToSolar, corePillars, resolveBirth } from './manse-core';
-export { GAN, ZHI, EL, EL_HEX, SIP, pil, lunarToSolar };
+import { GAN, ZHI, EL, EL_HEX, SIP, pil, GAN_EL, ZHI_EL, jdn, lunarToSolar, corePillars, resolveBirth, relation, yearGanji } from './manse-core';
+export { GAN, ZHI, EL, EL_HEX, SIP, pil, lunarToSolar, relation, yearGanji };
 
 export type Chart = {
   yGan:number; yZhi:number; mGan:number; mZhi:number;
@@ -31,11 +31,6 @@ export function sipsung(c:Chart):number[]{
   const d=[0,0,0,0,0];
   for(const e of els){if(e===me)d[0]++;else if((me+1)%5===e)d[1]++;else if((me+2)%5===e)d[2]++;else if((e+2)%5===me)d[3]++;else if((e+1)%5===me)d[4]++;}
   return d; // [비겁,식상,재성,관성,인성]
-}
-export function relation(me:number,td:number){
-  if(td===me)return'bi'; if((td+1)%5===me)return'in';
-  if((me+1)%5===td)return'sik'; if((me+2)%5===td)return'jae';
-  if((td+2)%5===me)return'gwan'; return'bi';
 }
 export function todayPillar(y:number,m:number,d:number){
   const i=((jdn(y,m,d)+49)%60+60)%60, g=i%10;
@@ -124,10 +119,6 @@ export type Sajeong = {
 // ── 세운(歲運): 그 해의 간지 × 명식 상성 ─────────────────
 // 타고난 사주는 고정이지만, 그 해(세운)가 명식을 살리느냐 누르느냐로
 // '올해의 흐름'은 매년 바뀐다. 대표·회사·궁합을 연도별로 보는 근거.
-export function yearGanji(year:number){
-  const g=((year-4)%10+10)%10, z=((year-4)%12+12)%12;
-  return {g,z,el:GAN_EL[g],hanja:GAN[g]+ZHI[z]};
-}
 export type Seun = { year:number; rel:string; el:number; gan:number; zhi:number; hanja:string; tilt:number };
 export function seunOf(c:Chart, year:number):Seun{
   const y=yearGanji(year);

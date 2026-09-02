@@ -129,3 +129,16 @@ export function resolveBirth(dateISO:string,timeHHMM:string|null,cal:'solar'|'lu
   }
   return {y,m,d,hf,yaja};
 }
+
+// ── 십성 관계 · 연간지 ─────────────────────────────
+// engine.ts(서버) 에만 있던 것을 여기로 내렸다. /hoesa 처럼 유료 해석 없이
+// 관계만 필요한 화면이 engine 을 끌어오지 않도록 — 그리고 같은 식을 두 벌 쓰지 않도록.
+export function relation(me: number, td: number) {
+  if (td === me) return 'bi'; if ((td + 1) % 5 === me) return 'in';
+  if ((me + 1) % 5 === td) return 'sik'; if ((me + 2) % 5 === td) return 'jae';
+  if ((td + 2) % 5 === me) return 'gwan'; return 'bi';
+}
+export function yearGanji(year: number) {
+  const g = ((year - 4) % 10 + 10) % 10, z = ((year - 4) % 12 + 12) % 12;
+  return { g, z, el: GAN_EL[g], hanja: GAN[g] + ZHI[z] };
+}

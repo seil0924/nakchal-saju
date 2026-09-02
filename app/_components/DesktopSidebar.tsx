@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 // 데스크톱(≥900px) 전용 좌측 내비. 모바일에서는 CSS로 숨김.
 const NAV = [
   { href: '/', label: '홈', d: 'M3 10.5 12 3l9 7.5V21H3z' },
+  // 회사 사주 — 무료 입구이자 사장만 검색하는 자리라 전역에 건다.
+  { href: '/hoesa', label: '회사 사주', d: 'M4 21V6l7-3 7 3v15M4 21h14M9 21v-4h4v4M8 10h1M12 10h1M8 14h1M12 14h1' },
   { href: '/balju', label: '발주처', d: 'M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5' },
   { href: '/column', label: '칼럼', d: 'M5 4h9l5 5v11H5zM14 4v5h5M8 13h8M8 16h8' },
   // 택일은 검색으로 들어오는 입구라 사이트 전역에서 한 번씩 걸어 준다.
