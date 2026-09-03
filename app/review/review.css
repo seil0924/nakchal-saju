@@ -1,0 +1,45 @@
+/* app/review/review.css — 이용 후기. 폼도 목록도 서버가 그린다(JS 없이 동작). */
+
+.rvform { display: flex; flex-direction: column; gap: 12px; }
+.rvform label { font-size: 12.5px; font-weight: 700; color: #57523f; display: block; margin-bottom: 5px; }
+.rvform input[type="text"], .rvform textarea, .rvform select {
+  width: 100%; padding: 12px 13px; font-size: 15px; color: #26231c; font-family: inherit;
+  background: #fff; border: 1px solid #ddd3bd; border-radius: 11px;
+}
+.rvform textarea { min-height: 118px; resize: vertical; line-height: 1.7; }
+.rvform input:focus, .rvform textarea:focus, .rvform select:focus { outline: 2px solid var(--navy); outline-offset: 1px; }
+.rvhp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* 별점 — 라디오를 눌러도 되고 키보드로도 고를 수 있게 남겨 둔다 */
+.rvstars { display: flex; gap: 6px; }
+.rvstars label {
+  flex: 1; text-align: center; cursor: pointer; margin: 0;
+  border: 1px solid #ddd3bd; border-radius: 10px; padding: 9px 0; background: #fff;
+  font-size: 13px; font-weight: 700; color: #57523f;
+}
+.rvstars input { position: absolute; opacity: 0; width: 0; height: 0; }
+.rvstars input:checked + span { color: var(--navy); }
+.rvstars label:has(input:checked) { border-color: var(--navy); background: #f2f5ff; }
+.rvstars label:focus-within { outline: 2px solid var(--navy); outline-offset: 1px; }
+
+.rvgo {
+  width: 100%; padding: 14px; border: 0; border-radius: 12px; cursor: pointer;
+  background: var(--navy); color: #fff; font-size: 15px; font-weight: 800; font-family: inherit;
+}
+
+.rvmsg { border-radius: 12px; padding: 13px 15px; font-size: 13.5px; line-height: 1.7; font-weight: 600; }
+.rvmsg.ok { background: #eef6f1; border: 1px solid #bcdccb; color: #14684c; }
+.rvmsg.no { background: #fbf0ee; border: 1px solid #e6c4bc; color: #8f2f1c; }
+
+.rvitem { border-top: 1px solid #efe7d6; padding: 14px 0; }
+.rvitem:first-child { border-top: 0; padding-top: 0; }
+.rvhd { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.rvhd .who { font-weight: 800; color: #26231c; font-size: 13.5px; }
+.rvhd .biz { font-size: 11.5px; color: #7c7768; background: #faf6ec; border: 1px solid #e6dcc4; border-radius: 999px; padding: 3px 8px; }
+.rvhd .st { color: #b58a2f; font-size: 13px; letter-spacing: .04em; }
+.rvhd .dt { font-size: 11.5px; color: #8d8672; margin-left: auto; }
+.rvbody { font-size: 14px; color: #3a3630; line-height: 1.8; margin-top: 7px; white-space: pre-wrap; }
+
+.rvempty { text-align: center; padding: 26px 12px; }
+.rvempty .big { font-family: var(--serif); font-size: 15px; font-weight: 800; color: #57523f; }
+.rvempty .sm { font-size: 13px; color: #7c7768; line-height: 1.75; margin-top: 8px; }

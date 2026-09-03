@@ -7,6 +7,7 @@ const BASIC = [
   { href: '/admin/members', label: '회원 관리', d: 'M9 8a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 20c0-3.3 2.7-5 6-5s6 1.7 6 5M16 11h5M18.5 8.5v5' },
   { href: '/admin/payments', label: '결제·주문 내역', d: 'M3 6h18v12H3zM3 10h18' },
   { href: '/admin/views', label: '조회수', d: 'M3 17l5-6 4 4 5-8M3 21h18' },
+  { href: '/admin/reviews', label: '후기', d: 'M4 5h16v11H9l-5 4z' },
 ];
 const OWN = [
   { href: '/admin/clients', label: '발주처 DB', d: 'M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5' },
