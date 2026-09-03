@@ -137,7 +137,9 @@ textarea{font-weight:500;resize:none;height:60px;line-height:1.5}
 .catbuy-pp{margin-left:auto;font-family:var(--serif);font-weight:900;font-size:23px;color:var(--red);white-space:nowrap}
 .catbuy-lead{font-size:13.5px;color:#6f6858;line-height:1.65;margin-top:11px;font-weight:500;word-break:keep-all}
 .guarantee{margin:12px 0 6px;background:#f2f7f1;border:1px solid #cfe3cf;border-radius:10px;padding:10px 12px;font-size:12px;color:#2f6b42;font-weight:700;text-align:center;line-height:1.5}
-.cta{margin-top:6px;padding:16px;background:linear-gradient(135deg,var(--red),#7f1a17);color:#fff;border:1px solid var(--gold2);border-radius:14px;font-family:var(--serif);font-weight:900;font-size:16px;text-align:center;cursor:pointer}
+/* display:block 이 없으면 <a class="cta"> 가 inline 이라 margin-top 을 무시하고 위 문구를 덮는다.
+   div 로 쓸 때는 안 보이던 버그라 오래 남아 있었다 — 공유받은 리포트의 「나도 보기」가 그랬다. */
+.cta{display:block;text-decoration:none;margin-top:6px;padding:16px;background:linear-gradient(135deg,var(--red),#7f1a17);color:#fff;border:1px solid var(--gold2);border-radius:14px;font-family:var(--serif);font-weight:900;font-size:16px;text-align:center;cursor:pointer}
 .cta small{display:block;font-family:var(--sans);font-weight:500;font-size:12.5px;color:#f6d9cd;margin-top:4px}
 .disc{text-align:center;font-size:10.5px;color:#8d8672;padding:12px 8px 0;line-height:1.6;font-weight:500}
 .counter{text-align:right;font-size:11px;color:#a99f88;font-weight:600;margin-top:4px}
