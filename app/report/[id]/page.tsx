@@ -154,6 +154,12 @@ export default function ReportView({ params }: { params: { id: string } }) {
               <div className="ba">→</div>
             </Link>
             </>)}
+            {/* 본인 리포트에서만 후기를 청한다 — 공유받은 사람은 아직 써 본 게 아니다 */}
+            {res.mine && (
+              <p className="no-print" style={{ fontSize: 12.5, color: '#8a806a', lineHeight: 1.7, textAlign: 'center', margin: '16px 0 0' }}>
+                도움이 되셨다면 한 줄 남겨 주십시오 — <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
+              </p>
+            )}
             <button className="sharebtn no-print" style={{ marginTop: 12 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장

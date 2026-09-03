@@ -76,13 +76,30 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
           )}
 
           {ready && rows.length === 0 && (
-            <div className="rvempty">
-              <div className="big">아직 올라온 후기가 없습니다</div>
-              <div className="sm">
-                지어낸 후기로 채우지 않기로 했습니다. 그래서 지금은 비어 있습니다.<br />
-                써 보셨다면 아래에 한 줄 남겨 주십시오 — <b>첫 번째 후기</b>가 됩니다.
+            <>
+              <div className="rvempty">
+                <div className="big">아직 올라온 후기가 없습니다</div>
+                <div className="sm">
+                  지어낸 후기로 채우지 않기로 했습니다. 그래서 지금은 비어 있습니다.<br />
+                  써 보셨다면 아래에 한 줄 남겨 주십시오 — <b>첫 번째 후기</b>가 됩니다.
+                </div>
               </div>
-            </div>
+
+              {/* 후기가 아니라 '무엇을 쓰면 되는지'다. 후기 카드와 안 닮게 그린다 —
+                  점선·회색·별점 없음·이름 없음. 손님 말인 척하는 순간 가짜 후기가 된다. */}
+              <div className="rvguide">
+                <div className="gh">이렇게 써 주시면 됩니다 <span>· 예시 문항</span></div>
+                <ol>
+                  <li><b>어떤 상황이었는지</b> — 어떤 입찰·수주를 앞두고 보셨습니까</li>
+                  <li><b>무엇을 보셨는지</b> — 회사 사주, 투찰 택일, 발주처 궁합 중 어느 것</li>
+                  <li><b>실제로 어땠는지</b> — 도움이 된 점, 아쉬웠던 점 그대로</li>
+                </ol>
+                <p className="gn">
+                  좋게 써 달라는 뜻이 아닙니다. <b>아쉬웠던 점이 있으면 그대로 적어 주십시오</b> —
+                  그쪽이 고칠 거리가 되고, 읽는 분께도 더 믿음이 갑니다.
+                </p>
+              </div>
+            </>
           )}
 
           {ready && rows.map(r => (

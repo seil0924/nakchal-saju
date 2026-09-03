@@ -34,7 +34,7 @@ describe('isPublicPath — 로그인 게이트 판정', () => {
 describe('사이트맵에 올린 곳은 모두 열려 있어야 한다', () => {
   it('제출한 URL 중 로그인으로 튕기는 것이 없다', async () => {
     const { default: sitemap } = await import('../../app/sitemap');
-    const blocked = sitemap()
+    const blocked = (await sitemap())
       .map(e => new URL(e.url).pathname)
       .filter(p => !isPublicPath(p));
     expect(blocked).toEqual([]);

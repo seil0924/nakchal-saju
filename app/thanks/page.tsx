@@ -35,6 +35,13 @@ export default function ThanksPage({ searchParams }: { searchParams: { kind?: st
           <Link href="/" style={{ display: 'block', textAlign: 'center', color: '#8a806a', padding: '8px', fontSize: 13.5, fontWeight: 600, textDecoration: 'none' }}>홈으로 돌아가기</Link>
         </div>
 
+        {/* 후기를 청하는 자리는 여기다. 결제 직후가 유일하게 「써 봤다」가 확실한 시점이라,
+            후기가 실제로 들어오는 통로가 이 링크 하나뿐이다. */}
+        <p style={{ fontSize: 12.5, color: '#8a806a', lineHeight: 1.7, margin: '22px auto 0', maxWidth: 340 }}>
+          써 보신 뒤 한 줄 남겨 주시면 다음 대표님께 도움이 됩니다 —{' '}
+          <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
+        </p>
+
         <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, margin: '26px auto 0', maxWidth: 340 }}>영수증·결제 내역은 결제하신 카드사/간편결제 앱에서 확인하실 수 있습니다. 문의는 사이트 하단 연락처로 남겨주세요.</p>
       </div>
     </div>

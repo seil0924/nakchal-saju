@@ -5,6 +5,7 @@ import { CONCEPTS } from '@/lib/seo-concepts';
 import { getAllColumns } from '@/lib/column';
 import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
 import { TAEKIL } from '@/lib/taekil';
+import { listPublicReviews } from '@/lib/reviews-db';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -14,11 +15,16 @@ const BASE = 'https://nakchalsaju.com';
 // 사람이 직접 쓴 칼럼과 핵심 상품 페이지에 크롤링을 몰아준다.
 // 제외한 페이지도 살아 있고 내부 링크로 접근 가능하므로 색인에서 강제로 빠지지 않는다.
 // 색인률이 회복되면 단계적으로 다시 편입한다.
-export default function sitemap(): MetadataRoute.Sitemap {
+// 후기가 0건인 동안 /review 는 사이트맵에서 뺀다. 빈 페이지가 색인되면
+// "후기 없는 서비스"가 검색결과에 박힌다 — 첫 후기가 승인되면 자동으로 들어온다.
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const hasReviews = (await listPublicReviews(1)).rows.length > 0;
 
   // 1순위 — 전환이 일어나는 페이지
-  const primary = ['', '/reading', '/hoesa', '/review', '/column', '/full', '/pricing', '/balju', '/ceo', '/jari', '/taekil',
+  const primary = ['', '/reading', '/hoesa', ...(hasReviews ? ['/review'] : []), '/column', '/full', '/pricing', '/balju', '/ceo', '/jari', '/taekil',
     '/en/bazi', '/en/date-picker', '/en/why-charts-differ',
     '/zh/bazi', '/zh/why-charts-differ'];
   // 2순위 — 신뢰·전환 보조
