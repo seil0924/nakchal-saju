@@ -1779,3 +1779,11 @@ p,.hometag,.sec .bd p,.teaser .ttx,.catbuy-lead,.gbridge,.sub,.lead,.btip .btv,.
   --h-tx:#1e2124; --h-mut:#58616a; --h-mut2:#8a949e;
   --h-red:#b3382c; --h-gold:#a58a4e; --h-goldlt:#c6b07d;
 }
+
+/* 이걸 알게 됩니다 — 폼보다 먼저 오는 목록. 상품이 실제로 답해주는 것만 적혀 있다. */
+.gives{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.gives li{position:relative;padding-left:23px;font-size:14px;line-height:1.72;color:#3a3630;font-weight:500}
+.gives li::before{content:'開';position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:4px;background:var(--red);color:#f6e7c8;font-family:var(--serif);font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.lockgives{margin:11px 0 13px;padding:13px 15px;background:#faf6ec;border:1px solid #e6dcc4;border-radius:12px}
+.lockgives li{font-size:13.5px}
+.readynote{font-size:11.5px;color:#a99f88;text-align:center;line-height:1.6;margin:0 0 10px}

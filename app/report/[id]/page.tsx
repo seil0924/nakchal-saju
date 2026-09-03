@@ -137,7 +137,15 @@ export default function ReportView({ params }: { params: { id: string } }) {
             })}
             {level < 2 && catInfo && (
               <>
-                <div className="readyline"><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
+                {/* 분량이 아니라 내용을 말한다. "5장·수십항목"은 아무도 안 궁금하다 —
+                    궁금한 건 "돈 내면 내가 뭘 알게 되냐"다. */}
+                <div className="readyline"><b>{catInfo.name}</b> — 열면 이걸 알게 됩니다</div>
+                {catInfo.gives?.length > 0 && (
+                  <ul className="gives lockgives">
+                    {catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}
+                  </ul>
+                )}
+                <div className="readynote">{res.meta?.chapters ?? res.sections.length}장(章) 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
                 <div className="cta" onClick={(e) => openModal(e)}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
                 <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
               </>
