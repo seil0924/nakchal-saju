@@ -39,6 +39,7 @@ export async function generateMetadata(
   };
 }
 
-export default function ReadingPage() {
-  return <ReadingForm />;
+export default function ReadingPage({ searchParams }: { searchParams: { cat?: string } }) {
+  // cat 을 서버에서 넘겨야 "이걸 알게 됩니다"가 첫 HTML 에 들어간다.
+  return <ReadingForm initialCat={isCatKey(searchParams?.cat) ? searchParams.cat : ''} />;
 }

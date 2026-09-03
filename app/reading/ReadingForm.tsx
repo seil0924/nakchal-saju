@@ -69,7 +69,10 @@ function dedupe<T>(arr: T[], keyFn: (x: T) => string): T[] {
   return out;
 }
 
-export default function ReadingForm() {
+// initialCat: 서버(page.tsx)가 ?cat= 을 읽어 넘겨준다.
+// 예전에는 이 값을 useEffect 안에서만 읽어서, 서버 HTML 에는 카테고리가 비어 있었다 —
+// "이걸 알게 됩니다"가 하이드레이션 뒤에야 나타나 구글이 못 봤다.
+export default function ReadingForm({ initialCat = '' }: { initialCat?: string }) {
   const [f, setF] = useState({
     name: '', cal: 'solar' as 'solar' | 'lunar', leap: false,
     birth: '', gender: 'M',
@@ -92,7 +95,7 @@ export default function ReadingForm() {
   const [prog, setProg] = useState(false);     // 로딩 리추얼
   const [seal, setSeal] = useState(false);     // 결제 후 개봉 연출
   const [sticky, setSticky] = useState(false); // 스크롤 스티키 CTA
-  const [cat, setCat] = useState('');           // 카테고리(대표·사정률·발주처·궁합·대운)
+  const [cat, setCat] = useState(isCatKey(initialCat) ? initialCat : ''); // 카테고리(대표·택일·발주처·궁합·대운)
   const [bp, setBp] = useState({ y: 0, m: 0, d: 0 }); // 생년월일 3분할 선택 누적
   const [picker, setPicker] = useState<{ open: boolean; kind: PersonKind }>({ open: false, kind: 'self' });
   const catInfo = isCatKey(cat) ? CAT_INFO[cat] : null;
@@ -137,7 +140,8 @@ export default function ReadingForm() {
       // 닮은 CEO(/ceo)에서 넘어온 경우 대표 생년월일·성함 프리필
       const b = p.get('b'), n = p.get('n');
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
-      const ct = p.get('cat'); if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
+      // cat 은 initialCat 으로 이미 서버에서 세워 두었다. 여기서는 부수 상태만 맞춘다.
+      const ct = p.get('cat'); if (isCatKey(ct) && ct === 'gunghap') setAddKind('partner');
       // /jari → /reading 핸드오프. 숫자만 받고, 범위를 벗어나면 조용히 버린다.
       const num = (v: string | null, lo: number, hi: number) => { const n = Number(v); return v !== null && Number.isFinite(n) && n >= lo && n <= hi ? n : undefined; };
       const dg = num(p.get('dg'), 0, 360), km = num(p.get('km'), 0, 20000);
