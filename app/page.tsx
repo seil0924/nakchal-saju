@@ -8,6 +8,7 @@ import CountUp from '@/app/_components/CountUp';
 import HeroCarousel from '@/app/_components/HeroCarousel';
 import ScrollReveal from '@/app/_components/ScrollReveal';
 import TrustStrip from '@/app/_components/TrustStrip';
+import ReviewStrip from '@/app/_components/ReviewStrip';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { CLIENTS } from '@/lib/clients';
 import { TYCOONS } from '@/lib/tycoon';
@@ -24,6 +25,10 @@ export const metadata: Metadata = {
 };
 
 // 홈 — home5 정본: 정관장×무복의 현대적 해석 (먹빛·금박·인주·괘선·인장)
+// 후기가 붙으면 홈도 갱신돼야 한다. 관리자 등록 때 revalidatePath('/') 로 즉시 반영되고,
+// 손님이 직접 남긴 뒤 승인한 경우를 위해 10분 주기도 함께 건다.
+export const revalidate = 600;
+
 export default function Home() {
   // 하드코딩하지 않는다 — 실제 데이터에서 세야 콘텐츠가 늘 때 같이 오른다.
   // 최근 발행 3편 — "이 사이트 지금도 글이 올라오는구나"가 활발함의 가장 정직한 증거다.
@@ -87,6 +92,9 @@ export default function Home() {
         </div>
         <div className="sc-note">절기는 태양황경으로 계산하고 진태양시·야자시를 보정합니다 — 고정 만세력표를 쓰지 않습니다.</div>
       </div>
+
+      {/* 후기 띠 — 승인된 후기가 1건이라도 있을 때만 그려진다 */}
+      <ReviewStrip />
 
       {/* 닮은 CEO — 바이럴 입구 */}
       <Link data-reveal className="ceoband" href="/ceo">

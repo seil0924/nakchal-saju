@@ -5,7 +5,10 @@ import 'server-only';
 import { adminEnabled, supabaseAdmin } from '@/lib/supabase/admin';
 import type { Review, ReviewInput } from '@/lib/reviews';
 
-export type ReviewRow = Review & { approved: boolean };
+export type ReviewRow = Review & { approved: boolean; source?: string | null };
+
+/** 관리자가 받은 경로 — 옮겨 적은 후기는 어디서 받았는지가 남아야 한다. */
+export const SOURCES = ['전화', '카카오톡', '문자', '이메일', '방문·대면', '기타'] as const;
 
 /** 공개용 — 승인된 것만. ready=false 면 테이블이 아직 없다. */
 export async function listPublicReviews(limit = 50): Promise<{ ready: boolean; rows: Review[] }> {
@@ -24,7 +27,7 @@ export async function listAllReviews(limit = 200): Promise<{ ready: boolean; row
   if (!adminEnabled()) return { ready: false, rows: [] };
   try {
     const { data, error } = await supabaseAdmin()
-      .from('reviews').select('id,nickname,biz,rating,body,created_at,approved')
+      .from('reviews').select('id,nickname,biz,rating,body,created_at,approved,source')
       .order('created_at', { ascending: false }).limit(limit);
     if (error) return { ready: false, rows: [] };
     return { ready: true, rows: (data ?? []) as ReviewRow[] };
@@ -38,6 +41,34 @@ export async function insertReview(v: ReviewInput): Promise<boolean> {
     const { error } = await supabaseAdmin().from('reviews').insert({
       nickname: v.nickname, biz: v.biz || null, rating: v.rating, body: v.body, approved: false,
     });
+    return !error;
+  } catch { return false; }
+}
+
+/**
+ * 관리자 직접 입력. 전화·카톡으로 받은 후기를 옮겨 적는 자리다.
+ * 바로 게시(approved=true)하고, 받은 경로와 받은 날짜를 함께 남긴다.
+ */
+export async function insertAdminReview(
+  v: ReviewInput, source: string, receivedAt?: string,
+): Promise<boolean> {
+  if (!adminEnabled()) return false;
+  try {
+    const row: Record<string, unknown> = {
+      nickname: v.nickname, biz: v.biz || null, rating: v.rating, body: v.body,
+      approved: true, source: source || '기타',
+    };
+    // 받은 날짜를 주면 그날로 박는다 — 오늘로 찍히면 언제 받은 후기인지 사라진다.
+    if (receivedAt && /^\d{4}-\d{2}-\d{2}$/.test(receivedAt)) row.created_at = `${receivedAt}T09:00:00+09:00`;
+    const { error } = await supabaseAdmin().from('reviews').insert(row);
+    return !error;
+  } catch { return false; }
+}
+
+export async function deleteReview(id: number): Promise<boolean> {
+  if (!adminEnabled()) return false;
+  try {
+    const { error } = await supabaseAdmin().from('reviews').delete().eq('id', id);
     return !error;
   } catch { return false; }
 }
