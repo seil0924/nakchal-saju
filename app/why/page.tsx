@@ -4,6 +4,7 @@ import { PAINS } from '@/lib/pains';
 export const metadata = {
   title: '대표님 잘못이 아닙니다',
   description: '하한가·연패·큰 건·동업·관재수 — 대표님을 괴롭힌 그 일, 실력이 아니라 흐름의 문제일 수 있습니다.',
+  alternates: { canonical: '/why' },
 };
 
 export default function WhyHub() {

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '결제가 완료되었습니다 | 낙찰사주',
+  title: '결제가 완료되었습니다',
   description: '낙찰사주 결제가 정상적으로 완료되었습니다.',
   robots: { index: false, follow: false },
   alternates: { canonical: '/thanks' },

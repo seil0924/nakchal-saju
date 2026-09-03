@@ -12,7 +12,7 @@ export function generateStaticParams() { return INDUSTRIES.map(r => ({ slug: r.s
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const r = bySlug(params.slug);
   if (!r) return { title: '낙찰사주' };
-  const title = `${r.name} 대표 입찰 사주 — 낙찰 흐름과 발주처 궁합 | 낙찰사주`;
+  const title = `${r.name} 대표 입찰 사주 — 낙찰 흐름과 발주처 궁합`;
   const description = `${r.name} 대표님을 위한 입찰 사주 — 오늘의 투찰 택일·길일·발주처 궁합을 30초 무료로. ${r.intro}`.slice(0, 155);
   return { title, description, alternates: { canonical: `/industry/${r.slug}` },
     openGraph: { title, description, url: `${BASE}/industry/${r.slug}`, type: 'article', siteName: '낙찰사주' },

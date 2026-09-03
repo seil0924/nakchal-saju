@@ -4,6 +4,13 @@ import MoreClient from './MoreClient';
 
 export const dynamic = 'force-dynamic'; // 매 요청 쿠키를 읽어야 하므로 정적화 금지
 
+// 제목이 없어서 홈과 똑같이 나갔다 — 구글이 홈의 사본으로 볼 여지를 열어 둔 셈이다.
+export const metadata = {
+  title: '더보기 — 전체 메뉴',
+  description: '낙찰사주의 모든 상품과 자료 — 회사 사주, 투찰 택일, 발주처 궁합, 칼럼, 용어사전, 이용안내를 한 곳에서.',
+  alternates: { canonical: '/more' },
+};
+
 export default async function More() {
   let initial: { loggedIn: boolean; email?: string; name?: string } = { loggedIn: false };
   if (authEnabled()) {

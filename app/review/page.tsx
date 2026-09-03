@@ -20,7 +20,7 @@ import './review.css';
 export const dynamic = 'force-dynamic';
 
 const BASE = 'https://nakchalsaju.com';
-const T = '이용 후기 — 낙찰사주를 써 본 대표들의 말';
+const T = '이용 후기 — 써 본 대표들의 말';
 const D = '낙찰사주를 실제로 써 본 대표님들이 남긴 후기입니다. 지어낸 후기는 싣지 않습니다. 직접 남기실 수도 있습니다.';
 
 export const metadata: Metadata = {

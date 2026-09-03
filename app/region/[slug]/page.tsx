@@ -13,7 +13,7 @@ export function generateStaticParams() { return REGIONS.map(r => ({ slug: r.slug
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const r = bySlug(params.slug);
   if (!r) return { title: '낙찰사주' };
-  const title = `${r.name} 입찰 사주 — 지역 발주처 궁합과 낙찰 흐름 | 낙찰사주`;
+  const title = `${r.name} 입찰 사주 — 지역 발주처 궁합과 낙찰 흐름`;
   const description = `${r.name} 지역 발주처(${r.clients.join('·')})와 대표님 사주의 궁합, 오늘의 투찰 택일·길일을 30초 무료로. ${r.intro}`;
   return { title, description, alternates: { canonical: `/region/${r.slug}` },
     openGraph: { title, description, url: `${BASE}/region/${r.slug}`, type: 'article', siteName: '낙찰사주' },

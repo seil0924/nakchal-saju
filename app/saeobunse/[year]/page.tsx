@@ -75,7 +75,7 @@ export function generateMetadata({ params }: { params: { year: string } }): Meta
   const y = Number(params.year);
   if (!Number.isInteger(y) || y < MIN || y > MAX) return {};
   const yi = yInfo(y);
-  const title = `${y} ${yi.ganzhi} 12지신 사업·입찰운세 — 출생연도별 | 낙찰사주`;
+  const title = `${y} ${yi.ganzhi} 12지신 사업·입찰운세 — 출생연도별`;
   const description = `${y}년(${yi.ganzhi}, ${yi.label}) 띠별·출생연도별 사업·입찰운세. 같은 띠라도 년주(年柱)에 따라 다른 올해의 수주 흐름과 실전 수칙.`;
   return {
     title, description,
