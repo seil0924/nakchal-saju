@@ -1,15 +1,24 @@
 /* 홈 후기 띠. 옆으로 넘기는 카드 — scroll-snap 만 쓰고 JS 는 안 붙인다. */
 
-.rstrip { margin: 22px 0 4px; }
+/* 밴드 배경 — 위아래가 전부 흰 카드라 바탕이 같으면 띠가 안 읽힌다.
+   따뜻한 종이색을 깔고 카드는 흰색으로 남겨, 카드가 바탕 위에 뜨게 한다. */
+.rstrip {
+  margin: 22px 0 4px;
+  background: linear-gradient(180deg, #fbf7ee, #f7f1e3);
+  border: 1px solid #e9dfc7;
+  border-radius: 11px;
+  padding: 14px 0 2px;
+  overflow: hidden;
+}
 
-.rshd { display: flex; align-items: baseline; gap: 9px; padding: 0 24px 11px; flex-wrap: wrap; }
+.rshd { display: flex; align-items: baseline; gap: 9px; padding: 0 15px 11px; flex-wrap: wrap; }
 .rshd .rsk { font-size: 10.5px; letter-spacing: .22em; color: #a99f88; font-weight: 700; }
 .rshd b { font-family: var(--serif); font-size: 16px; font-weight: 900; color: var(--ink); }
 .rshd .rsavg { font-size: 12px; font-weight: 700; color: #b58a2f; letter-spacing: .03em; }
 .rshd .rsall { margin-left: auto; font-size: 12.5px; font-weight: 700; color: var(--navy); text-decoration: none; }
 
 .rsrow {
-  display: flex; gap: 11px; overflow-x: auto; padding: 2px 24px 14px;
+  display: flex; gap: 11px; overflow-x: auto; padding: 2px 15px 14px;
   scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -19,7 +28,7 @@
   flex: 0 0 268px; scroll-snap-align: start;
   background: #fff; border: 1px solid var(--line); border-radius: 14px;
   padding: 14px 15px; display: flex; flex-direction: column;
-  box-shadow: 0 2px 10px rgba(60,50,30,.05);
+  box-shadow: 0 2px 10px rgba(60,50,30,.07);
 }
 .rsst { color: #b58a2f; font-size: 13px; letter-spacing: .06em; margin-bottom: 8px; }
 .rstx {
@@ -32,7 +41,7 @@
 
 .rsmore {
   flex: 0 0 132px; align-items: center; justify-content: center; text-align: center;
-  background: #faf6ec; border-style: dashed; border-color: #ddd3bd; text-decoration: none;
+  background: #fff; border-style: dashed; border-color: #d9cbaa; text-decoration: none;
   font-family: var(--serif); font-size: 14px; font-weight: 800; color: var(--navy); line-height: 1.6;
 }
 
