@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 const fmt = (iso: string) => (iso || '').slice(0, 10).replace(/-/g, '.');
 
 export default async function ReviewPage({ searchParams }: { searchParams: { sent?: string; err?: string } }) {
-  const { ready, rows } = await listPublicReviews();
+  const { ready, rows, why } = await listPublicReviews();
   const avg = averageRating(rows);
   const sent = searchParams?.sent === '1';
   const err = (searchParams?.err || '').slice(0, 120);
@@ -71,7 +71,9 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
           {!ready && (
             <div className="rvempty">
               <div className="big">후기 게시판이 아직 켜지지 않았습니다</div>
-              <div className="sm">Supabase → SQL Editor 에서 <b>supabase/reviews.sql</b> 을 한 번 실행하면 이 화면이 살아납니다.</div>
+              <div className="sm">Supabase → SQL Editor 에서 <b>supabase/reviews.sql</b> 을 한 번 실행하면 이 화면이 살아납니다.
+                {why && <><br /><span style={{ fontSize: 11.5, color: '#8f2f1c' }}>({why})</span></>}
+              </div>
             </div>
           )}
 

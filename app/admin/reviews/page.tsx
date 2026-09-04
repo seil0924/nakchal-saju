@@ -40,7 +40,7 @@ const inp: React.CSSProperties = {
 const lbl: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: '#57523f', display: 'block', marginBottom: 5 };
 
 export default async function AdminReviews() {
-  const { ready, rows } = await listAllReviews();
+  const { ready, rows, why } = await listAllReviews();
   const pending = rows.filter(r => !r.approved);
   const live = rows.filter(r => r.approved);
 
@@ -56,11 +56,19 @@ export default async function AdminReviews() {
       <div className="abody">
         {!ready && (
           <div className="acard"><div className="empty">
-            후기 표가 아직 없습니다.<br />
+            후기를 읽지 못했습니다.<br />
             Supabase → SQL Editor 에서 <b>supabase/reviews.sql</b> 을 한 번 실행하면 이 화면이 채워집니다.
+            {why && <div style={{ marginTop: 10, fontSize: 12, color: '#8f2f1c', background: '#fbf0ee', border: '1px solid #e6c4bc', borderRadius: 8, padding: '9px 11px', textAlign: 'left', wordBreak: 'break-word' }}>
+              <b>실제 사유</b> — {why}
+            </div>}
           </div></div>
         )}
 
+        {ready && why && (
+          <div className="acard"><div style={{ fontSize: 12.5, color: '#8f2f1c', background: '#fbf0ee', border: '1px solid #e6c4bc', borderRadius: 9, padding: '10px 12px', lineHeight: 1.7 }}>
+            {why}
+          </div></div>
+        )}
         {ready && (
           <>
             {/* 직접 입력 — 전화·카톡으로 받은 후기를 옮겨 적는 자리 */}

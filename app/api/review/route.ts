@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     });
     if (!v.ok || !v.value) return back(req, `err=${encodeURIComponent(v.reason)}`);
 
-    const ok = await insertReview(v.value);
+    const { ok } = await insertReview(v.value);
     return back(req, ok ? 'sent=1' : 'err=' + encodeURIComponent('지금은 접수가 안 됩니다. 잠시 후 다시 시도해 주세요.'));
   } catch {
     return back(req, 'err=' + encodeURIComponent('접수 중 문제가 생겼습니다.'));
