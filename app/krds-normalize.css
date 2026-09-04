@@ -88,6 +88,8 @@ html .tl-recent .trc-all{display:block;margin-top:8px;padding-top:9px;border-top
 
 /* === sweep17: 수록 규모 — 처음 온 사람에게 축적을 보여준다 === */
 html .home5>.scale{order:4;margin:14px 24px 2px;padding:15px 16px 13px;background:#fff;border:1px solid #e6e8ea;border-radius:11px}
+/* 후기 띠 — 수록 규모와 같은 4번 그룹. 안 적으면 catch-all(order:6)로 밀려 페이지 끝에 붙는다. */
+html .home5>.rstrip{order:4;margin:16px 0 2px}
 html .scale .sc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 html .scale .sc-i{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;position:relative}
 html .scale .sc-i+.sc-i::before{content:"";position:absolute;left:-3px;top:5px;bottom:5px;width:1px;background:#eceef0}

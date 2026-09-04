@@ -2,14 +2,14 @@
 
 .rstrip { margin: 22px 0 4px; }
 
-.rshd { display: flex; align-items: baseline; gap: 9px; padding: 0 16px 11px; flex-wrap: wrap; }
+.rshd { display: flex; align-items: baseline; gap: 9px; padding: 0 24px 11px; flex-wrap: wrap; }
 .rshd .rsk { font-size: 10.5px; letter-spacing: .22em; color: #a99f88; font-weight: 700; }
 .rshd b { font-family: var(--serif); font-size: 16px; font-weight: 900; color: var(--ink); }
 .rshd .rsavg { font-size: 12px; font-weight: 700; color: #b58a2f; letter-spacing: .03em; }
 .rshd .rsall { margin-left: auto; font-size: 12.5px; font-weight: 700; color: var(--navy); text-decoration: none; }
 
 .rsrow {
-  display: flex; gap: 11px; overflow-x: auto; padding: 2px 16px 14px;
+  display: flex; gap: 11px; overflow-x: auto; padding: 2px 24px 14px;
   scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }

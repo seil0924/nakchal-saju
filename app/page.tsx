@@ -81,10 +81,6 @@ export default function Home() {
       {/* 히어로 — 자동 넘김 롤링 배너 (4장) */}
       <HeroCarousel />
 
-      {/* 후기 띠 — 히어로 배너 바로 아래. 처음 온 대표가 스크롤 전에 만나는 자리다.
-          승인된 후기가 1건이라도 있을 때만 그려지고, 0건이면 통째로 안 나온다. */}
-      <ReviewStrip />
-
       <div className="scale" data-reveal>
         <div className="sc-row">
           {scale.map(s => (
@@ -96,6 +92,12 @@ export default function Home() {
         </div>
         <div className="sc-note">절기는 태양황경으로 계산하고 진태양시·야자시를 보정합니다 — 고정 만세력표를 쓰지 않습니다.</div>
       </div>
+
+      {/* 후기 띠 — 수록 규모 바로 아래, 「사주별로 골라 보기」 위.
+          자리는 DOM 이 아니라 krds-normalize.css 의 flex order 가 정한다 — order 를 안 주면
+          catch-all(order:6)에 걸려 페이지 꼬리로 밀린다. 여기 순서만 바꿔선 아무 일도 안 일어난다.
+          승인된 후기가 1건이라도 있을 때만 그려지고, 0건이면 통째로 안 나온다. */}
+      <ReviewStrip />
 
       {/* 닮은 CEO — 바이럴 입구 */}
       <Link data-reveal className="ceoband" href="/ceo">
