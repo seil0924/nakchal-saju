@@ -21,6 +21,8 @@ export default function ReportView({ params }: { params: { id: string } }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [consent, setConsent] = useState(false);
+  // 카테고리 없는 리포트에서 손님이 고른 상품(결제 직전까지만 들고 있는다)
+  const [pending, setPending] = useState<string | undefined>(undefined);
   const [sku, setSku] = useState<'taekil' | 'full'>('full');
   const [seal, setSeal] = useState(false);
   const [sticky, setSticky] = useState(false);
@@ -52,11 +54,14 @@ export default function ReportView({ params }: { params: { id: string } }) {
     catch {} finally { setBusy(false); }
   }
 
-  async function pay(chosen: 'taekil' | 'full') {
+  // pickCat: 카테고리 없이 만들어진 리포트를 결제할 때 손님이 고른 상품.
+  // 서버가 needs 를 검증하고 금액도 서버가 정한다 — 여기서 보낸 값은 '무엇을 살지'일 뿐이다.
+  async function pay(chosen: 'taekil' | 'full', pickCat?: string) {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
     setErr(''); setBusy(true);
     try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: id, sku: chosen }) }).then(x => x.json());
+      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: id, sku: chosen, cat: pickCat ?? pending }) }).then(x => x.json());
+      if (prep?.error) { setBusy(false); setErr(prep.error === 'category_required' ? '어떤 풀이를 여실지 먼저 골라 주세요.' : '결제 준비에 실패했습니다.'); return; }
       if (KCP_CLIENT_ENABLED) {
         const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
         if (kres === 'redirect') return;
@@ -124,7 +129,9 @@ export default function ReportView({ params }: { params: { id: string } }) {
               const prod = productOfMk(sec.mk);
               const pPrice = catInfo ? catInfo.price : (prod?.price ?? 0);
               const pName = catInfo ? catInfo.name : (prod?.name ?? '개별 상품');
-              const openThis = (e?: any) => { if (catInfo) openModal(e); else { setErr(''); location.href = prod ? `/reading?cat=${prod.key}` : '/reading'; } };
+              // 예전엔 여기서 /reading?cat=... 으로 되돌려 보냈다. 생년월일을 이미 받아놓고
+              // 폼을 처음부터 다시 시키는 셈이라, 그 자리에서 결제되게 바꿨다.
+              const openThis = (e?: any) => { setErr(''); if (!catInfo && prod) setPending(prod.key); openModal(e); };
               return (
                 <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                   <div className="hd" onClick={locked ? openThis : undefined}><div className="mk">{sec.mk}</div><div className="ti">{sec.t}</div>
@@ -195,19 +202,23 @@ export default function ReportView({ params }: { params: { id: string } }) {
         <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setModal(false); }}>
           <div className="sheet" style={sheetStyle}>
             <div className="grip" />
-            {catInfo ? (
-              <>
-                <h3>{catInfo.name} 전체 열기</h3>
-                <div className="catbuy">
-                  <div className="catbuy-hd"><span className="catbuy-seal">{catInfo.hanja}</span><div><div className="catbuy-nm">{catInfo.name}</div><div className="catbuy-kick">{catInfo.kicker}</div></div><div className="catbuy-pp">{won(catInfo.price)}</div></div>
-                  <div className="catbuy-lead">{catInfo.lead}</div>
-                </div>
-              </>
-            ) : null}
+            {/* 카테고리 없이 만들어진 리포트면 손님이 방금 고른 상품(pending)을 보여준다. */}
+            {(() => {
+              const pick = catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null);
+              return pick ? (
+                <>
+                  <h3>{pick.name} 전체 열기</h3>
+                  <div className="catbuy">
+                    <div className="catbuy-hd"><span className="catbuy-seal">{pick.hanja}</span><div><div className="catbuy-nm">{pick.name}</div><div className="catbuy-kick">{pick.kicker}</div></div><div className="catbuy-pp">{won(pick.price)}</div></div>
+                    <div className="catbuy-lead">{pick.lead}</div>
+                  </div>
+                </>
+              ) : null;
+            })()}
             <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
             <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
             {err && <div className="errbox">{err}</div>}
-            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won(catInfo ? catInfo.price : 0)} 결제하기`}</button>
+            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won((catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0)} 결제하기`}</button>
             <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
           </div>
         </div>

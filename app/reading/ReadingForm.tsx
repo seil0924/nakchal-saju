@@ -32,7 +32,7 @@ type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t:
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
 type Hero = { score: number; big?: string; unit?: string; label: string; headline: string; sub: string; up: boolean };
-type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
+type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number }; admin?: boolean; level?: number };
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
@@ -260,6 +260,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       setTok(r.reportId, r.token);   // 접근토큰 로컬 보관(비회원 리포트 IDOR 방어)
       await minWait;
       setRes(r);
+      // 관리자는 서버가 레벨 2로 본문을 만들어 보낸다. 그 값을 그대로 받아야
+      // 배지(자물쇠/열림)와 본문이 같은 기준으로 그려진다.
+      setLevel(r.level ?? 0);
       // 보관함 기록 (이 기기 · 로그인 시 계정) + 저장된 사주/대상 서버 기록(best-effort)
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
       fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: 'self', name: f.name, birth_date: f.birth, birth_time: f.timeMode === 'N' ? null : effTime, calendar: f.cal, is_leap: f.leap }) }).catch(() => {});
@@ -619,6 +622,13 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             </div>
             <div className="rright">
+            {/* 관리자는 결제 없이 전부 열려 보인다. 그걸 안 적어두면 손님 화면이 이런 줄 알고
+                유료 게이팅이 고장 난 걸 멀쩡한 걸로 착각하게 된다. */}
+            {res.admin && (
+              <div className="adminview no-print">
+                관리자 열람 중 — 손님에게는 잠겨 보입니다. 실제 화면은 시크릿 창에서 확인하십시오.
+              </div>
+            )}
             <div className="rephd">{res.title}</div>
             <button className="topshare no-print" onClick={share} aria-label="결과 링크 공유">↗ 결과 공유</button>
             {res.hero && <a className="topshare no-print" href={`/api/og/card?score=${encodeURIComponent(String(res.hero.big ?? res.hero.score))}&unit=${encodeURIComponent(res.hero.unit ?? '점')}&type=${encodeURIComponent(res.hero.label)}&note=${encodeURIComponent(res.hero.sub || '')}&up=${res.hero.up ? '1' : '0'}`} target="_blank" rel="noopener" style={{ marginLeft: 6 }}>🖼 카드 저장</a>}
@@ -662,7 +672,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                           <div className="teaser">
                             <div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
                             <button className="tunlock" onClick={openThis}>
-                              {`${pName} 열기`} →
+                              {`${pName} 열기 · ${won(pPrice)}`} →
                             </button>
                           </div>
                         )}

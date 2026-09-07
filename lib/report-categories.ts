@@ -159,3 +159,29 @@ export const CAT_UI: Record<string, CatUI> = {
 };
 
 export const catUI = (cat?: string): CatUI => CAT_UI[cat ?? ''] ?? CAT_UI_DEFAULT;
+
+/**
+ * 이 리포트로 지금 팔 수 있는 상품 목록.
+ *
+ * 카테고리 없이 들어온 손님(홈·칼럼 등 36개 링크가 여기로 보낸다)은 리포트는 받는데
+ * 살 게 정해져 있지 않다. 그렇다고 아무거나 팔면 안 된다 — 발주처 사주는 발주처
+ * 설립일이 있어야 하고, 궁합은 상대 날짜가 있어야 한다.
+ *
+ * 그래서 needs 가 채워진 것만 돌려준다. 값이 있는 것만 파는 게 원칙이다.
+ */
+export function sellableCats(input: {
+  legal?: string | null; client?: string | null; partner?: string | null; ally?: string | null;
+}): (CatInfo & { key: CatKey })[] {
+  const has = { legal: !!input?.legal, client: !!input?.client, partner: !!input?.partner, ally: !!input?.ally };
+  return (Object.keys(CAT_INFO) as CatKey[])
+    .filter(k => CAT_INFO[k].needs.every(n => has[n]))
+    .map(k => ({ ...CAT_INFO[k], key: k }));
+}
+
+/** 그 리포트에 이 카테고리를 붙여 팔아도 되는가. 결제 직전 서버 검증용. */
+export function canSellCat(
+  cat: unknown,
+  input: { legal?: string | null; client?: string | null; partner?: string | null; ally?: string | null },
+): cat is CatKey {
+  return isCatKey(cat) && sellableCats(input).some(c => c.key === cat);
+}

@@ -16,5 +16,7 @@ export async function POST(req: Request) {
   const free = computeReport(input, admin ? 2 : false, undefined, bpass);
   const label = `${input.name ? input.name + ' 대표님' : '대표님'} · ${free.gauge.dir}${input.legalName ? ' · ' + input.legalName : ''}`;
   const { id: reportId, token } = await saveReport(input, user?.id, label); // 원장 보관(+소유자+라벨+접근토큰)
-  return NextResponse.json({ reportId, token, label, admin, ...free });
+  // level 을 같이 내려보낸다. 안 보내면 화면이 0 으로 계산해서,
+  // 관리자에게 만들어 준 본문은 다 그려지는데 배지만 자물쇠로 뜬다(표시가 서로 어긋남).
+  return NextResponse.json({ reportId, token, label, admin, level: admin ? 2 : 0, ...free });
 }
