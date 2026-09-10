@@ -478,7 +478,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <span className="pkgo">›</span>
           </button>
           <label>성함 <span className="opt">(선택)</span></label>
-          <input value={f.name} maxLength={12} placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
+          <input value={f.name} maxLength={12} aria-label="성함" placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
           <label>달력</label>
           <div className="seg">
             <button className={seg(f.cal === 'solar')} onClick={() => set('cal', 'solar')}>양력</button>
@@ -492,9 +492,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           )}
           <label>생년월일</label>
           <div className="bdate">
-            <select required value={by || ''} onChange={e => setB({ y: +e.target.value })}><option value="" disabled>년</option>{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
-            <select required value={bm || ''} onChange={e => setB({ m: +e.target.value })}><option value="" disabled>월</option>{MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}</select>
-            <select required value={bd || ''} onChange={e => setB({ d: +e.target.value })}><option value="" disabled>일</option>{DAYS.map(d => <option key={d} value={d}>{d}일</option>)}</select>
+            <select required aria-label="태어난 해" value={by || ''} onChange={e => setB({ y: +e.target.value })}><option value="" disabled>년</option>{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
+            <select required aria-label="태어난 달" value={bm || ''} onChange={e => setB({ m: +e.target.value })}><option value="" disabled>월</option>{MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}</select>
+            <select required aria-label="태어난 날" value={bd || ''} onChange={e => setB({ d: +e.target.value })}><option value="" disabled>일</option>{DAYS.map(d => <option key={d} value={d}>{d}일</option>)}</select>
           </div>
           <label>성별</label>
           <div className="seg">
@@ -509,7 +509,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           </div>
           {f.timeMode === 'Y' && (
             <div>
-              <input type="time" value={f.time} onChange={e => set('time', e.target.value)} style={{ marginTop: 8 }} />
+              <input type="time" aria-label="태어난 시각" value={f.time} onChange={e => set('time', e.target.value)} style={{ marginTop: 8 }} />
               <div className="tsnote">✓ 진태양시 −30분 자동 보정 (한국 경도 기준)</div>
             </div>
           )}
@@ -548,7 +548,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <span className="pkgo">›</span>
           </button>
           <label>회사명 <span className="opt">(선택)</span></label>
-          <input value={f.company} maxLength={20} placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
+          <input value={f.company} maxLength={20} aria-label="회사명" placeholder="예) 대한건설(주)" onChange={e => set('company', e.target.value)} />
           <label>법인 설립일 {ui.legal === 'required' ? <span className="opt" style={{ color: 'var(--red)' }}>· 대운·세운 계산의 기준</span> : <span className="opt">· 법인 운세 + 통합 택일</span>}</label>
           <DateSelect value={f.legal} onChange={v => set('legal', v)} yearFrom={1945} yearTo={2026} />
           <div className="note">{ui.legal === 'required' ? '※ 회사 대운은 법인 설립일을 기준으로 연도별 큰 흐름(세운)을 산출합니다. 사업자등록증의 「개업연월일」을 넣어주세요.' : '※ 회사 설립일을 넣으면 대표+법인 통합으로 택일과 회사 운세가 더 정교해집니다.'}</div>

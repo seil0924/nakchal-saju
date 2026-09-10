@@ -45,7 +45,7 @@ export default function Balju() {
 
       <div className="searchbar">
         <span className="si"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.2-3.2" /></svg></span>
-        <input value={q} onChange={e => setQ(e.target.value)} placeholder="발주처 이름·분야로 검색" />
+        <input value={q} onChange={e => setQ(e.target.value)} placeholder="발주처 이름·분야로 검색" aria-label="발주처 검색" type="search" />
       </div>
 
       {favClients.length > 0 && !q && (
@@ -73,7 +73,7 @@ export default function Balju() {
       <nav aria-label="발주처별 상세 분석" style={{ padding: '4px 15px 10px' }}>
         <div style={{ fontSize: 12, fontWeight: 800, color: '#6b6249', margin: '6px 0 8px' }}>발주처별 상세 분석</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {CLIENTS.map(c => (<Link key={c.name} href={`/balju/${clientSlug(c.name)}`} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{c.name}</Link>))}
+          {CLIENTS.map(c => (<Link key={c.name} href={`/balju/${clientSlug(c.name)}`} style={{ fontSize: 12, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{c.name}</Link>))}
         </div>
       </nav>
 

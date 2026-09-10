@@ -84,7 +84,7 @@ export default async function AdminViews() {
                   <tr key={c.slug}>
                     <td>
                       <Link href={`/column/${c.slug}`} style={{ color: 'inherit' }}>{titleOf.get(c.slug) ?? c.slug}</Link>
-                      <div style={{ fontSize: 11, color: '#a39c8e', fontFamily: 'monospace' }}>{c.slug}</div>
+                      <div style={{ fontSize: 12, color: '#a39c8e', fontFamily: 'monospace' }}>{c.slug}</div>
                     </td>
                     <td style={{ textAlign: 'right', fontWeight: 700 }}>{c.count.toLocaleString()}</td>
                   </tr>

@@ -133,7 +133,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
           ))}
         </div>
 
-        <p style={{ fontSize: 11.5, color: '#6f6a58', lineHeight: 1.65, marginBottom: 20 }}>
+        <p style={{ fontSize: 12, color: '#6f6a58', lineHeight: 1.65, marginBottom: 20 }}>
           ※ 출생일은 공개 기록 기준이며, 생시가 미상이라 시주(時柱)를 뺀 삼주(三柱)로 계산했습니다.
           유사도는 명식의 구조적 비교이며 해당 인물의 실제 운세 단정이 아닙니다. 명리 기반 참고·오락용 정보입니다.
         </p>

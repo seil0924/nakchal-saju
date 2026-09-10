@@ -74,7 +74,7 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
             {siblings.map(x => (<Link key={x.slug} href={`/saju/${x.slug}`} style={chip}>{x.label}</Link>))}
           </div>
         </>)}
-        <p style={{ fontSize: 11.5, color: '#6f6a58', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다.</p>
+        <p style={{ fontSize: 12, color: '#6f6a58', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다.</p>
       </div>
     </div>
   );

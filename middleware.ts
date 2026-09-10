@@ -25,6 +25,16 @@ export function isPublicPath(rawPath: string): boolean {
   return PUBLIC_PREFIX.some((p) => path.startsWith(p));
 }
 
+// 로그인이 필요한 곳은 이 셋뿐이다. 예전엔 '공개 목록에 없으면 막는다' 였는데, 그러면
+// 없는 주소(오타·지운 글)까지 /login 으로 튕겨서 404 가 한 번도 안 났다 — 사람은 영문 모를
+// 로그인 화면을 보고, 검색엔진은 없는 주소를 전부 로그인 페이지로 읽는다(2026-09-10 60명 점검).
+const PROTECTED_PREFIX = ['/admin', '/mypage', '/vault'];
+export function needsLogin(rawPath: string): boolean {
+  let path = rawPath; try { path = decodeURIComponent(rawPath); } catch {}
+  if (isPublicPath(path)) return false;
+  return PROTECTED_PREFIX.some((p) => path === p || path.startsWith(p + '/'));
+}
+
 // 한글 주소 별칭. app/사업운세 와 app/사주/[slug] 는 소스에 있지만 Next 가 한글 세그먼트를
 // 라우팅하지 못해 배포본에서 404 였다(x-matched-path 가 라우트가 아니라 퍼센트 인코딩 문자열로 잡힌다).
 // 내용은 ASCII 쪽에 그대로 있으므로 여기서 넘긴다. 라우트 파일은 삭제했다.
@@ -152,8 +162,8 @@ export async function middleware(req: NextRequest) {
   });
   const { data: { user } } = await sb.auth.getUser();
 
-  // 공개 경로 외(보관함·마이페이지·리포트 열람 등)는 로그인 필요.
-  if (!user && !isPublicPath(req.nextUrl.pathname)) {
+  // 보관함·마이페이지·관리자만 로그인 필요. 그 밖의 없는 주소는 그대로 흘려 404 를 받게 한다.
+  if (!user && needsLogin(req.nextUrl.pathname)) {
     const to = req.nextUrl.clone();
     to.pathname = '/login';
     to.search = `?next=${encodeURIComponent(req.nextUrl.pathname + (req.nextUrl.search || ''))}`;

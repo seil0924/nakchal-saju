@@ -42,7 +42,7 @@ export default function IndustryPage({ params }: { params: { slug: string } }) {
         <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 11, letterSpacing: '.28em', color: '#a99f88', fontWeight: 700, marginBottom: 6 }}>業種別 入札</div>
+        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#a99f88', fontWeight: 700, marginBottom: 6 }}>業種別 入札</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 10px' }}>{r.name} 대표 — 입찰 흐름과 발주처 궁합</h1>
         <p style={{ fontSize: 15.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>{r.intro}</p>
         <div style={card}><div style={h}>{r.name} 입찰·적격심사 특성</div><p style={p}>{r.trait}</p></div>
@@ -69,7 +69,7 @@ export default function IndustryPage({ params }: { params: { slug: string } }) {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 22 }}>
           {INDUSTRIES.filter(x => x.slug !== r.slug).map(x => (<Link key={x.slug} href={`/industry/${x.slug}`} style={chip}>{x.name}</Link>))}
         </div>
-        <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다. 실제 투찰금액 산정 근거가 아닙니다.</p>
+        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다. 실제 투찰금액 산정 근거가 아닙니다.</p>
       </div>
     </div>
   );

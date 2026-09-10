@@ -186,14 +186,14 @@ export default function Home() {
       <nav aria-label="입찰 사주 가이드" style={{ padding: '6px 22px 4px' }}>
         <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.02em', color: '#6b6249', margin: '10px 0 8px' }}>입찰 사주 가이드 · 지역별</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {GUIDES.map(g => (<Link key={g.slug} href={`/guide/${g.slug}`} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{g.keywords[0]}</Link>))}
-          {REGIONS.map(r => (<Link key={r.slug} href={`/region/${r.slug}`} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{r.name} 입찰</Link>))}
-          {INDUSTRIES.map(x => (<Link key={x.slug} href={`/industry/${x.slug}`} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{x.name}</Link>))}
-          <Link href="/faq" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>자주 묻는 질문</Link>
-          <Link href="/why" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>대표 고민별</Link>
-          <Link href="/samples" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>샘플 리포트</Link>
-          <Link href="/glossary" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>용어사전</Link>
-          <Link href="/method" style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>계산 방법</Link>
+          {GUIDES.map(g => (<Link key={g.slug} href={`/guide/${g.slug}`} style={{ fontSize: 12, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{g.keywords[0]}</Link>))}
+          {REGIONS.map(r => (<Link key={r.slug} href={`/region/${r.slug}`} style={{ fontSize: 12, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{r.name} 입찰</Link>))}
+          {INDUSTRIES.map(x => (<Link key={x.slug} href={`/industry/${x.slug}`} style={{ fontSize: 12, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{x.name}</Link>))}
+          <Link href="/faq" style={{ fontSize: 12, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>자주 묻는 질문</Link>
+          <Link href="/why" style={{ fontSize: 12, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>대표 고민별</Link>
+          <Link href="/samples" style={{ fontSize: 12, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>샘플 리포트</Link>
+          <Link href="/glossary" style={{ fontSize: 12, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>용어사전</Link>
+          <Link href="/method" style={{ fontSize: 12, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>계산 방법</Link>
         </div>
       </nav>
 
@@ -203,7 +203,7 @@ export default function Home() {
       <nav aria-label="사주 개념" style={{ padding: '2px 22px 8px' }}>
         <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.02em', color: '#6b6249', margin: '10px 0 8px' }}>사주 개념 · 내 사주로 확인</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {CONCEPTS.map(c => (<Link key={c.slug} href={`/saju/${c.slug}`} style={{ fontSize: 11.5, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{c.label}</Link>))}
+          {CONCEPTS.map(c => (<Link key={c.slug} href={`/saju/${c.slug}`} style={{ fontSize: 12, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{c.label}</Link>))}
         </div>
       </nav>
 

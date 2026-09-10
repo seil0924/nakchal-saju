@@ -64,7 +64,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
             {g.related.map((r, i) => (<Link key={i} href={r.href} style={chip}>{r.label}</Link>))}
           </div>
         </>)}
-        <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다. 실제 투찰금액 산정의 근거로 사용할 수 없습니다.</p>
+        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력·십성·오행 상성으로 산출한 명리 기반 참고·오락용 정보입니다. 실제 투찰금액 산정의 근거로 사용할 수 없습니다.</p>
       </div>
     </div>
   );

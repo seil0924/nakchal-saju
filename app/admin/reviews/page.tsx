@@ -107,7 +107,7 @@ export default async function AdminReviews() {
                   등록하고 바로 게시
                 </button>
               </form>
-              <p style={{ fontSize: 11.5, color: '#a09884', lineHeight: 1.65, margin: '12px 0 0' }}>
+              <p style={{ fontSize: 12, color: '#a09884', lineHeight: 1.65, margin: '12px 0 0' }}>
                 받은 경로와 날짜는 관리자 화면에만 남고 손님에게는 안 보입니다.
               </p>
             </div>
@@ -119,11 +119,11 @@ export default async function AdminReviews() {
                 <div key={r.id} style={{ borderTop: '1px solid #efe7d6', padding: '12px 0' }}>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap' }}>
                     <b>{r.nickname}</b>
-                    {r.biz && <span style={{ fontSize: 11.5, color: '#7c7768' }}>{r.biz}</span>}
+                    {r.biz && <span style={{ fontSize: 12, color: '#7c7768' }}>{r.biz}</span>}
                     <span style={{ color: '#b58a2f', fontSize: 13 }}>{stars(r.rating)}</span>
-                    <span style={{ fontSize: 11.5, color: '#8d8672' }}>{(r.created_at || '').slice(0, 16).replace('T', ' ')}</span>
+                    <span style={{ fontSize: 12, color: '#8d8672' }}>{(r.created_at || '').slice(0, 16).replace('T', ' ')}</span>
                     {looksPromotional(r.body) && (
-                      <span style={{ fontSize: 11.5, fontWeight: 800, color: '#8f2f1c', background: '#fbf0ee', border: '1px solid #e6c4bc', borderRadius: 999, padding: '2px 8px' }}>
+                      <span style={{ fontSize: 12, fontWeight: 800, color: '#8f2f1c', background: '#fbf0ee', border: '1px solid #e6c4bc', borderRadius: 999, padding: '2px 8px' }}>
                         광고 의심 — 링크·연락처
                       </span>
                     )}
@@ -145,10 +145,10 @@ export default async function AdminReviews() {
                 <div key={r.id} style={{ borderTop: '1px solid #efe7d6', padding: '12px 0' }}>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap' }}>
                     <b>{r.nickname}</b>
-                    {r.biz && <span style={{ fontSize: 11.5, color: '#7c7768' }}>{r.biz}</span>}
+                    {r.biz && <span style={{ fontSize: 12, color: '#7c7768' }}>{r.biz}</span>}
                     <span style={{ color: '#b58a2f', fontSize: 13 }}>{stars(r.rating)}</span>
-                    <span style={{ fontSize: 11.5, color: '#8d8672' }}>{(r.created_at || '').slice(0, 16).replace('T', ' ')}</span>
-                    {r.source && <span style={{ fontSize: 11, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '2px 8px' }}>{r.source}로 받음</span>}
+                    <span style={{ fontSize: 12, color: '#8d8672' }}>{(r.created_at || '').slice(0, 16).replace('T', ' ')}</span>
+                    {r.source && <span style={{ fontSize: 12, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '2px 8px' }}>{r.source}로 받음</span>}
                   </div>
                   <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#3a3630', margin: '6px 0 9px', whiteSpace: 'pre-wrap' }}>{r.body}</p>
                   <div style={{ display: 'flex', gap: 8 }}>

@@ -68,7 +68,7 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
         {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 14.5, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
 
-        <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, margin: '18px 0 20px' }}>※ 발주처 설립일은 공개 연혁 기준 자체 DB이며, 명리 기반 참고·오락용 정보입니다. 실제 투찰 판단의 근거로 사용할 수 없습니다.</p>
+        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, margin: '18px 0 20px' }}>※ 발주처 설립일은 공개 연혁 기준 자체 DB이며, 명리 기반 참고·오락용 정보입니다. 실제 투찰 판단의 근거로 사용할 수 없습니다.</p>
       </div>
     </div>
   );

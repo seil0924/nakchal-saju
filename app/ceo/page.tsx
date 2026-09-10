@@ -173,7 +173,7 @@ export default function CeoTwin() {
         {!res && (<>
         <div className="card">
           <label>성함 <span className="opt">(선택)</span></label>
-          <input value={f.name} maxLength={12} placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
+          <input value={f.name} maxLength={12} aria-label="성함" placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
           <label>달력</label>
           <div className="seg">
             <button className={seg(f.cal === 'solar')} onClick={() => set('cal', 'solar')}>양력</button>
@@ -297,8 +297,8 @@ export default function CeoTwin() {
             </div>
 
             <div className="sharewrap">
-              <button className="sharebtn primary" onClick={share}>결과 링크 공유<span style={{ fontWeight: 500, fontSize: 11.5, display: 'block', marginTop: 2 }}>카카오톡 · 문자</span></button>
-              <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 11.5, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
+              <button className="sharebtn primary" onClick={share}>결과 링크 공유<span style={{ fontWeight: 500, fontSize: 12, display: 'block', marginTop: 2 }}>카카오톡 · 문자</span></button>
+              <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 12, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
             </div>
 
             {/* 미끼 브리지 — 유형은 알려줬지만 '나 개인'은 감춰 갈증을 만든다 */}

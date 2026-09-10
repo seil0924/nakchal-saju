@@ -25,7 +25,7 @@ export default function ThanksPage({ searchParams }: { searchParams: { kind?: st
       <div style={{ padding: '40px 22px 24px', textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 76, height: 76, borderRadius: '50%', background: 'linear-gradient(135deg,#a5241f,#7d1d12)', border: '2px solid var(--gold2)', color: '#f6e7c8', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 38, margin: '0 auto 20px', boxShadow: '0 8px 26px rgba(125,29,18,.28)' }}>士</div>
 
-        <div style={{ fontSize: 11, letterSpacing: '.28em', color: '#a99f88', fontWeight: 700, marginBottom: 8 }}>結濟 完了</div>
+        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#a99f88', fontWeight: 700, marginBottom: 8 }}>結濟 完了</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 24, lineHeight: 1.4, color: 'var(--ink)', margin: '0 0 12px' }}>{title}</h1>
         <p style={{ fontSize: 14.5, lineHeight: 1.85, color: '#3a3630', fontWeight: 500, margin: '0 auto 26px', maxWidth: 340 }}>{sub}</p>
 
@@ -42,7 +42,7 @@ export default function ThanksPage({ searchParams }: { searchParams: { kind?: st
           <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
         </p>
 
-        <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, margin: '26px auto 0', maxWidth: 340 }}>영수증·결제 내역은 결제하신 카드사/간편결제 앱에서 확인하실 수 있습니다. 문의는 사이트 하단 연락처로 남겨주세요.</p>
+        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, margin: '26px auto 0', maxWidth: 340 }}>영수증·결제 내역은 결제하신 카드사/간편결제 앱에서 확인하실 수 있습니다. 문의는 사이트 하단 연락처로 남겨주세요.</p>
       </div>
     </div>
   );

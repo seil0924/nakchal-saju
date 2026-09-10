@@ -98,6 +98,14 @@ export default function ReportView({ params }: { params: { id: string } }) {
         <p><Link href="/vault" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 보관함</Link></p></div>
       <div className="wrap">
         {err && <div className="errbox">{err}</div>}
+        {/* 리포트를 못 찾으면 한 줄 오류만 남아 막다른 화면이 됐다. 왜 그런지와 갈 곳을 같이 준다. */}
+        {err && !res && (
+          <div className="card" style={{ textAlign: 'center', lineHeight: 1.8, color: '#3a3f47', fontSize: 14 }}>
+            <p style={{ margin: 0 }}>주소가 잘렸거나 공유 링크가 만료됐을 수 있습니다.<br />로그인하셨다면 보관함에 저장된 리포트가 있습니다.</p>
+            <Link className="cta" href="/reading" style={{ marginTop: 14 }}>무료로 새로 뽑기 →</Link>
+            <p style={{ marginTop: 10 }}><Link href="/vault" style={{ color: 'var(--navy)', fontWeight: 700 }}>보관함 열기</Link></p>
+          </div>
+        )}
         {res && (
           <div className="rcols" id="rep">
             <div className="rleft">
@@ -179,7 +187,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장
             </button>
-            {level < 2 && <div className="no-print" style={{ textAlign: 'center', fontSize: 11.5, color: '#a99f88', marginTop: 6 }}>상품을 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
+            {level < 2 && <div className="no-print" style={{ textAlign: 'center', fontSize: 12, color: '#a99f88', marginTop: 6 }}>상품을 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
             </div>
           </div>
         )}

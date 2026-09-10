@@ -16,9 +16,9 @@
 /* 명식 세 기둥 — 설립일에는 시(時)가 없어 삼주다 */
 ._hspil { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 ._hspil .p { background: #faf6ec; border: 1px solid #e6dcc4; border-radius: 12px; padding: 11px 6px; text-align: center; }
-._hspil .lb { font-size: 11px; color: #7c7768; font-weight: 700; }
+._hspil .lb { font-size: 12px; color: #7c7768; font-weight: 700; }
 ._hspil .gz { font-family: var(--serif); font-size: 25px; font-weight: 900; line-height: 1.15; margin-top: 4px; }
-._hspil .el { font-size: 11px; color: #7c7768; margin-top: 3px; }
+._hspil .el { font-size: 12px; color: #7c7768; margin-top: 3px; }
 
 /* 이 화면이 답하는 한 줄 */
 .hsphase { border-radius: 14px; padding: 16px; text-align: center; }

@@ -39,7 +39,7 @@ export default function MethodPage() {
         <Link className="ic" href="/glossary" aria-label="용어사전" style={{ fontSize: 12, fontWeight: 700, color: '#7f786c', textDecoration: 'none' }}>용어사전 ›</Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 11, letterSpacing: '.28em', color: '#a99f88', fontWeight: 700, marginBottom: 6 }}>計算 方法論</div>
+        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#a99f88', fontWeight: 700, marginBottom: 6 }}>計算 方法論</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 23, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>어떻게 계산하나 — 명식을 세우는 방법</h1>
         <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>사주 해석의 정확도는 명식을 얼마나 정확히 세우는가에서 갈립니다. 낙찰사주는 아래 원리로 여덟 글자를 계산합니다. 해석 자체는 명리 이론에 기반한 참고·오락용입니다.</p>
         {SEC.map((s, i) => (
@@ -52,7 +52,7 @@ export default function MethodPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '18px 0 22px' }}>
           <Link href="/glossary/절기" style={chip}>절기</Link><Link href="/glossary/진태양시" style={chip}>진태양시</Link><Link href="/glossary/야자시" style={chip}>야자시</Link><Link href="/glossary/만세력" style={chip}>만세력</Link><Link href="/faq" style={chip}>자주 묻는 질문</Link>
         </div>
-        <p style={{ fontSize: 11.5, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력 계산의 정확도를 높인 것이며, 해석과 예측은 명리 이론에 기반한 참고·오락용 정보입니다.</p>
+        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력 계산의 정확도를 높인 것이며, 해석과 예측은 명리 이론에 기반한 참고·오락용 정보입니다.</p>
       </div>
     </div>
   );

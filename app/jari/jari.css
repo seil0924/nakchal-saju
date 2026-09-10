@@ -6,22 +6,22 @@
 /* ── 나침반 ── */
 .jr-card{background:#1c1c1d;border-radius:4px;padding:14px 10px 12px;margin:12px 0 16px}
 .jr-card svg{display:block;width:100%;height:auto;max-width:360px;margin:0 auto}
-.jr-cap{margin-top:10px;text-align:center;font-size:11.5px;line-height:1.62;color:rgba(239,234,224,.72)}
+.jr-cap{margin-top:10px;text-align:center;font-size:12px;line-height:1.62;color:rgba(239,234,224,.72)}
 .jr-cap b{color:#efeae0;font-weight:800}
 .jr-caut{display:block;margin-top:7px;padding-top:7px;border-top:1px solid rgba(239,234,224,.14);
-  font-size:10.5px;line-height:1.6;color:rgba(224,168,159,.92)}
+  font-size:12px;line-height:1.6;color:rgba(224,168,159,.92)}
 .jr-caut b{color:#f0c6bf;font-weight:800}
 
 /* ── 단락 ── */
 .jr-sec{margin:0 0 22px}
 .jr-h{display:flex;align-items:center;gap:8px;margin:0 0 6px;font-family:var(--serif);font-size:15.5px;font-weight:800;color:#1e2124}
 .jr-h em{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:2px;
-  background:#1c1c1d;color:#efeae0;font-style:normal;font-size:11px;font-weight:800}
+  background:#1c1c1d;color:#efeae0;font-style:normal;font-size:12px;font-weight:800}
 .jr-lead{margin:0 0 12px;font-size:12.5px;line-height:1.7;color:#4a5158}
 
 /* ── 방위 고르기 ── */
 .jr-pick{margin:0 0 12px}
-.jr-plab{margin:0 0 6px;font-size:11.5px;font-weight:800;color:#58616a}
+.jr-plab{margin:0 0 6px;font-size:12px;font-weight:800;color:#58616a}
 .jr-pbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .jr-pb{padding:9px 0;border:1px solid #ddd6c6;border-radius:3px;background:#fdfbf6;
   font-size:12.5px;font-weight:700;color:#3a4046;cursor:pointer;transition:transform .12s ease,background .12s ease}
@@ -36,7 +36,7 @@
 .jr-verd.caution{border-left-color:#a8321f;background:#faf1ef}
 .jr-verd b{display:block;font-size:13.5px;font-weight:800;color:#1e2124;margin-bottom:5px}
 .jr-verd span{display:block;font-size:12.5px;line-height:1.72;color:#3a4046}
-.jr-verd em{display:block;margin-top:7px;font-style:normal;font-size:11px;line-height:1.6;color:#5d646b}
+.jr-verd em{display:block;margin-top:7px;font-style:normal;font-size:12px;line-height:1.6;color:#5d646b}
 
 .jr-el{padding:11px 13px;border-radius:3px;background:#fdfbf6;border:1px solid #e6dcc4;
   font-size:12.5px;line-height:1.72;color:#3a4046;margin:0 0 12px}
@@ -46,12 +46,12 @@
 .jr-bibo{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .jr-bibo li{padding:11px 13px;border:1px solid #e7e3d8;border-radius:3px;background:#fff}
 .jr-bibo b{display:block;font-size:13px;font-weight:800;color:#1e2124}
-.jr-bibo span{display:block;margin-top:3px;font-size:11.5px;font-weight:700;color:#84621a}
-.jr-bibo em{display:block;margin-top:4px;font-style:normal;font-size:11.5px;line-height:1.6;color:#4a5158}
+.jr-bibo span{display:block;margin-top:3px;font-size:12px;font-weight:700;color:#84621a}
+.jr-bibo em{display:block;margin-top:4px;font-style:normal;font-size:12px;line-height:1.6;color:#4a5158}
 
 /* ── 주소 입력 ── */
 .jr-fl{display:block;margin:0 0 9px}
-.jr-fl span{display:block;margin:0 0 5px;font-size:11.5px;font-weight:800;color:#58616a}
+.jr-fl span{display:block;margin:0 0 5px;font-size:12px;font-weight:800;color:#58616a}
 .jr-fl input{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #ddd6c6;border-radius:3px;
   background:#fff;font-size:13.5px;color:#1e2124}
 .jr-fl input::placeholder{color:#8b9199}
@@ -68,24 +68,24 @@
 .jr-days li{display:grid;grid-template-columns:52px 26px 1fr auto;align-items:center;gap:9px;
   padding:10px 12px;border:1px solid #e7e3d8;border-radius:3px;background:#fff}
 .jr-days .jd{font-size:13px;font-weight:800;color:#1e2124}
-.jr-days .jd em{margin-left:3px;font-style:normal;font-size:10.5px;font-weight:700;color:#6b7278}
+.jr-days .jd em{margin-left:3px;font-style:normal;font-size:12px;font-weight:700;color:#6b7278}
 .jr-days .jk{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
   border-radius:2px;background:#1c1c1d;color:#efeae0;font-family:var(--serif);font-size:12px;font-weight:800}
-.jr-days .jw{font-size:11.5px;line-height:1.5;color:#4a5158;min-width:0}
+.jr-days .jw{font-size:12px;line-height:1.5;color:#4a5158;min-width:0}
 .jr-days .jw b{display:block;font-size:12px;font-weight:800;color:#1e2124}
 .jr-days .jg{font-family:var(--serif);font-size:12px;font-weight:700;color:#84621a}
 
 /* ── 진입 유도 ── */
 .jr-cta{display:block;padding:14px 15px;border-radius:3px;background:#1c1c1d;color:#efeae0;
   text-decoration:none;font-family:var(--serif);font-size:14px;font-weight:800;text-align:center}
-.jr-cta small{display:block;margin-top:5px;font-family:inherit;font-size:11px;font-weight:500;
+.jr-cta small{display:block;margin-top:5px;font-family:inherit;font-size:12px;font-weight:500;
   color:rgba(239,234,224,.72)}
 
 /* 유료 진입만 인주색 테두리를 두른다 — 무료 진입과 한눈에 갈리게 */
 .jr-cta.pay{background:#7a1f16;margin:4px 0 14px}
 .jr-cta.pay small{color:rgba(250,240,236,.86)}
 
-.jr-disc{margin:0;font-size:11px;line-height:1.7;color:#5d646b}
+.jr-disc{margin:0;font-size:12px;line-height:1.7;color:#5d646b}
 
 @media (min-width:560px){
   .jr-pbtns{grid-template-columns:repeat(8,1fr)}

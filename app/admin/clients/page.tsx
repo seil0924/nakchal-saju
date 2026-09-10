@@ -10,7 +10,7 @@ export default function AdminClients() {
           <table><tbody>
             <tr><th>발주처</th><th>설립일</th><th>분야</th><th>노출</th><th>관리</th></tr>
             {CLIENTS.map((c: any, i: number) => (
-              <tr key={i}><td className="who">{c.name}</td><td>{c.date ?? "-"}</td><td>{c.cat ?? "-"}</td><td><span className="pill unlock">노출</span></td><td><a style={{ color: 'var(--gold)', fontWeight: 700, textDecoration: 'none', fontSize: 11 }}>수정 →</a></td></tr>
+              <tr key={i}><td className="who">{c.name}</td><td>{c.date ?? "-"}</td><td>{c.cat ?? "-"}</td><td><span className="pill unlock">노출</span></td><td><a style={{ color: 'var(--gold)', fontWeight: 700, textDecoration: 'none', fontSize: 12 }}>수정 →</a></td></tr>
             ))}
           </tbody></table>
         </div>

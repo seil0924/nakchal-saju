@@ -39,7 +39,7 @@ export default function TaekilHub() {
       </div>
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 11, letterSpacing: '.28em', color: '#6f6a58', fontWeight: 700, marginBottom: 6 }}>擇 日</div>
+        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#6f6a58', fontWeight: 700, marginBottom: 6 }}>擇 日</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 23, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>언제 시작할 것인가</h1>
         <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>
           개업·법인 설립·계약·사무실 이전·입찰. 하는 일에 따라 좋은 날이 다릅니다. 건제십이신(建除十二神)으로
@@ -98,7 +98,7 @@ const card: React.CSSProperties = {
   borderRadius: 13, padding: '13px 15px', textDecoration: 'none',
 };
 const pill: React.CSSProperties = {
-  fontSize: 11.5, fontWeight: 700, color: '#6f6a58',
+  fontSize: 12, fontWeight: 700, color: '#6f6a58',
   background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '3px 8px',
 };
 

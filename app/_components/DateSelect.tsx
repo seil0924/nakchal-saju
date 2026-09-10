@@ -22,9 +22,9 @@ export default function DateSelect({ value, onChange, yearFrom = 1930, yearTo = 
   };
   return (
     <div className="bdate">
-      <select value={y || ''} onChange={e => { const v = +e.target.value; setY(v); commit(v, m, d); }}><option value="" disabled>년</option>{YEARS.map(v => <option key={v} value={v}>{v}년</option>)}</select>
-      <select value={m || ''} onChange={e => { const v = +e.target.value; setM(v); commit(y, v, d); }}><option value="" disabled>월</option>{MONTHS.map(v => <option key={v} value={v}>{v}월</option>)}</select>
-      <select value={d || ''} onChange={e => { const v = +e.target.value; setD(v); commit(y, m, v); }}><option value="" disabled>일</option>{DAYS.map(v => <option key={v} value={v}>{v}일</option>)}</select>
+      <select aria-label="연도" value={y || ''} onChange={e => { const v = +e.target.value; setY(v); commit(v, m, d); }}><option value="" disabled>년</option>{YEARS.map(v => <option key={v} value={v}>{v}년</option>)}</select>
+      <select aria-label="월" value={m || ''} onChange={e => { const v = +e.target.value; setM(v); commit(y, v, d); }}><option value="" disabled>월</option>{MONTHS.map(v => <option key={v} value={v}>{v}월</option>)}</select>
+      <select aria-label="일" value={d || ''} onChange={e => { const v = +e.target.value; setD(v); commit(y, m, v); }}><option value="" disabled>일</option>{DAYS.map(v => <option key={v} value={v}>{v}일</option>)}</select>
     </div>
   );
 }

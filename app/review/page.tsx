@@ -72,7 +72,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
             <div className="rvempty">
               <div className="big">후기 게시판이 아직 켜지지 않았습니다</div>
               <div className="sm">Supabase → SQL Editor 에서 <b>supabase/reviews.sql</b> 을 한 번 실행하면 이 화면이 살아납니다.
-                {why && <><br /><span style={{ fontSize: 11.5, color: '#8f2f1c' }}>({why})</span></>}
+                {why && <><br /><span style={{ fontSize: 12, color: '#8f2f1c' }}>({why})</span></>}
               </div>
             </div>
           )}
