@@ -296,6 +296,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       setRes(r);
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
       // (스크롤 점프 제거 — 잠긴 항목 클릭 시 화면이 위로 튀지 않도록 제자리 갱신)
+      // 버튼에 "열기 · 9,900원" 이라고 적어놓고 누르면 리포트만 다시 뽑고 끝났다 — 결제하려면
+      // 새로 생긴 버튼을 또 찾아 눌러야 했다(2026-09-10 60명 점검). 뽑은 그 자리에서 결제창을 연다.
+      setModal(true);
     } catch { setErr('상품을 여는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
     finally { setBusy(false); }
   }

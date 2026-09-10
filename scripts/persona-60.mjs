@@ -373,9 +373,18 @@ const flowPeople = [
 ];
 console.log(`\n흐름 ${flowPeople.length}명 — 생년월일 넣고 결제창까지 (결제하기는 누르지 않음)`);
 
+// 상대가 필요한 상품은 손님이 실제로 들어오는 주소로 들어간다 — /balju 에서 발주처를 고르면
+// ?ck=client&cn=…&cd=… 로, 궁합은 ?ck=partner 로 상대가 미리 채워진다(ReadingForm 135줄).
+// 이전(ijeon)은 /jari 에서 주소를 넣어야 뽑히는 설계라, 그 안내가 뜨면 통과로 본다.
+const PREFILL = {
+  gunghap: '&ck=partner&cn=' + encodeURIComponent('점검용 상대') + '&cd=1975-05-05',
+  balju: '&ck=client&cn=' + encodeURIComponent('한국도로공사') + '&cd=1969-02-15',
+};
+const EXPECT_GUIDE = { ijeon: /자리 사주는 사무실 주소/ };
+
 for (const [k, persona] of flowPeople.entries()) {
   const cat = FLOW_CATS[k % FLOW_CATS.length];
-  const page = '/reading' + (cat ? `?cat=${cat}` : '');
+  const page = '/reading' + (cat ? `?cat=${cat}${PREFILL[cat] ?? ''}` : '');
   const tag = `${page} (흐름)`;
   const row = { who: `${persona.roleLabel} ${persona.name}`, view: persona.view.label, cat: cat || '(없음)', result: false, sec: null, locks: 0, price: null, modal: false, note: '' };
   const fail = (kind, detail, severity = '높음') => raw.push({ kind, what: tag, detail, severity, page: tag, persona });
@@ -408,6 +417,8 @@ for (const [k, persona] of flowPeople.entries()) {
       if (state === 'report' || state === 'result' || state.startsWith('error:')) break;
     }
     row.sec = +((Date.now() - t0) / 1000).toFixed(1);
+    // 필수 입력이 없을 때 폼이 무엇이 필요한지 말해 주면 그게 맞는 동작이다(이전 = /jari 주소).
+    if (state.startsWith('error:') && EXPECT_GUIDE[cat] && EXPECT_GUIDE[cat].test(state)) { row.note = '필수 입력 안내가 뜸(정상)'; flowRows.push(row); process.stdout.write('  ' + (k + 1) + '/' + flowPeople.length + ' · ' + row.who + ' · cat=' + row.cat + ' · 안내 정상\n'); continue; }
     if (state.startsWith('error:')) { fail('결과 대신 오류', state.slice(6)); row.note = state; flowRows.push(row); continue; }
     if (state !== 'report' && state !== 'result') { fail('결과가 안 나옴', `21초를 기다려도 결과 화면이 안 떴습니다 (${state || '반응 없음'}).`); flowRows.push(row); continue; }
     row.result = true;
@@ -426,7 +437,8 @@ for (const [k, persona] of flowPeople.entries()) {
     if (info.priced === 0) fail('잠금 버튼에 가격이 없음', '"열기" 버튼 어디에도 가격이 적혀 있지 않습니다.', '중간');
     // 결제창을 연다
     await evaluate(`(() => { const b = [...document.querySelectorAll('.cta, .tunlock')].find((e) => e.offsetParent); b && b.click(); })()`);
-    await sleep(1200);
+    // 카테고리 없는 결과는 누르면 그 상품으로 리포트를 다시 뽑은 뒤 결제창을 연다 — 서버를 한 번 다녀온다.
+    for (let w = 0; w < 12 && !(await evaluate("!!document.querySelector('.modal.on')")); w += 1) await sleep(700);
     const modal = await evaluate(`(() => {
       const m = document.querySelector('.modal.on');
       if (!m) return { open: false, href: location.pathname };
