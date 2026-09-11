@@ -5,11 +5,17 @@ export const dynamic = 'force-dynamic';
 import { revalidatePath } from 'next/cache';
 import { listAllReviews, setApproved, insertAdminReview, deleteReview, SOURCES } from '@/lib/reviews-db';
 import { looksPromotional, stars, validateReview, BIZ, NICK_MAX, BODY_MAX } from '@/lib/reviews';
+import { authEnabled, isAdmin } from '@/lib/supabase/server';
 
 const touch = () => { revalidatePath('/admin/reviews'); revalidatePath('/review'); revalidatePath('/'); };
 
+// 서버 액션은 레이아웃의 관리자 확인을 거치지 않는다 — 액션 주소만 알면 누구나 POST 할 수 있다.
+// 여기가 비어 있어서, 관리자가 아니어도 후기를 올리고(홈·/review 에 공개된다) 지우고 지어 넣을 수 있었다.
+async function guard() { return authEnabled() && (await isAdmin()); }
+
 async function approve(formData: FormData) {
   'use server';
+  if (!(await guard())) return;
   const id = Number(formData.get('id'));
   const to = String(formData.get('to')) === '1';
   if (Number.isInteger(id)) { await setApproved(id, to); touch(); }
@@ -17,6 +23,7 @@ async function approve(formData: FormData) {
 
 async function remove(formData: FormData) {
   'use server';
+  if (!(await guard())) return;
   const id = Number(formData.get('id'));
   if (Number.isInteger(id)) { await deleteReview(id); touch(); }
 }
@@ -24,6 +31,7 @@ async function remove(formData: FormData) {
 // 전화·카톡으로 받은 후기를 옮겨 적는 자리. 공개 폼과 같은 검증을 태운다.
 async function addReview(formData: FormData) {
   'use server';
+  if (!(await guard())) return;
   const v = validateReview({
     nickname: formData.get('nickname'), biz: formData.get('biz'),
     rating: formData.get('rating'), body: formData.get('body'),
