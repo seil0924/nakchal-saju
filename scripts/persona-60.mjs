@@ -157,7 +157,9 @@ const AUDIT = (role, mobile) => `(() => {
   if (R === 'marketer' || R === 'planner') {
     const title = document.title || '';
     if (!title || title.length < 8) say('제목이 없거나 짧음', location.pathname, '탭 제목: "' + title + '"', '중간');
-    const priv = /^\\/(report|admin|mypage|login)/.test(location.pathname);
+    // 색인 제외(noindex) 페이지 — 404·로그인·리포트 — 는 canonical·공유 그림이 없어야 맞다(첫 재실행 404 페이지 오탐).
+    const noindex = /noindex/i.test(document.querySelector('meta[name="robots"]')?.getAttribute('content') || '');
+    const priv = noindex || /^\\/(report|admin|mypage|login)/.test(location.pathname);
     const desc = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
     if (!desc && !priv) say('검색 설명이 없음', location.pathname, '검색 결과에 한 줄 설명이 안 뜹니다.', '낮음');
     if (R === 'marketer') {
@@ -355,7 +357,11 @@ for (const persona of personas) {
         const ok = page.startsWith('/report/does') ? (docStatus === 404 || docStatus === 200) : docStatus === want;
         if (!ok) found.push({ kind: `응답 코드 ${docStatus}`, what: page, detail: `${want} 이어야 합니다.`, severity: docStatus >= 500 ? '높음' : '중간' });
         if (docMs > 4000) found.push({ kind: '느린 첫 응답', what: page, detail: `문서가 ${(docMs / 1000).toFixed(1)}초 만에 왔습니다.`, severity: '낮음' });
-        for (const e of pageEvents) found.push({ kind: e.kind, what: page, detail: e.detail, severity: e.kind.startsWith('요청 실패 5') || e.kind === '잡히지 않은 오류' ? '높음' : '중간' });
+        for (const e of pageEvents) {
+          // 없는 리포트를 열면 리포트 API 가 404 를 주는 게 정상이다(화면은 안내를 띄운다).
+          if (page === '/report/does-not-exist' && e.kind === '요청 실패 404' && e.detail.startsWith('/api/report/get')) continue;
+          found.push({ kind: e.kind, what: page, detail: e.detail, severity: e.kind.startsWith('요청 실패 5') || e.kind === '잡히지 않은 오류' ? '높음' : '중간' });
+        }
       }
       pageCache.set(cacheKey, found);
     }

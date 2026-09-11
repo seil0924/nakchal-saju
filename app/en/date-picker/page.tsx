@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   },
 };
 
+// "next 90 days" — baked once at deploy it goes stale within days. Rebuild hourly.
+export const revalidate = 3600;
+
 export default function DatePickerPage() {
   const ld = [
     {
@@ -62,7 +65,8 @@ export default function DatePickerPage() {
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>Free · no sign-up · the next 90 days</div>
       </div>
 
-      <DayPicker />
+      {/* 서버가 그린 날(UTC)로 첫 그림을 맞추고, 붙은 뒤 읽는 사람의 현지 날짜로 바꾼다. */}
+      <DayPicker todayYmd={new Date().toISOString().slice(0, 10)} />
 
       <section className="bz-read" lang="en">
         <h3>What the twelve officers are</h3>

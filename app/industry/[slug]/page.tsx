@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { INDUSTRIES } from '@/lib/seo-landings';
 import { CLIENTS, clientSlug } from '@/lib/clients';
+import { ogCard } from '@/lib/og';
 
 const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => INDUSTRIES.find(r => r.slug === decodeURIComponent(slug));
@@ -15,7 +16,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const title = `${r.name} 대표 입찰 사주 — 낙찰 흐름과 발주처 궁합`;
   const description = `${r.name} 대표님을 위한 입찰 사주 — 오늘의 투찰 택일·길일·발주처 궁합을 30초 무료로. ${r.intro}`.slice(0, 155);
   return { title, description, alternates: { canonical: `/industry/${r.slug}` },
-    openGraph: { title, description, url: `${BASE}/industry/${r.slug}`, type: 'article', siteName: '낙찰사주' },
+    openGraph: { title, description, url: `${BASE}/industry/${r.slug}`, type: 'article', siteName: '낙찰사주',
+      images: ogCard({ seal: '業', k: '業種 入札', t: `${r.name} 대표 입찰 사주`, s: '낙찰 흐름과 발주처 궁합' }) },
     keywords: [...r.keywords, '업종별 입찰', '낙찰사주'] };
 }
 

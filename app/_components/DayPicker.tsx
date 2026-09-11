@@ -1,17 +1,22 @@
 'use client';
 // 영어권 택일. 무엇을 하려는지 고르면 앞으로 석 달 중 맞는 날을 내놓는다.
 // 피하는 날도 같이 보여 준다 — 겁주려는 게 아니라 왜 그날은 빼는지 보이려는 것이다.
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PURPOSES, pickDays, avoidDays, OFFICERS, type Purpose } from '@/lib/daypicker-en';
+import { localYmd, dateFromYmd } from '@/lib/kst';
 
 const ORDER: Purpose[] = ['opening', 'contract', 'moving', 'travel', 'wedding'];
 const RANK_TONE = ['a', 'b', 'c', 'd'];
 
-export default function DayPicker() {
+// todayYmd — 서버가 그린 날. 첫 그림을 서버와 똑같이 맞추고(하이드레이션 오류 #425 방지),
+// 붙은 뒤 읽는 사람의 현지 날짜가 다르면 그때 다시 그린다 — 영어판은 한국 날짜가 아니라 그 사람의 오늘이다.
+export default function DayPicker({ todayYmd }: { todayYmd: string }) {
   const [purpose, setPurpose] = useState<Purpose>('opening');
   const [showAvoid, setShowAvoid] = useState(false);
 
-  const today = useMemo(() => new Date(), []);
+  const [todayKey, setTodayKey] = useState(todayYmd);
+  useEffect(() => { const k = localYmd(); if (k !== todayKey) setTodayKey(k); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const today = useMemo(() => dateFromYmd(todayKey), [todayKey]);
   const good = useMemo(() => pickDays(purpose, today, 90), [purpose, today]);
   const bad = useMemo(() => avoidDays(today, 90), [today]);
   const info = PURPOSES[purpose];

@@ -2,9 +2,10 @@
 // 한국어 택일 화면. 무엇을 하려는지 고르면 앞으로 석 달 중 맞는 날을 내놓는다.
 // 피하는 날도 접어서 같이 둔다 — 겁주려는 게 아니라 왜 그날은 빼는지 보이려는 것이다.
 // 계산은 lib/daypicker-en 하나만 쓴다(lib/taekil 이 그걸 감싸고 있다).
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { TAEKIL, OFFICER_KO, goodDays, badDays, taekilBySlug } from '@/lib/taekil';
+import { kstYmd, dateFromYmd } from '@/lib/kst';
 
 const TONE = ['a', 'b', 'c', 'd'];
 // 요일은 영어판 엔진이 Fri·Sun 으로 내준다. 계산을 갈라 놓지 않으려고 그대로 두고,
@@ -15,9 +16,14 @@ const dowKo = (ymd: string) => {
   return DOW_KO[new Date(y, m - 1, d).getDay()];
 };
 
-export default function TaekilPick({ slug, showTabs = false }: { slug: string; showTabs?: boolean }) {
+// todayYmd — 서버가 그린 날(한국 기준). 이걸로 첫 그림을 서버와 똑같이 그려야 하이드레이션이 맞는다.
+// 렌더 중에 new Date() 를 부르면 서버(UTC·빌드 시점)와 브라우저의 "오늘" 이 달라 React 오류 #425 가 났다.
+// 브라우저가 붙은 뒤 날짜가 넘어갔으면 그때 한 번 다시 그린다.
+export default function TaekilPick({ slug, showTabs = false, todayYmd }: { slug: string; showTabs?: boolean; todayYmd: string }) {
   const [cur, setCur] = useState(slug);
-  const today = useMemo(() => new Date(), []);
+  const [todayKey, setTodayKey] = useState(todayYmd);
+  useEffect(() => { const k = kstYmd(); if (k !== todayKey) setTodayKey(k); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const today = useMemo(() => dateFromYmd(todayKey), [todayKey]);
   const good = useMemo(() => goodDays(cur, today, 90), [cur, today]);
   const bad = useMemo(() => badDays(today, 90), [today]);
   const [openAvoid, setOpenAvoid] = useState(false);

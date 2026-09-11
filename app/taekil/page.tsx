@@ -4,6 +4,10 @@ import Link from 'next/link';
 import { TAEKIL, OFFICER_KO } from '@/lib/taekil';
 import TaekilPick from '@/app/_components/TaekilPick';
 import { ogCard, ogCardUrl } from '@/lib/og';
+import { kstYmd } from '@/lib/kst';
+
+// "앞으로 90일" 목록이라 배포 때 한 번 구우면 며칠 뒤엔 지난 날짜를 보여준다. 한 시간마다 다시 굽는다.
+export const revalidate = 3600;
 
 const CARD = { seal: '擇', k: '擇日 · 언제 시작할 것인가', t: '개업·설립·계약·이전·입찰\n좋은 날 고르기', s: '건제십이신으로 앞으로 90일 · 무료' };
 
@@ -66,7 +70,7 @@ export default function TaekilHub() {
       <div style={{ padding: '18px 18px 0' }}>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 8 }}>바로 골라 보기</div>
       </div>
-      <TaekilPick slug="개업일" showTabs />
+      <TaekilPick slug="개업일" showTabs todayYmd={kstYmd()} />
 
       <section className="bz-read" style={{ padding: '0 18px 24px' }}>
         <h3>건제십이신이 무엇인가</h3>

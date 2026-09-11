@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CLIENTS, clientSlug, clientBySlug, josa } from '@/lib/clients';
 import { baljuContent } from '@/lib/balju-content';
+import { ogCard } from '@/lib/og';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -20,7 +21,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title, description,
     alternates: { canonical: `/balju/${clientSlug(c.name)}` },
-    openGraph: { title, description, url, type: 'article', siteName: '낙찰사주' },
+    openGraph: { title, description, url, type: 'article', siteName: '낙찰사주',
+      images: ogCard({ seal: '官', k: '發注處 宮合', t: `${c.name} 입찰`, s: '대표님과 맞는 발주처일까 · 낙찰사주' }) },
     keywords: [c.name, `${c.name} 입찰`, `${c.name} 조달`, `${c.name} 낙찰`, `${c.name} 입찰 방식`, ct.sector, c.cat, '발주처 궁합', '입찰 사주', '낙찰사주'],
   };
 }

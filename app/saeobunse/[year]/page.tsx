@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ogCard } from '@/lib/og';
 
 const BASE = 'https://nakchalsaju.com';
 const MIN = 2026, MAX = 2035;
@@ -81,7 +82,8 @@ export function generateMetadata({ params }: { params: { year: string } }): Meta
     title, description,
     keywords: [`${y} 사업운세`, '띠별 운세', '출생연도별 운세', '12지신 운세', yi.ganzhi, '입찰운'],
     alternates: { canonical: `/saeobunse/${y}` },
-    openGraph: { title: `${y} ${yi.ganzhi} 12지신 사업·입찰운세`, description: '띠별·출생연도별 올해의 수주 흐름', type: 'article', siteName: '낙찰사주', url: `${BASE}/saeobunse/${y}` },
+    openGraph: { title: `${y} ${yi.ganzhi} 12지신 사업·입찰운세`, description: '띠별·출생연도별 올해의 수주 흐름', type: 'article', siteName: '낙찰사주', url: `${BASE}/saeobunse/${y}`,
+      images: ogCard({ seal: '運', k: `${yi.ganzhi} · 十二支`, t: `${y} 12지신 사업·입찰운세`, s: '출생연도별 올해의 수주 흐름' }) },
   };
 }
 

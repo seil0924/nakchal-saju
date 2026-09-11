@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { REGIONS } from '@/lib/seo-landings';
 import { CLIENTS, clientSlug } from '@/lib/clients';
+import { ogCard } from '@/lib/og';
 
 const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => REGIONS.find(r => r.slug === decodeURIComponent(slug));
@@ -16,7 +17,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const title = `${r.name} 입찰 사주 — 지역 발주처 궁합과 낙찰 흐름`;
   const description = `${r.name} 지역 발주처(${r.clients.join('·')})와 대표님 사주의 궁합, 오늘의 투찰 택일·길일을 30초 무료로. ${r.intro}`;
   return { title, description, alternates: { canonical: `/region/${r.slug}` },
-    openGraph: { title, description, url: `${BASE}/region/${r.slug}`, type: 'article', siteName: '낙찰사주' },
+    openGraph: { title, description, url: `${BASE}/region/${r.slug}`, type: 'article', siteName: '낙찰사주',
+      images: ogCard({ seal: '地', k: '地域 發注處', t: `${r.name} 입찰 사주`, s: '지역 발주처 궁합 · 낙찰사주' }) },
     keywords: [`${r.name} 입찰`, `${r.name} 조달`, `${r.name} 발주처`, `${r.name} 입찰 사주`, '지역 입찰', '낙찰사주'] };
 }
 

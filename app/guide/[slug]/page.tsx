@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { GUIDES } from '@/lib/seo-landings';
 import { GUIDE_FAQS } from '@/lib/faq';
+import { ogCard } from '@/lib/og';
 
 const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => GUIDES.find(g => g.slug === decodeURIComponent(slug));
@@ -15,7 +16,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title: g.title, description: g.lead.slice(0, 155),
     alternates: { canonical: `/guide/${g.slug}` },
-    openGraph: { title: g.title, description: g.lead.slice(0, 155), url: `${BASE}/guide/${g.slug}`, type: 'article', siteName: '낙찰사주' },
+    openGraph: { title: g.title, description: g.lead.slice(0, 155), url: `${BASE}/guide/${g.slug}`, type: 'article', siteName: '낙찰사주',
+      images: ogCard({ seal: '札', k: '入札 四柱', t: g.title, s: '낙찰사주' }) },
     keywords: [...g.keywords, '낙찰사주', '입찰 사주'],
   };
 }

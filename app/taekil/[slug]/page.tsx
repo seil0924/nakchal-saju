@@ -5,6 +5,10 @@ import { redirect } from 'next/navigation';
 import { TAEKIL, OFFICER_KO, taekilBySlug } from '@/lib/taekil';
 import TaekilPick from '@/app/_components/TaekilPick';
 import { ogCard, ogCardUrl } from '@/lib/og';
+import { kstYmd } from '@/lib/kst';
+
+// "앞으로 90일" 목록이라 배포 때 한 번 구우면 며칠 뒤엔 지난 날짜를 보여준다. 한 시간마다 다시 굽는다.
+export const revalidate = 3600;
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -78,7 +82,7 @@ export default function TaekilPage({ params }: { params: { slug: string } }) {
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 14px' }}>{t.lead}</p>
       </div>
 
-      <TaekilPick slug={t.slug} />
+      <TaekilPick slug={t.slug} todayYmd={kstYmd()} />
 
       <section className="bz-read" style={{ padding: '0 18px 8px' }}>
         {t.body.map((b, i) => (
