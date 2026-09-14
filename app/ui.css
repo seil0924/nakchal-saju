@@ -215,3 +215,12 @@ html body .gmneedle::after{background:var(--u-blue)!important;border-color:#fff!
 html body .sajmonhd b{color:var(--u-ink)!important}
 html body .bizsum .bsk.av,html body .bwl .bwm.av,html body .bsc .bsk.av{background:none!important}
 html body .weekahead .wacell.now{box-shadow:inset 0 0 0 1px var(--u-blue)!important}
+
+/* ═════════ 상단 막대 (페이지 공통) ═════════
+   홈은 로고 막대(.h6-top), 나머지는 뒤로 + 제목 한 줄. 예전 .hero(짙은 머리 → 흰 머리)를 대신한다. */
+html body .u-top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:4px;min-height:56px;padding:0 16px 0 6px;background:#fff;border-bottom:1px solid var(--u-line)}
+html body .u-top h1{margin:0;font-size:17px!important;font-weight:800;color:var(--u-ink);letter-spacing:-.01em;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .u-back{flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;color:var(--u-ink)}
+html body .u-back svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html body .u-back:active{background:var(--u-soft)}
+@media (min-width:900px){html body .u-top{position:static}}

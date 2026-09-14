@@ -421,11 +421,10 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
 
   return (
     <div className="app">
-      <div className="hero">
-        
-        <h1>{catInfo ? catInfo.name : '회사 사주 · 오늘의 투찰 택일'}</h1>
-        <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p>
-      </div>
+      <header className="u-top">
+        <Link href="/" className="u-back" aria-label="홈으로"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></Link>
+        <h1>{catInfo ? catInfo.name : '사주 보기'}</h1>
+      </header>
       <div className="wrap">
         {!res && (<>
         {/* 0. 컨셉 훅 — 카테고리별 몰입 배너 */}
@@ -435,17 +434,10 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <span>{HOOK[cat].d}</span>
           </div>
         )}
-        {/* 0-1. 이걸 알게 됩니다 — 폼보다 먼저 온다.
-            전에는 이 자리가 비어 있어서, 처음 온 대표가 보는 게 빈 입력폼뿐이었다.
-            뭘 얻는지 모르는 채로 생년월일부터 넣으라고 하면 아무도 안 넣는다. */}
-        {catInfo && catInfo.gives?.length > 0 && (
-          <div className="card">
-            <div className="st"><span className="l"><span className="b" />이걸 알게 됩니다</span>
-              <span className="opt">{catInfo.name}</span></div>
-            <ul className="gives">
-              {catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}
-            </ul>
-            <p className="note">아래에 생년월일을 넣으시면 <b>명식과 방향은 무료로</b> 먼저 나옵니다. 위 항목은 열어보실 때 결제하십시오.</p>
+        {!cat && (
+          <div className="rd-hook">
+            <b>생년월일만 넣으면 30초</b>
+            <span>명식과 오늘의 투찰 신호가 무료로 나옵니다. 가입은 필요 없습니다.</span>
           </div>
         )}
         {/* 0-2. 사업운 캘린더 — 기간 선택(이달/연간 한 경로) */}
@@ -462,24 +454,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             </div>
           </div>
         )}
-        {/* 1. 상황 (사정률·통합에서만) */}
-        {ui.situation && (<div className="card">
-          <div className="st"><span className="l"><span className="b" />지금 어떤 입찰을 앞두고 계세요?</span></div>
-          <div className="chips">
-            {BID_TYPES.map(t => <button key={t} className={'chip2' + (f.bidType === t ? ' on' : '')} onClick={() => set('bidType', f.bidType === t ? '' : t)}>{t}</button>)}
-          </div>
-          {f.bidType && (<div className="reveal">
-          <div className="qh">지금 상황은? <span className="opt">(고르면 리포트에 반영됩니다)</span></div>
-          <div className="chips">
-            {CONDITIONS.map(t => <button key={t} className={'chip2' + (f.condition === t ? ' on' : '')} onClick={() => set('condition', f.condition === t ? '' : t)}>{t}</button>)}
-          </div>
-          <label style={{ marginTop: 14 }}>지금 가장 고민되는 결정 <span className="opt">(선택)</span></label>
-          <textarea value={f.worry} maxLength={200} onChange={e => set('worry', e.target.value)} placeholder="예) 이번 도로공사 큰 건, 넣을지 말지 고민입니다" />
-          </div>)}
-        </div>)}
-
         {/* 2. 대표님 정보 */}
-        <div className="card reveal" style={{ display: (ui.selfImmediate || f.bidType || f.birth) ? undefined : 'none' }}>
+        <div className="card">
           <div className="st"><span className="l"><span className="b" />대표님 생년월일</span></div>
           {savedSelf.length > 0 && (
             <button type="button" className="pickbtn" onClick={() => setPicker({ open: true, kind: 'self' })}>
@@ -552,6 +528,36 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           </div>}
         </div>
 
+        {/* 상황 (사정률·통합에서만) — 고르지 않아도 뽑힌다. 생년월일 아래로 내렸다. */}
+        {ui.situation && (<div className="card">
+          <div className="st"><span className="l"><span className="b" />지금 어떤 입찰을 앞두고 계세요?</span><span className="opt">선택</span></div>
+          <div className="chips">
+            {BID_TYPES.map(t => <button key={t} className={'chip2' + (f.bidType === t ? ' on' : '')} onClick={() => set('bidType', f.bidType === t ? '' : t)}>{t}</button>)}
+          </div>
+          {f.bidType && (<div className="reveal">
+          <div className="qh">지금 상황은? <span className="opt">(고르면 리포트에 반영됩니다)</span></div>
+          <div className="chips">
+            {CONDITIONS.map(t => <button key={t} className={'chip2' + (f.condition === t ? ' on' : '')} onClick={() => set('condition', f.condition === t ? '' : t)}>{t}</button>)}
+          </div>
+          <label style={{ marginTop: 14 }}>지금 가장 고민되는 결정 <span className="opt">(선택)</span></label>
+          <textarea value={f.worry} maxLength={200} onChange={e => set('worry', e.target.value)} placeholder="예) 이번 도로공사 큰 건, 넣을지 말지 고민입니다" />
+          </div>)}
+        </div>)}
+
+
+        {/* 0-1. 이걸 알게 됩니다 — 폼보다 먼저 온다.
+            전에는 이 자리가 비어 있어서, 처음 온 대표가 보는 게 빈 입력폼뿐이었다.
+            뭘 얻는지 모르는 채로 생년월일부터 넣으라고 하면 아무도 안 넣는다. */}
+        {catInfo && catInfo.gives?.length > 0 && (
+          <div className="card">
+            <div className="st"><span className="l"><span className="b" />이걸 알게 됩니다</span>
+              <span className="opt">{catInfo.name}</span></div>
+            <ul className="gives">
+              {catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}
+            </ul>
+            <p className="note">위에 생년월일을 넣으시면 <b>명식과 방향은 무료로</b> 먼저 나옵니다. 이 항목들은 열어보실 때 결제하십시오.</p>
+          </div>
+        )}
         {/* 3. 회사 정보 */}
         <div id="cocard" className="card reveal" style={{ display: (f.birth && ui.legal !== 'hidden') ? undefined : 'none' }}>
           <div className="st"><span className="l"><span className="b" />회사 정보</span><span className={'chip ' + (ui.legal === 'required' ? 'paid' : 'free')}>{ui.legal === 'required' ? '필수' : '회사 사주'}</span></div>
@@ -757,8 +763,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       {!res && !prog && !confirm && (
         <div className="rd-bar no-print">
           <div className="rd-bar-tx">
-            <b>{catInfo ? catInfo.name : '회사 사주 리포트'}</b>
-            <span>{catInfo ? `명식·방향 무료 · 전체 ${won(catInfo.price)}` : '명식·방향 무료'}</span>
+            <b>{catInfo ? catInfo.name : '사주 보기'}</b>
+            <span>{catInfo ? `명식·방향 무료 · 전체 ${won(catInfo.price)}` : '명식·오늘의 신호 무료'}</span>
           </div>
           <button type="button" className="go" disabled={busy} onClick={() => {
             if (!f.birth) {
