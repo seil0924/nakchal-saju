@@ -33,7 +33,7 @@ html body .rhero .lab{color:var(--u-sub)!important;font-weight:700!important}
 html body .rhero .sub2{color:var(--u-sub)!important;font-weight:600!important;margin-top:8px!important}
 
 /* 명식 */
-html body .wonguk{background:#fff!important;border:1px solid var(--u-line)!important;box-shadow:none!important;border-radius:var(--u-r-card)!important;padding:16px 14px 14px!important}
+html body .wonguk{background:#fff!important;border:1px solid var(--u-line)!important;box-shadow:none!important;border-radius:var(--u-r-card)!important}
 html body .wonguk .wgt{font-size:15px!important;font-weight:800!important;color:var(--u-ink)!important;text-align:left!important;margin-bottom:12px!important;letter-spacing:0}
 html body .wgpos{font-size:13px!important;font-weight:700!important;color:var(--u-sub)!important}
 html body .wgcol.day .wgpos{color:var(--u-blue-ink)!important}
@@ -180,7 +180,7 @@ html body .cheobang .cbk{color:var(--u-blue-ink)!important}
 html body .ileon{background:var(--u-soft)!important;background-image:none!important;border:0!important}
 html body .ileon .ilk{color:var(--u-blue-ink)!important}
 html body .ileon p{color:var(--u-ink)!important}
-html body .bwl .bwm.av,html body .bsc .bsk.av{background:#fff!important;color:var(--u-warn)!important}
+html body .bwl .bwm.av,html body .bsc .bsk.av{color:var(--u-warn)!important}
 html body .bwl .bwm.mv{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important}
 html body .bizweek{background:#fff!important;background-image:none!important;border:1px solid var(--u-line)!important}
 html body .baljulock{background:var(--u-soft)!important;background-image:none!important}
@@ -238,7 +238,7 @@ html body .st-menu svg{width:22px;height:22px;stroke:currentColor;stroke-width:1
 /* 페이지 제목 묶음(.hero) — 왼쪽 정렬, 제목 22 · 설명 15 */
 html body .hero,html body .home .hero{background:#fff!important;background-image:none!important;border-bottom:0!important;text-align:left!important;padding:22px 20px 8px!important}
 html body .hero::before,html body .hero::after{display:none!important}
-html body .hero h1,html body .hero h2{font-size:22px!important;font-weight:800!important;line-height:1.4!important;color:var(--u-ink)!important;margin:0!important;letter-spacing:-.02em}
+html body .hero h1,html body .hero h2{font-size:22px!important;font-weight:800!important;line-height:1.4!important;color:var(--u-ink)!important;margin:0!important}
 html body .hero p,html body .hero [style*="color"],html body .hero div:not(.k):not(.kick){color:var(--u-sub)!important;font-size:15px!important}
 html body .hero a{color:var(--u-blue-ink)!important}
 

@@ -3,22 +3,12 @@ html .home5 .hcslide{transition:opacity .22s ease!important}
 html .home5 .hcslide.on .hckick{animation-duration:.25s!important;animation-delay:0s!important}
 html .home5 .hcslide.on .hctitle{animation-duration:.3s!important;animation-delay:.05s!important}
 /* === sweep8: 히어로 — 정보형 플랫 배너(영상 off, 건설넷 구조 x KRDS 블루) === */
-html .home5 .herocar{background:linear-gradient(150deg,#3f6be0,#2646a3)!important;height:290px!important}
-@media(min-width:560px){html .home5 .herocar{height:310px!important}}
 html .home5 .hcslide video{display:none!important}
-html .home5 .hcslide{justify-content:center!important;padding:36px 30px!important}
-html .home5 .hctitle{text-shadow:none!important}
-html .home5 .hcgo{background:#fff!important;color:#2f56c4!important;border:0!important}
-html .home5 .herocar::after{content:"";position:absolute;right:26px;bottom:34px;width:150px;height:190px;z-index:0;pointer-events:none;opacity:.28;background:linear-gradient(#fff,#fff) 0 100%/26px 115px no-repeat,linear-gradient(#fff,#fff) 41px 100%/26px 165px no-repeat,linear-gradient(#fff,#fff) 82px 100%/26px 140px no-repeat,linear-gradient(#fff,#fff) 123px 100%/26px 190px no-repeat}
-html .home5 .herocar::before{content:"";position:absolute;right:26px;bottom:236px;width:22px;height:22px;border-radius:50%;background:#ffb4a8;opacity:.75;z-index:0;pointer-events:none}
 /* === sweep7: 히어로 카루셀 자막 — 금색 은퇴(영상은 유지) === */
-html .home5 .hckick{color:rgba(255,255,255,.82)!important}
-html .home5 .hctitle b{color:#9ab7f5!important}
 /* === sweep6: 밸런스 — 사이드바 화이트 플립(파랑=포인트만). html 프리픽스로 우선순위 확보 === */
 html .dsidebar{background:#fff!important;color:#1e2124!important;border-right:1px solid #e6e8ea!important}
 html .dbrand{border-bottom-color:#e6e8ea!important}
 html .dbrand .dbt{color:#1e2124!important}
-html .dbrand .dbt small{color:#8a949e!important}
 html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!important;color:#fff!important}
 html .dcta:hover{background:#2f56c4!important}
 html .dnavi{color:#464c53!important}
@@ -35,7 +25,6 @@ html .home5 .nav5 .c .cl{color:rgba(255,255,255,.9)!important}
 /* 푸터 — sweep14가 앞쪽에 놓여 sweep6에 덮였다. 중복 클래스로 확정 */
 html .dfoot.dfoot{color:#636d77!important}
 html .dfoot .dfoot-biz.dfoot-biz{color:#636d77!important}
-html .dbrand .dbt small{color:#636d77!important}
 html .app>.foot.foot{color:#636d77!important}
 html .foot .bizinfo.bizinfo{color:#636d77!important}
 html .app>.foot a,html .foot a{color:#58616a!important}
@@ -55,7 +44,7 @@ html .tlive .tl-stamp{color:rgba(239,234,224,.6)!important}
 html .tlive .tl-week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(239,234,224,.16)}
 html .tlive .tw-d{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;border-radius:7px;background:rgba(239,234,224,.06);border:1px solid transparent}
 html .tlive .tw-d.now{border-color:rgba(239,234,224,.5);background:rgba(239,234,224,.13)}
-html .tlive .tw-dw{font-size:13px;color:rgba(239,234,224,.5)}
+html .tlive .tw-dw{font-size:13px}
 html .tlive .tw-n{font-size:13px;font-weight:700;color:#f0ebe2;line-height:1}
 html .tlive .tw-k{font-family:var(--serif);font-weight:900;font-size:13px;line-height:1;padding:2px 0 1px;border-radius:3px;width:20px;text-align:center;color:#fff}
 html .tlive .tw-d.v-good .tw-k{background:#1f7a55}
@@ -95,7 +84,7 @@ html .tlive .tl-tk.v-bad .tl-k{background:#b3382c}
 html .tlive .tl-tx{display:flex;flex-direction:column;gap:3px;min-width:0}
 html .tlive .tl-tx b{font-size:13px;font-weight:700;color:#f4f0e8}
 html .tlive .tl-tx span{font-size:13px;line-height:1.6;color:rgba(239,234,224,.76);word-break:keep-all}
-html .tlive .tl-stamp{margin-top:10px;font-size:13px;color:rgba(239,234,224,.45);letter-spacing:.01em}
+html .tlive .tl-stamp{margin-top:10px;font-size:13px;letter-spacing:.01em}
 /* 이어보기 — 재방문자 전용 */
 html .home5>.tl-resume{display:flex;align-items:center;gap:10px;margin:8px 24px 2px;padding:12px 14px;background:#fff;border:1px solid #3f6be0;border-radius:10px;text-decoration:none}
 html .tl-resume .tlr-k{flex:none;width:28px;height:28px;border-radius:6px;background:#eef3fe;color:#2646a3;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:15px}
@@ -116,11 +105,6 @@ html .colrel .crd{font-size:13px;color:#636d77}
 /* === sweep14: 가독성 — WCAG AA 미달 전수 교정 === */
 /* 다크 컨테이너 강조 텍스트 복구 (sweep11 역침범 차단) */
 html .mecard.mecard b,html .mecard.mecard .mep b,html .hero b,html .ceoband b,html .sealcmp b,html .loginpromo b,html .ileon b,html .bokpage b,html .trhd b,html .herocar b{color:#ffffff!important}
-html .mecard{background:#202022!important;background-image:none!important;border-color:#33332f!important}
-html .mecard .mep{color:rgba(243,238,228,.88)!important}
-html .mecard .mep.dim{color:rgba(243,238,228,.72)!important}
-html .mecard .mel{color:#ffffff!important}
-html .mecard .merule{background:rgba(243,238,228,.42)!important}
 html .mecard::before{color:rgba(255,255,255,.05)!important}
 /* 흐린 회색 → AA 통과 */
 html .axhd span,html .sbnote,html .ten,html .trdisc,html .disc,html .readyline{color:#58616a!important}
@@ -169,21 +153,14 @@ html .dfoot .dlinks a{color:#58616a!important}
 html .dfoot .dfoot-biz{color:#8a949e!important}
 /* === sweep5: 투어 발견 — CTA 텍스트/신뢰패널/복채/발주처 pill/핵심배지 === */
 .home5 .today .tcta b{color:#fff!important}
-.home5 .today .tcta b .a{color:rgba(255,255,255,.8)!important}
-.home5 .today .tcta em{color:rgba(255,255,255,.75)!important}
 .trust{border-color:#e6e8ea!important;background:#fff!important}
-.trhd{color:#fff!important}
 .trm{border-bottom-color:#e6e8ea!important}
 .trm span{color:#58616a!important}
 .li .r{color:#2f56c4!important;background:#fff!important;border:1px solid #3f6be0!important}
-.corelock{background:#b3382c!important;box-shadow:none!important}
+.corelock{box-shadow:none!important}
 /* === sweep4: 사이드바 하단 링크 + 사람선택 모달 베이지 제거 === */
-.dfoot{color:rgba(255,255,255,.6)!important;border-top-color:rgba(255,255,255,.22)!important}
-.dfoot .dlinks a{color:rgba(255,255,255,.85)!important}
-.dfoot .dfoot-biz{color:rgba(255,255,255,.55)!important}
 .foot .bizinfo{color:#8a949e!important}
 .pp-sheet{background:#fff!important}
-.pp-hd{color:#fff!important}
 .pp-seal{color:#fff!important;border-color:rgba(255,255,255,.85)!important}
 .pp-x{color:rgba(255,255,255,.85)!important}
 .pp-add:active{background:#eef3fe!important}
@@ -195,27 +172,13 @@ html .dfoot .dfoot-biz{color:#8a949e!important}
 /* === sweep3: 가독성 — 금색 은퇴(파랑 위=흰색, 흰 배경=잉크+파랑), 베이지→흰색 === */
 :root{--gold:#5b82e8;--gold2:#ffffff}
 @media(min-width:900px){body{background:#ffffff!important}}
-.dnavi{color:rgba(255,255,255,.78)!important}
-.dnavi svg{stroke:rgba(255,255,255,.78)!important}
-.dnavi:hover{background:rgba(255,255,255,.14)!important;color:#fff!important}
-.dnavi.on{background:rgba(255,255,255,.2)!important;color:#fff!important;border-left-color:#fff!important}
-.dnavi.on svg{stroke:#fff!important}
-.hero .k,.home .hero .kick{color:rgba(255,255,255,.85)!important}
 .pickbtn{background:#eef3fe!important;border:1.5px solid #d9e4fb!important;box-shadow:none!important}
-.pktx b{color:#1e2124!important}
 .teaser .ttx::before{background:#3f6be0!important}
 .sec .mk{background:#eef3fe!important;color:#2f56c4!important}
 
 /* === remaining dark areas -> blue (sweep 2) === */
-.ceoband,.home5 .ceoband{background:linear-gradient(135deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
-.ceoband::before{color:rgba(255,255,255,.08)!important}
-.sealcmp,.loginpromo{background:linear-gradient(150deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
-.bizyear .byhd{background:#3f6be0!important;color:#fff!important}
-.ileon{background:linear-gradient(150deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
 .acctbtn,.sheet .sumbtns button.ok,.baljupick,.donebar{background:#3f6be0!important;border-color:#3f6be0!important;color:#fff!important}
-.ybchip.on{background:#3f6be0!important;color:#fff!important;border-color:#2f56c4!important}
-.hero{background:linear-gradient(180deg,#3f6be0,#2f56c4)!important}
-.bokpage{background:linear-gradient(160deg,#2f56c4,#2646a3)!important}
+.ybchip.on{border-color:#2f56c4!important}
 /* KRDS normalize - 낙찰사주. KRDS(krds.go.kr) foundation token 적용 레이어.
    globals.css 뒤에 로드되어 색/라운드/그림자/버튼/입력/스플래시를 KRDS 규격으로 정규화. 롤링배너(.home .hero, HeroCarousel)는 제외. */
 :root{
@@ -245,8 +208,8 @@ body{letter-spacing:0;line-height:var(--krds-lh)}
 .go,.cta,.paygo,.bokgo{background:var(--krds-primary-50)!important;border:1px solid var(--krds-primary-50)!important;color:#fff!important;box-shadow:none!important}
 .go:hover,.cta:hover,.paygo:hover,.bokgo:hover{background:var(--krds-primary-60)!important}
 .tcta{background:var(--krds-primary-50)!important;border:0!important;color:#fff!important}
-.tunlock{border-color:var(--krds-point-50)!important;color:var(--krds-point-60)!important;background:#fff!important}
-.catbuy{border-color:var(--krds-point-50)!important;box-shadow:none!important}
+.tunlock{border-color:var(--krds-point-50)!important}
+.catbuy{border-color:var(--krds-point-50)!important}
 .catbuy-seal{background:var(--krds-point-50)!important;border:0!important;color:#fff!important}
 /* cards: hairline + subtle */
 .card,.sec,.li,.li5,.today,.compat{border:1px solid var(--krds-gray-10)!important;box-shadow:var(--elev-1)!important}
@@ -267,18 +230,15 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:none!import
 /* brand seal shadow off */
 /* sidebar brand box: navy frame */
 .dbrand .ds{border:0!important;background:transparent!important}
-.dcta{background:var(--krds-point-50)!important;border:0!important}
 .home5{--h-ink:#2f56c4}
 /* badges/labels tone */
-.sec .lb.free{color:#177f5e!important;background:#e7f4ee!important}
 
 /* === sweep20: 발주처 관계지도 === */
 html .bmap-wrap{margin:14px 20px 4px}
-html .bmap{background:#202022;border-radius:13px;padding:12px 12px 11px}
+html .bmap{border-radius:13px;padding:12px 12px 11px}
 html .bmap svg{display:block;width:100%;height:auto}
-html .bm-cap{margin-top:8px;font-size:13px;line-height:1.65;color:rgba(239,234,224,.62);text-align:center}
-html .bm-cap b{color:#efeae0;font-weight:700}
-html .bm-cap b.lk{color:#e6b9b3}
+html .bm-cap{margin-top:8px;font-size:13px;line-height:1.65;text-align:center}
+html .bm-cap b{font-weight:700}
 /* 떠다님 — 노드마다 주기·지연·진폭이 달라 규칙적으로 안 보인다 */
 @keyframes bmfl{0%,100%{transform:translate(0,0)}
  25%{transform:translate(var(--a),calc(var(--a)*-.6))}
@@ -298,7 +258,7 @@ html .bm-rk:first-child{border-top:0}
 html .bm-rk.lk{background:#fbfafa}
 html .bm-rk .rkn{flex:none;width:18px;text-align:center;font-size:13px;font-weight:800;color:#636d77}
 html .bm-rk .rkoh{flex:none;width:26px;height:26px;border-radius:7px;color:#fff;font-family:var(--serif);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
-html .bm-rk .rkoh.lock{background:#3a3a3d;color:#e6b9b3;border:1px dashed #b3382c}
+html .bm-rk .rkoh.lock{border:1px dashed #b3382c}
 html .bm-rk .rkm{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
 html .bm-rk .rkm b{font-size:13px;font-weight:700;color:#1e2124}
 html .bm-rk .core{font-style:normal;font-family:var(--serif);font-size:13px;color:#fff;background:#b3382c;border-radius:3px;padding:1px 4px;margin-left:4px}
@@ -311,7 +271,7 @@ html .bm-rk .bl{filter:blur(4.5px);user-select:none;opacity:.72}
 /* CTA · 고지 */
 html .bm-cta{display:block;margin-top:10px;background:#3f6be0;color:#fff;text-align:center;font-weight:700;font-size:15px;padding:14px;border-radius:9px;text-decoration:none}
 html .bm-cta.pay{background:#202022}
-html .bm-cta small{display:block;font-weight:400;font-size:13px;color:#e4ecff;margin-top:3px}
+html .bm-cta small{display:block;font-weight:400;font-size:13px;margin-top:3px}
 html .bm-cta.pay small{color:rgba(239,234,224,.72)}
 html .bm-disc{margin-top:9px;font-size:13px;line-height:1.6;color:#636d77;word-break:keep-all}
 html .bm-disc b{color:#58616a;font-weight:700}
@@ -419,12 +379,10 @@ html .chip2{color:#58616a!important}
 /* /column 머리말 부제 — .sub 는 다른 데서도 쓰여서 colhead 안으로만 좁힌다 */
 html .colhead .sub{color:#58616a!important}
 /* /full 표지·필름밴드 — 남색 위 금색이 3.05:1 이었다 */
-html .fsmk,html .home5 h1 b,html .home5 .emocore b,html .filmband .fbt b{color:#eadfc1!important}
 /* /full 목차 셰브런(2.02:1)·캡션·연호 */
 html .fchev,html .fscap{color:#58616a!important}
 html .an{color:#8a7136!important}
 /* /bokchae 어두운 카드 위 안내문 — 4.12:1 */
-html .boknote{color:#a89b83!important}
 
 /* === sweep21 (2026-09-14): 모바일 정리 — 배경은 흰색·연회색·파랑 셋 ===
    모바일 사주 사이트 15곳 비교에서, 한 페이지에 검정 배너·검정 띠·베이지 카드·흰 카드가 섞인 것이
@@ -439,13 +397,11 @@ html body .topbar .logo .s,html body .home .topbar .logo .s{font-size:0!importan
   background:#3f6be0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='10' y='19' width='3.8' height='12' rx='1.9' fill='%23fff'/%3E%3Crect x='16' y='14' width='3.8' height='17' rx='1.9' fill='%23fff'/%3E%3Crect x='22' y='17' width='3.8' height='14' rx='1.9' fill='%23fff'/%3E%3Crect x='28' y='11' width='3.8' height='20' rx='1.9' fill='%23fff'/%3E%3C/svg%3E") center/100% no-repeat!important}
 html body .topbar .ic svg,html body .home .topbar .ic svg{stroke:#1e2124!important}
 html body .topbar a,html body .home .topbar a{color:#1e2124!important}
-html body .hero,html body .home .hero{background:#fff!important;background-image:none!important;border-bottom:1px solid #e6e8ea!important;text-align:left!important;padding:22px 20px 20px!important;color:#1e2124!important}
+html body .hero,html body .home .hero{color:#1e2124!important}
 html body .hero::after,html body .home .hero::after{display:none!important}
 html body .hero h1,html body .hero h2,html body .home .hero h1,html body .home .hero h2{color:#1e2124!important;font-family:var(--sans)!important;font-weight:800!important;font-size:22px!important;letter-spacing:-.02em!important;margin-top:4px!important}
 html body .hero b,html body .home .hero h2 b{color:#1e2124!important}
 html body .hero .k,html body .hero .kick,html body .home .hero .kick{color:#2f56c4!important;font-family:var(--sans)!important;letter-spacing:0!important;font-weight:700!important}
-html body .hero p,html body .hero [style*="color"],html body .hero div:not(.k):not(.kick){color:#58616a!important}
-html body .hero a{color:#2f56c4!important}
 
 /* 짙은 카드·배너·띠 → 연회색 면 */
 html body .baljupick,html body .ceoband,html body .sealcmp,html body .ileon,html body .bizyear .byhd,html body .loginpromo,html body .mecard,html body .mecard.mecard,html body .execsum,html body .donebar,html body .acctbtn,html body .pp-hd,html body .trhd,html body .rhero,html body .wonguk,html body .amulet,html body .bmap{
@@ -469,7 +425,6 @@ html body .stickycta :is(b,em,span){color:#fff!important}
 html body :is(.seg button.on,.seg-b.on,.chip2.on,.sijin .sj.on,.ybchip.on,.pp-seg button.on){
   background:#fff!important;background-image:none!important;color:#2f56c4!important;border:1.5px solid #3f6be0!important;box-shadow:none!important}
 html body .sijin .sj.on :is(b,span){color:#2f56c4!important}
-html body .rprog .rpbar i{background:#3f6be0!important}
 html body .corelock{background:#f4f5f7!important;color:#2f56c4!important;border:1px solid #e6e8ea!important}
 html body .sec.locked .mk{background:#f4f5f7!important;color:#636d77!important}
 html body :is(.gverdict .gvseal,.bokseal,.bokdone .bdseal,.axseal,.persona .av,.profcard .pav){background:#f4f5f7!important;background-image:none!important;color:#2f56c4!important;border-color:#e6e8ea!important}
