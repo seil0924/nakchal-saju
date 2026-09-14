@@ -161,7 +161,6 @@ export default function CeoTwin() {
   return (
     <div className="app">
       <div className="hero">
-        <div className="k">運 七 技 三</div>
         <h1>나와 닮은<br />세계적 CEO는?</h1>
         <p style={{ color: '#c3cfe3', marginTop: 10, fontSize: 13.5, lineHeight: 1.7 }}>
           생년월일만 넣으면 30초. 잡스·록펠러·샤넬… 세계 거장 100인 중<br />당신의 사주와 가장 닮은 대표를 찾아 드립니다. <b style={{ color: 'var(--gold2)' }}>무료</b>

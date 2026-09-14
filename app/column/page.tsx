@@ -35,7 +35,7 @@ export default function ColumnIndex() {
       </div>
 
       <div className="colhead">
-        <div className="kick">士 · 사주 칼럼</div>
+        <div className="kick">사주 칼럼</div>
         <h1>입찰·수주 대표를 위한<br />명리 이야기</h1>
         <div className="sub">재주는 갖추셨습니다. 그 운칠(運七)을 짚는 이야기를 연재합니다.</div>
       </div>

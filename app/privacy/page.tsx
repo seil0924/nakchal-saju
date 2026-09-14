@@ -27,7 +27,7 @@ const SECTIONS: [string, string][] = [
 export default function Privacy() {
   return (
     <div className="app">
-      <div className="hero"><div className="k">運 七 技 三</div><h1>개인정보처리방침</h1>
+      <div className="hero"><h1>개인정보처리방침</h1>
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">
         <div className="card" style={{ lineHeight: 1.8, fontSize: 13.5, color: '#3a3f47' }}>

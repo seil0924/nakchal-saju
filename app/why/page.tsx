@@ -20,7 +20,6 @@ export default function WhyHub() {
 
       <div className="hero5">
         <div className="wm">運</div>
-        <div className="kick">運七技三</div>
         <h1>그 일, 대표님 <b>실력</b> 탓이<br />아닐 수 있습니다</h1>
         <div className="rule" />
         <div className="sub">대표님을 오래 괴롭힌 그 고민 — 어느 쪽에 가까운지 골라 보십시오.</div>

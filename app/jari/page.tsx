@@ -43,7 +43,7 @@ export default function Jari() {
         <Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
 
-      <div className="hero"><div className="kick">宅 · 자 리 사 주</div>
+      <div className="hero"><div className="kick">자리 사주</div>
         <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>사무실을 옮기기 전에,<br />어느 쪽인지부터</h1>
         <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>지금 자리의 문·책상 방위와 옮길 곳의 방위·택일을 함께 봅니다</div>
       </div>
@@ -59,13 +59,6 @@ export default function Jari() {
         </div>
       </nav>
 
-      <div className="tab">
-        <Link href="/"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</Link>
-        <Link href="/balju"><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5" /></svg>발주처</Link>
-        <Link className="fab" href="/reading"><span className="fi">士</span><span className="fl">오늘 전망</span></Link>
-        <Link href="/vault"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3" /></svg>보관함</Link>
-        <Link href="/more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>더보기</Link>
-      </div>
     </div>
   );
 }

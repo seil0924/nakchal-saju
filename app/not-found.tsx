@@ -19,7 +19,7 @@ const WAYS: [string, string][] = [
 export default function NotFound() {
   return (
     <div className="app">
-      <div className="hero"><div className="k">四 〇 四</div><h1>찾으시는 페이지가 없습니다</h1>
+      <div className="hero"><h1>찾으시는 페이지가 없습니다</h1>
         <p>주소가 바뀌었거나 정리된 글일 수 있습니다.</p></div>
       <div className="wrap">
         <div className="card" style={{ lineHeight: 1.8, fontSize: 14, color: '#3a3f47' }}>

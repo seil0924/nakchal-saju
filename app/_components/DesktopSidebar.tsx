@@ -70,7 +70,6 @@ export default function DesktopSidebar() {
         ))}
       </nav>
       <div className="dfoot">
-        <div className="dkick">運 七 技 三</div>
         {loc.disc}
         <div className="dfoot-biz">{loc.biz}</div>
       </div>
@@ -78,8 +77,8 @@ export default function DesktopSidebar() {
   );
   return (
     <aside className="dsidebar">
-      <Link href="/" className="dbrand"><span className="ds"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#f2ede0"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#f2ede0"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#f2ede0"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#f2ede0"/><circle cx="29.9" cy="8.2" r="2.6" fill="#b3382c"/></svg></span><span className="dbt">낙찰사주<small>會社 사주 전문</small></span></Link>
-      <Link href="/reading" className="dcta"><span className="dci">擇</span> 오늘, 넣을 날인가</Link>
+      <Link href="/" className="dbrand"><span className="ds"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#f2ede0"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#f2ede0"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#f2ede0"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#f2ede0"/><circle cx="29.9" cy="8.2" r="2.6" fill="#b3382c"/></svg></span><span className="dbt">낙찰사주<small>회사 사주 전문</small></span></Link>
+      <Link href="/reading" className="dcta">오늘, 넣을 날인가 →</Link>
       <nav className="dnav">
         {NAV.map(n => (
           <Link key={n.href} href={n.href} className={'dnavi' + (active(n.href) ? ' on' : '')}>
@@ -88,7 +87,6 @@ export default function DesktopSidebar() {
         ))}
       </nav>
       <div className="dfoot">
-        <div className="dkick">運 七 技 三</div>
         명리 기반 참고 정보입니다.<br />투찰금액 산정 근거가 아닙니다.
         <div className="dlinks"><Link href="/terms">이용약관</Link> · <Link href="/privacy">개인정보</Link> · <Link href="/refund">청약철회·환불</Link> · <Link href="/pricing">이용안내</Link></div>
         <div className="dfoot-biz">{bizFooterLine()}</div>

@@ -67,7 +67,6 @@ export default function FullIntro() {
           <source src="/fullhero.mp4" type="video/mp4" />
         </video>
         <div className="wm">命</div>
-        <div className="kick">運七技三</div>
         <h1>낙찰은 운이라면서,<br />왜 <b>운(運)</b>은 준비 안 하십니까</h1>
         <div className="rule" />
         <div className="sub">견적·실적·서류, 기술(技三)은 이미 갖추셨습니다. 이제 나머지 칠 할 — 운칠(運七)을 준비할 차례입니다.</div>
@@ -99,7 +98,6 @@ export default function FullIntro() {
       <div className="filmband">
         <video autoPlay muted loop playsInline poster="/herobg-poster.jpg"><source src="/herobg.mp4" type="video/mp4" /></video>
         <div className="fbin">
-          <div className="fbk">運 七 技 三</div>
           <div className="fbt">실력(技三)은 이미 갖추셨습니다.<br />이제 남은 건 <b>운(運七)</b>입니다.</div>
         </div>
       </div>

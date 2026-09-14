@@ -89,13 +89,6 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
         <div className="hdisc" style={{ marginTop: 14 }}>명리 기반 참고 정보 · 투찰금액 산정 근거가 아닙니다</div>
       </div>
 
-      <div className="tab">
-        <Link href="/"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z" /></svg>홈</Link>
-        <Link href="/balju"><svg viewBox="0 0 24 24"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5" /></svg>발주처</Link>
-        <Link className="fab" href="/reading"><span className="fi">擇</span><span className="fl">오늘 전망</span></Link>
-        <Link href="/vault"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3" /></svg>보관함</Link>
-        <a className="on"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>더보기</a>
-      </div>
     </div>
   );
 }

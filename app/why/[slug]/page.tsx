@@ -43,7 +43,6 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
           <source src={`/why-${p.slug}.mp4`} type="video/mp4" />
         </video>
         <div className="wm">{p.mk}</div>
-        <div className="kick">{p.kicker}</div>
         <h1>{p.title.split('\n').map((line, i) => <span key={i}>{i > 0 && <br />}<T s={line} /></span>)}</h1>
         <div className="rule" />
         <div className="sub">{p.lead}</div>

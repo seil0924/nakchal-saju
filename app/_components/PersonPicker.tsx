@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import DateSelect from '@/app/_components/DateSelect';
-import { peopleOf, savePerson, removePerson, migrateLegacy, KIND_LABEL, KIND_HANJA, KIND_DATELABEL, type Person, type PersonKind } from '@/lib/people';
+import { peopleOf, savePerson, removePerson, migrateLegacy, KIND_LABEL, KIND_DATELABEL, type Person, type PersonKind } from '@/lib/people';
 
 // 재사용 사람/업체 선택 바텀시트 (사주아이식) — 낙찰사주 브랜드(먹빛·금박)
 export default function PersonPicker({ open, kind, title, onPick, onClose }: {
@@ -35,7 +35,7 @@ export default function PersonPicker({ open, kind, title, onPick, onClose }: {
   return createPortal(
     <div className="pp-ov" onClick={e => { if ((e.target as HTMLElement).classList.contains('pp-ov')) onClose(); }}>
       <div className="pp-sheet">
-        <div className="pp-hd"><span className="pp-seal">{KIND_HANJA[kind]}</span><b>{heading}</b><button className="pp-x" onClick={onClose} aria-label="닫기">✕</button></div>
+        <div className="pp-hd"><b>{heading}</b><button className="pp-x" onClick={onClose} aria-label="닫기">✕</button></div>
 
         {!adding ? (
           <div className="pp-body">

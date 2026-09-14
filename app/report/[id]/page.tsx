@@ -94,7 +94,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
 
   return (
     <div className="app">
-      <div className="hero"><div className="k">運 七 技 三</div><h1>{catInfo ? catInfo.name : '사주 리포트'}</h1>
+      <div className="hero"><h1>{catInfo ? catInfo.name : '사주 리포트'}</h1>
         <p><Link href="/vault" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 보관함</Link></p></div>
       <div className="wrap">
         {err && <div className="errbox">{err}</div>}
@@ -217,7 +217,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 <>
                   <h3>{pick.name} 전체 열기</h3>
                   <div className="catbuy">
-                    <div className="catbuy-hd"><span className="catbuy-seal">{pick.hanja}</span><div><div className="catbuy-nm">{pick.name}</div><div className="catbuy-kick">{pick.kicker}</div></div><div className="catbuy-pp">{won(pick.price)}</div></div>
+                    <div className="catbuy-hd"><div><div className="catbuy-nm">{pick.name}</div><div className="catbuy-kick">{pick.kicker}</div></div><div className="catbuy-pp">{won(pick.price)}</div></div>
                     <div className="catbuy-lead">{pick.lead}</div>
                   </div>
                 </>

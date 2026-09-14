@@ -63,7 +63,6 @@ export default function Hoesa({ searchParams }: { searchParams: { d?: string; n?
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="hero">
-        <div className="k">會 社 四 柱</div>
         <h1>우리 회사의 사주</h1>
         <p>설립일만 넣으면 30초 · 가입도 결제도 없습니다</p>
       </div>

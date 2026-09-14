@@ -31,7 +31,6 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
 
       <div className="hero5">
         <div className="wm">{p.hanja}</div>
-        <div className="kick">{oh.el} · {p.kicker}</div>
         <h1><T s={p.title} /></h1>
         <div className="rule" />
         <div className="sub">{p.lead}</div>

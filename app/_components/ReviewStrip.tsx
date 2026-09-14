@@ -18,7 +18,6 @@ export default async function ReviewStrip() {
   return (
     <div className="rstrip" data-reveal>
       <div className="rshd">
-        <span className="rsk">利用 後記</span>
         <b>써 본 대표들의 말</b>
         {avg !== null && <span className="rsavg">{stars(Math.round(avg))} {avg}</span>}
         <Link href="/review" className="rsall">전체 보기 →</Link>

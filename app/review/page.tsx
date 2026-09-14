@@ -48,7 +48,6 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
   return (
     <div className="app">
       <div className="hero">
-        <div className="k">利 用 後 記</div>
         <h1>써 본 대표들의 말</h1>
         <p>지어낸 후기는 싣지 않습니다</p>
       </div>

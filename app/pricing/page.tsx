@@ -36,7 +36,7 @@ const PRODUCTS: [string, number, string][] = [
 export default function Pricing() {
   return (
     <div className="app">
-      <div className="hero"><div className="k">利 用 案 內</div><h1>이용안내 · 요금</h1>
+      <div className="hero"><h1>이용안내 · 요금</h1>
         <p><Link href="/" style={{ color: '#d8cba0', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">
         <div className="card">

@@ -126,7 +126,6 @@ export default function TodayChip() {
 
       {resume && (
         <Link className="tl-resume" href="/reading">
-          <span className="tlr-k" aria-hidden="true">繼</span>
           <span className="tlr-t"><b>{resume}</b> 님 명식으로 이어보기</span>
           <span className="tlr-go" aria-hidden="true">→</span>
         </Link>

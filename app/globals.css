@@ -1807,3 +1807,14 @@ dt>a{display:inline-flex;align-items:center;min-height:36px}
 .loginterms a{display:inline-block;padding:11px 2px}
 .loginswitch button{padding:9px 4px;min-height:36px}
 .bz-lang{display:inline-flex;align-items:center;min-height:36px}
+
+/* ── 하단 탭 (BottomTab, 2026-09-14) ──
+   모든 화면에서 같은 다섯 칸. 휴대폰·태블릿에서만 보이고, 데스크톱(900px~)은 사이드바가 대신한다.
+   탭이 떠 있는 화면은 바닥 여백을 줘서 마지막 줄이 탭 밑에 깔리지 않게 한다. */
+.btab{position:fixed;left:0;right:0;bottom:0;z-index:55;display:flex;background:#fff;border-top:1px solid #e6e8ea;padding-bottom:env(safe-area-inset-bottom)}
+.btab a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:58px;color:#6d7882;font-size:13px;font-weight:600;text-decoration:none;letter-spacing:-.02em}
+.btab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btab svg .dot{fill:currentColor;stroke:none}
+.btab a.on{color:#2f56c4;font-weight:800}
+body:has(.btab) .shell{padding-bottom:calc(59px + env(safe-area-inset-bottom))}
+@media (min-width:900px){.btab{display:none}body:has(.btab) .shell{padding-bottom:0}}
