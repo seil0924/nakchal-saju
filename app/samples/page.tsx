@@ -31,7 +31,7 @@ export default function SamplesPage() {
         <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>SAMPLE 四柱</div>
+        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>샘플 리포트</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>이런 결과가 나옵니다</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>가상 대표 3인의 예시입니다. 실제로는 대표님 생년월일로 오늘의 투찰 택일·유형·실전 수칙이 산출됩니다.</p>
 
