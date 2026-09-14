@@ -360,7 +360,8 @@ for (const persona of personas) {
         if (docMs > 4000) found.push({ kind: '느린 첫 응답', what: page, detail: `문서가 ${(docMs / 1000).toFixed(1)}초 만에 왔습니다.`, severity: '낮음' });
         for (const e of pageEvents) {
           // 없는 리포트를 열면 리포트 API 가 404 를 주는 게 정상이다(화면은 안내를 띄운다).
-          if (page === '/report/does-not-exist' && e.kind === '요청 실패 404' && e.detail.startsWith('/api/report/get')) continue;
+          // 없는 리포트 화면이 부른 조회가 늦게 끝나 다음 화면 몫으로 잡히기도 한다 — 주소로 거른다
+          if (e.kind === '요청 실패 404' && e.detail.startsWith('/api/report/get?id=does-not-exist')) continue;
           // Vercel 분석 스크립트(/_vercel/insights)는 배포 환경에만 있다. 로컬 dev 에서 404 는 정상이다.
           if (/localhost|127.0.0.1/.test(base) && e.kind === '요청 실패 404' && e.detail.startsWith('/_vercel/')) continue;
           found.push({ kind: e.kind, what: page, detail: e.detail, severity: e.kind.startsWith('요청 실패 5') || e.kind === '잡히지 않은 오류' ? '높음' : '중간' });
