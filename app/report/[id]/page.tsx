@@ -158,7 +158,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                   <div className="hd" role="button" tabIndex={0} aria-expanded={locked ? undefined : expanded.includes(i)}
                     onClick={locked ? openThis : () => toggleSec(i)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}><div className="ti">{sec.t}</div>
-                    {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk">{won(pPrice)}</span>}<div className="cv">▾</div></div>
+                    {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}<div className="cv">▾</div></div>
                   <div className="bd">{sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
                     : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
                       {catInfo ? <button type="button" className="tlink" onClick={openThis}>{pName}에 포함 · 열기</button> : <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button>}</div>)}</div>
@@ -182,7 +182,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {level >= 1 && res.sections?.some((s: any) => s.mk === "率") && <div className="unlocked-note">✓ 결제 확인됨 · 이달 투찰 길일과 유리한 시진이 전부 열렸습니다</div>}
             {/* 나도 보기 / CEO 브리지 — 공유받은 비소유자에게만 노출(본인 유료 리포트엔 숨김) */}
             {!res.mine && (<>
-            <Link className="cta no-print" href="/reading" style={{ marginTop: 14 }}>
+            <Link className="cta cta2 no-print" href="/reading" style={{ marginTop: 14 }}>
               나도 보기 — 무료로 시작<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 투찰 택일</small>
             </Link>
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 10 }}>

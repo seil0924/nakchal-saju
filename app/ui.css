@@ -364,3 +364,6 @@ html body .amulet{border-radius:12px!important}
 /* 복채 — 가운데 정렬 flex 안에 머리를 넣었더니 가로로 늘어섰다. 세로로 쌓는다 */
 html body .bokpage{flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;min-height:0!important}
 html body .bokpage .bokwrap{padding:28px 24px 40px!important}
+/* 공유받은 사람의 '나도 보기' — 결제 버튼 바로 아래에서 같은 파란 덩어리로 겹치지 않게 보조 버튼으로 */
+html body .cta.cta2{background:#fff!important;border:1.5px solid var(--u-blue)!important;color:var(--u-blue-ink)!important}
+html body .cta.cta2 small{color:var(--u-sub)!important}
