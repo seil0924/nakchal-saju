@@ -325,3 +325,5 @@ html body .home5 .lab span{letter-spacing:0!important;font-size:15px!important;c
 html body .home5,html body .catpage{--h-red:#2f56c4;--h-gold:#e6e8ea;--h-goldlt:#2f56c4;--h-ink:#1e2124}
 html body .home5 .arow .an{display:none!important}
 html body .home5 .colhead .kick{letter-spacing:0!important}
+/* 데스크톱은 왼쪽 사이드바가 로고·메뉴를 맡는다 — 머리 한 줄이 겹치지 않게 */
+@media (min-width:900px){html body .site-top,html body .home6 .h6-top{display:none!important}}
