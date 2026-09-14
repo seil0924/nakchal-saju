@@ -33,14 +33,58 @@
 .h6-h { margin: 0 0 14px; font-size: 17px; font-weight: 800; letter-spacing: -.01em; }
 .h6-note { margin: 12px 0 0; font-size: 13px; color: var(--h6-mut); }
 
-/* 상품 3×3 */
-.h6-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.h6-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 96px; padding: 12px 4px; border-radius: 12px; text-align: center; }
-.h6-tile:active { background: var(--h6-gray); }
-@media (hover: hover) { .h6-tile:hover { background: var(--h6-gray); } }
-.h6-ic { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; background: var(--h6-gray); }
+/* 낙찰사주의 표식 — 오행 다섯 색. 명식 글자 칸과 같은 색이라 결과 화면으로 이어진다. */
+.h6-top { position: relative; }
+.h6-top::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, #2e8b57 0 20%, #b5402f 20% 40%, #b58a2f 40% 60%, #6b7280 60% 80%, #2e5aa8 80%); }
+
+/* 첫 화면 예시 카드 — 실제 결과 화면의 축소판 */
+.h6-sample { margin: 0 0 16px; padding: 14px 16px 12px; border: 1px solid var(--h6-line); border-radius: 14px; background: #fff; box-shadow: 0 6px 20px rgba(30, 33, 36, .06); }
+.h6-sample figcaption { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--h6-sub); font-weight: 600; }
+.h6-tag { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 6px; background: var(--h6-gray); color: var(--h6-sub); font-size: 13px; font-weight: 700; }
+.h6-smain { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.h6-pils { display: flex; gap: 6px; }
+.h6-pil { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.h6-pp { font-size: 13px; color: var(--h6-mut); font-weight: 600; }
+.h6-pil.day .h6-pp { color: var(--h6-blue-d); }
+.h6-pil b { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 9px; color: #fff; font-size: 22px; font-weight: 800; line-height: 1; }
+.h6-pil.day b { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--h6-blue); }
+.h6-sig { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.h6-sl { font-size: 13px; color: var(--h6-sub); font-weight: 600; }
+.h6-sn { font-size: 40px; font-weight: 800; color: var(--h6-blue-d); line-height: 1.1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.h6-sn small { font-size: 15px; font-weight: 700; margin-left: 1px; }
+.h6-sv { font-size: 13px; font-weight: 700; color: var(--h6-ink); }
+.h6-snote { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--h6-line); font-size: 13px; color: var(--h6-mut); }
+.h6-assure { margin: 8px 0 0; text-align: center; font-size: 13px; color: var(--h6-mut); }
+
+/* 아이콘 */
+.h6-ic { flex: none; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; background: var(--h6-gray); }
 .h6-ic svg { width: 26px; height: 26px; fill: none; stroke: var(--h6-blue); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.h6-tl { font-size: 13px; font-weight: 700; line-height: 1.35; word-break: keep-all; }
+.h6-ic.sm { width: 40px; height: 40px; border-radius: 12px; }
+.h6-ic.sm svg { width: 22px; height: 22px; }
+
+/* 처음이라면 이 둘부터 */
+.h6-feat { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.h6-fcard { display: flex; align-items: center; gap: 14px; padding: 16px; border: 1px solid var(--h6-line); border-radius: 14px; position: relative; padding-right: 36px; }
+.h6-fcard::after { content: ""; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; border-top: 1.8px solid var(--h6-mut); border-right: 1.8px solid var(--h6-mut); transform: translateY(-50%) rotate(45deg); }
+.h6-fcard .h6-ic { background: #eef3fe; }
+.h6-fcard:active { background: var(--h6-gray); }
+@media (hover: hover) { .h6-fcard:hover { border-color: var(--h6-blue); } }
+.h6-ftx { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.h6-ftx b { font-size: 17px; font-weight: 800; }
+.h6-ftx span { font-size: 15px; color: var(--h6-sub); line-height: 1.5; word-break: keep-all; }
+.h6-ftx em { font-style: normal; font-size: 13px; font-weight: 700; color: var(--h6-blue-d); margin-top: 4px; }
+
+/* 다른 풀이 */
+.h6-list { list-style: none; margin: 0; padding: 0; }
+.h6-list li + li { border-top: 1px solid var(--h6-line); }
+.h6-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; min-height: 64px; }
+.h6-row:active { background: var(--h6-gray); }
+.h6-rtx { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.h6-rtx b { font-size: 15px; font-weight: 700; }
+.h6-rtx span { font-size: 13px; color: var(--h6-mut); word-break: keep-all; }
+.h6-pr { flex: none; font-size: 13px; font-weight: 700; color: var(--h6-sub); font-variant-numeric: tabular-nums; }
+.h6-pr.free { color: var(--h6-blue-d); background: #eef3fe; border-radius: 6px; padding: 2px 8px; }
 
 /* 수록 규모 */
 .h6-scale { margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }

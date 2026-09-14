@@ -12,6 +12,9 @@ import { CLIENTS } from '@/lib/clients';
 import { TYCOONS } from '@/lib/tycoon';
 import { GLOSSARY } from '@/lib/glossary';
 import { getAllColumns } from '@/lib/column';
+import { CAT_INFO, type CatKey } from '@/lib/report-categories';
+import { won } from '@/lib/constants';
+import { GAN, ZHI, EL_HEX, GAN_ELc, ZHI_ELc } from '@/lib/preview';
 
 // 홈만 스스로를 정본으로 선언한다. 레이아웃에 두면 모든 페이지가 이걸 물려받아 홈을 가리킨다.
 export const metadata: Metadata = {
@@ -23,22 +26,44 @@ export const metadata: Metadata = {
 };
 
 // 홈 — home6 (2026-09-14). 모바일 사주 사이트 15곳을 비교해 다시 짰다.
-// 규칙: 첫 화면엔 한 줄 + 버튼 하나 + 상품 3×3. 배경은 흰색·연회색·파랑 셋. 글씨는 13·15·17·22 네 단계.
+// 규칙: 첫 화면엔 한 줄 + 결과 예시 카드 + 버튼 하나, 그 아래 권하는 두 상품 → 나머지 목록(가격 표시).
+// 배경은 흰색·연회색·파랑 셋. 글씨는 13·15·17·22 네 단계. 표식은 오행 다섯 색 한 줄.
 // 장식 한자는 쓰지 않는다 — 명식 간지·건제십이신처럼 뜻이 있는 한자만 남긴다.
 // 후기가 붙으면 홈도 갱신돼야 한다. 관리자 등록 때 revalidatePath('/') 로 즉시 반영되고, 10분 주기도 함께 건다.
 export const revalidate = 600;
 
-// 상품 아홉 칸. 아이콘은 한 스타일(24px 선, 굵기 1.8)로만 그린다.
-const TILES: { href: string; label: string; d: string }[] = [
-  { href: '/hoesa', label: '회사 사주', d: 'M4 20V6l7-2v16M11 9h9v11M7 8h1M7 12h1M7 16h1M14 13h3M14 16h3M3 20h18' },
-  { href: '/reading?cat=daepyo', label: '대표 사주', d: 'M12 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM5 20c1.2-3.5 3.9-5.3 7-5.3s5.8 1.8 7 5.3' },
-  { href: '/reading?cat=sajeong', label: '투찰 택일', d: 'M5 6h14v14H5zM8.5 4v4M15.5 4v4M5 10h14M9.5 15l2 2 3.5-3.5' },
-  { href: '/balju', label: '발주처 궁합', d: 'M3 10l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18' },
-  { href: '/reading?cat=gunghap', label: '동업·협정 궁합', d: 'M9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM15 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z' },
-  { href: '/reading?cat=daeun', label: '회사 대운', d: 'M4 18l5-5 4 3 7-8M15 8h5v5' },
-  { href: '/reading?cat=calendar', label: '사업운 캘린더', d: 'M5 6h14v14H5zM8.5 4v4M15.5 4v4M5 10h14M8.5 13.5h.01M12 13.5h.01M15.5 13.5h.01M8.5 16.5h.01M12 16.5h.01' },
-  { href: '/jari', label: '사무실 자리', d: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM15.5 8.5l-2 5-5 2 2-5z' },
-  { href: '/ceo', label: '닮은 CEO', d: 'M10 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4 19c.9-2.9 3.2-4.4 6-4.4M17 18.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM19 18l2 2' },
+// 아이콘은 한 스타일(24px 선, 굵기 1.8)로만 그린다.
+const IC = {
+  company: 'M4 20V6l7-2v16M11 9h9v11M7 8h1M7 12h1M7 16h1M14 13h3M14 16h3M3 20h18',
+  person: 'M12 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM5 20c1.2-3.5 3.9-5.3 7-5.3s5.8 1.8 7 5.3',
+  pick: 'M5 6h14v14H5zM8.5 4v4M15.5 4v4M5 10h14M9.5 15l2 2 3.5-3.5',
+  client: 'M3 10l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18',
+  pair: 'M9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM15 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z',
+  trend: 'M4 18l5-5 4 3 7-8M15 8h5v5',
+  cal: 'M5 6h14v14H5zM8.5 4v4M15.5 4v4M5 10h14M8.5 13.5h.01M12 13.5h.01M15.5 13.5h.01M8.5 16.5h.01M12 16.5h.01',
+  compass: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM15.5 8.5l-2 5-5 2 2-5z',
+  ceo: 'M10 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4 19c.9-2.9 3.2-4.4 6-4.4M17 18.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM19 18l2 2',
+};
+
+// 처음 온 대표에게 권하는 두 가지. 아홉 칸이 같은 무게로 늘어서 있으면 무엇부터 누를지 모른다.
+// 가격은 CAT_INFO 에서 읽는다 — 여기 숫자를 적어 두면 가격이 바뀔 때 홈만 틀린다.
+const FEATURED: { href: string; cat: CatKey; title: string; hook: string; d: string }[] = [
+  { href: '/reading?cat=sajeong', cat: 'sajeong', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 이번 달 길일은 언제인지', d: IC.pick },
+  { href: '/reading?cat=daepyo', cat: 'daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지 — 승부 기질·재물·사람', d: IC.person },
+];
+const OTHERS: { href: string; label: string; sub: string; price: number | null; d: string }[] = [
+  { href: '/hoesa', label: '회사 사주', sub: '설립일만 넣고 30초', price: null, d: IC.company },
+  { href: '/balju', label: '발주처 사주', sub: '그 발주처와 맞는 판인가', price: CAT_INFO.balju.price, d: IC.client },
+  { href: '/reading?cat=gunghap', label: '협정·궁합 사주', sub: '손잡기 전에 깨질 궁합인지', price: CAT_INFO.gunghap.price, d: IC.pair },
+  { href: '/reading?cat=daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', price: CAT_INFO.daeun.price, d: IC.trend },
+  { href: '/reading?cat=calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', price: CAT_INFO.calendar.price, d: IC.cal },
+  { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', price: CAT_INFO.ijeon.price, d: IC.compass },
+  { href: '/ceo', label: '닮은 CEO', sub: '거장 100인 중 명식이 닮은 사람', price: null, d: IC.ceo },
+];
+
+// 첫 화면 예시 카드 — 실제 결과 화면과 같은 모양의 '예시'. 명식 간지와 오행 색은 실제 계산값(1971-07-16생)이다.
+const SAMPLE = [
+  { pos: '년주', g: 7, z: 11 }, { pos: '월주', g: 1, z: 7 }, { pos: '일주', g: 8, z: 2 },
 ];
 
 const MORE: { href: string; label: string; sub: string }[] = [
@@ -76,19 +101,61 @@ export default function Home() {
 
       <section className="h6-intro">
         <p className="h6-eye">공공입찰·수주 대표를 위한 사주</p>
-        <h1>대표와 회사의 사주,<br />생년월일 하나로 봅니다</h1>
-        <p className="h6-lead">명식과 오늘의 방향은 가입 없이 무료로 먼저 나옵니다.</p>
-        <Link className="h6-cta" href="/reading">무료로 시작하기</Link>
+        <h1>오늘 넣어도 되는 날인지,<br />대표님 명식으로 먼저 봅니다</h1>
+        <p className="h6-lead">생년월일만 넣으면 명식과 오늘의 투찰 신호가 무료로 나옵니다.</p>
+
+        <figure className="h6-sample" aria-label="결과 화면 예시">
+          <figcaption><span className="h6-tag">예시</span>1971년 7월 16일생 대표</figcaption>
+          <div className="h6-smain">
+            <div className="h6-pils" aria-label="명식 辛亥 乙未 壬寅">
+              {SAMPLE.map(p => (
+                <div key={p.pos} className={'h6-pil' + (p.pos === '일주' ? ' day' : '')}>
+                  <span className="h6-pp">{p.pos}</span>
+                  <b style={{ background: EL_HEX[GAN_ELc[p.g]] }}>{GAN[p.g]}</b>
+                  <b style={{ background: EL_HEX[ZHI_ELc[p.z]] }}>{ZHI[p.z]}</b>
+                </div>
+              ))}
+            </div>
+            <div className="h6-sig">
+              <span className="h6-sl">투찰 택일 신호</span>
+              <span className="h6-sn">65<small>점</small></span>
+              <span className="h6-sv">넣을 만한 흐름</span>
+            </div>
+          </div>
+          <p className="h6-snote">분석형 대표 · 이번 달 투찰 길일 · 시진별 흐름까지</p>
+        </figure>
+
+        <Link className="h6-cta" href="/reading?cat=sajeong">내 생년월일로 무료로 보기</Link>
+        <p className="h6-assure">가입 없이 30초 · 결제는 결과를 본 뒤에 고릅니다</p>
+      </section>
+
+      <section className="h6-sec" aria-labelledby="h6-first">
+        <h2 id="h6-first" className="h6-h">처음이라면 이 둘부터</h2>
+        <ul className="h6-feat">
+          {FEATURED.map(f => (
+            <li key={f.href}>
+              <Link href={f.href} className="h6-fcard">
+                <span className="h6-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={f.d} /></svg></span>
+                <span className="h6-ftx">
+                  <b>{f.title}</b>
+                  <span>{f.hook}</span>
+                  <em>무료 미리보기 · 전체 {won(CAT_INFO[f.cat].price)}</em>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="h6-sec" aria-labelledby="h6-pick">
-        <h2 id="h6-pick" className="h6-h">무엇을 볼까요</h2>
-        <ul className="h6-grid">
-          {TILES.map(t => (
-            <li key={t.href}>
-              <Link href={t.href} className="h6-tile">
-                <span className="h6-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={t.d} /></svg></span>
-                <span className="h6-tl">{t.label}</span>
+        <h2 id="h6-pick" className="h6-h">다른 풀이</h2>
+        <ul className="h6-list">
+          {OTHERS.map(o => (
+            <li key={o.href}>
+              <Link href={o.href} className="h6-row">
+                <span className="h6-ic sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={o.d} /></svg></span>
+                <span className="h6-rtx"><b>{o.label}</b><span>{o.sub}</span></span>
+                <span className={'h6-pr' + (o.price ? '' : ' free')}>{o.price ? won(o.price) : '무료'}</span>
               </Link>
             </li>
           ))}
