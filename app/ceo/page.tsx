@@ -241,7 +241,7 @@ export default function CeoTwin() {
             )}
 
             <div className="myeong">
-              <div className="myl">命 · {res.type} — {res.typeDesc} 명</div>
+              <div className="myl">{res.type} — {res.typeDesc} 명</div>
               <p>{res.myeong}</p>
               <p className="mys">이 거장을 일으킨 것은 재능이나 운이 아니라 <b>바로 이 명(命)</b>이었습니다. <b>{res.tycoon.name}</b> — {res.story}</p>
               <p className="mys2">맨손에서 시작해 <b>무(無)에서 유(有)를 이룬 사람</b>. 그 뿌리에 있던 기운이, 지금부터 말씀드릴 대표님의 여덟 글자와 같은 것입니다.</p>

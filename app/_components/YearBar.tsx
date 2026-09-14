@@ -6,7 +6,7 @@ export default function YearBar({ year, onChange, hanja, busy }: { year: number;
   for (let y = now - 1; y <= now + 6; y++) years.push(y);
   return (
     <div className="yearbar">
-      <div className="ybhd"><span className="ybk">歲 運</span><span className="ybt">이 풀이는 <b>{year}년{hanja ? ` (${hanja})` : ''}</b> 기준입니다 — 해마다 흐름이 바뀝니다</span></div>
+      <div className="ybhd"><span className="ybt">이 풀이는 <b>{year}년{hanja ? ` (${hanja})` : ''}</b> 기준입니다 — 해마다 흐름이 바뀝니다</span></div>
       <div className="ybrow">
         {years.map(y => (
           <button key={y} className={'ybchip' + (y === year ? ' on' : '')} disabled={busy} onClick={() => y !== year && onChange(y)}>

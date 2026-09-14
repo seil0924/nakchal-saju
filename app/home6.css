@@ -4,7 +4,7 @@
    TodayChip·ReviewStrip·TrustStrip 은 다른 곳과 같은 부품이라, 그 부품의 짙은 색 규칙을 여기서만 밝게 되돌린다. */
 
 .home6 {
-  --h6-ink: #1e2124; --h6-sub: #58616a; --h6-mut: #6d7882; --h6-line: #e6e8ea;
+  --h6-ink: #1e2124; --h6-sub: #58616a; --h6-mut: #636d77; --h6-line: #e6e8ea;
   --h6-gray: #f4f5f7; --h6-blue: #3f6be0; --h6-blue-d: #2f56c4;
   --h6-good: #1f7a55; --h6-bad: #b3382c;
   background: #fff; color: var(--h6-ink); font-size: 15px; line-height: 1.6;

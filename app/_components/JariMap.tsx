@@ -128,7 +128,7 @@ export default function JariMap() {
             const on = i === door || i === desk;
             return (
               <text key={h} x={x} y={y + 4} textAnchor="middle" fontSize={i % 2 ? 11 : 13.5}
-                fontWeight={on ? 900 : 600} fill={on ? '#1e2124' : '#6d7882'}
+                fontWeight={on ? 900 : 600} fill={on ? '#1e2124' : '#636d77'}
                 style={{ fontFamily: 'var(--serif)' }}>{h}</text>
             );
           })}

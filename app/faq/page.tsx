@@ -39,7 +39,7 @@ export default function FaqPage() {
         <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.3em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>自主 問答</div>
+        <div style={{ fontSize: 13, letterSpacing: '.3em', color: '#636d77', fontWeight: 700, marginBottom: 6 }}>自主 問答</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>자주 묻는 질문</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>입찰 사주가 무엇인지부터 발주처 궁합·투찰 택일까지 — 대표님이 가장 많이 묻는 것들에 답합니다.</p>
         {FAQ_MAIN.map((x, i) => (
@@ -57,7 +57,7 @@ export default function FaqPage() {
           <Link href="/guide/법인-설립일-사주" style={chip}>법인 설립일 사주</Link>
           <Link href="/why" style={chip}>대표 고민별</Link>
         </div>
-        <p style={{ fontSize: 13, color: '#6d7882', lineHeight: 1.65, marginBottom: 20 }}>※ 사주명리 이론에 기반한 참고·오락용 정보입니다. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다.</p>
+        <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.65, marginBottom: 20 }}>※ 사주명리 이론에 기반한 참고·오락용 정보입니다. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다.</p>
       </div>
     </div>
   );

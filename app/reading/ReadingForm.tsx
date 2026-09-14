@@ -326,6 +326,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     return out;
   }, [res, level]);
   const anyLocked = !!res && res.sections.some(s => (RANK[s.tier] ?? 2) > level && !s.html);
+  const lockedCount = res ? res.sections.filter((s2: any) => (RANK[s2.tier] ?? 2) > level).length : 0;
   const anyPass = !!res && res.sections.some(s => (s as any).passLock);   // 발주처 프리미엄 잠금 존재
 
   async function pay(chosen: 'taekil' | 'full') {
@@ -622,7 +623,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
-                <div className={'num' + (res.hero.big && (res.hero.big as any).length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 22 }}>{res.hero.unit ?? '점'}</span></div>
+                <div className={'num' + (res.hero.big && (res.hero.big as any).length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? '#2f56c4' : '#b3382c' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 22 }}>{res.hero.unit ?? '점'}</span></div>
                 <div className="lab">{res.hero.label}</div>
                 <div className="sub2">{res.hero.sub}</div>
               </div>
@@ -639,7 +640,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             )}
             <div className="rephd">{res.title}</div>
             <button className="topshare no-print" onClick={share} aria-label="결과 링크 공유">↗ 결과 공유</button>
-            {res.hero && <a className="topshare no-print" href={`/api/og/card?score=${encodeURIComponent(String(res.hero.big ?? res.hero.score))}&unit=${encodeURIComponent(res.hero.unit ?? '점')}&type=${encodeURIComponent(res.hero.label)}&note=${encodeURIComponent(res.hero.sub || '')}&up=${res.hero.up ? '1' : '0'}`} target="_blank" rel="noopener" style={{ marginLeft: 6 }}>🖼 카드 저장</a>}
+            {res.hero && <a className="topshare no-print" href={`/api/og/card?score=${encodeURIComponent(String(res.hero.big ?? res.hero.score))}&unit=${encodeURIComponent(res.hero.unit ?? '점')}&type=${encodeURIComponent(res.hero.label)}&note=${encodeURIComponent(res.hero.sub || '')}&up=${res.hero.up ? '1' : '0'}`} target="_blank" rel="noopener" style={{ marginLeft: 6 }}>카드 저장</a>}
             {res.selYear && ui.yearBar && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
@@ -662,16 +663,16 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                   <React.Fragment key={i}>
                     {catInfo && level < 2 && i === firstLockedIdx && (
                       <>
-                        <div className="readyline"><b>{catInfo.name}</b> {res.meta?.chapters ?? res.sections.length}장(章) · {res.meta?.items ?? '수십'}개 항목 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
+                        <div className="readyline"><b>{catInfo.name}</b> — 열면 이걸 알게 됩니다</div>
+                        {catInfo.gives?.length > 0 && <ul className="gives lockgives">{catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}</ul>}
                         <div className="cta" onClick={() => { setErr(''); setModal(true); }}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
-                        <div className="ctaassure">✓ 30초 · 결제 즉시 열람</div>
+                        <div className="ctaassure">카카오페이·토스로 30초 · 결제 즉시 열람</div>
                       </>
                     )}
                   <div className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                     <div className="hd" onClick={locked ? openThis : undefined}>
-                      <div className="mk">{sec.mk}</div>
                       <div className="ti">{sec.t}</div>
-                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒</span>}
+                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}
                       <div className="cv">▾</div>
                     </div>
                     <div className="bd">
@@ -679,9 +680,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                         : (
                           <div className="teaser">
                             <div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
-                            <button className="tunlock" onClick={openThis}>
-                              {`${pName} 열기 · ${won(pPrice)}`} →
-                            </button>
+                            {catInfo
+                              ? <button type="button" className="tlink" onClick={openThis}>{pName}에 포함 · 열기</button>
+                              : <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button>}
                           </div>
                         )}
                     </div>
@@ -811,8 +812,10 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               <>
                 <h3>{catInfo.name} 전체 열기</h3>
                 <div className="catbuy">
-                  <div className="catbuy-hd"><div><div className="catbuy-nm">{catInfo.name}</div></div><div className="catbuy-pp">{won(catInfo.price)}</div></div>
-                  <div className="catbuy-lead">{catInfo.lead}</div>
+                  <div className="catbuy-hd"><div className="catbuy-nm">{lockedCount > 0 ? `잠긴 ${lockedCount}장 전부` : '전체 풀이'}</div><div className="catbuy-pp">{won(catInfo.price)}</div></div>
+                  {catInfo.gives?.length > 0
+                    ? <ul className="gives catgives">{catInfo.gives.slice(0, 3).map((g: string) => <li key={g}>{g}</li>)}</ul>
+                    : <div className="catbuy-lead">{catInfo.lead}</div>}
                 </div>
               </>
             ) : null}

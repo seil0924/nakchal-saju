@@ -94,10 +94,12 @@ export default function ReportView({ params }: { params: { id: string } }) {
     return { position: 'fixed' as const, left, top, margin: 0 };
   })() : undefined;
 
+  const lockedCount = res ? res.sections.filter((s2: any) => (RANK[s2.tier] ?? 2) > level).length : 0;
+
   return (
     <div className="app">
       <div className="hero"><h1>{catInfo ? catInfo.name : '사주 리포트'}</h1>
-        <p><Link href="/vault" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 보관함</Link></p></div>
+        <p><Link href="/vault" style={{ color: 'var(--navy)', textDecoration: 'underline' }}>← 보관함</Link></p></div>
       <div className="wrap">
         {err && <div className="errbox">{err}</div>}
         {/* 리포트를 못 찾으면 한 줄 오류만 남아 막다른 화면이 됐다. 왜 그런지와 갈 곳을 같이 준다. */}
@@ -114,7 +116,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
-                <div className={'num' + (res.hero.big && res.hero.big.length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 22 }}>{res.hero.unit ?? '점'}</span></div>
+                <div className={'num' + (res.hero.big && res.hero.big.length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? '#2f56c4' : '#b3382c' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 22 }}>{res.hero.unit ?? '점'}</span></div>
                 <div className="lab">{res.hero.label}</div><div className="sub2">{res.hero.sub}</div>
               </div>
             )}
@@ -131,7 +133,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                   <span className="rpr">{level >= 2 ? '전체 열람' : level === 1 ? '택일팩' : '무료 열람'}</span>
                 </div>
               ); })()}
-            <div className="print-only pfoot" style={{ display: 'none' }}>낙찰사주 · 士가 읽는 사주·투찰 택일 리포트 · 명리 기반 참고 정보</div>
+            <div className="print-only pfoot" style={{ display: 'none' }}>낙찰사주 · 사주·투찰 택일 리포트 · 명리 기반 참고 정보</div>
             {res.sections.map((sec, i) => {
               const rank = RANK[sec.tier] ?? 2;
               const open = rank <= level && !!sec.html;
@@ -144,11 +146,11 @@ export default function ReportView({ params }: { params: { id: string } }) {
               const openThis = (e?: any) => { setErr(''); if (!catInfo && prod) setPending(prod.key); openModal(e); };
               return (
                 <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
-                  <div className="hd" onClick={locked ? openThis : undefined}><div className="mk">{sec.mk}</div><div className="ti">{sec.t}</div>
-                    {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb">🔒 {won(pPrice)}</span>}<div className="cv">▾</div></div>
+                  <div className="hd" onClick={locked ? openThis : undefined}><div className="ti">{sec.t}</div>
+                    {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk">{won(pPrice)}</span>}<div className="cv">▾</div></div>
                   <div className="bd">{sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
                     : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
-                      <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button></div>)}</div>
+                      {catInfo ? <button type="button" className="tlink" onClick={openThis}>{pName}에 포함 · 열기</button> : <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button>}</div>)}</div>
                 </div>
               );
             })}
@@ -162,8 +164,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                     {catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}
                   </ul>
                 )}
-                <div className="readynote">{res.meta?.chapters ?? res.sections.length}장(章) 풀이가 이미 산출을 마쳤습니다 — 열람만 잠겨 있습니다</div>
-                <div className="cta" onClick={(e) => openModal(e)}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
+                                <div className="cta" onClick={(e) => openModal(e)}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
                 <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
               </>
             )}
@@ -174,7 +175,6 @@ export default function ReportView({ params }: { params: { id: string } }) {
               나도 보기 — 무료로 시작<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 투찰 택일</small>
             </Link>
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 10 }}>
-              <div className="bi">鏡</div>
               <div className="bt"><b>나도 30초 만에 — 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 100인 중 내 사주와 닮은 대표 · 무료</span></div>
               <div className="ba">→</div>
             </Link>
@@ -189,11 +189,11 @@ export default function ReportView({ params }: { params: { id: string } }) {
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장
             </button>
-            {level < 2 && <div className="no-print" style={{ textAlign: 'center', fontSize: 13, color: '#6d7882', marginTop: 6 }}>상품을 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
+            {level < 2 && <div className="no-print" style={{ textAlign: 'center', fontSize: 13, color: '#636d77', marginTop: 6 }}>상품을 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
             </div>
           </div>
         )}
-        {!res && !err && <div style={{ textAlign: 'center', color: '#6d7882', padding: 30 }}>불러오는 중…</div>}
+        {!res && !err && <div style={{ textAlign: 'center', color: '#636d77', padding: 30 }}>불러오는 중…</div>}
       </div>
 
       {seal && (
@@ -219,8 +219,10 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 <>
                   <h3>{pick.name} 전체 열기</h3>
                   <div className="catbuy">
-                    <div className="catbuy-hd"><div><div className="catbuy-nm">{pick.name}</div><div className="catbuy-kick">{pick.kicker}</div></div><div className="catbuy-pp">{won(pick.price)}</div></div>
-                    <div className="catbuy-lead">{pick.lead}</div>
+                    <div className="catbuy-hd"><div className="catbuy-nm">{lockedCount > 0 ? `잠긴 ${lockedCount}장 전부` : '전체 풀이'}</div><div className="catbuy-pp">{won(pick.price)}</div></div>
+                    {pick.gives?.length > 0
+                      ? <ul className="gives catgives">{pick.gives.slice(0, 3).map((g: string) => <li key={g}>{g}</li>)}</ul>
+                      : <div className="catbuy-lead">{pick.lead}</div>}
                   </div>
                 </>
               ) : null;
@@ -230,6 +232,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won((catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0)} 결제하기`}</button>
             <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
+            <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>
           </div>
         </div>
       )}

@@ -99,7 +99,7 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
     : { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos };
 
   const hero = reportHeroFor(input.cat, { c, s, nowYMD, cli, legal, partner, ally, seunSelf: seunSelf }); // 카테고리별 히어로
-  const title = `士가 읽는 ${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
+  const title = `${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
   return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta,
     selYear, seun: { hanja: seunSelf.hanja, rel: seunSelf.rel, tilt: seunSelf.tilt } };
 }

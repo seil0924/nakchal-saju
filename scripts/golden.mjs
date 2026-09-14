@@ -19,6 +19,8 @@ const strip = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true }
   else if (f.endsWith('.ts')) { const t = fs.readFileSync(f, 'utf8'); if (t.includes("import 'server-only'")) fs.writeFileSync(f, t.replace(/import 'server-only';?\r?\n?/g, '')); }
 } };
 strip(path.join(tmp, 'lib'));
+// lib 안의 '@/lib/…' 가져오기를 임시 폴더에서도 풀리게 한다(없으면 하네스가 모듈을 못 찾고 멈춘다).
+fs.writeFileSync(path.join(tmp, 'tsconfig.json'), JSON.stringify({ compilerOptions: { baseUrl: '.', paths: { '@/*': ['./*'] } } }));
 
 const harness = `
 import { computeReport } from './lib/report';
@@ -34,7 +36,7 @@ process.stdout.write(JSON.stringify(out));
 `;
 fs.writeFileSync(path.join(tmp, 'harness.mjs.ts'), harness);
 let json;
-try { json = execFileSync('npx', ['--yes', 'tsx', path.join(tmp, 'harness.mjs.ts')], { encoding: 'utf8', cwd: tmp, maxBuffer: 64 * 1024 * 1024 }); }
+try { json = execFileSync('npx', ['--yes', 'tsx', path.join(tmp, 'harness.mjs.ts')], { encoding: 'utf8', cwd: tmp, maxBuffer: 64 * 1024 * 1024, shell: process.platform === 'win32' }); }
 catch (e) { console.error('golden: 하네스 실행 실패\n', e.stderr || e.message); process.exit(2); }
 fs.rmSync(tmp, { recursive: true, force: true });
 

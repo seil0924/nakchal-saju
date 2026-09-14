@@ -48,7 +48,7 @@
    손님 말처럼 보이는 순간 그건 가짜 후기다. */
 .rvguide { border: 1px dashed #e6e8ea; border-radius: 12px; background: #f4f5f7; padding: 15px 16px; margin-top: 4px; }
 .rvguide .gh { font-size: 13px; font-weight: 800; color: #57523f; margin-bottom: 10px; }
-.rvguide .gh span { font-weight: 600; color: #6d7882; }
+.rvguide .gh span { font-weight: 600; color: #636d77; }
 .rvguide ol { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 7px; }
 .rvguide li { font-size: 13px; line-height: 1.7; color: #58616a; }
 .rvguide li b { color: #3a3630; }

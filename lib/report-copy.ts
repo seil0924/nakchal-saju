@@ -37,7 +37,7 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[], myGan?:string){
       `<div class="tpmeta"><span class="tpm"><i>분야</i>${tm.profile.field}</span><span class="tpm"><i>활동</i>${tm.profile.life}</span></div>`+
       `<div class="tpscale"><span class="tpsl">전성기 · 이룬 것</span><p>${tm.profile.scale}</p></div>`+
       `<div class="tparc"><span class="tpsl">연혁</span><p>${tm.profile.arc}</p></div></div>`:'')+
-    `<div class="myeong"><div class="myl">命 · ${TYPE_NAME[me]} — ${TYPE_DESC[me]} 명</div>`+
+    `<div class="myeong"><div class="myl">${TYPE_NAME[me]} — ${TYPE_DESC[me]} 명</div>`+
       `<p>${TYPE_MYEONG[me]}</p>`+
       `<p class="mys">이 거장을 일으킨 것은 재능이나 운이 아니라 <b>바로 이 명(命)</b>이었습니다. <b>${t.name}</b> — ${tm.story}</p>`+
       `<p class="mys2">맨손에서 시작해 <b>무(無)에서 유(有)를 이룬 사람</b>. 그 뿌리의 기운이, 대표님 여덟 글자와 같은 것입니다.</p></div>`+
@@ -49,7 +49,7 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[], myGan?:string){
       `<p class="mep">${TYPE_USER[me]}</p>`+
       `<div class="merule"></div>`+
       `<p class="mep">${TYPE_BIZ[me]}</p></div>`+
-    `<p style="margin-top:12px">다만 ${TYPE_RISK[me]}<br>그러니 ${TYPE_WAY[me]}</p>`+
+    `<p style="margin-top:12px">${TYPE_RISK[me]}<br>그러니 ${TYPE_WAY[me]}</p>`+
     `<p class="twinnote">※ 인물 명식은 널리 공개된 출생일 기준이며 생시(生時)는 미상이라 삼주(三柱)로만 계산했습니다. 명식의 구조를 견준 것으로, 재미로 보는 유형 비교일 뿐 그분들의 삶이나 대표님의 운을 단정하는 것이 아닙니다.</p>`;
 }
 
@@ -410,17 +410,17 @@ function gaugeHtml(s,worryTxt,unlocked){
   const pos=clamp(s.pos);
   return `<div class="gauge">`+
     `<div class="gverdict ${up?'up':'down'}">`+
-      `<span class="gvseal">${up?'上':'下'}</span>`+
+      
       `<span class="gvl">오늘의 택일 신호 · 투찰 유·불리</span>`+
       `<span class="gvd">${up?'상단':'하단'} 흐름<i>${up?'▲':'▼'}</i></span>`+
-      `<span class="gvb">기준(基準) <b>100.0</b> 대비 <b>${up?'위':'아래'}쪽</b> — 이번 흐름 <b>${s.bandLo}~${s.bandHi}%</b>에 무게</span>`+
+      `<span class="gvb">기준 <b>100.0</b> 대비 <b>${up?'위':'아래'}쪽</b> — 이번 흐름 <b>${s.bandLo}~${s.bandHi}%</b>에 무게</span>`+
     `</div>`+
     `<div class="gmeter">`+
       `<div class="gmtrack"><div class="gmband" style="left:${bL}%;width:${bW}%"></div></div>`+
       `<div class="gmbase"></div>`+
       `<div class="gmneedle" style="left:${pos}%"></div>`+
     `</div>`+
-    `<div class="gscale"><span>98.0<em>下限</em></span><span class="mid">基準 100.0</span><span>102.0<em>上限</em></span></div>`+
+    `<div class="gscale"><span>98.0<em>하한</em></span><span class="mid">기준 100.0</span><span>102.0<em>상한</em></span></div>`+
     // 여기에 있던 "🔒 정밀 택일 지표 100.42%" 를 걷어냈다.
     // 그 소수점 두 자리의 마지막 ±0.2 는 명식·날짜로 시드를 만든 mulberry32 난수다(engine.ts).
     // 방향(상단/하단)은 명리로 결정되고 그건 무료로 다 준다. 그러면 결제선이 계산이 아니라
@@ -473,11 +473,11 @@ const DAEUN_REL={in:'회사를 밖에서 밀어주는 기운이 드는 시기 �
  sik:'회사가 힘을 밖으로 쏟는 시기 — 실적은 나되 소모가 크니 관리가 관건',
  gwan:'회사가 눌리고 조여지는 시기 — 무리한 확장보다 내실·시스템을 다질 때'};
 // 세운(歲運) — 연도별 큰 흐름. 회사 명식 × 그해 간지 상성으로 8년치를 표로.
-const SEUN_REL={in:['도움運','회사를 밖에서 밀어주는 해 — 자금·수주·귀인이 붙어 판을 키우기 좋습니다','#177f5e'],
- bi:['경쟁運','같은 기운이 겹치는 해 — 힘은 세나 경쟁·과속 확장을 조심하고 내실을 지킬 때','#6f6a5c'],
- jae:['결실運','거둬들이는 재물의 해 — 벌이기보다 챙기고 굳혀 실속을 남길 때','#b58a2f'],
- sik:['소모運','힘을 밖으로 쏟는 해 — 실적은 나되 지출·소모가 크니 관리가 관건','#b5402f'],
- gwan:['시련運','눌리고 조여지는 해 — 무리한 확장을 접고 시스템·내실을 다질 때','#22406b']};
+const SEUN_REL={in:['도움운','회사를 밖에서 밀어주는 해 — 자금·수주·귀인이 붙어 판을 키우기 좋습니다','#177f5e'],
+ bi:['경쟁운','같은 기운이 겹치는 해 — 힘은 세나 경쟁·과속 확장을 조심하고 내실을 지킬 때','#6f6a5c'],
+ jae:['결실운','거둬들이는 재물의 해 — 벌이기보다 챙기고 굳혀 실속을 남길 때','#b58a2f'],
+ sik:['소모운','힘을 밖으로 쏟는 해 — 실적은 나되 지출·소모가 크니 관리가 관건','#b5402f'],
+ gwan:['시련운','눌리고 조여지는 해 — 무리한 확장을 접고 시스템·내실을 다질 때','#22406b']};
 function seunYear(y:number){const g=((y-4)%10+10)%10, z=((y-4)%12+12)%12; return {g,z,el:GAN_ELc[g]};}
 // 세운 각 해의 상세 설명 — 그해 간지·오행을 반영해 년마다 구체적으로
 function seunDetail(rel:string, sy:{g:number;z:number;el:number}){
@@ -499,7 +499,7 @@ function seunHtml(d,legalName,curYear){
       `<span class="sytag" style="background:${info[2]}">${info[0]}</span>`+
       `<span class="syd"><b class="syd1">${info[1]}</b><span class="syd2">${seunDetail(rel,sy)}</span></span></div>`;}
   return `<div class="seunhd">연도별 큰 흐름 — 앞으로 8년 세운(歲運)</div><div class="seun">${rows}</div>`+
-    `<p style="margin-top:11px">위 표는 <b>${legalName||'회사'}</b> 명식에 그해 간지를 대조해, 밀어주는 해와 조여지는 해를 갈라 놓은 것입니다. <b>도움運·결실運</b>의 해에 큰 건과 확장을, <b>시련運</b>의 해엔 내실과 정비를 두시면 회사의 10년이 달라집니다.</p>`;
+    `<p style="margin-top:11px">위 표는 <b>${legalName||'회사'}</b> 명식에 그해 간지를 대조해, 밀어주는 해와 조여지는 해를 갈라 놓은 것입니다. <b>도움운·결실운</b>의 해에 큰 건과 확장을, <b>시련운</b>의 해엔 내실과 정비를 두시면 회사의 10년이 달라집니다.</p>`;
 }
 function daeunSectionHtml(d,legalName,curYear){
   const cur=d.list[d.curBlock];
@@ -517,7 +517,7 @@ function cheobangHtml(s:Sajeong){
   const when=up?'오늘은 기운이 위로 뻗는 날 — 준비된 건이라면 정면 승부해도 좋습니다.':'오늘은 눌리는 흐름 — 개시 직후를 피하고 마감 직전 시간대에 손을 쓰십시오.';
   const warn=up?'자신감이 과해지기 쉬우니, 미리 정한 하한선 아래로는 내려가지 마십시오.':'조급함에 성급한 저가·과속 투찰을 던지지 마십시오.';
   const alt=up?'흐름이 꺾이거나 조건이 나쁘면, 무리하지 말고 이번 달 투찰 길일로 미루십시오.':'큰 건이라면 오늘 무리하기보다 이번 달 투찰 길일(擇日)로 옮기는 편이 유리합니다.';
-  return `<div class="cheobang"><div class="cbt">處方 · 오늘의 실행 지침</div>`+
+  return `<div class="cheobang"><div class="cbt">오늘의 실행 지침</div>`+
     `<div class="cbrow"><span class="cbk">시점</span><span class="cbv">${when}</span></div>`+
     `<div class="cbrow"><span class="cbk">주의</span><span class="cbv">${warn}</span></div>`+
     `<div class="cbrow"><span class="cbk">대안</span><span class="cbv">${alt}</span></div></div>`;
@@ -667,7 +667,7 @@ function bizYearHtml(c:Chart,selYear:number,curM:number){
       `<span class="mytag" style="background:${info[1]}">${info[0]}運</span>`+
       `<span class="myd">${BY_DESC[rel]}</span></div>`;}
   return `<div class="bizyear"><div class="byhd">${selYear}년 — 12개월 사업운 흐름(月運)</div>${rows}</div>`+
-    `<p style="margin-top:11px">밀어주는 달(<b>도움運·결실運</b>)에 큰 계약·발표·투자를, 조여지는 달(<b>시련運</b>)엔 내실·정비를 두십시오. 위 흐름을 <b>${selYear}년 세운</b>과 겹쳐 보면 한 해 농사의 밑그림이 나옵니다.</p>`;
+    `<p style="margin-top:11px">밀어주는 달(<b>도움운·결실운</b>)에 큰 계약·발표·투자를, 조여지는 달(<b>시련운</b>)엔 내실·정비를 두십시오. 위 흐름을 <b>${selYear}년 세운</b>과 겹쳐 보면 한 해 농사의 밑그림이 나옵니다.</p>`;
 }
 // ── 診 · 대표 유형 진단 (사주아이식 프로파일) — 4유형 + 4축 스펙트럼 + 위기 약점(심리 훅)
 const TYPE4=['공격형','관계형','안정형','분석형','분석형'];
@@ -721,12 +721,12 @@ function jinHtml(c:Chart,seun?,selYear?){
       `<div class="axdesc"><b>${active}</b> — ${desc}</div></div>`;
   }).join('');
   return `<div class="jin">`+
-    `<div class="jintag">진단 · 診</div>`+
+    `<div class="jintag">진단</div>`+
     seunBannerHtml(seun,selYear)+
     `<div class="jintype">대표님은 <b>${TYPE4[me]}</b> — ${TYPE4_SUB[me]}입니다.</div>`+
     `<div class="axes">${axes}</div>`+
     `<div class="crisis"><div class="crhd">⚠ 위기 상황에서 나타나는 약점</div><p>${CRISIS[me]}</p></div>`+
-    `<p class="jinhook">이 약점이 <b>언제, 어떤 발주처·계약</b>에서 터지는지 — 그 정확한 타이밍과 처방은 아래 <b>승부(決)·사람(人)·재물(財)</b>에서 짚어 드립니다.</p>`+
+    `<p class="jinhook">이 약점이 <b>언제, 어떤 발주처·계약</b>에서 터지는지 — 그 정확한 타이밍과 처방은 아래 <b>승부·사람·재물</b>에서 짚어 드립니다.</p>`+
     `</div>`;
 }
 function argmaxRC(a:number[]){let x=0;for(let i=1;i<a.length;i++)if(a[i]>a[x])x=i;return x;}
@@ -741,7 +741,7 @@ const ILEON:Record<string,string[]>={
 function ileonHtml(c:Chart,today:{gan:number;zhi:number;el:number}){
   const rel=relation(c.dayMasterEl,today.el);const pool=ILEON[rel]||ILEON.bi;
   const idx=(today.gan*7+today.zhi*3)%pool.length;
-  return `<div class="ileon"><span class="ilk">오늘의 한마디 · 一言</span><p>${pool[idx]}</p></div>`;
+  return `<div class="ileon"><span class="ilk">오늘의 한마디</span><p>${pool[idx]}</p></div>`;
 }
 // ── 이번 달 사정률 캘린더 — 하루하루 상단/하단 흐름. 무료는 오늘·이번 주만 열고 나머지는 잠금.
 function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolean){
@@ -819,7 +819,7 @@ function scorecardHtml(axes:any[], selYear?:number){
   const lo=axes.reduce((a,b)=>b.score<a.score?b:a);
   const dots=(n:number)=>Array.from({length:5},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('');
   return `<div class="axiscard">`+
-    axes.map(a=>`<div class="axrow"><div class="axseal">${a.hanja}</div>`+
+    axes.map(a=>`<div class="axrow">`+
       `<div class="axmid"><div class="axlb">${a.label}<span>${a.key}</span></div><div class="axdots">${dots(a.score)}</div></div>`+
       `<div class="axsc">${a.score}<em>/5</em></div></div>`).join('')+
     `</div>`+
@@ -861,7 +861,7 @@ function secDaepyoIntro(x:any):any[]{
   if(ss.length){
     out.push({mk:'符',tier:'free',t:`대표님 명식에 새겨진 부호 — ${ss.map(x=>x.name).join('·')}`,html:
       `<div class="sinsal">`+
-      ss.map((x,i)=>`<div class="ssrow"><div class="sshan" style="background:${['#7a1f1f','#22406b'][i%2]}">${x.hanja.slice(0,2)}</div>`+
+      ss.map((x,i)=>`<div class="ssrow"><div class="sshan">${x.hanja.slice(0,2)}</div>`+
         `<div class="ssbody"><div class="sshead">${x.head}</div>`+
         ((i===0||unlocked)?`<p class="sstxt">${x.body}</p>`:`<p class="sstxt lockt">🔒 <b>대표 사주</b> 상품에서 <b>${x.name}(${x.hanja})</b>의 풀이가 열립니다.</p>`)+
       `</div></div>`).join('')+
@@ -877,12 +877,12 @@ function secSajeong(x:any):any[]{
   // ── 무료 정점(率) → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
   let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c);
   if(nowYMD){
-    rateHtml+=`<div class="sajmonhd"><span class="smk">曆</span>이번 달 <b>${nowYMD.m}월</b> 사정률 — 날마다 어느 쪽인가</div>`;
+    rateHtml+=`<div class="sajmonhd">이번 달 <b>${nowYMD.m}월</b> 사정률 — 날마다 어느 쪽인가</div>`;
     rateHtml+=sajeongMonthHtml(c,nowYMD.y,nowYMD.m,nowYMD.d,preciseOn);
     rateHtml+=weekAheadHtml(c,nowYMD.y,nowYMD.m,nowYMD.d);
   }
   if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
-    rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 바로 아래 <b>擇日 캘린더</b>에서 확인하세요</div></div>`;}
+    rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 바로 아래 <b>택일 캘린더</b>에서 확인하세요</div></div>`;}
   out.push({mk:'率',tier:'free',t:nowYMD?`이번 달 ${nowYMD.m}월 택일 — 오늘은 넣기 좋은 날인가`:`오늘, 투찰에 좋은 흐름인가`,html:rateHtml,gauge:true});
   if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
     out.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 길일 <b>${gc0}일</b>의 정확한 날짜가 이미 산출되어 있습니다 — 이달이 가기 전에 확인하십시오.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일(擇日)`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}

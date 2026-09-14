@@ -109,7 +109,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonld) }} />
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>{yi.ganzhi} · 事業運</div>
+        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#636d77', fontWeight: 700, marginBottom: 6 }}>{yi.ganzhi} · 事業運</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>{y} {yi.ganzhi} 12지신 사업·입찰운세</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 12px' }}>{y}년은 <b>{yi.ganzhi} — {yi.label}</b>. {yi.theme}입니다. 같은 띠라도 <b>태어난 해(년주)</b>에 따라 올해 기운과의 관계가 달라집니다 — 출생연도별로 짚어드립니다.</p>
 
@@ -131,7 +131,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 5, borderTop: '1px solid var(--line)', paddingTop: 9 }}>
               {t.rows.map((r, j) => (
                 <div key={j} style={{ display: 'flex', gap: 9, fontSize: 13, lineHeight: 1.5, alignItems: 'baseline' }}>
-                  <span style={{ flex: '0 0 82px', color: '#58616a', fontWeight: 700, fontFamily: 'var(--serif)' }}>{r.by}<span style={{ fontSize: 13, color: '#6d7882', marginLeft: 4 }}>{r.ganzhi}</span></span>
+                  <span style={{ flex: '0 0 82px', color: '#58616a', fontWeight: 700, fontFamily: 'var(--serif)' }}>{r.by}<span style={{ fontSize: 13, color: '#636d77', marginLeft: 4 }}>{r.ganzhi}</span></span>
                   <span style={{ color: '#4a4438' }}>{r.nuance}</span>
                 </div>
               ))}
@@ -145,7 +145,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
           <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '13px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 15, textDecoration: 'none' }}>내 사주로 30초 무료 확인 →</Link>
         </div>
 
-        <p style={{ fontSize: 13, color: '#6d7882', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 년주(태어난 해의 간지)와 올해 간지의 오행 관계로 산출한 참고·오락용 정보입니다. 중요한 사업 판단은 대표님의 종합적 검토와 함께하세요.</p>
+        <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 년주(태어난 해의 간지)와 올해 간지의 오행 관계로 산출한 참고·오락용 정보입니다. 중요한 사업 판단은 대표님의 종합적 검토와 함께하세요.</p>
       </div>
     </div>
   );

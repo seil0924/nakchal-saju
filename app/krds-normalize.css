@@ -33,7 +33,7 @@ html .dbrand .dbt small{color:#8a949e!important}
 html .dcta{background:#3f6be0!important;border:0!important;box-shadow:none!important;color:#fff!important}
 html .dcta:hover{background:#2f56c4!important}
 html .dnavi{color:#464c53!important}
-html .dnavi svg{stroke:#6d7882!important}
+html .dnavi svg{stroke:#636d77!important}
 /* === sweep19: 홈 명암비 마감 — 하단 네비·푸터·금색 잔재 ===
    ⚠ 이 파일의 스윕은 물리적 순서가 번호순이 아니다(웹 에디터 가상화로 삽입 위치가 밀렸다).
    그래서 순서에 기대지 않고 클래스를 중복(.dfoot.dfoot)해 특이도로 이긴다. */
@@ -44,15 +44,15 @@ html .home5 .nav5 a.on{color:#ffffff!important}
 html .home5 .nav5 a.on svg{stroke:#ffffff!important}
 html .home5 .nav5 .c .cl{color:rgba(255,255,255,.9)!important}
 /* 푸터 — sweep14가 앞쪽에 놓여 sweep6에 덮였다. 중복 클래스로 확정 */
-html .dfoot.dfoot{color:#6d7882!important}
-html .dfoot .dfoot-biz.dfoot-biz{color:#6d7882!important}
-html .dbrand .dbt small{color:#6d7882!important}
-html .app>.foot.foot{color:#6d7882!important}
-html .foot .bizinfo.bizinfo{color:#6d7882!important}
+html .dfoot.dfoot{color:#636d77!important}
+html .dfoot .dfoot-biz.dfoot-biz{color:#636d77!important}
+html .dbrand .dbt small{color:#636d77!important}
+html .app>.foot.foot{color:#636d77!important}
+html .foot .bizinfo.bizinfo{color:#636d77!important}
 html .app>.foot a,html .foot a{color:#58616a!important}
 /* 금색 잔재 */
-html .home5 .li5 .arw{color:#6d7882!important}
-html .home5 .li5 .t small{color:#6d7882!important}
+html .home5 .li5 .arw{color:#636d77!important}
+html .home5 .li5 .t small{color:#636d77!important}
 html .home5 .bokline .bltx em{color:#58616a!important}
 html .home5 .bokline .blgo{color:#58616a!important}
 html .home5 .hometag{color:#58616a!important}
@@ -79,11 +79,11 @@ html .tlive .tw-d.v-bad .tw-k{background:#b3382c}
 html .home5>.tl-recent{order:5;margin:8px 24px 2px;padding:14px 15px 10px;background:#fff;border:1px solid #e6e8ea;border-radius:11px}
 html .tl-recent .trc-hd{display:flex;align-items:center;gap:7px;font-family:var(--serif);font-weight:800;font-size:13px;color:#1e2124;margin-bottom:9px}
 html .tl-recent .trc-hd i{width:6px;height:6px;border-radius:50%;background:#1f7a55;flex:none}
-html .tl-recent .trc-hd em{font-style:normal;margin-left:auto;font-family:var(--sans);font-weight:600;font-size:13px;color:#6d7882}
+html .tl-recent .trc-hd em{font-style:normal;margin-left:auto;font-family:var(--sans);font-weight:600;font-size:13px;color:#636d77}
 html .tl-recent .trc-i{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid #f1f3f5;text-decoration:none}
 html .tl-recent .trc-i:first-of-type{border-top:0}
 html .tl-recent .trc-t{font-size:13px;color:#1e2124;line-height:1.5;word-break:keep-all;min-width:0}
-html .tl-recent .trc-d{margin-left:auto;flex:none;font-size:13px;color:#6d7882;white-space:nowrap}
+html .tl-recent .trc-d{margin-left:auto;flex:none;font-size:13px;color:#636d77;white-space:nowrap}
 html .tl-recent .trc-all{display:block;margin-top:8px;padding-top:9px;border-top:1px solid #f1f3f5;font-size:13px;font-weight:700;color:#2646a3;text-decoration:none}
 
 /* === sweep17: 수록 규모 — 처음 온 사람에게 축적을 보여준다 === */
@@ -95,7 +95,7 @@ html .scale .sc-i{display:flex;flex-direction:column;align-items:center;gap:3px;
 html .scale .sc-i+.sc-i::before{content:"";position:absolute;left:-3px;top:5px;bottom:5px;width:1px;background:#eceef0}
 html .scale .sc-n{font-family:var(--serif);font-weight:900;font-size:22px;color:#1e2124;line-height:1.1;letter-spacing:-.02em}
 html .scale .sc-n em{font-style:normal;font-family:var(--sans);font-weight:700;font-size:13px;color:#58616a;margin-left:2px}
-html .scale .sc-t{font-size:13px;color:#6d7882;letter-spacing:-.01em;word-break:keep-all}
+html .scale .sc-t{font-size:13px;color:#636d77;letter-spacing:-.01em;word-break:keep-all}
 html .scale .sc-note{margin-top:12px;padding-top:11px;border-top:1px solid #eceef0;font-size:13px;line-height:1.6;color:#58616a;word-break:keep-all}
 @media(max-width:359px){html .scale .sc-n{font-size:17px}html .scale .sc-t{font-size:13px}}
 
@@ -132,7 +132,7 @@ html .colrel ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:c
 html .colrel li{margin:0}
 html .colrel a{display:flex;flex-direction:column;gap:3px;padding:12px 14px;background:#fff;border:1px solid #e6e8ea;border-radius:9px;text-decoration:none}
 html .colrel .crt{font-size:15px;font-weight:700;color:#1e2124;line-height:1.5;word-break:keep-all}
-html .colrel .crd{font-size:13px;color:#6d7882}
+html .colrel .crd{font-size:13px;color:#636d77}
 @media(hover:hover){html .colrel a:hover{border-color:#3f6be0;background:#f7f9ff}}
 
 /* === sweep14: 가독성 — WCAG AA 미달 전수 교정 === */
@@ -146,7 +146,7 @@ html .mecard .merule{background:rgba(243,238,228,.42)!important}
 html .mecard::before{color:rgba(255,255,255,.05)!important}
 /* 흐린 회색 → AA 통과 */
 html .axhd span,html .sbnote,html .ten,html .trdisc,html .disc,html .readyline{color:#58616a!important}
-html .dfoot,html .dfoot .dlinks,html .dfoot .dlinks a,html .dfoot .dfoot-biz,html .dbrand .dbt small{color:#6d7882!important}
+html .dfoot,html .dfoot .dlinks,html .dfoot .dlinks a,html .dfoot .dfoot-biz,html .dbrand .dbt small{color:#636d77!important}
 /* 금색 잔재 → 먹빛 계열 */
 html .tpsl,html .jintag,html .tpm i,html .rpr{color:#5b5344!important}
 html .sbl .sbk{background:#7d5f1f!important}
@@ -193,7 +193,7 @@ html .dnavi:hover{background:#f4f5f6!important;color:#1e2124!important}
 html .dnavi.on{background:#eef3fe!important;color:#2f56c4!important;border-left-color:#3f6be0!important}
 html .dnavi.on svg{stroke:#2f56c4!important}
 html .dfoot{color:#8a949e!important;border-top-color:#e6e8ea!important}
-html .dfoot .dkick{color:#6d7882!important}
+html .dfoot .dkick{color:#636d77!important}
 html .dfoot .dlinks a{color:#58616a!important}
 html .dfoot .dfoot-biz{color:#8a949e!important}
 /* === sweep5: 투어 발견 — CTA 텍스트/신뢰패널/복채/발주처 pill/핵심배지 === */
@@ -268,7 +268,7 @@ html .dfoot .dfoot-biz{color:#8a949e!important}
    globals.css 뒤에 로드되어 색/라운드/그림자/버튼/입력/스플래시를 KRDS 규격으로 정규화. 롤링배너(.home .hero, HeroCarousel)는 제외. */
 :root{
   /* KRDS gray */
-  --krds-gray-0:#fff;--krds-gray-5:#f4f5f6;--krds-gray-10:#e6e8ea;--krds-gray-20:#cdd1d5;--krds-gray-30:#b1b8be;--krds-gray-40:#8a949e;--krds-gray-50:#6d7882;--krds-gray-60:#58616a;--krds-gray-70:#464c53;--krds-gray-80:#33363d;--krds-gray-90:#1e2124;--krds-gray-95:#131416;
+  --krds-gray-0:#fff;--krds-gray-5:#f4f5f6;--krds-gray-10:#e6e8ea;--krds-gray-20:#cdd1d5;--krds-gray-30:#b1b8be;--krds-gray-40:#8a949e;--krds-gray-50:#636d77;--krds-gray-60:#58616a;--krds-gray-70:#464c53;--krds-gray-80:#33363d;--krds-gray-90:#1e2124;--krds-gray-95:#131416;
   /* primary=감청 remap, point=주 */
   --krds-primary-5:#eef3fe;--krds-primary-10:#d9e4fb;--krds-primary-40:#6b93f0;--krds-primary-50:#3f6be0;--krds-primary-60:#2f56c4;--krds-primary-70:#2646a3;
   --krds-point-5:#f7e9e6;--krds-point-50:#b3382c;--krds-point-60:#8f2b21;
@@ -346,7 +346,7 @@ html .bm-rank{background:#fff;border:1px solid #e6e8ea;border-radius:12px;overfl
 html .bm-rk{display:flex;align-items:center;gap:10px;padding:11px 13px;border-top:1px solid #f1f3f5;text-decoration:none;color:inherit}
 html .bm-rk:first-child{border-top:0}
 html .bm-rk.lk{background:#fbfafa}
-html .bm-rk .rkn{flex:none;width:18px;text-align:center;font-size:13px;font-weight:800;color:#6d7882}
+html .bm-rk .rkn{flex:none;width:18px;text-align:center;font-size:13px;font-weight:800;color:#636d77}
 html .bm-rk .rkoh{flex:none;width:26px;height:26px;border-radius:7px;color:#fff;font-family:var(--serif);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
 html .bm-rk .rkoh.lock{background:#3a3a3d;color:#e6b9b3;border:1px dashed #b3382c}
 html .bm-rk .rkm{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
@@ -354,8 +354,8 @@ html .bm-rk .rkm b{font-size:13px;font-weight:700;color:#1e2124}
 html .bm-rk .core{font-style:normal;font-family:var(--serif);font-size:13px;color:#fff;background:#b3382c;border-radius:3px;padding:1px 4px;margin-left:4px}
 html .bm-rk .rkt{font-size:13px;font-weight:600}
 html .bm-rk .rkt.lkt{color:#b3382c}
-html .bm-rk .rkd{font-size:13px;color:#6d7882}
-html .bm-rk .rks{flex:none;font-size:13px;color:#6d7882;text-align:right}
+html .bm-rk .rkd{font-size:13px;color:#636d77}
+html .bm-rk .rks{flex:none;font-size:13px;color:#636d77;text-align:right}
 html .bm-rk .rks b{display:block;font-size:15px;color:#1e2124;font-weight:800}
 html .bm-rk .bl{filter:blur(4.5px);user-select:none;opacity:.72}
 /* CTA · 고지 */
@@ -363,7 +363,7 @@ html .bm-cta{display:block;margin-top:10px;background:#3f6be0;color:#fff;text-al
 html .bm-cta.pay{background:#202022}
 html .bm-cta small{display:block;font-weight:400;font-size:13px;color:#e4ecff;margin-top:3px}
 html .bm-cta.pay small{color:rgba(239,234,224,.72)}
-html .bm-disc{margin-top:9px;font-size:13px;line-height:1.6;color:#6d7882;word-break:keep-all}
+html .bm-disc{margin-top:9px;font-size:13px;line-height:1.6;color:#636d77;word-break:keep-all}
 html .bm-disc b{color:#58616a;font-weight:700}
 
 /* === sweep21: 모션 패스 — 목적이 있는 움직임만 ===
@@ -424,7 +424,7 @@ html .bmap svg>g.bm-fl{animation:bmfl var(--d) ease-in-out infinite;animation-de
 /* 잠긴 줄 배경(#fbfafa) 위에서 4.33:1 로 살짝 모자랐다 */
 html .bm-rk.lk .rkn,html .bm-rk.lk .rkd,html .bm-rk.lk .rks{color:#58616a!important}
 /* 즐겨찾기 별 — 1.83:1 이라 켜졌는지 꺼졌는지 구분이 안 됐다 */
-html .favstar{color:#6d7882!important}
+html .favstar{color:#636d77!important}
 html .favstar.on{color:#b3382c!important}
 /* 발주처 안내문·목록 링크 */
 html .balnote{color:#58616a!important}
@@ -440,7 +440,7 @@ html .fullcta small{color:rgba(255,255,255,.92)!important}
 html .colmeta{color:#58616a!important}
 html .colby{color:#58616a!important}
 html .coltags span{color:#58616a!important}
-html .colpost .colo{color:#6d7882!important}
+html .colpost .colo{color:#636d77!important}
 /* 상단 '목록 ›' 링크 */
 html .colpost .mast a[href="/column"]{color:#2646a3!important}
 /* 하단 SEO 링크 — .home5 에만 걸어 둬서 .home(발주처 등)은 안 닿았다 */
@@ -529,7 +529,7 @@ html body :is(.seg button.on,.seg-b.on,.chip2.on,.sijin .sj.on,.ybchip.on,.pp-se
 html body .sijin .sj.on :is(b,span){color:#2f56c4!important}
 html body .rprog .rpbar i{background:#3f6be0!important}
 html body .corelock{background:#f4f5f7!important;color:#2f56c4!important;border:1px solid #e6e8ea!important}
-html body .sec.locked .mk{background:#f4f5f7!important;color:#6d7882!important}
+html body .sec.locked .mk{background:#f4f5f7!important;color:#636d77!important}
 html body :is(.gverdict .gvseal,.bokseal,.bokdone .bdseal,.axseal,.persona .av,.profcard .pav){background:#f4f5f7!important;background-image:none!important;color:#2f56c4!important;border-color:#e6e8ea!important}
 
 /* 입력 폼(2026-09-14) — 훅 한 줄, 달력 토글, 접기, 바닥 막대 */
@@ -544,7 +544,7 @@ html body .gives li::before{content:''!important;width:14px!important;height:14p
 .rd-cal button.on{border-color:#3f6be0;color:#2f56c4}
 .rd-sep{width:1px;height:18px;background:#e6e8ea;margin:0 2px}
 .rd-more{display:flex;align-items:center;width:100%;min-height:44px;margin-top:14px;padding:0;border:0;border-top:1px solid #e6e8ea;background:none;color:#2f56c4;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;text-align:left}
-.rd-more span{color:#6d7882;font-weight:500;font-size:13px}
+.rd-more span{color:#636d77;font-weight:500;font-size:13px}
 .rd-fold{padding-top:2px}
 .rd-bar{position:fixed;left:0;right:0;bottom:0;z-index:58;display:flex;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #e6e8ea}
 .rd-bar-tx{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35}
@@ -583,9 +583,9 @@ html body .bokrule{background:#3f6be0!important}
 html body .bokamt{background:#fff!important;border:1px solid #e6e8ea!important;color:#1e2124!important;font-family:var(--sans)!important;box-shadow:none!important}
 html body .bokamt.on{border:1.5px solid #3f6be0!important;color:#2f56c4!important;background:#fff!important}
 html body .bokcustom{background:#fff!important;border:1px solid #e6e8ea!important;color:#1e2124!important}
-html body .boknote{color:#6d7882!important}
+html body .boknote{color:#636d77!important}
 html body .bokback{color:#2f56c4!important}
-html body .bokgo:disabled{background:#e6e8ea!important;color:#6d7882!important}
+html body .bokgo:disabled{background:#e6e8ea!important;color:#636d77!important}
 html body .dp-b.on{background:#fff!important;border:1.5px solid #3f6be0!important;color:#2f56c4!important}
 html body .dp-days .dh{background:#f4f5f7!important;color:#1e2124!important}
 html body .jr-card{background:#f4f5f7!important}

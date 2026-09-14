@@ -91,7 +91,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>대표님 생년월일만 · 30초 무료로 시작</span>
         </Link>
 
-        <div style={{ fontSize: 13, color: '#6d7882', textAlign: 'center', margin: '10px 0 20px', lineHeight: 1.6 }}>
+        <div style={{ fontSize: 13, color: '#636d77', textAlign: 'center', margin: '10px 0 20px', lineHeight: 1.6 }}>
           {c.core ? '핵심 발주처 상세 궁합은 유료입니다. 먼저 무료로 방향을 보실 수 있어요.' : '이 발주처 궁합은 무료로 열립니다.'}
         </div>
 
@@ -113,7 +113,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           <Link href="/balju" style={{ ...chip, background: 'var(--navy)', color: '#f4e7c4', borderColor: 'var(--navy)' }}>전체 발주처 →</Link>
         </div>
 
-        <p style={{ fontSize: 13, color: '#6d7882', lineHeight: 1.65, marginBottom: 20 }}>
+        <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.65, marginBottom: 20 }}>
           ※ 설립일은 공개 연혁 기준 자체 구축 DB이며, 명리 기반 참고 정보입니다. 실제 입찰·투찰 판단의 근거로 사용할 수 없습니다.
         </p>
       </div>

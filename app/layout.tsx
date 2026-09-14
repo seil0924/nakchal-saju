@@ -1,5 +1,6 @@
 import './globals.css';
 import './krds-normalize.css';
+import './ui.css';
 import type { Metadata } from 'next';
 import DesktopSidebar from '@/app/_components/DesktopSidebar';
 import TapFX from '@/app/_components/TapFX';

@@ -82,7 +82,7 @@ export default function AddToHome() {
         .a2hs .a2t span{font-size:13px;color:#58616a;line-height:1.5}
         .a2hs .a2b{flex:none;border:0;border-radius:9px;background:#3f6be0;color:#fff;
           font-weight:800;font-size:13px;padding:0 14px;min-height:40px;cursor:pointer}
-        .a2hs .a2x{flex:none;border:0;background:transparent;color:#6d7882;font-size:15px;
+        .a2hs .a2x{flex:none;border:0;background:transparent;color:#636d77;font-size:15px;
           min-width:40px;min-height:40px;cursor:pointer;line-height:1}
       `}</style>
       <div className="a2i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 6h14v14H5zM8.5 4v4M15.5 4v4M5 10h14M9.5 15l2 2 3.5-3.5" /></svg></div>

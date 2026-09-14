@@ -12,7 +12,7 @@
 }
 
 .rshd { display: flex; align-items: baseline; gap: 9px; padding: 0 15px 11px; flex-wrap: wrap; }
-.rshd .rsk { font-size: 13px; letter-spacing: .22em; color: #6d7882; font-weight: 700; }
+.rshd .rsk { font-size: 13px; letter-spacing: .22em; color: #636d77; font-weight: 700; }
 .rshd b { font-family: var(--serif); font-size: 17px; font-weight: 900; color: var(--ink); }
 .rshd .rsavg { font-size: 13px; font-weight: 700; color: #b58a2f; letter-spacing: .03em; }
 .rshd .rsall { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--navy); text-decoration: none; }

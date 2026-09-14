@@ -23,13 +23,12 @@ export function sealSvg(dist: number[], centerChar: string, size = 150): string 
   }
   const gc = GAN_COLOR[centerChar] || '#c9a24a';
   return `<svg class="seal" width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">`
-    + `<circle cx="${c}" cy="${c}" r="${S * 0.47}" fill="#f7edd6"/>`
-    + `<circle cx="${c}" cy="${c}" r="${S * 0.455}" fill="none" stroke="#b23a2b" stroke-width="${S * 0.028}" opacity=".92"/>`
-    + `<circle cx="${c}" cy="${c}" r="${S * 0.412}" fill="none" stroke="#b23a2b" stroke-width="${S * 0.008}" opacity=".55"/>`
+    + `<circle cx="${c}" cy="${c}" r="${S * 0.47}" fill="#ffffff"/>`
+    + `<circle cx="${c}" cy="${c}" r="${S * 0.455}" fill="none" stroke="#e6e8ea" stroke-width="${S * 0.012}"/>`
     + ring
-    + `<circle cx="${c}" cy="${c}" r="${R - W * 0.62}" fill="#241a12"/>`
-    + `<circle cx="${c}" cy="${c}" r="${R - W * 0.62}" fill="none" stroke="${gc}" stroke-width="1.2" opacity=".6"/>`
-    + `<text x="${c}" y="${c}" text-anchor="middle" dominant-baseline="central" font-family="'Noto Serif KR',serif" font-weight="900" font-size="${S * 0.30}" fill="${gc}">${centerChar}</text>`
+    + `<circle cx="${c}" cy="${c}" r="${R - W * 0.62}" fill="#ffffff"/>`
+    + `<circle cx="${c}" cy="${c}" r="${R - W * 0.62}" fill="none" stroke="#e6e8ea" stroke-width="1"/>`
+    + `<text x="${c}" y="${c}" text-anchor="middle" dominant-baseline="central" font-family="Pretendard,'Noto Sans KR',sans-serif" font-weight="800" font-size="${S * 0.30}" fill="${gc}">${centerChar}</text>`
     + `</svg>`;
 }
 export const ganEl = (g: string) => GAN_EL_KO[g] || '';

@@ -1,0 +1,217 @@
+/* ui.css — 2026-09-14 디자인 정리의 정본. layout 에서 마지막에 읽힌다.
+   규칙: 배경은 #fff · #f4f5f7 · 파랑(#3f6be0, 옅은 #eef3fe) / 글씨 #1e2124 · #58616a · #636d77 · 파랑 #2f56c4 · 경고 #b3382c
+   글씨 크기 13·15·17·22 (27 이상은 명식 글자·큰 숫자) / 명조 없음 / 장식 한자 없음.
+   예전 층(globals → krds-normalize sweep)이 !important 로 덮어 둔 곳은 여기서도 !important 가 필요하다. */
+
+:root{
+  --serif:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --u-ink:#1e2124; --u-sub:#58616a; --u-mute:#636d77; --u-line:#e6e8ea; --u-soft:#f4f5f7;
+  --u-blue:#3f6be0; --u-blue-ink:#2f56c4; --u-blue-soft:#eef3fe; --u-warn:#b3382c;
+  --u-r-card:14px; --u-r-in:10px;
+}
+
+/* ═════════ 결과 리포트 ═════════ */
+
+/* 머리 */
+html body .rephd{font-size:22px!important;font-weight:800;color:var(--u-ink)!important;text-align:left;margin:4px 0 10px;padding-bottom:0}
+html body .rephd::after{display:none!important}
+html body .topshare{background:#fff!important;border:1px solid var(--u-line)!important;color:var(--u-sub)!important;font-weight:700;padding:7px 12px}
+html body .reinput{background:#fff;border:1px solid var(--u-line);color:var(--u-sub);font-weight:700;border-radius:999px}
+html body .rprog{background:var(--u-soft)!important;border:0!important}
+html body .rprog .rpl b{color:var(--u-blue-ink)!important}
+html body .rprog .rpbar{background:var(--u-line)!important}
+html body .rprog .rpbar i{background:var(--u-blue)!important}
+html body .rprog .rpr{color:var(--u-sub)!important}
+
+/* 결론 카드 */
+html body .rhero{background:var(--u-soft)!important;border:0!important;box-shadow:none!important;border-radius:var(--u-r-card)!important;text-align:left!important;padding:20px 18px!important}
+html body .rhero::after{display:none!important}
+html body .rhero .hl{font-size:17px!important;font-weight:800!important;color:var(--u-ink)!important;line-height:1.5!important}
+html body .rhero .hl b{color:var(--u-blue-ink)!important}
+html body .rhero .num{font-weight:800!important;margin:12px 0 2px!important;letter-spacing:-.02em}
+html body .rhero .lab{color:var(--u-sub)!important;font-weight:700!important}
+html body .rhero .sub2{color:var(--u-sub)!important;font-weight:600!important;margin-top:8px!important}
+
+/* 명식 */
+html body .wonguk{background:#fff!important;border:1px solid var(--u-line)!important;box-shadow:none!important;border-radius:var(--u-r-card)!important;padding:16px 14px 14px!important}
+html body .wonguk .wgt{font-size:15px!important;font-weight:800!important;color:var(--u-ink)!important;text-align:left!important;margin-bottom:12px!important;letter-spacing:0}
+html body .wgpos{font-size:13px!important;font-weight:700!important;color:var(--u-sub)!important}
+html body .wgcol.day .wgpos{color:var(--u-blue-ink)!important}
+html body .wgsip{background:var(--u-soft)!important;color:var(--u-sub)!important}
+html body .wgcol.day .wgc{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--u-blue)!important}
+html body .wgc{text-shadow:none!important}
+html body .wgel{color:var(--u-sub)!important}
+html body .wonguk .wgnote{color:var(--u-mute)!important;text-align:left!important}
+html body .wgtrust{justify-content:flex-start!important;border-top:1px solid var(--u-line)!important}
+html body .wgtrust span{background:var(--u-soft)!important;border:0!important;color:var(--u-sub)!important}
+
+/* 섹션 카드 */
+html body .sec{border:1px solid var(--u-line)!important;box-shadow:none!important;border-radius:var(--u-r-card)!important;background:#fff!important;background-image:none!important}
+html body .sec.locked{background:#fff!important}
+html body .sec.locked::after{display:none!important}
+html body .sec .hd{gap:10px;padding:15px 16px}
+html body .sec .ti{font-weight:800!important;color:var(--u-ink)!important}
+html body .sec .lb{background:var(--u-soft)!important;color:var(--u-sub)!important}
+html body .sec .lb.free{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important}
+html body .sec .cv{color:var(--u-mute)}
+html body .teaser .ttx{color:var(--u-sub)!important;padding-left:0!important}
+html body .teaser .ttx::before{display:none!important}
+html body .teaser .ttx b{color:var(--u-ink)!important}
+html body .tlink{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:0;border:0;background:none;color:var(--u-blue-ink);font:700 13px/1.5 var(--serif);cursor:pointer}
+html body .tlink::before{content:"";width:12px;height:12px;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center/contain no-repeat}
+html body .tunlock{background:#fff!important;border:1px solid var(--u-blue)!important;color:var(--u-blue-ink)!important;font-weight:700!important}
+
+/* 잠금 안내 · 버튼 */
+html body .readyline{text-align:left!important;color:var(--u-sub)!important;font-size:15px!important;margin:18px 0 8px!important}
+html body .readyline b{color:var(--u-ink)!important}
+html body .gives li{color:var(--u-ink)!important}
+html body .lockgives{background:var(--u-soft)!important;border:0!important}
+html body .cta{border-radius:12px!important}
+html body .cta small{color:rgba(255,255,255,.86)!important}
+html body .ctaassure{color:var(--u-sub)!important;font-weight:600!important}
+html body .cta::after,html body .stickycta::after{display:none!important}
+html body .sharebtn{border:1px solid var(--u-line)!important;color:var(--u-ink)!important;font-weight:700!important;background:#fff!important}
+html body .sharebtn b{color:var(--u-blue-ink)!important}
+html body .sharebtn span{color:var(--u-mute)!important}
+html body .prodmenu{background:var(--u-soft)!important;background-image:none!important;border:0!important}
+html body .pmrow{background:#fff!important;border:1px solid var(--u-line)!important}
+html body .pmrow .pmpp{color:var(--u-blue-ink)!important}
+html body .bridge{background:var(--u-soft)!important;border:0!important}
+html body .bridge .ba{color:var(--u-blue-ink)!important}
+
+/* 결제창 */
+html body .sheet .grip{background:var(--u-line)!important}
+html body .sheet h3{font-size:17px!important;font-weight:800!important;text-align:left!important;color:var(--u-ink)!important}
+html body .catbuy{border:1.5px solid var(--u-blue)!important;box-shadow:none!important;background:#fff!important;border-radius:var(--u-r-card)!important}
+html body .catbuy-hd{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+html body .catbuy-nm{font-size:15px!important;font-weight:700!important;color:var(--u-sub)!important}
+html body .catbuy-pp{font-size:22px!important;font-weight:800!important;color:var(--u-ink)!important;margin-left:auto}
+html body .catgives{margin-top:12px!important;padding-top:12px!important;border-top:1px solid var(--u-line);gap:7px!important}
+html body .catgives li{font-size:13px!important;line-height:1.6!important}
+html body .paymethods{background:var(--u-soft)!important;border:0!important;color:var(--u-sub)!important}
+html body .paymethods span{color:var(--u-sub)!important}
+html body .consent{color:var(--u-sub)!important}
+html body .mclose{color:var(--u-sub)!important}
+html body .msec{color:var(--u-mute)!important}
+html body .sheet .sumhd{text-align:left!important}
+
+/* 스티키 결제 막대 */
+html body .stickycta .sl b{font-weight:800!important}
+
+/* ── 섹션 속 부품 (lib/report-copy.ts 가 만드는 HTML) ── */
+/* 닮은 CEO */
+html body .sealcmp{background:var(--u-soft)!important;background-image:none!important;border:0!important;box-shadow:none!important}
+html body .sealcmp .scwrap svg{filter:none!important}
+html body .sealcmp .scnm{color:var(--u-ink)!important;font-weight:700!important}
+html body .sealcmp .scr,html body .sealcmp .scpl,html body .sealcmp .sccap{color:var(--u-sub)!important}
+html body .sealcmp .scpct{color:var(--u-blue-ink)!important}
+html body .sealcmp .sccap b{color:var(--u-ink)!important}
+html body .twincard{background:#fff!important;border:1px solid var(--u-line)!important}
+html body .twincard .tco{color:var(--u-sub)!important}
+html body .twinchips .twc{background:var(--u-soft)!important;border:0!important;color:var(--u-ink)!important}
+html body .typrof{background:#fff!important;border:1px solid var(--u-line)!important}
+html body .typrof .tprep{color:var(--u-ink)!important}
+html body .typrof .tpm{background:var(--u-soft)!important;border:0!important;color:var(--u-sub)!important}
+html body .typrof .tpm i,html body .typrof .tpsl{color:var(--u-blue-ink)!important}
+html body .typrof .tpscale p,html body .typrof .tparc p{color:var(--u-sub)!important}
+html body .myeong{background:var(--u-soft)!important;border:0!important}
+html body .myeong .myl{color:var(--u-blue-ink)!important;font-weight:800!important}
+html body .myeong .mys{color:var(--u-sub)!important}
+html body .mecard,html body .mecard.mecard{background:var(--u-blue-soft)!important;background-image:none!important;border:0!important}
+html body .mecard::before{display:none!important}
+html body .mecard .mel{color:var(--u-blue-ink)!important;font-size:17px!important}
+html body .mecard .mep,html body .mecard .mep.dim{color:var(--u-ink)!important}
+html body .mecard .mep b,html body .mecard.mecard b{color:var(--u-blue-ink)!important}
+html body .mecard .merule{background:rgba(63,107,224,.3)!important}
+
+/* 진단 · 수칙 · 축 */
+html body .jin .jintag{border:1px solid var(--u-line)!important;color:var(--u-sub)!important;letter-spacing:0!important}
+html body .jin .jintype b{color:var(--u-blue-ink)!important}
+html body .seunban{background:var(--u-soft)!important;background-image:none!important;border:0!important}
+html body .seunban .sbk{background:var(--u-blue)!important;color:#fff!important}
+html body .seunban .sby em{color:var(--u-sub)!important;font-style:normal}
+html body .seunban .sbd b{color:var(--u-ink)!important}
+html body .jin .crisis{background:#fff!important;border:1px solid var(--u-line)!important;border-left:3px solid var(--u-warn)!important;border-radius:0 12px 12px 0!important}
+html body .jin .crisis .crhd{color:var(--u-warn)!important}
+html body .jin .crisis p{color:var(--u-ink)!important}
+html body .jin .crisis p b{color:var(--u-ink)!important}
+html body .suchik{background:#fff!important;background-image:none!important;border:1px solid var(--u-line)!important}
+html body .suchik .sut{color:var(--u-ink)!important;font-weight:800!important}
+html body .sun{background:var(--u-blue-soft)!important;background-image:none!important;color:var(--u-blue-ink)!important;font-weight:800!important}
+html body .esn{background:var(--u-blue-soft)!important;background-image:none!important;color:var(--u-blue-ink)!important;font-weight:800!important}
+html body .axiscard{background:#fff!important;background-image:none!important;border:1px solid var(--u-line)!important}
+html body .axrow{padding:12px 14px!important}
+html body .axsc{color:var(--u-ink)!important;font-weight:800!important}
+html body .axsc em{color:var(--u-mute)!important;font-style:normal}
+html body .tkrow .tkdot{background:var(--u-blue)!important}
+html body .execsum{background:var(--u-soft)!important;background-image:none!important;border:0!important}
+html body .ssrow .sshan{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important;font-size:15px!important}
+html body .ssrow .sstxt.lockt{color:var(--u-sub)!important}
+
+/* 연도 막대 */
+html body .yearbar{background:var(--u-soft)!important;background-image:none!important;border:0!important}
+html body .ybchip{background:#fff!important;border:1px solid var(--u-line)!important;color:var(--u-ink)!important;font-weight:700}
+html body .ybchip.on{border:1.5px solid var(--u-blue)!important;color:var(--u-blue-ink)!important;background:#fff!important}
+html body .ybchip em{color:var(--u-blue-ink)!important;font-style:normal}
+html body .ybt b{color:var(--u-ink)!important}
+
+/* 택일 · 사정률 게이지 */
+html body .gauge{background:#fff!important;background-image:none!important;border:1px solid var(--u-line)!important}
+html body .gauge .worry{background:var(--u-soft)!important}
+html body .gverdict .gvl,html body .gscale span.mid{color:var(--u-sub)!important}
+html body .gverdict .gvd{color:var(--u-blue-ink)!important}
+html body .gmeter .gmbase{border-color:var(--u-line)!important}
+html body .gmeter .gmtrack{background:var(--u-soft)!important;background-image:none!important}
+html body .gmtrack .gmband{background:rgba(63,107,224,.22)!important;background-image:none!important;border-color:rgba(63,107,224,.45)!important}
+html body .giltease,html body .sajlock,html body .bizhint{background:var(--u-soft)!important;background-image:none!important;border:0!important}
+html body .giltease .glt{color:var(--u-ink)!important}
+html body .giltease .gls,html body .giltease .gls b{color:var(--u-sub)!important}
+html body .weekahead{background:#fff!important;background-image:none!important}
+html body .wacell.now{background:var(--u-blue-soft)!important;border-color:var(--u-blue)!important}
+html body .wacell .wal{color:var(--u-blue-ink)!important}
+html body .sajcal .sch{color:var(--u-sub)!important}
+html body .sajcal .scd.lock{background:var(--u-soft)!important;background-image:none!important}
+html body .scd .scm{color:var(--u-sub)!important}
+html body .sj12 b{color:var(--u-ink)!important}
+html body .sj12 span{color:var(--u-sub)!important}
+html body .cheobang .cbk{color:var(--u-blue-ink)!important}
+html body .ileon{background:var(--u-soft)!important;background-image:none!important;border:0!important}
+html body .ileon .ilk{color:var(--u-blue-ink)!important}
+html body .ileon p{color:var(--u-ink)!important}
+html body .bwl .bwm.av,html body .bsc .bsk.av{background:#fff!important;color:var(--u-warn)!important}
+html body .bwl .bwm.mv{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important}
+html body .bizweek{background:#fff!important;background-image:none!important;border:1px solid var(--u-line)!important}
+html body .baljulock{background:var(--u-soft)!important;background-image:none!important}
+html body .tkt .tkfree{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important}
+html body .tkrow .tktx{color:var(--u-sub)!important}
+
+/* 믿어도 되나요 */
+html body .trhd{background:var(--u-soft)!important}
+
+/* 진단 스펙트럼 — 점수표의 .axrow(가로 flex)와 이름이 겹쳐 좌우 낱말이 한 칸에 끼었다 */
+html body .jin .axrow{display:block!important;padding:0!important;border:0!important}
+html body .jin .axhd{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--u-mute)}
+html body .jin .axhd .axon{color:var(--u-blue-ink);font-weight:800}
+html body .jin .axbar{background:var(--u-line)!important;background-image:none!important}
+html body .jin .axdot{background:var(--u-blue)!important}
+html body .jin .axdesc{color:var(--u-sub)}
+html body .jin .axdesc b{color:var(--u-ink)}
+html body .axdots i.on{background:var(--u-blue)!important;background-image:none!important}
+html body .axdots i{background:var(--u-line)!important}
+/* 잠금 뱃지 */
+html body .sec .lb.lk{display:inline-flex;align-items:center;gap:5px;min-width:26px;min-height:26px;justify-content:center}
+html body .sec .lb.lk::before{content:"";width:13px;height:13px;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center/contain no-repeat}
+html body a.topshare{text-decoration:none!important}
+html body .gverdict .gvl,html body .ileon .ilk{letter-spacing:0!important}
+html body .gverdict .gvd{font-size:27px!important}
+html body .gverdict.up .gvd i{color:var(--u-blue)!important}
+html body .gverdict.down .gvd i{color:var(--u-warn)!important}
+html body .gmneedle{background:var(--u-ink)!important;box-shadow:0 0 0 2.5px #fff!important}
+html body .gmneedle::after{background:var(--u-blue)!important;border-color:#fff!important;box-shadow:none!important}
+html body .sajmonhd b{color:var(--u-ink)!important}
+html body .bizsum .bsk.av,html body .bwl .bwm.av,html body .bsc .bsk.av{background:none!important}
+html body .weekahead .wacell.now{box-shadow:inset 0 0 0 1px var(--u-blue)!important}
