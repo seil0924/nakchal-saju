@@ -39,7 +39,7 @@ export default function Jari() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <ScrollReveal />
       <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>자리</Link>
+        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />자리</Link>
         <Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
 

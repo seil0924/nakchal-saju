@@ -28,7 +28,7 @@ export default function ColumnIndex() {
     <div className="app home5 colpage">
       <div className="mast">
         <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="s">士</span>
+          <span className="s" aria-hidden="true" />
           <div className="n">낙찰사주</div>
         </Link>
         <Link href="/reading" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>무료로 보기 ›</Link>

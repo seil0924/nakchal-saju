@@ -56,7 +56,7 @@ export default function DatePickerPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="topbar">
-        <Link className="logo" href="/en/bazi" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>BaZi</Link>
+        <Link className="logo" href="/en/bazi" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />BaZi</Link>
         <Link className="bz-lang" href="/jari" hrefLang="ko">한국어</Link>
       </div>
 

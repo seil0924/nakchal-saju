@@ -87,7 +87,7 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
 
       <div className="mast">
         <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="s">士</span>
+          <span className="s" aria-hidden="true" />
           <div className="n">낙찰사주</div>
         </Link>
         <Link href="/column" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>목록 ›</Link>

@@ -24,7 +24,7 @@ export default function AdminSidebar() {
   );
   return (
     <aside className="aside">
-      <Link href="/admin" className="abrand"><span className="s">士</span><span className="n">낙찰사주<em>ADMIN</em></span></Link>
+      <Link href="/admin" className="abrand"><span className="s" aria-hidden="true" /><span className="n">낙찰사주<em>ADMIN</em></span></Link>
       <div className="agrp">기본 관리</div>
       {BASIC.map(item)}
       <div className="agrp">낙찰사주 관리</div>

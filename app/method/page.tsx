@@ -35,7 +35,7 @@ export default function MethodPage() {
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>낙찰사주</Link>
+        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
         <Link className="ic" href="/glossary" aria-label="용어사전" style={{ fontSize: 13, fontWeight: 700, color: '#58616a', textDecoration: 'none' }}>용어사전 ›</Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>

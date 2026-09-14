@@ -49,7 +49,7 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>낙찰사주</Link>
+        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
         <Link className="ic" href="/reading?cat=daepyo" aria-label="대표 사주"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>

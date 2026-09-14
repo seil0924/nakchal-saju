@@ -38,7 +38,7 @@ export default function TaekilHub() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>낙찰사주</Link>
+        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
         <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10" /></svg></Link>
       </div>
 

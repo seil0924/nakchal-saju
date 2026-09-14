@@ -58,7 +58,7 @@ export default function WhyZhPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="topbar">
-        <Link className="logo" href="/zh/bazi" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>八字</Link>
+        <Link className="logo" href="/zh/bazi" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />八字</Link>
         <Link className="bz-lang" href="/zh/bazi">排盤</Link>
       </div>
 
