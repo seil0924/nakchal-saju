@@ -86,7 +86,7 @@ export default function BaljuMap() {
         <div className="bmap">
           <svg viewBox={`0 0 ${VB} ${VB}`} role="img" aria-label="발주처 성좌도">
             {[78, 128, 178, 216].map(r => (
-              <circle key={r} cx={C} cy={C} r={r} fill="none" stroke="rgba(255,255,255,.06)" />
+              <circle key={r} cx={C} cy={C} r={r} fill="none" stroke="rgba(30,33,36,.08)" />
             ))}
             {drift.map((n, k) => (
               <g key={k} className="bm-fl" style={{ ['--d' as string]: `${n.dur}s`, ['--dl' as string]: `-${n.delay}s`, ['--a' as string]: `${n.amp}px` }}>
@@ -95,9 +95,9 @@ export default function BaljuMap() {
                 </circle>
               </g>
             ))}
-            <circle className="bm-pulse" cx={C} cy={C} r={29} fill="none" stroke="rgba(239,234,224,.5)" strokeWidth={1.5} strokeDasharray="4 3" />
-            <text x={C} y={C + 1} textAnchor="middle" fontSize={10.5} fill="rgba(239,234,224,.82)">대표님</text>
-            <text x={C} y={C + 15} textAnchor="middle" fontSize={9} fill="rgba(239,234,224,.5)">자리</text>
+            <circle className="bm-pulse" cx={C} cy={C} r={29} fill="none" stroke="rgba(63,107,224,.55)" strokeWidth={1.5} strokeDasharray="4 3" />
+            <text x={C} y={C + 1} textAnchor="middle" fontSize={10.5} fill="#1e2124">대표님</text>
+            <text x={C} y={C + 15} textAnchor="middle" fontSize={9} fill="#58616a">자리</text>
             {OH_HANJA.map((h, i) => {
               const a = -Math.PI / 2 + i * 2 * Math.PI / 5;
               return <text key={h} x={C + 228 * Math.cos(a)} y={C + 228 * Math.sin(a)} textAnchor="middle" fontSize={12.5} fontWeight={700} fill={OH_COLOR[i]} style={{ fontFamily: 'var(--serif)' }}>{h}</text>;
@@ -125,7 +125,7 @@ export default function BaljuMap() {
       <div className="bmap">
         <svg viewBox={`0 0 ${VB} ${VB}`} role="img" aria-label="발주처 궁합 지도">
           {[86, 136, 186, 216].map(r => (
-            <circle key={r} cx={C} cy={C} r={r} fill="none" stroke="rgba(255,255,255,.07)" />
+            <circle key={r} cx={C} cy={C} r={r} fill="none" stroke="rgba(30,33,36,.08)" />
           ))}
           <circle cx={C} cy={C} r={118} fill="rgba(179,56,44,.07)" stroke="rgba(179,56,44,.35)" strokeDasharray="5 4" />
           {pts.filter(p => !p.lock).map(p => (
@@ -134,20 +134,20 @@ export default function BaljuMap() {
           {pts.map(p => p.lock ? (
             <g key={p.k}>
               <circle cx={p.x} cy={p.y} r={(p.t.core ? 10 : 7.5) + 3} fill="none" stroke="#b3382c" strokeWidth={1.2} strokeDasharray="3 2.5" opacity={0.85} />
-              <circle cx={p.x} cy={p.y} r={p.t.core ? 10 : 7.5} fill="#3a3a3d" />
-              <text x={p.x} y={p.y + 3.6} textAnchor="middle" fontSize={9.5} fontWeight={900} fill="#e6b9b3" style={{ fontFamily: 'var(--serif)' }}>封</text>
+              <circle cx={p.x} cy={p.y} r={p.t.core ? 10 : 7.5} fill="#e6e8ea" />
+              <text x={p.x} y={p.y + 3.6} textAnchor="middle" fontSize={9.5} fontWeight={900} fill="#58616a">🔒</text>
             </g>
           ) : (
             <g key={p.k}>
               <circle cx={p.x} cy={p.y} r={p.t.core ? 10 : 7.5} fill={OH_COLOR[p.t.oh]} opacity={0.95}>
                 <title>{p.t.name} · 궁합 {p.t.score}</title>
               </circle>
-              <text x={p.x} y={p.y - 12.5} textAnchor="middle" fontSize={8.5} fill="rgba(239,234,224,.88)">{p.t.name.slice(0, 7)}</text>
+              <text x={p.x} y={p.y - 12.5} textAnchor="middle" fontSize={8.5} fill="#1e2124">{p.t.name.slice(0, 7)}</text>
               <text x={p.x} y={p.y + 3.2} textAnchor="middle" fontSize={8} fontWeight={800} fill="#fff">{p.t.score}</text>
             </g>
           ))}
           <circle cx={C} cy={C} r={28} fill="#c79a3a" />
-          <circle cx={C} cy={C} r={28} fill="none" stroke="#efeae0" strokeWidth={1.5} opacity={0.85} />
+          <circle cx={C} cy={C} r={28} fill="none" stroke="#fff" strokeWidth={1.5} opacity={0.85} />
           <text x={C} y={C + 1} textAnchor="middle" fontSize={13} fontWeight={800} fill="#fff">{me?.name.slice(0, 4)}</text>
           <text x={C} y={C + 14} textAnchor="middle" fontSize={8.5} fill="rgba(255,255,255,.9)">{OH_HANJA[[0, 0, 1, 1, 2, 2, 3, 3, 4, 4][me!.gan]]} 일간</text>
         </svg>

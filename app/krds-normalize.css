@@ -553,3 +553,52 @@ html body .gives li::before{content:''!important;width:14px!important;height:14p
 html body .rd-bar .go{flex:none;width:auto!important;margin:0!important;min-height:48px;padding:0 20px!important;border-radius:12px!important;font-size:15px!important}
 body:has(.rd-bar) .shell{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 @media (min-width:900px){.rd-bar{left:252px}}
+
+/* sweep21 보강 — 머리의 금빛 번짐, 발주처 지도 글씨, 카드 제목 서체 */
+html body .hero::before,html body .home .hero::before{display:none!important}
+html body .bm-cap{color:#58616a!important}
+html body .bm-cap b{color:#1e2124!important}
+html body .bm-cap b.lk{color:#b3382c!important}
+html body .bm-rk .rkoh.lock{background:#f4f5f7!important;color:#b3382c!important}
+html body :is(.st,.qh,.subhd,.sechd .t,.bm-insight b){font-family:var(--sans)!important;font-weight:800!important}
+
+/* sweep21 보강 2 — 머리 도장, 로그인, 복채, 택일, 자리 나침판 (2026-09-14) */
+html body .home5 .mast .s{font-size:0!important;width:30px!important;height:30px!important;border:0!important;border-radius:8px!important;
+  background:#3f6be0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='10' y='19' width='3.8' height='12' rx='1.9' fill='%23fff'/%3E%3Crect x='16' y='14' width='3.8' height='17' rx='1.9' fill='%23fff'/%3E%3Crect x='22' y='17' width='3.8' height='14' rx='1.9' fill='%23fff'/%3E%3Crect x='28' y='11' width='3.8' height='20' rx='1.9' fill='%23fff'/%3E%3C/svg%3E") center/100% no-repeat!important}
+html body .home5 .mast .n{font-family:var(--sans)!important}
+html body .loginseal{filter:none!important}
+html body .loginseal svg{display:none!important}
+html body .loginseal::before{content:"";width:56px;height:56px;border-radius:15px;
+  background:#3f6be0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='10' y='19' width='3.8' height='12' rx='1.9' fill='%23fff'/%3E%3Crect x='16' y='14' width='3.8' height='17' rx='1.9' fill='%23fff'/%3E%3Crect x='22' y='17' width='3.8' height='14' rx='1.9' fill='%23fff'/%3E%3Crect x='28' y='11' width='3.8' height='20' rx='1.9' fill='%23fff'/%3E%3C/svg%3E") center/100% no-repeat}
+html body .login-app :is(h1,.loginttl){font-family:var(--sans)!important}
+html body .lgin{border:1px solid #e6e8ea!important;background:#fff!important;color:#1e2124!important}
+html body .lgin:focus{border-color:#3f6be0!important}
+html body .logindiv::before,html body .logindiv::after{background:#e6e8ea!important}
+html body .lgbtn{font-family:var(--sans)!important}
+html body .loginnote{border-color:#e6e8ea!important;background:#f4f5f7!important}
+html body .bokbg,html body .bokscrim,html body .bokkick,html body .bokpage .bokseal,html body .bokdone .bdseal{display:none!important}
+html body .bokpage h1,html body .bokdone h1{font-family:var(--sans)!important;color:#1e2124!important}
+html body .boklead{color:#58616a!important}
+html body .bokrule{background:#3f6be0!important}
+html body .bokamt{background:#fff!important;border:1px solid #e6e8ea!important;color:#1e2124!important;font-family:var(--sans)!important;box-shadow:none!important}
+html body .bokamt.on{border:1.5px solid #3f6be0!important;color:#2f56c4!important;background:#fff!important}
+html body .bokcustom{background:#fff!important;border:1px solid #e6e8ea!important;color:#1e2124!important}
+html body .boknote{color:#6d7882!important}
+html body .bokback{color:#2f56c4!important}
+html body .bokgo:disabled{background:#e6e8ea!important;color:#6d7882!important}
+html body .dp-b.on{background:#fff!important;border:1.5px solid #3f6be0!important;color:#2f56c4!important}
+html body .dp-days .dh{background:#f4f5f7!important;color:#1e2124!important}
+html body .jr-card{background:#f4f5f7!important}
+html body .jr-cap{color:#58616a!important}
+html body .jr-cap b{color:#1e2124!important}
+html body .jr-caut{border-top-color:#e6e8ea!important;color:#b3382c!important}
+html body .jr-caut b{color:#b3382c!important}
+
+/* sweep21 보강 3 — 인라인 버튼 테두리(금색)·자리 버튼·/full 영상 띠 */
+html body a[style*="#3f6be0"]{border-color:transparent!important;font-family:var(--sans)!important}
+html body .jr-cta{background:#3f6be0!important;color:#fff!important;border-radius:12px!important}
+html body .jr-cta small{color:rgba(255,255,255,.88)!important}
+html body .home5 .filmband{background:#f4f5f7!important;height:auto!important;padding:28px 20px!important}
+html body .home5 .filmband video{display:none!important}
+html body .home5 .filmband .fbin{position:static!important}
+html body .home5 .filmband .fbt,html body .home5 .filmband .fbt b{color:#1e2124!important;font-family:var(--sans)!important;text-shadow:none!important}

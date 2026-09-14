@@ -56,7 +56,7 @@ export default function FullIntro() {
       <div className="mast">
         <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
           <span className="s">士</span>
-          <div className="n">전체 리포트<em>大 全 書 · 十八章</em></div>
+          <div className="n">전체 리포트</div>
         </Link>
         <Link href="/" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
       </div>

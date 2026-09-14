@@ -32,7 +32,7 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
       <div className="mast">
         <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
           <span className="s">士</span>
-          <div className="n">낙찰사주<em>會社 사주 전문</em></div>
+          <div className="n">낙찰사주</div>
         </Link>
         <Link href="/why" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>다른 고민 ›</Link>
       </div>

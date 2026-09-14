@@ -120,15 +120,15 @@ export default function JariMap() {
           {DIR8.map((_, i) => (
             <path key={'w' + i} d={wedge(i, 74, 150)}
               fill={i === desk ? 'rgba(199,154,58,.34)' : i === door ? 'rgba(179,56,44,.30)'
-                : (i === caution.daejanggun || i === caution.samsal) ? 'rgba(179,56,44,.12)' : 'rgba(255,255,255,.035)'}
-              stroke="rgba(239,234,224,.14)" strokeWidth={0.8} />
+                : (i === caution.daejanggun || i === caution.samsal) ? 'rgba(179,56,44,.12)' : '#fff'}
+              stroke="#e6e8ea" strokeWidth={0.8} />
           ))}
           {DIR8.map((h, i) => {
             const [x, y] = px(168, i * 45);
             const on = i === door || i === desk;
             return (
               <text key={h} x={x} y={y + 4} textAnchor="middle" fontSize={i % 2 ? 11 : 13.5}
-                fontWeight={on ? 900 : 600} fill={on ? '#efeae0' : 'rgba(239,234,224,.5)'}
+                fontWeight={on ? 900 : 600} fill={on ? '#1e2124' : '#6d7882'}
                 style={{ fontFamily: 'var(--serif)' }}>{h}</text>
             );
           })}
@@ -138,13 +138,13 @@ export default function JariMap() {
               <g>
                 <line x1={C} y1={C} x2={x} y2={y} stroke="#c79a3a" strokeWidth={2.4} />
                 <circle cx={x} cy={y} r={7} fill="#c79a3a" />
-                <text x={x} y={y + 3.2} textAnchor="middle" fontSize={8} fontWeight={900} fill="#1c1c1d">宅</text>
+                <text x={x} y={y + 3.2} textAnchor="middle" fontSize={8} fontWeight={900} fill="#fff"></text>
               </g>
             );
           })()}
-          <circle cx={C} cy={C} r={40} fill="#26262a" stroke="rgba(239,234,224,.3)" />
-          <text x={C} y={C - 3} textAnchor="middle" fontSize={16} fontWeight={800} fill="#efeae0" style={{ fontFamily: 'var(--serif)' }}>宅</text>
-          <text x={C} y={C + 13} textAnchor="middle" fontSize={9} fill="rgba(239,234,224,.62)">{verdict ? `${verdict.km}km` : '지금 자리'}</text>
+          <circle cx={C} cy={C} r={40} fill="#fff" stroke="#e6e8ea" />
+          <text x={C} y={C - 3} textAnchor="middle" fontSize={13} fontWeight={800} fill="#1e2124">자리</text>
+          <text x={C} y={C + 13} textAnchor="middle" fontSize={9} fill="#58616a">{verdict ? `${verdict.km}km` : '지금 자리'}</text>
         </svg>
         <div className="jr-cap">
           {verdict

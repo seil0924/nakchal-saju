@@ -25,7 +25,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
     <div className="app home5 catpage" style={{ ['--acc' as any]: oh.acc }}>
       <div className="mast">
         <div className="mb"><Link href="/" className="s" style={{ textDecoration: 'none' }}>士</Link>
-          <div className="n">{p.name}<em>{p.kicker}</em></div></div>
+          <div className="n">{p.name}</div></div>
         <Link href="/" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
       </div>
 
