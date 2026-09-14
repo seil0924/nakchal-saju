@@ -6,6 +6,7 @@ import SipsungCheck from '@/app/_components/SipsungCheck';
 import { type Pattern } from '@/lib/sipsung';
 import './concept.css';
 import { ogCard, ogCardUrl } from '@/lib/og';
+import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
 const bySlug = (slug: string) => CONCEPTS.find(c => c.slug === decodeURIComponent(slug));
@@ -48,10 +49,7 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
   return (
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
-        <Link className="ic" href="/reading?cat=daepyo" aria-label="대표 사주"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
-      </div>
+      <SiteTop />
       <div style={{ padding: '18px 18px 4px' }}>
         <nav aria-label="위치" style={{ fontSize: 13, color: '#58616a', marginBottom: 10 }}>{c.group} › {c.label}</nav>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '4px 0 12px' }}>{c.h1}</h1>
@@ -79,6 +77,6 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
     </div>
   );
 }
-const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

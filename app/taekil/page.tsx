@@ -5,6 +5,7 @@ import { TAEKIL, OFFICER_KO } from '@/lib/taekil';
 import TaekilPick from '@/app/_components/TaekilPick';
 import { ogCard, ogCardUrl } from '@/lib/og';
 import { kstYmd } from '@/lib/kst';
+import SiteTop from '@/app/_components/SiteTop';
 
 // "앞으로 90일" 목록이라 배포 때 한 번 구우면 며칠 뒤엔 지난 날짜를 보여준다. 한 시간마다 다시 굽는다.
 export const revalidate = 3600;
@@ -37,13 +38,10 @@ export default function TaekilHub() {
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
-        <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10" /></svg></Link>
-      </div>
+      <SiteTop />
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>擇 日</div>
+        <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>택일</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>언제 시작할 것인가</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>
           개업·법인 설립·계약·사무실 이전·입찰. 하는 일에 따라 좋은 날이 다릅니다. 건제십이신(建除十二神)으로
@@ -99,7 +97,7 @@ export default function TaekilHub() {
 
 const card: React.CSSProperties = {
   display: 'block', background: '#fff', border: '1px solid var(--line)',
-  borderRadius: 13, padding: '13px 15px', textDecoration: 'none',
+  borderRadius: 12, padding: '13px 15px', textDecoration: 'none',
 };
 const pill: React.CSSProperties = {
   fontSize: 13, fontWeight: 700, color: '#58616a',

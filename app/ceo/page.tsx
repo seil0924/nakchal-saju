@@ -5,6 +5,7 @@ import { EL_HEX } from '@/lib/preview';
 import { sealSvg } from '@/lib/seal';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
+import SiteTop from '@/app/_components/SiteTop';
 
 const CEO_STEPS = [
   '삼주(三柱) 구성 — 년·월·일',
@@ -160,6 +161,7 @@ export default function CeoTwin() {
 
   return (
     <div className="app">
+      <SiteTop />
       <div className="hero">
         <h1>나와 닮은<br />세계적 CEO는?</h1>
         <p style={{ color: '#c3cfe3', marginTop: 10, fontSize: 13, lineHeight: 1.7 }}>

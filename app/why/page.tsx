@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { PAINS } from '@/lib/pains';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata = {
   title: '대표님 잘못이 아닙니다',
@@ -10,13 +11,7 @@ export const metadata = {
 export default function WhyHub() {
   return (
     <div className="app home5">
-      <div className="mast">
-        <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="s" aria-hidden="true" />
-          <div className="n">낙찰사주</div>
-        </Link>
-        <Link href="/" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
-      </div>
+      <SiteTop />
 
       <div className="hero5">
         <div className="wm">運</div>

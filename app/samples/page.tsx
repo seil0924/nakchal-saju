@@ -3,6 +3,7 @@ import { ogCard } from '@/lib/og';
 
 const CARD = { seal: '例', k: 'SAMPLE 四柱', t: '이런 결과가 나옵니다', s: '가상 대표 3인의 예시 리포트' };
 import Link from 'next/link';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata: Metadata = {
   title: '샘플 리포트 — 이런 결과가 나옵니다',
@@ -26,19 +27,16 @@ const SAMPLES = [
 export default function SamplesPage() {
   return (
     <div className="app home">
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
-        <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
-      </div>
+      <SiteTop />
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#636d77', fontWeight: 700, marginBottom: 6 }}>샘플 리포트</div>
+        <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>샘플 리포트</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>이런 결과가 나옵니다</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>가상 대표 3인의 예시입니다. 실제로는 대표님 생년월일로 오늘의 투찰 택일·유형·실전 수칙이 산출됩니다.</p>
 
         {SAMPLES.map((s, i) => (
-          <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 16, padding: '16px 17px', marginBottom: 13 }}>
+          <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '16px 17px', marginBottom: 13 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 10 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: 10, background: '#3f6be0', color: '#f6e7c8', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22 }}>{s.seal}</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: 10, background: '#3f6be0', color: '#fff', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22 }}>{s.seal}</span>
               <div>
                 <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--ink)' }}>{s.name}</div>
                 <div style={{ fontSize: 13, color: '#58616a', fontWeight: 600 }}>대표 유형 · {s.type}</div>
@@ -57,7 +55,7 @@ export default function SamplesPage() {
           </div>
         ))}
 
-        <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 4 }}>내 결과 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 4 }}>내 결과 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
         <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 위 사례는 이해를 돕기 위한 가상 예시입니다. 실제 인물과 무관하며, 명리 기반 참고·오락용 정보입니다.</p>
       </div>
     </div>

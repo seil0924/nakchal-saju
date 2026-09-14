@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import JariMap from '@/app/_components/JariMap';
 import ScrollReveal from '@/app/_components/ScrollReveal';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata: Metadata = {
   // 레이아웃 템플릿이 ' · 낙찰사주'를 뒤에 붙인다. 여기서 또 붙이면 두 번 나온다.
@@ -38,10 +39,7 @@ export default function Jari() {
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <ScrollReveal />
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />자리</Link>
-        <Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
-      </div>
+      <SiteTop />
 
       <div className="hero"><div className="kick">자리 사주</div>
         <h1 style={{ fontSize: 17, marginTop: 8, lineHeight: 1.35 }}>사무실을 옮기기 전에,<br />어느 쪽인지부터</h1>

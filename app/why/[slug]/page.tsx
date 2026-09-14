@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PAINS, painBySlug, PAIN_CAT } from '@/lib/pains';
 import { PAIN_OH, OHAENG } from '@/lib/categories';
+import SiteTop from '@/app/_components/SiteTop';
 
 export function generateStaticParams() {
   return PAINS.map(p => ({ slug: p.slug }));
@@ -29,13 +30,7 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="app home5 catpage" style={{ ['--acc' as any]: acc }}>
-      <div className="mast">
-        <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="s" aria-hidden="true" />
-          <div className="n">낙찰사주</div>
-        </Link>
-        <Link href="/why" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>다른 고민 ›</Link>
-      </div>
+      <SiteTop />
 
       {/* 통점 히어로 (상징 영상) */}
       <div className="hero5">

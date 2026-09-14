@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { CLIENTS, clientSlug, clientBySlug, josa } from '@/lib/clients';
 import { baljuContent } from '@/lib/balju-content';
 import { ogCard } from '@/lib/og';
+import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -46,10 +47,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
   return (
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />발주처</Link>
-        <Link className="ic" href="/balju" aria-label="발주처 목록"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
-      </div>
+      <SiteTop />
 
       <div style={{ padding: '18px 18px 4px' }}>
         <nav aria-label="위치" style={{ fontSize: 13, color: '#58616a', marginBottom: 10 }}>
@@ -61,7 +59,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '10px 0 16px' }}>
           <span style={tag}>{c.date.slice(0, 4)} 설립</span>
           <span style={tag}>{c.cat}</span>
-          {c.core ? <span style={{ ...tag, background: '#f6e7c8', color: '#7a5c1e' }}>封 핵심 발주처</span> : <span style={{ ...tag, background: '#e7f4ee', color: '#177f5e' }}>일반 발주처</span>}
+          {c.core ? <span style={{ ...tag, background: '#eef3fe', color: '#2f56c4' }}>핵심 발주처</span> : <span style={{ ...tag, background: '#f4f5f7', color: '#58616a' }}>일반 발주처</span>}
         </div>
 
         <div style={card}>
@@ -122,6 +120,6 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
 }
 
 const tag: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#58616a', background: '#f4f5f7', padding: '5px 11px', borderRadius: 999 };
-const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

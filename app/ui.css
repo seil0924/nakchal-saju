@@ -224,3 +224,96 @@ html body .u-back{flex:none;display:inline-flex;align-items:center;justify-conte
 html body .u-back svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 html body .u-back:active{background:var(--u-soft)}
 @media (min-width:900px){html body .u-top{position:static}}
+
+/* ═════════ 4단계 — 페이지 공통 부품 ═════════ */
+
+/* 머리 한 줄: SiteTop (홈 .h6-top 과 같은 치수) */
+html body .site-top{position:relative;display:flex;align-items:center;justify-content:space-between;padding:10px 16px 10px 18px;background:#fff;border-bottom:1px solid var(--u-line)}
+html body .site-top::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#2e8b57 0 20%,#b5402f 20% 40%,#b58a2f 40% 60%,#6b7280 60% 80%,#2e5aa8 80%)}
+html body .st-brand{display:inline-flex;align-items:center;gap:9px;min-height:44px;font-size:17px;font-weight:800;letter-spacing:-.01em;color:var(--u-ink)!important;text-decoration:none!important}
+html body .st-menu{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;color:var(--u-ink)}
+html body .st-menu svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round}
+@media print{html body .site-top{display:none}}
+
+/* 페이지 제목 묶음(.hero) — 왼쪽 정렬, 제목 22 · 설명 15 */
+html body .hero,html body .home .hero{background:#fff!important;background-image:none!important;border-bottom:0!important;text-align:left!important;padding:22px 20px 8px!important}
+html body .hero::before,html body .hero::after{display:none!important}
+html body .hero h1,html body .hero h2{font-size:22px!important;font-weight:800!important;line-height:1.4!important;color:var(--u-ink)!important;margin:0!important;letter-spacing:-.02em}
+html body .hero p,html body .hero [style*="color"],html body .hero div:not(.k):not(.kick){color:var(--u-sub)!important;font-size:15px!important}
+html body .hero a{color:var(--u-blue-ink)!important}
+
+/* 소제목 — 색 막대 없이 굵기로만 */
+html body .st .b,html body .sechd .t .b,html body .home .sechd .t .b{display:none!important}
+html body .st,html body .sechd .t,html body .home .sechd .t{color:var(--u-ink)!important;font-size:15px!important;font-weight:800!important}
+
+/* 카드 모서리 — 12 하나 */
+:root{--krds-radius-l:12px;--u-r-card:12px}
+html body .h6-sample,html body .h6-fcard{border-radius:12px}
+
+/* 글 속 링크 — 파랑 #3f6be0 은 흰 바탕에서 4.4 로 모자라 한 단계 짙게 */
+html body .app a:not([class]),html body .app p a,html body .app li a:not([class]){color:var(--u-blue-ink)}
+html body .bm-cta small{color:#fff!important;opacity:.92}
+html body .hsex a{color:var(--u-blue-ink)!important;border-color:var(--u-line)!important}
+html body .rvstars label span{color:var(--u-blue-ink)!important}
+
+/* 로그인 */
+html body .loginswitch button{color:var(--u-blue-ink)!important}
+
+/* 짙은 영상 머리(home5 .hero5 — /full · /why · /product) → 밝은 제목 */
+html body .home5 .hero5,html body .home5 .hero5.vhero{background:#fff!important;background-image:none!important;min-height:0!important;max-height:none!important;padding:22px 20px 18px!important;border-bottom:1px solid var(--u-line)}
+html body .home5 .hero5::after,html body .home5 .hero5::before{display:none!important}
+html body .home5 .hero5 .herovid,html body .home5 .hero5 .wm,html body .home5 .hero5 .rule{display:none!important}
+html body .home5 .hero5 .kick{color:var(--u-blue-ink)!important;letter-spacing:0!important}
+html body .home5 .hero5 h1{font-size:22px!important;font-weight:800!important;color:var(--u-ink)!important;margin-top:6px!important;line-height:1.4!important}
+html body .home5 .hero5 h1 b{color:var(--u-blue-ink)!important}
+html body .home5 .hero5 .sub{color:var(--u-sub)!important;font-size:15px!important;max-width:none!important;line-height:1.7!important;margin-top:8px}
+
+/* /full 공감 단락(짙은 영상 카드) → 연회색 */
+html body .home5 .emocore{background:var(--u-soft)!important;background-image:none!important;color:var(--u-ink)!important;text-align:left!important}
+html body .home5 .emocore::before,html body .home5 .emocore .emovid,html body .home5 .emocore .emk{display:none!important}
+html body .home5 .emocore p,html body .home5 .emocore .emlast{color:var(--u-ink)!important}
+html body .home5 .emocore b,html body .home5 .emocore p b,html body .home5 .emocore .emlast b{color:var(--u-blue-ink)!important}
+html body .home5 .emocore .emrule{background:var(--u-line)!important;margin:16px 0!important}
+
+/* home5 부품 */
+html body .home5 .pain .pk,html body .catpage .painbox .pain .pk{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important}
+html body .home5 .painout,html body .catpage .painout{background:var(--u-soft)!important;border-left:0!important;color:var(--u-ink)!important}
+html body .home5 .painout b,html body .catpage .painout b{color:var(--u-blue-ink)!important}
+html body .home5 .fullcta,html body .catpage .fullcta{background:var(--u-blue)!important;border:0!important;color:#fff!important}
+html body .home5 .arow .an,html body .catpage .auth .arow .an{border-color:var(--u-line)!important;color:var(--u-blue-ink)!important}
+html body .home5 .faqi summary .fq{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important}
+html body .home5 .urgent{background:var(--u-soft)!important;border:0!important;color:var(--u-ink)!important}
+html body .home5 .urgent b{color:var(--u-blue-ink)!important}
+html body .home5 .li5 .gz{color:var(--u-sub)!important}
+html body .fsmk,html body .home5 h1 b,html body .filmband .fbt b{color:var(--u-blue-ink)!important}
+html body .foot .colo,html body .colpost .colo{display:none!important}
+html body .foot,html body .foot a{font-size:13px!important}
+
+/* 택일 달력(DayPicker) */
+html body .dp-toggle{background:#fff!important;border:1px dashed var(--u-line)!important;color:var(--u-blue-ink)!important}
+html body .dp-b{border-color:var(--u-line)!important}
+html body .dp-chip.a,html body .dp-chip.b{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important;border-color:transparent!important}
+html body .dp-chip.c,html body .dp-chip.d{background:var(--u-soft)!important;color:var(--u-sub)!important;border-color:transparent!important}
+html body .dp-chip b{color:inherit!important}
+html body .dp-days li.c{border-left-color:var(--u-line)!important}
+html body .dp-days .dg,html body .jr-days .jg{color:var(--u-sub)!important}
+html body .dp-cta,html body .dp-cta em{font-size:15px!important}
+
+/* 자리 사주 */
+html body .jr-h em,html body .jr-days .jk{background:var(--u-blue-soft)!important;color:var(--u-blue-ink)!important;border-radius:6px!important}
+
+/* 회사 사주 */
+html body .hsphase.hold{border-color:var(--u-line)!important}
+html body .hsphase .v{color:var(--u-ink)!important}
+html body .hslock{border-color:var(--u-line)!important}
+html body .hsseun .tag{background:var(--u-soft)!important;color:var(--u-sub)!important}
+html body .c .e{color:var(--u-sub)!important}
+
+/* 더보기 로그인 권유 */
+html body .loginpromo .lpk{background:var(--u-blue-soft)!important;background-image:none!important;border:0!important;color:var(--u-blue-ink)!important}
+/* --navy 는 KRDS 파랑 #3f6be0 을 가리켜 글씨로 쓰면 흰 바탕에서 4.4 — 글씨 기준 파랑으로 */
+:root{--navy:#2f56c4}
+html body .fshd .fsmk{display:none!important}
+html body .fstx b{color:var(--u-ink)!important}
+html body :is(.setrow,.pickbtn,.hsphase,.hslock,.bmap,.pricelist,.loginpromo,.persona,.jr-card,.loginnote){border-radius:12px!important}
+html body .dp-days li{border-radius:8px!important}

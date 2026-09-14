@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ogCard } from '@/lib/og';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata = {
   title: '개인정보처리방침',
@@ -27,6 +28,7 @@ const SECTIONS: [string, string][] = [
 export default function Privacy() {
   return (
     <div className="app">
+      <SiteTop />
       <div className="hero"><h1>개인정보처리방침</h1>
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">

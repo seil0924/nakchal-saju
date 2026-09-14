@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ogCard } from '@/lib/og';
+import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
 const MIN = 2026, MAX = 2035;
@@ -102,14 +103,11 @@ export default function YearPage({ params }: { params: { year: string } }) {
   const years = Array.from({ length: MAX - MIN + 1 }, (_, i) => MIN + i);
   return (
     <div className="app home">
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
-        <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
-      </div>
+      <SiteTop />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonld) }} />
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#636d77', fontWeight: 700, marginBottom: 6 }}>{yi.ganzhi} · 事業運</div>
+        <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>{yi.ganzhi}년 사업운</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>{y} {yi.ganzhi} 12지신 사업·입찰운세</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 12px' }}>{y}년은 <b>{yi.ganzhi} — {yi.label}</b>. {yi.theme}입니다. 같은 띠라도 <b>태어난 해(년주)</b>에 따라 올해 기운과의 관계가 달라집니다 — 출생연도별로 짚어드립니다.</p>
 
@@ -120,9 +118,9 @@ export default function YearPage({ params }: { params: { year: string } }) {
         </div>
 
         {DATA.map((t, i) => (
-          <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 16, padding: '15px 16px', marginBottom: 12 }}>
+          <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 8 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 10, background: '#3f6be0', color: '#f6e7c8', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17 }}>{t.h}</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 10, background: '#3f6be0', color: '#fff', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17 }}>{t.h}</span>
               <div>
                 <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--ink)' }}>{t.a}</div>
                 <div style={{ fontSize: 13, color: '#58616a', fontWeight: 600 }}>{t.base}</div>
@@ -139,7 +137,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
           </div>
         ))}
 
-        <div style={{ background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 16, padding: '18px 17px', margin: '6px 0 4px' }}>
+        <div style={{ background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 12, padding: '18px 17px', margin: '6px 0 4px' }}>
           <div style={{ fontWeight: 800, fontSize: 17, color: '#1e2124', marginBottom: 6 }}>년주는 큰 흐름일 뿐입니다</div>
           <p style={{ fontSize: 13, lineHeight: 1.75, color: '#58616a', margin: '0 0 12px' }}>같은 해에 태어나도 월·일·시에 따라 사주는 전혀 달라집니다. 대표님의 <b style={{ color: '#1e2124' }}>정확한 생년월일</b>로 오늘의 투찰 택일·발주처 궁합·회사 사주까지 만세력으로 짚어보세요.</p>
           <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '13px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 15, textDecoration: 'none' }}>내 사주로 30초 무료 확인 →</Link>

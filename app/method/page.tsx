@@ -3,6 +3,7 @@ import { ogCard } from '@/lib/og';
 
 const CARD = { seal: '法', k: '算出 方法', t: '어떻게 계산하는가', s: '만세력 · 절기 · 진태양시 — 근거를 공개합니다' };
 import Link from 'next/link';
+import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -34,16 +35,13 @@ export default function MethodPage() {
   return (
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
-        <Link className="ic" href="/glossary" aria-label="용어사전" style={{ fontSize: 13, fontWeight: 700, color: '#58616a', textDecoration: 'none' }}>용어사전 ›</Link>
-      </div>
+      <SiteTop />
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#636d77', fontWeight: 700, marginBottom: 6 }}>計算 方法論</div>
+        <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>계산 방법</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>어떻게 계산하나 — 명식을 세우는 방법</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>사주 해석의 정확도는 명식을 얼마나 정확히 세우는가에서 갈립니다. 낙찰사주는 아래 원리로 여덟 글자를 계산합니다. 해석 자체는 명리 이론에 기반한 참고·오락용입니다.</p>
         {SEC.map((s, i) => (
-          <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 }}>
+          <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 }}>
             <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{s.h}</div>
             <p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{s.p}</p>
           </div>
@@ -57,5 +55,5 @@ export default function MethodPage() {
     </div>
   );
 }
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

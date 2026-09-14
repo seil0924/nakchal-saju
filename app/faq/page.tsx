@@ -4,6 +4,7 @@ import { ogCard } from '@/lib/og';
 const CARD = { seal: '問', k: '常 問', t: '자주 묻는 질문', s: '정확도 · 결제 · 환불까지 있는 그대로' };
 import Link from 'next/link';
 import { FAQ_MAIN } from '@/lib/faq';
+import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -34,10 +35,7 @@ export default function FaqPage() {
   return (
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
-        <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
-      </div>
+      <SiteTop />
       <div style={{ padding: '18px 18px 4px' }}>
         <div style={{ fontSize: 13, letterSpacing: '.3em', color: '#636d77', fontWeight: 700, marginBottom: 6 }}>自主 問答</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>자주 묻는 질문</h1>
@@ -62,6 +60,6 @@ export default function FaqPage() {
     </div>
   );
 }
-const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

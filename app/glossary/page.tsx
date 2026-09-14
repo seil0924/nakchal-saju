@@ -5,6 +5,7 @@ const CARD = { seal: '典', k: '用語 辭典', t: '입찰·명리 용어사전'
 import Link from 'next/link';
 import { GLOSSARY, glossaryByCat } from '@/lib/glossary';
 import { CONCEPTS } from '@/lib/seo-concepts';
+import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
 const slugify = (s: string) => s;
@@ -31,12 +32,9 @@ export default function GlossaryPage() {
   return (
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />낙찰사주</Link>
-        <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
-      </div>
+      <SiteTop />
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>用語 辭典</div>
+        <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>용어사전</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>입찰·명리 용어사전</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>공공입찰·조달과 사주명리의 핵심 용어를 한자리에서 명확히 정의합니다. 각 용어를 눌러 자세한 뜻과 연관어를 확인하세요.</p>
         {cats.map(cat => (
@@ -44,7 +42,7 @@ export default function GlossaryPage() {
             <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '6px 0 10px' }}>{cat} 용어</div>
             <dl style={{ margin: 0 }}>
               {glossaryByCat(cat).map(t => (
-                <div key={t.slug} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 13, padding: '13px 15px', marginBottom: 9 }}>
+                <div key={t.slug} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '13px 15px', marginBottom: 9 }}>
                   <dt style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 5 }}>
                     <Link href={`/glossary/${t.slug}`} style={{ color: 'var(--navy)', textDecoration: 'none' }}>{t.term}{t.hanja && t.hanja !== t.term ? '' : ''}</Link>
                   </dt>
@@ -75,4 +73,4 @@ export default function GlossaryPage() {
   );
 }
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };

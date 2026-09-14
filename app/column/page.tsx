@@ -4,6 +4,7 @@ import { ogCard } from '@/lib/og';
 const CARD = { seal: '筆', k: '會社 사주 칼럼', t: '낙찰사주 칼럼', s: '입찰·경영·명리 — 대표를 위한 글' };
 import type { Metadata } from 'next';
 import { getAllColumns } from '@/lib/column';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata: Metadata = {
   title: '사주 칼럼 — 입찰·경매·수주 대표를 위한 명리 이야기',
@@ -26,13 +27,7 @@ export default function ColumnIndex() {
   const posts = getAllColumns();
   return (
     <div className="app home5 colpage">
-      <div className="mast">
-        <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="s" aria-hidden="true" />
-          <div className="n">낙찰사주</div>
-        </Link>
-        <Link href="/reading" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>무료로 보기 ›</Link>
-      </div>
+      <SiteTop />
 
       <div className="colhead">
         <div className="kick">사주 칼럼</div>

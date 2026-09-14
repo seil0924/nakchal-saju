@@ -15,6 +15,7 @@ import { ogCard, ogCardUrl } from '@/lib/og';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { BIZ, NICK_MAX, BODY_MIN, BODY_MAX, stars, averageRating } from '@/lib/reviews';
 import { listPublicReviews } from '@/lib/reviews-db';
+import SiteTop from '@/app/_components/SiteTop';
 import './review.css';
 
 export const dynamic = 'force-dynamic';
@@ -47,6 +48,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
 
   return (
     <div className="app">
+      <SiteTop />
       <div className="hero">
         <h1>써 본 대표들의 말</h1>
         <p>지어낸 후기는 싣지 않습니다</p>

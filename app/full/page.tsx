@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata = {
   title: '전체 리포트 — 대표의 사주 열여덟 장',
@@ -53,13 +54,7 @@ const FAQ: [string, string][] = [
 export default function FullIntro() {
   return (
     <div className="app home5">
-      <div className="mast">
-        <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="s" aria-hidden="true" />
-          <div className="n">전체 리포트</div>
-        </Link>
-        <Link href="/" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
-      </div>
+      <SiteTop />
 
       {/* 통점 히어로 (촛불·먹산수 영상) */}
       <div className="hero5">

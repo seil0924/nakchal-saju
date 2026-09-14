@@ -4,6 +4,7 @@ import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { bizFooterLine } from '@/lib/bizinfo';
 
 import { ogCard } from '@/lib/og';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata = {
   title: '이용안내·요금', description: '낙찰사주 상품 안내와 판매가, 청약철회·환불 정책, 사업자정보.',
@@ -36,6 +37,7 @@ const PRODUCTS: [string, number, string][] = [
 export default function Pricing() {
   return (
     <div className="app">
+      <SiteTop />
       <div className="hero"><h1>이용안내 · 요금</h1>
         <p><Link href="/" style={{ color: '#d8cba0', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">

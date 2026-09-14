@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getColumn, getAllColumnSlugs, getAllColumns } from '@/lib/column';
 import { conceptsFor } from '@/lib/concept-links';
+import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -85,13 +86,7 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
 
-      <div className="mast">
-        <Link href="/" className="mb" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="s" aria-hidden="true" />
-          <div className="n">낙찰사주</div>
-        </Link>
-        <Link href="/column" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>목록 ›</Link>
-      </div>
+      <SiteTop />
 
       <article className="colbody">
         <div className="colmeta">{fmtDate(p.date)} · {p.readingMin}분 읽기</div>

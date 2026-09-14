@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PRODUCTS, productBySlug, OHAENG } from '@/lib/categories';
+import SiteTop from '@/app/_components/SiteTop';
 
 export function generateStaticParams() { return PRODUCTS.map(p => ({ slug: p.slug })); }
 
@@ -23,11 +24,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="app home5 catpage" style={{ ['--acc' as any]: oh.acc }}>
-      <div className="mast">
-        <div className="mb"><Link href="/" className="s" aria-label="낙찰사주 홈" style={{ textDecoration: 'none' }} />
-          <div className="n">{p.name}</div></div>
-        <Link href="/" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
-      </div>
+      <SiteTop />
 
       <div className="hero5">
         <div className="wm">{p.hanja}</div>

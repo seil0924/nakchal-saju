@@ -9,6 +9,7 @@ import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import YearBar from '@/app/_components/YearBar';
 import { markResultSeen } from '@/app/_components/AddToHome';
+import SiteTop from '@/app/_components/SiteTop';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
 type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
@@ -98,6 +99,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
 
   return (
     <div className="app">
+      <SiteTop />
       <div className="hero"><h1>{catInfo ? catInfo.name : '사주 리포트'}</h1>
         <p><Link href="/vault" style={{ color: 'var(--navy)', textDecoration: 'underline' }}>← 보관함</Link></p></div>
       <div className="wrap">

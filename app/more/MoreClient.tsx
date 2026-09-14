@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { sget } from '@/lib/scope';
+import SiteTop from '@/app/_components/SiteTop';
 
 // 19 · 더보기 · 설정 (프로필 · 회사 · 구독 · 알림)
 // 로그인 상태(initial)는 서버가 쿠키를 읽어 미리 판정 → 첫 페인트에 로그아웃/로그인 버튼 즉시 표시(지연 팝인 제거)
@@ -38,10 +39,7 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
 
   return (
     <div className="app home">
-      <div className="topbar">
-        <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s"><svg viewBox="0 0 40 40" width="20" height="20" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#fff"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#fff"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#fff"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#fff"/><circle cx="29.9" cy="8.2" r="2.6" fill="#ffd2ca"/></svg></span>더보기</Link>
-        <div className="ic"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1l-.3-2.5h-4l-.3 2.5a7 7 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7 7 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5a7 7 0 0 0 .1-1z" /></svg></div>
-      </div>
+      <SiteTop />
 
       <div style={{ padding: '0 16px 24px' }}>
         {/* 이 화면엔 제목 요소가 하나도 없었다. 스크린리더로 오면 어디인지 알 길이 없다. */}

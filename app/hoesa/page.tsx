@@ -13,6 +13,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ogCard, ogCardUrl } from '@/lib/og';
 import { bizFooterLine } from '@/lib/bizinfo';
+import SiteTop from '@/app/_components/SiteTop';
 import {
   companyChart, companyDaeun, companySeun, elBalance,
   PHASE_LABEL, PHASE_HINT, DAEUN_LINE, elName, elHex, ganjaOf, eunNeun,
@@ -62,6 +63,7 @@ export default function Hoesa({ searchParams }: { searchParams: { d?: string; n?
     <div className="app">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
+      <SiteTop />
       <div className="hero">
         <h1>우리 회사의 사주</h1>
         <p>설립일만 넣으면 30초 · 가입도 결제도 없습니다</p>

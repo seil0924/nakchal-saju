@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { ogCard } from '@/lib/og';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata = {
   title: '이용약관',
@@ -28,6 +29,7 @@ const SECTIONS: [string, string][] = [
 export default function Terms() {
   return (
     <div className="app">
+      <SiteTop />
       <div className="hero"><h1>이용약관</h1>
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">

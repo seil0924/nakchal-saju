@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { ogCard } from '@/lib/og';
+import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata = {
   title: '청약철회·환불 안내',
@@ -23,6 +24,7 @@ const SECTIONS: [string, string][] = [
 export default function Refund() {
   return (
     <div className="app">
+      <SiteTop />
       <div className="hero"><h1>청약철회·환불 안내</h1>
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">

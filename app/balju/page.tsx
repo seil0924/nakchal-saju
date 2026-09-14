@@ -7,6 +7,7 @@ import ScrollReveal from '@/app/_components/ScrollReveal';
 import PersonPicker from '@/app/_components/PersonPicker';
 import BaljuMap from '@/app/_components/BaljuMap';
 import { type Person } from '@/lib/people';
+import SiteTop from '@/app/_components/SiteTop';
 
 export default function Balju() {
   const [q, setQ] = useState('');
@@ -33,7 +34,7 @@ export default function Balju() {
     <div className="app home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <ScrollReveal />
-      <div className="topbar"><Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s" aria-hidden="true" />발주처</Link><Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link></div>
+      <SiteTop />
 
       <div className="hero">
         <h1 style={{ fontSize: 17, marginTop: 8, lineHeight: 1.35 }}>어느 발주처와<br />붙어볼까요</h1>
