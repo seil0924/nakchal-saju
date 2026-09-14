@@ -74,7 +74,7 @@ export default function FullIntro() {
           <div key={i} className="pain"><span className="pk">✓</span>{p}</div>
         ))}
         <div className="painout">
-          하나라도 뜨끔하셨다면 — 그것은 성격 탓도, 실력 탓도 아니라 <b>명식(命式)의 구조</b>입니다.<br />
+          하나라도 뜨끔하셨다면 — 그것은 성격 탓도, 실력 탓도 아니라 <b>명식의 구조</b>입니다.<br />
           타고난 구조는 바꿀 수 없어도, <b>쓰는 법</b>은 배울 수 있습니다. 그 쓰는 법이 이 열여덟 장에 담깁니다.
         </div>
       </div>
@@ -93,7 +93,7 @@ export default function FullIntro() {
       <div className="filmband">
         <video autoPlay muted loop playsInline poster="/herobg-poster.jpg"><source src="/herobg.mp4" type="video/mp4" /></video>
         <div className="fbin">
-          <div className="fbt">실력(技三)은 이미 갖추셨습니다.<br />이제 남은 건 <b>운(運七)</b>입니다.</div>
+          <div className="fbt">실력은 이미 갖추셨습니다.<br />이제 남은 건 <b>운</b>입니다.</div>
         </div>
       </div>
 
@@ -102,7 +102,7 @@ export default function FullIntro() {
       <div className="usecase">
         <div className="ucstep"><span className="ud">D-3</span><div><b>이번 건의 방향을 봅니다</b>전체 리포트로 그날의 방향과 승부 심법을 확인 — 정면 승부할 건인지, 접을 건인지.</div></div>
         <div className="ucstep"><span className="ud">D-1</span><div><b>날을 대조합니다</b>이달 택일 캘린더에서 개찰일이 대표님께 유리한 날인지 확인 — 아니면 다음 유리한 날로 전략 조정.</div></div>
-        <div className="ucstep"><span className="ud">當日</span><div><b>시간을 맞춥니다</b>시진별 흐름에서 제출·통화에 유리한 창(窓)을 확인 — 그 시간대에 손을 씁니다.</div></div>
+        <div className="ucstep"><span className="ud">當日</span><div><b>시간을 맞춥니다</b>시진별 흐름에서 제출·통화에 유리한 창을 확인 — 그 시간대에 손을 씁니다.</div></div>
         <p className="ucout">맞히는 도구가 아니라, <b>결정을 돕는 도구</b>입니다.</p>
       </div>
 

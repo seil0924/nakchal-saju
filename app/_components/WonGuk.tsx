@@ -21,12 +21,7 @@ export default function WonGuk({ p }: { p: Pillar[] }) {
         ))}
       </div>
       <div className="wgnote">한국천문연구원 절기 기준으로 계산했습니다{p.length === 3 ? ' · 태어난 시를 넣으면 시주까지 완성됩니다' : ''}</div>
-      <div className="wgtrust">
-        <span>절기 천문계산</span>
-        <span>진태양시 −30분 보정</span>
-        <span>서머타임 자동보정</span>
-        <span>경도 127.5° 기준</span>
-      </div>
+      <div className="wgtrust">진태양시 −30분 · 서머타임 · 경도 127.5° 보정</div>
     </div>
   );
 }

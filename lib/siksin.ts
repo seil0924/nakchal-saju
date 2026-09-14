@@ -1,7 +1,7 @@
-// lib/siksin.ts — 식신생재(食神生財) 판정.
+// lib/siksin.ts — 식신생재 판정.
 //
 // 식신생재는 '내가 만들어낸 것이 돈으로 이어지는' 구조다.
-// 관(官)으로 자리를 얻어 버는 것도, 겁재로 남과 다퉈 뺏는 것도 아니다.
+// 관으로 자리를 얻어 버는 것도, 겁재로 남과 다퉈 뺏는 것도 아니다.
 // 시공·제조·용역으로 먹고사는 대표님들 이야기라 우리 손님과 결이 맞는다.
 //
 // 판정 원칙: 있다/없다를 딱 자르지 않는다. 고전도 그렇게 안 잘랐다.
@@ -123,7 +123,7 @@ export function judgeSiksin(c: Chart8): Siksin {
   let adjacent = false;
   for (const o of out) for (const j of jae) if (Math.abs(o.pillar - j.pillar) <= 1) adjacent = true;
   const bothStem = out.some(s => s.stem) && jae.some(s => s.stem);
-  // 도식(倒食) — 천간의 편인이 천간의 식신을 친다. 밥그릇을 엎는다는 뜻이다.
+  // 도식 — 천간의 편인이 천간의 식신을 친다. 밥그릇을 엎는다는 뜻이다.
   const doosik = slots.some(s => s.star === '편인' && s.stem) && sik.some(s => s.stem);
 
   const kind: SiksinKind = sik.length && sang.length ? '식상생재'
@@ -157,7 +157,7 @@ export function judgeSiksin(c: Chart8): Siksin {
   else notes.push('식상과 재성이 서로 떨어져 있습니다. 재주와 돈벌이가 한 줄로 이어지기까지 시간이 걸리는 편입니다.');
   if (bothStem) notes.push('둘 다 천간에 드러나 있어 남 눈에도 보이는 구조입니다.');
   if (jae.length >= 2) notes.push('재성이 여럿이라 벌이가 한 갈래로만 오지 않습니다.');
-  if (doosik) notes.push('다만 천간의 편인이 식신을 칩니다. 옛말로 도식(倒食) — 벌어들일 판에 생각이 앞서 손을 늦추는 일이 잦습니다.');
+  if (doosik) notes.push('다만 천간의 편인이 식신을 칩니다. 옛말로 도식 — 벌어들일 판에 생각이 앞서 손을 늦추는 일이 잦습니다.');
   notes.push(strength.strong
     ? `일간이 ${[strength.ryeong && '득령', strength.ji && '득지', strength.se && '득세'].filter(Boolean).join('·')}으로 버팁니다. 벌어들이는 것을 담을 그릇은 됩니다.`
     : '일간이 얇은 편입니다. 벌 구조는 서 있으나 혼자 다 짊어지면 몸이 먼저 상합니다 — 사람을 쓰고 나눠야 남습니다.');

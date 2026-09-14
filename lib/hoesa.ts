@@ -29,7 +29,7 @@ export function companyChart(dateISO: string): CompanyChart | null {
   const chk = new Date(Date.UTC(y, mo - 1, d));
   if (chk.getUTCFullYear() !== y || chk.getUTCMonth() !== mo - 1 || chk.getUTCDate() !== d) return null;
 
-  // 설립일에는 시(時)가 없다. 등기 시각을 아는 회사가 없어서 삼주로 본다.
+  // 설립일에는 시가 없다. 등기 시각을 아는 회사가 없어서 삼주로 본다.
   const p = corePillars(y, mo, d, null);
   const dist = [0, 0, 0, 0, 0];
   dist[GAN_EL[p.yGan]]++; dist[ZHI_EL[p.yZhi]]++;

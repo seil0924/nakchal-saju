@@ -23,7 +23,7 @@ export const PATTERN_LABEL: Record<Pattern, string> = {
   siksin: '식신생재', jaeda: '재다신약', jesal: '식신제살',
 };
 
-// ── 재다신약(財多身弱) — 돈은 보이는데 담을 그릇이 얇다 ──
+// ── 재다신약 — 돈은 보이는데 담을 그릇이 얇다 ──
 export function judgeJaeda(c: Chart8): Verdict {
   const slots = starsOf(c);
   const strength = strengthOf(slots);
@@ -83,7 +83,7 @@ export function judgeJaeda(c: Chart8): Verdict {
   };
 }
 
-// ── 식신제살(食神制殺) — 누르는 힘을 내 실력으로 막는다 ──
+// ── 식신제살 — 누르는 힘을 내 실력으로 막는다 ──
 export function judgeJesal(c: Chart8): Verdict {
   const slots = starsOf(c);
   const strength = strengthOf(slots);

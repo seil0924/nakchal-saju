@@ -206,7 +206,7 @@ export default function CeoTwin() {
               <span className="crlab">鏡 · 거울에 비추다</span>
             </div>
             <div className="twinlead" style={{ marginTop: 4 }}>
-              대표님의 명(命)을 세계 거장 100인과 견줬습니다.<br />
+              대표님의 명을 세계 거장 100인과 견줬습니다.<br />
               가장 <b>{LV(res.level)}</b>는 이 사람 — <b>{res.tycoon.name}</b>입니다.
             </div>
             <div className="sealcmp"><div className="scin">
@@ -245,13 +245,13 @@ export default function CeoTwin() {
             <div className="myeong">
               <div className="myl">{res.type} — {res.typeDesc} 명</div>
               <p>{res.myeong}</p>
-              <p className="mys">이 거장을 일으킨 것은 재능이나 운이 아니라 <b>바로 이 명(命)</b>이었습니다. <b>{res.tycoon.name}</b> — {res.story}</p>
+              <p className="mys">이 거장을 일으킨 것은 재능이나 운이 아니라 <b>바로 이 명</b>이었습니다. <b>{res.tycoon.name}</b> — {res.story}</p>
               <p className="mys2">맨손에서 시작해 <b>무(無)에서 유(有)를 이룬 사람</b>. 그 뿌리에 있던 기운이, 지금부터 말씀드릴 대표님의 여덟 글자와 같은 것입니다.</p>
             </div>
 
             {/* 2막 — 근거: 명식 대조 (오행이 몇 자씩) */}
             <div className="distcmp">
-              <div className="dch">명식 대조 <small>삼주(三柱) 기준 — 오행이 몇 자씩 앉았는가</small></div>
+              <div className="dch">명식 대조 <small>삼주 기준 — 오행이 몇 자씩 앉았는가</small></div>
               <div className="dcg">
                 <span className="dcl" />
                 {ELC.map((e, i) => <span key={i} className="dce" style={{ color: EL_HEX[i] }}>{e}</span>)}
@@ -281,7 +281,7 @@ export default function CeoTwin() {
 
             {/* 3막 — 주인공 전환: 대표님이 그 명입니다 (칭찬 → 회사 연결 → 방향·희망) */}
             <div className="mecard">
-              <div className="mel">그리고 — 대표님이 그 명(命)입니다</div>
+              <div className="mel">그리고 — 대표님이 그 명입니다</div>
               <p className="mep">{res.tycoon.name}을 일으킨 그 <b>{ELC[res.me]}의 기운</b>이, 대표님 명식에 같은 뼈대로 앉아 있습니다.</p>
               <p className="mep">{res.user}</p>
               <div className="merule" />
@@ -304,7 +304,7 @@ export default function CeoTwin() {
 
             {/* 미끼 브리지 — 유형은 알려줬지만 '나 개인'은 감춰 갈증을 만든다 */}
             <div className="bridges">
-              <div className="bridgehd">그 명(命)이 <b>오늘, 이달, 이 발주처</b>에서 어떻게 흐르는지 — 대표님만의 풀이는 따로 있습니다</div>
+              <div className="bridgehd">그 명이 <b>오늘, 이달, 이 발주처</b>에서 어떻게 흐르는지 — 대표님만의 풀이는 따로 있습니다</div>
               <Link className="bridge" href={bridge}>
                 <div className="bi">率</div>
                 <div className="bt"><b>오늘, 나에게 유리한 날인가</b><span>같은 {res.type}이라도 오늘 일진은 사람마다 다릅니다 · 무료</span></div>
@@ -323,7 +323,7 @@ export default function CeoTwin() {
             </div>
 
             <p className="twinnote" style={{ marginTop: 14 }}>
-              ※ 인물 명식은 널리 공개된 출생일 기준이며 생시(生時)는 미상이라 삼주(三柱)로만 계산했습니다. 명식의 구조를 견준 재미용 유형 비교로, 그분들의 삶이나 대표님의 운을 단정하는 것이 아닙니다.
+              ※ 인물 명식은 널리 공개된 출생일 기준이며 생시(生時)는 미상이라 삼주로만 계산했습니다. 명식의 구조를 견준 재미용 유형 비교로, 그분들의 삶이나 대표님의 운을 단정하는 것이 아닙니다.
             </p>
           </div>
         )}

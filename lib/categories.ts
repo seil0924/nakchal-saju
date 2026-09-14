@@ -1,4 +1,4 @@
-// lib/categories.ts — 오행(五行) 색 시스템 + 상품 세일즈 페이지 데이터
+// lib/categories.ts — 오행 색 시스템 + 상품 세일즈 페이지 데이터
 // 각 카테고리에 전통 오방색을 입혀 '남색 일변도'를 없애고 정체성을 준다.
 
 export type Ohaeng = { el: string; acc: string };
@@ -93,11 +93,11 @@ export const productBySlug = (s: string) => PRODUCTS.find(p => p.slug === s) || 
 
 // 통점 랜딩(/why) 카테고리별 오행색
 export const PAIN_OH: Record<string, keyof typeof OHAENG> = {
-  haha: 'su',            // 하한가 — 흐름(水)
-  'losing-streak': 'to', // 연패 — 버팀·기반(土)
-  'big-miss': 'geum',    // 큰 건 — 결실·재물(金)
-  partner: 'hwa',        // 동업 — 사람(火)
-  gwanjae: 'mok',        // 관재수 — 관계·풀림(木)
+  haha: 'su',            // 하한가 — 흐름
+  'losing-streak': 'to', // 연패 — 버팀·기반
+  'big-miss': 'geum',    // 큰 건 — 결실·재물
+  partner: 'hwa',        // 동업 — 사람
+  gwanjae: 'mok',        // 관재수 — 관계·풀림
   jamin: 'geum', staff: 'hwa', slump: 'to', burnout: 'su', succession: 'mok',
   decision: 'geum', expand: 'hwa', betray: 'hwa', 'money-leak': 'geum',
   health: 'su', timing: 'to', start: 'hwa',

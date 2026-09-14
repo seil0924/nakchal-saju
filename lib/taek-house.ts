@@ -1,7 +1,7 @@
-// lib/taek-house.ts — 자리 사주(宅) 중 '지금 앉아 있는 자리'를 본다.
+// lib/taek-house.ts — 자리 사주 중 '지금 앉아 있는 자리'를 본다.
 // 옮길 자리(방위·택일)는 taek-map.ts 가 맡고, 여기는 사무실 안쪽을 본다.
 //
-// 근거는 양택 팔택론(八宅論)이다. 여덟 방위를 동사택 넷과 서사택 넷으로 가르고,
+// 근거는 양택 팔택론이다. 여덟 방위를 동사택 넷과 서사택 넷으로 가르고,
 // 출입문이 속한 사택과 대표 자리가 속한 사택이 같은가를 본다.
 // 고전이 실제로 말한 범위가 여기까지다. 그 너머는 지어내지 않는다.
 import { GAN_EL, ZHI_EL } from '@/lib/manse-core';
@@ -34,7 +34,7 @@ export function guaOf(dir: number): Gua {
 export type Harmony = {
   door: Gua; desk: Gua;
   same: boolean;
-  line: boolean;                       // 문과 자리가 정면으로 마주 보는가(門沖)
+  line: boolean;                       // 문과 자리가 정면으로 마주 보는가
   level: 'good' | 'ok' | 'caution';
   title: string; body: string;
 };
@@ -55,7 +55,7 @@ export function houseHarmony(door: number, desk: number): Harmony {
   return { door: d, desk: k, same, line, level, title, body };
 }
 
-// ── 비보(裨補) 물건 ──────────────────────────────────
+// ── 비보 물건 ──────────────────────────────────
 // 값이 비싼 물건이 아니라 놓는 자리가 값을 한다. 그래서 where 를 반드시 같이 준다.
 export type Bibo = { item: string; where: string; why: string };
 

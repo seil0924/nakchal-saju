@@ -21,7 +21,7 @@ export type ReportInput = {
   situation?: string;            // 상황 칩 요약 (예: "관급 공사 · 저가경쟁 심함")
   worry?: string;
   cat?: string;                  // 카테고리(daepyo·sajeong·balju·gunghap·daeun·ijeon) — 섹션 필터
-  // 자리 사주(宅). /jari 에서 이미 잰 방위각·거리만 넘어온다 — 좌표는 받지도 남기지도 않는다.
+  // 자리 사주. /jari 에서 이미 잰 방위각·거리만 넘어온다 — 좌표는 받지도 남기지도 않는다.
   jari?: JariInput;
 };
 
@@ -38,7 +38,7 @@ export type ReportResult = {
   gauge: { dir: string; band: [string, string]; pos: number; precise?: string };
   hero: Hero;
   sections: Section[];
-  meta: { chapters: number; items: number }; // 분량 앵커 — 전체 리포트 장(章)·항목 수
+  meta: { chapters: number; items: number }; // 분량 앵커 — 전체 리포트 장·항목 수
   selYear: number;              // 이 리포트가 기준으로 삼은 해 (세운)
   seun: { hanja: string; rel: string; tilt: number }; // 대표 본인의 그해 세운
 };
@@ -77,7 +77,7 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   const cc = !!input.clientCore;
   const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf, cc, baljuPremium));
 
-  // 자리 사주(宅)는 report-copy 의 티어 빌더 바깥에서 만든다.
+  // 자리 사주는 report-copy 의 티어 빌더 바깥에서 만든다.
   // 방위·거리는 주소를 넣어야 생기는 값이라, 명식만으로 도는 빌더에 끼워 넣으면 자리가 어색하다.
   const taek = mks && mks.includes('宅')
     ? taekSection(input.jari || {}, weakElOf(c), c.dZhi, selYear, now)

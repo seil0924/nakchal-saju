@@ -96,6 +96,14 @@ export default function ReportView({ params }: { params: { id: string } }) {
   })() : undefined;
 
   const lockedCount = res ? res.sections.filter((s2: any) => (RANK[s2.tier] ?? 2) > level).length : 0;
+  // 첫 장만 펼친다 — ReadingForm 과 같은 규칙
+  const [expanded, setExpanded] = useState<number[]>([]);
+  useEffect(() => {
+    if (!res) return;
+    const first = res.sections.findIndex((s2: any) => (RANK[s2.tier] ?? 2) <= level && !!s2.html);
+    setExpanded(first >= 0 ? [first] : []);
+  }, [res, level]);
+  const toggleSec = (i: number) => setExpanded(ex => ex.includes(i) ? ex.filter(x => x !== i) : [...ex, i]);
 
   return (
     <div className="app">
@@ -129,10 +137,9 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
-                <div className="rprog">
-                  <span className="rpl">열람 <b>{opened}</b> / {total} 섹션</span>
-                  <span className="rpbar"><i style={{ width: Math.round(opened / total * 100) + '%' }} /></span>
-                  <span className="rpr">{level >= 2 ? '전체 열람' : level === 1 ? '택일팩' : '무료 열람'}</span>
+                <div className="rtoc">
+                  <b>{total}장 중 {opened}장 열림</b>
+                  <span>제목을 누르면 펼쳐집니다</span>
                 </div>
               ); })()}
             <div className="print-only pfoot" style={{ display: 'none' }}>낙찰사주 · 사주·투찰 택일 리포트 · 명리 기반 참고 정보</div>
@@ -147,8 +154,10 @@ export default function ReportView({ params }: { params: { id: string } }) {
               // 폼을 처음부터 다시 시키는 셈이라, 그 자리에서 결제되게 바꿨다.
               const openThis = (e?: any) => { setErr(''); if (!catInfo && prod) setPending(prod.key); openModal(e); };
               return (
-                <div key={i} className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
-                  <div className="hd" onClick={locked ? openThis : undefined}><div className="ti">{sec.t}</div>
+                <div key={i} className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
+                  <div className="hd" role="button" tabIndex={0} aria-expanded={locked ? undefined : expanded.includes(i)}
+                    onClick={locked ? openThis : () => toggleSec(i)}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}><div className="ti">{sec.t}</div>
                     {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk">{won(pPrice)}</span>}<div className="cv">▾</div></div>
                   <div className="bd">{sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
                     : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />

@@ -1,4 +1,4 @@
-// lib/taek-report.ts — 자리 사주(宅) 유료 섹션 본문.
+// lib/taek-report.ts — 자리 사주 유료 섹션 본문.
 //
 // 좌표를 받지 않는다. /jari 에서 이미 잰 방위각과 거리만 넘겨받는다.
 // 브이월드 이용조건상 지오코더 응답은 저장할 수 없는데, 리포트는 보관함에 남는다.
@@ -23,7 +23,7 @@ const SIJIN = [
   ['신시', '15:00~17:00'], ['유시', '17:00~19:00'], ['술시', '19:00~21:00'], ['해시', '21:00~23:00'],
 ];
 
-// 그날 일지와 육합(六合)을 이루는 시진. 子丑·寅亥·卯戌·辰酉·巳申·午未 여섯 짝이다.
+// 그날 일지와 육합을 이루는 시진. 子丑·寅亥·卯戌·辰酉·巳申·午未 여섯 짝이다.
 export function hourFor(dZhi: number): { idx: number; name: string; span: string; night: boolean } {
   const i = ((dZhi % 12) + 12) % 12;
   const p = (13 - i) % 12;
@@ -88,7 +88,7 @@ export function taekSection(
     const dist = j.km != null && Number.isFinite(j.km) ? ` <b>${Math.round((j.km as number) * 10) / 10}km</b>` : '';
     P.push(`<p><b>옮길 자리는 ${esc(name)}쪽입니다.</b> ${where}지금 자리에서 ${esc(name)}으로 ${Math.round((j.deg as number) * 10) / 10}도,${dist} 떨어져 있습니다.</p>`);
     if (isDae || isSam) {
-      const which = isDae && isSam ? '대장군방(大將軍方)과 삼살방(三殺方)이 겹치는 자리' : isDae ? '대장군방(大將軍方)' : '삼살방(三殺方)';
+      const which = isDae && isSam ? '대장군방과 삼살방이 겹치는 자리' : isDae ? '대장군방' : '삼살방';
       P.push(`<p>${year}년 기준으로 ${esc(name)}쪽은 <b>${which}</b>입니다. 예부터 이 해에는 이 방면으로 크게 움직이지 말라고 보았습니다. 다만 이것은 <b>못 간다는 뜻이 아니라 서두르지 말라는 뜻</b>입니다. 계약이 이미 잡혀 있다면 못 갈 이유로 삼지 마시고, 아직 고르는 중이라면 한 번 더 견주어 보시라는 정도로 읽으십시오.</p>`);
       if (clear) P.push(`<p>이 방면은 <b>${clear}년</b>에 풀립니다. 급하지 않은 이전이라면 그해로 미루는 것도 방법입니다.</p>`);
     } else if (isFav) {
@@ -103,7 +103,7 @@ export function taekSection(
 
   // ── 택일 ──
   const days = moveDays(from, 90);
-  P.push('<p><b>앞으로 석 달, 옮기기 좋은 날</b> — 건제십이신의 만(滿)·정(定)·성(成)·개(開)에 드는 날만 골랐습니다. 성(成)이 가장 힘이 실립니다.</p>');
+  P.push('<p><b>앞으로 석 달, 옮기기 좋은 날</b> — 건제십이신의 만·정·성·개에 드는 날만 골랐습니다. 성이 가장 힘이 실립니다.</p>');
   for (const d of days) {
     P.push(`<div class="ssrow"><b>${d.month}월 ${d.day}일 (${d.dow})</b> · ${d.ganji} · ${d.key}(${d.name})<br /><span>${esc(d.why)}</span></div>`);
   }

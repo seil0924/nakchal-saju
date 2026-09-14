@@ -85,6 +85,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   });
   const [res, setRes] = useState<Result | null>(null);
   const [level, setLevel] = useState(0);              // 0 무료 · 1 택일팩 · 2 전체
+  // 펼친 장. 결과가 9,500px(스크롤 12번)까지 길어져 핵심이 묻혔다 — 첫 장만 펼치고 나머지는 제목으로 둔다.
+  const [expanded, setExpanded] = useState<number[]>([]);
   const [sku, setSku] = useState<'taekil' | 'full'>('full');
   const [confirm, setConfirm] = useState(false);
   const [modal, setModal] = useState(false);
@@ -327,6 +329,12 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   }, [res, level]);
   const anyLocked = !!res && res.sections.some(s => (RANK[s.tier] ?? 2) > level && !s.html);
   const lockedCount = res ? res.sections.filter((s2: any) => (RANK[s2.tier] ?? 2) > level).length : 0;
+  useEffect(() => {
+    if (!res) return;
+    const first = res.sections.findIndex((s2: any) => (RANK[s2.tier] ?? 2) <= level && !!s2.html);
+    setExpanded(first >= 0 ? [first] : []);
+  }, [res, level]);
+  const toggleSec = (i: number) => setExpanded(ex => ex.includes(i) ? ex.filter(x => x !== i) : [...ex, i]);
   const anyPass = !!res && res.sections.some(s => (s as any).passLock);   // 발주처 프리미엄 잠금 존재
 
   async function pay(chosen: 'taekil' | 'full') {
@@ -650,10 +658,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {res.selYear && ui.yearBar && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
-                <div className="rprog">
-                  <span className="rpl">열람 <b>{opened}</b> / {total} 섹션</span>
-                  <span className="rpbar"><i style={{ width: Math.round(opened / total * 100) + '%' }} /></span>
-                  <span className="rpr">{level >= 2 ? '전체 열람' : level === 1 ? '부분 열람' : '무료 열람'}</span>
+                <div className="rtoc">
+                  <b>{total}장 중 {opened}장 열림</b>
+                  <span>제목을 누르면 펼쳐집니다</span>
                 </div>
               ); })()}
             <div id="acc">
@@ -675,8 +682,10 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                         <div className="ctaassure">카카오페이·토스로 30초 · 결제 즉시 열람</div>
                       </>
                     )}
-                  <div className={'sec ' + (open ? 'open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
-                    <div className="hd" onClick={locked ? openThis : undefined}>
+                  <div className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
+                    <div className="hd" role="button" tabIndex={0} aria-expanded={locked ? undefined : expanded.includes(i)}
+                      onClick={locked ? openThis : () => toggleSec(i)}
+                      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}>
                       <div className="ti">{sec.t}</div>
                       {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}
                       <div className="cv">▾</div>
@@ -739,7 +748,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       {/* 로딩 리추얼 */}
       <RiteProgress open={prog} title="만세력을 폅니다" steps={RITE_STEPS} stepMs={410} />
 
-      {/* 결제 성공 — 개봉(開) 연출 */}
+      {/* 결제 성공 — 개봉 연출 */}
       {seal && (
         <div className="sealov" aria-hidden>
           <div className="sealbox">

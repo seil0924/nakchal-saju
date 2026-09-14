@@ -28,7 +28,8 @@ export default function AddToHome() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const where = path === '/' || path === '/reading' || path.startsWith('/report/');
+    // 결과 화면(/reading·/report) 위를 덮지 않는다 — 읽는 중에 머리를 가렸다. 다시 온 사람의 홈에서만.
+    const where = path === '/';
     if (!where) return;
     const standalone = window.matchMedia('(display-mode: standalone)').matches
       || (window.navigator as any).standalone === true;
