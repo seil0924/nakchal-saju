@@ -293,7 +293,8 @@ listeners.add((message) => {
     pageEvents.push({ kind: '잡히지 않은 오류', detail: (p.exceptionDetails?.exception?.description ?? p.exceptionDetails?.text ?? '').split('\n')[0].slice(0, 160) });
   } else if (message.method === 'Runtime.consoleAPICalled' && p.type === 'error') {
     const line = (p.args ?? []).map((a) => a.value ?? a.description ?? '').join(' ').slice(0, 160);
-    if (!/favicon|DevTools/.test(line)) pageEvents.push({ kind: '콘솔 오류', detail: line });
+    // 검사기가 스스로 붙인 data-hover-probe 를 개발 서버 React 가 '서버에 없던 속성'으로 경고한다 — 사이트 오류가 아니다
+    if (!/favicon|DevTools|data-hover-probe/.test(line)) pageEvents.push({ kind: '콘솔 오류', detail: line });
   } else if (message.method === 'Network.responseReceived') {
     const r = p.response ?? {};
     if (p.type === 'Document') { docStatus = r.status; docMs = Date.now() - docStart; }
