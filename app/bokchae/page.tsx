@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { won } from '@/lib/constants';
 import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
+import SiteTop from '@/app/_components/SiteTop';
 
 // 복채(福債) — 홈 최하단에만 조용히 두는 자율 감사·기원 결제. 리포트/결제 흐름엔 등장하지 않는다.
 const PRESETS = [50000, 100000, 200000, 500000, 1000000];
@@ -36,6 +37,7 @@ export default function Bokchae() {
 
   return (
     <div className="app bokpage">
+      <SiteTop />
       <video className="bokbg" autoPlay muted loop playsInline poster="/bokchae-bg-poster.jpg">
         <source src="/bokchae-bg.mp4" type="video/mp4" />
       </video>

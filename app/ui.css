@@ -351,3 +351,16 @@ html body .wgc{max-width:48px!important;font-size:22px!important;border-radius:1
 html body .wgcol{gap:4px!important}
 html body .wgtrust{display:block!important;margin-top:10px!important;padding-top:10px!important;font-size:13px;color:var(--u-mute)!important;text-align:left}
 html body .sec.locked .cv{display:none!important}
+
+/* ═════════ 90점 3 — 부적(/ritual) ═════════ */
+html body .bujavid .bvtx{color:#fff!important;font-size:17px!important;font-weight:800!important;letter-spacing:0!important;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+html body .sechd{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+html body .sechd .m{font-size:13px!important;color:var(--u-mute)!important}
+html body .persona{display:block!important;border-radius:12px!important}
+html body .persona .av{display:none!important}
+html body .persona b{color:var(--u-ink)!important}
+html body .warn{border-radius:12px!important}
+html body .amulet{border-radius:12px!important}
+/* 복채 — 가운데 정렬 flex 안에 머리를 넣었더니 가로로 늘어섰다. 세로로 쌓는다 */
+html body .bokpage{flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;min-height:0!important}
+html body .bokpage .bokwrap{padding:28px 24px 40px!important}

@@ -12,31 +12,28 @@ export default function Ritual() {
     const w = 600, h = 800;
     const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
     const x = cv.getContext('2d'); if (!x) return;
-    const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#2a2013'); g.addColorStop(1, '#3a2c19');
-    x.fillStyle = g; x.fillRect(0, 0, w, h);
-    x.strokeStyle = '#e3c27a'; x.lineWidth = 8; x.strokeRect(24, 24, w - 48, h - 48);
-    x.fillStyle = '#e3c27a'; x.textAlign = 'center';
-    x.font = '900 190px "Noto Serif KR", serif'; x.fillText('吉', w / 2, h / 2 - 40);
-    x.font = '700 66px "Noto Serif KR", serif';
+    x.fillStyle = '#ffffff'; x.fillRect(0, 0, w, h);
+    x.strokeStyle = '#3f6be0'; x.lineWidth = 8; x.strokeRect(24, 24, w - 48, h - 48);
+    x.fillStyle = '#1e2124'; x.textAlign = 'center';
+    x.font = '800 190px Pretendard, "Noto Sans KR", sans-serif'; x.fillText('吉', w / 2, h / 2 - 40);
+    x.font = '700 66px Pretendard, "Noto Sans KR", sans-serif';
     '落札大吉'.split('').forEach((ch, i) => x.fillText(ch, w / 2, h / 2 + 110 + i * 78 - 120));
-    x.font = '500 24px sans-serif'; x.fillStyle = '#c9b184';
-    x.fillText('낙찰사주 · 士', w / 2, h - 60);
+    x.font = '600 24px sans-serif'; x.fillStyle = '#636d77';
+    x.fillText('낙찰사주', w / 2, h - 60);
     const a = document.createElement('a');
     a.href = cv.toDataURL('image/png'); a.download = '낙찰_부적_落札大吉.png'; a.click();
   }
 
   return (
-    <div className="app" style={{ background: 'linear-gradient(180deg,#f4f5f7,#f4f5f7)', minHeight: '100vh' }}>
-      <div className="topbar" style={{ background: '#2a2013' }}>
-        <Link className="logo" href="/" style={{ fontSize: 15, color: '#e3c27a', textDecoration: 'none' }}>
-          <span style={{ marginRight: 4 }}>‹</span> 기 모으기
-        </Link>
-        <div className="ic"><svg viewBox="0 0 24 24" style={{ stroke: '#e3c27a' }}><path d="M4 6h16M4 12h16M4 18h16" /></svg></div>
-      </div>
+    <div className="app" style={{ background: '#f4f5f7', minHeight: '100vh' }}>
+      <header className="u-top">
+        <Link href="/" className="u-back" aria-label="홈으로"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></Link>
+        <h1>기 모으기</h1>
+      </header>
 
       <div className="bujavid">
         <video autoPlay muted loop playsInline poster="/ritual-poster.jpg"><source src="/ritual-buja.mp4" type="video/mp4" /></video>
-          <h1 className="bvtx" style={{ margin: 0 }}>투찰 직전, 붉은 기운을 담습니다</h1>
+          <p className="bvtx" style={{ margin: 0 }}>투찰 직전, 붉은 기운을 담습니다</p>
       </div>
 
       <div style={{ padding: '0 16px 20px' }}>
@@ -46,13 +43,13 @@ export default function Ritual() {
         <div className="ritsub">길게 눌러 저장하거나 아래 버튼으로 배경화면에 담으십시오</div>
         <button className="sharebtn" style={{ marginTop: 12 }} onClick={saveAmulet}>부적 이미지 저장</button>
 
-        <div className="persona"><div className="av">士</div>
+        <div className="persona">
           <p>"<b>마감 10분 전에 기운이 튼다.</b> 조급함을 버리고, 딱 그때 손을 쓰십시오. 서두른 자가 아니라 때를 아는 자가 가져갑니다."</p>
         </div>
 
         <div className="card" style={{ marginTop: 12 }}>
           <div className="st"><span className="b" />투찰 택시(擇時)</div>
-          <div className="kv"><span className="k">권장 시간대</span><span className="v" style={{ color: 'var(--red)' }}>마감 40분 전 ~ 마감</span></div>
+          <div className="kv"><span className="k">권장 시간대</span><span className="v" style={{ color: '#2f56c4' }}>마감 40분 전 ~ 마감</span></div>
           <div className="kv"><span className="k">피할 시간대</span><span className="v">개시 직후 성급한 투찰</span></div>
           <div className="kv"><span className="k">오늘의 마음가짐</span><span className="v">하한선 사수 · 관망</span></div>
         </div>
