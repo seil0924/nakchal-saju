@@ -61,8 +61,8 @@ export default function DatePickerPage() {
       </div>
 
       <div className="hero"><div className="kick">擇 日 · CHOOSING A DAY</div>
-        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>When to start,<br />by the old calendar</h1>
-        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>Free · no sign-up · the next 90 days</div>
+        <h1 style={{ fontSize: 17, marginTop: 8, lineHeight: 1.35 }}>When to start,<br />by the old calendar</h1>
+        <div style={{ color: '#c3cfe3', fontSize: 13, marginTop: 8, fontWeight: 500 }}>Free · no sign-up · the next 90 days</div>
       </div>
 
       {/* 서버가 그린 날(UTC)로 첫 그림을 맞추고, 붙은 뒤 읽는 사람의 현지 날짜로 바꾼다. */}

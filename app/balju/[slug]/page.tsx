@@ -52,7 +52,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
       </div>
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <nav aria-label="위치" style={{ fontSize: 12, color: '#58616a', marginBottom: 10 }}>
+        <nav aria-label="위치" style={{ fontSize: 13, color: '#58616a', marginBottom: 10 }}>
           <Link href="/balju" style={{ color: '#58616a' }}>발주처</Link> › {c.name}
         </nav>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.35, color: 'var(--ink)', margin: '0 0 8px' }}>
@@ -71,27 +71,27 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
 
         <div style={card}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{ct.sector} · 입찰은 이렇게 진행됩니다</div>
-          <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#33383f', margin: 0, fontWeight: 500 }}>{ct.bid}</p>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: '#33383f', margin: 0, fontWeight: 500 }}>{ct.bid}</p>
         </div>
 
         <div style={card}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 8 }}>{c.name} 입찰, 먼저 챙길 것</div>
-          <ol style={{ margin: 0, paddingLeft: 18, fontSize: 14.5, lineHeight: 1.8, color: '#33383f', fontWeight: 500 }}>
+          <ol style={{ margin: 0, paddingLeft: 18, fontSize: 15, lineHeight: 1.8, color: '#33383f', fontWeight: 500 }}>
             {ct.prep.map((p, i) => <li key={i} style={{ marginBottom: 4 }}>{p}</li>)}
           </ol>
         </div>
 
         <div style={card}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>설립일 사주 × 대표 사주</div>
-          <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#4a4636', margin: 0, fontWeight: 500 }}>{ct.founding}</p>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: '#4a4636', margin: 0, fontWeight: 500 }}>{ct.founding}</p>
         </div>
 
         <Link href={readingUrl} style={cta}>
           {c.name}{josa(c.name, '과', '와')} 내 궁합 보기 →
-          <span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>대표님 생년월일만 · 30초 무료로 시작</span>
+          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>대표님 생년월일만 · 30초 무료로 시작</span>
         </Link>
 
-        <div style={{ fontSize: 12, color: '#6d7882', textAlign: 'center', margin: '10px 0 20px', lineHeight: 1.6 }}>
+        <div style={{ fontSize: 13, color: '#6d7882', textAlign: 'center', margin: '10px 0 20px', lineHeight: 1.6 }}>
           {c.core ? '핵심 발주처 상세 궁합은 유료입니다. 먼저 무료로 방향을 보실 수 있어요.' : '이 발주처 궁합은 무료로 열립니다.'}
         </div>
 
@@ -99,13 +99,13 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
         <div style={{ marginBottom: 24 }}>
           {ct.faqs.map(([q, a], i) => (
             <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '13px 15px', marginBottom: 9 }}>
-              <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--ink)', marginBottom: 5 }}>Q. {q}</div>
-              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#4a4636', margin: 0, fontWeight: 500 }}>{a}</p>
+              <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 5 }}>Q. {q}</div>
+              <p style={{ fontSize: 13, lineHeight: 1.75, color: '#4a4636', margin: 0, fontWeight: 500 }}>{a}</p>
             </div>
           ))}
         </div>
 
-        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14, color: 'var(--navy)', margin: '18px 0 10px' }}>다른 발주처와의 궁합도 보기</div>
+        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '18px 0 10px' }}>다른 발주처와의 궁합도 보기</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
           {others.map((o) => (
             <Link key={o.name} href={`/balju/${clientSlug(o.name)}`} style={chip}>{o.name}</Link>
@@ -113,7 +113,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           <Link href="/balju" style={{ ...chip, background: 'var(--navy)', color: '#f4e7c4', borderColor: 'var(--navy)' }}>전체 발주처 →</Link>
         </div>
 
-        <p style={{ fontSize: 12, color: '#6d7882', lineHeight: 1.65, marginBottom: 20 }}>
+        <p style={{ fontSize: 13, color: '#6d7882', lineHeight: 1.65, marginBottom: 20 }}>
           ※ 설립일은 공개 연혁 기준 자체 구축 DB이며, 명리 기반 참고 정보입니다. 실제 입찰·투찰 판단의 근거로 사용할 수 없습니다.
         </p>
       </div>
@@ -121,7 +121,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
   );
 }
 
-const tag: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: '#58616a', background: '#f4f5f7', padding: '5px 11px', borderRadius: 999 };
+const tag: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#58616a', background: '#f4f5f7', padding: '5px 11px', borderRadius: 999 };
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

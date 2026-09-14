@@ -60,8 +60,8 @@ export default function BaziZhPage() {
       </div>
 
       <div className="hero"><div className="kick">八 字 · 四 柱</div>
-        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>你的八字，<br />時柱算得對的那一種</h1>
-        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>免費 · 免註冊 · 依出生地校正真太陽時</div>
+        <h1 style={{ fontSize: 17, marginTop: 8, lineHeight: 1.35 }}>你的八字，<br />時柱算得對的那一種</h1>
+        <div style={{ color: '#c3cfe3', fontSize: 13, marginTop: 8, fontWeight: 500 }}>免費 · 免註冊 · 依出生地校正真太陽時</div>
       </div>
 
       <BaziCalc lang="zh" />

@@ -91,7 +91,7 @@ export default function Hoesa({ searchParams }: { searchParams: { d?: string; n?
           <div className="st"><span className="b" />자주 묻는 질문</div>
           {FAQ.map(([q, a]) => (
             <div key={q} style={{ marginBottom: 13 }}>
-              <p style={{ fontWeight: 800, fontSize: 13.5, color: 'var(--navy)', marginBottom: 4 }}>Q. {q}</p>
+              <p style={{ fontWeight: 800, fontSize: 13, color: 'var(--navy)', marginBottom: 4 }}>Q. {q}</p>
               <p style={{ fontSize: 13, color: '#4a4636', lineHeight: 1.75 }}>{a}</p>
             </div>
           ))}
@@ -121,7 +121,7 @@ function Result({ ch, label, curYear, raw, name }: {
   return (
     <>
       <div className="card">
-        <div className="st"><span className="b" />{label}의 명식 <span style={{ fontWeight: 500, color: '#58616a', fontSize: 12 }}>· 설립 {ch.foundYear}년</span></div>
+        <div className="st"><span className="b" />{label}의 명식 <span style={{ fontWeight: 500, color: '#58616a', fontSize: 13 }}>· 설립 {ch.foundYear}년</span></div>
         <div className="_hspil">
           {(['년주', '월주', '일주'] as const).map((lb, i) => {
             const [g, z] = [[ch.yGan, ch.yZhi], [ch.mGan, ch.mZhi], [ch.dGan, ch.dZhi]][i];

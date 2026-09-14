@@ -34,7 +34,7 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
           <span className="s">士</span>
           <div className="n">낙찰사주<em>會社 사주 전문</em></div>
         </Link>
-        <Link href="/why" style={{ fontSize: 12, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>다른 고민 ›</Link>
+        <Link href="/why" style={{ fontSize: 13, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>다른 고민 ›</Link>
       </div>
 
       {/* 통점 히어로 (상징 영상) */}

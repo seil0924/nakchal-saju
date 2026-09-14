@@ -36,9 +36,9 @@ export default function GlossaryPage() {
         <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>用語 辭典</div>
-        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 23, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>입찰·명리 용어사전</h1>
-        <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>공공입찰·조달과 사주명리의 핵심 용어를 한자리에서 명확히 정의합니다. 각 용어를 눌러 자세한 뜻과 연관어를 확인하세요.</p>
+        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>用語 辭典</div>
+        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>입찰·명리 용어사전</h1>
+        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>공공입찰·조달과 사주명리의 핵심 용어를 한자리에서 명확히 정의합니다. 각 용어를 눌러 자세한 뜻과 연관어를 확인하세요.</p>
         {cats.map(cat => (
           <section key={cat} style={{ marginBottom: 18 }}>
             <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '6px 0 10px' }}>{cat} 용어</div>
@@ -48,7 +48,7 @@ export default function GlossaryPage() {
                   <dt style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 5 }}>
                     <Link href={`/glossary/${t.slug}`} style={{ color: 'var(--navy)', textDecoration: 'none' }}>{t.term}{t.hanja && t.hanja !== t.term ? '' : ''}</Link>
                   </dt>
-                  <dd style={{ margin: 0, fontSize: 14, lineHeight: 1.72, color: '#33383f', fontWeight: 500 }}>{t.def}</dd>
+                  <dd style={{ margin: 0, fontSize: 15, lineHeight: 1.72, color: '#33383f', fontWeight: 500 }}>{t.def}</dd>
                 </div>
               ))}
             </dl>
@@ -68,11 +68,11 @@ export default function GlossaryPage() {
           </div>
         </section>
 
-        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
-        <p style={{ fontSize: 12, color: '#58616a', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 명리 용어 해석은 참고·오락용이며, 입찰·조달 용어는 일반적 설명으로 실제 제도는 공고문·관련 법령을 따릅니다.</p>
+        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <p style={{ fontSize: 13, color: '#58616a', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 명리 용어 해석은 참고·오락용이며, 입찰·조달 용어는 일반적 설명으로 실제 제도는 공고문·관련 법령을 따릅니다.</p>
       </div>
     </div>
   );
 }
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
+const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };

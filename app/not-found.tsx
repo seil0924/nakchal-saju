@@ -22,7 +22,7 @@ export default function NotFound() {
       <div className="hero"><h1>찾으시는 페이지가 없습니다</h1>
         <p>주소가 바뀌었거나 정리된 글일 수 있습니다.</p></div>
       <div className="wrap">
-        <div className="card" style={{ lineHeight: 1.8, fontSize: 14, color: '#3a3f47' }}>
+        <div className="card" style={{ lineHeight: 1.8, fontSize: 15, color: '#3a3f47' }}>
           <p style={{ margin: 0 }}>자주 찾으시는 곳으로 안내해 드립니다.</p>
           <Link className="cta" href="/reading" style={{ marginTop: 14 }}>무료로 사주 보기 →</Link>
           <nav aria-label="다른 곳으로" style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>

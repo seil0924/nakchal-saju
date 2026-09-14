@@ -8,6 +8,7 @@ import { tokParam } from '@/lib/rtok';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import YearBar from '@/app/_components/YearBar';
+import { markResultSeen } from '@/app/_components/AddToHome';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
 type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
@@ -45,6 +46,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
     const r = await fetch('/api/report/get?id=' + id + '&t=' + encodeURIComponent(t));
     if (!r.ok) { setErr('리포트를 찾을 수 없습니다.'); return; }
     setRes(await r.json());
+    markResultSeen();
   }
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [id]);
 
@@ -100,7 +102,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
         {err && <div className="errbox">{err}</div>}
         {/* 리포트를 못 찾으면 한 줄 오류만 남아 막다른 화면이 됐다. 왜 그런지와 갈 곳을 같이 준다. */}
         {err && !res && (
-          <div className="card" style={{ textAlign: 'center', lineHeight: 1.8, color: '#3a3f47', fontSize: 14 }}>
+          <div className="card" style={{ textAlign: 'center', lineHeight: 1.8, color: '#3a3f47', fontSize: 15 }}>
             <p style={{ margin: 0 }}>주소가 잘렸거나 공유 링크가 만료됐을 수 있습니다.<br />로그인하셨다면 보관함에 저장된 리포트가 있습니다.</p>
             <Link className="cta" href="/reading" style={{ marginTop: 14 }}>무료로 새로 뽑기 →</Link>
             <p style={{ marginTop: 10 }}><Link href="/vault" style={{ color: 'var(--navy)', fontWeight: 700 }}>보관함 열기</Link></p>
@@ -112,7 +114,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
-                <div className={'num' + (res.hero.big && res.hero.big.length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 20 }}>{res.hero.unit ?? '점'}</span></div>
+                <div className={'num' + (res.hero.big && res.hero.big.length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 22 }}>{res.hero.unit ?? '점'}</span></div>
                 <div className="lab">{res.hero.label}</div><div className="sub2">{res.hero.sub}</div>
               </div>
             )}
@@ -179,7 +181,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             </>)}
             {/* 본인 리포트에서만 후기를 청한다 — 공유받은 사람은 아직 써 본 게 아니다 */}
             {res.mine && (
-              <p className="no-print" style={{ fontSize: 12.5, color: '#58616a', lineHeight: 1.7, textAlign: 'center', margin: '16px 0 0' }}>
+              <p className="no-print" style={{ fontSize: 13, color: '#58616a', lineHeight: 1.7, textAlign: 'center', margin: '16px 0 0' }}>
                 도움이 되셨다면 한 줄 남겨 주십시오 — <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
               </p>
             )}
@@ -187,7 +189,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장
             </button>
-            {level < 2 && <div className="no-print" style={{ textAlign: 'center', fontSize: 12, color: '#6d7882', marginTop: 6 }}>상품을 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
+            {level < 2 && <div className="no-print" style={{ textAlign: 'center', fontSize: 13, color: '#6d7882', marginTop: 6 }}>상품을 열면 잠긴 섹션까지 담아 PDF로 저장됩니다</div>}
             </div>
           </div>
         )}

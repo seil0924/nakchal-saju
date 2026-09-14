@@ -26,14 +26,14 @@ export default function Refund() {
       <div className="hero"><h1>청약철회·환불 안내</h1>
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">
-        <div className="card" style={{ lineHeight: 1.8, fontSize: 13.5, color: '#3a3f47' }}>
+        <div className="card" style={{ lineHeight: 1.8, fontSize: 13, color: '#3a3f47' }}>
           {SECTIONS.map(([h, b], i) => (
             <p key={i} style={{ marginTop: i ? 14 : 0 }}><b style={{ color: 'var(--navy)' }}>{h}</b><br />{b.replace(/</g, '‹').replace(/>/g, '›')}</p>
           ))}
-          <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6e8ea', fontSize: 12, color: '#58616a' }}>
+          <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6e8ea', fontSize: 13, color: '#58616a' }}>
             {bizFooterLine()}
           </p>
-          <p style={{ marginTop: 10, fontSize: 12, color: '#58616a' }}>자세한 내용은 <Link href="/terms" style={{ color: 'var(--navy)' }}>이용약관</Link> 제6·7조를 따릅니다.</p>
+          <p style={{ marginTop: 10, fontSize: 13, color: '#58616a' }}>자세한 내용은 <Link href="/terms" style={{ color: 'var(--navy)' }}>이용약관</Link> 제6·7조를 따릅니다.</p>
         </div>
       </div>
     </div>

@@ -109,29 +109,29 @@ export default function YearPage({ params }: { params: { year: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonld) }} />
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>{yi.ganzhi} · 事業運</div>
+        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>{yi.ganzhi} · 事業運</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>{y} {yi.ganzhi} 12지신 사업·입찰운세</h1>
-        <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 12px' }}>{y}년은 <b>{yi.ganzhi} — {yi.label}</b>. {yi.theme}입니다. 같은 띠라도 <b>태어난 해(년주)</b>에 따라 올해 기운과의 관계가 달라집니다 — 출생연도별로 짚어드립니다.</p>
+        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 12px' }}>{y}년은 <b>{yi.ganzhi} — {yi.label}</b>. {yi.theme}입니다. 같은 띠라도 <b>태어난 해(년주)</b>에 따라 올해 기운과의 관계가 달라집니다 — 출생연도별로 짚어드립니다.</p>
 
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: '0 0 16px' }}>
           {years.map(yy => (
-            <Link key={yy} href={`/saeobunse/${yy}`} style={{ fontSize: 12.5, fontWeight: 700, textDecoration: 'none', padding: '8px 12px', borderRadius: 999, border: '1px solid var(--line)', color: yy === y ? '#fff' : '#58616a', background: yy === y ? 'linear-gradient(135deg,var(--red),#7f1a17)' : '#fff' }}>{yy}</Link>
+            <Link key={yy} href={`/saeobunse/${yy}`} style={{ fontSize: 13, fontWeight: 700, textDecoration: 'none', padding: '8px 12px', borderRadius: 999, border: '1px solid var(--line)', color: yy === y ? '#fff' : '#58616a', background: yy === y ? 'linear-gradient(135deg,var(--red),#7f1a17)' : '#fff' }}>{yy}</Link>
           ))}
         </div>
 
         {DATA.map((t, i) => (
           <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 16, padding: '15px 16px', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 8 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#a5241f,#7d1d12)', color: '#f6e7c8', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 19 }}>{t.h}</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#a5241f,#7d1d12)', color: '#f6e7c8', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17 }}>{t.h}</span>
               <div>
-                <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15.5, color: 'var(--ink)' }}>{t.a}</div>
-                <div style={{ fontSize: 12.5, color: '#58616a', fontWeight: 600 }}>{t.base}</div>
+                <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--ink)' }}>{t.a}</div>
+                <div style={{ fontSize: 13, color: '#58616a', fontWeight: 600 }}>{t.base}</div>
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 5, borderTop: '1px solid var(--line)', paddingTop: 9 }}>
               {t.rows.map((r, j) => (
                 <div key={j} style={{ display: 'flex', gap: 9, fontSize: 13, lineHeight: 1.5, alignItems: 'baseline' }}>
-                  <span style={{ flex: '0 0 82px', color: '#58616a', fontWeight: 700, fontFamily: 'var(--serif)' }}>{r.by}<span style={{ fontSize: 12, color: '#6d7882', marginLeft: 4 }}>{r.ganzhi}</span></span>
+                  <span style={{ flex: '0 0 82px', color: '#58616a', fontWeight: 700, fontFamily: 'var(--serif)' }}>{r.by}<span style={{ fontSize: 13, color: '#6d7882', marginLeft: 4 }}>{r.ganzhi}</span></span>
                   <span style={{ color: '#4a4438' }}>{r.nuance}</span>
                 </div>
               ))}
@@ -140,12 +140,12 @@ export default function YearPage({ params }: { params: { year: string } }) {
         ))}
 
         <div style={{ background: 'linear-gradient(135deg,#2a2622,#1c1916)', border: '1px solid var(--gold2)', borderRadius: 16, padding: '18px 17px', margin: '6px 0 4px' }}>
-          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 16, color: '#f6e7c8', marginBottom: 6 }}>년주는 큰 흐름일 뿐입니다</div>
-          <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#d8cdb5', margin: '0 0 12px' }}>같은 해에 태어나도 월·일·시에 따라 사주는 전혀 달라집니다. 대표님의 <b style={{ color: '#f0d9a8' }}>정확한 생년월일</b>로 오늘의 투찰 택일·발주처 궁합·회사 사주까지 만세력으로 짚어보세요.</p>
-          <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '13px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 15.5, textDecoration: 'none' }}>내 사주로 30초 무료 확인 →</Link>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 17, color: '#f6e7c8', marginBottom: 6 }}>년주는 큰 흐름일 뿐입니다</div>
+          <p style={{ fontSize: 13, lineHeight: 1.75, color: '#d8cdb5', margin: '0 0 12px' }}>같은 해에 태어나도 월·일·시에 따라 사주는 전혀 달라집니다. 대표님의 <b style={{ color: '#f0d9a8' }}>정확한 생년월일</b>로 오늘의 투찰 택일·발주처 궁합·회사 사주까지 만세력으로 짚어보세요.</p>
+          <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '13px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 15, textDecoration: 'none' }}>내 사주로 30초 무료 확인 →</Link>
         </div>
 
-        <p style={{ fontSize: 12, color: '#6d7882', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 년주(태어난 해의 간지)와 올해 간지의 오행 관계로 산출한 참고·오락용 정보입니다. 중요한 사업 판단은 대표님의 종합적 검토와 함께하세요.</p>
+        <p style={{ fontSize: 13, color: '#6d7882', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 년주(태어난 해의 간지)와 올해 간지의 오행 관계로 산출한 참고·오락용 정보입니다. 중요한 사업 판단은 대표님의 종합적 검토와 함께하세요.</p>
       </div>
     </div>
   );

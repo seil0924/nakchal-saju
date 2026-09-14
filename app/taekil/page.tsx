@@ -43,9 +43,9 @@ export default function TaekilHub() {
       </div>
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>擇 日</div>
-        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 23, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>언제 시작할 것인가</h1>
-        <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>
+        <div style={{ fontSize: 13, letterSpacing: '.28em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>擇 日</div>
+        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>언제 시작할 것인가</h1>
+        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>
           개업·법인 설립·계약·사무실 이전·입찰. 하는 일에 따라 좋은 날이 다릅니다. 건제십이신(建除十二神)으로
           앞으로 90일 중 결이 맞는 날을 가려 놓았습니다. 회원가입도 결제도 없습니다.
         </p>
@@ -55,7 +55,7 @@ export default function TaekilHub() {
         <div style={{ display: 'grid', gap: 8 }}>
           {TAEKIL.map(t => (
             <Link key={t.slug} href={`/taekil/${encodeURIComponent(t.slug)}`} style={card}>
-              <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15.5, color: 'var(--navy)', marginBottom: 4 }}>{t.kw}</div>
+              <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 4 }}>{t.kw}</div>
               <div style={{ fontSize: 13, lineHeight: 1.7, color: '#3a3630' }}>{t.lead}</div>
               <div style={{ marginTop: 7, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                 {t.good.map(o => (
@@ -102,7 +102,7 @@ const card: React.CSSProperties = {
   borderRadius: 13, padding: '13px 15px', textDecoration: 'none',
 };
 const pill: React.CSSProperties = {
-  fontSize: 12, fontWeight: 700, color: '#58616a',
+  fontSize: 13, fontWeight: 700, color: '#58616a',
   background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '3px 8px',
 };
 

@@ -64,14 +64,14 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
           <div className="st">
             <span className="b" />
             후기 {rows.length}건
-            {avg !== null && <span style={{ fontWeight: 500, color: '#58616a', fontSize: 12 }}>· 평균 {avg}점</span>}
+            {avg !== null && <span style={{ fontWeight: 500, color: '#58616a', fontSize: 13 }}>· 평균 {avg}점</span>}
           </div>
 
           {!ready && (
             <div className="rvempty">
               <div className="big">후기 게시판이 아직 켜지지 않았습니다</div>
               <div className="sm">Supabase → SQL Editor 에서 <b>supabase/reviews.sql</b> 을 한 번 실행하면 이 화면이 살아납니다.
-                {why && <><br /><span style={{ fontSize: 12, color: '#8f2f1c' }}>({why})</span></>}
+                {why && <><br /><span style={{ fontSize: 13, color: '#8f2f1c' }}>({why})</span></>}
               </div>
             </div>
           )}
@@ -168,7 +168,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
           <div className="st"><span className="b" />먼저 써 보시겠다면</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {[['/hoesa', '회사 사주 — 설립일만'], ['/reading', '오늘, 넣을 날인가'], ['/ceo', '나와 닮은 CEO']].map(([h, t]) => (
-              <Link key={h} href={h} style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' }}>{t}</Link>
+              <Link key={h} href={h} style={{ fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' }}>{t}</Link>
             ))}
           </div>
         </div>

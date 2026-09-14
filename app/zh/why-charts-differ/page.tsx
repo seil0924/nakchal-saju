@@ -63,8 +63,8 @@ export default function WhyZhPage() {
       </div>
 
       <div className="hero"><div className="kick">同 日 異 命 · 一 生 兩 盤</div>
-        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>為什麼各家八字排盤<br />結果會不一樣？</h1>
-        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>五個原因 — 以及一組你可以自己跑的並排對照</div>
+        <h1 style={{ fontSize: 17, marginTop: 8, lineHeight: 1.35 }}>為什麼各家八字排盤<br />結果會不一樣？</h1>
+        <div style={{ color: '#c3cfe3', fontSize: 13, marginTop: 8, fontWeight: 500 }}>五個原因 — 以及一組你可以自己跑的並排對照</div>
       </div>
 
       <ChartDiff lang="zh" />

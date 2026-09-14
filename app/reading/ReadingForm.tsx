@@ -14,6 +14,7 @@ import PersonPicker from '@/app/_components/PersonPicker';
 import { type Person, type PersonKind } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
 import TrustStrip from '@/app/_components/TrustStrip';
+import { markResultSeen } from '@/app/_components/AddToHome';
 import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 import { sget, sset } from '@/lib/scope';
 import { setTok, tokParam } from '@/lib/rtok';
@@ -263,6 +264,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       setTok(r.reportId, r.token);   // 접근토큰 로컬 보관(비회원 리포트 IDOR 방어)
       await minWait;
       setRes(r);
+      markResultSeen();   // 홈 화면 추가 권유는 결과를 본 사람에게만
       // 관리자는 서버가 레벨 2로 본문을 만들어 보낸다. 그 값을 그대로 받아야
       // 배지(자물쇠/열림)와 본문이 같은 기준으로 그려진다.
       setLevel(r.level ?? 0);
@@ -620,7 +622,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {res.hero && (
               <div className="rhero">
                 <div className="hl" dangerouslySetInnerHTML={{ __html: res.hero.headline }} />
-                <div className={'num' + (res.hero.big && (res.hero.big as any).length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 20 }}>{res.hero.unit ?? '점'}</span></div>
+                <div className={'num' + (res.hero.big && (res.hero.big as any).length > 2 ? ' numtx' : '')} style={{ color: res.hero.up ? 'var(--gold2)' : '#e88' }}>{res.hero.big ?? res.hero.score}<span style={{ fontSize: 22 }}>{res.hero.unit ?? '점'}</span></div>
                 <div className="lab">{res.hero.label}</div>
                 <div className="sub2">{res.hero.sub}</div>
               </div>
@@ -709,14 +711,14 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {level >= 1 && ui.gauge && (
               <div className="unlocked-note">✓ 결제 확인됨 · 이달 투찰 길일과 유리한 시진이 전부 열렸습니다</div>
             )}
-            <button className="sharebtn no-print" onClick={share}>결과 링크 공유하기 <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>
+            <button className="sharebtn no-print" onClick={share}>결과 링크 공유하기 <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장
             </button>
             {res.sections.some((s2: any) => s2.mk === '曆' || s2.mk === '曆詳' || s2.mk === '曆年') && (
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={exportIcs}>
-              이달 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 12, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
+              이달 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
             </button>)}
             <TrustStrip />
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>

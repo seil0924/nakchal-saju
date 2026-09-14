@@ -74,10 +74,10 @@ export default function TaekilPage({ params }: { params: { slug: string } }) {
       </div>
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <nav aria-label="위치" style={{ fontSize: 12, color: '#58616a', marginBottom: 10 }}>
+        <nav aria-label="위치" style={{ fontSize: 13, color: '#58616a', marginBottom: 10 }}>
           <Link href="/taekil" style={{ color: '#2f56c4', textDecoration: 'none', fontWeight: 600 }}>택일</Link> › {t.kw}
         </nav>
-        <div style={{ fontSize: 12, letterSpacing: '.24em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>{t.kicker}</div>
+        <div style={{ fontSize: 13, letterSpacing: '.24em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>{t.kicker}</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 10px' }}>{t.h1}</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 14px' }}>{t.lead}</p>
       </div>
@@ -97,20 +97,20 @@ export default function TaekilPage({ params }: { params: { slug: string } }) {
         <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '10px 0 8px' }}>자주 묻는 질문</h2>
         {t.faq.map((f, i) => (
           <div key={i} style={card}>
-            <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: 'var(--navy)', marginBottom: 6 }}>Q. {f.q}</div>
-            <p style={{ fontSize: 13.5, lineHeight: 1.75, color: '#33383f', margin: 0 }}>{f.a}</p>
+            <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>Q. {f.q}</div>
+            <p style={{ fontSize: 13, lineHeight: 1.75, color: '#33383f', margin: 0 }}>{f.a}</p>
           </div>
         ))}
       </section>
 
       <section style={{ padding: '10px 18px 0' }}>
-        <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14, color: 'var(--navy)', margin: '10px 0 8px' }}>다른 날 고르기</h2>
+        <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '10px 0 8px' }}>다른 날 고르기</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
           {others.map(x => (
             <Link key={x.slug} href={'/taekil/' + encodeURIComponent(x.slug)} style={chip}>{x.kw.replace(' 택일', '')}</Link>
           ))}
         </div>
-        <p style={{ fontSize: 12, color: '#58616a', lineHeight: 1.65, margin: '14px 0 22px' }}>
+        <p style={{ fontSize: 13, color: '#58616a', lineHeight: 1.65, margin: '14px 0 22px' }}>
           ※ 절기로 나눈 달과 그날의 일지로 건제십이신을 낸 참고·오락용 정보입니다.
           계약 조건·비용·사람이 먼저이고 이 글은 그 위에 얹는 것입니다. 투찰금액 산정 근거가 아닙니다.
         </p>
@@ -124,7 +124,7 @@ const card: React.CSSProperties = {
   padding: '13px 15px', marginBottom: 9,
 };
 const chip: React.CSSProperties = {
-  fontSize: 12.5, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7',
+  fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7',
   border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none',
 };
 

@@ -36,8 +36,8 @@ export default function Balju() {
       <div className="topbar"><Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>발주처</Link><Link className="ic" href="/more" aria-label="메뉴 · 더보기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link></div>
 
       <div className="hero">
-        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>어느 발주처와<br />붙어볼까요</h1>
-        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>발주처 설립일 사주 × 대표님 사주로 궁합을 봅니다</div>
+        <h1 style={{ fontSize: 17, marginTop: 8, lineHeight: 1.35 }}>어느 발주처와<br />붙어볼까요</h1>
+        <div style={{ color: '#c3cfe3', fontSize: 13, marginTop: 8, fontWeight: 500 }}>발주처 설립일 사주 × 대표님 사주로 궁합을 봅니다</div>
       </div>
 
       {/* 관계지도 — 목록만 있으면 훑고 나간다. 지도로 먼저 보여주고 목록은 아래 그대로 둔다. */}
@@ -71,9 +71,9 @@ export default function Balju() {
       <div className="balnote"><b>핵심</b> 표시가 붙은 발주처(LH·조달청·도로공사 등 큰 판)의 궁합은 유료입니다. 일반 발주처 궁합은 무료로 열립니다.<br />설립일은 공개 연혁 기준의 자체 구축 DB이며, 더 많은 발주처가 계속 추가됩니다.</div>
 
       <nav aria-label="발주처별 상세 분석" style={{ padding: '4px 15px 10px' }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: '#58616a', margin: '6px 0 8px' }}>발주처별 상세 분석</div>
+        <div style={{ fontSize: 13, fontWeight: 800, color: '#58616a', margin: '6px 0 8px' }}>발주처별 상세 분석</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {CLIENTS.map(c => (<Link key={c.name} href={`/balju/${clientSlug(c.name)}`} style={{ fontSize: 12, fontWeight: 600, color: '#58616a', background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{c.name}</Link>))}
+          {CLIENTS.map(c => (<Link key={c.name} href={`/balju/${clientSlug(c.name)}`} style={{ fontSize: 13, fontWeight: 600, color: '#58616a', background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{c.name}</Link>))}
         </div>
       </nav>
 

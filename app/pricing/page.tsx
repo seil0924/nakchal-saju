@@ -65,7 +65,7 @@ export default function Pricing() {
 
         <div className="card">
           <div className="st"><span className="l"><span className="b" />취소 · 환불</span></div>
-          <p style={{ fontSize: 13.5, lineHeight: 1.8, color: '#3a3f47' }}>
+          <p style={{ fontSize: 13, lineHeight: 1.8, color: '#3a3f47' }}>
             유료 콘텐츠는 디지털 콘텐츠 특성상 <b>열람 전</b>에는 전액 환불, <b>열람 후</b>에는 청약철회가 제한될 수 있습니다(전자상거래법 제17조). 자세한 내용은 <Link href="/refund" style={{ color: 'var(--navy)', fontWeight: 700 }}>청약철회·환불 안내</Link>와 <Link href="/terms" style={{ color: 'var(--navy)', fontWeight: 700 }}>이용약관</Link>을 확인해 주세요.
           </p>
         </div>

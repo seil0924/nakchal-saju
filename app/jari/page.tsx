@@ -44,17 +44,17 @@ export default function Jari() {
       </div>
 
       <div className="hero"><div className="kick">자리 사주</div>
-        <h1 style={{ fontSize: 19, marginTop: 8, lineHeight: 1.35 }}>사무실을 옮기기 전에,<br />어느 쪽인지부터</h1>
-        <div style={{ color: '#c3cfe3', fontSize: 12, marginTop: 8, fontWeight: 500 }}>지금 자리의 문·책상 방위와 옮길 곳의 방위·택일을 함께 봅니다</div>
+        <h1 style={{ fontSize: 17, marginTop: 8, lineHeight: 1.35 }}>사무실을 옮기기 전에,<br />어느 쪽인지부터</h1>
+        <div style={{ color: '#c3cfe3', fontSize: 13, marginTop: 8, fontWeight: 500 }}>지금 자리의 문·책상 방위와 옮길 곳의 방위·택일을 함께 봅니다</div>
       </div>
 
       <JariMap />
 
       <nav aria-label="함께 보면 좋은 것" style={{ padding: '4px 15px 12px' }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: '#58616a', margin: '6px 0 8px' }}>함께 보면 좋은 것</div>
+        <div style={{ fontSize: 13, fontWeight: 800, color: '#58616a', margin: '6px 0 8px' }}>함께 보면 좋은 것</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {[['/reading?cat=daeun', '회사 대운 — 지금이 옮길 때인가'], ['/reading?cat=sajeong', '오늘의 투찰 택일'], ['/balju', '발주처 궁합'], ['/column', '칼럼']].map(([h, t]) => (
-            <Link key={h} href={h} style={{ fontSize: 12, fontWeight: 600, color: '#58616a', background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{t}</Link>
+            <Link key={h} href={h} style={{ fontSize: 13, fontWeight: 600, color: '#58616a', background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{t}</Link>
           ))}
         </div>
       </nav>

@@ -31,12 +31,12 @@ export default function Terms() {
       <div className="hero"><h1>이용약관</h1>
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">
-        <div className="card" style={{ lineHeight: 1.8, fontSize: 13.5, color: '#3a3f47' }}>
-          <p style={{ color: '#58616a', fontSize: 12, marginBottom: 14 }}>시행일자: 2026년 7월 15일</p>
+        <div className="card" style={{ lineHeight: 1.8, fontSize: 13, color: '#3a3f47' }}>
+          <p style={{ color: '#58616a', fontSize: 13, marginBottom: 14 }}>시행일자: 2026년 7월 15일</p>
           {SECTIONS.map(([h, b], i) => (
             <p key={i} style={{ marginTop: i ? 14 : 0 }}><b style={{ color: 'var(--navy)' }}>{h}</b><br />{b}</p>
           ))}
-          <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6e8ea', fontSize: 12, color: '#58616a' }}>
+          <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6e8ea', fontSize: 13, color: '#58616a' }}>
             {bizFooterLine()}
           </p>
         </div>

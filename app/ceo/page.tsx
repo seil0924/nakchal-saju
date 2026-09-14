@@ -162,7 +162,7 @@ export default function CeoTwin() {
     <div className="app">
       <div className="hero">
         <h1>나와 닮은<br />세계적 CEO는?</h1>
-        <p style={{ color: '#c3cfe3', marginTop: 10, fontSize: 13.5, lineHeight: 1.7 }}>
+        <p style={{ color: '#c3cfe3', marginTop: 10, fontSize: 13, lineHeight: 1.7 }}>
           생년월일만 넣으면 30초. 잡스·록펠러·샤넬… 세계 거장 100인 중<br />당신의 사주와 가장 닮은 대표를 찾아 드립니다. <b style={{ color: 'var(--gold2)' }}>무료</b>
         </p>
         <p style={{ marginTop: 8 }}><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p>
@@ -296,8 +296,8 @@ export default function CeoTwin() {
             </div>
 
             <div className="sharewrap">
-              <button className="sharebtn primary" onClick={share}>결과 링크 공유<span style={{ fontWeight: 500, fontSize: 12, display: 'block', marginTop: 2 }}>카카오톡 · 문자</span></button>
-              <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 12, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
+              <button className="sharebtn primary" onClick={share}>결과 링크 공유<span style={{ fontWeight: 500, fontSize: 13, display: 'block', marginTop: 2 }}>카카오톡 · 문자</span></button>
+              <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 13, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
             </div>
 
             {/* 미끼 브리지 — 유형은 알려줬지만 '나 개인'은 감춰 갈증을 만든다 */}

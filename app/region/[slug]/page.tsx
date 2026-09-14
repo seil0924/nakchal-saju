@@ -46,7 +46,7 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '4px 0 10px' }}>{r.name} 입찰 — 지역 발주처와 내 궁합</h1>
-        <p style={{ fontSize: 15.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 14px' }}>{r.intro}</p>
+        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 14px' }}>{r.intro}</p>
         <div style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{r.name} 입찰·조달 특성</div><p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{r.industry}</p></div>
 
         {localClients.length > 0 && (<>
@@ -55,7 +55,7 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
           {localClients.map(c => (
             <Link key={c.name} href={`/balju/${clientSlug(c.name)}`} style={row}>
               <b style={{ color: 'var(--navy)', fontFamily: 'var(--serif)' }}>{c.name}</b>
-              <span style={{ fontSize: 12, color: '#58616a' }}>{c.date.slice(0, 4)} 설립 · {c.cat} ›</span>
+              <span style={{ fontSize: 13, color: '#58616a' }}>{c.date.slice(0, 4)} 설립 · {c.cat} ›</span>
             </Link>
           ))}
         </div>
@@ -66,16 +66,16 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
           {NATIONAL.map(n => (<Link key={n} href={`/balju/${clientSlug(n)}`} style={chip}>{n}</Link>))}
         </div>
 
-        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>{r.name} 입찰, 오늘 넣을까 미룰까 · 30초</span></Link>
+        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>{r.name} 입찰, 오늘 넣을까 미룰까 · 30초</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
-        {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 14.5, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 14.5, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
+        {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
 
-        <p style={{ fontSize: 12, color: '#6d7882', lineHeight: 1.65, margin: '18px 0 20px' }}>※ 발주처 설립일은 공개 연혁 기준 자체 DB이며, 명리 기반 참고·오락용 정보입니다. 실제 투찰 판단의 근거로 사용할 수 없습니다.</p>
+        <p style={{ fontSize: 13, color: '#6d7882', lineHeight: 1.65, margin: '18px 0 20px' }}>※ 발주처 설립일은 공개 연혁 기준 자체 DB이며, 명리 기반 참고·오락용 정보입니다. 실제 투찰 판단의 근거로 사용할 수 없습니다.</p>
       </div>
     </div>
   );
 }
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
 const row: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 3, background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '12px 14px', textDecoration: 'none' };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none' };
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
