@@ -1,14 +1,3 @@
-/* === sweep9: 퍼널①② — 홈 순서(배너→카테고리→나머지) === */
-html .home5>*{order:6}
-html .home5>.mast{order:1}
-html .home5>.hometag{order:2}
-html .home5>.herocar{order:3}
-html .home5>.lab{order:5}
-html .home5>.lab:has(+.list){order:4}
-html .home5>.list{order:4}
-html .home5>.todayband{order:5}
-html .home5>.today{order:5}
-html .home5>.ceoband{order:5}
 /* === sweep8b: 배너 전환 즉각화 — 플랫 배경에서 빈화면 구간 제거 === */
 html .home5 .hcslide{transition:opacity .22s ease!important}
 html .home5 .hcslide.on .hckick{animation-duration:.25s!important;animation-delay:0s!important}
@@ -53,9 +42,6 @@ html .app>.foot a,html .foot a{color:#58616a!important}
 /* 금색 잔재 */
 html .home5 .li5 .arw{color:#636d77!important}
 html .home5 .li5 .t small{color:#636d77!important}
-html .home5 .bokline .bltx em{color:#58616a!important}
-html .home5 .bokline .blgo{color:#58616a!important}
-html .home5 .hometag{color:#58616a!important}
 /* 파란 CTA 위 보조문구 */
 html .home5 .today .tcta em{color:#ffffff!important}
 html .home5 .today .tcta .a{color:#ffffff!important}
@@ -76,7 +62,7 @@ html .tlive .tw-d.v-good .tw-k{background:#1f7a55}
 html .tlive .tw-d.v-ok .tw-k{background:#4a5058}
 html .tlive .tw-d.v-bad .tw-k{background:#b3382c}
 /* 최근 발행 */
-html .home5>.tl-recent{order:5;margin:8px 24px 2px;padding:14px 15px 10px;background:#fff;border:1px solid #e6e8ea;border-radius:11px}
+html .home5>.tl-recent{margin:8px 24px 2px;padding:14px 15px 10px;background:#fff;border:1px solid #e6e8ea;border-radius:11px}
 html .tl-recent .trc-hd{display:flex;align-items:center;gap:7px;font-family:var(--serif);font-weight:800;font-size:13px;color:#1e2124;margin-bottom:9px}
 html .tl-recent .trc-hd i{width:6px;height:6px;border-radius:50%;background:#1f7a55;flex:none}
 html .tl-recent .trc-hd em{font-style:normal;margin-left:auto;font-family:var(--sans);font-weight:600;font-size:13px;color:#636d77}
@@ -87,20 +73,12 @@ html .tl-recent .trc-d{margin-left:auto;flex:none;font-size:13px;color:#636d77;w
 html .tl-recent .trc-all{display:block;margin-top:8px;padding-top:9px;border-top:1px solid #f1f3f5;font-size:13px;font-weight:700;color:#2646a3;text-decoration:none}
 
 /* === sweep17: 수록 규모 — 처음 온 사람에게 축적을 보여준다 === */
-html .home5>.scale{order:4;margin:14px 24px 2px;padding:15px 16px 13px;background:#fff;border:1px solid #e6e8ea;border-radius:11px}
+html .home5>.scale{margin:14px 24px 2px;padding:15px 16px 13px;background:#fff;border:1px solid #e6e8ea;border-radius:11px}
 /* 후기 띠 — 수록 규모와 같은 4번 그룹. 안 적으면 catch-all(order:6)로 밀려 페이지 끝에 붙는다. */
-html .home5>.rstrip{order:4;margin:16px 24px 2px}
-html .scale .sc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-html .scale .sc-i{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;position:relative}
-html .scale .sc-i+.sc-i::before{content:"";position:absolute;left:-3px;top:5px;bottom:5px;width:1px;background:#eceef0}
-html .scale .sc-n{font-family:var(--serif);font-weight:900;font-size:22px;color:#1e2124;line-height:1.1;letter-spacing:-.02em}
-html .scale .sc-n em{font-style:normal;font-family:var(--sans);font-weight:700;font-size:13px;color:#58616a;margin-left:2px}
-html .scale .sc-t{font-size:13px;color:#636d77;letter-spacing:-.01em;word-break:keep-all}
-html .scale .sc-note{margin-top:12px;padding-top:11px;border-top:1px solid #eceef0;font-size:13px;line-height:1.6;color:#58616a;word-break:keep-all}
-@media(max-width:359px){html .scale .sc-n{font-size:17px}html .scale .sc-t{font-size:13px}}
+html .home5>.rstrip{margin:16px 24px 2px}
 
 /* === sweep16: 오늘의 라이브 띠 — 일진·절기 D-day·택일 === */
-html .home5>.tlive{order:5;margin:12px 24px 2px;background:#202022;border-radius:11px;padding:14px 15px 12px;color:#efeae0}
+html .home5>.tlive{margin:12px 24px 2px;background:#202022;border-radius:11px;padding:14px 15px 12px;color:#efeae0}
 html .tlive:empty{display:none;min-height:0}
 html .tlive .tl-top{display:flex;align-items:center;gap:13px}
 html .tlive .tl-gz{font-family:var(--serif);font-size:22px;font-weight:900;line-height:1;letter-spacing:.04em;flex:none;color:#efeae0}
@@ -119,7 +97,7 @@ html .tlive .tl-tx b{font-size:13px;font-weight:700;color:#f4f0e8}
 html .tlive .tl-tx span{font-size:13px;line-height:1.6;color:rgba(239,234,224,.76);word-break:keep-all}
 html .tlive .tl-stamp{margin-top:10px;font-size:13px;color:rgba(239,234,224,.45);letter-spacing:.01em}
 /* 이어보기 — 재방문자 전용 */
-html .home5>.tl-resume{order:5;display:flex;align-items:center;gap:10px;margin:8px 24px 2px;padding:12px 14px;background:#fff;border:1px solid #3f6be0;border-radius:10px;text-decoration:none}
+html .home5>.tl-resume{display:flex;align-items:center;gap:10px;margin:8px 24px 2px;padding:12px 14px;background:#fff;border:1px solid #3f6be0;border-radius:10px;text-decoration:none}
 html .tl-resume .tlr-k{flex:none;width:28px;height:28px;border-radius:6px;background:#eef3fe;color:#2646a3;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:15px}
 html .tl-resume .tlr-t{font-size:13px;color:#1e2124;min-width:0}
 html .tl-resume .tlr-t b{font-weight:800}
@@ -137,7 +115,7 @@ html .colrel .crd{font-size:13px;color:#636d77}
 
 /* === sweep14: 가독성 — WCAG AA 미달 전수 교정 === */
 /* 다크 컨테이너 강조 텍스트 복구 (sweep11 역침범 차단) */
-html .mecard.mecard b,html .mecard.mecard .mep b,html .hero b,html .chook b,html .ceoband b,html .sealcmp b,html .loginpromo b,html .ileon b,html .bokpage b,html .todayband b,html .trhd b,html .herocar b{color:#ffffff!important}
+html .mecard.mecard b,html .mecard.mecard .mep b,html .hero b,html .ceoband b,html .sealcmp b,html .loginpromo b,html .ileon b,html .bokpage b,html .trhd b,html .herocar b{color:#ffffff!important}
 html .mecard{background:#202022!important;background-image:none!important;border-color:#33332f!important}
 html .mecard .mep{color:rgba(243,238,228,.88)!important}
 html .mecard .mep.dim{color:rgba(243,238,228,.72)!important}
@@ -152,24 +130,18 @@ html .tpsl,html .jintag,html .tpm i,html .rpr{color:#5b5344!important}
 html .sbl .sbk{background:#7d5f1f!important}
 /* 파랑 위 보조 텍스트 / 경계 항목 */
 html .cta small,html .tcta small{color:#ffffff!important}
-html .trseal,html .topshare.topshare{color:#2646a3!important}
+html .topshare.topshare{color:#2646a3!important}
 html .wgnote{color:#b9c2d6!important}
 html .lb.free,html .sec .lb.free{color:#0f6b4f!important}
 
 /* === sweep13: 띠는 먹빛, 버튼은 파랑 — 배너 색 위계 통일 === */
-html .hero,html .chook,html .ceoband,html .home5 .ceoband,html .sealcmp,html .loginpromo,html .ileon,html .bokpage,html .bizyear .byhd,html .trhd,html .todayband{background:#202022!important;background-image:none!important;border-color:#2e2e31!important;box-shadow:none!important}
+html .hero,html .ceoband,html .home5 .ceoband,html .sealcmp,html .loginpromo,html .ileon,html .bokpage,html .bizyear .byhd,html .trhd{background:#202022!important;background-image:none!important;border-color:#2e2e31!important;box-shadow:none!important}
 html .ceoband::before{color:rgba(255,255,255,.05)!important}
-html .todayband .tb-gz,html .todayband .tb-k{color:#e6ded0!important}
-html .todayband .tb-k{border-color:rgba(230,222,208,.4)!important}
-html .todayband .tb-date{color:#eee9e0!important}
-html .todayband .tb-sub{color:rgba(238,233,224,.62)!important}
 
 /* === sweep11: 텍스트는 먹빛으로 — 파랑은 인터랙티브 요소에만 === */
-html .st,html .subhd,html .qh,html .compat .gt,html .home .sechd .t,html .cheobang .cbt,html .suchik .sut,html .btip .btl,html .axlb,html .axsc,html .pp-nm,html .mychips .c .v,html .trstat span{color:#1e2124!important}
+html .st,html .qh,html .compat .gt,html .home .sechd .t,html .cheobang .cbt,html .suchik .sut,html .btip .btl,html .axlb,html .axsc,html .pp-nm,html .mychips .c .v{color:#1e2124!important}
 html .sec .bd p b,html .teaser .ttx b,html .twinlead b,html .myeong p b,html .baljulock b,html .distcmp .dcs b,html .fcline b,html .gauge .gnote b,html .pktx b,html .prn b,html .trdisc b,html .trm b,html .twbasis b{color:#1e2124!important}
-html .home5 .hometag b,html .sj12.g{color:#1e2124!important}
-html .subhd{border-top-color:#e6e8ea!important}
-html .home5 .foot .bokquiet span{color:#58616a!important}
+html .sj12.g{color:#1e2124!important}
 
 /* === sweep12: 배너 — 먹빛 한지 타이포 포스터 === */
 html .home5 .herocar{background:#1c1c1d!important;height:330px!important;position:relative;overflow:hidden;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E")!important;background-color:#1c1c1d!important}
@@ -193,7 +165,6 @@ html .dnavi:hover{background:#f4f5f6!important;color:#1e2124!important}
 html .dnavi.on{background:#eef3fe!important;color:#2f56c4!important;border-left-color:#3f6be0!important}
 html .dnavi.on svg{stroke:#2f56c4!important}
 html .dfoot{color:#8a949e!important;border-top-color:#e6e8ea!important}
-html .dfoot .dkick{color:#636d77!important}
 html .dfoot .dlinks a{color:#58616a!important}
 html .dfoot .dfoot-biz{color:#8a949e!important}
 /* === sweep5: 투어 발견 — CTA 텍스트/신뢰패널/복채/발주처 pill/핵심배지 === */
@@ -204,16 +175,10 @@ html .dfoot .dfoot-biz{color:#8a949e!important}
 .trhd{color:#fff!important}
 .trm{border-bottom-color:#e6e8ea!important}
 .trm span{color:#58616a!important}
-.trft,.trust .trft{background:#f4f5f6!important;color:#58616a!important}
-.home5 .bokline .blseal{border-color:#3f6be0!important;color:#3f6be0!important;background:#eef3fe!important}
-.home5 .bokline .bltx b{color:#1e2124!important}
-.home5 .foot .bokquiet{border-color:#d9e4fb!important;background:#eef3fe!important;color:#2f56c4!important}
-.home5 .foot .bokquiet span{color:#2f56c4!important}
 .li .r{color:#2f56c4!important;background:#fff!important;border:1px solid #3f6be0!important}
 .corelock{background:#b3382c!important;box-shadow:none!important}
 /* === sweep4: 사이드바 하단 링크 + 사람선택 모달 베이지 제거 === */
 .dfoot{color:rgba(255,255,255,.6)!important;border-top-color:rgba(255,255,255,.22)!important}
-.dfoot .dkick{color:rgba(255,255,255,.78)!important}
 .dfoot .dlinks a{color:rgba(255,255,255,.85)!important}
 .dfoot .dfoot-biz{color:rgba(255,255,255,.55)!important}
 .foot .bizinfo{color:#8a949e!important}
@@ -236,31 +201,18 @@ html .dfoot .dfoot-biz{color:#8a949e!important}
 .dnavi.on{background:rgba(255,255,255,.2)!important;color:#fff!important;border-left-color:#fff!important}
 .dnavi.on svg{stroke:#fff!important}
 .hero .k,.home .hero .kick{color:rgba(255,255,255,.85)!important}
-.chook .chtx b{color:#fff!important}
-.chook .chtx em{color:rgba(255,255,255,.85)!important}
-.chook::after{background:rgba(255,255,255,.35)!important;height:1px!important}
-.chook .chseal{border-color:rgba(255,255,255,.9)!important;color:#fff!important}
-.ceoband .cbseal{border-color:rgba(255,255,255,.9)!important}
 .pickbtn{background:#eef3fe!important;border:1.5px solid #d9e4fb!important;box-shadow:none!important}
-.pkseal{background:#3f6be0!important;border:0!important;color:#fff!important}
 .pktx b{color:#1e2124!important}
 .teaser .ttx::before{background:#3f6be0!important}
 .sec .mk{background:#eef3fe!important;color:#2f56c4!important}
-.subhd{color:#2f56c4!important;border-top:1px dashed #d9e4fb!important}
-.home5 .foot .bokquiet span{color:#58616a!important}
-.trseal{border-color:#3f6be0!important;color:#3f6be0!important;background:#eef3fe!important}
 
 /* === remaining dark areas -> blue (sweep 2) === */
 .ceoband,.home5 .ceoband{background:linear-gradient(135deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
-.ceoband .cbseal{border-color:#d9e4fb!important;color:#fff!important}
-.ceoband .cbgo{color:#fff!important}
-.ceoband .cbtx b{color:#fff!important}
-.ceoband .cbtx em{color:#d9e4fb!important}
 .ceoband::before{color:rgba(255,255,255,.08)!important}
 .sealcmp,.loginpromo{background:linear-gradient(150deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
 .bizyear .byhd{background:#3f6be0!important;color:#fff!important}
 .ileon{background:linear-gradient(150deg,#2f56c4,#2646a3)!important;border-color:#2646a3!important}
-.acctbtn,.sheet .sumbtns button.ok,.chook,.baljupick,.donebar{background:#3f6be0!important;border-color:#3f6be0!important;color:#fff!important}
+.acctbtn,.sheet .sumbtns button.ok,.baljupick,.donebar{background:#3f6be0!important;border-color:#3f6be0!important;color:#fff!important}
 .ybchip.on{background:#3f6be0!important;color:#fff!important;border-color:#2f56c4!important}
 .hero{background:linear-gradient(180deg,#3f6be0,#2f56c4)!important}
 .bokpage{background:linear-gradient(160deg,#2f56c4,#2646a3)!important}
@@ -286,9 +238,9 @@ html .dfoot .dfoot-biz{color:#8a949e!important}
 /* base */
 body{letter-spacing:0;line-height:var(--krds-lh)}
 /* radius normalize (banner 제외) */
-.card,.sec,.li,.li5,.today,.metric,.plan2,.catbuy,.compat,.sheet,.teaser,.gverdict,.tsnote,.unlocked-note{border-radius:var(--krds-radius-l)!important}
-.go,.cta,.tcta,.pay,.paygo,.lgbtn,.tunlock,.bokgo,.hcta,.btn-login,.seg button,input[type=date],input[type=time],textarea,select{border-radius:var(--krds-radius-m)!important}
-.pil .g,.pil .z,.gvseal,.catbuy-seal,.sec .mk{border-radius:var(--krds-radius-m)!important}
+.card,.sec,.li,.li5,.today,.catbuy,.compat,.sheet,.teaser,.gverdict,.tsnote,.unlocked-note{border-radius:var(--krds-radius-l)!important}
+.go,.cta,.tcta,.pay,.paygo,.lgbtn,.tunlock,.bokgo,.hcta,.seg button,input[type=date],input[type=time],textarea,select{border-radius:var(--krds-radius-m)!important}
+.pil .g,.pil .z,.catbuy-seal,.sec .mk{border-radius:var(--krds-radius-m)!important}
 /* flat: gradient CTA -> solid KRDS primary */
 .go,.cta,.paygo,.bokgo{background:var(--krds-primary-50)!important;border:1px solid var(--krds-primary-50)!important;color:#fff!important;box-shadow:none!important}
 .go:hover,.cta:hover,.paygo:hover,.bokgo:hover{background:var(--krds-primary-60)!important}
@@ -297,7 +249,7 @@ body{letter-spacing:0;line-height:var(--krds-lh)}
 .catbuy{border-color:var(--krds-point-50)!important;box-shadow:none!important}
 .catbuy-seal{background:var(--krds-point-50)!important;border:0!important;color:#fff!important}
 /* cards: hairline + subtle */
-.card,.sec,.li,.li5,.today,.plan2,.compat{border:1px solid var(--krds-gray-10)!important;box-shadow:var(--elev-1)!important}
+.card,.sec,.li,.li5,.today,.compat{border:1px solid var(--krds-gray-10)!important;box-shadow:var(--elev-1)!important}
 .home5 .li5:hover{box-shadow:var(--elev-2)!important;border-color:var(--krds-gray-20)!important;transform:translateY(-1px)!important}
 /* inputs: KRDS field */
 input[type=date],input[type=time],textarea,select{border:1px solid var(--krds-gray-20)!important;background:#fff!important}
@@ -313,14 +265,12 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:none!import
 .tapfx{background:radial-gradient(circle,rgba(63,107,224,.35),rgba(63,107,224,0) 68%)!important}
 .tapfx i{border-color:rgba(63,107,224,.4)!important}
 /* brand seal shadow off */
-.home5 .mast .brandseal{filter:none!important}
 /* sidebar brand box: navy frame */
 .dbrand .ds{border:0!important;background:transparent!important}
 .dcta{background:var(--krds-point-50)!important;border:0!important}
 .home5{--h-ink:#2f56c4}
 /* badges/labels tone */
 .sec .lb.free{color:#177f5e!important;background:#e7f4ee!important}
-.pz.free{color:var(--krds-primary-50)!important}
 
 /* === sweep20: 발주처 관계지도 === */
 html .bmap-wrap{margin:14px 20px 4px}
@@ -372,10 +322,6 @@ html .bm-disc b{color:#58616a;font-weight:700}
 
 /* 수록 규모 — 숫자가 올라오는 동안 살짝 커졌다 제자리로 */
 @keyframes scpop{0%{transform:translateY(6px);opacity:0}60%{transform:translateY(-2px);opacity:1}100%{transform:none;opacity:1}}
-html .scale .sc-n{display:inline-block;animation:scpop .7s cubic-bezier(.2,.7,.3,1) both}
-html .scale .sc-i:nth-child(2) .sc-n{animation-delay:.09s}
-html .scale .sc-i:nth-child(3) .sc-n{animation-delay:.18s}
-html .scale .sc-i:nth-child(4) .sc-n{animation-delay:.27s}
 
 /* 오늘의 택일 — 오늘 칸이 천천히 숨쉰다. 어제와 다른 날이라는 신호다 */
 @keyframes twnow{0%,100%{box-shadow:0 0 0 0 rgba(239,234,224,.34)}50%{box-shadow:0 0 0 5px rgba(239,234,224,0)}}
@@ -414,9 +360,7 @@ html .bmap svg>g:nth-child(6n){animation-delay:.27s}
 html .bmap svg>g.bm-fl{animation:bmfl var(--d) ease-in-out infinite;animation-delay:var(--dl)}
 
 @media(prefers-reduced-motion:reduce){
-  html .scale .sc-n,html .tlive .tw-d.now,html .tlive .tl-gz,html .tlive .tl-term,
-  html .today .tcta .a,html .bm-cta:not(.pay)::after,html .bmap svg>g,
-  html .bmap svg g circle[stroke="#b3382c"]{animation:none}
+  html .tlive .tw-d.now,html .tlive .tl-gz,html .tlive .tl-term,html .today .tcta .a,html .bm-cta:not(.pay)::after,html .bmap svg>g,html .bmap svg g circle[stroke="#b3382c"]{animation:none}
   html .home5 .li5:hover,html .tl-recent .trc-i:hover,html .colrel a:hover,html .bm-rk:not(.lk):hover{transform:none}
 }
 
@@ -504,9 +448,7 @@ html body .hero p,html body .hero [style*="color"],html body .hero div:not(.k):n
 html body .hero a{color:#2f56c4!important}
 
 /* 짙은 카드·배너·띠 → 연회색 면 */
-html body .chook,html body .baljupick,html body .ceoband,html body .sealcmp,html body .ileon,html body .bizyear .byhd,
-html body .loginpromo,html body .mecard,html body .mecard.mecard,html body .todayband,html body .execsum,html body .donebar,html body .acctbtn,
-html body .pp-hd,html body .trhd,html body .rhero,html body .wonguk,html body .amulet,html body .bmap{
+html body .baljupick,html body .ceoband,html body .sealcmp,html body .ileon,html body .bizyear .byhd,html body .loginpromo,html body .mecard,html body .mecard.mecard,html body .execsum,html body .donebar,html body .acctbtn,html body .pp-hd,html body .trhd,html body .rhero,html body .wonguk,html body .amulet,html body .bmap{
   background:#f4f5f7!important;background-image:none!important;border-color:#e6e8ea!important;color:#1e2124!important;box-shadow:none!important}
 html body :is(.chook,.baljupick,.ceoband,.sealcmp,.ileon,.bizyear .byhd,.loginpromo,.mecard,.todayband,.execsum,.donebar,.acctbtn,.pp-hd,.trhd,.rhero,.amulet) :is(b,strong,h2,h3,h4,.t,.hl,.lab){color:#1e2124!important}
 html body :is(.chook,.baljupick,.ceoband,.sealcmp,.ileon,.bizyear .byhd,.loginpromo,.mecard,.todayband,.execsum,.donebar,.acctbtn,.pp-hd,.trhd,.rhero,.amulet) :is(p,em,span,small,.sub2,.d){color:#58616a!important}

@@ -7,6 +7,7 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import { COLUMN_ENRICHMENTS } from './column-enrichment';
+import { boldToStrong } from './md-bold';
 
 const COLUMN_DIR = path.join(process.cwd(), 'content', 'column');
 
@@ -98,6 +99,6 @@ export function getColumn(slug: string): ColumnPost | null {
   if (!readFileNames().includes(file)) return null;
   const parsed = parseFile(file);
   if (!parsed) return null;
-  const html = marked.parse(parsed.body, { async: false }) as string;
+  const html = marked.parse(boldToStrong(parsed.body), { async: false }) as string;
   return { ...parsed.meta, html };
 }

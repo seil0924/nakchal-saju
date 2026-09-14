@@ -251,7 +251,7 @@ html body .st,html body .sechd .t,html body .home .sechd .t{color:var(--u-ink)!i
 html body .h6-sample,html body .h6-fcard{border-radius:12px}
 
 /* 글 속 링크 — 파랑 #3f6be0 은 흰 바탕에서 4.4 로 모자라 한 단계 짙게 */
-html body .app a:not([class]),html body .app p a,html body .app li a:not([class]){color:var(--u-blue-ink)}
+html body .app p a:not([class]){color:var(--u-blue-ink)}
 html body .bm-cta small{color:#fff!important;opacity:.92}
 html body .hsex a{color:var(--u-blue-ink)!important;border-color:var(--u-line)!important}
 html body .rvstars label span{color:var(--u-blue-ink)!important}
@@ -260,7 +260,7 @@ html body .rvstars label span{color:var(--u-blue-ink)!important}
 html body .loginswitch button{color:var(--u-blue-ink)!important}
 
 /* 짙은 영상 머리(home5 .hero5 — /full · /why · /product) → 밝은 제목 */
-html body .home5 .hero5,html body .home5 .hero5.vhero{background:#fff!important;background-image:none!important;min-height:0!important;max-height:none!important;padding:22px 20px 18px!important;border-bottom:1px solid var(--u-line)}
+html body .home5 .hero5{background:#fff!important;background-image:none!important;min-height:0!important;max-height:none!important;padding:22px 20px 18px!important;border-bottom:1px solid var(--u-line)}
 html body .home5 .hero5::after,html body .home5 .hero5::before{display:none!important}
 html body .home5 .hero5 .herovid,html body .home5 .hero5 .wm,html body .home5 .hero5 .rule{display:none!important}
 html body .home5 .hero5 .kick{color:var(--u-blue-ink)!important;letter-spacing:0!important}
@@ -317,3 +317,11 @@ html body .fshd .fsmk{display:none!important}
 html body .fstx b{color:var(--u-ink)!important}
 html body :is(.setrow,.pickbtn,.hsphase,.hslock,.bmap,.pricelist,.loginpromo,.persona,.jr-card,.loginnote){border-radius:12px!important}
 html body .dp-days li{border-radius:8px!important}
+/* home5 목록 머리의 장식 한자(率·運·財) 칸과 붉은 줄표 */
+html body .home5 .li5 .gz{display:none!important}
+html body .home5 .lab i{display:none!important}
+html body .home5 .lab span{letter-spacing:0!important;font-size:15px!important;color:var(--u-ink)!important}
+/* home5 계열(칼럼·/why·/full·상품) 색 토큰 — 붉은 강조·금색 줄·짙은 잉크가 여기서 나왔다 */
+html body .home5,html body .catpage{--h-red:#2f56c4;--h-gold:#e6e8ea;--h-goldlt:#2f56c4;--h-ink:#1e2124}
+html body .home5 .arow .an{display:none!important}
+html body .home5 .colhead .kick{letter-spacing:0!important}
