@@ -31,7 +31,7 @@ export default function ColumnIndex() {
           <span className="s">士</span>
           <div className="n">낙찰사주<em>會社 사주 전문</em></div>
         </Link>
-        <Link href="/reading" style={{ fontSize: 12, color: '#7f786c', textDecoration: 'none', fontWeight: 600 }}>무료로 보기 ›</Link>
+        <Link href="/reading" style={{ fontSize: 12, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>무료로 보기 ›</Link>
       </div>
 
       <div className="colhead">

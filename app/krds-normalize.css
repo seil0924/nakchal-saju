@@ -180,14 +180,14 @@ html .home5 .herocar::before{content:"落";position:absolute;right:24px;top:22px
 html .home5 .hckick{color:rgba(239,234,224,.62)!important;letter-spacing:.16em!important;font-family:var(--serif)!important}
 html .home5 .hctitle{color:#efeae0!important;font-family:var(--serif)!important;font-weight:800!important;font-size:30px!important;line-height:1.34!important;letter-spacing:-.018em!important;text-shadow:none!important}
 html .home5 .hctitle b{color:#ffffff!important;font-weight:800!important}
-html .home5 .hcgo{background:#efeae0!important;color:#1c1c1d!important;border:0!important;border-radius:2px!important;font-family:var(--serif)!important;font-weight:800!important;padding:13px 26px!important}
+html .home5 .hcgo{background:#f4f5f7!important;color:#1c1c1d!important;border:0!important;border-radius:2px!important;font-family:var(--serif)!important;font-weight:800!important;padding:13px 26px!important}
 /* 캐러셀 점 — 3px 막대 모양은 그대로, 누르는 자리는 32px. 막대는 ::after 로 바닥에 그린다.
    예전엔 버튼 자체가 3px 이라 휴대폰에서 거의 못 눌렀다(60명 점검: 63×3). */
 html .home5 .hcdots{position:absolute!important;left:0!important;right:0!important;bottom:0!important;gap:0!important;padding:0!important;background:transparent!important;height:32px!important}
 html .home5 .hcdot{position:relative!important;width:100%!important;height:32px!important;border-radius:0!important;background:transparent!important;border:0!important;padding:0!important;margin:0!important}
 html .home5 .hcdot::after{content:''!important;position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:3px!important;background:rgba(239,234,224,.14)!important}
 html .home5 .hcdot.on{background:transparent!important}
-html .home5 .hcdot.on::after{background:#efeae0!important}
+html .home5 .hcdot.on::after{background:#f4f5f7!important}
 
 html .dnavi:hover{background:#f4f5f6!important;color:#1e2124!important}
 html .dnavi.on{background:#eef3fe!important;color:#2f56c4!important;border-left-color:#3f6be0!important}
@@ -449,8 +449,8 @@ html .home nav a,html .app nav a:not(.dnavi):not(.nav5 a){color:#2646a3!importan
    .note 는 3.63:1, .opt 는 2.16:1 이었다. 둘 다 흰 배경 위 12px 이하라 4.5:1 이 필요하다.
    원본은 globals.css 에 있지만 이 파일이 뒤에 실려 특이도만 맞추면 이긴다.
    순서에 기대지 말라는 규칙대로 클래스를 겹쳐 특이도를 확보한다. */
-.note.note{color:#6f6a58}
-.opt.opt{color:#6e6858}
+.note.note{color:#58616a}
+.opt.opt{color:#58616a}
 
 /* === sweep25: 2차 감사에서 나온 잔여분 === */
 /* 상품 페이지 체크 배지 — 크림색 ✓ 가 초록 위에서 2.68:1 이었다. 배지를 어둡게 해서 5.09:1 */
@@ -458,26 +458,98 @@ html .pk{background:#2b6e53!important}
 /* 하단 낙관 도장 士 — 14px 900 인데 3.31:1. 칼럼 페이지 규칙은 위(444줄)에서 따로 잡는다 */
 html .colo{color:#8a7136!important}
 /* 모바일 하단 면책 문구 — 10.5px 에 3.63:1 이었다 */
-html .hdisc{color:#6f6a58!important}
+html .hdisc{color:#58616a!important}
 /* === sweep26: 사이트 전역 2차 감사 — 아직 남아 있던 흐린 색 일괄 정리 ===
    인라인 style 로 박힌 색은 클래스로 못 잡는다. 속성 선택자로 그 색만 정확히 덮는다.
    (!important 는 인라인 style 을 이긴다 — 이 파일이 마지막에 실리는 것도 같은 이유) */
-html [style*="color:#a99f88"]{color:#6f6a58!important}
-html [style*="color:#8a806a"]{color:#6f6a58!important}
-html [style*="color:#7f786c"]{color:#6f6a58!important}
-html [style*="color:#8d8672"]{color:#6f6a58!important}
+html [style*="color:#a99f88"]{color:#58616a!important}
+html [style*="color:#8a806a"]{color:#58616a!important}
+html [style*="color:#7f786c"]{color:#58616a!important}
+html [style*="color:#8d8672"]{color:#58616a!important}
 /* /samples 의 · 구분자 — 이 페이지엔 --gold2 가 정의돼 있지 않아 흰색을 상속받아 아예 안 보였다 */
 html [style*="color:var(--gold2)"]{color:#8a7136!important}
 /* 크림 배경 위 파란 칩 — 4.43:1 로 0.07 모자랐다. CEO 칩과 같은 파랑으로 통일 */
 html [style*="var(--navy)"][style*="#faf6ec"]{color:#2f56c4!important}
 /* /reading 업종 선택 칩 */
-html .chip2{color:#6b6559!important}
+html .chip2{color:#58616a!important}
 /* /column 머리말 부제 — .sub 는 다른 데서도 쓰여서 colhead 안으로만 좁힌다 */
-html .colhead .sub{color:#6f6a58!important}
+html .colhead .sub{color:#58616a!important}
 /* /full 표지·필름밴드 — 남색 위 금색이 3.05:1 이었다 */
 html .fsmk,html .home5 h1 b,html .home5 .emocore b,html .filmband .fbt b{color:#eadfc1!important}
 /* /full 목차 셰브런(2.02:1)·캡션·연호 */
-html .fchev,html .fscap{color:#6f6a58!important}
+html .fchev,html .fscap{color:#58616a!important}
 html .an{color:#8a7136!important}
 /* /bokchae 어두운 카드 위 안내문 — 4.12:1 */
 html .boknote{color:#a89b83!important}
+
+/* === sweep21 (2026-09-14): 모바일 정리 — 배경은 흰색·연회색·파랑 셋 ===
+   모바일 사주 사이트 15곳 비교에서, 한 페이지에 검정 배너·검정 띠·베이지 카드·흰 카드가 섞인 것이
+   난잡함의 가장 큰 원인이었다(홈 배경색 16가지). 짙은 면을 모두 밝게 되돌린다.
+   앞선 스윕이 !important 로 짙게 칠해 둔 것이라, 여기서도 html body 접두어 + !important 로 이긴다.
+   파랑(#3f6be0)은 '누르는 것'에만 쓴다: 주요 버튼·결제 막대·고른 칸의 테두리. */
+
+/* 머리 막대 · 페이지 머리 */
+html body .topbar,html body .home .topbar{background:#fff!important;border-bottom:1px solid #e6e8ea!important;color:#1e2124!important}
+html body .topbar .logo,html body .home .topbar .logo{color:#1e2124!important;font-family:var(--sans)!important;font-weight:800!important}
+html body .topbar .logo .s,html body .home .topbar .logo .s{font-size:0!important;width:26px!important;height:26px!important;border:0!important;box-shadow:none!important;border-radius:7px!important;
+  background:#3f6be0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='10' y='19' width='3.8' height='12' rx='1.9' fill='%23fff'/%3E%3Crect x='16' y='14' width='3.8' height='17' rx='1.9' fill='%23fff'/%3E%3Crect x='22' y='17' width='3.8' height='14' rx='1.9' fill='%23fff'/%3E%3Crect x='28' y='11' width='3.8' height='20' rx='1.9' fill='%23fff'/%3E%3C/svg%3E") center/100% no-repeat!important}
+html body .topbar .ic svg,html body .home .topbar .ic svg{stroke:#1e2124!important}
+html body .topbar a,html body .home .topbar a{color:#1e2124!important}
+html body .hero,html body .home .hero{background:#fff!important;background-image:none!important;border-bottom:1px solid #e6e8ea!important;text-align:left!important;padding:22px 20px 20px!important;color:#1e2124!important}
+html body .hero::after,html body .home .hero::after{display:none!important}
+html body .hero h1,html body .hero h2,html body .home .hero h1,html body .home .hero h2{color:#1e2124!important;font-family:var(--sans)!important;font-weight:800!important;font-size:22px!important;letter-spacing:-.02em!important;margin-top:4px!important}
+html body .hero b,html body .home .hero h2 b{color:#1e2124!important}
+html body .hero .k,html body .hero .kick,html body .home .hero .kick{color:#2f56c4!important;font-family:var(--sans)!important;letter-spacing:0!important;font-weight:700!important}
+html body .hero p,html body .hero [style*="color"],html body .hero div:not(.k):not(.kick){color:#58616a!important}
+html body .hero a{color:#2f56c4!important}
+
+/* 짙은 카드·배너·띠 → 연회색 면 */
+html body .chook,html body .baljupick,html body .ceoband,html body .sealcmp,html body .ileon,html body .bizyear .byhd,
+html body .loginpromo,html body .mecard,html body .mecard.mecard,html body .todayband,html body .execsum,html body .donebar,html body .acctbtn,
+html body .pp-hd,html body .trhd,html body .rhero,html body .wonguk,html body .amulet,html body .bmap{
+  background:#f4f5f7!important;background-image:none!important;border-color:#e6e8ea!important;color:#1e2124!important;box-shadow:none!important}
+html body :is(.chook,.baljupick,.ceoband,.sealcmp,.ileon,.bizyear .byhd,.loginpromo,.mecard,.todayband,.execsum,.donebar,.acctbtn,.pp-hd,.trhd,.rhero,.amulet) :is(b,strong,h2,h3,h4,.t,.hl,.lab){color:#1e2124!important}
+html body :is(.chook,.baljupick,.ceoband,.sealcmp,.ileon,.bizyear .byhd,.loginpromo,.mecard,.todayband,.execsum,.donebar,.acctbtn,.pp-hd,.trhd,.rhero,.amulet) :is(p,em,span,small,.sub2,.d){color:#58616a!important}
+html body :is(.chook,.ceoband,.baljupick,.execsum)::after,html body .bizyear .byhd::after{display:none!important}
+html body .rhero .num,html body .rhero .num span{color:#2f56c4!important}
+html body .bokpage,html body .login-app{background:#fff!important;background-image:none!important;color:#1e2124!important}
+html body .bokpage :is(h1,h2,h3,b,strong),html body .login-app :is(h1,h2,h3,b,strong){color:#1e2124!important}
+html body .bokpage :is(p,em,span,small),html body .login-app :is(p,em,span,small){color:#58616a!important}
+
+/* 누르는 것 — 주요 버튼은 파랑 한 가지 */
+html body :is(.go,.cta,.paygo,.bokgo,.emptybox .ebcta,.sharebtn.primary,.lgbtn.email,.pp-btns .pp-ok,.sheet .sumbtns button.ok,.tunlock,.bm-cta.pay){
+  background:#3f6be0!important;background-image:none!important;border:0!important;color:#fff!important;font-family:var(--sans)!important;font-weight:800!important;box-shadow:none!important}
+html body :is(.go,.cta,.paygo,.bokgo,.tunlock) :is(small,em,span){color:rgba(255,255,255,.88)!important}
+html body .stickycta{background:#3f6be0!important;background-image:none!important;border:0!important;box-shadow:0 6px 18px rgba(47,86,196,.28)!important}
+html body .stickycta :is(b,em,span){color:#fff!important}
+
+/* 고른 칸 — 칠하지 않고 파란 테두리·파란 글씨 */
+html body :is(.seg button.on,.seg-b.on,.chip2.on,.sijin .sj.on,.ybchip.on,.pp-seg button.on){
+  background:#fff!important;background-image:none!important;color:#2f56c4!important;border:1.5px solid #3f6be0!important;box-shadow:none!important}
+html body .sijin .sj.on :is(b,span){color:#2f56c4!important}
+html body .rprog .rpbar i{background:#3f6be0!important}
+html body .corelock{background:#f4f5f7!important;color:#2f56c4!important;border:1px solid #e6e8ea!important}
+html body .sec.locked .mk{background:#f4f5f7!important;color:#6d7882!important}
+html body :is(.gverdict .gvseal,.bokseal,.bokdone .bdseal,.axseal,.persona .av,.profcard .pav){background:#f4f5f7!important;background-image:none!important;color:#2f56c4!important;border-color:#e6e8ea!important}
+
+/* 입력 폼(2026-09-14) — 훅 한 줄, 달력 토글, 접기, 바닥 막대 */
+.rd-hook{display:flex;flex-direction:column;gap:4px;margin:2px 0 14px}
+.rd-hook b{font-size:17px;font-weight:800;color:#1e2124;line-height:1.45;letter-spacing:-.01em}
+.rd-hook span{font-size:15px;color:#58616a;line-height:1.6}
+html body .gives li::before{content:''!important;width:14px!important;height:14px!important;top:6px!important;border-radius:0!important;border:0!important;box-shadow:none!important;background:#3f6be0!important;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.rd-cal{display:flex;align-items:center;gap:6px;margin:4px 0 10px;flex-wrap:wrap}
+.rd-cal button{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid #e6e8ea;background:#fff;color:#58616a;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+.rd-cal button.on{border-color:#3f6be0;color:#2f56c4}
+.rd-sep{width:1px;height:18px;background:#e6e8ea;margin:0 2px}
+.rd-more{display:flex;align-items:center;width:100%;min-height:44px;margin-top:14px;padding:0;border:0;border-top:1px solid #e6e8ea;background:none;color:#2f56c4;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;text-align:left}
+.rd-more span{color:#6d7882;font-weight:500;font-size:13px}
+.rd-fold{padding-top:2px}
+.rd-bar{position:fixed;left:0;right:0;bottom:0;z-index:58;display:flex;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #e6e8ea}
+.rd-bar-tx{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35}
+.rd-bar-tx b{font-size:15px;font-weight:800;color:#1e2124;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd-bar-tx span{font-size:13px;color:#58616a}
+html body .rd-bar .go{flex:none;width:auto!important;margin:0!important;min-height:48px;padding:0 20px!important;border-radius:12px!important;font-size:15px!important}
+body:has(.rd-bar) .shell{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+@media (min-width:900px){.rd-bar{left:252px}}

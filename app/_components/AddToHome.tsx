@@ -69,10 +69,10 @@ export default function AddToHome() {
           display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:19px}
         .a2hs .a2t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
         .a2hs .a2t b{font-size:13px;font-weight:800;color:#20242c;line-height:1.4}
-        .a2hs .a2t span{font-size:11.5px;color:#5f5949;line-height:1.5}
+        .a2hs .a2t span{font-size:11.5px;color:#58616a;line-height:1.5}
         .a2hs .a2b{flex:none;border:0;border-radius:9px;background:#2f56c4;color:#fff;
           font-weight:800;font-size:13px;padding:9px 14px;cursor:pointer}
-        .a2hs .a2x{flex:none;border:0;background:transparent;color:#6f6a58;font-size:14px;
+        .a2hs .a2x{flex:none;border:0;background:transparent;color:#58616a;font-size:14px;
           padding:6px 4px;cursor:pointer;line-height:1}
       `}</style>
       <div className="a2i" aria-hidden="true">擇</div>

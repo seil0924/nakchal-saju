@@ -54,7 +54,7 @@ export default function Vault() {
       {saved.map((s, i) => (
         <div key={i} className="li" style={{ cursor: 'default' }}>
           <div className="t"><b>{s.name}</b><span>{KIND_LABEL[s.kind] || s.kind} · {s.date}</span></div>
-          <div className="r" style={{ background: '#f3ead6', color: '#8a6a2a' }}>저장됨</div>
+          <div className="r" style={{ background: '#f4f5f7', color: '#8a6a2a' }}>저장됨</div>
         </div>
       ))}
       <div className="balnote">데모에서는 이 기기에 저장됩니다. 카카오 로그인을 연결하면 계정별로 기기 간 동기화됩니다.</div>

@@ -36,10 +36,10 @@ export default function MethodPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <div className="topbar">
         <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>낙찰사주</Link>
-        <Link className="ic" href="/glossary" aria-label="용어사전" style={{ fontSize: 12, fontWeight: 700, color: '#7f786c', textDecoration: 'none' }}>용어사전 ›</Link>
+        <Link className="ic" href="/glossary" aria-label="용어사전" style={{ fontSize: 12, fontWeight: 700, color: '#58616a', textDecoration: 'none' }}>용어사전 ›</Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#a99f88', fontWeight: 700, marginBottom: 6 }}>計算 方法論</div>
+        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>計算 方法論</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 23, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>어떻게 계산하나 — 명식을 세우는 방법</h1>
         <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>사주 해석의 정확도는 명식을 얼마나 정확히 세우는가에서 갈립니다. 낙찰사주는 아래 원리로 여덟 글자를 계산합니다. 해석 자체는 명리 이론에 기반한 참고·오락용입니다.</p>
         {SEC.map((s, i) => (
@@ -52,10 +52,10 @@ export default function MethodPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '18px 0 22px' }}>
           <Link href="/glossary/절기" style={chip}>절기</Link><Link href="/glossary/진태양시" style={chip}>진태양시</Link><Link href="/glossary/야자시" style={chip}>야자시</Link><Link href="/glossary/만세력" style={chip}>만세력</Link><Link href="/faq" style={chip}>자주 묻는 질문</Link>
         </div>
-        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력 계산의 정확도를 높인 것이며, 해석과 예측은 명리 이론에 기반한 참고·오락용 정보입니다.</p>
+        <p style={{ fontSize: 12, color: '#6d7882', lineHeight: 1.65, marginBottom: 20 }}>※ 만세력 계산의 정확도를 높인 것이며, 해석과 예측은 명리 이론에 기반한 참고·오락용 정보입니다.</p>
       </div>
     </div>
   );
 }
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

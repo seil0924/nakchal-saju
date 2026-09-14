@@ -64,7 +64,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
           <div className="st">
             <span className="b" />
             후기 {rows.length}건
-            {avg !== null && <span style={{ fontWeight: 500, color: '#8d8672', fontSize: 12 }}>· 평균 {avg}점</span>}
+            {avg !== null && <span style={{ fontWeight: 500, color: '#58616a', fontSize: 12 }}>· 평균 {avg}점</span>}
           </div>
 
           {!ready && (
@@ -131,7 +131,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
             </div>
 
             <div>
-              <label htmlFor="biz">업종 <span style={{ fontWeight: 500, color: '#8d8672' }}>(선택)</span></label>
+              <label htmlFor="biz">업종 <span style={{ fontWeight: 500, color: '#58616a' }}>(선택)</span></label>
               <select id="biz" name="biz" defaultValue="">
                 <option value="">고르지 않음</option>
                 {BIZ.map(b => <option key={b} value={b}>{b}</option>)}
@@ -168,7 +168,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
           <div className="st"><span className="b" />먼저 써 보시겠다면</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {[['/hoesa', '회사 사주 — 설립일만'], ['/reading', '오늘, 넣을 날인가'], ['/ceo', '나와 닮은 CEO']].map(([h, t]) => (
-              <Link key={h} href={h} style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f3ede0', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' }}>{t}</Link>
+              <Link key={h} href={h} style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' }}>{t}</Link>
             ))}
           </div>
         </div>

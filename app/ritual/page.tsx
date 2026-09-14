@@ -26,7 +26,7 @@ export default function Ritual() {
   }
 
   return (
-    <div className="app" style={{ background: 'linear-gradient(180deg,#f6f3ec,#efe7d6)', minHeight: '100vh' }}>
+    <div className="app" style={{ background: 'linear-gradient(180deg,#f4f5f7,#f4f5f7)', minHeight: '100vh' }}>
       <div className="topbar" style={{ background: '#2a2013' }}>
         <Link className="logo" href="/" style={{ fontSize: 15, color: '#e3c27a', textDecoration: 'none' }}>
           <span style={{ marginRight: 4 }}>‹</span> 기 모으기

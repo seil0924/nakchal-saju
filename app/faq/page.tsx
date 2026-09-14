@@ -39,7 +39,7 @@ export default function FaqPage() {
         <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 12, letterSpacing: '.3em', color: '#a99f88', fontWeight: 700, marginBottom: 6 }}>自主 問答</div>
+        <div style={{ fontSize: 12, letterSpacing: '.3em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>自主 問答</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 23, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>자주 묻는 질문</h1>
         <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>입찰 사주가 무엇인지부터 발주처 궁합·투찰 택일까지 — 대표님이 가장 많이 묻는 것들에 답합니다.</p>
         {FAQ_MAIN.map((x, i) => (
@@ -57,11 +57,11 @@ export default function FaqPage() {
           <Link href="/guide/법인-설립일-사주" style={chip}>법인 설립일 사주</Link>
           <Link href="/why" style={chip}>대표 고민별</Link>
         </div>
-        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ 사주명리 이론에 기반한 참고·오락용 정보입니다. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다.</p>
+        <p style={{ fontSize: 12, color: '#6d7882', lineHeight: 1.65, marginBottom: 20 }}>※ 사주명리 이론에 기반한 참고·오락용 정보입니다. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다.</p>
       </div>
     </div>
   );
 }
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

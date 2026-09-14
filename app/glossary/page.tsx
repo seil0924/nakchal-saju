@@ -36,7 +36,7 @@ export default function GlossaryPage() {
         <Link className="ic" href="/reading" aria-label="오늘의 전망"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg></Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#6f6a58', fontWeight: 700, marginBottom: 6 }}>用語 辭典</div>
+        <div style={{ fontSize: 12, letterSpacing: '.28em', color: '#58616a', fontWeight: 700, marginBottom: 6 }}>用語 辭典</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 23, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>입찰·명리 용어사전</h1>
         <p style={{ fontSize: 14.5, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>공공입찰·조달과 사주명리의 핵심 용어를 한자리에서 명확히 정의합니다. 각 용어를 눌러 자세한 뜻과 연관어를 확인하세요.</p>
         {cats.map(cat => (
@@ -58,7 +58,7 @@ export default function GlossaryPage() {
             — 서로끼리만 링크돼 고립돼 있었다. 용어사전이 이 개념들의 자연스러운 입구다. */}
         <section style={{ marginBottom: 18 }}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '6px 0 6px' }}>일간·오행·십성 풀이</div>
-          <p style={{ fontSize: 13, lineHeight: 1.7, color: '#6f6650', margin: '0 0 10px', fontWeight: 500 }}>
+          <p style={{ fontSize: 13, lineHeight: 1.7, color: '#58616a', margin: '0 0 10px', fontWeight: 500 }}>
             내 일간이 무엇이고 어떤 그릇인지, 오행이 치우치면 무엇이 문제인지 낱장으로 풀어 두었습니다.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
@@ -69,10 +69,10 @@ export default function GlossaryPage() {
         </section>
 
         <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
-        <p style={{ fontSize: 12, color: '#6f6a58', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 명리 용어 해석은 참고·오락용이며, 입찰·조달 용어는 일반적 설명으로 실제 제도는 공고문·관련 법령을 따릅니다.</p>
+        <p style={{ fontSize: 12, color: '#58616a', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 명리 용어 해석은 참고·오락용이며, 입찰·조달 용어는 일반적 설명으로 실제 제도는 공고문·관련 법령을 따릅니다.</p>
       </div>
     </div>
   );
 }
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: '#2f56c4', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };

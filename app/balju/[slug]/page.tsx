@@ -52,8 +52,8 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
       </div>
 
       <div style={{ padding: '18px 18px 4px' }}>
-        <nav aria-label="위치" style={{ fontSize: 12, color: '#8a806a', marginBottom: 10 }}>
-          <Link href="/balju" style={{ color: '#8a806a' }}>발주처</Link> › {c.name}
+        <nav aria-label="위치" style={{ fontSize: 12, color: '#58616a', marginBottom: 10 }}>
+          <Link href="/balju" style={{ color: '#58616a' }}>발주처</Link> › {c.name}
         </nav>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.35, color: 'var(--ink)', margin: '0 0 8px' }}>
           {c.name} 입찰,<br />대표님과 맞는 발주처입니까
@@ -91,7 +91,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           <span style={{ display: 'block', fontSize: 12.5, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>대표님 생년월일만 · 30초 무료로 시작</span>
         </Link>
 
-        <div style={{ fontSize: 12, color: '#a99f88', textAlign: 'center', margin: '10px 0 20px', lineHeight: 1.6 }}>
+        <div style={{ fontSize: 12, color: '#6d7882', textAlign: 'center', margin: '10px 0 20px', lineHeight: 1.6 }}>
           {c.core ? '핵심 발주처 상세 궁합은 유료입니다. 먼저 무료로 방향을 보실 수 있어요.' : '이 발주처 궁합은 무료로 열립니다.'}
         </div>
 
@@ -113,7 +113,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           <Link href="/balju" style={{ ...chip, background: 'var(--navy)', color: '#f4e7c4', borderColor: 'var(--navy)' }}>전체 발주처 →</Link>
         </div>
 
-        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>
+        <p style={{ fontSize: 12, color: '#6d7882', lineHeight: 1.65, marginBottom: 20 }}>
           ※ 설립일은 공개 연혁 기준 자체 구축 DB이며, 명리 기반 참고 정보입니다. 실제 입찰·투찰 판단의 근거로 사용할 수 없습니다.
         </p>
       </div>
@@ -121,7 +121,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
   );
 }
 
-const tag: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: '#6b6249', background: '#f3ead6', padding: '5px 11px', borderRadius: 999 };
+const tag: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: '#58616a', background: '#f4f5f7', padding: '5px 11px', borderRadius: 999 };
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 14, padding: '15px 16px', marginBottom: 11 };
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

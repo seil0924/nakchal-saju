@@ -15,7 +15,7 @@ const KEY = 'nakchal_lang_nudge';
 
 const wrap: CSSProperties = {
   display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
-  padding: '9px 14px', background: '#1c1c1d', color: '#efeae0',
+  padding: '9px 14px', background: '#1c1c1d', color: '#f4f5f7',
   fontSize: 12.5, lineHeight: 1.5,
 };
 const go: CSSProperties = {

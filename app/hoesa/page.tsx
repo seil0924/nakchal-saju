@@ -72,7 +72,7 @@ export default function Hoesa({ searchParams }: { searchParams: { d?: string; n?
           <div className="st"><span className="b" />법인 설립일 · 사업자등록일</div>
           <form className="hsform" method="get" action="/hoesa">
             <div>
-              <label htmlFor="n">회사명 <span style={{ fontWeight: 500, color: '#8d8672' }}>(선택)</span></label>
+              <label htmlFor="n">회사명 <span style={{ fontWeight: 500, color: '#58616a' }}>(선택)</span></label>
               <input id="n" name="n" type="text" maxLength={30} defaultValue={name} placeholder="○○건설" autoComplete="organization" />
             </div>
             <div>
@@ -121,7 +121,7 @@ function Result({ ch, label, curYear, raw, name }: {
   return (
     <>
       <div className="card">
-        <div className="st"><span className="b" />{label}의 명식 <span style={{ fontWeight: 500, color: '#8d8672', fontSize: 12 }}>· 설립 {ch.foundYear}년</span></div>
+        <div className="st"><span className="b" />{label}의 명식 <span style={{ fontWeight: 500, color: '#58616a', fontSize: 12 }}>· 설립 {ch.foundYear}년</span></div>
         <div className="_hspil">
           {(['년주', '월주', '일주'] as const).map((lb, i) => {
             const [g, z] = [[ch.yGan, ch.yZhi], [ch.mGan, ch.mZhi], [ch.dGan, ch.dZhi]][i];

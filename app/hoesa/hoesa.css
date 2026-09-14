@@ -5,7 +5,7 @@
 .hsform label { font-size: 12.5px; font-weight: 700; color: #57523f; display: block; margin-bottom: 5px; }
 .hsform input {
   width: 100%; padding: 12px 13px; font-size: 15px; color: #26231c;
-  background: #fff; border: 1px solid #ddd3bd; border-radius: 11px; font-family: inherit;
+  background: #fff; border: 1px solid #e6e8ea; border-radius: 11px; font-family: inherit;
 }
 .hsform input:focus { outline: 2px solid var(--navy); outline-offset: 1px; }
 .hsgo {
@@ -15,23 +15,23 @@
 
 /* 명식 세 기둥 — 설립일에는 시(時)가 없어 삼주다 */
 ._hspil { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-._hspil .p { background: #faf6ec; border: 1px solid #e6dcc4; border-radius: 12px; padding: 11px 6px; text-align: center; }
-._hspil .lb { font-size: 12px; color: #7c7768; font-weight: 700; }
+._hspil .p { background: #f4f5f7; border: 1px solid #e6e8ea; border-radius: 12px; padding: 11px 6px; text-align: center; }
+._hspil .lb { font-size: 12px; color: #58616a; font-weight: 700; }
 ._hspil .gz { font-family: var(--serif); font-size: 25px; font-weight: 900; line-height: 1.15; margin-top: 4px; }
-._hspil .el { font-size: 12px; color: #7c7768; margin-top: 3px; }
+._hspil .el { font-size: 12px; color: #58616a; margin-top: 3px; }
 
 /* 이 화면이 답하는 한 줄 */
 .hsphase { border-radius: 14px; padding: 16px; text-align: center; }
 .hsphase.expand { background: #eef6f1; border: 1px solid #bcdccb; }
-.hsphase.hold { background: #f6f1ea; border: 1px solid #e0d2bc; }
-.hsphase.harvest { background: #f7f2e4; border: 1px solid #e2cd97; }
+.hsphase.hold { background: #f4f5f7; border: 1px solid #e0d2bc; }
+.hsphase.harvest { background: #f4f5f7; border: 1px solid #e2cd97; }
 .hsphase.harvest .v { color: #7a5c1e; }
 .hsphase .k { font-size: 12px; font-weight: 800; letter-spacing: .04em; color: #57523f; }
 .hsphase .v { font-family: var(--serif); font-size: 26px; font-weight: 900; margin: 6px 0 4px; }
 .hsphase.expand .v { color: #14684c; }
 .hsphase.hold .v { color: #8a5a1e; }
 .hsphase .d { font-size: 13.5px; color: #4a4636; line-height: 1.7; }
-.hsphase .age { font-size: 12px; color: #6b6249; margin-top: 8px; font-weight: 700; }
+.hsphase .age { font-size: 12px; color: #58616a; margin-top: 8px; font-weight: 700; }
 
 .hsseun { display: flex; gap: 11px; align-items: flex-start; }
 .hsseun .tag {
@@ -41,16 +41,16 @@
 .hsseun .tx { font-size: 13.5px; color: #4a4636; line-height: 1.7; }
 
 .hsbal { display: flex; gap: 6px; }
-.hsbal .c { flex: 1; text-align: center; border-radius: 9px; padding: 8px 2px; background: #faf6ec; border: 1px solid #e6dcc4; }
+.hsbal .c { flex: 1; text-align: center; border-radius: 9px; padding: 8px 2px; background: #f4f5f7; border: 1px solid #e6e8ea; }
 .hsbal .c .e { font-family: var(--serif); font-size: 17px; font-weight: 900; }
 .hsbal .c .n { font-size: 12px; color: #57523f; font-weight: 700; margin-top: 2px; }
 
-.hslock { background: #faf6ec; border: 1px solid #e2cd97; border-radius: 14px; padding: 15px; }
+.hslock { background: #f4f5f7; border: 1px solid #e2cd97; border-radius: 14px; padding: 15px; }
 .hslock .t { font-family: var(--serif); font-weight: 800; color: var(--navy); font-size: 14.5px; margin-bottom: 7px; }
 .hslock .d { font-size: 13px; color: #4a4636; line-height: 1.75; }
 
 .hsex { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .hsex a {
-  font-size: 12px; font-weight: 700; color: var(--navy); background: #f3ede0;
+  font-size: 12px; font-weight: 700; color: var(--navy); background: #f4f5f7;
   border: 1px solid #e2cd97; border-radius: 999px; padding: 6px 11px; text-decoration: none;
 }

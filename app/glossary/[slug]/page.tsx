@@ -39,10 +39,10 @@ export default function TermPage({ params }: { params: { slug: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <div className="topbar">
         <Link className="logo" href="/" style={{ textDecoration: 'none', color: 'inherit' }}><span className="s">士</span>낙찰사주</Link>
-        <Link className="ic" href="/glossary" aria-label="용어사전" style={{ fontSize: 12, fontWeight: 700, color: '#7f786c', textDecoration: 'none' }}>용어사전 ›</Link>
+        <Link className="ic" href="/glossary" aria-label="용어사전" style={{ fontSize: 12, fontWeight: 700, color: '#58616a', textDecoration: 'none' }}>용어사전 ›</Link>
       </div>
       <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 12, letterSpacing: '.24em', color: '#a99f88', fontWeight: 700, marginBottom: 6 }}>{t.cat} 用語{t.hanja ? ` · ${t.hanja}` : ''}</div>
+        <div style={{ fontSize: 12, letterSpacing: '.24em', color: '#6d7882', fontWeight: 700, marginBottom: 6 }}>{t.cat} 用語{t.hanja ? ` · ${t.hanja}` : ''}</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 24, lineHeight: 1.35, color: 'var(--ink)', margin: '2px 0 12px' }}>{t.term}</h1>
         <p style={{ fontSize: 16, lineHeight: 1.85, color: '#33383f', fontWeight: 500, margin: '0 0 18px' }}>{t.def}</p>
         {(t.long || []).map((s, i) => (
@@ -62,10 +62,10 @@ export default function TermPage({ params }: { params: { slug: string } }) {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 22 }}>
           {GLOSSARY.filter(x => x.slug !== t.slug && x.cat === t.cat).slice(0, 12).map(x => (<Link key={x.slug} href={`/glossary/${x.slug}`} style={chip}>{x.term}</Link>))}
         </div>
-        <p style={{ fontSize: 12, color: '#a99f88', lineHeight: 1.65, marginBottom: 20 }}>※ {t.cat === '명리·사주' ? '명리 기반 참고·오락용 해석입니다.' : '일반적 설명으로, 실제 제도는 공고문·관련 법령을 따릅니다.'}</p>
+        <p style={{ fontSize: 12, color: '#6d7882', lineHeight: 1.65, marginBottom: 20 }}>※ {t.cat === '명리·사주' ? '명리 기반 참고·오락용 해석입니다.' : '일반적 설명으로, 실제 제도는 공고문·관련 법령을 따릅니다.'}</p>
       </div>
     </div>
   );
 }
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: 'linear-gradient(135deg,var(--red),#7f1a17)', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 14, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 16, textDecoration: 'none', marginTop: 6 };
-const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

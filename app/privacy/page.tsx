@@ -31,11 +31,11 @@ export default function Privacy() {
         <p><Link href="/" style={{ color: '#c3cfe3', textDecoration: 'underline' }}>← 홈으로</Link></p></div>
       <div className="wrap">
         <div className="card" style={{ lineHeight: 1.8, fontSize: 13.5, color: '#3a3f47' }}>
-          <p style={{ color: '#8d8672', fontSize: 12, marginBottom: 14 }}>시행일자: 2026년 7월 15일 · 나인굿즈는 「개인정보 보호법」 등 관련 법령을 준수합니다.</p>
+          <p style={{ color: '#58616a', fontSize: 12, marginBottom: 14 }}>시행일자: 2026년 7월 15일 · 나인굿즈는 「개인정보 보호법」 등 관련 법령을 준수합니다.</p>
           {SECTIONS.map(([h, b], i) => (
             <p key={i} style={{ marginTop: i ? 14 : 0 }}><b style={{ color: 'var(--navy)' }}>{h}</b><br />{b}</p>
           ))}
-          <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6ddc9', fontSize: 12, color: '#6f6a5c' }}>
+          <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6e8ea', fontSize: 12, color: '#58616a' }}>
             나인굿즈 · 대표 오세일 · 개인정보 보호책임자 오세일 · 문의 ohselie24@naver.com · 010-2131-1924
           </p>
         </div>

@@ -58,7 +58,7 @@ export default function FullIntro() {
           <span className="s">士</span>
           <div className="n">전체 리포트<em>大 全 書 · 十八章</em></div>
         </Link>
-        <Link href="/" style={{ fontSize: 12, color: '#7f786c', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
+        <Link href="/" style={{ fontSize: 12, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
       </div>
 
       {/* 통점 히어로 (촛불·먹산수 영상) */}

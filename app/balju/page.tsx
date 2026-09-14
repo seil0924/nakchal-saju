@@ -71,9 +71,9 @@ export default function Balju() {
       <div className="balnote"><b>핵심</b> 표시가 붙은 발주처(LH·조달청·도로공사 등 큰 판)의 궁합은 유료입니다. 일반 발주처 궁합은 무료로 열립니다.<br />설립일은 공개 연혁 기준의 자체 구축 DB이며, 더 많은 발주처가 계속 추가됩니다.</div>
 
       <nav aria-label="발주처별 상세 분석" style={{ padding: '4px 15px 10px' }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: '#6b6249', margin: '6px 0 8px' }}>발주처별 상세 분석</div>
+        <div style={{ fontSize: 12, fontWeight: 800, color: '#58616a', margin: '6px 0 8px' }}>발주처별 상세 분석</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {CLIENTS.map(c => (<Link key={c.name} href={`/balju/${clientSlug(c.name)}`} style={{ fontSize: 12, fontWeight: 600, color: '#7c7768', background: '#faf6ec', border: '1px solid #e6dcc4', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{c.name}</Link>))}
+          {CLIENTS.map(c => (<Link key={c.name} href={`/balju/${clientSlug(c.name)}`} style={{ fontSize: 12, fontWeight: 600, color: '#58616a', background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{c.name}</Link>))}
         </div>
       </nav>
 

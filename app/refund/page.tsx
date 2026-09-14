@@ -30,10 +30,10 @@ export default function Refund() {
           {SECTIONS.map(([h, b], i) => (
             <p key={i} style={{ marginTop: i ? 14 : 0 }}><b style={{ color: 'var(--navy)' }}>{h}</b><br />{b.replace(/</g, '‹').replace(/>/g, '›')}</p>
           ))}
-          <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6ddc9', fontSize: 12, color: '#6f6a5c' }}>
+          <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6e8ea', fontSize: 12, color: '#58616a' }}>
             {bizFooterLine()}
           </p>
-          <p style={{ marginTop: 10, fontSize: 12, color: '#6f6a5c' }}>자세한 내용은 <Link href="/terms" style={{ color: 'var(--navy)' }}>이용약관</Link> 제6·7조를 따릅니다.</p>
+          <p style={{ marginTop: 10, fontSize: 12, color: '#58616a' }}>자세한 내용은 <Link href="/terms" style={{ color: 'var(--navy)' }}>이용약관</Link> 제6·7조를 따릅니다.</p>
         </div>
       </div>
     </div>

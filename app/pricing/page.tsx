@@ -20,7 +20,7 @@ const PRODUCT_LINKS: [string, string][] = [
   ['/product/beopin', '법인 운세'],
   ['/product/jari', '자리 사주'],
 ];
-const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#faf6ec', border: '1px solid #e2cd97', borderRadius: 999, padding: '8px 13px', textDecoration: 'none' };
+const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '8px 13px', textDecoration: 'none' };
 
 const PRODUCTS: [string, number, string][] = [
   ['대표 사주', CAT_INFO.daepyo.price, '대표님의 그릇·승부 기질·재물·사람·6대 축 경영 스코어카드·유형별 실전 수칙 등 대표 사주 심층 진단(디지털 콘텐츠 열람).'],

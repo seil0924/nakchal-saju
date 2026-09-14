@@ -26,7 +26,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       <div className="mast">
         <div className="mb"><Link href="/" className="s" style={{ textDecoration: 'none' }}>士</Link>
           <div className="n">{p.name}<em>{p.kicker}</em></div></div>
-        <Link href="/" style={{ fontSize: 12, color: '#6f6a58', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
+        <Link href="/" style={{ fontSize: 12, color: '#58616a', textDecoration: 'none', fontWeight: 600 }}>홈 ›</Link>
       </div>
 
       <div className="hero5">
