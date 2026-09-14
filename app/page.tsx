@@ -12,8 +12,6 @@ import { CLIENTS } from '@/lib/clients';
 import { TYCOONS } from '@/lib/tycoon';
 import { GLOSSARY } from '@/lib/glossary';
 import { getAllColumns } from '@/lib/column';
-import { CAT_INFO, type CatKey } from '@/lib/report-categories';
-import { won } from '@/lib/constants';
 import { GAN, ZHI, EL_HEX, GAN_ELc, ZHI_ELc } from '@/lib/preview';
 
 // 홈만 스스로를 정본으로 선언한다. 레이아웃에 두면 모든 페이지가 이걸 물려받아 홈을 가리킨다.
@@ -26,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 // 홈 — home6 (2026-09-14). 모바일 사주 사이트 15곳을 비교해 다시 짰다.
-// 규칙: 첫 화면엔 한 줄 + 결과 예시 카드 + 버튼 하나, 그 아래 권하는 두 상품 → 나머지 목록(가격 표시).
+// 규칙: 첫 화면엔 한 줄 + 결과 예시 카드 + 버튼 하나, 그 아래 권하는 두 상품 → 나머지 목록(가격 없이 전부 '무료').
 // 배경은 흰색·연회색·파랑 셋. 글씨는 13·15·17·22 네 단계. 표식은 오행 다섯 색 한 줄.
 // 장식 한자는 쓰지 않는다 — 명식 간지·건제십이신처럼 뜻이 있는 한자만 남긴다.
 // 후기가 붙으면 홈도 갱신돼야 한다. 관리자 등록 때 revalidatePath('/') 로 즉시 반영되고, 10분 주기도 함께 건다.
@@ -46,19 +44,20 @@ const IC = {
 };
 
 // 처음 온 대표에게 권하는 두 가지. 아홉 칸이 같은 무게로 늘어서 있으면 무엇부터 누를지 모른다.
-// 가격은 CAT_INFO 에서 읽는다 — 여기 숫자를 적어 두면 가격이 바뀔 때 홈만 틀린다.
-const FEATURED: { href: string; cat: CatKey; title: string; hook: string; d: string }[] = [
-  { href: '/reading?cat=sajeong', cat: 'sajeong', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 이번 달 길일은 언제인지', d: IC.pick },
-  { href: '/reading?cat=daepyo', cat: 'daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지 — 승부 기질·재물·사람', d: IC.person },
+// 홈에는 가격을 적지 않는다(2026-09-15 대표 지시) — 금액이 줄줄이 보이면 아무도 안 들어온다.
+// 모든 상품이 명식·방향·첫 장은 무료로 나오고, 결제는 결과 화면에서 잠긴 장을 열 때만 한다.
+const FEATURED: { href: string; title: string; hook: string; d: string }[] = [
+  { href: '/reading?cat=sajeong', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 이번 달 길일은 언제인지', d: IC.pick },
+  { href: '/reading?cat=daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지 — 승부 기질·재물·사람', d: IC.person },
 ];
-const OTHERS: { href: string; label: string; sub: string; price: number | null; d: string }[] = [
-  { href: '/hoesa', label: '회사 사주', sub: '설립일만 넣고 30초', price: null, d: IC.company },
-  { href: '/balju', label: '발주처 사주', sub: '그 발주처와 맞는 판인가', price: CAT_INFO.balju.price, d: IC.client },
-  { href: '/reading?cat=gunghap', label: '협정·궁합 사주', sub: '손잡기 전에 깨질 궁합인지', price: CAT_INFO.gunghap.price, d: IC.pair },
-  { href: '/reading?cat=daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', price: CAT_INFO.daeun.price, d: IC.trend },
-  { href: '/reading?cat=calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', price: CAT_INFO.calendar.price, d: IC.cal },
-  { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', price: CAT_INFO.ijeon.price, d: IC.compass },
-  { href: '/ceo', label: '닮은 CEO', sub: '거장 100인 중 명식이 닮은 사람', price: null, d: IC.ceo },
+const OTHERS: { href: string; label: string; sub: string; d: string }[] = [
+  { href: '/hoesa', label: '회사 사주', sub: '설립일만 넣고 30초', d: IC.company },
+  { href: '/balju', label: '발주처 사주', sub: '그 발주처와 맞는 판인가', d: IC.client },
+  { href: '/reading?cat=gunghap', label: '협정·궁합 사주', sub: '손잡기 전에 깨질 궁합인지', d: IC.pair },
+  { href: '/reading?cat=daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', d: IC.trend },
+  { href: '/reading?cat=calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', d: IC.cal },
+  { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', d: IC.compass },
+  { href: '/ceo', label: '닮은 CEO', sub: '거장 100인 중 명식이 닮은 사람', d: IC.ceo },
 ];
 
 // 첫 화면 예시 카드 — 실제 결과 화면과 같은 모양의 '예시'. 명식 간지와 오행 색은 실제 계산값(1971-07-16생)이다.
@@ -139,7 +138,7 @@ export default function Home() {
                 <span className="h6-ftx">
                   <b>{f.title}</b>
                   <span>{f.hook}</span>
-                  <em>무료 미리보기 · 전체 {won(CAT_INFO[f.cat].price)}</em>
+                  <em>무료로 보기</em>
                 </span>
               </Link>
             </li>
@@ -155,7 +154,7 @@ export default function Home() {
               <Link href={o.href} className="h6-row">
                 <span className="h6-ic sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={o.d} /></svg></span>
                 <span className="h6-rtx"><b>{o.label}</b><span>{o.sub}</span></span>
-                <span className={'h6-pr' + (o.price ? '' : ' free')}>{o.price ? won(o.price) : '무료'}</span>
+                <span className="h6-pr free">무료</span>
               </Link>
             </li>
           ))}
