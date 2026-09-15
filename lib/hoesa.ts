@@ -115,7 +115,10 @@ export function companySeun(ch: CompanyChart, year: number) {
 export function elBalance(ch: CompanyChart) {
   let strong = 0, weak = 0;
   ch.dist.forEach((v, i) => { if (v > ch.dist[strong]) strong = i; if (v < ch.dist[weak]) weak = i; });
-  return { strong, weak, zero: ch.dist[weak] === 0, dist: ch.dist };
+  // 가장 많은 오행이 둘 이상이면 하나만 집어 "木으로 쏠렸다"고 하면 틀린 말이 된다(木2·金2 인데 木만 말했다)
+  const strongs = ch.dist.map((v, i) => (v === ch.dist[strong] ? i : -1)).filter(i => i >= 0);
+  const weaks = ch.dist.map((v, i) => (v === ch.dist[weak] ? i : -1)).filter(i => i >= 0);
+  return { strong, weak, strongs, weaks, zero: ch.dist[weak] === 0, dist: ch.dist };
 }
 
 export const elName = (i: number) => EL[i];
