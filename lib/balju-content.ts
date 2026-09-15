@@ -111,7 +111,7 @@ export function baljuContent(c: BaljuClient) {
 
   const founding =
     `${n}${josa(n, '은', '는')} ${c.date} 설립으로, 설립연도의 세차는 ` +
-    `${gz.ganji}년(${gz.hanja}·${gz.oh})입니다. 이 해의 기운은 ${gz.trait}으로 읽힙니다. ` +
+    `${gz.ganji}년(${gz.hanja}·${gz.oh})입니다. 이 해의 기운은 ${gz.trait}${josa(gz.trait, '으로', '로')} 읽힙니다. ` +
     `낙찰사주는 이 설립일 사주를 대표님 사주와 맞춰, 이 발주처와 애초에 결이 맞는 판인지 — ` +
     `언제 나서고 어떻게 대해야 유리한지를 짚어 드립니다.`;
 

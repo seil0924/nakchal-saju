@@ -3,6 +3,7 @@
 // 등급(level)과 소식(tone)을 따로 둔다. 식신생재는 뚜렷할수록 반가운 소식이지만,
 // 재다신약은 뚜렷할수록 조심할 소식이다. 둘을 한 눈금으로 묶으면 화면이 거짓말을 한다.
 import { starsOf, strengthOf, judgeSiksin, type Chart8, type Slot, type Strength, type Level } from '@/lib/siksin';
+import { josa } from './josa';
 
 export type Pattern = 'siksin' | 'jaeda' | 'jesal';
 export type Tone = 'good' | 'warn' | 'flat';
@@ -55,7 +56,7 @@ export function judgeJaeda(c: Chart8): Verdict {
       : '인성이 얇습니다. 자격·면허·문서를 갖추는 쪽으로 힘을 쓰면 그릇이 커집니다.');
   }
   notes.push(strength.strong
-    ? `일간이 ${[strength.ryeong && '득령', strength.ji && '득지', strength.se && '득세'].filter(Boolean).join('·')}으로 버팁니다.`
+    ? `일간이 ${[strength.ryeong && '득령', strength.ji && '득지', strength.se && '득세'].filter(Boolean).join('·')}${josa([strength.ryeong && '득령', strength.ji && '득지', strength.se && '득세'].filter(Boolean).join('·'), '으로')} 버팁니다.`
     : '일간이 얇습니다. 득령·득지·득세 중 하나도 온전히 얻지 못했습니다.');
 
   const HEAD: Record<Level, string> = {

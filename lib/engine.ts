@@ -2,6 +2,7 @@
 // 만세력 공통 계산은 ./manse-core 로 분리(중복 제거). 이 파일은 십성·신살·사정률·세운 등
 // 명리 해석과 유료 정밀값 산출을 담당한다.
 import { GAN, ZHI, EL, EL_HEX, SIP, pil, GAN_EL, ZHI_EL, jdn, lunarToSolar, corePillars, resolveBirth, relation, yearGanji } from './manse-core';
+import { josa } from './josa';
 export { GAN, ZHI, EL, EL_HEX, SIP, pil, lunarToSolar, relation, yearGanji };
 
 export type Chart = {
@@ -109,7 +110,7 @@ export function mkBridge(rel:string,me:number,td:number){const M=EL[me],D=EL[td]
   if(rel==='in')return `오늘은 <b>${D}</b> 기운이 당신의 <b>${M}</b> 기운을 살리는 날 — 위로 뻗어 사정률이 <b>상단</b>으로 뽑혔습니다.`;
   if(rel==='bi')return `오늘은 당신과 같은 <b>${M}</b> 기운이 힘을 보태는 날 — <b>상단</b> 흐름으로 뽑혔습니다.`;
   if(rel==='jae')return `오늘은 당신이 다스리는 <b>${D}</b> 기운의 날, 재물의 기운이라 <b>약간 위</b>로 뽑혔습니다.`;
-  if(rel==='sik')return `오늘은 당신의 <b>${M}</b> 기운이 <b>${D}</b>로 새어나가는 날 — 힘이 빠져 <b>하단</b>으로 뽑혔습니다.`;
+  if(rel==='sik')return `오늘은 당신의 <b>${M}</b> 기운이 <b>${D}</b>${josa(D, '로')} 새어나가는 날 — 힘이 빠져 <b>하단</b>으로 뽑혔습니다.`;
   return `오늘은 <b>${D}</b> 기운이 당신의 <b>${M}</b> 기운을 누르는 날 — 눌린 기운이라 <b>하단</b>으로 뽑혔습니다.`;}
 export type Sajeong = {
   rel:string; tilt:number; up:boolean;

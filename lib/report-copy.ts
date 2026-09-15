@@ -5,6 +5,7 @@ import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, sinsal,
 import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, TYPE_MYEONG, TYPE_USER, TYPE_BIZ, type TyMatch } from './tycoon';
 import { sealSvg } from './seal';
 import { clientTip } from './clients';
+import { josa } from './josa';
 
 // 인명 조사(받침 유무) 자동 보정 — '아사 캔들러을' 같은 오류 방지
 const josaEB = (w: string, withB: string, noB: string): string => { const s = (w||'').replace(/\([^)]*\)/g, '').trim(); const ch = s.charCodeAt(s.length - 1); const h = ch >= 0xac00 && ch <= 0xd7a3; return (h && (ch - 0xac00) % 28 !== 0) ? withB : noB; };
@@ -26,7 +27,7 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[], myGan?:string){
     `<div class="scside"><div class="scwrap">${sealSvg(tm.tyDist,tyGanChar,132)}</div><div class="scnm">${t.name}</div><div class="scr">${EL[tm.el]} 기운</div></div>`+
     `</div><div class="sccap">얼굴이 아니라 <b>명식의 문양</b>입니다 — 두 인장의 오행 비율이 이만큼 겹칩니다</div></div>`;
   return `<div class="twinlead">대표님의 명을 세계 거장 100인과 견줬습니다.<br>`+
-    `가장 <b>${lv}</b>는 이 사람 — <b>${t.name}</b>입니다.</div>`+
+    `가장 <b>${lv}</b>${josa(lv, '는')} 이 사람 — <b>${t.name}</b>입니다.</div>`+
     sealcmp+
     `<div class="twincard">`+
       `<div class="tface" style="background:${EL_HEX[tm.el]}">${tm.pills}</div>`+
@@ -294,7 +295,7 @@ function partnerExtraHtml(meEl:number,otherEl:number,rel:string,otherLabel:strin
   const same=meEl===otherEl;
   const roleLine=same
     ? `대표님과 ${otherLabel} 모두 <b>${ROLE_SHORT[meEl]}</b>에 강해 영역이 겹칩니다. 같은 일을 공동으로 결정하면 갈등이 커지니, 한 분은 반드시 반대 축(안/밖, 공격/수비)을 맡아야 합니다.`
-    : `대표님은 <b>${ROLE_STR[meEl]}</b>에, ${otherLabel}는 <b>${ROLE_STR[otherEl]}</b>에 적합합니다. 이 둘을 겹치지 않게 나누면 시너지가 크고, 같은 영역을 공동 결정하면 갈등이 커집니다.`;
+    : `대표님은 <b>${ROLE_STR[meEl]}</b>에, ${otherLabel}${josa(otherLabel, '는')} <b>${ROLE_STR[otherEl]}</b>에 적합합니다. 이 둘을 겹치지 않게 나누면 시너지가 크고, 같은 영역을 공동 결정하면 갈등이 커집니다.`;
   return `<div class="prole"><div class="prhd">${company?'회사 역할 분담 제안':'업무 분담 제안'}</div>`+
     `<div class="prsplit"><div class="prc"><span class="prwho">대표님</span><span class="prwhat" style="color:${EL_HEX[meEl]}">${ROLE_SHORT[meEl]}</span></div>`+
     `<div class="prvs">×</div>`+
@@ -380,13 +381,13 @@ function legalReport(meChart,legalChart){
  const relLine=LEGREL[rel].replace(/\{LO\}/g,EL[legalChart.dayMasterEl]).replace(/\{M\}/g,EL[meChart.dayMasterEl]);
  return {pills:pil(legalChart.dGan,legalChart.dZhi),strong,weak,zero,rel,
    paras:[
-     `법인의 사주(설립일 <b>${pil(legalChart.dGan,legalChart.dZhi)}</b>, 일간 ${GAN[legalChart.dGan]})는 <b>${EL[strong]}</b> 기운이 강하고 <b>${EL[weak]}</b> 기운이 ${zero?'비어':'옅어'}, ${STRONG_MEAN[strong]} 체질의 회사입니다.`,
+     `법인의 사주(설립일 <b>${pil(legalChart.dGan,legalChart.dZhi)}</b>, 일간 ${GAN[legalChart.dGan]})는 <b>${EL[strong]}</b> 기운이 강하고 <b>${EL[weak]}</b> 기운이 ${zero?'비어':'옅어'}, ${STRONG_MEAN[strong]}는 결의 회사입니다.`,
      `설립일이 회사의 사주가 된다는 것은, 법인을 세운 그날의 하늘 기운이 회사의 타고난 성향으로 굳는다는 뜻입니다. 그래서 같은 대표라도 어느 날 세운 회사냐에 따라 커가는 결이 달라집니다.`,
      relLine,
      `그러니 대표님이 회사에서 ${rel==='gwan'?'유독 짓눌리거나 매인 느낌을 받으셨다면, 그것은 기질 탓이 아니라 이 구조 때문':rel==='sik'?'혼자 다 떠안는 느낌을 받으셨다면, 그것은 이 헌신형 구조 때문':rel==='in'?'유난히 순하게 풀린 대목이 있었다면, 법인이 대표님을 받쳐준 덕':rel==='jae'?'뜻대로 밀어붙일 수 있었다면, 대표님이 회사를 쥔 구조 덕':'힘은 나되 함께 지치는 대목이 있었다면, 같은 기운이 겹친 탓'}입니다.`,
      `이 회사는 <b>${EL[strong]}</b>의 힘으로 굴러가니, ${strong===0?'신규 사업·확장에 강하나 벌인 것을 끝맺는 관리가 약합니다':strong===1?'대외 영업·홍보에 강하나 내실을 다지는 뒷심이 약합니다':strong===2?'신용·지속성에 강하나 빠른 변화·결단이 약합니다':strong===3?'정리·결단에 강하나 사람을 품는 온기가 약합니다':'전략·위기관리에 강하나 밀어붙이는 추진이 약합니다'}. 강점은 살리고 약한 쪽은 사람으로 메우십시오.`,
      `지금이 회사를 ${rel==='jae'||rel==='in'?'키울 때인지 지킬 때인지는 위 대운·세운에서 갈립니다. 밀어주는 구간엔 과감히, 눌리는 구간엔 내실로':'무리해서 키우기보다 기반을 다질 때입니다. 시스템과 사람에 권한을 나눠'} 가십시오.`,
-     `법인에 부족한 <b>${EL[weak]}</b>는 상호·로고 색(<b>${COLOR_EL[weak]}</b>), 사무실 방위(<b>${DIR_EL[weak]}</b>), 행운 숫자(<b>${NUM_EL[weak]}</b>)로 채우면 회사의 기운이 균형을 찾습니다. 새 지점·법인을 낼 때도 이 방위를 참고하십시오.`]};
+     `법인에 부족한 <b>${EL[weak]}</b>${josa(EL[weak], '는')} 상호·로고 색(<b>${COLOR_EL[weak]}</b>), 사무실 방위(<b>${DIR_EL[weak]}</b>), 행운 숫자(<b>${NUM_EL[weak]}</b>)로 채우면 회사의 기운이 균형을 찾습니다. 새 지점·법인을 낼 때도 이 방위를 참고하십시오.`]};
 }
 function argmax(a){let x=0;for(let i=1;i<a.length;i++)if(a[i]>a[x])x=i;return x;}
 // 일지 12지지별 성정 — 오행 5분류를 넘어 개인화 한 스푼
@@ -484,10 +485,10 @@ function seunDetail(rel:string, sy:{g:number;z:number;el:number}){
   const gz=GAN[sy.g]+ZHI[sy.z], en=EL[sy.el];
   const M:Record<string,string>={
     in:`${gz}(${en})의 해 — ${en} 기운이 회사를 밖에서 밀어줍니다. 자금 조달·수주·귀인이 붙는 흐름이니, 미뤄둔 큰 건과 확장·투자를 이 해에 여십시오.`,
-    bi:`${gz}(${en})의 해 — 같은 ${en}이 겹쳐 힘은 세나 경쟁·내부 분란이 잦습니다. 지분·역할·결정권을 명확히 하고, 과속 확장 대신 실속을 지키십시오.`,
-    jae:`${gz}(${en})의 해 — ${en}이 회사의 재물 자리를 채웁니다. 벌이기보다 굵직한 수금·정산·계약 마무리를 이 해에 몰아 실속을 굳히십시오.`,
-    sik:`${gz}(${en})의 해 — 회사가 ${en}으로 힘을 밖에 쏟습니다. 실적은 나되 지출·소모가 크니, 마진·원가·현금흐름 관리를 최우선에 두십시오.`,
-    gwan:`${gz}(${en})의 해 — ${en}이 회사를 조입니다. 신규 확장·차입은 미루고 시스템·인력·내실을 다지는 '정비의 해'로 쓰면 다음 상승을 크게 탑니다.`,
+    bi:`${gz}(${en})의 해 — 같은 ${en}${josa(en, '이')} 겹쳐 힘은 세나 경쟁·내부 분란이 잦습니다. 지분·역할·결정권을 명확히 하고, 과속 확장 대신 실속을 지키십시오.`,
+    jae:`${gz}(${en})의 해 — ${en}${josa(en, '이')} 회사의 재물 자리를 채웁니다. 벌이기보다 굵직한 수금·정산·계약 마무리를 이 해에 몰아 실속을 굳히십시오.`,
+    sik:`${gz}(${en})의 해 — 회사가 ${en}${josa(en, '으로')} 힘을 밖에 쏟습니다. 실적은 나되 지출·소모가 크니, 마진·원가·현금흐름 관리를 최우선에 두십시오.`,
+    gwan:`${gz}(${en})의 해 — ${en}${josa(en, '이')} 회사를 조입니다. 신규 확장·차입은 미루고 시스템·인력·내실을 다지는 '정비의 해'로 쓰면 다음 상승을 크게 탑니다.`,
   };
   return M[rel]||M.bi;
 }
@@ -506,7 +507,7 @@ function daeunSectionHtml(d,legalName,curYear){
   const relc=relation(d.me,cur.el);
   const cells=d.list.slice(0,6).map(b=>`<div class="dcell${b.cur?' cur':''}"><div class="dg" style="color:${EL_HEX[b.el]}">${GAN[b.gan]}${ZHI[b.zhi]}</div><div class="dy">${b.from}~${b.to}년차</div></div>`).join('');
   return `<div class="daeun">${cells}</div>`+
-    `<p style="margin-top:12px"><b>${legalName||'회사'}</b>는 설립 <b>${d.age}년차</b> — 지금은 <b>${GAN[cur.gan]}${ZHI[cur.zhi]}(${EL[cur.el]})</b> 대운, ${d.forward?'순행':'역행'}으로 흐릅니다.</p>`+
+    `<p style="margin-top:12px"><b>${legalName||'회사'}</b>${josa(legalName||'회사', '는')} 설립 <b>${d.age}년차</b> — 지금은 <b>${GAN[cur.gan]}${ZHI[cur.zhi]}(${EL[cur.el]})</b> 대운, ${d.forward?'순행':'역행'}${josa(d.forward?'순행':'역행', '으로')} 흐릅니다.</p>`+
     `<p>${DAEUN_REL[relc]}.</p>`+
     `<p>다음 10년(<b>${d.list[Math.min(7,d.curBlock+1)].from}년차~</b>)엔 <b>${EL[d.list[Math.min(7,d.curBlock+1)].el]}</b> 기운으로 넘어가니, 그 결에 맞춰 확장·정비의 때를 잡으십시오.</p>`+
     (curYear?seunHtml(d,legalName,curYear):'');
@@ -533,7 +534,7 @@ function sijinHtml(c:Chart){
   }).join('');
   const gil=SIJIN12.filter((_,z)=>{const r=relation(c.dayMasterEl,ZHI_EL12[z]);return r==='in'||r==='bi';}).map(([h])=>h+'시');
   return `<div class="sjhd">시진별 흐름 — 오늘, 언제 움직일까</div><div class="sijin12">${cells}</div>`+
-    `<p style="margin-top:10px">오늘은 <b>${gil.join('·')}</b>가 대표님 일간을 살리는 창입니다. 큰 건의 제출·통화·미팅은 이 창에 맞추십시오.</p>`+
+    `<p style="margin-top:10px">오늘은 <b>${gil.join('·')}</b>${josa(gil.join('·'), '가')} 대표님 일간을 살리는 창입니다. 큰 건의 제출·통화·미팅은 이 창에 맞추십시오.</p>`+
     `<p class="fcline">이 점수는 판정이 아니라 <b>예보</b>입니다 — 우산을 챙길지는 대표님이 정하십니다.</p>`;
 }
 // ── 曆 · 사업운 캘린더 (개인화) — 이달 각 날에 사업 흐름을 표시
@@ -664,7 +665,7 @@ function bizYearHtml(c:Chart,selYear:number,curM:number){
   for(let m=1;m<=12;m++){const el=MEL[m-1];const rel=relation(c.dayMasterEl,el);const info=BY_REL[rel]||BY_REL.bi;
     rows+=`<div class="myrow${m===curM?' now':''}"><span class="mym">${m}월${m===curM?'<em>이달</em>':''}</span>`+
       `<span class="myg" style="color:${EL_HEX[el]}">${EL[el]}</span>`+
-      `<span class="mytag" style="background:${info[1]}">${info[0]}運</span>`+
+      `<span class="mytag" style="background:${info[1]}">${info[0]}운</span>`+
       `<span class="myd">${BY_DESC[rel]}</span></div>`;}
   return `<div class="bizyear"><div class="byhd">${selYear}년 — 12개월 사업운 흐름</div>${rows}</div>`+
     `<p style="margin-top:11px">밀어주는 달(<b>도움운·결실운</b>)에 큰 계약·발표·투자를, 조여지는 달(<b>시련운</b>)엔 내실·정비를 두십시오. 위 흐름을 <b>${selYear}년 세운</b>과 겹쳐 보면 한 해 농사의 밑그림이 나옵니다.</p>`;
@@ -707,7 +708,7 @@ function seunBannerHtml(seun,selYear){
   if(!seun||!selYear) return '';
   const info=SEUN_SELF[seun.rel]||SEUN_SELF.bi;
   return `<div class="seunban"><div class="sbl"><span class="sby">${selYear}<em>${seun.hanja}</em></span>`+
-    `<span class="sbk" style="background:${info[2]}">${info[0]}運</span></div>`+
+    `<span class="sbk" style="background:${info[2]}">${info[0]}운</span></div>`+
     `<div class="sbd"><b>${selYear}년 기준</b> — ${info[1]}. <span class="sbnote">해가 바뀌면 세운도 바뀌니, 연도를 바꿔 확인하십시오.</span></div></div>`;
 }
 function jinHtml(c:Chart,seun?,selYear?){
@@ -847,8 +848,8 @@ function secDaepyoIntro(x:any):any[]{
   out.push({mk:'器',tier:'free',t:T1[me],html:P([
     `대표님은 <b>${NAT[me]}</b> 그릇입니다. ${DMc[me]}`,
     `${DM_D1[me]}`,
-    `무엇보다 일지 <b>${ZHI[c.dZhi]}</b>가 말해주듯, 대표님은 ${DZHI_TRAIT[c.dZhi]}입니다.`,
-    `이는 일간 <b>${gan}(${EL[me]})</b>에 <b>${SIP[dom]}</b>의 기운이 두텁게 실려, ${SIP_MEAN[dom]} 사주이기 때문입니다. 일지 <b>${ZHI[c.dZhi]}</b>가 그 밑을 받쳐, 겉으로 드러나는 모습보다 속이 더 단단한 구조입니다.`,
+    `무엇보다 일지 <b>${ZHI[c.dZhi]}</b>${josa(ZHI[c.dZhi], '가')} 말해주듯, 대표님은 ${DZHI_TRAIT[c.dZhi]}입니다.`,
+    `이는 일간 <b>${gan}(${EL[me]})</b>에 <b>${SIP[dom]}</b>의 기운이 두텁게 실려, ${SIP_MEAN[dom]} 사주이기 때문입니다. 일지 <b>${ZHI[c.dZhi]}</b>${josa(ZHI[c.dZhi], '가')} 그 밑을 받쳐, 겉으로 드러나는 모습보다 속이 더 단단한 구조입니다.`,
     `전체로 보면 <b>${EL[strong]}</b>의 기운이 무기이고, ${zero?`<b>${EL[weak]}</b>의 기운이 통째로 비어`:`<b>${EL[weak]}</b>의 기운이 옅어`} 그 자리가 평생의 숙제였습니다.`,
     `${DMs[me]}`,
     `${DM_D2[me]}`])});
@@ -912,21 +913,21 @@ function secDaepyoStrength(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn,baljuPremium}=x;
   const out:any[]=[];
   out.push({mk:'核',tier:'free',t:`${selYear?selYear+'년 ':''}이 리포트의 핵심 3가지 — 미리보기`,html:summaryHtml(c,s,seunSelf,selYear)});
-  out.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>으로 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}은 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
+  out.push({mk:'五',tier:'full',teaser:`여덟 글자가 <b>${EL[strong]}</b>${josa(EL[strong], '으로')} 크게 쏠리고 <b>${EL[weak]}</b> 한 자리가 ${zero?'텅 비었습니다':'옅습니다'} — 이 불균형이 대표님께 무엇을 뜻하는지, 무엇으로 메워야 하는지가 여기 담깁니다.`,t:`${EL[strong]}${josa(EL[strong], '은')} 넘치는데, ${EL[weak]} 한 자리가 ${zero?'텅 비었습니다':'옅습니다'}`,html:
     distHtml(c)+P([
     `여덟 글자의 오행은 ${EL.map((e,i)=>`${e}${c.dist[i]}`).join(' · ')} — ${zero?'한쪽으로 크게 쏠린 극단적 구성':'다소 치우친 구성'}입니다.`,
-    `<b>${EL[strong]}</b>이 강하다는 것은 ${STRONG_MEAN[strong]}는 뜻입니다. 다만 지나치면 ${STRONG_RISK[strong]}.`,
+    `<b>${EL[strong]}</b>${josa(EL[strong], '이')} 강하다는 것은 ${STRONG_MEAN[strong]}${josa(STRONG_MEAN[strong], '는')} 뜻입니다. 다만 지나치면 ${STRONG_RISK[strong]}.`,
     `${FIVE_S[strong]}`,
-    `${zero?`비어 있는 <b>${EL[weak]}</b>의 자리 — ${LACK[weak]} 늘 아쉬우셨을 것입니다.`:`옅은 <b>${EL[weak]}</b>를 채울수록 사주가 균형을 찾습니다.`}`,
+    `${zero?`비어 있는 <b>${EL[weak]}</b>의 자리 — ${LACK[weak]} 늘 아쉬우셨을 것입니다.`:`옅은 <b>${EL[weak]}</b>${josa(EL[weak], '를')} 채울수록 사주가 균형을 찾습니다.`}`,
     `${FIVE_W[weak]}`,
     `개운으로는 <b>${DIR_EL[weak]}</b> 방향, 행운 숫자 <b>${NUM_EL[weak]}</b>, 색 <b>${COLOR_EL[weak]}</b> — 부족한 기운을 일상에서 채우십시오.`])});
   out.push({mk:'決',tier:'full',teaser:`대표님의 승부 기질은 <b>${DEC_A[me]}</b> 쪽 — 이 힘이 큰 건을 따내지만, 투찰·계약에서 독이 되는 순간과 반드시 지켜야 할 한 가지가 아직 가려져 있습니다.`,t:DEC_T[me],html:P([
     `대표님의 승부 기질은 <b>${DEC_A[me]}</b> 쪽입니다.`,
-    `일지 <b>${ZHI[c.dZhi]}</b>와 <b>${SIP[dom]}</b>의 기운이 겹쳐, 판단이 서면 좀처럼 되돌리지 않습니다.`,
+    `일지 <b>${ZHI[c.dZhi]}</b>${josa(ZHI[c.dZhi], '와')} <b>${SIP[dom]}</b>의 기운이 겹쳐, 판단이 서면 좀처럼 되돌리지 않습니다.`,
     `${DEC_X1[me]}`,
     `그 힘이 큰 건을 따내지만, 지나치면 ${DEC_R[me]}.`,
     `투찰과 계약에서는 ${DEC_V[me]}.`,
-    `일간 <b>${gan}</b>에 <b>${SIP[dom]}</b>이 두터워, 대표님은 작은 건엔 방심하고 판이 커질수록 오히려 냉정해지는 승부사입니다 — 큰 건일수록 남에게 미루지 말고 직접 쥐십시오`,
+    `일간 <b>${gan}</b>에 <b>${SIP[dom]}</b>${josa(SIP[dom], '이')} 두터워, 대표님은 작은 건엔 방심하고 판이 커질수록 오히려 냉정해지는 승부사입니다 — 큰 건일수록 남에게 미루지 말고 직접 쥐십시오`,
     `다만 ${dom===0?'비겁이 강해 밀어붙이다 무리한 저가로 스스로를 깎기 쉬우니':dom===1?'식상이 강해 새 수를 두되 검증 없이 지르기 쉬우니':dom===2?'재성을 좇아 이문엔 밝되 큰 그림을 놓치기 쉬우니':dom===3?'관성이 무거워 원칙을 지키다 때를 놓치기 쉬우니':'인성이 두터워 신중하나 결정이 늦어 기회를 흘리기 쉬우니'}, 투찰 전 「물러설 하한선」을 숫자로 못 박아 두는 그 하나만은 반드시 지키십시오`,
     `${DEC_X2[me]}`])});
   out.push({mk:'人',tier:'full',teaser:`직원과 파트너가 대표님을 <b>${CL_MIS[me]}</b>고 오해하기 쉬운 이유, 그리고 곁에 사람을 남기는 법이 여기 있습니다.`,t:PPL_T[me],html:P([
@@ -935,16 +936,16 @@ function secDaepyoStrength(x:any):any[]{
     `그 기준이 조직을 세우지만, 선을 넘은 이는 가차 없이 잘라 홀로 남기도 합니다.`,
     `사람을 남기려면 ${PPL_V[me]}.`,
     `${PPL_X1[me]}`,
-    `대표님 곁엔 부족한 <b>${EL[weak]}</b> 기운을 지닌 사람 — ${['묵묵히 뿌리를 내리는 실무형','분위기를 데우는 활달한 사람','살림을 안정시키는 관리형','원칙과 뒷심을 채우는 감사형','차분히 문서를 지키는 참모형'][weak]}을 두면 조직이 오래갑니다`,
-    `반대로 대표님처럼 <b>${EL[strong]}</b>이 강한 사람만 모으면 한때는 시원해도 결국 부딪쳐 갈라집니다 — 대표님을 닮은 사람이 아니라, 대표님을 채워주는 사람이 남습니다`,
+    `대표님 곁엔 부족한 <b>${EL[weak]}</b> 기운을 지닌 사람 — ${['묵묵히 뿌리를 내리는 실무형','분위기를 데우는 활달한 사람','살림을 안정시키는 관리형','원칙과 뒷심을 채우는 감사형','차분히 문서를 지키는 참모형'][weak]}${josa(['묵묵히 뿌리를 내리는 실무형','분위기를 데우는 활달한 사람','살림을 안정시키는 관리형','원칙과 뒷심을 채우는 감사형','차분히 문서를 지키는 참모형'][weak], '을')} 두면 조직이 오래갑니다`,
+    `반대로 대표님처럼 <b>${EL[strong]}</b>${josa(EL[strong], '이')} 강한 사람만 모으면 한때는 시원해도 결국 부딪쳐 갈라집니다 — 대표님을 닮은 사람이 아니라, 대표님을 채워주는 사람이 남습니다`,
     `${PPL_X2[me]}`])});
   out.push({mk:'財',tier:'full',teaser:`대표님의 재물운은 <b>${['새 판을 벌여 키우는 확장형','크게 벌고 크게 쓰는 기복형','천천히 쌓는 축적형','끊고 맺어 남기는 결실형','굴려서 불리는 순환형'][me]}</b> — 언제 쥐고 언제 풀지, 어디서 새는지가 가려져 있습니다.`,t:WL_T[me],html:P([
     `대표님의 재물운은 <b>${['새 판을 벌여 키우는 확장형','크게 벌고 크게 쓰는 기복형','천천히 쌓는 축적형','끊고 맺어 남기는 결실형','굴려서 불리는 순환형'][me]}</b>입니다.`,
-    `사주에 재성의 기운이 <b>${sip[2]}</b>로 ${sip[2]>=2?'분명해':'옅어'}, ${WL_A[me]} 버는 구조입니다.`,
+    `사주에 재성의 기운이 <b>${sip[2]}</b>${josa(sip[2], '로')} ${sip[2]>=2?'분명해':'옅어'}, ${WL_A[me]} 버는 구조입니다.`,
     `${WL_R[me]}.`,
     `${WL_X1[me]}`,
     `${WL_X2[me]}`,
-    `대표님은 <b>${gan}</b> 일간이라 돈을 ${['키우는','벌이는','모으는','맺고 끊는','굴리는'][me]} 데는 밝으나, 재성이 <b>${sip[2]}</b>로 ${sip[2]>=2?'분명한 만큼 씀씀이도 함께 커지기 쉽습니다':'옅어 큰돈이 들어와도 손에 오래 머물지 않기 쉽습니다'}`,
+    `대표님은 <b>${gan}</b> 일간이라 돈을 ${['키우는','벌이는','모으는','맺고 끊는','굴리는'][me]} 데는 밝으나, 재성이 <b>${sip[2]}</b>${josa(sip[2], '로')} ${sip[2]>=2?'분명한 만큼 씀씀이도 함께 커지기 쉽습니다':'옅어 큰돈이 들어와도 손에 오래 머물지 않기 쉽습니다'}`,
     `자금은 「들어올 때」가 아니라 「굳힐 때」가 승부입니다 — 수금·정산·유보금 규칙을 미리 정하고, 부족한 <b>${EL[weak]}</b> 기운의 분야(${['교육·콘텐츠','사람·미디어','부동산·현물','금융·계약','유통·물류'][weak]})로 여유자금의 결을 잡으십시오`,
     `수주와 자금은 ${WL_V[me]}.`])});
   return out;
@@ -957,7 +958,7 @@ function secDaeun(x:any):any[]{
     out.push({mk:'法',tier:'full',teaser:`<b>${names.legal||'법인'}</b> 설립일 사주로 본 회사의 그릇과 대표님의 궁합 — 지금 회사가 대표님을 받치는지 누르는지가 여기서 드러납니다.`,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
       `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});
     if(daeunMeta&&daeunMeta.foundYear){const d=daeun(legalChart,daeunMeta.foundYear,daeunMeta.curYear);
-      out.push({mk:'運',tier:'full',teaser:`<b>${names.legal||'회사'}</b>는 지금 대운의 어느 길목에 있는지, 다음 10년 확장·정비의 때가 언제인지가 가려져 있습니다.`,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal,daeunMeta.curYear)});}}
+      out.push({mk:'運',tier:'full',teaser:`<b>${names.legal||'회사'}</b>${josa(names.legal||'회사', '는')} 지금 대운의 어느 길목에 있는지, 다음 10년 확장·정비의 때가 언제인지가 가려져 있습니다.`,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal,daeunMeta.curYear)});}}
   return out;
 }
 // [宮 발주처] 카테고리 섹션 빌더
@@ -986,18 +987,18 @@ function secDaepyoPlace(x:any):any[]{
   const out:any[]=[];
   out.push({mk:'方',tier:'full',teaser:`대표님께 기운을 돋우는 방면과 피해야 할 방면 — 현장·발주처·사무실 택지의 기준이 가려져 있습니다.`,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
-    `사주에 <b>${EL[weak]}</b>가 ${zero?'비어':'옅어'}, 그 기운이 채워지는 <b>${DIR_EL[weak]}</b> 현장·발주처가 유리합니다.`,
+    `사주에 <b>${EL[weak]}</b>${josa(EL[weak], '가')} ${zero?'비어':'옅어'}, 그 기운이 채워지는 <b>${DIR_EL[weak]}</b> 현장·발주처가 유리합니다.`,
     `${DIR_X[weak]}`,
     `반대 방면은 예민함을 키우니, 그쪽 큰 건은 한 박자 신중히 보십시오.`,
     `구체적으로 <b>${DIR_EL[weak]}</b> 방면의 발주처·현장이 대표님과 결이 맞습니다 — 책상도 그 방향을 등지지 말고 바라보게 두면 판단이 맑아집니다`,
-    `큰 계약을 앞두고 자리를 고를 땐, 이미 강한 <b>${EL[strong]}</b>을 더 키우는 방면(과열)보다 부족한 <b>${EL[weak]}</b>를 채우는 <b>${DIR_EL[weak]}</b> 쪽이 균형에 이롭습니다`,
+    `큰 계약을 앞두고 자리를 고를 땐, 이미 강한 <b>${EL[strong]}</b>${josa(EL[strong], '을')} 더 키우는 방면(과열)보다 부족한 <b>${EL[weak]}</b>${josa(EL[weak], '를')} 채우는 <b>${DIR_EL[weak]}</b> 쪽이 균형에 이롭습니다`,
     `사무실·현장 택지에도 같은 원리를 적용하십시오.`])});
   out.push({mk:'士',tier:'full',teaser:`홀로 벼려온 그 날카로움을, 이제 무기로 바꾸는 마지막 한마디가 여기 있습니다.`,t:`홀로 벼려온 그 날카로움이, 결국 대표님의 무기입니다`,html:P([
     `남들은 대표님을 <b>${CL_MIS[me]}</b>고 볼지 모르나, 그 뒤에 홀로 짊어진 무게를 저는 압니다.`,
     `${SA_X[me]}`,
     `타고난 <b>${EL[strong]}</b>의 힘으로 여기까지 오셨으니, 이제 그 기운을 ${CL_TURN[me]} 쓰실 때입니다.`,
-    `행운 숫자 <b>${NUM_EL[weak]}</b>, 색 <b>${COLOR_EL[weak]}</b>, 방위 <b>${DIR_EL[weak]}</b> — 부족한 <b>${EL[weak]}</b>를 곁에 두십시오.`,
-    `대표님의 <b>${gan}(${EL[me]})</b> 일간에 <b>${SIP[dom]}</b>이 두터운 이 명식은, 홀로 짊어지고 끝을 보는 힘이 유독 강합니다 — 그 힘이 여기까지 왔고, 이제는 나눌수록 더 커집니다`,
+    `행운 숫자 <b>${NUM_EL[weak]}</b>, 색 <b>${COLOR_EL[weak]}</b>, 방위 <b>${DIR_EL[weak]}</b> — 부족한 <b>${EL[weak]}</b>${josa(EL[weak], '를')} 곁에 두십시오.`,
+    `대표님의 <b>${gan}(${EL[me]})</b> 일간에 <b>${SIP[dom]}</b>${josa(SIP[dom], '이')} 두터운 이 명식은, 홀로 짊어지고 끝을 보는 힘이 유독 강합니다 — 그 힘이 여기까지 왔고, 이제는 나눌수록 더 커집니다`,
     `${selYear?selYear+'년':'올해'}의 흐름은 ${seunSelf&&seunSelf.tilt>0?'대표님을 밀어주는 결이니, 미뤄둔 큰 건을 이 결에 실으십시오':'숨을 고르라는 결이니, 무리한 확장보다 사람과 시스템을 다지며 다음 상승을 준비하십시오'}`,
     `오늘도 그 마지막 한 끗을 살피는 참모 士가, 대표님의 길을 함께 봅니다.`])});
   return out;
@@ -1074,7 +1075,7 @@ export function reportHeroFor(cat:string|undefined, ctx:any):Hero{
   if(cat==='daeun'&&legal){const lr=legalReport(c,legal);
     const relKo=['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]||'';
     return {score:0,big:EL[lr.strong],unit:' 체질',label:'회사의 그릇',
-      headline:`회사가 대표님을 <b>${relKo}</b>으로 받칩니다`,sub:`법인 ${EL[lr.strong]} 체질 · ${lr.pills}`,up:true};}
+      headline:`회사가 대표님을 <b>${relKo}</b>${josa(relKo, '으로')} 받칩니다`,sub:`법인 ${EL[lr.strong]} 체질 · ${lr.pills}`,up:true};}
   return base; // 사정률·전체
 }
 // 레벨(0 무료 · 1 택일팩 · 2 전체)로 섹션 생성. 유료 html은 서버에서 결제 검증 후에만 채워짐.

@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { ogCard, ogCardUrl } from '@/lib/og';
 import { bizFooterLine } from '@/lib/bizinfo';
 import SiteTop from '@/app/_components/SiteTop';
+import { josa } from '@/lib/josa';
 import {
   companyChart, companyDaeun, companySeun, elBalance,
   PHASE_LABEL, PHASE_HINT, DAEUN_LINE, elName, elHex, ganjaOf, eunNeun,
@@ -22,7 +23,7 @@ import './hoesa.css';
 
 const BASE = 'https://nakchalsaju.com';
 const T = '회사 사주 — 법인 설립일로 보는 우리 회사의 명식과 지금 구간';
-const D = '사람에게 생년월일이 있듯 회사에는 설립일이 있습니다. 법인 설립일만 넣으면 회사의 명식 여덟 글자와, 지금이 확장 구간인지 수성 구간인지를 30초에 무료로 봅니다.';
+const D = '사람에게 생년월일이 있듯 회사에는 설립일이 있습니다. 법인 설립일만 넣으면 회사의 명식 여섯 글자와, 지금이 확장 구간인지 수성 구간인지를 30초에 무료로 봅니다.';
 
 export const metadata: Metadata = {
   title: T, description: D,
@@ -84,7 +85,7 @@ export default function Hoesa({ searchParams }: { searchParams: { d?: string; n?
             <button className="hsgo" type="submit">회사 사주 보기 →</button>
           </form>
           {bad && <p className="note" style={{ color: '#a3341f', fontWeight: 700 }}>날짜를 다시 확인해 주세요. 실제로 있는 날이어야 합니다.</p>}
-          <p className="note">사람에게 생년월일이 있듯, 회사에는 설립일이 있습니다. 그날의 여덟 글자가 회사의 타고난 결과 10년 흐름을 정합니다.</p>
+          <p className="note">사람에게 생년월일이 있듯, 회사에는 설립일이 있습니다. 그날의 여섯 글자가 회사의 타고난 결과 10년 흐름을 정합니다.</p>
         </div>
 
         {ch && <Result ch={ch} label={label} curYear={curYear} raw={raw} name={name} />}
@@ -173,8 +174,8 @@ function Result({ ch, label, curYear, raw, name }: {
         </div>
         <p className="note">
           {b.zero
-            ? <>여덟 글자가 <b>{elName(b.strong)}</b>으로 쏠리고 <b>{elName(b.weak)}</b> 한 자리가 비었습니다. 비어 있는 쪽이 이 회사가 반복해서 걸리는 지점입니다.</>
-            : <><b>{elName(b.strong)}</b>이 두텁고 <b>{elName(b.weak)}</b>이 옅습니다. 옅은 쪽을 사람이나 시스템으로 채우면 균형이 섭니다.</>}
+            ? <>여섯 글자가 <b>{b.strongs.map(elName).join('·')}</b>{josa(elName(b.strongs[b.strongs.length - 1]), '으로')} 쏠리고 <b>{b.weaks.map(elName).join('·')}</b> 자리가 비었습니다. 비어 있는 쪽이 이 회사가 반복해서 걸리는 지점입니다.</>
+            : <><b>{b.strongs.map(elName).join('·')}</b>{josa(elName(b.strongs[b.strongs.length - 1]), '이')} 두텁고 <b>{b.weaks.map(elName).join('·')}</b>{josa(elName(b.weaks[b.weaks.length - 1]), '이')} 옅습니다. 옅은 쪽을 사람이나 시스템으로 채우면 균형이 섭니다.</>}
         </p>
       </div>
 
