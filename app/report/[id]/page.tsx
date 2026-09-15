@@ -238,6 +238,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 </>
               ) : null;
             })()}
+            <a className="catsample" href="/samples" target="_blank" rel="noopener">결제하면 열리는 화면, 예시로 먼저 보기 →</a>
             <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
             <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
             {err && <div className="errbox">{err}</div>}

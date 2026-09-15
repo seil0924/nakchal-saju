@@ -317,6 +317,16 @@ function compatWith(meChart,otherChart,table,A,S,seun?){
    base,score2:compatScore(rel,otherChart,boost),seun:seun||null,
    pills:pil(otherChart.dGan,otherChart.dZhi),oel:GAN_ELc[otherChart.dGan],paras:c.p.map(fill)};
 }
+// 궁합 무료 장 — 점수·등급·첫 문단까지. 역할·적합도·3계는 유료 장에 있다.
+function compatFreeHtml(cm:any,c:any,otherLabel:string,kind:string){
+  const meCol=EL_HEX[GAN_ELc[c.dGan]],otCol=EL_HEX[cm.oel];
+  return `<div class="cverdict">`+
+    `<div class="cvs"><div class="cnm">대표님</div><div class="cpl" style="background:${meCol}">${pil(c.dGan,c.dZhi)}</div></div>`+
+    `<div class="cvscore"><div class="n" style="color:${cm.gc}">${cm.score2}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
+    `<div class="cvs"><div class="cnm">${otherLabel}</div><div class="cpl" style="background:${otCol}">${cm.pills}</div></div>`+
+  `</div>`+`<p>${cm.paras[0]||''}</p>`+
+    `<p class="jinhook">이 ${kind}이 오래 가려면 무엇을 누가 맡아야 하는지 — <b>장기 적합도 ${QV(2)}</b>, <b>역할 분담 ${QV(4)}</b>, 관계가 상하는 지점은 아래에서 열립니다.</p>`;
+}
 // 궁합 히어로 — 대표↔상대 명식 나란히 + 큰 점수 (사주아이식 극화)
 function compatBlock(cm,c,otherLabel,ctx?,stepTitle?){
   const P=a=>a.map(x=>`<p>${x}</p>`).join('');
@@ -656,18 +666,40 @@ function gilCount(c:Chart,y:number,m:number){
   for(let d=1;d<=days;d++){const rel=relation(c.dayMasterEl,todayPillar(y,m,d).el);if(rel==='in'||rel==='bi')n++;}
   return n;
 }
+// ── 가려진 값 미리보기 ──────────────────────────────
+// 조사한 사주 사이트 대부분이 "??점 · ?월 · [?]명" 처럼 답의 모양은 보여 주고 값만 가린다(천명·헬로우봇·청월당).
+// 규칙: 여기서 가리는 값은 모두 결제 후 같은 장에 그대로 나온다. 없는 값을 가려 궁금증만 만들지 않는다.
+const QV=(n=2)=>`<b class="qv" aria-label="결제 후 공개">${'?'.repeat(n)}</b>`;
+// 올해 달별 흐름 — 연간 캘린더(무료 요약·유료 본문)가 같은 계산을 쓴다
+const MONTH_EL=[2,0,0,2,1,1,2,3,3,2,4,4]; // 1~12월 월지 오행 근사
+function yearMonths(c:Chart){return MONTH_EL.map((el,i)=>({m:i+1,el,rel:relation(c.dayMasterEl,el)}));}
+const REL_RANK:Record<string,number>={in:5,jae:4,sik:3,bi:2,gwan:1};
 // 사업운 캘린더 · 연간 — 12개월 월운을 밀어주는 달/조여지는 달로 갈라 한눈에
 const BY_REL:Record<string,[string,string]>={in:['도움','#177f5e'],jae:['결실','#b58a2f'],bi:['경쟁','#6f6a5c'],sik:['분출','#b5402f'],gwan:['시련','#22406b']};
 const BY_DESC:Record<string,string>={in:'밀어주는 달 — 계약·확장에 좋음',jae:'거두는 달 — 실속을 챙길 때',bi:'힘 겹치는 달 — 경쟁·과속 주의',sik:'쏟는 달 — 성과 나되 소모 큼',gwan:'조이는 달 — 무리 말고 내실'};
+const BY_DO:Record<string,string>={in:'미뤄둔 계약·투자·신규 수주를 이 달에 거십시오',jae:'수금·정산·계약 마무리를 몰아 실속을 굳히십시오',bi:'경쟁 입찰은 조건과 서류를 한 끗 앞서 준비하십시오',sik:'영업·홍보·제안서를 넓게 뿌리되 원가를 먼저 챙기십시오',gwan:'신규 확장은 미루고 인력·서류·시스템을 정비하십시오'};
+const BY_DONT:Record<string,string>={in:'들어온 기회를 재다가 흘려보내는 것',jae:'벌여 둔 일 위에 새 일을 더 벌이는 것',bi:'과속 확장과 내부 지분·역할 다툼',sik:'마진 없는 수주와 무리한 지출',gwan:'무리한 차입·감정적인 계약·서두른 결정'};
 function bizYearHtml(c:Chart,selYear:number,curM:number){
-  const MEL=[2,0,0,2,1,1,2,3,3,2,4,4]; // 1~12월 월지 오행 근사
+  const MEL=MONTH_EL;
   let rows='';
   for(let m=1;m<=12;m++){const el=MEL[m-1];const rel=relation(c.dayMasterEl,el);const info=BY_REL[rel]||BY_REL.bi;
     rows+=`<div class="myrow${m===curM?' now':''}"><span class="mym">${m}월${m===curM?'<em>이달</em>':''}</span>`+
       `<span class="myg" style="color:${EL_HEX[el]}">${EL[el]}</span>`+
       `<span class="mytag" style="background:${info[1]}">${info[0]}운</span>`+
-      `<span class="myd">${BY_DESC[rel]}</span></div>`;}
-  return `<div class="bizyear"><div class="byhd">${selYear}년 — 12개월 사업운 흐름</div>${rows}</div>`+
+      `<span class="myd">${BY_DESC[rel]}<em class="mydo">할 일 — ${BY_DO[rel]}</em><em class="mydont">피할 일 — ${BY_DONT[rel]}</em></span></div>`;}
+  const ms=yearMonths(c);
+  // 올해를 보는 중이면 지난 달은 승부처로 권하지 않는다 — 9월에 '5월에 계약하라'는 쓸모가 없다
+  const ahead=ms.filter(x=>!curM||x.m>=curM);
+  const top=[...ahead].sort((a,b)=>REL_RANK[b.rel]-REL_RANK[a.rel]||a.m-b.m).slice(0,3).sort((a,b)=>a.m-b.m);
+  const tough=ahead.filter(x=>x.rel==='gwan').map(x=>x.m);
+  const Q4=[[1,3],[4,6],[7,9],[10,12]].map(([a,b],qi)=>{const seg=ms.slice(a-1,b);const sc=seg.reduce((t,x)=>t+REL_RANK[x.rel],0);
+    const tone=sc>=12?'밀어주는 분기 — 큰 건을 여기에 모으십시오':sc>=9?'고르게 흐르는 분기 — 계획대로 굴리십시오':'조여지는 분기 — 정비와 준비에 쓰십시오';
+    return `<div class="bzwk"><span class="bzwkk">${qi+1}분기</span><div class="bzwkbd"><b>${a}~${b}월</b><em>${tone}</em></div></div>`;}).join('');
+  const topHtml=top.map((x,i)=>`<div class="bztop"><span class="bztn">${i+1}</span><div class="bztbd"><b>${x.m}월 · ${BY_REL[x.rel][0]}운</b><em>${BY_DO[x.rel]}</em></div></div>`).join('');
+  const lead=`<div class="bzsec"><div class="bzsh">◆ ${curM?`남은 ${selYear}년`:`${selYear}년`} 승부처 ${top.length}개월 — 큰 계약·발표·투자는 이 달에</div>${topHtml}</div>`+
+    `<div class="bzsec"><div class="bzsh">◆ 분기별 운용</div><div class="bzwks">${Q4}</div></div>`+
+    (tough.length?`<p class="cwarn">조여지는 달은 <b>${tough.map(m=>m+'월').join('·')}</b> — 이 달엔 새 판보다 정비를, 서두른 결정보다 한 박자 늦춘 확인을 두십시오.</p>`:'');
+  return lead+`<div class="bizyear"><div class="byhd">${selYear}년 — 12개월 사업운 흐름</div>${rows}</div>`+
     `<p style="margin-top:11px">밀어주는 달(<b>도움운·결실운</b>)에 큰 계약·발표·투자를, 조여지는 달(<b>시련운</b>)엔 내실·정비를 두십시오. 위 흐름을 <b>${selYear}년 세운</b>과 겹쳐 보면 한 해 농사의 밑그림이 나옵니다.</p>`;
 }
 // ── 診 · 대표 유형 진단 (사주아이식 프로파일) — 4유형 + 4축 스펙트럼 + 위기 약점(심리 훅)
@@ -886,7 +918,8 @@ function secSajeong(x:any):any[]{
     rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날 — 정확한 날짜는 바로 아래 <b>택일 캘린더</b>에서 확인하세요</div></div>`;}
   out.push({mk:'率',tier:'free',t:nowYMD?`이번 달 ${nowYMD.m}월 택일 — 오늘은 넣기 좋은 날인가`:`오늘, 투찰에 좋은 흐름인가`,html:rateHtml,gauge:true});
   if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
-    out.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 길일 <b>${gc0}일</b>의 정확한 날짜가 이미 산출되어 있습니다 — 이달이 가기 전에 확인하십시오.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
+    const left0=new Date(Date.UTC(nowYMD.y,nowYMD.m,0)).getUTCDate()-nowYMD.d;
+    out.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 투찰 길일 <b>${gc0}일</b> — ${Array.from({length:Math.min(gc0,4)},()=>QV(2)+'일').join(' · ')}${gc0>4?' …':''} 정확한 날짜가 여기 있습니다. ${nowYMD.m}월은 <b>${left0}일</b> 남았습니다.`,t:`이번 달 투찰 길일 — ${nowYMD.m}월 택일`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
   return out;
 }
 // [曆 이달] 카테고리 섹션 빌더
@@ -896,7 +929,8 @@ function secCalendarMonth(x:any):any[]{
   // 曆 · 사업운 캘린더 (그리드는 무료 노출, 날짜별 상세는 결제 후)
   if(nowYMD){
     out.push({mk:'曆',tier:'free',t:`오늘부터 한 달 — 사업운 캘린더`,html:bizGrid(c,nowYMD.y,nowYMD.m,nowYMD.d)+bizFreeLead(c,nowYMD.y,nowYMD.m,nowYMD.d)});
-    out.push({mk:'曆詳',tier:'full',teaser:`오늘부터 <b>30일</b> — 계약에 최적인 <b>핵심 3일</b>, 카테고리별(계약·채용·발표·영업) 정확한 날짜, <b>주차별 4주 전략</b>과 피해야 할 날까지. 어느 날에 무엇을 하고 어느 날을 접어야 하는지가 여기 담깁니다.`,t:`오늘부터 30일 상세 — 핵심 3일·주차별 전략`,html:bizMonthDetail(c,nowYMD.y,nowYMD.m,nowYMD.d)});
+    const rd=rollDays(c,nowYMD.y,nowYMD.m,nowYMD.d);const rc:Record<string,number>={};rd.forEach(q=>{rc[q.key]=(rc[q.key]||0)+1;});
+    out.push({mk:'曆詳',tier:'full',teaser:`큰 건을 걸 <b>핵심 3일</b>은 ${QV(2)}일 · ${QV(2)}일 · ${QV(2)}일 — 앞으로 30일 중 계약에 좋은 날 <b>${rc.jae||0}일</b>, 채용·투자 검토 <b>${rc.in||0}일</b>, 조심할 날 <b>${rc.gwanY||0}일</b>의 정확한 날짜와 주차별 전략이 여기 있습니다.`,t:`오늘부터 30일 상세 — 핵심 3일·주차별 전략`,html:bizMonthDetail(c,nowYMD.y,nowYMD.m,nowYMD.d)});
   }
   return out;
 }
@@ -905,7 +939,18 @@ function secCalendarYear(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn,baljuPremium}=x;
   const out:any[]=[];
   {const yy=selYear||(nowYMD?nowYMD.y:2026); const cm=(nowYMD&&nowYMD.y===yy)?nowYMD.m:0;
-   out.push({mk:'曆年',tier:'full',teaser:`올 한 해 <b>12개월</b>의 흐름 — 밀어주는 달과 조여지는 달이 이미 갈라져 있습니다. 큰 계약·발표·정비의 때를 한 해 단위로 잡으십시오.`,t:`${yy}년 12개월 사업운 흐름 — 밀어주는 달, 조여지는 달`,html:bizYearHtml(c,yy,cm)});}
+   const ms=yearMonths(c); const ahead=ms.filter(q=>!cm||q.m>=cm); const good=ahead.filter(q=>q.rel==='in'||q.rel==='jae'); const tough=ahead.filter(q=>q.rel==='gwan');
+   const lockedN=ahead.length-2; const span=cm?`남은 ${ahead.length}개월`:'12개월';
+   const show=cm?[cm,cm%12+1]:[1,2];
+   // 지난 달은 가려 봐야 궁금할 게 없다 — 올해면 이달부터 12월까지만 보인다
+   const rowsF=ms.filter(q=>!cm||q.m>=cm).map(q=>show.includes(q.m)
+     ?`<div class="myrow${q.m===cm?' now':''}"><span class="mym">${q.m}월${q.m===cm?'<em>이달</em>':''}</span><span class="mytag" style="background:${(BY_REL[q.rel]||BY_REL.bi)[1]}">${(BY_REL[q.rel]||BY_REL.bi)[0]}운</span><span class="myd">${BY_DESC[q.rel]}<em class="mydo">할 일 — ${BY_DO[q.rel]}</em></span></div>`
+     :`<div class="myrow lockrow"><span class="mym">${q.m}월</span><span class="mytag qtag">${QV(2)}운</span><span class="myd">결제 후 공개</span></div>`).join('');
+   out.push({mk:'曆年要',tier:'free',t:`${yy}년 한눈에 — 이달과 다음 달은 무료`,html:
+     `<div class="bizsum"><div class="bsc"><span class="bsk mv">밀어주는 달</span><span class="bsv">${good.length}개월</span></div><div class="bsc"><span class="bsk av">조여지는 달</span><span class="bsv">${tough.length}개월</span></div><div class="bsc"><span class="bsk rt">고른 달</span><span class="bsv">${ahead.length-good.length-tough.length}개월</span></div></div>`+
+     `<div class="bizyear"><div class="byhd">${yy}년 — ${span} 사업운 흐름</div>${rowsF}</div>`+
+     `<p class="bizhint">나머지 ${lockedN}개월의 흐름과 달마다 할 일·피할 일, <b>승부처</b>와 분기별 운용은 아래 <b>연간 상세</b>에서 열립니다.</p>`});
+   out.push({mk:'曆年',tier:'full',teaser:`${span} 중 밀어주는 달은 ${good.map(()=>QV(2)+'월').join(' · ')||'없음'} (${good.length}개월), 조여지는 달 <b>${tough.length}개월</b> — 달마다 할 일·피할 일과 <b>승부처 달</b>이 여기 있습니다.`,t:`${yy}년 12개월 사업운 흐름 — 밀어주는 달, 조여지는 달`,html:bizYearHtml(c,yy,cm)});}
   return out;
 }
 // [代 五決人財] 카테고리 섹션 빌더
@@ -958,7 +1003,17 @@ function secDaeun(x:any):any[]{
     out.push({mk:'法',tier:'full',teaser:`<b>${names.legal||'법인'}</b> 설립일 사주로 본 회사의 그릇과 대표님의 궁합 — 지금 회사가 대표님을 받치는지 누르는지가 여기서 드러납니다.`,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
       `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});
     if(daeunMeta&&daeunMeta.foundYear){const d=daeun(legalChart,daeunMeta.foundYear,daeunMeta.curYear);
-      out.push({mk:'運',tier:'full',teaser:`<b>${names.legal||'회사'}</b>${josa(names.legal||'회사', '는')} 지금 대운의 어느 길목에 있는지, 다음 10년 확장·정비의 때가 언제인지가 가려져 있습니다.`,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal,daeunMeta.curYear)});}}
+      const curB=d.list[d.curBlock]; const relc=relation(d.me,curB.el);
+      const nextUp=d.list.find((b:any,i:number)=>i>d.curBlock&&['in','jae'].includes(relation(d.me,b.el)));
+      const yrs=Array.from({length:8},(_,i)=>relation(d.me,seunYear(daeunMeta.curYear+i).el));
+      const upN=yrs.filter(r=>r==='in'||r==='jae').length, dnN=yrs.filter(r=>r==='gwan').length;
+      const sy0=seunYear(daeunMeta.curYear); const r0=relation(d.me,sy0.el);
+      out.unshift({mk:'今',tier:'free',t:`${names.legal||'회사'}${josa(names.legal||'회사','는')} 지금 ${curB.from}~${curB.to}년차 구간`,html:P([
+        `설립 <b>${d.age}년차</b> — 지금은 <b>${GAN[curB.gan]}${ZHI[curB.zhi]}</b> 대운입니다. ${DAEUN_REL[relc]}.`,
+        `<b>${daeunMeta.curYear}년</b>은 <b>${SEUN_REL[r0][0]}</b>입니다. ${SEUN_REL[r0][1]}.`,
+        `앞으로 8년 중 회사를 밀어주는 해가 <b>${upN}번</b>, 조이는 해가 <b>${dnN}번</b> 있습니다.`+(nextUp?` 다음에 밀어주는 대운은 설립 ${QV(2)}년차부터입니다.`:''),
+        `그 해가 언제인지, 그리고 이 회사가 대표님을 받치는지 누르는지는 아래에서 열립니다.`])});
+      out.push({mk:'運',tier:'full',teaser:`앞으로 8년 중 밀어주는 해 <b>${upN}번</b> — ${yrs.map((r,i)=>(r==='in'||r==='jae')?QV(4)+'년':'').filter(Boolean).slice(0,3).join(' · ')} 그 해가 언제인지와 다음 10년 확장·정비의 때가 여기 있습니다.`,t:`${names.legal||'회사'}의 대운 — 지금은 ${d.list[d.curBlock].from}~${d.list[d.curBlock].to}년차`,html:daeunSectionHtml(d,names.legal,daeunMeta.curYear)});}}
   return out;
 }
 // [宮 발주처] 카테고리 섹션 빌더
@@ -976,16 +1031,18 @@ function secGunghap(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn,baljuPremium}=x;
   const out:any[]=[];
   if(partnerChart){const cm=compatWith(c,partnerChart,DONGUP,'대표님','동업 상대',seunSelf);
-    out.push({mk:'同',tier:'full',teaser:`<b>${names.partner||'상대 대표'}</b>와의 동업 궁합 — 지분·역할·최종 결정권을 어떻게 나눠야 깨지지 않는지가 가려져 있습니다.`,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대','partner','깨지지 않게 나누는 3계')});}
+    out.push({mk:'同點',tier:'free',t:`${names.partner||'상대 대표'}${josa(names.partner||'상대 대표','과')}의 동업 궁합 — ${cm.score2}점 ${cm.grade}`,html:compatFreeHtml(cm,c,names.partner||'동업 상대','동업')});
+    out.push({mk:'同',tier:'full',teaser:`장기 동업 적합도 ${QV(2)} · 역할은 대표님 ${QV(4)} × 상대 ${QV(4)} — 스트레스가 터지는 지점과 깨지지 않게 나누는 3계가 여기 있습니다.`,t:`동업 · ${names.partner||'상대 대표'} — ${cm.t}`,html:compatBlock(cm,c,names.partner||'동업 상대','partner','깨지지 않게 나누는 3계')});}
   if(allyChart){const cm=compatWith(c,allyChart,HYEOPJEONG,'우리 법인','상대 회사',seunSelf);
-    out.push({mk:'協',tier:'full',teaser:`<b>${names.ally||'상대 회사'}</b>와의 협정(공동도급) 궁합 — 주관사·지분·관재수까지, 계약 전 반드시 짚을 점이 여기 있습니다.`,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사','ally','계약 전 반드시 짚을 3계')});}
+    out.push({mk:'協點',tier:'free',t:`${names.ally||'상대 회사'}${josa(names.ally||'상대 회사','과')}의 협정 궁합 — ${cm.score2}점 ${cm.grade}`,html:compatFreeHtml(cm,c,names.ally||'상대 회사','협정')});
+    out.push({mk:'協',tier:'full',teaser:`회사 역할은 우리 ${QV(4)} × 상대 ${QV(4)}, 장기 협정 적합도 ${QV(2)} — 주관사·지분·계약 전 반드시 짚을 3계가 여기 있습니다.`,t:`협정 · ${names.ally||'상대 회사'} — ${cm.t}`,html:compatBlock(cm,c,names.ally||'상대 회사','ally','계약 전 반드시 짚을 3계')});}
   return out;
 }
 // [代 方士] 카테고리 섹션 빌더
 function secDaepyoPlace(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn,baljuPremium}=x;
   const out:any[]=[];
-  out.push({mk:'方',tier:'full',teaser:`대표님께 기운을 돋우는 방면과 피해야 할 방면 — 현장·발주처·사무실 택지의 기준이 가려져 있습니다.`,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
+  out.push({mk:'方',tier:'full',teaser:`대표님께 기운을 돋우는 방면은 ${QV(2)}쪽, 행운 숫자 ${QV(3)}, 색 ${QV(4)} — 현장·발주처·사무실을 고르는 기준이 여기 있습니다.`,t:`${DIR_EL[weak]} 방면이 대표님의 부족한 기운을 채웁니다`,html:P([
     `대표님께는 <b>${PLACE_EL[weak]}</b> 방면이 기운을 돋웁니다.`,
     `사주에 <b>${EL[weak]}</b>${josa(EL[weak], '가')} ${zero?'비어':'옅어'}, 그 기운이 채워지는 <b>${DIR_EL[weak]}</b> 현장·발주처가 유리합니다.`,
     `${DIR_X[weak]}`,
@@ -1047,8 +1104,10 @@ export function reportHeroFor(cat:string|undefined, ctx:any):Hero{
   if(cat==='calendar'||cat==='calendar_year'){
     const y=nowYMD?.y, m=nowYMD?.m;
     if(cat==='calendar_year'){
-      return {score:0,big:'12',unit:'개월',label:'올해 사업운 흐름',
-        headline:'올 한 해, <b>밀어주는 달</b>에 큰 판을 거십시오',
+      // 올해를 9월에 보면 남은 달은 4개월이다 — '12개월'이라고 크게 쓰면 받는 것과 말이 어긋난다
+      const yy=ctx.selYear||y; const left=(nowYMD&&yy===y)?13-(m||1):12;
+      return {score:0,big:String(left),unit:'개월',label:left<12?`남은 ${yy}년 사업운 흐름`:`${yy}년 사업운 흐름`,
+        headline:left<12?`남은 ${yy}년, <b>밀어주는 달</b>에 큰 판을 거십시오`:'올 한 해, <b>밀어주는 달</b>에 큰 판을 거십시오',
         sub:'밀어주는 달·조여지는 달을 미리 가릅니다',up:true};
     }
     let good=0,care=0;

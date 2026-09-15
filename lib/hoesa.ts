@@ -80,6 +80,33 @@ export function companyDaeun(ch: CompanyChart, curYear: number): CompanyDaeun {
   return { age, curBlock, forward, list, rel, phase: PHASE_OF[rel] ?? 'hold' };
 }
 
+/** 대운 여덟 구간 각각이 확장·수확·수성 중 무엇인지 — 무료 화면의 10년 구간표 */
+export function blockPhases(ch: CompanyChart, d: CompanyDaeun): Phase[] {
+  return d.list.map(b => PHASE_OF[relation(ch.dayMasterEl, b.el)] ?? 'hold');
+}
+
+/** 앞으로 n년 세운 — 밀어주는 해(도움·결실)와 조이는 해(시련) 개수. 해가 언제인지는 유료(회사 대운)에서 연다. */
+export function yearsAhead(ch: CompanyChart, fromYear: number, n = 8) {
+  const list = Array.from({ length: n }, (_, i) => ({ year: fromYear + i, rel: relation(ch.dayMasterEl, yearGanji(fromYear + i).el) }));
+  return { list, up: list.filter(x => x.rel === 'in' || x.rel === 'jae').length, down: list.filter(x => x.rel === 'gwan').length };
+}
+
+/** 회사 오행이 두터운 쪽·빈 쪽이 일에서 무엇으로 나타나는가 */
+export const CO_STRONG = [
+  '새 사업을 벌이고 판을 넓히는 힘이 셉니다 — 대신 벌인 일을 끝맺는 관리가 약해지기 쉽습니다.',
+  '영업·대외 관계로 판을 키우는 힘이 셉니다 — 대신 기복이 크고 지출이 빠르게 붙습니다.',
+  '버티고 신용을 쌓는 힘이 셉니다 — 대신 변화가 느려 새 시장 진입이 늦어지기 쉽습니다.',
+  '원칙·품질·결단이 강한 회사입니다 — 대신 경직돼 사람과 거래처가 등을 돌리기 쉽습니다.',
+  '정보를 읽고 흐름을 타는 힘이 셉니다 — 대신 결정이 늦고 실행이 흩어지기 쉽습니다.',
+];
+export const CO_WEAK = [
+  '새 판을 여는 힘이 비어, 기존 발주처에 매이기 쉽습니다. 신사업은 사람을 따로 세워 맡기십시오.',
+  '알리고 사람을 끄는 힘이 비어, 실력에 비해 덜 알려집니다. 영업·홍보를 구조로 만드십시오.',
+  '버티는 힘이 비어, 자금 흐름이 흔들리면 크게 출렁입니다. 유보금·현금 규칙을 먼저 정하십시오.',
+  '끊고 정리하는 힘이 비어, 손해 보는 거래를 오래 끌기 쉽습니다. 손절 기준을 문서로 두십시오.',
+  '멀리 보는 힘이 비어, 눈앞 수주에 끌려다니기 쉽습니다. 1년 단위 계획표를 따로 두십시오.',
+];
+
 export const PHASE_LABEL: Record<Phase, string> = { expand: '확장 구간', harvest: '수확 구간', hold: '수성 구간' };
 export const PHASE_HINT: Record<Phase, string> = {
   expand: '사람과 자금을 태워 벌일 때입니다.',

@@ -51,7 +51,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   },
   gunghap: {
     name: '협정·궁합 사주', hanja: '合', oh: 'hwa',
-    mks: ['同', '協'],
+    mks: ['同點', '同', '協點', '協'],
     price: 19900, needs: ['partner', 'ally'],
     kicker: '同業 · 協定 宮合', lead: '손잡기 전에, 깨질 궁합인지부터 — 대표×대표, 회사×회사.',
     gives: [
@@ -62,7 +62,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   },
   daeun: {
     name: '회사 대운', hanja: '運', oh: 'to',
-    mks: ['法', '運'],
+    mks: ['今', '法', '運'],
     price: 29000, needs: ['legal'],
     kicker: '會社 大運', lead: '회사가 대표님을 밀어주는가 — 법인의 그릇과 년도별 큰 흐름.',
     gives: [
@@ -95,7 +95,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   },
   calendar_year: {
     name: '사업운 캘린더 · 연간', hanja: '曆', oh: 'hwa',
-    mks: ['曆年'],
+    mks: ['曆年要', '曆年'],
     price: 29000, needs: [],
     kicker: '事業運 年曆', lead: '올 한 해 12개월 — 밀어주는 달과 조여지는 달을 미리 갈라, 큰 계약·발표·정비의 때를 한눈에 잡아 드립니다.',
     gives: [

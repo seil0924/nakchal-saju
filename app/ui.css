@@ -368,3 +368,25 @@ html body .bokpage .bokwrap{padding:28px 24px 40px!important}
    krds 의 :is(.cta, .sheet .sumbtns button.ok …) 는 :is 가 가장 센 인자(0,3,1)의 명시도를 가져가 (0,3,3) 이다 — 그보다 세게 쓴다 */
 html body .app a.cta.cta2.no-print{background:#fff!important;border:1.5px solid var(--u-blue)!important;color:var(--u-blue-ink)!important}
 html body .app a.cta.cta2.no-print small{color:var(--u-sub)!important}
+
+/* ═════════ 무료→유료 구조 (2026-09-15, 사주 사이트 15곳 조사) ═════════ */
+/* 가려진 값 — 결제 후 같은 장에 실제로 나오는 값의 자리 */
+html body .qv{display:inline-block;min-width:1.7em;padding:0 5px;margin:0 1px;border-radius:5px;background:var(--u-blue-soft);color:var(--u-blue-ink)!important;font-weight:800;letter-spacing:.04em;text-align:center;line-height:1.5}
+/* 연간 캘린더 */
+html body .myrow .myd em{display:block;font-style:normal;font-size:13px;color:var(--u-sub);margin-top:2px}
+html body .myrow .myd em.mydont{color:var(--u-mute)}
+html body .myrow.lockrow .myd{color:var(--u-mute)}
+html body .myrow .mytag.qtag{background:none!important;padding:0!important;color:var(--u-mute)!important}
+/* 결제창: 예시 먼저 보기 */
+html body .catsample{display:block;margin:10px 0 8px;font-size:13px;font-weight:700;color:var(--u-blue-ink);text-decoration:none}
+/* 회사 사주 10년 구간표 */
+.hsblocks{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.hsblocks .hb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px;border-radius:10px;background:var(--u-soft);text-align:center}
+.hsblocks .hb .yr{font-size:13px;color:var(--u-mute)}
+.hsblocks .hb b{font-size:15px;color:var(--u-ink)}
+.hsblocks .hb .gz{font-size:13px;color:var(--u-sub)}
+.hsblocks .hb.expand b{color:var(--u-blue-ink)}
+.hsblocks .hb.cur{background:#fff;box-shadow:inset 0 0 0 1.5px var(--u-blue)}
+.hsread{list-style:none;margin:12px 0 0;padding:12px 0 0;border-top:1px solid var(--u-line);display:flex;flex-direction:column;gap:8px}
+.hsread li{font-size:15px;line-height:1.65;color:var(--u-ink)}
+.hsq{display:block;margin-top:10px;font-size:15px;color:var(--u-ink)}

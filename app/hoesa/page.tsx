@@ -1,3 +1,4 @@
+import React from 'react';
 // app/hoesa — 회사(법인) 사주 한 장.
 //
 // **왜 이 화면인가.** 개인 사주 앱은 법인이라는 개념이 없어 이 계산을 하지 않고,
@@ -16,7 +17,7 @@ import { bizFooterLine } from '@/lib/bizinfo';
 import SiteTop from '@/app/_components/SiteTop';
 import { josa } from '@/lib/josa';
 import {
-  companyChart, companyDaeun, companySeun, elBalance,
+  companyChart, companyDaeun, companySeun, elBalance, blockPhases, yearsAhead, CO_STRONG, CO_WEAK,
   PHASE_LABEL, PHASE_HINT, DAEUN_LINE, elName, elHex, ganjaOf, eunNeun,
 } from '@/lib/hoesa';
 import './hoesa.css';
@@ -119,6 +120,8 @@ function Result({ ch, label, curYear, raw, name }: {
   const s = companySeun(ch, curYear);
   const b = elBalance(ch);
   const cur = d.list[d.curBlock];
+  const phases = blockPhases(ch, d);
+  const ahead = yearsAhead(ch, curYear);
   const share = `${BASE}/hoesa?d=${encodeURIComponent(raw)}${name ? `&n=${encodeURIComponent(name)}` : ''}`;
 
   return (
@@ -155,6 +158,20 @@ function Result({ ch, label, curYear, raw, name }: {
       </div>
 
       <div className="card">
+        <div className="st"><span className="b" />{label}의 10년 구간표</div>
+        <div className="hsblocks">
+          {d.list.map((bl, i) => (
+            <div key={i} className={'hb ' + phases[i] + (bl.cur ? ' cur' : '')}>
+              <span className="yr">{bl.from}~{bl.to}년차</span>
+              <b>{PHASE_LABEL[phases[i]].replace(' 구간', '')}</b>
+              <span className="gz">{ganjaOf(bl.gan, bl.zhi)}</span>
+            </div>
+          ))}
+        </div>
+        <p className="note">확장은 사람과 자금을 태울 때, 수확은 벌여 둔 것을 거둘 때, 수성은 내실을 다질 때입니다. 지금 칸이 파랗게 표시됩니다.</p>
+      </div>
+
+      <div className="card">
         <div className="st"><span className="b" />{curYear}년 {s.hanja} — 올해의 흐름</div>
         <div className="hsseun">
           <span className="tag">{s.tag}</span>
@@ -177,6 +194,10 @@ function Result({ ch, label, curYear, raw, name }: {
             ? <>여섯 글자가 <b>{b.strongs.map(elName).join('·')}</b>{josa(elName(b.strongs[b.strongs.length - 1]), '으로')} 쏠리고 <b>{b.weaks.map(elName).join('·')}</b> 자리가 비었습니다. 비어 있는 쪽이 이 회사가 반복해서 걸리는 지점입니다.</>
             : <><b>{b.strongs.map(elName).join('·')}</b>{josa(elName(b.strongs[b.strongs.length - 1]), '이')} 두텁고 <b>{b.weaks.map(elName).join('·')}</b>{josa(elName(b.weaks[b.weaks.length - 1]), '이')} 옅습니다. 옅은 쪽을 사람이나 시스템으로 채우면 균형이 섭니다.</>}
         </p>
+        <ul className="hsread">
+          {b.strongs.map(i => <li key={'s' + i}><b>{elName(i)} 두터움</b> — {CO_STRONG[i]}</li>)}
+          {b.weaks.slice(0, 2).map(i => <li key={'w' + i}><b>{elName(i)} {b.zero ? '빔' : '옅음'}</b> — {CO_WEAK[i]}</li>)}
+        </ul>
       </div>
 
       <div className="card">
@@ -186,6 +207,7 @@ function Result({ ch, label, curYear, raw, name }: {
             회사가 어떤 결인지는 위에서 다 보셨습니다. 남은 질문은 하나입니다 —
             <b> 이 회사가 대표님을 밀어주는가, 아니면 계속 빼가는가.</b><br />
             그리고 <b>다음 10년</b>의 확장·정비 구간이 언제 오는지도 함께 봅니다.
+            <span className="hsq">앞으로 8년 중 회사를 밀어주는 해 <b>{ahead.up}번</b> — {ahead.list.filter(x => x.rel === 'in' || x.rel === 'jae').slice(0, 3).map((x, i) => <b key={i} className="qv">????</b>).reduce<React.ReactNode[]>((acc, el, i) => (i ? [...acc, ' · ', el] : [el]), [])}년 · 조이는 해 <b>{ahead.down}번</b></span>
           </div>
           <div className="hsex">
             <Link href="/reading?cat=daeun">회사 대운 · 대표 궁합 보기 →</Link>
