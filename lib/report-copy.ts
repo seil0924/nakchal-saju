@@ -315,8 +315,133 @@ function compatWith(meChart,otherChart,table,A,S,seun?){
  const base=compatScore(rel,otherChart,0);
  return {rel,grade:c.grade,score:c.score,gc:c.gc,letter:c.g,t:fill(c.t),
    base,score2:compatScore(rel,otherChart,boost),seun:seun||null,
-   pills:pil(otherChart.dGan,otherChart.dZhi),oel:GAN_ELc[otherChart.dGan],paras:c.p.map(fill)};
+   pills:pil(otherChart.dGan,otherChart.dZhi),oel:GAN_ELc[otherChart.dGan],paras:c.p.map(fill),
+   odist:otherChart.dist,oGan:otherChart.dGan,oZhi:otherChart.dZhi};
 }
+// ── 궁합 심화 (유료) ─────────────────────────────
+// 모든 값은 두 명식에서 계산한다: 오행 분포 비교, 앞으로 3년 세운이 궁합을 미는 정도, 앞으로 6개월 월운.
+const TILT_RC:Record<string,number>={in:2,bi:1,jae:1,sik:-1,gwan:-2};
+const EL_WORK=['새 판을 여는 개척','사람을 끄는 영업·대외','살림을 지키는 재무·운영','끊고 맺는 결단·관리','멀리 보는 전략·기획'];
+const DG_CHECK:Record<string,string[]>={
+ in:['주도권은 대표님이 쥐되, 상대의 조언을 먼저 듣는 절차를 계약서에 적어 두십시오.','자금은 공동 통장 하나로 모으고, 인출은 두 사람 서명으로만 하게 하십시오.','상대가 받쳐주는 구조라 지분을 너무 적게 주면 서운함이 쌓입니다 — 기여를 숫자로 정해 반영하십시오.','이익 배분 시점(분기·반기)을 미리 정해, "언제 나누나"로 다투지 않게 하십시오.','한쪽이 빠질 때의 지분 정산 방식(평가 기준·지급 기한)을 처음부터 넣으십시오.'],
+ jae:['대표님이 이끄는 구조이니 최종 결정권 조항을 분명히 두되, 상대의 실무 권한도 함께 적으십시오.','상대를 직원처럼 대하면 금이 갑니다 — 호칭·보고 체계부터 동업자답게 정하십시오.','이익이 날수록 배분 다툼이 커지니, 배분 비율과 재투자 비율을 먼저 문서로 두십시오.','자금 집행 한도(얼마까지 혼자 결정)를 금액으로 정해 두십시오.','상대의 이탈에 대비해 핵심 거래처·기술의 귀속을 계약서에 적으십시오.'],
+ bi:['지분 50:50 은 피하십시오 — 교착이 났을 때 풀 사람이 없습니다. 51:49 든 결정권이든 한쪽을 세우십시오.','영역을 겹치지 않게 나누십시오(안/밖, 영업/운영). 같은 일을 둘이 결정하면 사사건건 부딪힙니다.','의견이 갈릴 때의 규칙(누가 최종, 외부 자문 누구)을 미리 정하십시오.','개인 자금을 섞지 말고, 각자 쓴 돈은 그달에 정산하십시오.','경쟁 사업 금지 조항과 이탈 시 지분 정산 방식을 넣으십시오.'],
+ sik:['대표님이 더 쏟는 구조입니다 — 기여(자금·시간·영업)를 숫자로 기록해 지분·배분에 반영하십시오.','"알아서 해주겠지"를 버리고, 상대가 맡을 일과 기한을 계약서에 적으십시오.','초기 투자금 회수 순서(누가 먼저 돌려받나)를 정해 두십시오.','대표님 개인 보증을 무리하게 서지 마십시오.','성과가 안 날 때 관계를 정리하는 조건(기간·지표)을 미리 합의하십시오.'],
+ gwan:['상대가 판을 쥐기 쉬운 구조입니다 — 대표님의 거부권(주요 사안)을 계약서에 넣으십시오.','결정 과정을 기록으로 남기십시오. 말로 한 약속은 이 궁합에서 가장 먼저 흔들립니다.','지분이 적더라도 정보 접근권(통장·장부 열람)은 동등하게 확보하십시오.','상대의 기준에 맞춰 무리하게 확장하지 말고, 대표님의 하한선을 숫자로 두십시오.','관계를 끝낼 때의 조건과 비용을 처음부터 합의하십시오.']};
+const HJ_CHECK:Record<string,string[]>={
+ in:['상대 회사가 끌어주는 결합이니 주관사는 상대에 두고, 우리 역할(공종·인력)을 분명히 받으십시오.','분담 비율은 실적 인정 범위와 함께 정하십시오 — 다음 입찰의 실적이 걸려 있습니다.','기성금 지급 흐름(주관사 경유 여부·기한)을 협정서에 적으십시오.','하자·지체 책임을 공종별로 나누어 두십시오.','이번 한 건 뒤 다음 건도 함께할지, 우선 협상 조건을 두는 것을 검토하십시오.'],
+ jae:['우리가 이끌 수 있는 결합입니다 — 주관사를 맡되 상대의 몫과 권한을 문서로 보장하십시오.','지분율을 우리 쪽으로 무리하게 당기면 현장에서 협조가 끊깁니다. 실제 투입에 맞추십시오.','정산 주기와 증빙 방식을 먼저 정하십시오.','공동 명의 계좌와 집행 승인 절차를 두십시오.','상대의 인력·장비 투입 약속을 일정표로 받아 두십시오.'],
+ bi:['체급이 비슷해 주관사를 다투기 쉽습니다 — 입찰 전에 주관사와 지분을 확정하고 들어가십시오.','공종을 겹치지 않게 나누십시오. 같은 공종을 함께 맡으면 책임이 흐려집니다.','의사결정이 막힐 때의 규칙(누가 최종 결정)을 협정서에 넣으십시오.','비용 분담 기준(공통비·간접비)을 숫자로 정하십시오.','탈퇴·대체 조건을 미리 합의하십시오.'],
+ sik:['우리가 기술·인력을 더 대는 결합입니다 — 투입량을 기록해 지분·정산에 반영하십시오.','우리 기술·도면·노하우의 사용 범위를 이번 건으로 한정하십시오.','기성금이 우리에게 늦게 오지 않게 지급 순서를 정하십시오.','상대의 하자 책임이 우리에게 넘어오지 않게 공종별 책임을 나누십시오.','손실이 날 때의 분담 비율을 먼저 정하십시오.'],
+ gwan:['상대 규모에 눌리기 쉬운 결합입니다 — 우리 몫의 최소 지분과 역할을 입찰 전에 확정하십시오.','주관사의 일방적 결정에 대비해 주요 사안 합의 조항을 넣으십시오.','정산·기성 정보 열람권을 확보하십시오.','과도한 연대 책임을 떠안지 않게 범위를 적으십시오.','이 건의 조건이 다음 건의 기준이 되니, 불리한 조항은 이번에 바로잡으십시오.']};
+const REL_SIGN:Record<string,[string[],string]>={
+ in:[['상대의 조언이 어느새 지시처럼 들리기 시작할 때','대표님이 결정을 상대에게 미루고 뒤로 물러설 때','상대의 공을 대표님의 공처럼 말할 때'],'고마움을 말로 하고, 결정은 대표님이 다시 쥐십시오. 받쳐주는 사람이 서운하면 이 궁합의 장점이 사라집니다.'],
+ jae:[['상대가 회의에서 말수가 줄어들 때','"그건 대표님이 알아서 하시죠"라는 말이 나올 때','이익 배분 이야기가 뒤로 밀릴 때'],'상대의 몫을 먼저 챙기고, 실무 결정은 상대에게 돌려주십시오. 쥐고 있는 쪽이 먼저 내려놓아야 풀립니다.'],
+ bi:[['같은 사안을 서로 다르게 지시할 때','직원들이 누구 말을 들어야 할지 묻기 시작할 때','상대의 실수를 공개적으로 지적하고 싶어질 때'],'영역을 다시 나누고, 겹치는 결정은 정해 둔 규칙대로 한 사람이 내리십시오. 둘 다 옳을 때 가장 크게 부딪힙니다.'],
+ sik:[['대표님만 야근하고 있다는 생각이 들 때','상대에게 부탁하기 전에 이미 포기하게 될 때','지출이 늘어나는데 성과 이야기가 없을 때'],'혼자 짊어지지 말고 기여를 숫자로 꺼내 이야기하십시오. 베푸는 쪽이 지치면 관계가 한 번에 끊깁니다.'],
+ gwan:[['상대의 기준에 맞추느라 대표님의 원칙이 흔들릴 때','중요한 결정을 사후에 통보받을 때','말한 약속과 문서가 달라질 때'],'정면으로 맞서기보다 기록과 조항으로 대응하십시오. 눌리는 궁합일수록 문서가 대표님을 지킵니다.']};
+function partnerDeepHtml(c:any, cm:any, otherLabel:string, company:boolean){
+  const me=c.dayMasterEl, od:number[]=cm.odist||[0,0,0,0,0], md:number[]=c.dist;
+  const who=company?'우리 법인':'대표님';
+  // 1) 오행 나란히 — 보완·과열·공백
+  const rows=EL.map((e,i)=>`<div class="axrow"><div class="axmid"><div class="axlb">${e}<span>${EL_WORK[i]}</span></div></div><div class="axsc">${md[i]}<em> : ${od[i]}</em></div></div>`).join('');
+  const give:string[]=[], take:string[]=[], hot:string[]=[], hole:string[]=[];
+  EL.forEach((e,i)=>{
+    if(md[i]<=0&&od[i]>=2) take.push(`<b>${e}</b>(${EL_WORK[i]})`);
+    if(od[i]<=0&&md[i]>=2) give.push(`<b>${e}</b>(${EL_WORK[i]})`);
+    if(md[i]>=2&&od[i]>=2) hot.push(`<b>${e}</b>`);
+    if(md[i]<=0&&od[i]<=0) hole.push(`<b>${e}</b>(${EL_WORK[i]})`);
+  });
+  const P=(a:string[])=>a.map(x=>`<p>${x}</p>`).join('');
+  const lines:string[]=[];
+  if(take.length) lines.push(`${who}에게 비어 있는 ${take.join('·')}${josa(take.join('·'), '을')} ${otherLabel}${josa(otherLabel, '이')} 채웁니다 — 이 일은 ${otherLabel}에게 맡기는 편이 서로 편합니다.`);
+  if(give.length) lines.push(`${otherLabel}에게 비어 있는 ${give.join('·')}${josa(give.join('·'), '은')} ${who}${josa(who, '이')} 채웁니다 — 이 영역의 결정은 ${who} 쪽이 쥐는 것이 맞습니다.`);
+  if(hot.length) lines.push(`둘 다 ${hot.join('·')} 기운이 두텁습니다. 같은 힘끼리는 밀어줄 땐 크게 밀지만, 부딪히면 둘 다 물러서지 않습니다 — 이 영역은 한 사람만 결정하게 하십시오.`);
+  if(hole.length) lines.push(`둘 다 ${hole.join('·')}${josa(hole.join('·'), '이')} 비어 있습니다. 둘이 함께 놓치는 자리이니 외부 자문이나 전담 인력으로 채우십시오.`);
+  if(!lines.length) lines.push('두 명식의 오행이 크게 겹치지도 비지도 않는 고른 조합입니다. 역할만 분명히 나누면 무난하게 굴러갑니다.');
+  const sec1=`<div class="bzsec"><div class="bzsh">◆ 두 명식의 오행 — ${who} : ${otherLabel}</div><div class="axiscard">${rows}</div></div>`+P(lines);
+
+  // 2) 앞으로 3년, 이 궁합의 흐름 (대표님 쪽 세운이 궁합을 미는 정도)
+  const Y=(cm.seun&&cm.seun.year)||new Date().getFullYear();
+  const yr=[0,1,2].map(k=>{const y=Y+k;const sy=seunYear(y);const rel=relation(me,sy.el);const tilt=TILT_RC[rel]??0;
+    const sc=compatScore(cm.rel,{dGan:cm.oGan,dZhi:cm.oZhi},Math.round(tilt*2));
+    const tone=tilt>=2?'밀어주는 해 — 새 공동 사업·역할 재조정·지분 논의를 이 해에 여십시오':tilt===1?'힘이 붙는 해 — 넓히되 정해 둔 역할과 규칙 안에서 움직이십시오':tilt<0?'조이는 해 — 새 약속을 늘리기보다 맺은 계약을 점검하고 갈등을 미리 푸십시오':'평이한 해 — 정해 둔 규칙대로 굴리며 신뢰를 쌓으십시오';
+    return `<div class="syrow${k===0?' now':''}"><span class="syy">${y}<em>${k===0?'올해':'+'+k}</em></span><span class="syg">${sc}점</span><span class="syd"><b class="syd1">${tone}</b></span></div>`;}).join('');
+  const sec2=`<div class="bzsec"><div class="bzsh">◆ 앞으로 3년, 이 궁합의 흐름</div><div class="seun">${yr}</div></div>`+
+    `<p>바탕 궁합 <b>${cm.base}점</b>에 그해 ${who}의 세운이 더해진 점수입니다. 점수가 오르는 해에 판을 넓히고, 내려가는 해엔 계약과 역할을 점검하는 해로 쓰십시오.</p>`;
+
+  // 3) 계약 전 체크리스트
+  const list=(company?HJ_CHECK:DG_CHECK)[cm.rel]||DG_CHECK.bi;
+  const sec3=`<div class="suchik"><div class="sut">${company?'협정서에 반드시 넣을 5가지':'동업 계약서에 반드시 넣을 5가지'}</div>`+
+    list.map((t,i)=>`<div class="surow"><span class="sun">${i+1}</span><span class="sux">${t}</span></div>`).join('')+`</div>`;
+
+  // 4) 관계가 상하는 신호와 회복법
+  const sg=REL_SIGN[cm.rel]||REL_SIGN.bi;
+  const sec4=`<div class="crisis"><div class="crhd">⚠ 이 관계가 상하기 시작하는 신호</div><p>${sg[0].map(x=>'· '+x).join('<br>')}</p></div><p>${sg[1]}</p>`;
+
+  // 5) 계약서 쓰기 좋은 달 — 앞으로 6개월, 두 명식의 월운이 함께 받쳐주는 달
+  const now=new Date(); const cy=now.getFullYear(), cmo=now.getMonth()+1;
+  const RK:Record<string,number>={in:3,jae:2,bi:1,sik:0,gwan:-3};
+  const ms=Array.from({length:6},(_,k)=>{const mm=((cmo-1+k)%12)+1, yy=cy+Math.floor((cmo-1+k)/12);const el=MONTH_EL[mm-1];
+    const a=relation(me,el), b=relation(cm.oel,el); return {mm,yy,a,b,sc:(RK[a]??0)+(RK[b]??0)};});
+  const good=[...ms].filter(x=>x.a!=='gwan'&&x.b!=='gwan').sort((p,q)=>q.sc-p.sc).slice(0,2).sort((p,q)=>(p.yy*12+p.mm)-(q.yy*12+q.mm));
+  const bad=ms.filter(x=>x.a==='gwan'||x.b==='gwan');
+  const sec5=`<div class="bzsec"><div class="bzsh">◆ 계약서 쓰기 좋은 달 — 앞으로 6개월</div>`+
+    (good.length?good.map((x,i)=>`<div class="bztop"><span class="bztn">${i+1}</span><div class="bztbd"><b>${x.yy!==cy?x.yy+'년 ':''}${x.mm}월</b><em>두 명식이 함께 받쳐주는 달 — 서명·지분 확정·공동 발표를 이 달에</em></div></div>`).join(''):'<p>앞으로 6개월 안에는 두 사람이 함께 받쳐주는 달이 뚜렷하지 않습니다. 서두르지 말고 조건부터 다듬으십시오.</p>')+
+    (bad.length?`<p class="cwarn">한쪽이 눌리는 달: <b>${bad.map(x=>x.mm+'월').join('·')}</b> — 이 달의 서명은 한 번 더 확인하고 넘기십시오.</p>`:'')+`</div>`;
+  return sec1+sec2+sec3+sec4+sec5;
+}
+
+// ── 회사 대운 심화 (유료) ─────────────────────────
+const LEG_ROLE:Record<string,string[]>={
+ in:['회사가 대표님을 받치는 구조이니, 대표님은 방향과 대외 관계에 힘을 쓰고 실무는 조직에 맡기십시오.','회사의 신용·실적을 대표님 개인 보증보다 앞세워 쓰십시오 — 이 구조에선 법인이 방패가 됩니다.','받쳐주는 회사에 안주하면 대표님의 추진력이 무뎌집니다. 해마다 새 시장 하나는 대표님이 직접 여십시오.'],
+ bi:['회사와 대표님이 같은 결이라 방향은 빠르나 빈 곳도 같습니다. 대표님과 다른 기질의 2인자를 두십시오.','같은 기운끼리 과열되기 쉬우니, 확장 결정은 숫자 기준(수주 잔고·현금)을 통과할 때만 하십시오.','대표님의 부족한 기운을 회사도 갖지 못했으니, 그 영역은 외주·자문으로 채우십시오.'],
+ jae:['대표님이 회사를 확실히 쥐는 구조입니다. 결정은 빠르게 하되, 결정의 근거를 기록으로 남기십시오.','쥐는 힘이 강한 만큼 직원이 수동적이 되기 쉽습니다. 권한을 금액 단위로 나눠 위임하십시오.','회사에서 나오는 결실을 대표님 개인이 먼저 가져가지 말고, 유보와 재투자 비율부터 정하십시오.'],
+ sik:['대표님이 회사에 쏟아붓는 헌신형 구조입니다. 대표님이 없어도 돌아가는 일부터 목록으로 만드십시오.','소모가 큰 구조이니 대표님의 시간·건강을 경영 지표처럼 관리하십시오.','실적은 나는데 남는 게 없다고 느끼신다면, 원가·마진 점검을 분기마다 하십시오.'],
+ gwan:['회사 일이 대표님을 누르는 구조입니다. 모든 결정을 대표님이 쥐지 말고 시스템과 사람에게 나누십시오.','규정·계약 업무에서 마찰이 잦으니 법무·세무 점검을 정기 일정으로 두십시오.','대표님 개인 자금과 법인 자금을 섞지 마십시오 — 이 구조에서 가장 먼저 탈이 나는 곳입니다.']};
+const DU_STAGE:Record<string,[string,string,string]>={
+ in:['밖에서 밀어주는 기운이 드는 초입 — 자금·수주 인연을 넓히고 신규 거래처를 여십시오','가장 크게 탈 수 있는 한가운데 — 미뤄둔 확장·투자·대형 수주를 이때 거십시오','다음 구간을 준비할 끝자락 — 벌인 일을 정리하고 조직을 다지십시오'],
+ jae:['결실이 드는 초입 — 벌여 둔 사업의 수금·정산 체계를 먼저 세우십시오','거둬들이는 한가운데 — 굵직한 계약 마무리와 유보금 확보에 힘을 쓰십시오','다음을 준비할 끝자락 — 번 것을 새 사업의 씨앗으로 나눠 두십시오'],
+ bi:['같은 기운이 겹치는 초입 — 경쟁이 붙기 시작하니 강점 한 가지를 분명히 하십시오','과열의 한가운데 — 과속 확장과 내부 분란을 조심하고 핵심 사업에 집중하십시오','다음을 준비할 끝자락 — 조직과 역할을 정비해 다음 구간의 결에 맞추십시오'],
+ sik:['힘을 밖으로 쏟는 초입 — 실적은 나오되 원가 관리 체계를 먼저 갖추십시오','소모가 큰 한가운데 — 매출보다 마진, 수주보다 현금흐름을 기준으로 삼으십시오','다음을 준비할 끝자락 — 흩어진 사업을 줄이고 남는 것에 힘을 모으십시오'],
+ gwan:['조여지기 시작하는 초입 — 신규 차입·확장을 줄이고 규정·계약 점검을 시작하십시오','가장 조이는 한가운데 — 버티는 힘이 곧 경쟁력입니다. 시스템·인력·내실을 다지십시오','풀리기 시작하는 끝자락 — 정비해 둔 기반 위에서 다음 상승을 준비하십시오']};
+function daeunDeepHtml(d:any, legalName:string, curYear:number){
+  const nm=legalName||'회사'; const found=curYear-d.age;
+  const cur=d.list[d.curBlock]; const relc=relation(d.me,cur.el);
+  const P=(a:string[])=>a.map(x=>`<p>${x}</p>`).join('');
+  // 1) 지금 대운 10년 운용 — 전반·한가운데·끝자락
+  const y0=found+cur.from, y1=found+cur.to; const inBlock=d.age-cur.from; const stageNow=inBlock<3?0:inBlock<7?1:2;
+  const st=DU_STAGE[relc]||DU_STAGE.bi;
+  const stages=[[0,2],[3,6],[7,9]].map(([a,b],i)=>`<div class="bzwk"><span class="bzwkk">${['초입','한가운데','끝자락'][i]}</span><div class="bzwkbd"><b>${y0+a}~${y0+b}년${i===stageNow?' · 지금':''}</b><em>${st[i]}</em></div></div>`).join('');
+  const sec1=`<div class="bzsec"><div class="bzsh">◆ 지금 대운 10년(${y0}~${y1}년) 운용 계획</div><div class="bzwks">${stages}</div></div>`;
+  // 2) 다음 대운으로 넘어갈 때
+  const nx=d.list[Math.min(7,d.curBlock+1)]; const reln=relation(d.me,nx.el); const ny=found+nx.from;
+  const turn=['in','jae'].includes(reln)?'밀어주는 구간으로 넘어갑니다. 전환 2년 전부터 확장에 쓸 사람과 자금을 미리 준비해 두면, 넘어가는 첫해부터 탈 수 있습니다.':reln==='gwan'?'조이는 구간으로 넘어갑니다. 전환 2년 전부터 차입을 줄이고 현금 비중을 높여, 조이는 첫해를 버틸 여유를 만들어 두십시오.':'결이 바뀌는 구간으로 넘어갑니다. 전환 2년 전부터 주력 사업과 조직을 점검해, 새 구간의 결에 맞게 무게를 옮기십시오.';
+  const sec2=`<div class="bzsec"><div class="bzsh">◆ 다음 대운 — ${ny}년부터 ${GAN[nx.gan]}${ZHI[nx.zhi]}</div></div>`+P([`${ny}년(설립 ${nx.from}년차)부터 ${nm}${josa(nm, '는')} ${turn}`, `준비를 시작할 때는 <b>${ny-2}년</b>입니다.`]);
+  // 3) 여덟 구간 해설
+  const SH:Record<string,string>={in:'밀어주는 구간',jae:'거두는 구간',bi:'경쟁·과열 구간',sik:'쏟고 소모하는 구간',gwan:'조이고 다지는 구간'};
+  const blocks=d.list.map((b:any,i:number)=>{const r=relation(d.me,b.el);const tag=i<d.curBlock?'지난':i===d.curBlock?'지금':'앞으로';
+    return `<div class="tkrow"><span class="tkdot"></span><span class="tktx"><b>${found+b.from}~${found+b.to}년 · ${GAN[b.gan]}${ZHI[b.zhi]}</b> — ${SH[r]}${i===d.curBlock?' <em>(지금)</em>':''}${tag==='지난'?'':''}</span></div>`;}).join('');
+  const sec3=`<div class="threekye"><div class="tkt">${nm}의 대운 여덟 구간</div>${blocks}</div>`;
+  // 4) 올해 남은 달, 회사 흐름
+  const nowM=new Date().getFullYear()===curYear?new Date().getMonth()+1:1;
+  const months=MONTH_EL.map((el,i)=>({m:i+1,rel:relation(d.me,el)})).filter(x=>x.m>=nowM);
+  const mrows=months.map(x=>`<div class="myrow${x.m===nowM?' now':''}"><span class="mym">${x.m}월</span><span class="mytag" style="background:${(BY_REL[x.rel]||BY_REL.bi)[1]}">${(BY_REL[x.rel]||BY_REL.bi)[0]}운</span><span class="myd">${BY_DESC[x.rel]}<em class="mydo">할 일 — ${BY_DO[x.rel]}</em></span></div>`).join('');
+  const sec4=`<div class="bizyear"><div class="byhd">${curYear}년 ${nowM>1?'남은 달':'월별'} — ${nm}의 흐름</div>${mrows}</div>`;
+  // 5) 판단 기준표 — 지금 대운 × 올해 세운
+  const sy=seunYear(curYear); const rels=relation(d.me,sy.el);
+  const V=(t:number)=>t>=2?'<b style="color:#2f56c4">권장</b>':t>=0?'<b>신중</b>':'<b style="color:#b3382c">보류</b>';
+  const T=(r:string)=>TILT_RC[r]??0; const both=T(relc)+T(rels);
+  const expand=both, borrow=both-1, hire=T(relc)>=0||T(rels)>0?Math.max(both,0):both;
+  const sec5=`<div class="suchik"><div class="sut">${curYear}년 판단 기준 — 지금 대운 × 올해 세운</div>`+
+    [['신규 수주·사업 확장',expand,'밀어주는 결이 겹치면 판을 넓히고, 한쪽이라도 조이면 핵심 사업만 키우십시오.'],
+     ['차입·설비 투자',borrow,'빚을 내는 결정은 확장보다 한 단계 보수적으로 보십시오. 조이는 해의 차입은 다음 해를 묶습니다.'],
+     ['채용·조직 개편',hire,'사람을 들이는 일은 조이는 해에도 필요할 수 있으나, 규모를 늘리기보다 핵심 자리를 채우는 쪽으로 하십시오.']]
+    .map(([k,t,why]:any,i:number)=>`<div class="surow"><span class="sun">${i+1}</span><span class="sux">${k} — ${V(t)}. ${why}</span></div>`).join('')+`</div>`+
+    `<p class="twinnote">※ 명식과 대운·세운의 상성으로 낸 참고 기준입니다. 실제 경영 판단은 재무 상황과 함께 보십시오.</p>`;
+  return sec1+sec2+sec3+sec4+sec5;
+}
+
 // 궁합 무료 장 — 점수·등급·첫 문단까지. 역할·적합도·3계는 유료 장에 있다.
 function compatFreeHtml(cm:any,c:any,otherLabel:string,kind:string){
   const meCol=EL_HEX[GAN_ELc[c.dGan]],otCol=EL_HEX[cm.oel];
@@ -325,7 +450,7 @@ function compatFreeHtml(cm:any,c:any,otherLabel:string,kind:string){
     `<div class="cvscore"><div class="n" style="color:${cm.gc}">${cm.score2}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
     `<div class="cvs"><div class="cnm">${otherLabel}</div><div class="cpl" style="background:${otCol}">${cm.pills}</div></div>`+
   `</div>`+`<p>${cm.paras[0]||''}</p>`+
-    `<p class="jinhook">이 ${kind}이 오래 가려면 무엇을 누가 맡아야 하는지 — <b>장기 적합도 ${QV(2)}</b>, <b>역할 분담 ${QV(4)}</b>, 관계가 상하는 지점은 아래에서 열립니다.</p>`;
+    `<p class="jinhook">이 ${kind}${josa(kind, '이')} 오래 가려면 무엇을 누가 맡아야 하는지 — <b>장기 적합도 ${QV(2)}</b>, <b>역할 분담 ${QV(4)}</b>, 관계가 상하는 지점은 아래에서 열립니다.</p>`;
 }
 // 궁합 히어로 — 대표↔상대 명식 나란히 + 큰 점수 (사주아이식 극화)
 function compatBlock(cm,c,otherLabel,ctx?,stepTitle?){
@@ -342,6 +467,7 @@ function compatBlock(cm,c,otherLabel,ctx?,stepTitle?){
   // 파트너(동업)·협정에는 역할 제안 + 스트레스·충돌·장기적합도까지
   if(ctx==='partner'||ctx==='ally'){
     deep+=partnerExtraHtml(c.dayMasterEl, cm.oel, cm.rel, otherLabel, ctx==='ally');
+    deep+=partnerDeepHtml(c, cm, otherLabel, ctx==='ally');
   }
   const yearLine = cm.seun ? `<div class="cyear"><span class="cyl">${cm.seun.year}년 기준</span>`+
     `<span class="cyd">바탕 ${cm.base} → 올해 <b style="color:${cm.gc}">${cm.score2}</b> `+
@@ -391,7 +517,7 @@ function legalReport(meChart,legalChart){
  const relLine=LEGREL[rel].replace(/\{LO\}/g,EL[legalChart.dayMasterEl]).replace(/\{M\}/g,EL[meChart.dayMasterEl]);
  return {pills:pil(legalChart.dGan,legalChart.dZhi),strong,weak,zero,rel,
    paras:[
-     `법인의 사주(설립일 <b>${pil(legalChart.dGan,legalChart.dZhi)}</b>, 일간 ${GAN[legalChart.dGan]})는 <b>${EL[strong]}</b> 기운이 강하고 <b>${EL[weak]}</b> 기운이 ${zero?'비어':'옅어'}, ${STRONG_MEAN[strong]}는 결의 회사입니다.`,
+     `법인의 사주(설립일 <b>${pil(legalChart.dGan,legalChart.dZhi)}</b>, 일간 ${GAN[legalChart.dGan]})는 <b>${EL[strong]}</b> 기운이 강하고 <b>${EL[weak]}</b> 기운이 ${zero?'비어':'옅어'}, ${STRONG_MEAN[strong]}${josa(STRONG_MEAN[strong], '는')} 결의 회사입니다.`,
      `설립일이 회사의 사주가 된다는 것은, 법인을 세운 그날의 하늘 기운이 회사의 타고난 성향으로 굳는다는 뜻입니다. 그래서 같은 대표라도 어느 날 세운 회사냐에 따라 커가는 결이 달라집니다.`,
      relLine,
      `그러니 대표님이 회사에서 ${rel==='gwan'?'유독 짓눌리거나 매인 느낌을 받으셨다면, 그것은 기질 탓이 아니라 이 구조 때문':rel==='sik'?'혼자 다 떠안는 느낌을 받으셨다면, 그것은 이 헌신형 구조 때문':rel==='in'?'유난히 순하게 풀린 대목이 있었다면, 법인이 대표님을 받쳐준 덕':rel==='jae'?'뜻대로 밀어붙일 수 있었다면, 대표님이 회사를 쥔 구조 덕':'힘은 나되 함께 지치는 대목이 있었다면, 같은 기운이 겹친 탓'}입니다.`,
@@ -520,7 +646,7 @@ function daeunSectionHtml(d,legalName,curYear){
     `<p style="margin-top:12px"><b>${legalName||'회사'}</b>${josa(legalName||'회사', '는')} 설립 <b>${d.age}년차</b> — 지금은 <b>${GAN[cur.gan]}${ZHI[cur.zhi]}(${EL[cur.el]})</b> 대운, ${d.forward?'순행':'역행'}${josa(d.forward?'순행':'역행', '으로')} 흐릅니다.</p>`+
     `<p>${DAEUN_REL[relc]}.</p>`+
     `<p>다음 10년(<b>${d.list[Math.min(7,d.curBlock+1)].from}년차~</b>)엔 <b>${EL[d.list[Math.min(7,d.curBlock+1)].el]}</b> 기운으로 넘어가니, 그 결에 맞춰 확장·정비의 때를 잡으십시오.</p>`+
-    (curYear?seunHtml(d,legalName,curYear):'');
+    (curYear?seunHtml(d,legalName,curYear)+daeunDeepHtml(d,legalName,curYear):'');
 }
 // 처방형 결과 (saju.ai식): 시점·주의·대안 3박자 — '맞히기'가 아니라 '의사결정 지침'
 function cheobangHtml(s:Sajeong){
@@ -1001,7 +1127,8 @@ function secDaeun(x:any):any[]{
   const out:any[]=[];
   if(legalChart){const lr=legalReport(c,legalChart);const nm=names.legal?`${names.legal} — `:'';
     out.push({mk:'法',tier:'full',teaser:`<b>${names.legal||'법인'}</b> 설립일 사주로 본 회사의 그릇과 대표님의 궁합 — 지금 회사가 대표님을 받치는지 누르는지가 여기서 드러납니다.`,t:`${nm}법인의 그릇과 대표님의 궁합`,html:
-      `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)});
+      `<div class="compat"><div class="grade" style="background:${EL_HEX[lr.strong]}">法</div><div><div class="gt">${names.legal||'법인'} 일주 ${lr.pills} · ${EL[lr.strong]} 체질</div><div class="gs">대표님 ${GAN[c.dGan]}(${EL[c.dayMasterEl]})과 ${['비겁','식상','재성','관성','인성'][['bi','sik','jae','gwan','in'].indexOf(lr.rel)]} 관계</div></div></div>`+P(lr.paras)+
+      `<div class="suchik"><div class="sut">이 구조에서 대표님이 할 일 3가지</div>`+(LEG_ROLE[lr.rel]||LEG_ROLE.bi).map((t,i)=>`<div class="surow"><span class="sun">${i+1}</span><span class="sux">${t}</span></div>`).join('')+`</div>`});
     if(daeunMeta&&daeunMeta.foundYear){const d=daeun(legalChart,daeunMeta.foundYear,daeunMeta.curYear);
       const curB=d.list[d.curBlock]; const relc=relation(d.me,curB.el);
       const nextUp=d.list.find((b:any,i:number)=>i>d.curBlock&&['in','jae'].includes(relation(d.me,b.el)));
