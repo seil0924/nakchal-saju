@@ -6,6 +6,7 @@ import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, TYPE
 import { sealSvg } from './seal';
 import { clientTip } from './clients';
 import { josa } from './josa';
+import { radarSvg, barsSvg, lineSvg, ringSvg } from './report-charts';
 
 // 인명 조사(받침 유무) 자동 보정 — '아사 캔들러을' 같은 오류 방지
 const josaEB = (w: string, withB: string, noB: string): string => { const s = (w||'').replace(/\([^)]*\)/g, '').trim(); const ch = s.charCodeAt(s.length - 1); const h = ch >= 0xac00 && ch <= 0xd7a3; return (h && (ch - 0xac00) % 28 !== 0) ? withB : noB; };
@@ -359,15 +360,18 @@ function partnerDeepHtml(c:any, cm:any, otherLabel:string, company:boolean){
   if(hot.length) lines.push(`둘 다 ${hot.join('·')} 기운이 두텁습니다. 같은 힘끼리는 밀어줄 땐 크게 밀지만, 부딪히면 둘 다 물러서지 않습니다 — 이 영역은 한 사람만 결정하게 하십시오.`);
   if(hole.length) lines.push(`둘 다 ${hole.join('·')}${josa(hole.join('·'), '이')} 비어 있습니다. 둘이 함께 놓치는 자리이니 외부 자문이나 전담 인력으로 채우십시오.`);
   if(!lines.length) lines.push('두 명식의 오행이 크게 겹치지도 비지도 않는 고른 조합입니다. 역할만 분명히 나누면 무난하게 굴러갑니다.');
-  const sec1=`<div class="bzsec"><div class="bzsh">◆ 두 명식의 오행 — ${who} : ${otherLabel}</div><div class="axiscard">${rows}</div></div>`+P(lines);
+  const radar=radarSvg(EL.map(e=>e), [{values:md,color:'#3f6be0',name:who},{values:od,color:'#d9822b',name:otherLabel}], Math.max(3,...md,...od), {labelColors:EL_HEX, title:`오행 겹쳐 보기 — ${who} : ${otherLabel}`});
+  const sec1=`<div class="bzsec"><div class="bzsh">◆ 두 명식의 오행 — ${who} : ${otherLabel}</div>${radar}<div class="axiscard">${rows}</div></div>`+P(lines);
 
   // 2) 앞으로 3년, 이 궁합의 흐름 (대표님 쪽 세운이 궁합을 미는 정도)
   const Y=(cm.seun&&cm.seun.year)||new Date().getFullYear();
-  const yr=[0,1,2].map(k=>{const y=Y+k;const sy=seunYear(y);const rel=relation(me,sy.el);const tilt=TILT_RC[rel]??0;
+  const yd=[0,1,2].map(k=>{const y=Y+k;const sy=seunYear(y);const rel=relation(me,sy.el);const tilt=TILT_RC[rel]??0;
     const sc=compatScore(cm.rel,{dGan:cm.oGan,dZhi:cm.oZhi},Math.round(tilt*2));
     const tone=tilt>=2?'밀어주는 해 — 새 공동 사업·역할 재조정·지분 논의를 이 해에 여십시오':tilt===1?'힘이 붙는 해 — 넓히되 정해 둔 역할과 규칙 안에서 움직이십시오':tilt<0?'조이는 해 — 새 약속을 늘리기보다 맺은 계약을 점검하고 갈등을 미리 푸십시오':'평이한 해 — 정해 둔 규칙대로 굴리며 신뢰를 쌓으십시오';
-    return `<div class="syrow${k===0?' now':''}"><span class="syy">${y}<em>${k===0?'올해':'+'+k}</em></span><span class="syg">${sc}점</span><span class="syd"><b class="syd1">${tone}</b></span></div>`;}).join('');
-  const sec2=`<div class="bzsec"><div class="bzsh">◆ 앞으로 3년, 이 궁합의 흐름</div><div class="seun">${yr}</div></div>`+
+    return {k,y,sc,tilt,tone};});
+  const yr=yd.map(({k,y,sc,tone})=>`<div class="syrow${k===0?' now':''}"><span class="syy">${y}<em>${k===0?'올해':'+'+k}</em></span><span class="syg">${sc}점</span><span class="syd"><b class="syd1">${tone}</b></span></div>`).join('');
+  const ybars=barsSvg(yd.map(x=>({label:`${x.y}년`,v:x.sc,tag:`${x.sc}점`,now:x.k===0,color:x.tilt>=1?'#177f5e':x.tilt<0?'#b3382c':'#3f6be0'})),100,{title:'궁합 점수 — 올해부터 3년'});
+  const sec2=`<div class="bzsec"><div class="bzsh">◆ 앞으로 3년, 이 궁합의 흐름</div>${ybars}<div class="seun">${yr}</div></div>`+
     `<p>바탕 궁합 <b>${cm.base}점</b>에 그해 ${who}의 세운이 더해진 점수입니다. 점수가 오르는 해에 판을 넓히고, 내려가는 해엔 계약과 역할을 점검하는 해로 쓰십시오.</p>`;
 
   // 3) 계약 전 체크리스트
@@ -422,12 +426,17 @@ function daeunDeepHtml(d:any, legalName:string, curYear:number){
   const SH:Record<string,string>={in:'밀어주는 구간',jae:'거두는 구간',bi:'경쟁·과열 구간',sik:'쏟고 소모하는 구간',gwan:'조이고 다지는 구간'};
   const blocks=d.list.map((b:any,i:number)=>{const r=relation(d.me,b.el);const tag=i<d.curBlock?'지난':i===d.curBlock?'지금':'앞으로';
     return `<div class="tkrow"><span class="tkdot"></span><span class="tktx"><b>${found+b.from}~${found+b.to}년 · ${GAN[b.gan]}${ZHI[b.zhi]}</b> — ${SH[r]}${i===d.curBlock?' <em>(지금)</em>':''}${tag==='지난'?'':''}</span></div>`;}).join('');
-  const sec3=`<div class="threekye"><div class="tkt">${nm}의 대운 여덟 구간</div>${blocks}</div>`;
+  const SHORT:Record<string,string>={in:'밀어줌',jae:'거둠',bi:'경쟁',sik:'소모',gwan:'조임'};
+  const dline=lineSvg(d.list.map((b:any,i:number)=>{const r=relation(d.me,b.el);return {label:`${found+b.from}`,sub:SHORT[r],v:REL_RANK[r],color:EL_HEX[b.el],now:i===d.curBlock,dim:i<d.curBlock};}),5,
+    {title:`${nm}의 대운 80년 — 10년 단위`,top:'밀어주는 구간',bottom:'조이는 구간'});
+  const sec3=`<div class="threekye"><div class="tkt">${nm}의 대운 여덟 구간</div>${dline}${blocks}</div>`;
   // 4) 올해 남은 달, 회사 흐름
   const nowM=new Date().getFullYear()===curYear?new Date().getMonth()+1:1;
   const months=MONTH_EL.map((el,i)=>({m:i+1,rel:relation(d.me,el)})).filter(x=>x.m>=nowM);
   const mrows=months.map(x=>`<div class="myrow${x.m===nowM?' now':''}"><span class="mym">${x.m}월</span><span class="mytag" style="background:${(BY_REL[x.rel]||BY_REL.bi)[1]}">${(BY_REL[x.rel]||BY_REL.bi)[0]}운</span><span class="myd">${BY_DESC[x.rel]}<em class="mydo">할 일 — ${BY_DO[x.rel]}</em></span></div>`).join('');
-  const sec4=`<div class="bizyear"><div class="byhd">${curYear}년 ${nowM>1?'남은 달':'월별'} — ${nm}의 흐름</div>${mrows}</div>`;
+  const mchart=barsSvg(months.map(x=>({label:`${x.m}월`,v:REL_RANK[x.rel],color:(BY_REL[x.rel]||BY_REL.bi)[1],tag:(BY_REL[x.rel]||BY_REL.bi)[0],now:x.m===nowM})),5,
+    {title:`${curYear}년 ${nowM>1?'남은 달':'월별'} 흐름`,top:'밀어주는 달',bottom:'조이는 달'});
+  const sec4=mchart+`<div class="bizyear"><div class="byhd">${curYear}년 ${nowM>1?'남은 달':'월별'} — ${nm}의 흐름</div>${mrows}</div>`;
   // 5) 판단 기준표 — 지금 대운 × 올해 세운
   const sy=seunYear(curYear); const rels=relation(d.me,sy.el);
   const V=(t:number)=>t>=2?'<b style="color:#2f56c4">권장</b>':t>=0?'<b>신중</b>':'<b style="color:#b3382c">보류</b>';
@@ -447,7 +456,7 @@ function compatFreeHtml(cm:any,c:any,otherLabel:string,kind:string){
   const meCol=EL_HEX[GAN_ELc[c.dGan]],otCol=EL_HEX[cm.oel];
   return `<div class="cverdict">`+
     `<div class="cvs"><div class="cnm">대표님</div><div class="cpl" style="background:${meCol}">${pil(c.dGan,c.dZhi)}</div></div>`+
-    `<div class="cvscore"><div class="n" style="color:${cm.gc}">${cm.score2}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
+    `<div class="cvscore"><div class="n cvring">${ringSvg(cm.score2,cm.gc,84)}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
     `<div class="cvs"><div class="cnm">${otherLabel}</div><div class="cpl" style="background:${otCol}">${cm.pills}</div></div>`+
   `</div>`+`<p>${cm.paras[0]||''}</p>`+
     `<p class="jinhook">이 ${kind}${josa(kind, '이')} 오래 가려면 무엇을 누가 맡아야 하는지 — <b>장기 적합도 ${QV(2)}</b>, <b>역할 분담 ${QV(4)}</b>, 관계가 상하는 지점은 아래에서 열립니다.</p>`;
@@ -474,7 +483,7 @@ function compatBlock(cm,c,otherLabel,ctx?,stepTitle?){
     `<em>${cm.score2>cm.base?'▲ 세운이 밀어주는 해':cm.score2<cm.base?'▼ 세운이 조이는 해':'· 평이한 해'}</em></span></div>` : '';
   return `<div class="cverdict">`+
     `<div class="cvs"><div class="cnm">대표님</div><div class="cpl" style="background:${meCol}">${pil(c.dGan,c.dZhi)}</div></div>`+
-    `<div class="cvscore"><div class="n" style="color:${cm.gc}">${cm.score2}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
+    `<div class="cvscore"><div class="n cvring">${ringSvg(cm.score2,cm.gc,84)}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
     `<div class="cvs"><div class="cnm">${otherLabel}</div><div class="cpl" style="background:${otCol}">${cm.pills}</div></div>`+
   `</div>`+yearLine+P(cm.paras)+deep;
 }
@@ -484,7 +493,7 @@ function baljuHtml(cm:any,c:any,otherLabel:string,tip:string|undefined,premium:b
   const meCol=EL_HEX[GAN_ELc[c.dGan]],otCol=EL_HEX[cm.oel];
   const verdict=`<div class="cverdict">`+
     `<div class="cvs"><div class="cnm">대표님</div><div class="cpl" style="background:${meCol}">${pil(c.dGan,c.dZhi)}</div></div>`+
-    `<div class="cvscore"><div class="n" style="color:${cm.gc}">${cm.score2}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
+    `<div class="cvscore"><div class="n cvring">${ringSvg(cm.score2,cm.gc,84)}</div><div class="g2" style="color:${cm.gc}">${cm.grade}</div></div>`+
     `<div class="cvs"><div class="cnm">${otherLabel}</div><div class="cpl" style="background:${otCol}">${cm.pills}</div></div>`+
   `</div>`;
   const tipHtml = tip?`<div class="btip"><span class="btl">${otherLabel} 발주 특성</span><span class="btv">${tip}</span></div>`:'';
@@ -564,8 +573,11 @@ function gaugeHtml(s,worryTxt,unlocked){
     // 난수 위에 그어져 있던 셈이라, 파는 쪽을 택일(길일 날짜·시진·이달 전체)로 옮겼다.
     `<p class="gbridge">${s.bridge}</p>`+`<p class="gnote"><b>사정률 자체는 추첨입니다.</b> 복수예비가격 15개 중 4개를 뽑아 정하므로 생년월일로 맞힐 수 있는 값이 아닙니다 — 누구도 맞히지 못합니다. 이 지표가 짚는 것은 그 숫자가 아니라 <b>지금이 대표님께 움직일 때인가</b>입니다. 명식과 오늘 일진의 상성으로 낸 택일·의사결정 참고 지표이며, 실제 낙찰가나 당락을 예측하지 않습니다.</p>`+`${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
 }
-function distHtml(c){const tot=c.dist.reduce((a,b)=>a+b,0);
-  return `<div class="dist">${EL.map((e,i)=>`<div class="d"><div class="c" style="color:${EL_HEX[i]}">${e}</div><div class="bar"><div class="fill" style="height:${Math.max(8,Math.round(c.dist[i]/tot*100))}%;background:${EL_HEX[i]}"></div></div><div class="n">${c.dist[i]}</div></div>`).join('')}</div>`;}
+// 오행 분포 — 다섯 기운의 글자 수를 레이더로(숫자는 꼭짓점 아래에 그대로)
+function distHtml(c){
+  const mx=Math.max(3,...c.dist);
+  return radarSvg(EL.map(e=>e), [{values:c.dist,color:'#3f6be0',name:'대표님'}], mx, {labelColors:EL_HEX, title:'대표님 명식의 오행 — 글자 수'});
+}
 function compatHtml(cm,relLabel){
   const P=a=>a.map(x=>`<p>${x}</p>`).join('');
   return `<div class="compat"><div class="grade" style="background:${cm.gc}">${cm.score2}</div><div><div class="gt">${cm.grade} · ${cm.score}</div><div class="gs">${relLabel} 일주 <b>${cm.pills}</b></div></div></div>`+P(cm.paras);
@@ -635,7 +647,10 @@ function seunHtml(d,legalName,curYear){
       `<span class="syg" style="color:${EL_HEX[sy.el]}">${GAN[sy.g]}${ZHI[sy.z]}</span>`+
       `<span class="sytag" style="background:${info[2]}">${info[0]}</span>`+
       `<span class="syd"><b class="syd1">${info[1]}</b><span class="syd2">${seunDetail(rel,sy)}</span></span></div>`;}
-  return `<div class="seunhd">연도별 큰 흐름 — 앞으로 8년 세운</div><div class="seun">${rows}</div>`+
+  const chart=barsSvg(Array.from({length:8},(_,i)=>{const y=curYear+i;const sy=seunYear(y);const rel=relation(d.me,sy.el);const info=SEUN_REL[rel];
+    return {label:`'${String(y).slice(2)}`,v:REL_RANK[rel],color:info[2],tag:info[0].replace('운',''),now:i===0};}),5,
+    {title:'앞으로 8년 — 해마다의 흐름',top:'밀어주는 해',bottom:'조이는 해'});
+  return `<div class="seunhd">연도별 큰 흐름 — 앞으로 8년 세운</div>${chart}<div class="seun">${rows}</div>`+
     `<p style="margin-top:11px">위 표는 <b>${legalName||'회사'}</b> 명식에 그해 간지를 대조해, 밀어주는 해와 조여지는 해를 갈라 놓은 것입니다. <b>도움운·결실운</b>의 해에 큰 건과 확장을, <b>시련운</b>의 해엔 내실과 정비를 두시면 회사의 10년이 달라집니다.</p>`;
 }
 function daeunSectionHtml(d,legalName,curYear){
@@ -825,7 +840,9 @@ function bizYearHtml(c:Chart,selYear:number,curM:number){
   const lead=`<div class="bzsec"><div class="bzsh">◆ ${curM?`남은 ${selYear}년`:`${selYear}년`} 승부처 ${top.length}개월 — 큰 계약·발표·투자는 이 달에</div>${topHtml}</div>`+
     `<div class="bzsec"><div class="bzsh">◆ 분기별 운용</div><div class="bzwks">${Q4}</div></div>`+
     (tough.length?`<p class="cwarn">조여지는 달은 <b>${tough.map(m=>m+'월').join('·')}</b> — 이 달엔 새 판보다 정비를, 서두른 결정보다 한 박자 늦춘 확인을 두십시오.</p>`:'');
-  return lead+`<div class="bizyear"><div class="byhd">${selYear}년 — 12개월 사업운 흐름</div>${rows}</div>`+
+  const chart=barsSvg(ms.map(x=>({label:`${x.m}월`,v:REL_RANK[x.rel],color:(BY_REL[x.rel]||BY_REL.bi)[1],tag:(BY_REL[x.rel]||BY_REL.bi)[0],now:x.m===curM,dim:!!curM&&x.m<curM})),5,
+    {title:`${selYear}년 12개월 사업운`,top:'밀어주는 달',bottom:'조이는 달'});
+  return lead+chart+`<div class="bizyear"><div class="byhd">${selYear}년 — 12개월 사업운 흐름</div>${rows}</div>`+
     `<p style="margin-top:11px">밀어주는 달(<b>도움운·결실운</b>)에 큰 계약·발표·투자를, 조여지는 달(<b>시련운</b>)엔 내실·정비를 두십시오. 위 흐름을 <b>${selYear}년 세운</b>과 겹쳐 보면 한 해 농사의 밑그림이 나옵니다.</p>`;
 }
 // ── 診 · 대표 유형 진단 (사주아이식 프로파일) — 4유형 + 4축 스펙트럼 + 위기 약점(심리 훅)
@@ -977,7 +994,8 @@ function scorecardHtml(axes:any[], selYear?:number){
   const hi=axes.reduce((a,b)=>b.score>a.score?b:a);
   const lo=axes.reduce((a,b)=>b.score<a.score?b:a);
   const dots=(n:number)=>Array.from({length:5},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('');
-  return `<div class="axiscard">`+
+  return radarSvg(axes.map(a=>a.label), [{values:axes.map(a=>a.score),color:'#3f6be0'}], 5, {title:'6대 축 한눈에 — 5점 만점'})+
+    `<div class="axiscard">`+
     axes.map(a=>`<div class="axrow">`+
       `<div class="axmid"><div class="axlb">${a.label}<span>${a.key}</span></div><div class="axdots">${dots(a.score)}</div></div>`+
       `<div class="axsc">${a.score}<em>/5</em></div></div>`).join('')+

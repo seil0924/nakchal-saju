@@ -390,3 +390,15 @@ html body .catsample{display:block;margin:10px 0 8px;font-size:13px;font-weight:
 .hsread{list-style:none;margin:12px 0 0;padding:12px 0 0;border-top:1px solid var(--u-line);display:flex;flex-direction:column;gap:8px}
 .hsread li{font-size:15px;line-height:1.65;color:var(--u-ink)}
 .hsq{display:block;margin-top:10px;font-size:15px;color:var(--u-ink)}
+
+/* 결과 리포트 그래프 (lib/report-charts.ts, 2026-09-17) */
+html body .rchart{margin:12px 0 14px;padding:12px 10px 10px;background:#fff;border:1px solid var(--u-line);border-radius:12px}
+html body .rchart figcaption{font-size:13px;font-weight:800;color:var(--u-ink);margin:0 4px 6px;letter-spacing:-.01em}
+html body .rchart svg{display:block;width:100%;height:auto;max-width:420px;margin:0 auto;overflow:visible;font-family:inherit}
+html body .rc-radar svg{max-width:340px}
+html body .rchart .rc-legend{display:flex;justify-content:center;gap:14px;margin-top:4px;font-size:12.5px;color:var(--u-sub);font-weight:600}
+html body .rchart .rc-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+html body .rchart .rc-side{text-align:center;margin:4px 4px 0;font-size:12px;color:var(--u-mute)}
+html body .rchart .rc-side b{color:var(--u-sub);font-weight:700}
+html body .cvscore .n.cvring{font-size:0;line-height:0}
+html body .cvscore .rc-ring{display:block;margin:0 auto}
