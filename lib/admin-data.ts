@@ -3,7 +3,8 @@
 import 'server-only';
 import { adminEnabled, supabaseAdmin } from './supabase/admin';
 import { chartFromBirth, sajeong, todayPillar } from './engine';
-import { CAT_INFO, isCatKey } from './report-categories';
+import { kstYmd } from './kst';
+import { kstDayStartIso, kstMonthStartIso, kstStamp, payerOf, payItemName, payStatusLabel } from './admin-format';
 import { splitDeletable, isReportId } from './report-cleanup';
 
 const won = (n: number) => n.toLocaleString('ko-KR');
@@ -21,45 +22,69 @@ function whyLabel(reason?: string | null): string {
   return reason.slice(0, 24);
 }
 
-// 결제 카테고리/금액 → 상품명
-function itemName(cat?: string | null, amount?: number): string {
-  if (cat && isCatKey(cat)) return CAT_INFO[cat].name;
-  if (amount === 990) return '택일팩';
-  return amount ? `${won(amount)}원 상품` : '리포트';
-}
 function dirOf(input: any): string {
   try {
     const c = chartFromBirth(input.birth, input.time ?? null, input.cal ?? 'solar', input.leap ?? false);
-    const now = new Date();
-    return sajeong(c, todayPillar(now.getFullYear(), now.getMonth() + 1, now.getDate())).dir;
+    const [y, m, d] = kstYmd().split('-').map(Number);
+    return sajeong(c, todayPillar(y, m, d)).dir;
   } catch { return '-'; }
 }
-const isoDayStart = () => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()).toISOString(); };
-const isoMonthStart = () => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), 1).toISOString(); };
 
-const EMPTY_STATS = { members: 0, todaySignup: 0, paid: 0, convRate: '0.0', mrr: 0, subs: 0, todayReports: 0, todayPay: 0, todayPayAmt: 0 };
+type SB = ReturnType<typeof supabaseAdmin>;
+
+// Supabase 는 한 번에 1000줄까지만 돌려준다(.limit 을 크게 줘도 잘린다). 끝까지 나눠 읽는다.
+export async function fetchAll<T>(page: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: any }>, max = 200000): Promise<T[]> {
+  const out: T[] = [];
+  for (let i = 0; i < max; i += 1000) {
+    const { data, error } = await page(i, i + 999);
+    if (error) throw error;
+    out.push(...(data ?? []));
+    if (!data || data.length < 1000) break;
+  }
+  return out;
+}
+
+// 리포트 id → 주인·카테고리 (결제 줄에 회원·상품이 없을 때 거꾸로 찾는 데 쓴다)
+async function reportMeta(sb: SB, ids: string[]) {
+  const owner: Record<string, string | null> = {}, cat: Record<string, string | undefined> = {};
+  for (let i = 0; i < ids.length; i += 200) {
+    const { data } = await sb.from('reports').select('id,user_id,input').in('id', ids.slice(i, i + 200));
+    for (const r of (data ?? []) as any[]) { owner[r.id] = r.user_id ?? null; cat[r.id] = r.input?.cat; }
+  }
+  return { owner, cat };
+}
+
+const PAY_COLS = 'payment_id,user_id,report_id,pass_key,amount';
+
+const EMPTY_STATS = { members: 0, todaySignup: 0, paid: 0, convRate: '0.0', mrr: 0, subs: 0, guestPaid: 0, todayReports: 0, testReports: 0, todayPay: 0, todayPayAmt: 0 };
 
 export async function getStats() {
   if (!adminEnabled()) return EMPTY_STATS;
   try {
     const sb = supabaseAdmin();
-    const dayStart = isoDayStart(), monthStart = isoMonthStart();
-    const [mAll, mToday, payRows, rToday] = await Promise.all([
+    const dayStart = kstDayStartIso(), monthStart = kstMonthStartIso();
+    const [mAll, mToday, rToday, rTest, paidList] = await Promise.all([
       sb.from('profiles').select('*', { count: 'exact', head: true }),
       sb.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
-      sb.from('payments').select('amount,paid_at,user_id').eq('status', 'paid'),
       sb.from('reports').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
+      // 점검 로봇이 '점검용' 이름으로 뽑은 리포트 — 실제 손님 수에서 뺀다
+      sb.from('reports').select('*', { count: 'exact', head: true }).gte('created_at', dayStart).eq('input->>name', '점검용'),
+      fetchAll<any>((a, b) => sb.from('payments').select(PAY_COLS + ',paid_at').eq('status', 'paid').order('created_at', { ascending: true }).range(a, b)),
     ]);
     const members = mAll.count ?? 0;
-    const paidList = payRows.data ?? [];
-    const paidUsers = new Set(paidList.map((p: any) => p.user_id).filter(Boolean)).size;
+    const { owner } = await reportMeta(sb, [...new Set(paidList.map((p: any) => p.report_id).filter(Boolean))] as string[]);
+    const payers = paidList.map((p: any) => payerOf(p, owner));
+    const paidUsers = new Set(payers.filter(Boolean)).size;
     const monthAmt = paidList.filter((p: any) => p.paid_at && p.paid_at >= monthStart).reduce((a: number, p: any) => a + (p.amount || 0), 0);
     const todayList = paidList.filter((p: any) => p.paid_at && p.paid_at >= dayStart);
+    const test = rTest.count ?? 0;
     return {
-      members, todaySignup: mToday.count ?? 0, paid: paidList.length,
+      members, todaySignup: mToday.count ?? 0,
+      paid: paidList.length,                        // 결제 완료 '건수'
       convRate: members ? ((paidUsers / members) * 100).toFixed(1) : '0.0',
       mrr: monthAmt, subs: paidUsers,
-      todayReports: rToday.count ?? 0,
+      guestPaid: payers.filter(x => !x).length,     // 회원을 찾지 못한 결제(비회원 결제)
+      todayReports: Math.max(0, (rToday.count ?? 0) - test), testReports: test,
       todayPay: todayList.length,
       todayPayAmt: todayList.reduce((a: number, p: any) => a + (p.amount || 0), 0),
     };
@@ -72,16 +97,33 @@ export async function listMembers() {
     const sb = supabaseAdmin();
     const { data: profs } = await sb.from('profiles').select('id,name,email,provider,created_at').order('created_at', { ascending: false }).limit(50);
     const ids = (profs ?? []).map((p: any) => p.id);
-    const [pays, reps] = ids.length ? await Promise.all([
-      sb.from('payments').select('user_id,amount').eq('status', 'paid').in('user_id', ids),
-      sb.from('reports').select('user_id').in('user_id', ids),
-    ]) : [{ data: [] }, { data: [] }] as any;
+    if (!ids.length) return [];
+    // 회원의 리포트에 붙은 결제 + 회원이 직접 붙은 결제(2026-09-17 이후) + 발주처 패스
+    const reps = await fetchAll<any>((a, b) => sb.from('reports').select('id,user_id').in('user_id', ids).range(a, b));
+    const repOwner: Record<string, string> = {};
+    reps.forEach(r => { repOwner[r.id] = r.user_id; });
+    const repIds = reps.map(r => r.id);
+    const pays: any[] = [];
+    for (let i = 0; i < repIds.length; i += 200) {
+      const { data } = await sb.from('payments').select(PAY_COLS).eq('status', 'paid').in('report_id', repIds.slice(i, i + 200));
+      pays.push(...(data ?? []));
+    }
+    const direct = await sb.from('payments').select(PAY_COLS).eq('status', 'paid').in('user_id', ids);
+    pays.push(...(direct.data ?? []));
+    const passes = await sb.from('payments').select(PAY_COLS).eq('status', 'paid').in('pass_key', ids.map((id: string) => 'pass:balju:' + id));
+    pays.push(...(passes.data ?? []));
+    const seen = new Set<string>();
     const paidBy: Record<string, number> = {}, repBy: Record<string, number> = {};
-    (pays.data ?? []).forEach((p: any) => { paidBy[p.user_id] = (paidBy[p.user_id] || 0) + (p.amount || 0); });
-    (reps.data ?? []).forEach((r: any) => { repBy[r.user_id] = (repBy[r.user_id] || 0) + 1; });
+    for (const p of pays) {
+      if (seen.has(p.payment_id)) continue;
+      seen.add(p.payment_id);
+      const who = payerOf(p, repOwner);
+      if (who) paidBy[who] = (paidBy[who] || 0) + (p.amount || 0);
+    }
+    reps.forEach(r => { repBy[r.user_id] = (repBy[r.user_id] || 0) + 1; });
     return (profs ?? []).map((p: any) => ({
       name: p.name ?? '(이름없음)', email: p.email ?? '', provider: p.provider ?? 'email',
-      joined: (p.created_at ?? '').slice(2, 16).replace('T', ' ').replace(/-/g, '.'),
+      joined: kstStamp(p.created_at, true),
       sub: (paidBy[p.id] || 0) > 0 ? '유료' : '무료',
       paidTotal: paidBy[p.id] || 0, reports: repBy[p.id] || 0,
     }));
@@ -93,42 +135,41 @@ export async function listPayments() {
   try {
     const sb = supabaseAdmin();
     // fail_reason 컬럼이 없는 환경도 있어서, 없으면 그 컬럼만 빼고 다시 읽는다.
+    const cols = PAY_COLS + ',status,paid_at,created_at,level';
     let pays: any[] | null = null;
     {
-      const withReason = await sb.from('payments')
-        .select('payment_id,amount,status,paid_at,created_at,user_id,report_id,fail_reason')
-        .order('created_at', { ascending: false }).limit(50);
+      const withReason = await sb.from('payments').select(cols + ',fail_reason').order('created_at', { ascending: false }).limit(100);
       if (!withReason.error) pays = withReason.data;
-      else {
-        const base = await sb.from('payments')
-          .select('payment_id,amount,status,paid_at,created_at,user_id,report_id')
-          .order('created_at', { ascending: false }).limit(50);
-        pays = base.data;
-      }
+      else pays = (await sb.from('payments').select(cols).order('created_at', { ascending: false }).limit(100)).data;
     }
-    const uids = [...new Set((pays ?? []).map((p: any) => p.user_id).filter(Boolean))];
-    const rids = [...new Set((pays ?? []).map((p: any) => p.report_id).filter(Boolean))];
-    const [profs, reps] = await Promise.all([
-      uids.length ? sb.from('profiles').select('id,name,email').in('id', uids) : Promise.resolve({ data: [] } as any),
-      rids.length ? sb.from('reports').select('id,input').in('id', rids) : Promise.resolve({ data: [] } as any),
-    ]);
-    const pmap: Record<string, any> = {}; (profs.data ?? []).forEach((p: any) => { pmap[p.id] = p; });
-    const cmap: Record<string, string> = {}; (reps.data ?? []).forEach((r: any) => { cmap[r.id] = r.input?.cat; });
-    return (pays ?? []).map((p: any) => ({
-      id: (p.payment_id ?? '').slice(-6),
-      name: pmap[p.user_id]?.name ?? '비회원', email: pmap[p.user_id]?.email ?? '',
-      item: itemName(cmap[p.report_id], p.amount), amount: p.amount ?? 0, pay: '간편결제',
-      status: p.status === 'paid' ? '완료' : (p.status === 'cancelled' || p.status === 'refunded' ? '환불' : (p.status === 'failed' ? '실패' : p.status)),
-      // 왜 승인까지 못 갔는지. confirm:* 는 승인은 났는데 우리 저장이 실패한 것이라 제일 위험하다.
-      why: whyLabel(p.fail_reason),
-      at: (p.paid_at ?? p.created_at ?? '').slice(5, 16),
-    }));
+    const rows = (pays ?? []) as any[];
+    const rids = [...new Set(rows.map(p => p.report_id).filter(Boolean))] as string[];
+    const { owner, cat } = await reportMeta(sb, rids);
+    const payer = rows.map(p => payerOf(p, owner));
+    const uids = [...new Set(payer.filter(Boolean))] as string[];
+    const profs = uids.length ? (await sb.from('profiles').select('id,name,email').in('id', uids)).data ?? [] : [];
+    const pmap: Record<string, any> = {};
+    profs.forEach((p: any) => { pmap[p.id] = p; });
+    return rows.map((p, i) => {
+      const who = payer[i];
+      return {
+        id: (p.payment_id ?? '').slice(-6),
+        name: who ? (pmap[who]?.name ?? '회원') : '비회원',
+        email: who ? (pmap[who]?.email ?? '') : '',
+        item: payItemName(p, p.report_id ? cat[p.report_id] : null),
+        amount: p.amount ?? 0,
+        status: payStatusLabel(p.status),
+        // 왜 승인까지 못 갔는지. confirm:* 는 승인은 났는데 우리 저장이 실패한 것이라 제일 위험하다.
+        why: whyLabel(p.fail_reason),
+        at: kstStamp(p.paid_at ?? p.created_at),
+      };
+    });
   } catch { return []; }
 }
 
 // 결제가 붙은 리포트 id. 조회가 실패하면 던진다 — '모름' 을 '결제 없음' 으로 읽으면
 // 지우면 안 되는 리포트를 지우게 된다(리포트 삭제는 결제 기록까지 cascade 로 지운다).
-async function paidReportIds(sb: ReturnType<typeof supabaseAdmin>, ids: string[]): Promise<Set<string>> {
+async function paidReportIds(sb: SB, ids: string[]): Promise<Set<string>> {
   const out = new Set<string>();
   for (let i = 0; i < ids.length; i += 200) {
     const { data, error } = await sb.from('payments').select('report_id').in('report_id', ids.slice(i, i + 200));
@@ -160,13 +201,13 @@ export async function listReports(name?: string) {
       paid: paid.has(r.id),
       paidKnown,
       deletable: canDelete.has(r.id),
-      at: (r.created_at ?? '').slice(5, 16),
+      at: kstStamp(r.created_at),
     }));
   } catch { return []; }
 }
 
 // 지운다 — 화면이 보낸 판단은 믿지 않고 서버에서 결제·유료 여부를 다시 확인한다.
-async function deleteWhereAllowed(sb: ReturnType<typeof supabaseAdmin>, ids: string[]) {
+async function deleteWhereAllowed(sb: SB, ids: string[]) {
   if (!ids.length) return { deleted: 0, kept: 0 };
   const { data, error } = await sb.from('reports').select('id,unlock_level').in('id', ids);
   if (error) throw error;

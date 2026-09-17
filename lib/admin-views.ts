@@ -3,6 +3,8 @@
 import 'server-only';
 import { adminEnabled, supabaseAdmin } from '@/lib/supabase/admin';
 import { SRC_LABEL, isSrc } from '@/lib/track-src';
+import { fetchAll } from '@/lib/admin-data';
+import { kstDayStartIso } from '@/lib/admin-format';
 
 export type KindStat = { kind: string; label: string; total: number; d7: number; today: number };
 export type SlugStat = { slug: string; count: number };
@@ -34,14 +36,21 @@ export async function getViewStats(): Promise<ViewStats> {
   try {
     const sb = supabaseAdmin();
     const now = Date.now();
-    const dayStart = new Date(new Date().setHours(0, 0, 0, 0)).toISOString();
+    // 서버는 UTC 다 — 오늘은 한국 자정부터 센다(예전엔 한국 오전 9시부터 셌다).
+    const dayStart = kstDayStartIso();
     const weekStart = new Date(now - 7 * 86400000).toISOString();
 
     // 한 번에 읽어 메모리에서 집계한다. 초기 규모에서는 이 편이 쿼리 수가 적다.
     // src 는 마이그레이션(supabase/page_views_src.sql)을 돌려야 생기는 컬럼이라,
     // 없으면 select 자체가 실패한다 — 그때 이 화면이 통째로 비면 안 되므로 빼고 한 번 더 읽는다.
-    const q = (cols: string) => sb.from('page_views').select(cols)
-      .order('created_at', { ascending: false }).limit(50000);
+    // ★Supabase 는 한 번에 1000줄만 준다. 예전 .limit(50000) 은 최근 1000줄만 세서 누적이 1000에서 멈췄다.
+    const q = async (cols: string) => {
+      try {
+        const data = await fetchAll<any>((a, b) => sb.from('page_views').select(cols)
+          .order('created_at', { ascending: false }).range(a, b));
+        return { data, error: null as any };
+      } catch (error) { return { data: null, error }; }
+    };
 
     let srcReady = true;
     let res = await q('kind,slug,created_at,src');

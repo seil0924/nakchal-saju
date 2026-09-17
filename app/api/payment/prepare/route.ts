@@ -9,17 +9,19 @@ import { requireUser, authEnabled } from '@/lib/supabase/server';
 export async function POST(req: Request) {
  try {
   const { reportId, sku, bokchae, amount, cat: pickedCat } = await req.json();
+  // 로그인한 손님이면 결제에 회원을 붙인다(비회원 결제는 그대로 된다)
+  const uid = (await requireUser().catch(() => null))?.id ?? null;
   // 복채(福債) — 리포트와 무관한 자율 감사·기원 결제. 서버가 금액 범위만 clamp.
   if (bokchae) {
     const amt = Math.max(1000, Math.min(1000000, Math.round(Number(amount) || 0)));
-    const order = await createOrder(reportId || 'bokchae', amt, 0);   // level 0 — 언락과 무관
+    const order = await createOrder(reportId || 'bokchae', amt, 0, uid);   // level 0 — 언락과 무관
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 복채(福債)', sku: 'bokchae' });
   }
   // 발주처 프리미엄 패스 — 사용자 계정 단위 권한(리포트와 무관)
   if (sku === 'baljuPass') {
     const user = await requireUser();
     if (authEnabled() && !user?.id) return NextResponse.json({ error: 'login_required' }, { status: 401 });
-    const order = await createOrder(BALJU_PASS_KEY(user?.id), PRICE_BALJU_PASS, 1);
+    const order = await createOrder(BALJU_PASS_KEY(user?.id), PRICE_BALJU_PASS, 1, user?.id ?? null);
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 발주처 프리미엄 패스', sku: 'baljuPass' });
   }
   const input = await getReport(reportId);
@@ -29,7 +31,7 @@ export async function POST(req: Request) {
   // 카테고리 개별 결제
   if (isCatKey(input.cat)) {
     const c = CAT_INFO[input.cat];
-    const order = await createOrder(reportId, c.price, 2);   // 단일 언락(레벨2)
+    const order = await createOrder(reportId, c.price, 2, uid);   // 단일 언락(레벨2)
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: `낙찰사주 ${c.name}`, sku: 'full' });
   }
   // 카테고리 없이 들어온 리포트 — 손님이 결제 시점에 고른 상품으로 판다.
@@ -42,7 +44,7 @@ export async function POST(req: Request) {
   // 금액도 서버가 CAT_INFO 에서 꺼낸다. 클라이언트가 보낸 금액은 쓰지 않는다.
   if (canSellCat(pickedCat, input)) {
     const c = CAT_INFO[pickedCat];
-    const order = await createOrder(reportId, c.price, 2);
+    const order = await createOrder(reportId, c.price, 2, uid);
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: `낙찰사주 ${c.name}`, sku: 'full', cat: pickedCat });
   }
   return NextResponse.json({ error: 'category_required' }, { status: 400 });
