@@ -47,15 +47,15 @@ const IC = {
 // 홈에는 가격을 적지 않는다(2026-09-15 대표 지시) — 금액이 줄줄이 보이면 아무도 안 들어온다.
 // 모든 상품이 명식·방향·첫 장은 무료로 나오고, 결제는 결과 화면에서 잠긴 장을 열 때만 한다.
 const FEATURED: { href: string; title: string; hook: string; d: string }[] = [
-  { href: '/reading?cat=sajeong', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 이번 달 길일은 언제인지', d: IC.pick },
-  { href: '/reading?cat=daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지 — 승부 기질·재물·사람', d: IC.person },
+  { href: '/product/taekil', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 이번 달 길일은 언제인지', d: IC.pick },
+  { href: '/product/daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지 — 승부 기질·재물·사람', d: IC.person },
 ];
 const OTHERS: { href: string; label: string; sub: string; d: string }[] = [
   { href: '/hoesa', label: '회사 사주', sub: '설립일만 넣고 30초', d: IC.company },
   { href: '/balju', label: '발주처 사주', sub: '그 발주처와 맞는 판인가', d: IC.client },
-  { href: '/reading?cat=gunghap', label: '협정·궁합 사주', sub: '손잡기 전에 깨질 궁합인지', d: IC.pair },
-  { href: '/reading?cat=daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', d: IC.trend },
-  { href: '/reading?cat=calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', d: IC.cal },
+  { href: '/product/gunghap', label: '협정·궁합 사주', sub: '손잡기 전에 깨질 궁합인지', d: IC.pair },
+  { href: '/product/daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', d: IC.trend },
+  { href: '/product/calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', d: IC.cal },
   { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', d: IC.compass },
   { href: '/ceo', label: '닮은 CEO', sub: '거장 100인 중 명식이 닮은 사람', d: IC.ceo },
 ];

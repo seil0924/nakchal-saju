@@ -16,10 +16,14 @@ export const metadata = {
 };
 
 const PRODUCT_LINKS: [string, string][] = [
+  ['/product/daepyo', '대표 사주'],
+  ['/product/taekil', '투찰 택일'],
+  ['/product/gunghap', '협정·궁합 사주'],
+  ['/product/daeun', '회사 대운'],
+  ['/product/calendar', '사업운 캘린더'],
+  ['/product/calendar-year', '연간 캘린더'],
   ['/product/balju', '발주처 궁합'],
-  ['/product/dongup', '동업·협정 궁합'],
-  ['/product/beopin', '법인 운세'],
-  ['/product/jari', '자리 사주'],
+  ['/product/jari', '사무실 자리'],
 ];
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '8px 13px', textDecoration: 'none' };
 

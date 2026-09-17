@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { PAINS } from '@/lib/pains';
-import { PRODUCTS } from '@/lib/categories';
+import { PRODUCT_PAGES } from '@/lib/product-pages';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import { getAllColumns } from '@/lib/column';
 import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: BASE + u, lastModified: now,
       changeFrequency: 'daily' as const, priority: u === '' ? 1 : 0.9,
     })),
-    ...PRODUCTS.map(p => ({
+    ...PRODUCT_PAGES.map(p => ({
       url: `${BASE}/product/${p.slug}`, lastModified: now,
       changeFrequency: 'weekly' as const, priority: 0.9,
     })),
