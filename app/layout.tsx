@@ -7,8 +7,6 @@ import TapFX from '@/app/_components/TapFX';
 import ScrollTop from '@/app/_components/ScrollTop';
 import AddToHome from '@/app/_components/AddToHome';
 import BottomTab from '@/app/_components/BottomTab';
-import { requireUser } from '@/lib/supabase/server';
-import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nakchalsaju.com'),
@@ -63,14 +61,13 @@ const LD = {
   ],
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  let scopeId = 'guest';
-  try { const u = await requireUser(); if (u?.id) scopeId = u.id; } catch { /* 미인증 */ }
-  // 미들웨어가 넘겨준 경로로 문서 언어를 정한다. 이미 쿠키를 읽어 동적 렌더라 추가 비용은 없다.
-  const path = headers().get('x-nk-path') || '/';
-  const lang = path.startsWith('/zh') ? 'zh-Hant' : path.startsWith('/en') ? 'en' : 'ko';
+// 여기서 요청 헤더나 로그인 정보를 읽으면 사이트 전체가 정적 파일이 되지 못한다(2026-09-21).
+// 그때는 접속 한 번마다 서버가 페이지를 다시 그려서 Vercel CPU 가 그대로 나간다 — 크롤러 한 번 훑으면 수백 번.
+// 로그인 계정별 저장 격리는 브라우저가 쿠키에서 읽는다(lib/scope.ts).
+// 문서 언어는 한국어가 기본이고, /en·/zh 페이지가 자기 언어로 바꾼다(app/_components/HtmlLang.tsx).
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={lang}>
+    <html lang="ko">
       <head>
         {/* Google Tag Manager */}
         <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WZR46LPT');` }} />
@@ -84,7 +81,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         {/* Google Tag Manager (noscript) */}
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WZR46LPT" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} /></noscript>
-        <script dangerouslySetInnerHTML={{ __html: `window.__NK_SCOPE__=${JSON.stringify(scopeId)}` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(LD) }} />
         {/* Vercel Web Analytics — 대시보드에서 Analytics 활성화 시 조회수·유입경로 수집 */}
         <script defer src="/_vercel/insights/script.js" />

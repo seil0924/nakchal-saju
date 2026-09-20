@@ -1,4 +1,5 @@
 import '@/app/en/bazi/bazi.css';
+import HtmlLang from '@/app/_components/HtmlLang';
 import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -51,7 +52,9 @@ export default function BaziZhPage() {
     },
   ];
   return (
-    <div className="app home" lang="zh-Hant">
+    <>
+      <HtmlLang lang="zh-Hant" />
+      <div className="app home" lang="zh-Hant">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="topbar">
@@ -84,6 +87,7 @@ export default function BaziZhPage() {
         <p>這個傳統在東亞是共通的 — 韓國稱<i>사주</i>、中國稱<i>八字</i>、日本稱<i>四柱推命</i> — 算法相同，只是名稱不同。本工具由太陽視黃經推算節氣而非查表，並且會問你在哪裡出生，因為時柱取決於此。</p>
       </section>
     </div>
+    </>
   );
 }
 

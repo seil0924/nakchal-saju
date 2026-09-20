@@ -20,7 +20,13 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-const base = (process.argv[2] ?? 'https://nakchalsaju.com').replace(/\/$/, '');
+// 기본은 로컬이다. 실서버로 한 번 돌리면 3천 번 가까이 페이지를 열어 Vercel CPU 를 먹는다
+// (2026-09-20 무료 한도 75% 경고). 실서버에 쏘려면 주소를 적고 --prod 를 붙일 것.
+const base = (process.argv[2] ?? 'http://localhost:3355').replace(/\/$/, '');
+if (!/^https?:\/\/(localhost|127\.)/.test(base) && !process.argv.includes('--prod')) {
+  console.error('실서버 점검은 CPU 를 많이 씁니다. 정말 돌리려면 뒤에 --prod 를 붙이십시오.');
+  process.exit(1);
+}
 const CHROME = process.env.CHROME_PATH ?? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const OUT = path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), 'persona-60-result.json');
 

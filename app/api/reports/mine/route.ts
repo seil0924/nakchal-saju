@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { listReports } from '@/lib/store';
 import { requireUser } from '@/lib/supabase/server';
 
+export const dynamic = 'force-dynamic';   // 사람마다 답이 다르다 — 캐시 금지
+
 export async function GET() {
   const user = await requireUser();
   const list = await listReports(user?.id);

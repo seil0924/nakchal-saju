@@ -18,7 +18,7 @@ import { listPublicReviews } from '@/lib/reviews-db';
 import SiteTop from '@/app/_components/SiteTop';
 import './review.css';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;   // 승인된 후기는 5분 안에 반영된다(매 요청 서버 렌더 금지)
 
 const BASE = 'https://nakchalsaju.com';
 const T = '이용 후기 — 써 본 대표들의 말';

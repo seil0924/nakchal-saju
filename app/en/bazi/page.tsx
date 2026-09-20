@@ -1,4 +1,5 @@
 import './bazi.css';
+import HtmlLang from '@/app/_components/HtmlLang';
 import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -53,7 +54,9 @@ export default function BaziPage() {
     },
   ];
   return (
-    <div className="app home" lang="en">
+    <>
+      <HtmlLang lang="en" />
+      <div className="app home" lang="en">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="topbar">
@@ -86,5 +89,6 @@ export default function BaziPage() {
         <p>The tradition is shared across East Asia — <i>saju</i> in Korea, <i>bazi</i> in China, <i>shichu suimei</i> in Japan — and the calculation is the same. Only the vocabulary differs. This calculator computes solar terms from the sun&rsquo;s apparent longitude rather than reading them off a table, and it asks where you were born because the hour pillar depends on it.</p>
       </section>
     </div>
+    </>
   );
 }

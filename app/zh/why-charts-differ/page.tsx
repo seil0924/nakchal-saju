@@ -1,4 +1,5 @@
 import '@/app/en/why-charts-differ/why.css';
+import HtmlLang from '@/app/_components/HtmlLang';
 import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -54,7 +55,9 @@ export default function WhyZhPage() {
   };
 
   return (
-    <div className="app home" lang="zh-Hant">
+    <>
+      <HtmlLang lang="zh-Hant" />
+      <div className="app home" lang="zh-Hant">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="topbar">
@@ -105,6 +108,7 @@ export default function WhyZhPage() {
         <p>想用把出生地算進去的方式看自己的盤，<Link href="/zh/bazi">排盤工具在這裡</Link>。免費，會問你在哪裡出生，並且會告訴你校正了幾分鐘。</p>
       </section>
     </div>
+    </>
   );
 }
 

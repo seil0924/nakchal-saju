@@ -59,3 +59,30 @@ describe('scope — 계정별 저장 격리 (보안)', () => {
     expect(s.sget('nakchal_vault_v1')).toBeNull();
   });
 });
+
+// 로그인 쿠키에서 uid 읽기 — 서버가 매 요청 로그인 조회를 하지 않으려고 브라우저가 직접 읽는다(2026-09-21)
+describe('uidFromCookie', () => {
+  const sess = (id: string) => 'base64-' + Buffer.from(JSON.stringify({ user: { id } })).toString('base64');
+  it('한 조각짜리 쿠키', async () => {
+    const { uidFromCookie } = await import('../scope');
+    expect(uidFromCookie(`a=1; sb-abcd-auth-token=${sess('u-1')}; b=2`)).toBe('u-1');
+  });
+  it('쪼개진 쿠키는 번호 순으로 이어 붙인다', async () => {
+    const { uidFromCookie } = await import('../scope');
+    const v = sess('u-2'); const h = Math.ceil(v.length / 2);
+    const c = `sb-x-auth-token.1=${v.slice(h)}; sb-x-auth-token.0=${v.slice(0, h)}`;
+    expect(uidFromCookie(c)).toBe('u-2');
+  });
+  it('토큰만 있으면 JWT 의 sub 를 본다', async () => {
+    const { uidFromCookie } = await import('../scope');
+    const b64 = (o: any) => Buffer.from(JSON.stringify(o)).toString('base64url');
+    const jwt = `${b64({ alg: 'x' })}.${b64({ sub: 'u-3' })}.sig`;
+    expect(uidFromCookie('sb-y-auth-token=' + 'base64-' + Buffer.from(JSON.stringify({ access_token: jwt })).toString('base64'))).toBe('u-3');
+  });
+  it('없거나 깨졌으면 null — 남의 데이터로 새지 않는다', async () => {
+    const { uidFromCookie } = await import('../scope');
+    expect(uidFromCookie('')).toBeNull();
+    expect(uidFromCookie('other=1')).toBeNull();
+    expect(uidFromCookie('sb-z-auth-token=깨진값')).toBeNull();
+  });
+});

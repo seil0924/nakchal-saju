@@ -1,4 +1,5 @@
 import './why.css';
+import HtmlLang from '@/app/_components/HtmlLang';
 import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -53,7 +54,9 @@ export default function WhyPage() {
   };
 
   return (
-    <div className="app home" lang="en">
+    <>
+      <HtmlLang lang="en" />
+      <div className="app home" lang="en">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="topbar">
@@ -104,5 +107,6 @@ export default function WhyPage() {
         <p>If you want to see your own chart with the birthplace taken into account, the <Link href="/en/bazi">calculator is here</Link>. It is free, it asks where you were born, and it will tell you how many minutes the correction came to.</p>
       </section>
     </div>
+    </>
   );
 }

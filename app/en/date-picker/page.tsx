@@ -1,4 +1,5 @@
 import './date-picker.css';
+import HtmlLang from '@/app/_components/HtmlLang';
 import { ogCard } from '@/lib/og';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -52,7 +53,9 @@ export default function DatePickerPage() {
     },
   ];
   return (
-    <div className="app home" lang="en">
+    <>
+      <HtmlLang lang="en" />
+      <div className="app home" lang="en">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <div className="topbar">
@@ -85,5 +88,6 @@ export default function DatePickerPage() {
         <p>The same engine runs <Link href="/jari" hrefLang="ko">Nakchal Saju</Link>, a Korean service that picks moving dates and office directions for company owners. If you want your own chart rather than a date, the <Link href="/en/bazi">BaZi calculator</Link> is here.</p>
       </section>
     </div>
+    </>
   );
 }
