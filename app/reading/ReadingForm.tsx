@@ -146,8 +146,10 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       // 닮은 CEO(/ceo)에서 넘어온 경우 대표 생년월일·성함 프리필
       const b = p.get('b'), n = p.get('n');
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
-      // cat 은 initialCat 으로 이미 서버에서 세워 두었다. 여기서는 부수 상태만 맞춘다.
-      const ct = p.get('cat'); if (isCatKey(ct) && ct === 'gunghap') setAddKind('partner');
+      // ?cat= 은 여기서 읽는다. 서버(page.tsx)가 읽으면 이 화면이 정적 파일이 되지 못해
+      // 접속마다 서버 렌더가 되고, 그게 Vercel CPU 로 그대로 나간다(2026-09-21).
+      const ct = p.get('cat');
+      if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
       // /jari → /reading 핸드오프. 숫자만 받고, 범위를 벗어나면 조용히 버린다.
       const num = (v: string | null, lo: number, hi: number) => { const n = Number(v); return v !== null && Number.isFinite(n) && n >= lo && n <= hi ? n : undefined; };
       const dg = num(p.get('dg'), 0, 360), km = num(p.get('km'), 0, 20000);
