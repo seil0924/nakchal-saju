@@ -145,11 +145,16 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(url, 308);
     }
   }
-  // 루트 레이아웃이 <html lang> 을 맞추려면 현재 경로를 알아야 하는데, 서버 컴포넌트는 pathname 을 못 받는다.
-  // 헤더로 넘긴다. /en, /zh 에 lang="ko" 가 붙어 있으면 스크린리더와 검색엔진 둘 다에게 거짓말이 된다.
+  // 현재 경로를 헤더로 넘긴다(쓰는 쪽이 있으면 쓰라고 남겨 둔다).
+  // ※ 서버 컴포넌트에서 이 헤더를 읽는 순간 그 페이지는 정적으로 굳지 못한다 — 2026-09-21 에
+  //   루트 레이아웃에서 걷어냈다. 문서 언어는 /en·/zh 페이지가 스스로 바꾼다.
   const fwd = new Headers(req.headers);
   fwd.set('x-nk-path', req.nextUrl.pathname);
   const res = NextResponse.next({ request: { headers: fwd } });
+  // 로그인 확인은 보관함·마이페이지·관리자에서만 한다.
+  // 예전에는 모든 요청마다 Supabase 에 로그인 조회를 보냈다 — 크롤러가 캐시된 페이지를 한 장 열 때도
+  // 서버 함수가 깨어나 네트워크 호출을 했다. 토큰 갱신은 브라우저 클라이언트가 알아서 한다.
+  if (!needsLogin(req.nextUrl.pathname)) return res;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return res; // 인증 미설정(데모) → 게이트 없이 통과
