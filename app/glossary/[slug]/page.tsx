@@ -55,7 +55,7 @@ export default function TermPage({ params }: { params: { slug: string } }) {
             {rel.map(r => (<Link key={r.slug} href={`/glossary/${r.slug}`} style={chip}>{r.term}</Link>))}
           </div>
         </>)}
-        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료로 시작</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '20px 0 10px' }}>다른 용어</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 22 }}>
           {GLOSSARY.filter(x => x.slug !== t.slug && x.cat === t.cat).slice(0, 12).map(x => (<Link key={x.slug} href={`/glossary/${x.slug}`} style={chip}>{x.term}</Link>))}
@@ -65,5 +65,5 @@ export default function TermPage({ params }: { params: { slug: string } }) {
     </div>
   );
 }
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

@@ -30,7 +30,7 @@ export default function ThanksPage({ searchParams }: { searchParams: { kind?: st
         <p style={{ fontSize: 15, lineHeight: 1.85, color: '#3a3630', fontWeight: 500, margin: '0 auto 26px', maxWidth: 340 }}>{sub}</p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 360, margin: '0 auto' }}>
-          <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none' }}>오늘의 투찰 택일 보기 →</Link>
+          <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none' }}>오늘의 투찰 택일 보기 →</Link>
           <Link href="/mypage" style={{ display: 'block', textAlign: 'center', background: '#fff', color: 'var(--ink)', border: '1px solid var(--line)', borderRadius: 12, padding: '14px', fontWeight: 700, fontSize: 15, textDecoration: 'none' }}>보관함으로</Link>
           <Link href="/" style={{ display: 'block', textAlign: 'center', color: '#58616a', padding: '8px', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>홈으로 돌아가기</Link>
         </div>

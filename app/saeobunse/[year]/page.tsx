@@ -120,7 +120,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
         {DATA.map((t, i) => (
           <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 8 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 10, background: '#3f6be0', color: '#fff', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17 }}>{t.h}</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 10, background: '#2f56c4', color: '#fff', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17 }}>{t.h}</span>
               <div>
                 <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--ink)' }}>{t.a}</div>
                 <div style={{ fontSize: 13, color: '#58616a', fontWeight: 600 }}>{t.base}</div>
@@ -140,7 +140,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
         <div style={{ background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 12, padding: '18px 17px', margin: '6px 0 4px' }}>
           <div style={{ fontWeight: 800, fontSize: 17, color: '#1e2124', marginBottom: 6 }}>년주는 큰 흐름일 뿐입니다</div>
           <p style={{ fontSize: 13, lineHeight: 1.75, color: '#58616a', margin: '0 0 12px' }}>같은 해에 태어나도 월·일·시에 따라 사주는 전혀 달라집니다. 대표님의 <b style={{ color: '#1e2124' }}>정확한 생년월일</b>로 오늘의 투찰 택일·발주처 궁합·회사 사주까지 만세력으로 짚어보세요.</p>
-          <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '13px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 15, textDecoration: 'none' }}>내 사주로 30초 무료 확인 →</Link>
+          <Link href="/reading" style={{ display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '13px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 15, textDecoration: 'none' }}>내 사주로 30초 무료 확인 →</Link>
         </div>
 
         <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 년주(태어난 해의 간지)와 올해 간지의 오행 관계로 산출한 참고·오락용 정보입니다. 중요한 사업 판단은 대표님의 종합적 검토와 함께하세요.</p>

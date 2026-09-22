@@ -66,11 +66,11 @@ export default function GlossaryPage() {
           </div>
         </section>
 
-        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료로 시작</span></Link>
         <p style={{ fontSize: 13, color: '#58616a', lineHeight: 1.65, margin: '14px 0 22px' }}>※ 명리 용어 해석은 참고·오락용이며, 입찰·조달 용어는 일반적 설명으로 실제 제도는 공고문·관련 법령을 따릅니다.</p>
       </div>
     </div>
   );
 }
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };

@@ -64,7 +64,7 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
           {NATIONAL.map(n => (<Link key={n} href={`/balju/${clientSlug(n)}`} style={chip}>{n}</Link>))}
         </div>
 
-        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>{r.name} 입찰, 오늘 넣을까 미룰까 · 30초</span></Link>
+        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>{r.name} 입찰, 오늘 넣을까 미룰까 · 30초</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
         {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
 
@@ -75,5 +75,5 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
 }
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
 const row: React.CSSProperties = { fontSize: 15, display: 'flex', flexDirection: 'column', gap: 3, background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '12px 14px', textDecoration: 'none' };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none' };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none' };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

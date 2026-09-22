@@ -97,9 +97,19 @@ function auditPage(path, res) {
     else seenTitles.set(title, where);
   }
 
+  // 언어 표시.
+  // <html lang> 은 ko 로 고정이다 — 경로마다 바꾸려면 루트 레이아웃이 요청 헤더를 읽어야 하고,
+  // 그 한 줄에 사이트 전체가 정적 파일이 되지 못한다(2026-09-21 Vercel CPU 한도 초과의 원인).
+  // 영어·중국어 페이지는 본문 래퍼 lang 과 인라인 스크립트 둘로 알린다(app/_components/HtmlLang.tsx).
+  // 하나라도 빠지면 스크린리더나 크롤러에게 거짓말이 되므로 둘 다 본다.
   const lang = (h.match(/<html[^>]*lang="([^"]*)"/) || [])[1] || '';
   const want = path.startsWith('/zh') ? 'zh-Hant' : path.startsWith('/en') ? 'en' : 'ko';
-  if (lang !== want) err(where, `html lang="${lang}" 인데 ${want} 여야 한다`);
+  if (want === 'ko') {
+    if (lang !== 'ko') err(where, `html lang="${lang}" 인데 ko 여야 한다`);
+  } else {
+    if (!h.includes(`lang="${want}"`)) err(where, `본문 래퍼에 lang="${want}" 가 없다`);
+    if (!h.includes(`document.documentElement.lang="${want}"`)) err(where, `문서 언어를 ${want} 로 바꾸는 스크립트가 없다`);
+  }
 
   return h;
 }

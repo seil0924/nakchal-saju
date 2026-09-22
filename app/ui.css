@@ -69,7 +69,7 @@ html body .readyline b{color:var(--u-ink)!important}
 html body .gives li{color:var(--u-ink)!important}
 html body .lockgives{background:var(--u-soft)!important;border:0!important}
 html body .cta{border-radius:12px!important}
-html body .cta small{color:rgba(255,255,255,.86)!important}
+html body .cta small{color:#fff!important}   /* 반투명 흰색은 파란 버튼 위에서 AA 미달(2026-09-22) */
 html body .ctaassure{color:var(--u-sub)!important;font-weight:600!important}
 html body .cta::after,html body .stickycta::after{display:none!important}
 html body .sharebtn{border:1px solid var(--u-line)!important;color:var(--u-ink)!important;font-weight:700!important;background:#fff!important}
@@ -252,7 +252,7 @@ html body .h6-sample,html body .h6-fcard{border-radius:12px}
 
 /* 글 속 링크 — 파랑 #3f6be0 은 흰 바탕에서 4.4 로 모자라 한 단계 짙게 */
 html body .app p a:not([class]){color:var(--u-blue-ink)}
-html body .bm-cta small{color:#fff!important;opacity:.92}
+html body .bm-cta small{color:#fff!important}
 html body .hsex a{color:var(--u-blue-ink)!important;border-color:var(--u-line)!important}
 html body .rvstars label span{color:var(--u-blue-ink)!important}
 
@@ -402,3 +402,11 @@ html body .rchart .rc-side{text-align:center;margin:4px 4px 0;font-size:12px;col
 html body .rchart .rc-side b{color:var(--u-sub);font-weight:700}
 html body .cvscore .n.cvring{font-size:0;line-height:0}
 html body .cvscore .rc-ring{display:block;margin:0 auto}
+
+/* 칼럼의 계산 3칸 — 어두운 바탕에 파란 글씨라 명암비 2.5:1 이었다(2026-09-22 야간 점검).
+   사이트가 밝은 결로 바뀐 뒤 남은 유일한 어두운 블록이라, 바탕을 밝게 돌린다. */
+html body .home5 .prose .calcrow{background:var(--u-soft);border:1px solid var(--u-line)}
+html body .home5 .prose .calcrow>div{border-right:1px solid var(--u-line)}
+html body .home5 .prose .calcrow>div:last-child{border-right:0}
+html body .home5 .prose .calcrow b{color:var(--u-blue-ink)}
+html body .home5 .prose .calcrow span{color:var(--u-sub)}

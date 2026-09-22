@@ -107,7 +107,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
 
         <Link href="/ceo" style={cta}>
           나와 닮은 CEO 찾기 →
-          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료 · 거장 100인과 대조</span>
+          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료 · 거장 100인과 대조</span>
         </Link>
 
         {/* 여기까지는 재미다. 회사에 필요한 것은 따로 있다 — 그 다리를 안 놓아서 다 나가고 있었다. */}
@@ -142,5 +142,5 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
 
 const tag: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#58616a', background: '#f4f5f7', padding: '5px 11px', borderRadius: 999 };
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

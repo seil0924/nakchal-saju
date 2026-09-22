@@ -62,7 +62,7 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
             <p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{s.p}</p>
           </div>
         ))}
-        <Link href="/reading?cat=daepyo" style={cta}>내 일간·오행으로 대표 사주 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료 · 6대 축 스코어카드</span></Link>
+        <Link href="/reading?cat=daepyo" style={cta}>내 일간·오행으로 대표 사주 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료 · 6대 축 스코어카드</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
         {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
         {/* 같은 갈래가 하나뿐이면 제목만 남고 아래가 빈다. 그럴 땐 통째로 뺀다. */}
@@ -78,5 +78,5 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
   );
 }
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#2f56c4', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

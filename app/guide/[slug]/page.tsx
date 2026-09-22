@@ -48,7 +48,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
             <p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{s.p}</p>
           </div>
         ))}
-        <Link href={g.ctaHref} style={cta}>{g.ctaText}<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href={g.ctaHref} style={cta}>{g.ctaText}<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료로 시작</span></Link>
         {faqs.length > 0 && (<>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '24px 0 10px' }}>자주 묻는 질문</div>
           {faqs.map((f, i) => (
@@ -70,5 +70,5 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   );
 }
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

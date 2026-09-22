@@ -46,7 +46,7 @@ export default function MethodPage() {
             <p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{s.p}</p>
           </div>
         ))}
-        <Link href="/reading" style={cta}>내 명식으로 오늘 흐름 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href="/reading" style={cta}>내 명식으로 오늘 흐름 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료로 시작</span></Link>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '18px 0 22px' }}>
           <Link href="/glossary/절기" style={chip}>절기</Link><Link href="/glossary/진태양시" style={chip}>진태양시</Link><Link href="/glossary/야자시" style={chip}>야자시</Link><Link href="/glossary/만세력" style={chip}>만세력</Link><Link href="/faq" style={chip}>자주 묻는 질문</Link>
         </div>
@@ -55,5 +55,5 @@ export default function MethodPage() {
     </div>
   );
 }
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

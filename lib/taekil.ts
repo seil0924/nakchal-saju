@@ -89,7 +89,7 @@ export const TAEKIL: Taekil[] = [
       { q: '좋은 날이 너무 적게 나옵니다.',
         a: '건·성·개·정 넷을 고르므로 석 달에 서른 날 안팎이 나옵니다. 그중 등기 처리가 가능한 평일만 추리면 더 줄어듭니다. 급하시면 파·위·폐만 피하는 것으로도 충분합니다.' },
     ],
-    cta: { href: '/product/beopin', label: '법인 운세 — 회사의 그릇 보기', note: '설립일 사주로 10년 흐름까지' },
+    cta: { href: '/product/daeun', label: '회사 대운 — 회사의 그릇 보기', note: '설립일 사주로 10년 흐름까지' },
   },
   {
     slug: '계약일',
@@ -117,7 +117,7 @@ export const TAEKIL: Taekil[] = [
       { q: '잔금일도 골라야 하나요?',
         a: '거두는 수에 드는 날이 잔금·정산에 결이 맞습니다. 다만 계약일보다 우선순위는 낮습니다.' },
     ],
-    cta: { href: '/product/dongup', label: '동업·협정 궁합 보기', note: '계약 전에 상대와의 상성부터' },
+    cta: { href: '/product/gunghap', label: '협정·궁합 사주 보기', note: '계약 전에 상대와의 상성부터' },
   },
   {
     slug: '사무실이전',

@@ -48,7 +48,7 @@ export default function IndustryPage({ params }: { params: { slug: string } }) {
         <div style={card}><div style={h}>{r.name} 입찰·적격심사 특성</div><p style={p}>{r.trait}</p></div>
         <div style={card}><div style={h}>명리로 보는 {r.name} 대표</div><p style={p}>{r.myeong}</p></div>
 
-        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3, opacity: 0.9 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료로 시작</span></Link>
 
         {rel.length > 0 && (<>
         <div style={{ ...h, margin: '22px 0 10px' }}>{r.name} 주요 발주처 궁합</div>
@@ -78,5 +78,5 @@ const card: React.CSSProperties = { background: '#fff', border: '1px solid var(-
 const h: React.CSSProperties = { fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 };
 const p: React.CSSProperties = { fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 };
 const row: React.CSSProperties = { fontSize: 15, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '12px 14px', textDecoration: 'none' };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#3f6be0', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };
