@@ -6,6 +6,7 @@ import { chartFromBirth, sajeong, todayPillar } from './engine';
 import { kstYmd } from './kst';
 import { kstDayStartIso, kstMonthStartIso, kstStamp, payerOf, payItemName, payStatusLabel } from './admin-format';
 import { splitDeletable, isReportId } from './report-cleanup';
+import { fetchAll } from './sb-page';
 
 const won = (n: number) => n.toLocaleString('ko-KR');
 
@@ -32,18 +33,6 @@ function dirOf(input: any): string {
 
 type SB = ReturnType<typeof supabaseAdmin>;
 
-// Supabase 는 한 번에 1000줄까지만 돌려준다(.limit 을 크게 줘도 잘린다). 끝까지 나눠 읽는다.
-export async function fetchAll<T>(page: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: any }>, max = 200000): Promise<T[]> {
-  const out: T[] = [];
-  for (let i = 0; i < max; i += 1000) {
-    const { data, error } = await page(i, i + 999);
-    if (error) throw error;
-    out.push(...(data ?? []));
-    if (!data || data.length < 1000) break;
-  }
-  return out;
-}
-
 // 리포트 id → 주인·카테고리 (결제 줄에 회원·상품이 없을 때 거꾸로 찾는 데 쓴다)
 async function reportMeta(sb: SB, ids: string[]) {
   const owner: Record<string, string | null> = {}, cat: Record<string, string | undefined> = {};
@@ -57,6 +46,8 @@ async function reportMeta(sb: SB, ids: string[]) {
 const PAY_COLS = 'payment_id,user_id,report_id,pass_key,amount';
 
 const EMPTY_STATS = { members: 0, todaySignup: 0, paid: 0, convRate: '0.0', mrr: 0, subs: 0, guestPaid: 0, todayReports: 0, testReports: 0, todayPay: 0, todayPayAmt: 0 };
+
+export { fetchAll };
 
 export async function getStats() {
   if (!adminEnabled()) return EMPTY_STATS;

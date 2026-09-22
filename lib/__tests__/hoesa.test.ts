@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { companyChart, companyDaeun, companySeun, elBalance, PHASE_LABEL, PHASE_HINT, DAEUN_LINE, eunNeun } from '../hoesa';
+import { companyChart, companyDaeun, companySeun, elBalance, PHASE_LABEL, PHASE_HINT, DAEUN_LINE, eunNeun, blockPhases, yearsAhead } from '../hoesa';
 import { compute } from '../engine';
 
 describe('hoesa: companyChart', () => {
@@ -92,5 +92,26 @@ describe('hoesa: eunNeun', () => {
   it('한글이 아니거나 비어 있으면 기본값', () => {
     expect(eunNeun('')).toBe('는');
     expect(eunNeun('ABC')).toBe('는');
+  });
+});
+
+// 무료 화면에 그대로 나가는 두 가지 — 10년 구간표와 앞으로 8년 개수(2026-09-22 추가)
+describe('구간과 앞으로 8년', () => {
+  const ch = companyChart('2010-03-02')!;
+  it('여덟 구간 모두 확장·수확·수성 중 하나를 받는다', () => {
+    const d = companyDaeun(ch, 2026);
+    const ph = blockPhases(ch, d);
+    expect(ph.length).toBe(8);
+    for (const p of ph) expect(['expand', 'harvest', 'hold']).toContain(p);
+    expect(PHASE_LABEL[ph[d.curBlock]]).toBeTruthy();
+  });
+  it('앞으로 8년 — 세는 해의 수가 맞고, 밀어주는 해·조이는 해가 전체를 넘지 않는다', () => {
+    const y = yearsAhead(ch, 2026);
+    expect(y.list.length).toBe(8);
+    expect(y.list[0].year).toBe(2026);
+    expect(y.list[7].year).toBe(2033);
+    expect(y.up + y.down).toBeLessThanOrEqual(8);
+    expect(y.up).toBe(y.list.filter(x => x.rel === 'in' || x.rel === 'jae').length);
+    expect(yearsAhead(ch, 2026, 3).list.length).toBe(3);
   });
 });
