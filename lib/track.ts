@@ -4,7 +4,9 @@
 'use client';
 import { srcOf } from '@/lib/track-src';
 
-type Kind = 'reading' | 'ceo' | 'column' | 'balju' | 'home';
+// 2026-09-28 — 다섯 가지만 세다 보니 용어사전·상품 상세·지역/업종 방문은 관리자 화면에 아예 없었다.
+export type Kind = 'reading' | 'ceo' | 'column' | 'balju' | 'home'
+  | 'product' | 'glossary' | 'why' | 'saju' | 'region' | 'industry' | 'taekil' | 'tool';
 
 const today = () => {
   const d = new Date();

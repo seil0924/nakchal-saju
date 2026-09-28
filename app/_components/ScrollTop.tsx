@@ -23,6 +23,15 @@ export default function ScrollTop() {
     else if (seg[0] === 'balju') track('balju', sub(1));
     else if (seg[0] === 'ceo') track('ceo', sub(1));
     else if (seg[0] === 'reading' || seg[0] === 'report') track('reading');
+    // 아래는 2026-09-28 추가 — 여기 없으면 관리자 조회수 화면에 그 화면은 아예 안 나온다
+    else if (seg[0] === 'product') track('product', sub(1));
+    else if (seg[0] === 'glossary') track('glossary', sub(1));
+    else if (seg[0] === 'why') track('why', sub(1));
+    else if (seg[0] === 'saju') track('saju', sub(1));
+    else if (seg[0] === 'region') track('region', sub(1));
+    else if (seg[0] === 'industry') track('industry', sub(1));
+    else if (seg[0] === 'taekil') track('taekil', sub(1));
+    else if (['hoesa', 'jari', 'full', 'pricing', 'samples', 'more', 'vault', 'review'].includes(seg[0])) track('tool', seg[0]);
   }, [pathname]);
 
   return null;

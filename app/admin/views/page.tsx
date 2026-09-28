@@ -76,6 +76,20 @@ export default async function AdminViews() {
                 </tbody></table>
               )}
             </div>
+            <div className="atop" style={{ marginTop: 22 }}><div><h1 style={{ fontSize: 17 }}>상품 상세페이지별 조회수</h1><div className="sub">여기서 무료 입력으로 넘어간다</div></div></div>
+            <div className="acard">
+              <table><tbody>
+                <tr><th>상품</th><th style={{ textAlign: 'right' }}>조회</th></tr>
+                {s.products.map(p => (
+                  <tr key={p.slug}>
+                    <td><Link href={`/product/${p.slug}`} style={{ color: 'inherit' }}>{p.slug}</Link></td>
+                    <td style={{ textAlign: 'right', fontWeight: 700 }}>{p.count.toLocaleString()}</td>
+                  </tr>
+                ))}
+                {s.products.length === 0 && <tr><td colSpan={2}><div className="empty">아직 상세페이지 조회 기록이 없습니다.</div></td></tr>}
+              </tbody></table>
+            </div>
+
             <div className="atop" style={{ marginTop: 22 }}><div><h1 style={{ fontSize: 17 }}>칼럼별 조회수</h1><div className="sub">상위 20편</div></div></div>
             <div className="acard">
               <table><tbody>
