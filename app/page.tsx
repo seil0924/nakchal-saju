@@ -48,7 +48,7 @@ const IC = {
 // 모든 상품이 명식·방향·첫 장은 무료로 나오고, 결제는 결과 화면에서 잠긴 장을 열 때만 한다.
 const FEATURED: { href: string; title: string; hook: string; d: string }[] = [
   { href: '/product/taekil', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 이번 달 길일은 언제인지', d: IC.pick },
-  { href: '/product/daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지 — 승부 기질·재물·사람', d: IC.person },
+  { href: '/product/daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지: 승부 기질·재물·사람', d: IC.person },
 ];
 const OTHERS: { href: string; label: string; sub: string; d: string }[] = [
   { href: '/hoesa', label: '회사 사주', sub: '설립일만 넣고 30초', d: IC.company },

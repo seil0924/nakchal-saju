@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '로그인',
-  description: '낙찰사주 로그인 — 저장한 명식과 리포트를 보관함에서 다시 보실 수 있습니다.',
+  description: '낙찰사주 로그인: 저장한 명식과 리포트를 보관함에서 다시 봅니다.',
   robots: { index: false, follow: true },
   alternates: { canonical: '/login' },
 };

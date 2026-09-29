@@ -13,14 +13,14 @@ export type ReportInput = {
   cal?: 'solar' | 'lunar';
   leap?: boolean;
   client?: string | null;        // 발주처 설립일
-  clientCore?: boolean;          // 핵심 발주처(큰 판) 여부 — true면 발주처 궁합 유료
+  clientCore?: boolean;          // 핵심 발주처(큰 판) 여부 · true면 발주처 궁합 유료
   legal?: string | null;         // 법인 설립일
   partner?: string | null;       // 동업 상대 생년월일
   ally?: string | null;          // 협정 상대 회사 설립일
   clientName?: string; legalName?: string; partnerName?: string; allyName?: string; // 대상 이름
   situation?: string;            // 상황 칩 요약 (예: "관급 공사 · 저가경쟁 심함")
   worry?: string;
-  cat?: string;                  // 카테고리(daepyo·sajeong·balju·gunghap·daeun·ijeon) — 섹션 필터
+  cat?: string;                  // 카테고리(daepyo·sajeong·balju·gunghap·daeun·ijeon): 섹션 필터
   // 자리 사주. /jari 에서 이미 잰 방위각·거리만 넘어온다 — 좌표는 받지도 남기지도 않는다.
   jari?: JariInput;
 };
@@ -38,7 +38,7 @@ export type ReportResult = {
   gauge: { dir: string; band: [string, string]; pos: number; precise?: string };
   hero: Hero;
   sections: Section[];
-  meta: { chapters: number; items: number }; // 분량 앵커 — 전체 리포트 장·항목 수
+  meta: { chapters: number; items: number }; // 분량 앵커: 전체 리포트 장·항목 수
   selYear: number;              // 이 리포트가 기준으로 삼은 해 (세운)
   seun: { hanja: string; rel: string; tilt: number }; // 대표 본인의 그해 세운
 };
@@ -61,9 +61,9 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
     : '오늘은 기운이 눌리는 날이라 <b>서두르기보다 관망이 유리한 흐름</b>';
   // 상황 칩 + 고민 텍스트를 결과에 반영 (input→output 가시화)
   let worry = '';
-  if (sit && wtxt) worry = `「상황 반영」 <b>${sit}</b> 상황에서 「${wtxt.slice(0, 60)}」 — ${flow}입니다.`;
-  else if (sit)   worry = `「상황 반영」 이번 건은 <b>${sit}</b> — 그런 판에서 ${flow}입니다.`;
-  else if (wtxt)  worry = `「고민 반영」 말씀하신 「${wtxt.slice(0, 60)}」 — ${flow}입니다.`;
+  if (sit && wtxt) worry = `「상황 반영」 <b>${sit}</b> 상황에서 「${wtxt.slice(0, 60)}」 · ${flow}입니다.`;
+  else if (sit)   worry = `「상황 반영」 이번 건은 <b>${sit}</b>: 그런 판에서 ${flow}입니다.`;
+  else if (wtxt)  worry = `「고민 반영」 말씀하신 「${wtxt.slice(0, 60)}」 · ${flow}입니다.`;
 
   const cli = dateChart(input.client), legal = dateChart(input.legal),
         partner = dateChart(input.partner), ally = dateChart(input.ally);

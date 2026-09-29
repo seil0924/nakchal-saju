@@ -11,7 +11,7 @@ export type TycoonFacts = {
   pills: string;      // 일주(日柱) 두 글자
   el: number;         // 일간 오행 0~4
   elName: string;
-  dist: number[];     // 오행 분포 — 삼주 기준
+  dist: number[];     // 오행 분포: 삼주 기준
   type: string;       // 대표 유형
   desc: string;
   myeong: string;

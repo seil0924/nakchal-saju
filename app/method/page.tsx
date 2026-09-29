@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import { ogCard } from '@/lib/og';
 
-const CARD = { seal: '法', k: '算出 方法', t: '어떻게 계산하는가', s: '만세력 · 절기 · 진태양시 — 근거를 공개합니다' };
+const CARD = { seal: '法', k: '算出 方法', t: '어떻게 계산하는가', s: '만세력 · 절기 · 진태양시: 근거를 공개합니다' };
 import Link from 'next/link';
 import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
 
 export const metadata: Metadata = {
-  title: '계산 방법론 — 절기 천문계산·진태양시·야자시 보정',
+  title: '계산 방법론: 절기 천문계산·진태양시·야자시 보정',
   description: '낙찰사주가 사주 명식을 세우는 방법: 절기를 태양황경으로 판정하고, 진태양시(경도 -30분)·서머타임·야자시를 보정하며 음·양력을 자동 변환합니다. 해석은 명리 기반 참고용입니다.',
   alternates: { canonical: '/method' },
   keywords: ['사주 계산 방법', '절기 천문계산', '진태양시 보정', '야자시', '만세력 정확도', '낙찰사주 방법론'],
@@ -17,14 +17,14 @@ export const metadata: Metadata = {
 
 const SEC = [
   { h: '절기(節氣)를 천문으로 판정', p: '명리에서 월(月)의 경계는 달력이 아니라 절기로 정합니다. 낙찰사주는 절기를 태양의 위치(황경)로 계산해 판정하므로, 입춘·경칩 같은 절입 시각 부근에 태어난 경우에도 월주(月柱)를 정확히 세웁니다.' },
-  { h: '진태양시(眞太陽時) 보정 — 경도 약 −30분', p: '한국 표준시(동경 135도 기준)와 실제 국토의 경도 차이로 인해, 시(時)를 정확히 정하려면 약 30분의 보정이 필요합니다. 태어난 시각을 진태양시로 환산해 시주(時柱)의 지지를 바로잡습니다.' },
+  { h: '진태양시(眞太陽時) 보정: 경도 약 −30분', p: '한국 표준시(동경 135도 기준)와 실제 국토의 경도 차이로 인해, 시(時)를 정확히 정하려면 약 30분의 보정이 필요합니다. 태어난 시각을 진태양시로 환산해 시주(時柱)의 지지를 바로잡습니다.' },
   { h: '서머타임·야자시 보정', p: '과거 서머타임 시행 기간에 태어난 경우 그 시차를 되돌리고, 밤 11시~자정의 야자시(夜子時) 구간은 날짜 경계 규칙에 따라 일주(日柱)를 정확히 정합니다.' },
   { h: '음·양력 자동 변환', p: '음력·양력, 윤달까지 자동으로 변환해 간지를 찾습니다. 사용자는 알고 있는 달력으로 입력하면 되고, 내부에서 만세력 기준으로 명식을 완성합니다.' },
 ];
 
 export default function MethodPage() {
   const ld = [
-    { '@context': 'https://schema.org', '@type': 'Article', headline: '낙찰사주 계산 방법론 — 절기 천문계산·진태양시·야자시 보정',
+    { '@context': 'https://schema.org', '@type': 'Article', headline: '낙찰사주 계산 방법론: 절기 천문계산·진태양시·야자시 보정',
       description: '사주 명식을 세우는 계산 방법과 보정 원리', mainEntityOfPage: `${BASE}/method`,
       publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE } },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
@@ -38,7 +38,7 @@ export default function MethodPage() {
       <SiteTop />
       <div style={{ padding: '18px 18px 4px' }}>
         <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>계산 방법</div>
-        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>어떻게 계산하나 — 명식을 세우는 방법</h1>
+        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>어떻게 계산하나: 명식을 세우는 방법</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>사주 해석의 정확도는 명식을 얼마나 정확히 세우는가에서 갈립니다. 낙찰사주는 아래 원리로 여덟 글자를 계산합니다. 해석 자체는 명리 이론에 기반한 참고·오락용입니다.</p>
         {SEC.map((s, i) => (
           <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 }}>

@@ -92,10 +92,10 @@ export function favorDir(weakEl: number): { main: number; alt: number } {
 // ── 이사 택일 ───────────────────────────────────────
 // 건제십이신 중 이사·입주에 쓰는 넷만 고른다.
 const MOVE_GOOD: Record<number, { key: string; name: string; why: string }> = {
-  2:  { key: '滿', name: '만', why: '채워지는 날 — 짐 들이기 좋습니다' },
-  4:  { key: '定', name: '정', why: '자리가 굳는 날 — 계약·입주에 맞습니다' },
-  8:  { key: '成', name: '성', why: '이루어지는 날 — 이사에 가장 힘이 실립니다' },
-  10: { key: '開', name: '개', why: '열리는 날 — 새 자리를 여는 데 좋습니다' },
+  2:  { key: '滿', name: '만', why: '채워지는 날: 짐 들이기 좋습니다' },
+  4:  { key: '定', name: '정', why: '자리가 굳는 날: 계약·입주에 맞습니다' },
+  8:  { key: '成', name: '성', why: '이루어지는 날: 이사에 가장 힘이 실립니다' },
+  10: { key: '開', name: '개', why: '열리는 날: 새 자리를 여는 데 좋습니다' },
 };
 
 const GAN_H = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];

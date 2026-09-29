@@ -10,8 +10,8 @@ import { DIR8, DIR8_HANJA, favorDir } from '@/lib/taek-map';
 // 팔택 — DIR8 순서(북·북동·동·남동·남·남서·서·북서)에 그대로 맞췄다.
 export const GUA = ['坎', '艮', '震', '巽', '離', '坤', '兌', '乾'] as const;
 export const GUA_KO = ['감', '간', '진', '손', '리', '곤', '태', '건'] as const;
-export const DONG_SATAEK = [0, 2, 3, 4];   // 감·진·손·리 — 북·동·남동·남
-export const SEO_SATAEK = [1, 5, 6, 7];    // 간·곤·태·건 — 북동·남서·서·북서
+export const DONG_SATAEK = [0, 2, 3, 4];   // 감·진·손·리: 북·동·남동·남
+export const SEO_SATAEK = [1, 5, 6, 7];    // 간·곤·태·건: 북동·남서·서·북서
 export type Sataek = '동사택' | '서사택';
 
 const norm8 = (d: number) => ((Math.round(d) % 8) + 8) % 8;
@@ -60,23 +60,23 @@ export function houseHarmony(door: number, desk: number): Harmony {
 export type Bibo = { item: string; where: string; why: string };
 
 const BIBO_EL: Bibo[][] = [
-  [ // 木 — 자라는 것
+  [ // 木 · 자라는 것
     { item: '키 큰 관엽 화분', where: '동쪽 또는 남동쪽 벽', why: '살아 자라는 것이 木을 채웁니다' },
     { item: '결이 보이는 원목 수납장', where: '대표 자리 뒤', why: '가공을 덜 한 나무일수록 결이 삽니다' },
   ],
-  [ // 火 — 빛과 열
+  [ // 火 · 빛과 열
     { item: '따뜻한 색 스탠드 조명', where: '남쪽 창가나 응접 자리', why: '빛과 열이 火의 몫입니다' },
     { item: '붉은 계열 액자 한 점', where: '대표 자리 정면 벽', why: '눈이 가장 오래 머무는 곳에 둡니다' },
   ],
-  [ // 土 — 흙에서 온 것
+  [ // 土 · 흙에서 온 것
     { item: '도자기 화병이나 돌 문진', where: '책상 위 왼쪽', why: '흙에서 온 것이 土를 세웁니다' },
     { item: '황토·베이지 계열 러그', where: '응접 테이블 아래', why: '바닥을 눌러 자리를 안정시킵니다' },
   ],
-  [ // 金 — 단단한 쇠붙이
+  [ // 金 · 단단한 쇠붙이
     { item: '금속 명패나 놋 소품', where: '서쪽 또는 북서쪽 선반', why: '단단한 쇠붙이가 결단을 돕습니다' },
     { item: '흰 바탕 시계', where: '출입문 맞은편 벽', why: '金은 때를 가르는 기운입니다' },
   ],
-  [ // 水 — 도는 물
+  [ // 水 · 도는 물
     { item: '작은 어항이나 유리 수반', where: '북쪽 벽 가까이', why: '고이지 않고 도는 물이 水입니다' },
     { item: '검정·짙은 남색 소품', where: '책상 오른쪽', why: '짙은 색이 물의 자리를 대신합니다' },
   ],

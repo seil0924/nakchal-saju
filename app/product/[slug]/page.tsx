@@ -25,7 +25,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   const info = CAT_INFO[p.key];
   const hook = p.hook.replace(/\{\/?b\}/g, '').replace(/\n/g, ' ');
   return {
-    title: `${info.name} — ${hook}`,
+    title: `${info.name}: ${hook}`,
     description: p.sub,
     alternates: { canonical: `/product/${p.slug}` },
   };
@@ -122,7 +122,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         <h2>무료로 보는 것, 결제하면 열리는 것</h2>
         <div className="pd-two">
           <div className="pd-col free">
-            <h3>무료 — 바로 보입니다</h3>
+            <h3>무료로 바로 보입니다</h3>
             <ul>{p.free.map(x => <li key={x}>{x}</li>)}</ul>
           </div>
           <div className="pd-col paid">
@@ -140,7 +140,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
             return (
               <li key={x} className={free ? 'free' : 'lock'}>
                 <span className="n">{String(i + 1).padStart(2, '0')}</span>
-                <span className="t">{x.replace(/ — 무료$/, '')}</span>
+                <span className="t">{x.replace(/ · 무료$/, '')}</span>
                 <span className="s">{free ? '무료' : ''}</span>
               </li>
             );

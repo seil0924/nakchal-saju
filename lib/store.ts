@@ -15,7 +15,7 @@ function sb(): SupabaseClient | null {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!(url && key) && process.env.NODE_ENV === 'production') {
     // 운영인데 Supabase 미구성 → 인메모리 폴백은 요청 간 데이터/결제 유실을 일으킴. 조용히 넘기지 말고 경고.
-    console.error('[store] PRODUCTION without Supabase service role — falling back to in-memory (data will NOT persist across requests).');
+    console.error('[store] PRODUCTION without Supabase service role · falling back to in-memory (data will NOT persist across requests).');
   }
   _sb = url && key ? createClient(url, key, { auth: { persistSession: false } }) : null;
   return _sb;
@@ -161,7 +161,7 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
       await markPaid();
       return { paymentId, reportId: key, amount: o.amount, level: o.level ?? 1, status: 'paid' };
     }
-    if (!o.report_id) {   // 복채 등 언락 대상 없음 — 확정만
+    if (!o.report_id) {   // 복채 등 언락 대상 없음: 확정만
       await markPaid();
       return { paymentId, reportId: null, amount: o.amount, level: o.level ?? 0, status: 'paid' };
     }

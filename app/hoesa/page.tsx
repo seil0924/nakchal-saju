@@ -23,7 +23,7 @@ import {
 import './hoesa.css';
 
 const BASE = 'https://nakchalsaju.com';
-const T = '회사 사주 — 법인 설립일로 보는 우리 회사의 명식과 지금 구간';
+const T = '회사 사주: 법인 설립일로 보는 우리 회사의 명식과 지금 구간';
 const D = '사람에게 생년월일이 있듯 회사에는 설립일이 있습니다. 법인 설립일만 넣으면 회사의 명식 여섯 글자와, 지금이 확장 구간인지 수성 구간인지를 30초에 무료로 봅니다.';
 
 export const metadata: Metadata = {
@@ -44,7 +44,7 @@ const FAQ = [
   ['회사에도 사주가 있나요?', '법인은 등기상 설립일을 기준으로 사주를 세웁니다. 사람과 똑같이 오행 균형과 10년 단위 대운이 생겨서, "예전엔 술술 됐는데 요즘 유독 더디다" 같은 흐름이 회사에도 나타납니다.'],
   ['설립 시각은 몰라도 되나요?', '괜찮습니다. 등기 시각을 아는 회사가 거의 없어 시주를 뺀 삼주(여섯 글자)로 봅니다. 회사의 결과 구간을 읽는 데는 충분합니다.'],
   ['개인사업자도 되나요?', '사업자등록일을 넣으시면 됩니다. 법인 설립일과 같은 방식으로 봅니다.'],
-  ['확장·수확·수성 구간은 뭐가 다른가요?', '확장은 밖에서 밀어주는 때라 사람과 자금을 태워 벌일 때이고, 수확은 새로 벌이기보다 이미 벌여 둔 것을 거두고 굳힐 때이며, 수성은 내실·부채정리·핵심 집중의 때입니다. 계절을 거스르면 탈이 납니다 — 겨울의 무리한 확장과 봄의 과한 몸사림 둘 다 손해입니다.'],
+  ['확장·수확·수성 구간은 뭐가 다른가요?', '확장은 밖에서 밀어주는 때라 사람과 자금을 태워 벌일 때이고, 수확은 새로 벌이기보다 이미 벌여 둔 것을 거두고 굳힐 때이며, 수성은 내실·부채정리·핵심 집중의 때입니다. 계절을 거스르면 탈이 납니다. 겨울의 무리한 확장과 봄의 과한 몸사림 둘 다 손해입니다.'],
 ];
 
 export default function Hoesa({ searchParams }: { searchParams: { d?: string; n?: string } }) {
@@ -143,7 +143,7 @@ function Result({ ch, label, curYear, raw, name }: {
         {/* 여기는 방금 자기 회사 명식을 처음 본 자리다. 변명이 아니라 사실만 적는다 —
             "아는 회사가 없어서"로 시작하면 아무도 안 물어본 의심을 먼저 심는다.
             왜 시주가 없는지는 아래 문답("설립 시각은 몰라도 되나요?")에 그대로 있다. */}
-        <p className="note">회사 명식은 설립일의 세 기둥 — <b>년주·월주·일주</b>로 세웁니다.</p>
+        <p className="note">회사 명식은 설립일의 세 기둥: <b>년주·월주·일주</b>로 세웁니다.</p>
       </div>
 
       <div className="card">
@@ -154,7 +154,7 @@ function Result({ ch, label, curYear, raw, name }: {
           <div className="d" style={{ marginTop: 6, fontWeight: 700 }}>{PHASE_HINT[d.phase]}</div>
           <div className="age">설립 {d.age}년차 · {cur.from}~{cur.to}년차 구간 ({ganjaOf(cur.gan, cur.zhi)})</div>
         </div>
-        <p className="note">계절을 거스르면 탈이 납니다 — 겨울의 무리한 확장과 봄의 과한 몸사림, 둘 다 손해입니다.</p>
+        <p className="note">계절을 거스르면 탈이 납니다. 겨울의 무리한 확장과 봄의 과한 몸사림, 둘 다 손해입니다.</p>
       </div>
 
       <div className="card">
@@ -172,7 +172,7 @@ function Result({ ch, label, curYear, raw, name }: {
       </div>
 
       <div className="card">
-        <div className="st"><span className="b" />{curYear}년 {s.hanja} — 올해의 흐름</div>
+        <div className="st"><span className="b" />{curYear}년 {s.hanja}: 올해의 흐름</div>
         <div className="hsseun">
           <span className="tag">{s.tag}</span>
           <span className="tx">{s.line}</span>
@@ -195,8 +195,8 @@ function Result({ ch, label, curYear, raw, name }: {
             : <><b>{b.strongs.map(elName).join('·')}</b>{josa(elName(b.strongs[b.strongs.length - 1]), '이')} 두텁고 <b>{b.weaks.map(elName).join('·')}</b>{josa(elName(b.weaks[b.weaks.length - 1]), '이')} 옅습니다. 옅은 쪽을 사람이나 시스템으로 채우면 균형이 섭니다.</>}
         </p>
         <ul className="hsread">
-          {b.strongs.map(i => <li key={'s' + i}><b>{elName(i)} 두터움</b> — {CO_STRONG[i]}</li>)}
-          {b.weaks.slice(0, 2).map(i => <li key={'w' + i}><b>{elName(i)} {b.zero ? '빔' : '옅음'}</b> — {CO_WEAK[i]}</li>)}
+          {b.strongs.map(i => <li key={'s' + i}><b>{elName(i)} 두터움</b>: {CO_STRONG[i]}</li>)}
+          {b.weaks.slice(0, 2).map(i => <li key={'w' + i}><b>{elName(i)} {b.zero ? '빔' : '옅음'}</b>: {CO_WEAK[i]}</li>)}
         </ul>
       </div>
 
@@ -207,7 +207,7 @@ function Result({ ch, label, curYear, raw, name }: {
             회사가 어떤 결인지는 위에서 다 보셨습니다. 남은 질문은 하나입니다 —
             <b> 이 회사가 대표님을 밀어주는가, 아니면 계속 빼가는가.</b><br />
             그리고 <b>다음 10년</b>의 확장·정비 구간이 언제 오는지도 함께 봅니다.
-            <span className="hsq">앞으로 8년 중 회사를 밀어주는 해 <b>{ahead.up}번</b> — {ahead.list.filter(x => x.rel === 'in' || x.rel === 'jae').slice(0, 3).map((x, i) => <b key={i} className="qv">????</b>).reduce<React.ReactNode[]>((acc, el, i) => (i ? [...acc, ' · ', el] : [el]), [])}년 · 조이는 해 <b>{ahead.down}번</b></span>
+            <span className="hsq">앞으로 8년 중 회사를 밀어주는 해 <b>{ahead.up}번</b>: {ahead.list.filter(x => x.rel === 'in' || x.rel === 'jae').slice(0, 3).map((x, i) => <b key={i} className="qv">????</b>).reduce<React.ReactNode[]>((acc, el, i) => (i ? [...acc, ' · ', el] : [el]), [])}년 · 조이는 해 <b>{ahead.down}번</b></span>
           </div>
           <div className="hsex">
             <Link href="/reading?cat=daeun">회사 대운 · 대표 궁합 보기 →</Link>

@@ -58,7 +58,7 @@ export default function Bokchae() {
             <div className="bokrule" />
             <p className="boklead">
               명리에서 복채는 이용료가 아니라, 받은 운(福)에 스스로 치르는 마음입니다.
-              이곳의 풀이가 대표님의 한 해에 닿았다면 — 그 마음만큼 조용히 놓고 가십시오.
+              이곳의 풀이가 대표님의 한 해에 닿았다면: 그 마음만큼 조용히 놓고 가세요.
               정해진 값은 없습니다.
             </p>
             <div className="bokamts">

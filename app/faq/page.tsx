@@ -9,8 +9,8 @@ import SiteTop from '@/app/_components/SiteTop';
 const BASE = 'https://nakchalsaju.com';
 
 export const metadata: Metadata = {
-  title: '자주 묻는 질문 — 입찰 사주·발주처 궁합·투찰 택일',
-  description: '입찰 사주란 무엇인지, 사주로 낙찰을 예측할 수 있는지, 발주처 궁합·법인 설립일 사주·투찰 길일은 어떻게 보는지 — 낙찰사주에 대해 자주 묻는 질문에 답합니다.',
+  title: '자주 묻는 질문: 입찰 사주·발주처 궁합·투찰 택일',
+  description: '입찰 사주란 무엇인지, 사주로 낙찰을 예측할 수 있는지, 발주처 궁합·법인 설립일 사주·투찰 길일은 어떻게 보는지: 낙찰사주에 대해 자주 묻는 질문에 답합니다.',
   alternates: { canonical: '/faq' },
   keywords: ['입찰 사주', '낙찰 사주', '발주처 궁합', '투찰 택일', '법인 설립일 사주', '사주 낙찰', '낙찰사주 FAQ'],
   openGraph: { title: '자주 묻는 질문 | 낙찰사주', description: '입찰 사주·발주처 궁합·투찰 택일에 대해 자주 묻는 질문', url: `${BASE}/faq`, type: 'article', siteName: '낙찰사주', images: ogCard(CARD) },
@@ -39,7 +39,7 @@ export default function FaqPage() {
       <div style={{ padding: '18px 18px 4px' }}>
         <div style={{ fontSize: 13, letterSpacing: '.3em', color: '#636d77', fontWeight: 700, marginBottom: 6 }}>自主 問答</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>자주 묻는 질문</h1>
-        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>입찰 사주가 무엇인지부터 발주처 궁합·투찰 택일까지 — 대표님이 가장 많이 묻는 것들에 답합니다.</p>
+        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>입찰 사주가 무엇인지부터 발주처 궁합·투찰 택일까지: 대표님이 가장 많이 묻는 것들에 답합니다.</p>
         {FAQ_MAIN.map((x, i) => (
           <div key={i} style={card}>
             <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 7, lineHeight: 1.5 }}>Q. {x.q}</div>

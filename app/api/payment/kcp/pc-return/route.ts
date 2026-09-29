@@ -18,7 +18,7 @@ export async function POST(req: Request) {
   // '결제창 닫음'과 '승인 났는데 저장 실패'가 똑같이 pending 으로 보였다.
   const back = async (ok: boolean, reportId?: string | null, why?: string, paymentId?: string) => {
     if (!ok && why && paymentId) { try { await failOrder(paymentId, why); } catch { /* 진단이 흐름을 막으면 안 된다 */ } }
-    if (ok && why && paymentId) { try { await failOrder(paymentId, why); } catch { } }   // confirm:* — 승인은 났다
+    if (ok && why && paymentId) { try { await failOrder(paymentId, why); } catch { } }   // confirm:* · 승인은 났다
     const base = dest(ok, reportId);
     const sep = base.includes('?') ? '&' : '?';
     const q = `${sep}paid=${ok ? '1' : '0'}${why ? `&why=${encodeURIComponent(why)}` : ''}`;

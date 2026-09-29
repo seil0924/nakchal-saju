@@ -8,8 +8,8 @@ import DateSelect from '@/app/_components/DateSelect';
 import SiteTop from '@/app/_components/SiteTop';
 
 const CEO_STEPS = [
-  '삼주(三柱) 구성 — 년·월·일',
-  '여섯 부호 추출 — 오행·음양·십성·신살',
+  '삼주(三柱) 구성: 년·월·일',
+  '여섯 부호 추출: 오행·음양·십성·신살',
   '세계 거장 100인 명식과 대조',
 ];
 
@@ -30,13 +30,13 @@ const WEAK_TRAIT: Record<string, string> = { '木': '새로 뻗을 활로', '火
 const SIP_TRAIT: Record<string, string> = { '비겁': '남에게 기대지 않고 스스로 짊어지는', '식상': '통찰과 결과물로 승부하는', '재성': '실리를 현실로 쥐는', '관성': '무게를 견디며 이끄는', '인성': '신중히 쌓고 인정으로 지키는' };
 const SINSAL_TRAIT: Record<string, string> = { '괴강살': '남다른 카리스마와 극단의 승부 기질', '백호살': '강렬한 돌파력', '양인살': '칼 같은 결단과 승부욕', '천을귀인': '위기에 귀인이 드는 복', '현침살': '바늘처럼 예리한 통찰', '역마살': '끊임없이 움직이는 확장성', '화개살': '남다른 독창적 사유' };
 function explainMatch(m: string): [string, string] {
-  if (m.startsWith('일간 ')) { const e = m.slice(3); return ['타고난 본질', `두 분 다 ${EL_KO[e] || ''}(${e})의 명 — ${ILGAN_TRAIT[e] || '같은 뿌리의 기질'}이 뼛속에 같습니다`]; }
+  if (m.startsWith('일간 ')) { const e = m.slice(3); return ['타고난 본질', `두 분 다 ${EL_KO[e] || ''}(${e})의 명: ${ILGAN_TRAIT[e] || '같은 뿌리의 기질'}이 뼛속에 같습니다`]; }
   if (m === '양간') return ['기질의 음양', '드러내고 밀어붙이는 양(陽)의 기질이 같습니다'];
   if (m === '음간') return ['기질의 음양', '안으로 벼리고 신중히 움직이는 음(陰)의 기질이 같습니다'];
-  if (m.startsWith('강한 ')) { const e = m.slice(3); return ['무기가 같음', `둘 다 ${e} 기운이 강해 — ${STRONG_TRAIT[e] || '같은 힘'}이 무기입니다`]; }
-  if (m.endsWith(' 부족')) { const e = m.slice(0, -3); return ['같은 숙제', `둘 다 ${e} 기운이 비어 — ${WEAK_TRAIT[e] || '같은 자리'}이 평생의 과제였습니다`]; }
-  if (m.endsWith(' 주도')) { const s = m.slice(0, -3); return ['생각의 결', `주도하는 기운이 같은 ${s} — ${SIP_TRAIT[s] || '같은'} 방식으로 판단하고 결정합니다`]; }
-  return ['특수 부호', SINSAL_TRAIT[m] ? `똑같이 ${m}이 앉아 — ${SINSAL_TRAIT[m]}을 타고났습니다` : `같은 특수 부호 ${m}을 지녔습니다`];
+  if (m.startsWith('강한 ')) { const e = m.slice(3); return ['무기가 같음', `둘 다 ${e} 기운이 강해: ${STRONG_TRAIT[e] || '같은 힘'}이 무기입니다`]; }
+  if (m.endsWith(' 부족')) { const e = m.slice(0, -3); return ['같은 숙제', `둘 다 ${e} 기운이 비어: ${WEAK_TRAIT[e] || '같은 자리'}이 평생의 과제였습니다`]; }
+  if (m.endsWith(' 주도')) { const s = m.slice(0, -3); return ['생각의 결', `주도하는 기운이 같은 ${s}: ${SIP_TRAIT[s] || '같은'} 방식으로 판단하고 결정합니다`]; }
+  return ['특수 부호', SINSAL_TRAIT[m] ? `똑같이 ${m}이 앉아: ${SINSAL_TRAIT[m]}을 타고났습니다` : `같은 특수 부호 ${m}을 지녔습니다`];
 }
 
 const LV = (l: Twin['level']) => (l === 'twin' ? '닮은 사주' : l === 'near' ? '가까운 사주' : '결이 비슷한 사주');
@@ -57,7 +57,7 @@ export default function CeoTwin() {
     if (!f.birth) { setErr('생년월일을 넣어주세요.'); return; }
     setBusy(true); setRes(null); setProg(true);
     try {
-      const minWait = new Promise(r => setTimeout(r, 3400)); // 리추얼(도장 연출) 최소 상영 — 천천히 각인
+      const minWait = new Promise(r => setTimeout(r, 3400)); // 리추얼(도장 연출) 최소 상영: 천천히 각인
       const r = await fetch('/api/twin', { method: 'POST', body: JSON.stringify({ birth: f.birth, cal: f.cal, leap: f.leap }) });
       if (!r.ok) throw new Error();
       const j = await r.json();
@@ -69,7 +69,7 @@ export default function CeoTwin() {
   }
 
   const shareText = res
-    ? `[낙찰사주] 나는 ${res.type} — 세계 거장 중 ${res.tycoon.name}${gwa(res.tycoon.name)} ${LV(res.level)}래요${res.count ? ` (겹치는 부호 ${res.count}가지)` : ''}. 대표님도 한번 보시죠:`
+    ? `[낙찰사주] 나는 ${res.type}: 세계 거장 중 ${res.tycoon.name}${gwa(res.tycoon.name)} ${LV(res.level)}래요${res.count ? ` (겹치는 부호 ${res.count}가지)` : ''}. 대표님도 한번 보시죠:`
     : '';
 
   // 결과 카드 이미지 생성 (캔버스) — 카톡/인스타 공유용 세로 카드
@@ -133,7 +133,7 @@ export default function CeoTwin() {
     }
     // 푸터
     x.fillStyle = '#f2ede0'; x.font = `800 40px ${serif}`;
-    x.fillText('나와 닮은 CEO 찾기 — 낙찰사주', cx, H - 150);
+    x.fillText('나와 닮은 CEO 찾기: 낙찰사주', cx, H - 150);
     x.fillStyle = '#7f786c'; x.font = `500 26px ${sans}`;
     x.fillText('공개 출생일 기준 · 생시 미상(삼주) · 재미로 보는 유형 비교', cx, H - 100);
     return await new Promise<Blob | null>(r => cv.toBlob(b => r(b), 'image/png', 0.95));
@@ -141,7 +141,7 @@ export default function CeoTwin() {
 
   async function share() {
     if (!res) return;
-    const url = `${location.origin}/ceo`;   // 이미지 카드 대신 URL(링크) 공유 — 받은 사람이 열어 '나도 보기'
+    const url = `${location.origin}/ceo`;   // 이미지 카드 대신 URL(링크) 공유: 받은 사람이 열어 '나도 보기'
     try {
       const nav: any = navigator;
       if (nav.share) { await nav.share({ title: '낙찰사주 · 나와 닮은 CEO', text: shareText, url }); return; }
@@ -200,20 +200,20 @@ export default function CeoTwin() {
 
         {res && (
           <div id="twinres" style={{ marginTop: 8 }}>
-            {/* 1막 — 거장의 명(命): 명리학 기반 칭찬일색 */}
+            {/* 1막: 거장의 명(命): 명리학 기반 칭찬일색 */}
             <div className="ceoreveal">
               <video autoPlay muted loop playsInline><source src="/ceoreveal.mp4" type="video/mp4" /></video>
               <span className="crlab">鏡 · 거울에 비추다</span>
             </div>
             <div className="twinlead" style={{ marginTop: 4 }}>
               대표님의 명을 세계 거장 100인과 견줬습니다.<br />
-              가장 <b>{LV(res.level)}</b>는 이 사람 — <b>{res.tycoon.name}</b>입니다.
+              가장 <b>{LV(res.level)}</b>는 이 사람: <b>{res.tycoon.name}</b>입니다.
             </div>
             <div className="sealcmp"><div className="scin">
               <div className="scside"><div className="scwrap" dangerouslySetInnerHTML={{ __html: sealSvg(res.myDist, res.myPills?.[0] || ELC[res.me], 132) }} /><div className="scnm">대표님</div><div className="scr">{ELC[res.me]} 기운</div></div>
               <div className="scmid"><div className="scpct">{res.count ? Math.round(52 + res.count / 6 * 46) : 68}<em>%</em></div><div className="scpl">닮음</div></div>
               <div className="scside"><div className="scwrap" dangerouslySetInnerHTML={{ __html: sealSvg(res.tyDist, res.tyPills?.[0] || ELC[res.tyEl], 132) }} /><div className="scnm">{res.tycoon.name}</div><div className="scr">{ELC[res.tyEl]} 기운</div></div>
-            </div><div className="sccap">얼굴이 아니라 <b>명식(命式)의 문양</b>입니다 — 두 인장의 오행 비율이 이만큼 겹칩니다</div></div>
+            </div><div className="sccap">얼굴이 아니라 <b>명식(命式)의 문양</b>입니다. 두 인장의 오행 비율이 이만큼 겹칩니다</div></div>
             <div className="twincard">
               <div className="tface" style={{ background: EL_HEX[res.tyEl] }}>{res.tyPills}</div>
               <div className="tinfo">
@@ -223,7 +223,7 @@ export default function CeoTwin() {
               </div>
             </div>
 
-            {/* 거장 프로필 — 상징·분야·전성기 규모·연혁 (이미지처럼 각인) */}
+            {/* 거장 프로필: 상징·분야·전성기 규모·연혁 (이미지처럼 각인) */}
             {res.profile && (
               <div className="typrof">
                 <div className="tprep">“{res.profile.rep}”</div>
@@ -243,15 +243,15 @@ export default function CeoTwin() {
             )}
 
             <div className="myeong">
-              <div className="myl">{res.type} — {res.typeDesc} 명</div>
+              <div className="myl">{res.type}: {res.typeDesc} 명</div>
               <p>{res.myeong}</p>
-              <p className="mys">이 거장을 일으킨 것은 재능이나 운이 아니라 <b>바로 이 명</b>이었습니다. <b>{res.tycoon.name}</b> — {res.story}</p>
+              <p className="mys">이 거장을 일으킨 것은 재능이나 운이 아니라 <b>바로 이 명</b>이었습니다. <b>{res.tycoon.name}</b>: {res.story}</p>
               <p className="mys2">맨손에서 시작해 <b>무(無)에서 유(有)를 이룬 사람</b>. 그 뿌리에 있던 기운이, 지금부터 말씀드릴 대표님의 여덟 글자와 같은 것입니다.</p>
             </div>
 
-            {/* 2막 — 근거: 명식 대조 (오행이 몇 자씩) */}
+            {/* 2막: 근거: 명식 대조 (오행이 몇 자씩) */}
             <div className="distcmp">
-              <div className="dch">명식 대조 <small>삼주 기준 — 오행이 몇 자씩 앉았는가</small></div>
+              <div className="dch">명식 대조 <small>삼주 기준: 오행이 몇 자씩 앉았는가</small></div>
               <div className="dcg">
                 <span className="dcl" />
                 {ELC.map((e, i) => <span key={i} className="dce" style={{ color: EL_HEX[i] }}>{e}</span>)}
@@ -261,27 +261,27 @@ export default function CeoTwin() {
                 {res.tyDist.map((n, i) => <span key={i} className={'dcn' + (n === 0 ? ' zero' : '')}>{n}</span>)}
               </div>
               <p className="dcs">
-                이렇게 놓고 보면 두 명식은 <b>{res.matched.join(' · ')}</b>{res.count ? ` — 여섯 부호 중 ${res.count}가지가 겹칩니다.` : '에서 결이 닿습니다.'}
+                이렇게 놓고 보면 두 명식은 <b>{res.matched.join(' · ')}</b>{res.count ? ` · 여섯 부호 중 ${res.count}가지가 겹칩니다.` : '에서 결이 닿습니다.'}
               </p>
             </div>
             {res.matched.length > 0 && (
               <div className="twinchips">{res.matched.map((m, i) => <span key={i} className="twc">{m}</span>)}</div>
             )}
 
-            {/* 왜 닮았나 — 겹치는 부호를 성향으로 풀어, "오 나랑 이래서 비슷하네"를 만든다 */}
+            {/* 왜 닮았나: 겹치는 부호를 성향으로 풀어, "오 나랑 이래서 비슷하네"를 만든다 */}
             {res.matched.length > 0 && (
               <div className="whymatch">
-                <div className="wmh">왜 닮았나 — 겹치는 결(結)</div>
+                <div className="wmh">왜 닮았나: 겹치는 결(結)</div>
                 {res.matched.map((m, i) => { const [k, v] = explainMatch(m); return (
                   <div key={i} className="wmrow"><span className="wmk">{k}</span><span className="wmv">{v}</span></div>
                 ); })}
-                <p className="wmsum">그래서 대표님과 <b>{res.tycoon.name}</b>은 <b>같은 자리에서 강하고, 같은 자리에서 비고, 같은 방식으로 판단</b>합니다. 사주가 닮으면 — 세상을 보는 눈과 결정하는 습관이 닮습니다. 생각이 비슷하게 느껴지셨다면, 그건 우연이 아닙니다.</p>
+                <p className="wmsum">그래서 대표님과 <b>{res.tycoon.name}</b>은 <b>같은 자리에서 강하고, 같은 자리에서 비고, 같은 방식으로 판단</b>합니다. 사주가 닮으면: 세상을 보는 눈과 결정하는 습관이 닮습니다. 생각이 비슷하게 느껴지셨다면, 그건 우연이 아닙니다.</p>
               </div>
             )}
 
-            {/* 3막 — 주인공 전환: 대표님이 그 명입니다 (칭찬 → 회사 연결 → 방향·희망) */}
+            {/* 3막: 주인공 전환: 대표님이 그 명입니다 (칭찬 → 회사 연결 → 방향·희망) */}
             <div className="mecard">
-              <div className="mel">그리고 — 대표님이 그 명입니다</div>
+              <div className="mel">그리고: 대표님이 그 명입니다</div>
               <p className="mep">{res.tycoon.name}을 일으킨 그 <b>{ELC[res.me]}의 기운</b>이, 대표님 명식에 같은 뼈대로 앉아 있습니다.</p>
               <p className="mep">{res.user}</p>
               <div className="merule" />
@@ -291,7 +291,7 @@ export default function CeoTwin() {
 
             {/* 유형 실전 지침 */}
             <div className="cheobang" style={{ marginTop: 14 }}>
-              <div className="cbt">{res.type}의 승부 기질 — 실전에서는</div>
+              <div className="cbt">{res.type}의 승부 기질: 실전에서는</div>
               <div className="cbrow"><span className="cbk">강점</span><span className="cbv">{res.good}</span></div>
               <div className="cbrow"><span className="cbk">주의</span><span className="cbv">{res.risk}</span></div>
               <div className="cbrow"><span className="cbk">지침</span><span className="cbv">{res.way}</span></div>
@@ -302,9 +302,9 @@ export default function CeoTwin() {
               <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 13, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
             </div>
 
-            {/* 미끼 브리지 — 유형은 알려줬지만 '나 개인'은 감춰 갈증을 만든다 */}
+            {/* 미끼 브리지: 유형은 알려줬지만 '나 개인'은 감춰 갈증을 만든다 */}
             <div className="bridges">
-              <div className="bridgehd">그 명이 <b>오늘, 이달, 이 발주처</b>에서 어떻게 흐르는지 — 대표님만의 풀이는 따로 있습니다</div>
+              <div className="bridgehd">그 명이 <b>오늘, 이달, 이 발주처</b>에서 어떻게 흐르는지: 대표님만의 풀이는 따로 있습니다</div>
               <Link className="bridge" href={bridge}>
                 <div className="bi">率</div>
                 <div className="bt"><b>오늘, 나에게 유리한 날인가</b><span>같은 {res.type}이라도 오늘 일진은 사람마다 다릅니다 · 무료</span></div>

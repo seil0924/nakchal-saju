@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   // 복채(福債) — 리포트와 무관한 자율 감사·기원 결제. 서버가 금액 범위만 clamp.
   if (bokchae) {
     const amt = Math.max(1000, Math.min(1000000, Math.round(Number(amount) || 0)));
-    const order = await createOrder(reportId || 'bokchae', amt, 0, uid);   // level 0 — 언락과 무관
+    const order = await createOrder(reportId || 'bokchae', amt, 0, uid);   // level 0: 언락과 무관
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 복채(福債)', sku: 'bokchae' });
   }
   // 발주처 프리미엄 패스 — 사용자 계정 단위 권한(리포트와 무관)

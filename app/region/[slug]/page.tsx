@@ -15,7 +15,7 @@ export function generateStaticParams() { return REGIONS.map(r => ({ slug: r.slug
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const r = bySlug(params.slug);
   if (!r) return { title: '낙찰사주' };
-  const title = `${r.name} 입찰 사주 — 지역 발주처 궁합과 낙찰 흐름`;
+  const title = `${r.name} 입찰 사주: 지역 발주처 궁합과 낙찰 흐름`;
   const description = `${r.name} 지역 발주처(${r.clients.join('·')})와 대표님 사주의 궁합, 오늘의 투찰 택일·길일을 30초 무료로. ${r.intro}`;
   return { title, description, alternates: { canonical: `/region/${r.slug}` },
     openGraph: { title, description, url: `${BASE}/region/${r.slug}`, type: 'article', siteName: '낙찰사주',
@@ -43,7 +43,7 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <SiteTop />
       <div style={{ padding: '18px 18px 4px' }}>
-        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '4px 0 10px' }}>{r.name} 입찰 — 지역 발주처와 내 궁합</h1>
+        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '4px 0 10px' }}>{r.name} 입찰: 지역 발주처와 내 궁합</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 14px' }}>{r.intro}</p>
         <div style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{r.name} 입찰·조달 특성</div><p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{r.industry}</p></div>
 

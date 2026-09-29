@@ -40,11 +40,11 @@ export default function Ritual() {
         <div className="sechd" style={{ marginTop: 15 }}><span className="t"><span className="b" />오늘의 부적</span><span className="m">투찰 임박</span></div>
 
         <div className="amulet" ref={amuletRef}><div className="sy">吉</div><div className="tx">落札大吉</div></div>
-        <div className="ritsub">길게 눌러 저장하거나 아래 버튼으로 배경화면에 담으십시오</div>
+        <div className="ritsub">길게 눌러 저장하거나 아래 버튼으로 배경화면에 담으세요</div>
         <button className="sharebtn" style={{ marginTop: 12 }} onClick={saveAmulet}>부적 이미지 저장</button>
 
         <div className="persona">
-          <p>"<b>마감 10분 전에 기운이 튼다.</b> 조급함을 버리고, 딱 그때 손을 쓰십시오. 서두른 자가 아니라 때를 아는 자가 가져갑니다."</p>
+          <p>"<b>마감 10분 전에 기운이 튼다.</b> 조급함을 버리고, 딱 그때 손을 쓰면 좋습니다. 서두른 자가 아니라 때를 아는 자가 가져갑니다."</p>
         </div>
 
         <div className="card" style={{ marginTop: 12 }}>
@@ -54,10 +54,10 @@ export default function Ritual() {
           <div className="kv"><span className="k">오늘의 마음가짐</span><span className="v">하한선 사수 · 관망</span></div>
         </div>
 
-        <div className="warn">⚠ 오늘 무리한 저가 투찰은 관재수(官災數)를 부릅니다. 미리 정한 하한선을 반드시 지키십시오.</div>
+        <div className="warn">⚠ 오늘 무리한 저가 투찰은 관재수(官災數)를 부릅니다. 미리 정한 하한선을 반드시 지키는 편이 낫습니다.</div>
 
         <div className={'donebar' + (done ? ' done' : '')} onClick={() => setDone(true)}>
-          {done ? '✓ 기 모으기 완료 — 오늘 뜻대로 되시길' : '기 모으기 완료'}
+          {done ? '✓ 기 모으기 완료: 오늘 뜻대로 되시길' : '기 모으기 완료'}
         </div>
 
         <div style={{ textAlign: 'center', marginTop: 8 }}>

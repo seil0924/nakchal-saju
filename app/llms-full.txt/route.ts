@@ -11,7 +11,7 @@ const BASE = 'https://nakchalsaju.com';
 
 export function GET() {
   const parts: string[] = [];
-  parts.push('# 낙찰사주 (nakchal-saju) — 전체 콘텐츠');
+  parts.push('# 낙찰사주 (nakchal-saju): 전체 콘텐츠');
   parts.push('');
   parts.push('> 공공입찰·조달·경매·수주 사업 대표와 법인을 위한 사주명리(만세력) 기반 의사결정 참고 서비스. 낙찰 결과를 예측·보장하지 않으며 투찰금액 산정 근거가 아님. 아래는 AI 인용을 돕기 위한 핵심 콘텐츠 전문(全文)이다.');
   parts.push('');
@@ -40,7 +40,7 @@ export function GET() {
 
   parts.push('## 공공 발주처 사전 (설립일 기반 궁합)');
   parts.push('아래 100곳의 설립일을 사전으로 두고 대표 사주와의 상성 및 조달 특성을 제공한다.');
-  for (const c of CLIENTS) parts.push(`- ${c.name} (설립 ${c.date}, ${c.cat})${c.tip ? ' — ' + c.tip : ''}`);
+  for (const c of CLIENTS) parts.push(`- ${c.name} (설립 ${c.date}, ${c.cat})${c.tip ? ' · ' + c.tip : ''}`);
   parts.push('');
 
   parts.push('## 입찰·명리 용어 정의');

@@ -41,7 +41,7 @@ export default function Balju() {
         <div style={{ color: '#c3cfe3', fontSize: 13, marginTop: 8, fontWeight: 500 }}>발주처 설립일 사주 × 대표님 사주로 궁합을 봅니다</div>
       </div>
 
-      {/* 관계지도 — 목록만 있으면 훑고 나간다. 지도로 먼저 보여주고 목록은 아래 그대로 둔다. */}
+      {/* 관계지도: 목록만 있으면 훑고 나간다. 지도로 먼저 보여주고 목록은 아래 그대로 둔다. */}
       <BaljuMap />
 
       <div className="searchbar">

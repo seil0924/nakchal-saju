@@ -67,9 +67,9 @@ const HELP: Star[] = ['비견', '겁재', '정인', '편인'];
 const helps = (s: Slot) => HELP.includes(s.star);
 
 export type Strength = {
-  ryeong: boolean;   // 득령 — 태어난 달이 나를 돕는가
-  ji: boolean;       // 득지 — 앉은 자리가 나를 돕는가
-  se: boolean;       // 득세 — 나머지 글자에서 내 편이 절반을 넘는가
+  ryeong: boolean;   // 득령: 태어난 달이 나를 돕는가
+  ji: boolean;       // 득지: 앉은 자리가 나를 돕는가
+  se: boolean;       // 득세: 나머지 글자에서 내 편이 절반을 넘는가
   count: number;     // 셋 중 몇을 얻었나
   strong: boolean;
   help: number; drain: number;
@@ -158,10 +158,10 @@ export function judgeSiksin(c: Chart8): Siksin {
   else notes.push('식상과 재성이 서로 떨어져 있습니다. 재주와 돈벌이가 한 줄로 이어지기까지 시간이 걸리는 편입니다.');
   if (bothStem) notes.push('둘 다 천간에 드러나 있어 남 눈에도 보이는 구조입니다.');
   if (jae.length >= 2) notes.push('재성이 여럿이라 벌이가 한 갈래로만 오지 않습니다.');
-  if (doosik) notes.push('다만 천간의 편인이 식신을 칩니다. 옛말로 도식 — 벌어들일 판에 생각이 앞서 손을 늦추는 일이 잦습니다.');
+  if (doosik) notes.push('다만 천간의 편인이 식신을 칩니다. 옛말로 도식: 벌어들일 판에 생각이 앞서 손을 늦추는 일이 잦습니다.');
   notes.push(strength.strong
     ? `일간이 ${[strength.ryeong && '득령', strength.ji && '득지', strength.se && '득세'].filter(Boolean).join('·')}${josa([strength.ryeong && '득령', strength.ji && '득지', strength.se && '득세'].filter(Boolean).join('·'), '으로')} 버팁니다. 벌어들이는 것을 담을 그릇은 됩니다.`
-    : '일간이 얇은 편입니다. 벌 구조는 서 있으나 혼자 다 짊어지면 몸이 먼저 상합니다 — 사람을 쓰고 나눠야 남습니다.');
+    : '일간이 얇은 편입니다. 벌 구조는 서 있으나 혼자 다 짊어지면 몸이 먼저 상합니다. 사람을 쓰고 나눠야 남습니다.');
 
   const HEAD: Record<Level, string> = {
     clear: `${kind}${josa(kind, '가')} 뚜렷하게 서 있습니다`,

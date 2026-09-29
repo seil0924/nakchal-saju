@@ -21,12 +21,12 @@ import { setTok, tokParam } from '@/lib/rtok';
 
 // 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
 const RITE_STEPS = [
-  '절기(節氣) 천문 계산 — 진태양시 보정',
-  '원국(元局) 구성 — 십성·오행 배치',
+  '절기(節氣) 천문 계산: 진태양시 보정',
+  '원국(元局) 구성: 십성·오행 배치',
   '신살(神殺) 대조',
   '오늘 일진 × 명식 흐름 대조',
   '세계 거장 100인 명식 대조',
-  '리포트 봉인 — 섹션 산출',
+  '리포트 봉인: 섹션 산출',
 ];
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string; passLock?: boolean };
@@ -56,13 +56,13 @@ function dayElOf(y:number,m:number,d:number){ const a=Math.floor((14-m)/12),yy=y
 function relCat(me:number,td:number){ if(td===me)return'bi'; if((td+1)%5===me)return'in'; if((me+1)%5===td)return'sik'; if((me+2)%5===td)return'jae'; if((td+2)%5===me)return'gwan'; return'bi'; }
 // 카테고리별 '혹하게 하는' 컨셉 훅 — 입력 화면 상단에서 몰입을 잡는다.
 const HOOK: Record<string, { seal: string; t: string; d: string }> = {
-  daepyo:  { seal: '鏡', t: '잡스·록펠러와 같은 그릇일지 모릅니다', d: '타고난 승부 기질·재물·사람 다루는 법을 여덟 글자로 낱낱이 — 위기에 드러나는 그 약점까지.' },
-  sajeong: { seal: '率', t: '오늘 넣을까 미룰까 — 30초면 방향이 섭니다', d: '오늘이 나설 날인지 관망할 날인지, 이달 어느 날이 유리한지 한눈에 짚어 드립니다.' },
-  balju:   { seal: '宮', t: '그 발주처, 애초에 나와 맞는 판입니까', d: '설립일 사주 × 대표님 사주 궁합 점수 — 큰 판에 손대기 전에 확인하십시오.' },
-  gunghap: { seal: '合', t: '손잡기 전에, 깨질 궁합인지부터', d: '지분·역할·최종 결정권을 어떻게 나눠야 안 깨지는지 — 계약 전에 봐야 할 궁합.' },
-  daeun:   { seal: '運', t: '회사가 대표님을 밀어줍니까, 누릅니까', d: '법인 설립일로 본 회사의 그릇과 10년 대운의 길목 — 지금이 확장기인지 정비기인지.' },
+  daepyo:  { seal: '鏡', t: '잡스·록펠러와 같은 그릇일지 모릅니다', d: '타고난 승부 기질·재물·사람 다루는 법을 여덟 글자로 낱낱이: 위기에 드러나는 그 약점까지.' },
+  sajeong: { seal: '率', t: '오늘 넣을까 미룰까: 30초면 방향이 섭니다', d: '오늘이 나설 날인지 관망할 날인지, 이달 어느 날이 유리한지 한눈에 짚어 드립니다.' },
+  balju:   { seal: '宮', t: '그 발주처, 애초에 나와 맞는 판입니까', d: '설립일 사주 × 대표님 사주 궁합 점수: 큰 판에 손대기 전에 확인해주세요.' },
+  gunghap: { seal: '合', t: '손잡기 전에, 깨질 궁합인지부터', d: '지분·역할·최종 결정권을 어떻게 나눠야 안 깨지는지: 계약 전에 봐야 할 궁합.' },
+  daeun:   { seal: '運', t: '회사가 대표님을 밀어줍니까, 누릅니까', d: '법인 설립일로 본 회사의 그릇과 10년 대운의 길목: 지금이 확장기인지 정비기인지.' },
   calendar:{ seal: '曆', t: '이달, 언제 움직이고 언제 멈출까', d: '계약·채용·발표에 좋은 날과 갈등·지출을 조심할 날을 달력에 짚어 드립니다.' },
-  calendar_year: { seal: '曆', t: '올 한 해, 밀어주는 달에 큰 판을 거십시오', d: '12개월 월운(月運)을 밀어주는 달·조여지는 달로 갈라 — 한 해 농사의 밑그림.' },
+  calendar_year: { seal: '曆', t: '올 한 해, 밀어주는 달에 큰 판을 거세요', d: '12개월 월운(月運)을 밀어주는 달·조여지는 달로 갈라: 한 해 농사의 밑그림.' },
 };
 function dedupe<T>(arr: T[], keyFn: (x: T) => string): T[] {
   const seen = new Set<string>(); const out: T[] = [];
@@ -103,11 +103,11 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   const [cat, setCat] = useState(isCatKey(initialCat) ? initialCat : ''); // 카테고리(대표·택일·발주처·궁합·대운)
   const [bp, setBp] = useState({ y: 0, m: 0, d: 0 }); // 생년월일 3분할 선택 누적
   const [picker, setPicker] = useState<{ open: boolean; kind: PersonKind }>({ open: false, kind: 'self' });
-  const [more, setMore] = useState(false);   // 성함·시간·성별 — 접어 두고 필요한 사람만 연다
+  const [more, setMore] = useState(false);   // 성함·시간·성별: 접어 두고 필요한 사람만 연다
   const catInfo = isCatKey(cat) ? CAT_INFO[cat] : null;
   const ui = catUI(cat);   // 카테고리별 UI 스키마(단일 소스)
   // 카테고리 개별 결제가 (카테고리 모드면 단일가, 아니면 sku 기준가)
-  const unlockPrice = catInfo ? catInfo.price : 0;   // 카테고리 전용 — 무카테고리는 개별 상품으로만 결제
+  const unlockPrice = catInfo ? catInfo.price : 0;   // 카테고리 전용: 무카테고리는 개별 상품으로만 결제
   const set = (k: string, v: any) => setF(s => ({ ...s, [k]: v }));
 
   // 잠긴 섹션을 지나 스크롤하면 슬림 CTA 노출 (결과 없거나 전체 열람이면 숨김)
@@ -157,7 +157,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       const pa = (p.get('pa') || '').slice(0, 40), pb = (p.get('pb') || '').slice(0, 40);
       if (dg !== undefined || dr !== undefined) setJari({ deg: dg, km, door: dr, desk: dk, from: pa || undefined, to: pb || undefined });
       // 저장된 대표가 있는 재방문자에게만 선택 시트를 자동으로 띄운다. 신규 방문자는 폼을 바로 보게 한다.
-      if (!p.get('b')) { try { const s = sget('nakchal_self_v1'); const has = !!s && (JSON.parse(s)?.length > 0); void has; /* 퍼널②: 자동 모달 제거 — 사용자가 직접 열 때만 */ } catch { /* noop */ } }
+      if (!p.get('b')) { try { const s = sget('nakchal_self_v1'); const has = !!s && (JSON.parse(s)?.length > 0); void has; /* 퍼널②: 자동 모달 제거: 사용자가 직접 열 때만 */ } catch { /* noop */ } }
     } catch {}
   }, []);
   function persistSaved(list: Target[]) { setSaved(list); try { sset(LS_KEY, JSON.stringify(list)); } catch {} }
@@ -243,8 +243,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     if (req === 'client' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 추가해 주세요.'); return; }
     if (req === 'partnerOrAlly' && !targets.some(t => t.kind === 'partner' || t.kind === 'ally')) { setErr('동업 또는 협정 상대를 먼저 추가해 주세요.'); return; }
     // 자리 사주는 주소·방위가 있어야 읽을 게 생긴다. 없이 팔면 빈 리포트가 나간다.
-    if (cat === 'ijeon' && !jari) { setErr('자리 사주는 사무실 주소와 방위가 필요합니다. 「자리 사주」 화면에서 주소를 넣고 다시 오십시오.'); return; }
-    setConfirm(true); // 사주아이식 — 입력 확인 모달 먼저
+    if (cat === 'ijeon' && !jari) { setErr('자리 사주는 사무실 주소와 방위가 필요합니다. 「자리 사주」 화면에서 주소를 넣고 다시 오세요.'); return; }
+    setConfirm(true); // 사주아이식: 입력 확인 모달 먼저
   }
 
   async function run() {
@@ -360,7 +360,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       if (!full) throw new Error();
       setRes({ ...res, ...full }); setLevel(full.level ?? (chosen === 'taekil' ? 1 : 2)); setModal(false);
       markUnlocked(res.reportId);
-      setSeal(true); setTimeout(() => setSeal(false), 2600); // 개봉(開) 연출 — 절정으로 마무리
+      setSeal(true); setTimeout(() => setSeal(false), 2600); // 개봉(開) 연출: 절정으로 마무리
     } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
     finally { setBusy(false); paying.current = false; }
   }
@@ -393,7 +393,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   async function share() {
     if (!res) return;
     const url = `${location.origin}/report/${res.reportId}?t=${encodeURIComponent(tokParam(res.reportId))}`;
-    const text = `[낙찰사주] 오늘 낙찰 유리도 ${res.hero?.score ?? ''}점 — ${res.hero?.sub ?? ''}. 대표와 회사 사주로 오늘의 투찰 택일을 짚어 봤습니다. 대표님도 한번 보시죠:`;
+    const text = `[낙찰사주] 오늘 낙찰 유리도 ${res.hero?.score ?? ''}점: ${res.hero?.sub ?? ''}. 대표와 회사 사주로 오늘의 투찰 택일을 짚어 봤습니다. 대표님도 한번 보시죠:`;
     try {
       if (navigator.share) await navigator.share({ title: '낙찰사주', text, url });
       else { await navigator.clipboard.writeText(text + ' ' + url); alert('공유 문구와 링크를 복사했어요. 카톡에 붙여넣어 보내세요.'); }
@@ -437,7 +437,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       </header>
       <div className="wrap">
         {!res && (<>
-        {/* 0. 컨셉 훅 — 카테고리별 몰입 배너 */}
+        {/* 0. 컨셉 훅: 카테고리별 몰입 배너 */}
         {cat && HOOK[cat] && (
           <div className="rd-hook">
             <b>{HOOK[cat].t}</b>
@@ -450,7 +450,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <span>명식과 오늘의 투찰 신호가 무료로 나옵니다. 가입은 필요 없습니다.</span>
           </div>
         )}
-        {/* 0-2. 사업운 캘린더 — 기간 선택(이달/연간 한 경로) */}
+        {/* 0-2. 사업운 캘린더: 기간 선택(이달/연간 한 경로) */}
         {ui.calToggle && (
           <div className="card">
             <div className="st"><span className="l"><span className="b" />기간 선택</span><span className="opt">이달 · 연간</span></div>
@@ -520,7 +520,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           </div>
           </div>)}
 
-          {/* 실시간 만세력 미리보기 — 생년월일이 들어온 뒤에만 */}
+          {/* 실시간 만세력 미리보기: 생년월일이 들어온 뒤에만 */}
           {chart && <div className="prevbox">
             <div className="prevhd"><span>만세력 미리보기</span><span className="live">● 실시간</span></div>
             {chart ? (
@@ -538,7 +538,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           </div>}
         </div>
 
-        {/* 상황 (사정률·통합에서만) — 고르지 않아도 뽑힌다. 생년월일 아래로 내렸다. */}
+        {/* 상황 (사정률·통합에서만): 고르지 않아도 뽑힌다. 생년월일 아래로 내렸다. */}
         {ui.situation && (<div className="card">
           <div className="st"><span className="l"><span className="b" />지금 어떤 입찰을 앞두고 계세요?</span><span className="opt">선택</span></div>
           <div className="chips">
@@ -555,7 +555,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         </div>)}
 
 
-        {/* 0-1. 이걸 알게 됩니다 — 폼보다 먼저 온다.
+        {/* 0-1. 이걸 알게 됩니다. 폼보다 먼저 온다.
             전에는 이 자리가 비어 있어서, 처음 온 대표가 보는 게 빈 입력폼뿐이었다.
             뭘 얻는지 모르는 채로 생년월일부터 넣으라고 하면 아무도 안 넣는다. */}
         {catInfo && catInfo.gives?.length > 0 && (
@@ -565,7 +565,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <ul className="gives">
               {catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}
             </ul>
-            <p className="note">위에 생년월일을 넣으시면 <b>명식과 방향은 무료로</b> 먼저 나옵니다. 이 항목들은 열어보실 때 결제하십시오.</p>
+            <p className="note">위에 생년월일을 넣으시면 <b>명식과 방향은 무료로</b> 먼저 나옵니다. 이 항목들은 열어보실 때 결제하세요.</p>
           </div>
         )}
         {/* 3. 회사 정보 */}
@@ -651,7 +651,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                 유료 게이팅이 고장 난 걸 멀쩡한 걸로 착각하게 된다. */}
             {res.admin && (
               <div className="adminview no-print">
-                관리자 열람 중 — 손님에게는 잠겨 보입니다. 실제 화면은 시크릿 창에서 확인하십시오.
+                관리자 열람 중: 손님에게는 잠겨 보입니다. 실제 화면은 시크릿 창에서 확인하는 편이 낫습니다.
               </div>
             )}
             <div className="rephd">{res.title}</div>
@@ -678,7 +678,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                   <React.Fragment key={i}>
                     {catInfo && level < 2 && i === firstLockedIdx && (
                       <>
-                        <div className="readyline"><b>{catInfo.name}</b> — 열면 이걸 알게 됩니다</div>
+                        <div className="readyline"><b>{catInfo.name}</b>: 열면 이걸 알게 됩니다</div>
                         {catInfo.gives?.length > 0 && <ul className="gives lockgives">{catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}</ul>}
                         <div className="cta" onClick={() => { setErr(''); setModal(true); }}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
                         <div className="ctaassure">카카오페이·토스로 30초 · 결제 즉시 열람</div>
@@ -710,7 +710,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             </div>
             {level < 2 && anyLocked && (catInfo ? null : lockedProducts.length > 0 ? (
               <div className="prodmenu">
-                <div className="pmhd"><span className="pmh">필요한 것만 낱개로 여십시오</span><span className="pms">묶음 없이 상품별로 — 대표님께 필요한 풀이만 고르세요</span></div>
+                <div className="pmhd"><span className="pmh">필요한 것만 낱개로 여세요</span><span className="pms">묶음 없이 상품별로: 대표님께 필요한 풀이만 고르세요</span></div>
                 {lockedProducts.map(p => (
                   <button key={p.key} className="pmrow" onClick={() => openProduct(p.key)} disabled={busy}>
                     <span className="pmtx"><b>{p.name}</b><em>{p.lead}</em></span>
@@ -750,14 +750,14 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       {/* 로딩 리추얼 */}
       <RiteProgress open={prog} title="만세력을 폅니다" steps={RITE_STEPS} stepMs={410} />
 
-      {/* 결제 성공 — 개봉 연출 */}
+      {/* 결제 성공: 개봉 연출 */}
       {seal && (
         <div className="sealov" aria-hidden>
           <div className="sealbox">
             <video className="sealvid" autoPlay muted playsInline poster="/openseal-poster.jpg">
               <source src="/openseal.mp4" type="video/mp4" />
             </video>
-            <div className="sealtxt">봉인 해제 — 잠긴 섹션이 열렸습니다</div>
+            <div className="sealtxt">봉인 해제: 잠긴 섹션이 열렸습니다</div>
           </div>
         </div>
       )}
@@ -770,7 +770,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         </div>
       )}
 
-      {/* 바닥 막대 — 무엇을 얼마에 사는지 늘 보이게. 누르면 무료 결과부터 뽑는다(결제는 결과 뒤). */}
+      {/* 바닥 막대: 무엇을 얼마에 사는지 늘 보이게. 누르면 무료 결과부터 뽑는다(결제는 결과 뒤). */}
       {!res && !prog && !confirm && (
         <div className="rd-bar no-print">
           <div className="rd-bar-tx">
@@ -840,7 +840,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
             <label className="consent">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
-              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
+              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다. <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
             </label>
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => (passMode ? payPass() : pay(sku))} disabled={busy}>{busy ? '결제 처리중…' : `${won(passMode ? PRICE_BALJU_PASS : unlockPrice)} 결제하기`}</button>

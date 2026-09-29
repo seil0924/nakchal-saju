@@ -10,12 +10,12 @@ import type { Review, ReviewInput } from '@/lib/reviews';
 
 export type ReviewRow = Review & { approved: boolean; source?: string | null };
 
-/** 관리자가 받은 경로 — 옮겨 적은 후기는 어디서 받았는지가 남아야 한다. */
+/** 관리자가 받은 경로: 옮겨 적은 후기는 어디서 받았는지가 남아야 한다. */
 export const SOURCES = ['전화', '카카오톡', '문자', '이메일', '방문·대면', '기타'] as const;
 
 const NO_KEY = 'Supabase 서비스 키가 이 환경에 없습니다 (SUPABASE_SERVICE_ROLE_KEY).';
 
-/** 공개용 — 승인된 것만. ready=false 면 why 에 이유가 담긴다. */
+/** 공개용: 승인된 것만. ready=false 면 why 에 이유가 담긴다. */
 export async function listPublicReviews(limit = 50): Promise<{ ready: boolean; rows: Review[]; why: string }> {
   if (!adminEnabled()) return { ready: false, rows: [], why: NO_KEY };
   try {
@@ -40,7 +40,7 @@ export async function listAllReviews(limit = 200): Promise<{ ready: boolean; row
     let { data, error } = await run('id,nickname,biz,rating,body,created_at,approved,source');
     let why = '';
     if (error) {
-      why = `source 컬럼 없이 다시 읽었습니다 — supabase/reviews-source.sql 을 아직 안 돌리신 듯합니다. (${error.message})`;
+      why = `source 컬럼 없이 다시 읽었습니다. supabase/reviews-source.sql 을 아직 안 돌리신 듯합니다. (${error.message})`;
       ({ data, error } = await run('id,nickname,biz,rating,body,created_at,approved'));
       if (error) return { ready: false, rows: [], why: error.message };
     }
@@ -48,7 +48,7 @@ export async function listAllReviews(limit = 200): Promise<{ ready: boolean; row
   } catch (e: any) { return { ready: false, rows: [], why: String(e?.message || e) }; }
 }
 
-/** 후기 접수. 기본은 숨김(approved=false) — 관리자가 올려야 보인다. */
+/** 후기 접수. 기본은 숨김(approved=false): 관리자가 올려야 보인다. */
 export async function insertReview(v: ReviewInput): Promise<{ ok: boolean; why: string }> {
   if (!adminEnabled()) return { ok: false, why: NO_KEY };
   try {

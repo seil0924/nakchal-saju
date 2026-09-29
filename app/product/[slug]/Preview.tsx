@@ -69,14 +69,14 @@ export default function Preview({ k }: { k: CatKey }) {
       const B = [['0~9', '확장'], ['10~19', '수성'], ['20~29', '수성'], ['30~39', '수확']];
       return (
         <div className="pv">
-          <div className="pv-card"><div className="pv-h">대운 구간 — 지금 10~19년차</div>
+          <div className="pv-card"><div className="pv-h">지금 대운 구간 · 10~19년차</div>
             <div className="pv-blocks">{B.map(([y, t], i) => <div key={y} className={i === 1 ? 'cur' : ''}><span>{y}년차</span><b>{t}</b></div>)}</div>
           </div>
           <div className="pv-card">
             <div className="pv-h">2026년 판단 기준</div>
             {[['신규 확장', '신중'], ['차입·투자', '보류'], ['채용', '신중']].map(([a, b]) => <div key={a} className="pv-line"><span>{a}</span><b className={b === '보류' ? 'warn' : ''}>{b}</b></div>)}
           </div>
-          <Locked t="앞으로 8년 중 밀어주는 해 2번"><Q n={4} />년 · <Q n={4} />년 — 확장·정비의 때</Locked>
+          <Locked t="앞으로 8년 중 밀어주는 해 2번"><Q n={4} />년 · <Q n={4} />년: 확장·정비의 때</Locked>
         </div>
       );
     }
@@ -87,7 +87,7 @@ export default function Preview({ k }: { k: CatKey }) {
             <div className="pv-cal">{Array.from({ length: 28 }, (_, i) => <div key={i}><span>{i + 14 > 30 ? i - 16 : i + 14}</span><i className={['g', 'b', 'y', 't', 'r', 'n'][(i * 7 + 3) % 6]} /></div>)}</div>
             <div className="pv-legend"><span><i className="g" />계약</span><span><i className="b" />채용</span><span><i className="y" />발표</span><span><i className="r" />주의</span></div>
           </div>
-          <Locked t="이달 핵심 3일"><Q />일 · <Q />일 · <Q />일 — 큰 건은 이 날에</Locked>
+          <Locked t="이달 핵심 3일"><Q />일 · <Q />일 · <Q />일: 큰 건은 이 날에</Locked>
         </div>
       );
     case 'calendar_year':
@@ -104,7 +104,7 @@ export default function Preview({ k }: { k: CatKey }) {
     case 'balju':
       return (
         <div className="pv">
-          <div className="pv-card pv-sig"><span>한국도로공사 × 대표님</span><b>68<small>점</small></b><em>대등하게 맞서는 자리 — 조건으로 승부</em></div>
+          <div className="pv-card pv-sig"><span>한국도로공사 × 대표님</span><b>68<small>점</small></b><em>대등하게 맞서는 자리: 조건으로 승부</em></div>
           <div className="pv-card"><div className="pv-h">궁합 순으로 다시 놓인 발주처</div>
             {[['1', '한국수자원공사', 86], ['2', '국가철도공단', 81], ['3', 'LH', 77]].map(([n, a, s]) => <div key={a as string} className="pv-line"><span>{n}</span><b>{a}</b><em>{s}점</em></div>)}
           </div>
@@ -126,7 +126,7 @@ export default function Preview({ k }: { k: CatKey }) {
             </svg>
             <em>파란 쪽이 옮기기 좋은 방위(예시)</em>
           </div>
-          <Locked t="이사 택일 — 석 달">추천 날짜 <Q />월 <Q />일 · 시진 <Q n={3} /></Locked>
+          <Locked t="이사 택일: 석 달">추천 날짜 <Q />월 <Q />일 · 시진 <Q n={3} /></Locked>
         </div>
       );
   }

@@ -3,18 +3,18 @@ import Link from 'next/link';
 import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata: Metadata = {
-  title: '결제가 완료되었습니다',
-  description: '낙찰사주 결제가 정상적으로 완료되었습니다.',
+  title: '결제됐습니다',
+  description: '낙찰사주 결제가 끝났습니다. 잠긴 장이 바로 열립니다.',
   robots: { index: false, follow: false },
   alternates: { canonical: '/thanks' },
 };
 
 export default function ThanksPage({ searchParams }: { searchParams: { kind?: string } }) {
   const isBokchae = searchParams?.kind === 'bokchae';
-  const title = isBokchae ? '복채가 잘 전달되었습니다' : '결제가 완료되었습니다';
+  const title = isBokchae ? '복채가 잘 전달됐습니다' : '결제됐습니다';
   const sub = isBokchae
     ? '정성으로 받았습니다. 대표님의 다음 입찰에 좋은 흐름이 함께하기를 빕니다.'
-    : '결제가 정상적으로 처리되었습니다. 이용해 주셔서 감사합니다.';
+    : '결제됐습니다. 잠긴 장이 바로 열립니다.';
 
   return (
     <div className="app home">
@@ -38,11 +38,11 @@ export default function ThanksPage({ searchParams }: { searchParams: { kind?: st
         {/* 후기를 청하는 자리는 여기다. 결제 직후가 유일하게 「써 봤다」가 확실한 시점이라,
             후기가 실제로 들어오는 통로가 이 링크 하나뿐이다. */}
         <p style={{ fontSize: 13, color: '#58616a', lineHeight: 1.7, margin: '22px auto 0', maxWidth: 340 }}>
-          써 보신 뒤 한 줄 남겨 주시면 다음 대표님께 도움이 됩니다 —{' '}
+          써 보신 뒤 한 줄 남겨 주시면 다음 대표님께 도움이 됩니다: {' '}
           <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
         </p>
 
-        <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.65, margin: '26px auto 0', maxWidth: 340 }}>영수증·결제 내역은 결제하신 카드사/간편결제 앱에서 확인하실 수 있습니다. 문의는 사이트 하단 연락처로 남겨주세요.</p>
+        <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.65, margin: '26px auto 0', maxWidth: 340 }}>영수증과 결제 내역은 결제한 카드사나 간편결제 앱에서 봅니다. 문의는 사이트 하단 연락처로 남겨주세요.</p>
       </div>
     </div>
   );

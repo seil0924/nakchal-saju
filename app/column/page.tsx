@@ -1,17 +1,17 @@
 import Link from 'next/link';
 import { ogCard } from '@/lib/og';
 
-const CARD = { seal: '筆', k: '會社 사주 칼럼', t: '낙찰사주 칼럼', s: '입찰·경영·명리 — 대표를 위한 글' };
+const CARD = { seal: '筆', k: '會社 사주 칼럼', t: '낙찰사주 칼럼', s: '입찰·경영·명리: 대표를 위한 글' };
 import type { Metadata } from 'next';
 import { getAllColumns } from '@/lib/column';
 import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata: Metadata = {
-  title: '사주 칼럼 — 입찰·경매·수주 대표를 위한 명리 이야기',
+  title: '사주 칼럼: 입찰·경매·수주 대표를 위한 명리 이야기',
   description: '오늘의 투찰 택일부터 발주처 궁합·회사 사주까지. 입찰·경매·조달 수주 대표를 위한 사주명리 칼럼을 연재합니다.',
   alternates: { canonical: '/column' },
   openGraph: {
-    title: '낙찰사주 칼럼 — 會社 사주 이야기',
+    title: '낙찰사주 칼럼 · 會社 사주 이야기',
     description: '입찰·경매·수주 대표를 위한 사주명리 칼럼',
     type: 'website', locale: 'ko_KR', siteName: '낙찰사주', images: ogCard(CARD),
   },

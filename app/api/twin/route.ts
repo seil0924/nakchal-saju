@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       good: TYPE_GOOD[me], risk: TYPE_RISK[me], way: TYPE_WAY[me],
       myeong: TYPE_MYEONG[me], user: TYPE_USER[me], biz: TYPE_BIZ[me], hope: TYPE_HOPE[me],
       me,
-      myPills: pil(c.dGan, c.dZhi),           // 내 일주(맛보기) — 전체 원국은 리포트에서
+      myPills: pil(c.dGan, c.dZhi),           // 내 일주(맛보기): 전체 원국은 리포트에서
       myDist: c.dist,                          // 내 여덟 글자 오행 분포
       level: tm.level, count: tm.count, matched: tm.matched,
       tycoon: tm.tycoon, tyPills: tm.pills, tyEl: tm.el,

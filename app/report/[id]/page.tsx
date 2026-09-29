@@ -169,7 +169,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               <>
                 {/* 분량이 아니라 내용을 말한다. "5장·수십항목"은 아무도 안 궁금하다 —
                     궁금한 건 "돈 내면 내가 뭘 알게 되냐"다. */}
-                <div className="readyline"><b>{catInfo.name}</b> — 열면 이걸 알게 됩니다</div>
+                <div className="readyline"><b>{catInfo.name}</b>: 열면 이걸 알게 됩니다</div>
                 {catInfo.gives?.length > 0 && (
                   <ul className="gives lockgives">
                     {catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}
@@ -180,20 +180,20 @@ export default function ReportView({ params }: { params: { id: string } }) {
               </>
             )}
             {level >= 1 && res.sections?.some((s: any) => s.mk === "率") && <div className="unlocked-note">✓ 결제 확인됨 · 이달 투찰 길일과 유리한 시진이 전부 열렸습니다</div>}
-            {/* 나도 보기 / CEO 브리지 — 공유받은 비소유자에게만 노출(본인 유료 리포트엔 숨김) */}
+            {/* 나도 보기 / CEO 브리지: 공유받은 비소유자에게만 노출(본인 유료 리포트엔 숨김) */}
             {!res.mine && (<>
             <Link className="cta cta2 no-print" href="/reading" style={{ marginTop: 14 }}>
-              나도 보기 — 무료로 시작<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 투찰 택일</small>
+              나도 무료로 보기<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 투찰 택일</small>
             </Link>
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 10 }}>
-              <div className="bt"><b>나도 30초 만에 — 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 100인 중 내 사주와 닮은 대표 · 무료</span></div>
+              <div className="bt"><b>나도 30초 만에: 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 100인 중 내 사주와 닮은 대표 · 무료</span></div>
               <div className="ba">→</div>
             </Link>
             </>)}
-            {/* 본인 리포트에서만 후기를 청한다 — 공유받은 사람은 아직 써 본 게 아니다 */}
+            {/* 본인 리포트에서만 후기를 청한다: 공유받은 사람은 아직 써 본 게 아니다 */}
             {res.mine && (
               <p className="no-print" style={{ fontSize: 13, color: '#58616a', lineHeight: 1.7, textAlign: 'center', margin: '16px 0 0' }}>
-                도움이 되셨다면 한 줄 남겨 주십시오 — <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
+                도움이 되셨다면 한 줄 남겨 주세요: <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
               </p>
             )}
             <button className="sharebtn no-print" style={{ marginTop: 12 }} onClick={() => window.print()}>
@@ -209,7 +209,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
 
       {seal && (
         <div className="sealov" aria-hidden>
-          <div className="sealbox"><video className="sealvid" autoPlay muted playsInline poster="/openseal-poster.jpg"><source src="/openseal.mp4" type="video/mp4" /></video><div className="sealtxt">봉인 해제 — 잠긴 섹션이 열렸습니다</div></div>
+          <div className="sealbox"><video className="sealvid" autoPlay muted playsInline poster="/openseal-poster.jpg"><source src="/openseal.mp4" type="video/mp4" /></video><div className="sealtxt">봉인 해제: 잠긴 섹션이 열렸습니다</div></div>
         </div>
       )}
       {res && level < 2 && catInfo && sticky && !modal && (
@@ -240,7 +240,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             })()}
             <a className="catsample" href="/samples" target="_blank" rel="noopener">결제하면 열리는 화면, 예시로 먼저 보기 →</a>
             <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
-            <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한 — <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
+            <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한: <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won((catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0)} 결제하기`}</button>
             <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>

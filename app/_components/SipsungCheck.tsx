@@ -106,7 +106,7 @@ export default function SipsungCheck({ pattern = 'siksin' }: { pattern?: Pattern
             {' '}<b className={r.strength.ryeong ? 'on' : ''}>득령 {r.strength.ryeong ? '○' : '×'}</b>
             {' '}<b className={r.strength.ji ? 'on' : ''}>득지 {r.strength.ji ? '○' : '×'}</b>
             {' '}<b className={r.strength.se ? 'on' : ''}>득세 {r.strength.se ? '○' : '×'}</b>
-            <em>태어난 달·앉은 자리·나머지 글자 셋을 봅니다. 둘 이상이면 버틴다고 봅니다 — 격국을 제대로 잡는 계산은 아닙니다.</em>
+            <em>태어난 달·앉은 자리·나머지 글자 셋을 봅니다. 둘 이상이면 버틴다고 봅니다. 격국을 제대로 잡는 계산은 아닙니다.</em>
           </div>
 
           <Link className="sk-cta" href={`/reading?cat=daepyo${date ? '&b=' + date : ''}${name ? '&n=' + encodeURIComponent(name) : ''}`}>

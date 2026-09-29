@@ -16,7 +16,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const c = clientBySlug(params.slug);
   if (!c) return { title: '발주처 · 낙찰사주' };
   const ct = baljuContent(c);
-  const title = `${c.name} 입찰, 대표님과 맞는 발주처일까 — 낙찰사주`;
+  const title = `${c.name} 입찰, 대표님과 맞는 발주처일까: 낙찰사주`;
   const description = `${c.name}(${c.date.slice(0, 4)} 설립·${ct.sector}) 입찰 방식과 준비 포인트, 대표님 사주 궁합. ${ct.bid} 설립일 사주 × 대표 사주로 30초 무료 진단.`;
   const url = `${BASE}/balju/${clientSlug(c.name)}`;
   return {

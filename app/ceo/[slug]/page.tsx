@@ -18,9 +18,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const t = tycoonBySlug(params.slug);
   if (!t) return { title: '나와 닮은 CEO · 낙찰사주' };
   const f = tycoonFacts(t);
-  const title = `${t.name} 사주 · 명식 — 일주 ${f.pills}, ${f.type} | 낙찰사주`;
+  const title = `${t.name} 사주 · 명식: 일주 ${f.pills}, ${f.type} | 낙찰사주`;
   const card = { seal: '命', k: `${t.born} 출생 · ${t.co}`, t: `${t.name} 사주 · 명식`, s: `일주 ${f.pills} · 일간 ${f.elName} · ${f.type}` };
-  const description = `${t.name}(${t.en}, ${t.co}, ${t.born} 출생)의 명식 — 일주 ${f.pills}, 일간 ${f.elName}(${ELKO[f.el]}), 대표 유형 ${f.type}. 생시 미상이라 삼주로 계산했습니다. 대표님 사주와 얼마나 겹치는지 30초 무료로 대조해 보십시오.`;
+  const description = `${t.name}(${t.en}, ${t.co}, ${t.born} 출생)의 명식: 일주 ${f.pills}, 일간 ${f.elName}(${ELKO[f.el]}), 대표 유형 ${f.type}. 생시 미상이라 삼주로 계산했습니다. 대표님 사주와 얼마나 겹치는지 30초 무료로 대조해 보면 좋습니다.`;
   return {
     title, description,
     alternates: { canonical: `/ceo/${tycoonSlug(t.name)}` },
@@ -40,7 +40,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
   const maxD = Math.max(1, ...f.dist);
 
   const ld = [
-    { '@context': 'https://schema.org', '@type': 'Article', headline: `${t.name} 사주 · 명식 — 일주 ${f.pills}`, about: t.name, description: t.story, publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE }, mainEntityOfPage: `${BASE}/ceo/${tycoonSlug(t.name)}` },
+    { '@context': 'https://schema.org', '@type': 'Article', headline: `${t.name} 사주 · 명식: 일주 ${f.pills}`, about: t.name, description: t.story, publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE }, mainEntityOfPage: `${BASE}/ceo/${tycoonSlug(t.name)}` },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: '나와 닮은 CEO', item: `${BASE}/ceo` },
       { '@type': 'ListItem', position: 2, name: t.name, item: `${BASE}/ceo/${tycoonSlug(t.name)}` },
@@ -72,7 +72,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
             <div aria-hidden="true" style={{ width: 62, height: 62, borderRadius: 15, background: '#20242c', color: '#f4f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, letterSpacing: '-.02em', flex: 'none' }}>{f.pills}</div>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: '#33383f', lineHeight: 1.6 }}>일주(日柱) <b>{f.pills}</b> · 일간 <b>{f.elName}({ELKO[f.el]})</b></div>
-              <div style={{ fontSize: 13, color: '#5b564a', lineHeight: 1.6 }}>대표 유형 <b>{f.type}</b> — {f.desc} 그릇</div>
+              <div style={{ fontSize: 13, color: '#5b564a', lineHeight: 1.6 }}>대표 유형 <b>{f.type}</b>: {f.desc} 그릇</div>
             </div>
           </div>
           <div style={{ borderTop: '1px solid var(--line)', paddingTop: 11 }}>
@@ -101,7 +101,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>나와 닮은 정도는?</div>
           <p style={{ fontSize: 15, lineHeight: 1.75, color: '#4a4636', margin: 0, fontWeight: 500 }}>
             생년월일을 넣으면 대표님의 명식을 <b>{t.name}</b>을 포함한 거장 100인의 명식과 견줍니다.
-            일간·음양·강한 기운·비는 기운·주도하는 십성·신살 — 여섯 부호 중 몇 가지가 겹치는지로 가장 닮은 사람을 찾습니다.
+            일간·음양·강한 기운·비는 기운·주도하는 십성·신살: 여섯 부호 중 몇 가지가 겹치는지로 가장 닮은 사람을 찾습니다.
           </p>
         </div>
 
@@ -110,7 +110,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
           <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료 · 거장 100인과 대조</span>
         </Link>
 
-        {/* 여기까지는 재미다. 회사에 필요한 것은 따로 있다 — 그 다리를 안 놓아서 다 나가고 있었다. */}
+        {/* 여기까지는 재미다. 회사에 필요한 것은 따로 있다: 그 다리를 안 놓아서 다 나가고 있었다. */}
         <div style={{ ...card, marginTop: 14, background: '#f4f5f7', borderColor: '#e2cd97' }}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: '#2f56c4', marginBottom: 6 }}>닮은 사람을 아는 것으로는 오늘이 안 바뀝니다</div>
           <p style={{ fontSize: 13, lineHeight: 1.75, color: '#4a4636', margin: '0 0 10px' }}>
@@ -120,7 +120,7 @@ export default function TycoonLanding({ params }: { params: { slug: string } }) 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
             <Link href="/reading" style={chip}>오늘, 넣을 날인가</Link>
             <Link href="/product/balju" style={chip}>발주처 궁합</Link>
-            <Link href="/taekil" style={chip}>택일 — 좋은 날 고르기</Link>
+            <Link href="/taekil" style={chip}>택일: 좋은 날 고르기</Link>
           </div>
         </div>
 

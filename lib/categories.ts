@@ -4,11 +4,11 @@
 export type Ohaeng = { el: string; acc: string };
 // 밝은 강조색(어두운 배경 위) — 오방색
 export const OHAENG: Record<string, Ohaeng> = {
-  mok:  { el: '木', acc: '#46a07d' }, // 청록 — 상생·관계·자람
-  hwa:  { el: '火', acc: '#d15c4a' }, // 인주 — 사람·열기
-  to:   { el: '土', acc: '#cfa64e' }, // 황금 — 기반·회사
-  geum: { el: '金', acc: '#b9b0a0' }, // 백은 — 결단·결실
-  su:   { el: '水', acc: '#3f8f80' }, // 먹빛 청 — 흐름·지혜 (남색 아님)
+  mok:  { el: '木', acc: '#46a07d' }, // 청록: 상생·관계·자람
+  hwa:  { el: '火', acc: '#d15c4a' }, // 인주: 사람·열기
+  to:   { el: '土', acc: '#cfa64e' }, // 황금: 기반·회사
+  geum: { el: '金', acc: '#b9b0a0' }, // 백은: 결단·결실
+  su:   { el: '水', acc: '#3f8f80' }, // 먹빛 청: 흐름·지혜 (남색 아님)
 };
 
 export type Product = {
@@ -23,7 +23,7 @@ export const PRODUCTS: Product[] = [
     slug: 'balju', oh: 'mok', hanja: '宮', name: '발주처 궁합',
     kicker: '發注處 宮合',
     title: '그 발주처, {b}나와 맞는 판인가{/b}',
-    lead: '발주처 설립일 사주와 대표님 사주의 상성 — 손대기 전에 봅니다.',
+    lead: '발주처 설립일 사주와 대표님 사주의 상성: 손대기 전에 봅니다.',
     pains: [
       '견적은 다 맞췄는데, 유독 그 발주처만 인연이 안 닿는다',
       '어떤 발주처는 술술 풀리고, 어떤 데는 매번 애를 먹는다',
@@ -31,7 +31,7 @@ export const PRODUCTS: Product[] = [
     ],
     gives: [
       ['발주처 × 대표 상성 점수', '이 발주처가 대표님을 밀어주는 자리인지, 누르는 자리인지'],
-      ['이 발주처를 대하는 법', '서류로 다가갈지 관계로 풀지 — 유리한 전략'],
+      ['이 발주처를 대하는 법', '서류로 다가갈지 관계로 풀지: 유리한 전략'],
       ['유리한 시점', '이 발주처 건은 언제 넣어야 결이 맞는지'],
     ],
     href: '/reading?cat=balju', cta: '발주처 골라 궁합 보기',
@@ -40,14 +40,14 @@ export const PRODUCTS: Product[] = [
     slug: 'dongup', oh: 'hwa', hanja: '同', name: '동업·협정 궁합',
     kicker: '同業 · 協定 宮合',
     title: '손잡기 전에, {b}깨질 궁합인지{/b}부터',
-    lead: '좋은 사람과 좋은 동업은 다릅니다 — 인성이 아니라 명식이 가릅니다.',
+    lead: '좋은 사람과 좋은 동업은 다릅니다. 인성이 아니라 명식이 가릅니다.',
     pains: [
       '분명 좋은 사람이었는데, 같이 일하니 사사건건 어긋났다',
       '지분·결정권을 두루뭉술 넘겼다가 뒤가 시끄러웠다',
       '이번 컨소시엄, 사람은 좋은데 어딘가 자꾸 찜찜하다',
     ],
     gives: [
-      ['대표 × 대표 동업 궁합', '누가 앞에 서고 누가 받칠지 — 역할·신뢰의 상성'],
+      ['대표 × 대표 동업 궁합', '누가 앞에 서고 누가 받칠지: 역할·신뢰의 상성'],
       ['지분·결정권 나누는 법', '어떻게 나눠야 위기에 안 깨지는지'],
       ['협정(회사×회사) 관재수', '공동도급 주관사·지분·정산까지 계약 전 진단'],
     ],
@@ -78,7 +78,7 @@ export const PRODUCTS: Product[] = [
     pains: [
       '임대료와 평수만 보고 옮겼다가, 옮긴 뒤로 이상하게 일이 안 풀렸다',
       '대장군방이니 삼살방이니 말은 들었는데 우리 사무실이 어느 쪽인지 모른다',
-      '이삿날을 부동산이 잡아주는 대로 받았다 — 무슨 날인지도 모르고',
+      '이삿날을 부동산이 잡아주는 대로 받았다: 무슨 날인지도 모르고',
     ],
     gives: [
       ['지금 자리 진단', '출입문과 대표 자리가 한 사택인지, 문과 정면으로 부딪히지는 않는지'],
@@ -93,11 +93,11 @@ export const productBySlug = (s: string) => PRODUCTS.find(p => p.slug === s) || 
 
 // 통점 랜딩(/why) 카테고리별 오행색
 export const PAIN_OH: Record<string, keyof typeof OHAENG> = {
-  haha: 'su',            // 하한가 — 흐름
-  'losing-streak': 'to', // 연패 — 버팀·기반
-  'big-miss': 'geum',    // 큰 건 — 결실·재물
-  partner: 'hwa',        // 동업 — 사람
-  gwanjae: 'mok',        // 관재수 — 관계·풀림
+  haha: 'su',            // 하한가: 흐름
+  'losing-streak': 'to', // 연패: 버팀·기반
+  'big-miss': 'geum',    // 큰 건: 결실·재물
+  partner: 'hwa',        // 동업: 사람
+  gwanjae: 'mok',        // 관재수: 관계·풀림
   jamin: 'geum', staff: 'hwa', slump: 'to', burnout: 'su', succession: 'mok',
   decision: 'geum', expand: 'hwa', betray: 'hwa', 'money-leak': 'geum',
   health: 'su', timing: 'to', start: 'hwa',

@@ -58,21 +58,21 @@ export function taekSection(
     if (h.level === 'good') {
       P.push('<p>이 배치는 손대지 않아도 됩니다. 자리를 바꾸는 것보다 <b>지금 자리를 지키는 편</b>이 낫습니다.</p>');
     } else if (h.line) {
-      P.push(`<p>문과 자리가 <b>일직선</b>입니다. 문을 열 때마다 드나드는 기운이 대표님 등이나 정면으로 곧장 닿습니다. 자리를 옆으로 한 칸만 물려도 직선이 깨집니다 — 벽을 뚫는 공사보다 <b>책상을 옮기는 쪽</b>이 먼저입니다.</p>`);
+      P.push(`<p>문과 자리가 <b>일직선</b>입니다. 문을 열 때마다 드나드는 기운이 대표님 등이나 정면으로 곧장 닿습니다. 자리를 옆으로 한 칸만 물려도 직선이 깨집니다. 벽을 뚫는 공사보다 <b>책상을 옮기는 쪽</b>이 먼저입니다.</p>`);
     } else {
       const g = guaOf(j.desk as number);
       const same = DIR8.filter((_, i) => guaOf(i).sataek === h.door.sataek).join('·');
-      P.push(`<p>지금 자리는 ${esc(g.dir)}(${esc(g.gua)})이라 문과 사택이 갈립니다. 같은 사택은 <b>${esc(same)}</b>입니다 — 이 넷 중 한 쪽으로 책상을 돌리는 것이 가장 적은 비용으로 맞추는 길입니다.</p>`);
+      P.push(`<p>지금 자리는 ${esc(g.dir)}(${esc(g.gua)})이라 문과 사택이 갈립니다. 같은 사택은 <b>${esc(same)}</b>입니다. 이 넷 중 한 쪽으로 책상을 돌리는 것이 가장 적은 비용으로 맞추는 길입니다.</p>`);
     }
   }
 
   // ── 모자란 기운과 자리 ──
   const adv = deskAdvice(el);
-  P.push(`<p>대표님 명식에서 가장 얇은 기운은 ${elTxt}입니다. 이 기운은 <b>${esc(adv.main.dir)}</b>쪽에서 들어옵니다. 창이나 구조 때문에 어렵다면 <b>${esc(adv.alt.dir)}</b>도 같은 결입니다. 자리를 통째로 옮기기 어려우면 <b>바라보는 방향</b>만이라도 그쪽으로 두십시오.</p>`);
+  P.push(`<p>대표님 명식에서 가장 얇은 기운은 ${elTxt}입니다. 이 기운은 <b>${esc(adv.main.dir)}</b>쪽에서 들어옵니다. 창이나 구조 때문에 어렵다면 <b>${esc(adv.alt.dir)}</b>도 같은 결입니다. 자리를 통째로 옮기기 어려우면 <b>바라보는 방향</b>만이라도 그쪽으로 두면 좋습니다.</p>`);
 
   // ── 비보 물건 ──
   const bibo = biboFor(el, h ?? undefined);
-  P.push('<p><b>사무실에 두면 좋은 것</b> — 값이 아니라 놓는 자리가 값을 합니다.</p>');
+  P.push('<p><b>사무실에 두면 좋은 것</b>: 값이 아니라 놓는 자리가 값을 합니다.</p>');
   for (const b of bibo) {
     P.push(`<div class="ssrow"><b>${esc(b.item)}</b> · ${esc(b.where)}<br /><span>${esc(b.why)}</span></div>`);
   }
@@ -85,12 +85,12 @@ export function taekSection(
     const isDae = idx === c.daejanggun, isSam = idx === c.samsal;
     const isFav = idx === fav.main || idx === fav.alt;
     const clear = (isDae || isSam) ? nextClearYear(idx, year + 1) : null;
-    const where = j.from && j.to ? `${cut(j.from)}에서 ${cut(j.to)}${josa(cut(j.to), '으로')} — ` : '';
+    const where = j.from && j.to ? `${cut(j.from)}에서 ${cut(j.to)}${josa(cut(j.to), '으로')} · ` : '';
     const dist = j.km != null && Number.isFinite(j.km) ? ` <b>${Math.round((j.km as number) * 10) / 10}km</b>` : '';
     P.push(`<p><b>옮길 자리는 ${esc(name)}쪽입니다.</b> ${where}지금 자리에서 ${esc(name)}${josa(esc(name), '으로')} ${Math.round((j.deg as number) * 10) / 10}도,${dist} 떨어져 있습니다.</p>`);
     if (isDae || isSam) {
       const which = isDae && isSam ? '대장군방과 삼살방이 겹치는 자리' : isDae ? '대장군방' : '삼살방';
-      P.push(`<p>${year}년 기준으로 ${esc(name)}쪽은 <b>${which}</b>입니다. 예부터 이 해에는 이 방면으로 크게 움직이지 말라고 보았습니다. 다만 이것은 <b>못 간다는 뜻이 아니라 서두르지 말라는 뜻</b>입니다. 계약이 이미 잡혀 있다면 못 갈 이유로 삼지 마시고, 아직 고르는 중이라면 한 번 더 견주어 보시라는 정도로 읽으십시오.</p>`);
+      P.push(`<p>${year}년 기준으로 ${esc(name)}쪽은 <b>${which}</b>입니다. 예부터 이 해에는 이 방면으로 크게 움직이지 말라고 보았습니다. 다만 이것은 <b>못 간다는 뜻이 아니라 서두르지 말라는 뜻</b>입니다. 계약이 이미 잡혀 있다면 못 갈 이유로 삼지 마시고, 아직 고르는 중이라면 한 번 더 견주어 보시라는 정도로 읽으세요.</p>`);
       if (clear) P.push(`<p>이 방면은 <b>${clear}년</b>에 풀립니다. 급하지 않은 이전이라면 그해로 미루는 것도 방법입니다.</p>`);
     } else if (isFav) {
       P.push(`<p>${esc(name)}쪽은 대표님께 모자란 ${elTxt} 기운이 들어오는 방면이고, ${year}년에 조심하라 본 방면에도 걸리지 않습니다. <b>결이 맞는 이전</b>입니다.</p>`);
@@ -104,19 +104,19 @@ export function taekSection(
 
   // ── 택일 ──
   const days = moveDays(from, 90);
-  P.push('<p><b>앞으로 석 달, 옮기기 좋은 날</b> — 건제십이신의 만·정·성·개에 드는 날만 골랐습니다. 성이 가장 힘이 실립니다.</p>');
+  P.push('<p><b>앞으로 석 달, 옮기기 좋은 날</b>: 건제십이신의 만·정·성·개에 드는 날만 골랐습니다. 성이 가장 힘이 실립니다.</p>');
   for (const d of days) {
     P.push(`<div class="ssrow"><b>${d.month}월 ${d.day}일 (${d.dow})</b> · ${d.ganji} · ${d.key}(${d.name})<br /><span>${esc(d.why)}</span></div>`);
   }
 
   const hr = hourFor(dZhi);
-  P.push(`<p>시간은 대표님 일지와 육합을 이루는 <b>${esc(hr.name)} ${esc(hr.span)}</b>${josa(esc(hr.span), '가')} 결이 맞습니다.${hr.night ? ' 다만 밤 시진이라 실제로 짐을 옮기기는 어렵습니다. 그럴 때는 <b>해 뜬 뒤부터 오후 세 시 전</b>에 마치는 것으로 갈음하십시오 — 옛 기록도 이사는 양기가 남아 있을 때 끝내라 하였습니다.' : ' 이 시간대에 짐을 다 들이고 마치면 됩니다.'}</p>`);
+  P.push(`<p>시간은 대표님 일지와 육합을 이루는 <b>${esc(hr.name)} ${esc(hr.span)}</b>${josa(esc(hr.span), '가')} 결이 맞습니다.${hr.night ? ' 다만 밤 시진이라 실제로 짐을 옮기기는 어렵습니다. 그럴 때는 <b>해 뜬 뒤부터 오후 세 시 전</b>에 마치는 것으로 갈음하세요: 옛 기록도 이사는 양기가 남아 있을 때 끝내라 하였습니다.' : ' 이 시간대에 짐을 다 들이고 마치면 됩니다.'}</p>`);
 
   P.push('<p class="note">방위는 두 자리의 대권 방위각으로, 택일은 절기로 잡은 월지와 일지의 건제십이신으로 가렸습니다. 대장군방·삼살방은 <b>예부터 조심하라 본 자리</b>일 뿐 금기가 아닙니다. 계약·임대 조건이 먼저이고, 이 글은 그 위에 얹는 참고입니다.</p>');
 
   const teaser = h
-    ? `${h.title} — 지금 자리에 둘 물건 ${bibo.length}가지와, 옮길 자리의 방위·거리·이사 택일 ${days.length}일을 함께 봅니다.`
+    ? `${h.title}: 지금 자리에 둘 물건 ${bibo.length}가지와, 옮길 자리의 방위·거리·이사 택일 ${days.length}일을 함께 봅니다.`
     : `옮길 자리의 방위와 거리, 이사에 좋은 날 ${days.length}일, 사무실에 둘 물건까지 짚어 드립니다.`;
 
-  return { t: '자리 사주 — 지금 자리와 옮길 자리', html: P.join('\n'), teaser };
+  return { t: '자리 사주: 지금 자리와 옮길 자리', html: P.join('\n'), teaser };
 }

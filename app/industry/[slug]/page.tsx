@@ -14,8 +14,8 @@ export function generateStaticParams() { return INDUSTRIES.map(r => ({ slug: r.s
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const r = bySlug(params.slug);
   if (!r) return { title: '낙찰사주' };
-  const title = `${r.name} 대표 입찰 사주 — 낙찰 흐름과 발주처 궁합`;
-  const description = `${r.name} 대표님을 위한 입찰 사주 — 오늘의 투찰 택일·길일·발주처 궁합을 30초 무료로. ${r.intro}`.slice(0, 155);
+  const title = `${r.name} 대표 입찰 사주: 낙찰 흐름과 발주처 궁합`;
+  const description = `${r.name} 대표님을 위한 입찰 사주: 오늘의 투찰 택일·길일·발주처 궁합을 30초 무료로. ${r.intro}`.slice(0, 155);
   return { title, description, alternates: { canonical: `/industry/${r.slug}` },
     openGraph: { title, description, url: `${BASE}/industry/${r.slug}`, type: 'article', siteName: '낙찰사주',
       images: ogCard({ seal: '業', k: '業種 入札', t: `${r.name} 대표 입찰 사주`, s: '낙찰 흐름과 발주처 궁합' }) },
@@ -43,7 +43,7 @@ export default function IndustryPage({ params }: { params: { slug: string } }) {
       <SiteTop />
       <div style={{ padding: '18px 18px 4px' }}>
         <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>업종별 입찰</div>
-        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 10px' }}>{r.name} 대표 — 입찰 흐름과 발주처 궁합</h1>
+        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 10px' }}>{r.name} 대표: 입찰 흐름과 발주처 궁합</h1>
         <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 16px' }}>{r.intro}</p>
         <div style={card}><div style={h}>{r.name} 입찰·적격심사 특성</div><p style={p}>{r.trait}</p></div>
         <div style={card}><div style={h}>명리로 보는 {r.name} 대표</div><p style={p}>{r.myeong}</p></div>

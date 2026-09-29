@@ -53,7 +53,7 @@ export function looksPromotional(body: string): boolean {
 
 export const stars = (n: number) => '★'.repeat(Math.max(0, Math.min(5, n))) + '☆'.repeat(5 - Math.max(0, Math.min(5, n)));
 
-/** 평균 별점. 후기가 없으면 null — 0.0 을 띄우면 "0점짜리 서비스"로 읽힌다. */
+/** 평균 별점. 후기가 없으면 null · 0.0 을 띄우면 "0점짜리 서비스"로 읽힌다. */
 export function averageRating(list: { rating: number }[]): number | null {
   if (!list.length) return null;
   return Math.round((list.reduce((a, r) => a + r.rating, 0) / list.length) * 10) / 10;

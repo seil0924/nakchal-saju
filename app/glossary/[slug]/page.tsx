@@ -13,7 +13,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const t = glossaryBySlug(params.slug);
   if (!t) return { title: '낙찰사주' };
   // 레이아웃 템플릿이 ' · 낙찰사주'를 뒤에 붙인다. 여기서 또 붙이면 제목에 두 번 나온다.
-  const title = t.titleQ || `${t.term} 뜻 — ${t.cat} 용어`;
+  const title = t.titleQ || `${t.term} 뜻: ${t.cat} 용어`;
   // 검색결과 설명은 질의에 곧장 답해야 한다. 두 문장 만에 우리 장사 이야기로 빠지면 아무도 안 누른다.
   const desc = (t.lead || t.def).slice(0, 155);
   return { title, description: desc, alternates: { canonical: `/glossary/${t.slug}` },

@@ -49,13 +49,13 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
         {p.dig.map((d, i) => <div key={i} className="pain"><span className="pk">·</span>{d}</div>)}
       </div>
 
-      {/* 네 탓이 아니다 — 명리 재구성 */}
+      {/* 네 탓이 아니다. 명리 재구성 */}
       <div className="lab"><i /><span>대표님 잘못이 아닙니다</span></div>
       <div className="auth">
         {p.reframe.map((r, i) => <p key={i} className="authlead" style={{ marginBottom: i === p.reframe.length - 1 ? 0 : 12 }} dangerouslySetInnerHTML={{ __html: r }} />)}
       </div>
 
-      {/* 위로 + 희망 — 버팀목 */}
+      {/* 위로 + 희망: 버팀목 */}
       <div className="emocore">
         <div className="emk">士</div>
         <p className="emlast" style={{ marginTop: 0 }}>{p.console}</p>
@@ -67,7 +67,7 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
         {p.gives.map(([t, d], i) => <div key={i} className="drow"><b>{t}</b><span>{d}</span></div>)}
       </div>
 
-      {/* CTA — 가격 노출 없음 · 무료 진입 */}
+      {/* CTA · 가격 노출 없음 · 무료 진입 */}
       <div style={{ padding: '16px 24px 0' }}>
         <Link className="fullcta" href={`/reading${PAIN_CAT[p.slug] ? `?cat=${PAIN_CAT[p.slug]}` : ''}`}>{p.cta} <small>생년월일만 · 30초 · 무료로 시작</small></Link>
       </div>

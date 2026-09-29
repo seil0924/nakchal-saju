@@ -8,7 +8,7 @@ import { ogCard, ogCardUrl } from '@/lib/og';
 import ReadingForm from './ReadingForm';
 
 const BASE = 'https://nakchalsaju.com';
-const T = '오늘, 넣을 날인가 — 대표 사주로 보는 투찰 택일';
+const T = '오늘, 넣을 날인가: 대표 사주로 보는 투찰 택일';
 const D = '생년월일만 넣으면 30초. 대표님 사주와 오늘 일진으로 오늘의 흐름을 짚어 드립니다. 회원가입 없이 무료로 시작.';
 const CARD = { seal: '擇', k: '運七技三 · 오늘의 택일', t: '오늘, 넣을 날인가', s: '생년월일만 · 30초 · 무료로 시작' };
 

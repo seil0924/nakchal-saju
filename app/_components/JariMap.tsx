@@ -151,7 +151,7 @@ export default function JariMap() {
             ? <>옮길 자리는 지금 자리에서 <b>{verdict.dirName}쪽 {verdict.deg}°</b>, <b>{verdict.km}km</b> 떨어져 있습니다</>
             : <>붉은 칸이 <b>출입문</b>, 금빛 칸이 <b>대표 자리</b>입니다</>}
           <span className="jr-caut">
-            {year}년에 예부터 조심하라 본 방면 — 대장군방 <b>{DIR8[caution.daejanggun]}</b>
+            {year}년에 예부터 조심하라 본 방면: 대장군방 <b>{DIR8[caution.daejanggun]}</b>
             {caution.same ? <>, 삼살방도 같은 <b>{DIR8[caution.samsal]}</b></> : <>, 삼살방 <b>{DIR8[caution.samsal]}</b></>}
           </span>
         </div>
@@ -237,7 +237,7 @@ export default function JariMap() {
               {ptA.matched} → {ptB.matched} · {verdict.dirName} {verdict.deg}° · {verdict.km}km
               {verdict.isDaejanggun && ' · 대장군방'}
               {verdict.isSamsal && ' · 삼살방'}
-              {verdict.clearYear && ` — 이 방면은 ${verdict.clearYear}년에 풀립니다.`}
+              {verdict.clearYear && ` · 이 방면은 ${verdict.clearYear}년에 풀립니다.`}
             </span>
             <em>대장군방·삼살방은 예부터 조심하라 본 자리일 뿐, 못 간다는 뜻이 아닙니다. 판단은 대표님 몫으로 남깁니다.</em>
           </div>

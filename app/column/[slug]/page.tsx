@@ -110,7 +110,7 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
         )}
       </article>
 
-      {/* 관련 칼럼 — 내부 링크 그래프. 크롤러 진입 경로이자 체류 시간 확보 */}
+      {/* 관련 칼럼: 내부 링크 그래프. 크롤러 진입 경로이자 체류 시간 확보 */}
       {rel.length > 0 && (
         <nav className="colrel" aria-label="관련 칼럼">
           <div className="colrel-hd">이어서 읽어볼 글</div>

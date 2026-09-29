@@ -10,7 +10,7 @@ import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata: Metadata = {
   // 레이아웃 템플릿이 ' · 낙찰사주'를 뒤에 붙인다. 여기서 또 붙이면 두 번 나온다.
-  title: '자리 사주 — 사무실 방위와 이전 택일',
+  title: '자리 사주: 사무실 방위와 이전 택일',
   description: '지금 사무실의 출입문·대표 자리 방위를 팔택으로 보고, 옮길 곳의 방위·거리와 이사에 좋은 날을 짚어 드립니다. 주소만 넣으면 됩니다.',
   alternates: {
     canonical: 'https://nakchalsaju.com/jari',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     languages: { 'ko-KR': '/jari', 'en': '/en/date-picker' },
   },
   openGraph: {
-    title: '자리 사주 — 사무실 방위와 이전 택일',
+    title: '자리 사주: 사무실 방위와 이전 택일',
     description: '출입문과 대표 자리의 방위, 옮길 곳의 방위와 거리, 이사에 좋은 날까지.',
     url: 'https://nakchalsaju.com/jari', type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
     images: ogCard(CARD),
@@ -29,7 +29,7 @@ export default function Jari() {
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: '자리 사주 — 사무실 이전 택일과 방위',
+    name: '자리 사주: 사무실 이전 택일과 방위',
     serviceType: '사무실 방위·이전 택일 상담',
     provider: { '@type': 'Organization', name: '낙찰사주', url: 'https://nakchalsaju.com' },
     areaServed: { '@type': 'Country', name: '대한민국' },
@@ -51,7 +51,7 @@ export default function Jari() {
       <nav aria-label="함께 보면 좋은 것" style={{ padding: '4px 15px 12px' }}>
         <div style={{ fontSize: 13, fontWeight: 800, color: '#58616a', margin: '6px 0 8px' }}>함께 보면 좋은 것</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {[['/reading?cat=daeun', '회사 대운 — 지금이 옮길 때인가'], ['/reading?cat=sajeong', '오늘의 투찰 택일'], ['/balju', '발주처 궁합'], ['/column', '칼럼']].map(([h, t]) => (
+          {[['/reading?cat=daeun', '회사 대운: 지금이 옮길 때인가'], ['/reading?cat=sajeong', '오늘의 투찰 택일'], ['/balju', '발주처 궁합'], ['/column', '칼럼']].map(([h, t]) => (
             <Link key={h} href={h} style={{ fontSize: 13, fontWeight: 600, color: '#58616a', background: '#f4f5f7', border: '1px solid #e6e8ea', borderRadius: 999, padding: '5px 10px', textDecoration: 'none' }}>{t}</Link>
           ))}
         </div>

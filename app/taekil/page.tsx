@@ -15,22 +15,22 @@ const CARD = { seal: '擇', k: '擇日 · 언제 시작할 것인가', t: '개�
 const BASE = 'https://nakchalsaju.com';
 
 export const metadata: Metadata = {
-  title: { absolute: '택일 — 개업일·법인 설립일·계약일·이사날 좋은 날 | 낙찰사주' },
+  title: { absolute: '택일: 개업일·법인 설립일·계약일·이사날 좋은 날 | 낙찰사주' },
   description: '개업일, 법인 설립일, 계약일, 사무실 이전, 입찰일. 건제십이신으로 앞으로 90일 중 결이 맞는 날을 가려 놓았습니다. 절기는 표가 아니라 태양 황경으로 직접 계산합니다.',
   keywords: ['택일', '개업일 택일', '법인 설립일', '계약일 택일', '이사 좋은 날', '사무실 이전 택일', '건제십이신', '좋은 날'],
   alternates: { canonical: '/taekil', languages: { 'ko-KR': '/taekil', 'en': '/en/date-picker' } },
   openGraph: {
-    title: '택일 — 언제 시작할 것인가',
+    title: '택일: 언제 시작할 것인가',
     description: '개업·설립·계약·이전·입찰. 앞으로 90일 중 결이 맞는 날.',
     url: BASE + '/taekil', type: 'website', locale: 'ko_KR', siteName: '낙찰사주', images: ogCard(CARD),
   },
-  twitter: { card: 'summary_large_image', title: '택일 — 언제 시작할 것인가', description: '개업·설립·계약·이전·입찰. 앞으로 90일 중 결이 맞는 날.', images: [ogCardUrl(CARD)] },
+  twitter: { card: 'summary_large_image', title: '택일: 언제 시작할 것인가', description: '개업·설립·계약·이전·입찰. 앞으로 90일 중 결이 맞는 날.', images: [ogCardUrl(CARD)] },
 };
 
 export default function TaekilHub() {
   const ld = {
     '@context': 'https://schema.org', '@type': 'CollectionPage',
-    name: '택일 — 개업일·법인 설립일·계약일·이사날', url: BASE + '/taekil', inLanguage: 'ko',
+    name: '택일: 개업일·법인 설립일·계약일·이사날', url: BASE + '/taekil', inLanguage: 'ko',
     description: '건제십이신으로 앞으로 90일 중 그 일에 맞는 날을 가립니다.',
     hasPart: TAEKIL.map(t => ({ '@type': 'WebPage', name: t.kw, url: `${BASE}/taekil/${encodeURIComponent(t.slug)}` })),
   };
@@ -72,13 +72,13 @@ export default function TaekilHub() {
 
       <section className="bz-read" style={{ padding: '0 18px 24px' }}>
         <h3>건제십이신이 무엇인가</h3>
-        <p>하루에 한 칸씩 도는 열두 개의 이름표입니다 — 건·제·만·평·정·집·파·위·성·수·개·폐. 그날의 일지(日支)를
+        <p>하루에 한 칸씩 도는 열두 개의 이름표입니다. 건·제·만·평·정·집·파·위·성·수·개·폐. 그날의 일지(日支)를
           그달의 월지(月支)에 견주어 어느 이름이 붙는지가 정해집니다. 동아시아 책력이 몇백 년째 날을 고를 때
           써 온 방식이고, 셈 자체는 단순합니다.</p>
 
         <h3>왜 절기를 직접 계산하는가</h3>
         <p>이름이 정해지려면 그 날이 어느 절기 구간에 들어 있는지를 알아야 합니다. 절기는 매년 같은 날짜에 들지
-          않습니다 — 태양이 특정 황경에 닿는 순간이라 해마다 몇 시간씩 밀립니다. 표에서 읽어 오면 경계에 걸린
+          않습니다. 태양이 특정 황경에 닿는 순간이라 해마다 몇 시간씩 밀립니다. 표에서 읽어 오면 경계에 걸린
           날이 한 달 통째로 밀립니다. 그래서 직접 계산합니다.</p>
 
         <h3>손 없는 날과는 다릅니다</h3>
@@ -87,7 +87,7 @@ export default function TaekilHub() {
           무엇을 근거로 골랐는지 밝혀 두는 편이 낫다고 봅니다.</p>
 
         <h3>더 볼 것</h3>
-        <p>사무실을 옮기실 것이라면 날짜와 함께 <Link href="/jari">방위와 거리</Link>를 같이 보십시오.
+        <p>사무실을 옮기실 것이라면 날짜와 함께 <Link href="/jari">방위와 거리</Link>를 같이 보는 편이 낫습니다.
           용어가 낯설면 <Link href="/glossary">용어사전</Link>에 정리해 두었습니다.
           영어로 필요하시면 <Link href="/en/date-picker" hrefLang="en">Auspicious Date Picker</Link>가 같은 엔진으로 돕니다.</p>
       </section>

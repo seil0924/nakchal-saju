@@ -21,7 +21,7 @@ import './review.css';
 export const revalidate = 300;   // 승인된 후기는 5분 안에 반영된다(매 요청 서버 렌더 금지)
 
 const BASE = 'https://nakchalsaju.com';
-const T = '이용 후기 — 써 본 대표들의 말';
+const T = '이용 후기: 써 본 대표들의 말';
 const D = '낙찰사주를 실제로 써 본 대표님들이 남긴 후기입니다. 지어낸 후기는 싣지 않습니다. 직접 남기실 수도 있습니다.';
 
 export const metadata: Metadata = {
@@ -57,7 +57,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
       <div className="wrap">
         {sent && (
           <div className="card"><div className="rvmsg ok">
-            후기 감사합니다. <b>확인 후 게시</b>됩니다 — 광고·욕설을 거르느라 바로 올라가지 않습니다.
+            후기 감사합니다. <b>확인 후 게시</b>됩니다. 광고·욕설을 거르느라 바로 올라가지 않습니다.
           </div></div>
         )}
         {err && <div className="card"><div className="rvmsg no">{err}</div></div>}
@@ -84,7 +84,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
                 <div className="big">아직 올라온 후기가 없습니다</div>
                 <div className="sm">
                   지어낸 후기로 채우지 않기로 했습니다. 그래서 지금은 비어 있습니다.<br />
-                  써 보셨다면 아래에 한 줄 남겨 주십시오 — <b>첫 번째 후기</b>가 됩니다.
+                  써 보셨다면 아래에 한 줄 남겨 주세요: <b>첫 번째 후기</b>가 됩니다.
                 </div>
               </div>
 
@@ -93,12 +93,12 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
               <div className="rvguide">
                 <div className="gh">이렇게 써 주시면 됩니다 <span>· 예시 문항</span></div>
                 <ol>
-                  <li><b>어떤 상황이었는지</b> — 어떤 입찰·수주를 앞두고 보셨습니까</li>
-                  <li><b>무엇을 보셨는지</b> — 회사 사주, 투찰 택일, 발주처 궁합 중 어느 것</li>
-                  <li><b>실제로 어땠는지</b> — 도움이 된 점, 아쉬웠던 점 그대로</li>
+                  <li><b>어떤 상황이었는지</b>: 어떤 입찰·수주를 앞두고 보셨습니까</li>
+                  <li><b>무엇을 보셨는지</b>: 회사 사주, 투찰 택일, 발주처 궁합 중 어느 것</li>
+                  <li><b>실제로 어땠는지</b>: 도움이 된 점, 아쉬웠던 점 그대로</li>
                 </ol>
                 <p className="gn">
-                  좋게 써 달라는 뜻이 아닙니다. <b>아쉬웠던 점이 있으면 그대로 적어 주십시오</b> —
+                  좋게 써 달라는 뜻이 아닙니다. <b>아쉬웠던 점이 있으면 그대로 적어 주세요</b> —
                   그쪽이 고칠 거리가 되고, 읽는 분께도 더 믿음이 갑니다.
                 </p>
               </div>
@@ -121,7 +121,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
         <div className="card">
           <div className="st"><span className="b" />후기 남기기</div>
           <form className="rvform" method="post" action="/api/review">
-            {/* 허니팟 — 사람에게는 안 보이고 봇만 채운다 */}
+            {/* 허니팟: 사람에게는 안 보이고 봇만 채운다 */}
             <div className="rvhp" aria-hidden="true">
               <label htmlFor="company">회사명</label>
               <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
@@ -169,7 +169,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
         <div className="card">
           <div className="st"><span className="b" />먼저 써 보시겠다면</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {[['/hoesa', '회사 사주 — 설립일만'], ['/reading', '오늘, 넣을 날인가'], ['/ceo', '나와 닮은 CEO']].map(([h, t]) => (
+            {[['/hoesa', '회사 사주: 설립일만'], ['/reading', '오늘, 넣을 날인가'], ['/ceo', '나와 닮은 CEO']].map(([h, t]) => (
               <Link key={h} href={h} style={{ fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' }}>{t}</Link>
             ))}
           </div>

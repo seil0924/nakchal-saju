@@ -4,7 +4,7 @@ import SiteTop from '@/app/_components/SiteTop';
 
 export const metadata = {
   title: '대표님 잘못이 아닙니다',
-  description: '하한가·연패·큰 건·동업·관재수 — 대표님을 괴롭힌 그 일, 실력이 아니라 흐름의 문제일 수 있습니다.',
+  description: '하한가·연패·큰 건·동업·관재수: 대표님을 괴롭힌 그 일, 실력이 아니라 흐름의 문제일 수 있습니다.',
   alternates: { canonical: '/why' },
 };
 
@@ -17,7 +17,7 @@ export default function WhyHub() {
         <div className="wm">運</div>
         <h1>그 일, 대표님 <b>실력</b> 탓이<br />아닐 수 있습니다</h1>
         <div className="rule" />
-        <div className="sub">대표님을 오래 괴롭힌 그 고민 — 어느 쪽에 가까운지 골라 보십시오.</div>
+        <div className="sub">대표님을 오래 괴롭힌 그 고민: 어느 쪽에 가까운지 골라 보면 좋습니다.</div>
       </div>
 
       <div className="lab"><i /><span>어떤 고민이 가장 무거우신가요</span></div>

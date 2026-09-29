@@ -44,12 +44,12 @@ export function judgeJaeda(c: Chart8): Verdict {
   const tone: Tone = heavy ? 'warn' : 'good';
   const tag = level === 'clear' ? '해당함' : level === 'yes' ? '기운 있음' : level === 'weak' ? '아님' : '아님';
 
-  if (jae.length) notes.push(`명식에 재성이 ${jae.length}자리 있습니다 — ${jae.map(s => s.where).join('·')}.`);
+  if (jae.length) notes.push(`명식에 재성이 ${jae.length}자리 있습니다. ${jae.map(s => s.where).join('·')}.`);
   else notes.push('명식에 재성이 없습니다. 재다신약과는 반대쪽 구조입니다.');
   if (monthJae) notes.push('태어난 달이 재성입니다. 재가 가장 무거운 자리에 앉아 있어 부담이 큽니다.');
   if (heavy) {
     notes.push(bi.length
-      ? `비겁이 ${bi.length}자리 있습니다. 재다신약에는 같이 짊어질 사람이 약입니다 — 동업·직원·조합이 여기에 해당합니다.`
+      ? `비겁이 ${bi.length}자리 있습니다. 재다신약에는 같이 짊어질 사람이 약입니다. 동업·직원·조합이 여기에 해당합니다.`
       : '비겁이 없습니다. 혼자 다 지려는 자리라 벌수록 몸이 상합니다. 사람을 쓰는 것이 곧 처방입니다.');
     notes.push(in_.length
       ? '인성이 있어 배움·자격·문서가 버팀목이 됩니다. 면허와 실적을 쌓아 두면 재를 담는 그릇이 커집니다.'
@@ -107,10 +107,10 @@ export function judgeJesal(c: Chart8): Verdict {
   const tag = level === 'clear' ? '뚜렷함' : level === 'yes' ? '있음' : level === 'weak' ? '약함' : '없음';
 
   if (!sal.length) notes.push('명식에 편관(칠살)이 없습니다. 누르는 힘 자체가 약하니 막을 일도 적습니다.');
-  else notes.push(`편관이 ${sal.length}자리 있습니다 — ${sal.map(s => s.where).join('·')}. 나를 시험하는 큰 판, 관재·감사·발주처의 압박이 여기에 해당합니다.`);
+  else notes.push(`편관이 ${sal.length}자리 있습니다. ${sal.map(s => s.where).join('·')}. 나를 시험하는 큰 판, 관재·감사·발주처의 압박이 여기에 해당합니다.`);
   if (sal.length && !sik.length) {
     notes.push(sang.length
-      ? '식신은 없고 상관이 있습니다. 눌리는 힘을 맞받아치는 형태라 결과는 나오지만 부딪힘이 큽니다 — 상관합살보다 식신제살이 조용합니다.'
+      ? '식신은 없고 상관이 있습니다. 눌리는 힘을 맞받아치는 형태라 결과는 나오지만 부딪힘이 큽니다. 상관합살보다 식신제살이 조용합니다.'
       : '식신이 없어 눌리는 힘을 실력으로 받아내기 어렵습니다. 인성(자격·문서)으로 돌려 푸는 쪽이 낫습니다.');
   }
   if (sal.length && sik.length) {

@@ -11,7 +11,7 @@ const BASE = 'https://nakchalsaju.com';
 const slugify = (s: string) => s;
 
 export const metadata: Metadata = {
-  title: '입찰·명리 용어사전 — 사정률·적격심사·일간·대운까지',
+  title: '입찰·명리 용어사전: 사정률·적격심사·일간·대운까지',
   description: '공공입찰·조달 용어(사정률·낙찰하한율·적격심사·종합심사)와 사주명리 용어(일간·십성·대운·세운·관재수)를 한자리에서 명확히 정의합니다.',
   alternates: { canonical: '/glossary' },
   keywords: ['입찰 용어', '조달 용어', '사정률 뜻', '적격심사 뜻', '사주 용어', '명리 용어', '일간 뜻', '대운 뜻', '낙찰사주'],
@@ -53,7 +53,7 @@ export default function GlossaryPage() {
           </section>
         ))}
         {/* 일간·오행·십성 풀이 18장. 사이트맵엔 있었지만 사이트 안에서 사람이 닿을 길이 없었다
-            — 서로끼리만 링크돼 고립돼 있었다. 용어사전이 이 개념들의 자연스러운 입구다. */}
+            · 서로끼리만 링크돼 고립돼 있었다. 용어사전이 이 개념들의 자연스러운 입구다. */}
         <section style={{ marginBottom: 18 }}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '6px 0 6px' }}>일간·오행·십성 풀이</div>
           <p style={{ fontSize: 13, lineHeight: 1.7, color: '#58616a', margin: '0 0 10px', fontWeight: 500 }}>

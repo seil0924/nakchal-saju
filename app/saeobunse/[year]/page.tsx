@@ -20,24 +20,24 @@ const GEN: Record<string, string> = { 목: '화', 화: '토', 토: '금', 금: '
 const KE: Record<string, string> = { 목: '토', 토: '수', 수: '화', 화: '금', 금: '목' };
 const THEME: Record<string, string> = {
   화: '火 기운이 강해 속도·확장·경쟁·가시성이 두드러지는 해',
-  목: '木 기운의 해 — 성장·시작·새 판을 벌이기에 좋은 흐름',
-  토: '土 기운의 해 — 안정·기반·신뢰가 힘이 되는 해',
-  금: '金 기운의 해 — 결실·정리·수확과 규율이 중요한 해',
-  수: '水 기운의 해 — 유연·지혜·준비와 흐름 읽기가 관건',
+  목: '木 기운의 해: 성장·시작·새 판을 벌이기에 좋은 흐름',
+  토: '土 기운의 해: 안정·기반·신뢰가 힘이 되는 해',
+  금: '金 기운의 해: 결실·정리·수확과 규율이 중요한 해',
+  수: '水 기운의 해: 유연·지혜·준비와 흐름 읽기가 관건',
 };
 const BASE_TXT: Record<string, string> = {
-  taese: '본인의 해(태세) — 주도권과 변화가 함께 오는 해.',
-  liuhe: '올해와 육합(六合) — 귀인·협력운이 좋은 해.',
-  sanhe: '올해와 삼합(三合) — 큰 흐름을 함께 타는 해.',
-  chong: '올해와 충(沖) — 변화·이동수가 큰 해.',
-  none: '올해와 큰 충·합은 없는 해 — 실속과 관리가 관건.',
+  taese: '본인의 해(태세): 주도권과 변화가 함께 오는 해.',
+  liuhe: '올해와 육합(六合): 귀인·협력운이 좋은 해.',
+  sanhe: '올해와 삼합(三合): 큰 흐름을 함께 타는 해.',
+  chong: '올해와 충(沖): 변화·이동수가 큰 해.',
+  none: '올해와 큰 충·합은 없는 해: 실속과 관리가 관건.',
 };
 const NUANCE: Record<string, string> = {
-  gen_in: '올해가 밀어주는 기운 — 지원·성장운 가세, 적극적으로.',
-  gen_out: '기운을 내주는 자리 — 소진 주의, 내실 다지기.',
-  ke_in: '눌리는 기운 — 무리한 확장보다 수비·관리.',
-  ke_out: '취하는 기운 — 재물·기회에 적극적으로.',
-  same: '같은 기운 — 경쟁 속 차별화가 관건.',
+  gen_in: '올해가 밀어주는 기운: 지원·성장운 가세, 적극적으로.',
+  gen_out: '기운을 내주는 자리: 소진 주의, 내실 다지기.',
+  ke_in: '눌리는 기운: 무리한 확장보다 수비·관리.',
+  ke_out: '취하는 기운: 재물·기회에 적극적으로.',
+  same: '같은 기운: 경쟁 속 차별화가 관건.',
 };
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 function yInfo(y: number) {
@@ -77,7 +77,7 @@ export function generateMetadata({ params }: { params: { year: string } }): Meta
   const y = Number(params.year);
   if (!Number.isInteger(y) || y < MIN || y > MAX) return {};
   const yi = yInfo(y);
-  const title = `${y} ${yi.ganzhi} 12지신 사업·입찰운세 — 출생연도별`;
+  const title = `${y} ${yi.ganzhi} 12지신 사업·입찰운세: 출생연도별`;
   const description = `${y}년(${yi.ganzhi}, ${yi.label}) 띠별·출생연도별 사업·입찰운세. 같은 띠라도 년주(年柱)에 따라 다른 올해의 수주 흐름과 실전 수칙.`;
   return {
     title, description,
@@ -109,7 +109,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
       <div style={{ padding: '18px 18px 4px' }}>
         <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>{yi.ganzhi}년 사업운</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>{y} {yi.ganzhi} 12지신 사업·입찰운세</h1>
-        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 12px' }}>{y}년은 <b>{yi.ganzhi} — {yi.label}</b>. {yi.theme}입니다. 같은 띠라도 <b>태어난 해(년주)</b>에 따라 올해 기운과의 관계가 달라집니다 — 출생연도별로 짚어드립니다.</p>
+        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 12px' }}>{y}년은 <b>{yi.ganzhi}: {yi.label}</b>. {yi.theme}입니다. 같은 띠라도 <b>태어난 해(년주)</b>에 따라 올해 기운과의 관계가 달라집니다. 출생연도별로 짚어드립니다.</p>
 
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: '0 0 16px' }}>
           {years.map(yy => (

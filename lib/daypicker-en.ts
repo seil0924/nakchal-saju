@@ -11,7 +11,7 @@ export const OFFICERS = [
   { hanja: '除', pinyin: 'Chu', en: 'Remove', gist: 'Clearing out. Good for ending things and cleaning up.' },
   { hanja: '滿', pinyin: 'Man', en: 'Full', gist: 'Filling up. Good for stocking, storing and moving in.' },
   { hanja: '平', pinyin: 'Ping', en: 'Balance', gist: 'Level ground. Quiet, unremarkable, safe for routine work.' },
-  { hanja: '定', pinyin: 'Ding', en: 'Stable', gist: 'Settling. The day things are fixed in place — contracts sit well here.' },
+  { hanja: '定', pinyin: 'Ding', en: 'Stable', gist: 'Settling. The day things are fixed in place · contracts sit well here.' },
   { hanja: '執', pinyin: 'Zhi', en: 'Initiate', gist: 'Taking hold. Good for hiring and taking charge.' },
   { hanja: '破', pinyin: 'Po', en: 'Destruction', gist: 'Breaking. Avoid for anything you want to last.' },
   { hanja: '危', pinyin: 'Wei', en: 'Danger', gist: 'Precarious. Avoid for travel and risk.' },
