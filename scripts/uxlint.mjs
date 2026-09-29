@@ -21,6 +21,9 @@ const args = Object.fromEntries(process.argv.slice(2).map(a => { const [k, ...v]
 // 볼 곳: 화면에 나가는 글. 관리자 화면과 테스트는 뺀다(손님이 읽지 않는다).
 const DIRS = ['app', 'lib', 'content'];
 const SKIP = /node_modules|\.next|__tests__|\/admin\/|scripts\//;
+// 약관·환불·개인정보 화면은 법 문구를 그대로 적어야 한다.
+// '청약철회가 제한됩니다'를 부드럽게 바꾸면 고지 의무를 흐리게 된다 — 그래서 재지 않는다(2026-09-29).
+const LEGAL = /app\/(refund|terms|privacy|en|zh)\//;   // 영어·중국어 화면은 한국어 문장 규칙 대상이 아니다
 const EXT = /\.(tsx?|md)$/;
 
 const RULES = [
@@ -37,7 +40,7 @@ const RULES = [
   { id: '적표현', why: '‘~적(的)’은 대개 빼도 뜻이 남는다.',
     re: /(가급적|추가적인|일시적으로|지속적으로|효과적으로|대표적으로|전반적으로|기본적으로|실질적으로|궁극적으로)/g },
   { id: '한자어', why: '어려운 한자어는 쉬운 우리말로. (익일→다음날, 통보→알림, 상이→다름)',
-    re: /(익일|익월|당월|사전 공지|통보|상이하|구비서류|유선상담|수령하|존재하지 않|제 수수료|소요됩니다)/g },
+    re: /(익일|익월|당월|사전 공지|통보(?!받)|상이하|구비서류|유선상담|수령하|존재하지 않|제 수수료|소요됩니다)/g },
   { id: 'AI티', why: '“단순히 ~가 아니라”, “~뿐만 아니라”, “무엇보다”는 사람 말투가 아니라 글쓰기 틀이다.',
     re: /(단순히 [^.]{0,30}가 아니라|뿐만 아니라|무엇보다도|바로 그것이|이야말로|라고 할 수 있습니다|에 다름없)/g },
   { id: '줄표', why: '줄표(—)를 한 문장에 여러 번 쓰면 읽는 호흡이 끊긴다. 문장을 나눠 쓴다.',
@@ -47,7 +50,7 @@ const RULES = [
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
-    if (SKIP.test(p.split(path.sep).join('/'))) continue;
+    if (SKIP.test(p.split(path.sep).join('/')) || LEGAL.test(p.split(path.sep).join('/'))) continue;
     if (e.isDirectory()) walk(p, out);
     else if (EXT.test(e.name)) out.push(p);
   }
@@ -61,8 +64,9 @@ const hits = new Map(RULES.map(r => [r.id, []]));
 for (const f of files) {
   const rel = path.relative(ROOT, f).split(path.sep).join('/');
   const lines = fs.readFileSync(f, 'utf8').split(/\r?\n/);
-  lines.forEach((line, i) => {
-    if (/^\s*(\/\/|\*|\/\*)/.test(line)) return;      // 주석은 화면에 안 나간다
+  lines.forEach((raw, i) => {
+    if (/^\s*(\/\/|\*|\/\*)/.test(raw)) return;       // 주석은 화면에 안 나간다
+    const line = raw.replace(/\s\/\/\s[^'"`]*$/, '');  // 줄 끝에 붙은 주석도 화면에 안 나간다
     for (const r of RULES) {
       r.re.lastIndex = 0;
       const m = line.match(r.re);

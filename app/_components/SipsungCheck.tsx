@@ -102,7 +102,7 @@ export default function SipsungCheck({ pattern = 'siksin' }: { pattern?: Pattern
           </ul>
 
           <div className="sk-meter">
-            일간이 버티는 힘 —
+            일간이 버티는 힘:
             {' '}<b className={r.strength.ryeong ? 'on' : ''}>득령 {r.strength.ryeong ? '○' : '×'}</b>
             {' '}<b className={r.strength.ji ? 'on' : ''}>득지 {r.strength.ji ? '○' : '×'}</b>
             {' '}<b className={r.strength.se ? 'on' : ''}>득세 {r.strength.se ? '○' : '×'}</b>
@@ -117,7 +117,7 @@ export default function SipsungCheck({ pattern = 'siksin' }: { pattern?: Pattern
       )}
 
       <p className="sk-disc">
-        원국 여덟 글자만 보고 매긴 판정입니다. 대운·세운으로 들어오는 기운은 여기 넣지 않았습니다 —
+        원국 여덟 글자만 보고 매긴 판정입니다. 대운·세운으로 들어오는 기운은 여기 넣지 않았습니다.
         지금 없다고 나와도 앞으로 서는 경우가 있고, 그 시점은 대표 사주에서 따로 봅니다.
       </p>
     </section>

@@ -98,7 +98,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: { sen
                   <li><b>실제로 어땠는지</b>: 도움이 된 점, 아쉬웠던 점 그대로</li>
                 </ol>
                 <p className="gn">
-                  좋게 써 달라는 뜻이 아닙니다. <b>아쉬웠던 점이 있으면 그대로 적어 주세요</b> —
+                  좋게 써 달라는 뜻이 아닙니다. <b>아쉬웠던 점이 있으면 그대로 적어 주세요.</b>
                   그쪽이 고칠 거리가 되고, 읽는 분께도 더 믿음이 갑니다.
                 </p>
               </div>

@@ -190,7 +190,7 @@ export default function JariMap() {
 
         {me && advice && (
           <div className="jr-el">
-            {me.name}께 모자란 기운은 <b style={{ color: OH_TEXT[me.el] }}>{OH_HANJA[me.el]}({OH_NAME[me.el]})</b>입니다 —
+            {me.name}께 모자란 기운은 <b style={{ color: OH_TEXT[me.el] }}>{OH_HANJA[me.el]}({OH_NAME[me.el]})</b>입니다.
             {' '}자리는 <b>{advice.main.dir}</b>, 어려우면 <b>{advice.alt.dir}</b> 쪽이 낫습니다.
           </div>
         )}

@@ -88,7 +88,7 @@ export default function TaekilPick({ slug, showTabs = false, todayYmd }: { slug:
 
       <p className="dp-disc">
         달은 그날이 든 <b>절기</b> 구간으로 가르고, 그 구간에 일지를 견주어 건제십이신을 냅니다.
-        절기 시각은 표에서 읽지 않고 태양 황경으로 직접 계산합니다. 책력의 셈법이지 예언이 아닙니다 —
+        절기 시각은 표에서 읽지 않고 태양 황경으로 직접 계산합니다. 책력의 셈법이지 예언이 아닙니다.
         계약 조건과 비용과 사람이 먼저이고, 이건 그 위에 얹는 참고입니다.
       </p>
     </section>

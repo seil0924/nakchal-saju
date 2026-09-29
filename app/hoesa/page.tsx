@@ -204,7 +204,7 @@ function Result({ ch, label, curYear, raw, name }: {
         <div className="hslock">
           <div className="t">여기서부터는 대표님과 함께 봐야 합니다</div>
           <div className="d">
-            회사가 어떤 결인지는 위에서 다 보셨습니다. 남은 질문은 하나입니다 —
+            회사가 어떤 결인지는 위에서 다 보셨습니다. 남은 질문은 하나입니다.
             <b> 이 회사가 대표님을 밀어주는가, 아니면 계속 빼가는가.</b><br />
             그리고 <b>다음 10년</b>의 확장·정비 구간이 언제 오는지도 함께 봅니다.
             <span className="hsq">앞으로 8년 중 회사를 밀어주는 해 <b>{ahead.up}번</b>: {ahead.list.filter(x => x.rel === 'in' || x.rel === 'jae').slice(0, 3).map((x, i) => <b key={i} className="qv">????</b>).reduce<React.ReactNode[]>((acc, el, i) => (i ? [...acc, ' · ', el] : [el]), [])}년 · 조이는 해 <b>{ahead.down}번</b></span>
