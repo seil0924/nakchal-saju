@@ -8,3 +8,4 @@ tsconfig.tsbuildinfo
 
 # 60명 점검 결과(매번 새로 생긴다)
 scripts/persona-60-result.json
+.wrangler
