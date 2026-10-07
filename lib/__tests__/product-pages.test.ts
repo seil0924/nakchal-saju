@@ -38,3 +38,16 @@ describe('상품 상세페이지 정의', () => {
     }
   });
 });
+
+describe('목차의 무료 표시', () => {
+  it('무료로 적힌 장은 FREE_MARK 가 알아보고, 지운 뒤에는 이름만 남는다', async () => {
+    const { FREE_MARK } = await import('../product-pages');
+    const free = PRODUCT_PAGES.flatMap(p => p.toc).filter(t => /무료$/.test(t));
+    expect(free.length).toBeGreaterThan(0);
+    for (const t of free) {
+      expect(FREE_MARK.test(t)).toBe(true);
+      const name = t.replace(FREE_MARK, '');
+      expect(name).not.toMatch(/무료|[:·—]\s*$/);
+    }
+  });
+});

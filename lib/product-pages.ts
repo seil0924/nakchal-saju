@@ -150,5 +150,9 @@ export const PRODUCT_PAGES: ProductPage[] = [
   },
 ];
 
+// 목차 항목 끝의 '무료' 표시. 2026-09-29 문장 정리 때 데이터의 구분 기호는 — 에서 쌍점으로 바뀌었는데
+// 상세페이지 코드는 — 만 찾아서, 무료 장이 자물쇠로 보이고 ': 무료' 가 글자로 찍혔다(2026-10-07 발견).
+export const FREE_MARK = /\s*(?:—|·|:)\s*무료$/;
+
 export const productPageBySlug = (s: string) => PRODUCT_PAGES.find(p => p.slug === s || p.old?.includes(s)) || null;
 export const productPageByKey = (k: CatKey) => PRODUCT_PAGES.find(p => p.key === k) || null;

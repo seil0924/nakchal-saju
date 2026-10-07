@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import './product.css';
 import SiteTop from '@/app/_components/SiteTop';
-import { PRODUCT_PAGES, productPageBySlug } from '@/lib/product-pages';
+import { PRODUCT_PAGES, productPageBySlug, FREE_MARK } from '@/lib/product-pages';
 import { CAT_INFO } from '@/lib/report-categories';
 import { won } from '@/lib/constants';
 import { computeReport } from '@/lib/report';
@@ -42,6 +42,7 @@ const ART: Record<string, string> = {
   balju: 'M3 10l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18',
   ijeon: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM15.5 8.5l-2 5-5 2 2-5z',
 };
+
 
 function Hook({ s }: { s: string }) {
   return <>{s.split('\n').map((line, li) => {
@@ -136,11 +137,11 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         <h2>목차</h2>
         <ol className="pd-toc">
           {p.toc.map((x, i) => {
-            const free = /— 무료$/.test(x) || i < freeCount;
+            const free = FREE_MARK.test(x) || i < freeCount;
             return (
               <li key={x} className={free ? 'free' : 'lock'}>
                 <span className="n">{String(i + 1).padStart(2, '0')}</span>
-                <span className="t">{x.replace(/ · 무료$/, '')}</span>
+                <span className="t">{x.replace(FREE_MARK, '')}</span>
                 <span className="s">{free ? '무료' : ''}</span>
               </li>
             );
