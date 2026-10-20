@@ -4,6 +4,7 @@ import { ogCard } from '@/lib/og';
 const CARD = { seal: '例', k: 'SAMPLE 四柱', t: '이런 결과가 나옵니다', s: '가상 대표 3인의 예시 리포트' };
 import Link from 'next/link';
 import SiteTop from '@/app/_components/SiteTop';
+import Mascot from '@/app/_components/Mascot';
 
 export const metadata: Metadata = {
   title: '샘플 리포트: 이런 결과가 나옵니다',
@@ -28,6 +29,7 @@ export default function SamplesPage() {
   return (
     <div className="app home">
       <SiteTop />
+      <Mascot art="consult" className="pageart" eager />
       <div style={{ padding: '18px 18px 4px' }}>
         <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>샘플 리포트</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>이런 결과가 나옵니다</h1>

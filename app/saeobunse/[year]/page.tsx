@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ogCard } from '@/lib/og';
 import SiteTop from '@/app/_components/SiteTop';
+import Mascot from '@/app/_components/Mascot';
 
 const BASE = 'https://nakchalsaju.com';
 const MIN = 2026, MAX = 2035;
@@ -104,6 +105,7 @@ export default function YearPage({ params }: { params: { year: string } }) {
   return (
     <div className="app home">
       <SiteTop />
+      <Mascot art="season" className="pageart" eager />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonld) }} />
 
       <div style={{ padding: '18px 18px 4px' }}>

@@ -22,7 +22,7 @@ export default function ThanksPage({ searchParams }: { searchParams: { kind?: st
       <SiteTop />
 
       <div style={{ padding: '40px 22px 24px', textAlign: 'center' }}>
-        <Mascot pose="yay" size={150} className="center" />
+        <Mascot art="milestone" width={300} className="center pagepic" eager />
 
         <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 8 }}>결제 완료</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '0 0 12px' }}>{title}</h1>

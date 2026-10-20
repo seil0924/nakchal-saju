@@ -21,7 +21,7 @@ export default function RiteProgress({ open, title, steps, stepMs = 430 }: {
     <div className="riteov" role="status" aria-live="polite">
       <div className="rite">
         <div className="ritechar">
-          <Mascot pose="think" size={140} className="bob" />
+          <Mascot art="think" width={225} className="ritepic" />
         </div>
         <div className="rtitle">{title}</div>
         <div className="rsteps">

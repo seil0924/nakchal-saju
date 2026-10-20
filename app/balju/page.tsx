@@ -8,6 +8,7 @@ import PersonPicker from '@/app/_components/PersonPicker';
 import BaljuMap from '@/app/_components/BaljuMap';
 import { type Person } from '@/lib/people';
 import SiteTop from '@/app/_components/SiteTop';
+import Mascot from '@/app/_components/Mascot';
 
 export default function Balju() {
   const [q, setQ] = useState('');
@@ -35,6 +36,7 @@ export default function Balju() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <ScrollReveal />
       <SiteTop />
+      <Mascot art="client" className="pageart" eager />
 
       <div className="hero">
         <h1 style={{ fontSize: 17, marginTop: 8, lineHeight: 1.35 }}>어느 발주처와<br />붙어볼까요</h1>

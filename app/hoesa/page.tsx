@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { ogCard, ogCardUrl } from '@/lib/og';
 import { bizFooterLine } from '@/lib/bizinfo';
 import SiteTop from '@/app/_components/SiteTop';
+import Mascot from '@/app/_components/Mascot';
 import { josa } from '@/lib/josa';
 import {
   companyChart, companyDaeun, companySeun, elBalance, blockPhases, yearsAhead, CO_STRONG, CO_WEAK,
@@ -66,6 +67,7 @@ export default function Hoesa({ searchParams }: { searchParams: { d?: string; n?
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <SiteTop />
+      <Mascot art="growth" className="pageart" eager />
       <div className="hero">
         <h1>우리 회사의 사주</h1>
         <p>설립일만 넣으면 30초 · 가입도 결제도 없습니다</p>

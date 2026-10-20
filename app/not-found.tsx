@@ -22,7 +22,7 @@ export default function NotFound() {
   return (
     <div className="app">
       <SiteTop />
-      <div className="hero"><Mascot pose="empty" size={120} className="center" decorative /><h1>찾으시는 페이지가 없습니다</h1>
+      <div className="hero"><Mascot art="crossroad" width={300} className="center pagepic" decorative eager /><h1>찾으시는 페이지가 없습니다</h1>
         <p>주소가 바뀌었거나 정리된 글일 수 있습니다.</p></div>
       <div className="wrap">
         <div className="card" style={{ lineHeight: 1.8, fontSize: 15, color: '#3a3f47' }}>

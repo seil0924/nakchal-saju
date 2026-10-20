@@ -6,6 +6,7 @@ import TaekilPick from '@/app/_components/TaekilPick';
 import { ogCard, ogCardUrl } from '@/lib/og';
 import { kstYmd } from '@/lib/kst';
 import SiteTop from '@/app/_components/SiteTop';
+import Mascot from '@/app/_components/Mascot';
 
 // "앞으로 90일" 목록이라 배포 때 한 번 구우면 며칠 뒤엔 지난 날짜를 보여준다. 한 시간마다 다시 굽는다.
 export const revalidate = 3600;
@@ -39,6 +40,7 @@ export default function TaekilHub() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <SiteTop />
+      <Mascot art="timing" className="pageart" eager />
 
       <div style={{ padding: '18px 18px 4px' }}>
         <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 6 }}>택일</div>

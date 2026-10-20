@@ -100,7 +100,7 @@ export default function Home() {
       </header>
 
       <section className="h6-intro">
-        <Mascot pose="hi" size={84} className="h6-mascot" decorative />
+        <Mascot art="welcome" width={132} className="h6-mascot" decorative eager />
         <p className="h6-eye">공공입찰·수주 대표를 위한 사주</p>
         <h1>오늘 넣어도 되는 날인지,<br />대표님 명식으로 먼저 봅니다</h1>
         <p className="h6-lead">생년월일만 넣으면 명식과 오늘의 투찰 신호가 무료로 나옵니다.</p>

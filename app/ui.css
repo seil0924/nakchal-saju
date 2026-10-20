@@ -412,15 +412,14 @@ html body .home5 .prose .calcrow b{color:var(--u-blue-ink)}
 html body .home5 .prose .calcrow span{color:var(--u-sub)}
 
 /* 캐릭터 — 나경 거북 (app/_components/Mascot.tsx, 2026-10-20)
-   그림 바탕이 흰색이라 multiply 로 겹쳐 바탕색에 녹인다. */
-html body .mascot{display:block;mix-blend-mode:multiply;user-select:none;-webkit-user-drag:none;height:auto;max-width:100%}
+   네 발로 선 거북의 가로 3:2 장면. 바탕이 연한 하늘빛이라 둥근 카드로 놓는다. */
+html body .mascot{display:block;height:auto;max-width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:14px;background:#f3f6fc;user-select:none;-webkit-user-drag:none}
 html body .mascot.center{margin-left:auto;margin-right:auto}
-@keyframes mascot-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-html body .mascot.bob{animation:mascot-bob 1.6s ease-in-out infinite}
-@media (prefers-reduced-motion: reduce){html body .mascot.bob{animation:none}}
-
-/* 계산 중 화면 — 어두운 영상 대신 계산하는 거북 */
-html body .rite .ritechar{display:flex;justify-content:center;align-items:flex-end;height:150px;margin:-4px -2px 4px;border-radius:10px;background:var(--u-soft,#f4f5f7)}
-
-/* 홈 첫 화면 — 인사하는 거북. 제목 위에 둔다(옆에 두면 좁은 화면에서 제목과 겹친다) */
-html body .h6-intro .h6-mascot{width:84px;height:auto;margin:0 0 6px -6px}
+html body .mascot.pagepic{margin-bottom:18px}
+/* 콘텐츠 페이지 머리 아래 장면 그림 */
+html body .mascot.pageart{width:calc(100% - 40px);max-width:520px;margin:16px auto 4px}
+/* 홈 첫 화면 — 제목 위 작은 그림(옆에 두면 좁은 화면에서 제목과 겹친다) */
+html body .h6-intro .h6-mascot{width:132px;margin:0 0 10px;border-radius:12px}
+/* 계산 중 화면 — 어두운 영상 대신 분석하는 거북 */
+html body .rite .ritechar{display:flex;justify-content:center;align-items:center;height:150px;margin:-4px -2px 4px;border-radius:10px;background:#f3f6fc;overflow:hidden}
+html body .rite .ritechar .ritepic{height:150px;width:auto;border-radius:0}
