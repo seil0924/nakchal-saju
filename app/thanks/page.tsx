@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteTop from '@/app/_components/SiteTop';
+import Mascot from '@/app/_components/Mascot';
 
 export const metadata: Metadata = {
   title: '결제됐습니다',
@@ -14,16 +15,14 @@ export default function ThanksPage({ searchParams }: { searchParams: { kind?: st
   const title = isBokchae ? '복채가 잘 전달됐습니다' : '결제됐습니다';
   const sub = isBokchae
     ? '정성으로 받았습니다. 대표님의 다음 입찰에 좋은 흐름이 함께하기를 빕니다.'
-    : '결제됐습니다. 잠긴 장이 바로 열립니다.';
+    : '잠긴 장이 바로 열립니다. 보관함에서도 다시 볼 수 있습니다.';
 
   return (
     <div className="app home">
       <SiteTop />
 
       <div style={{ padding: '40px 22px 24px', textAlign: 'center' }}>
-        <div aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 64, height: 64, borderRadius: '50%', background: '#eef3fe', margin: '0 auto 18px' }}>
-          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#2f56c4" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-        </div>
+        <Mascot pose="yay" size={150} className="center" />
 
         <div style={{ fontSize: 13, color: '#2f56c4', fontWeight: 700, marginBottom: 8 }}>결제 완료</div>
         <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '0 0 12px' }}>{title}</h1>

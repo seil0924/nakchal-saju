@@ -4,6 +4,7 @@ import './home6.css';
 import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import TodayChip from '@/app/_components/TodayChip';
+import Mascot from '@/app/_components/Mascot';
 import LangNudge from '@/app/_components/LangNudge';
 import TrustStrip from '@/app/_components/TrustStrip';
 import ReviewStrip from '@/app/_components/ReviewStrip';
@@ -99,6 +100,7 @@ export default function Home() {
       </header>
 
       <section className="h6-intro">
+        <Mascot pose="hi" size={84} className="h6-mascot" decorative />
         <p className="h6-eye">공공입찰·수주 대표를 위한 사주</p>
         <h1>오늘 넣어도 되는 날인지,<br />대표님 명식으로 먼저 봅니다</h1>
         <p className="h6-lead">생년월일만 넣으면 명식과 오늘의 투찰 신호가 무료로 나옵니다.</p>

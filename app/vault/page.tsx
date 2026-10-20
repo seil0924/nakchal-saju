@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { listVault, removeVault, type VaultItem } from '@/lib/vault';
 import { sget } from '@/lib/scope';
 import SiteTop from '@/app/_components/SiteTop';
+import Mascot from '@/app/_components/Mascot';
 
 const KIND_LABEL: Record<string, string> = { self: '대표 사주', legal: '법인', client: '발주처', partner: '동업 상대', ally: '상대 회사' };
 type Saved = { kind: string; name: string; date: string };
@@ -38,6 +39,7 @@ export default function Vault() {
       <div className="sechd"><span className="t"><span className="b" />내 리포트</span><span className="m">{items.length}건</span></div>
       {items.length === 0 && (
         <div className="emptybox">
+          <Mascot pose="empty" size={120} className="center" decorative />
           <div className="ebtit">아직 열어본 리포트가 없습니다</div>
           <div className="ebtx">대표님의 사주와 오늘의 투찰 택일부터<br />무료로 확인해 보세요.</div>
           <Link className="ebcta" href="/reading">오늘의 전망 열기 <span>· 무료 · 30초 →</span></Link>
