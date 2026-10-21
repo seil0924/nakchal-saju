@@ -1,10 +1,11 @@
 // lib/report.ts — 명식 입력 → 섹션 리포트 (서버 전용)
 import 'server-only';
-import { chartFromBirth, compute, todayPillar, sajeong, wonguk, seunOf, type Chart, type Pillar, type Seun } from './engine';
+import { chartFromBirth, compute, todayPillar, sajuYearOf, sajeong, wonguk, seunOf, type Chart, type Pillar, type Seun } from './engine';
 import { buildTiered, reportHeroFor, type Section, type Hero } from './report-copy';
 import { catMks } from './report-categories';
 import { taekSection, type JariInput } from './taek-report';
 import { weakElOf } from './taek-house';
+import { kstYmd, dateFromYmd } from './kst';
 
 export type ReportInput = {
   name?: string;
@@ -48,10 +49,12 @@ export type ReportResult = {
 export function computeReport(input: ReportInput, unlockedFlag: boolean | number, year?: number, baljuPremium: boolean = false): ReportResult {
   const level = typeof unlockedFlag === 'number' ? unlockedFlag : (unlockedFlag ? 2 : 0);
   const c = chartFromBirth(input.birth, input.time ?? null, input.cal ?? 'solar', input.leap ?? false);
-  const now = new Date();
-  const selYear = (year && year >= 1900 && year <= 2100) ? Math.floor(year) : now.getFullYear();
+  // 오늘은 한국 날짜로 잡는다. 서버(UTC)의 new Date() 로 잡으면 한국 새벽 0~9시에 전날 일진이 나온다.
+  const [ky, km, kd] = kstYmd().split('-').map(Number);
+  // 연도를 고르지 않았으면 입춘 기준 '사주의 올해' (1월 초~입춘 전은 아직 지난해다).
+  const selYear = (year && year >= 1900 && year <= 2100) ? Math.floor(year) : sajuYearOf(ky, km, kd);
   const seunSelf: Seun = seunOf(c, selYear);
-  const today = todayPillar(now.getFullYear(), now.getMonth() + 1, now.getDate());
+  const today = todayPillar(ky, km, kd);
   const s = sajeong(c, today);
 
   const wtxt = (input.worry || '').trim();
@@ -70,7 +73,7 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
 
   const names = { client: input.clientName, legal: input.legalName, partner: input.partnerName, ally: input.allyName };
   const daeunMeta = input.legal ? { foundYear: parseInt(input.legal.slice(0, 4), 10), curYear: selYear } : undefined;
-  const nowYMD = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
+  const nowYMD = { y: ky, m: km, d: kd };
   // 카테고리 섹션 필터 (해당 카테고리 섹션만 노출)
   const mks = catMks(input.cat);
   const filt = (arr: Section[]) => mks ? arr.filter(x => mks.includes(x.mk)) : arr;
@@ -80,7 +83,7 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   // 자리 사주는 report-copy 의 티어 빌더 바깥에서 만든다.
   // 방위·거리는 주소를 넣어야 생기는 값이라, 명식만으로 도는 빌더에 끼워 넣으면 자리가 어색하다.
   const taek = mks && mks.includes('宅')
-    ? taekSection(input.jari || {}, weakElOf(c), c.dZhi, selYear, now)
+    ? taekSection(input.jari || {}, weakElOf(c), c.dZhi, selYear, dateFromYmd(kstYmd()))
     : null;
   if (taek) {
     sections.push({ mk: '宅', free: false, tier: 'full', t: taek.t,

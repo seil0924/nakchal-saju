@@ -1,11 +1,15 @@
 // lib/report-copy.ts — 낙찰사주 리포트 카피 + 섹션 생성 (서버 전용)
 // ⚠️ 유료 섹션 텍스트는 이 모듈에서만 생성됩니다. 클라이언트로 직접 노출 금지.
 import 'server-only';
-import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, sinsal, type Chart, type Sajeong } from './engine';
+import { GAN, ZHI, EL, EL_HEX, SIP, pil, sipsung, relation, todayPillar, sinsal, sajuYearOf, type Chart, type Sajeong } from './engine';
 import { matchTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, TYPE_MYEONG, TYPE_USER, TYPE_BIZ, type TyMatch } from './tycoon';
 import { sealSvg } from './seal';
-import { clientTip } from './clients';
+import { clientTip, CORE_CLIENT_COUNT } from './clients';
 import { josa } from './josa';
+import { kstYmd } from './kst';
+import { CAT_INFO } from './report-categories';
+// 서버는 UTC 라 new Date() 의 날짜가 한국 새벽에 하루 늦다. 날짜는 한국 기준으로만 읽는다.
+const kstNow=()=>{const [y,m,d]=kstYmd().split('-').map(Number);return {y,m,d};};
 import { radarSvg, barsSvg, lineSvg, ringSvg } from './report-charts';
 
 // 인명 조사(받침 유무) 자동 보정 — '아사 캔들러을' 같은 오류 방지
@@ -70,12 +74,31 @@ function gilWindow(y:number,m:number,d:number,n=GIL_DAYS):WinDay[]{
 const winLabel=(w:WinDay)=>(w.i===0||w.d===1)?`${w.m}/${w.d}`:`${w.d}`;
 // 길일 목록 — 오늘이 든 달은 '23일', 다음 달로 넘어가면 '11/2'.
 const gilList=(ws:WinDay[],baseM:number)=>ws.map(w=>w.m===baseM?`${w.d}일`:`${w.m}/${w.d}`).join(' · ');
-const isGil=(c:Chart,w:{y:number;m:number;d:number})=>{const rel=relation(c.dayMasterEl,todayPillar(w.y,w.m,w.d).el);return rel==='in'||rel==='bi';};
+// 길일 = 일진 천간이 대표 일간을 살리거나(인성) 같은 기운(비겁)이면서, 일진 지지가 대표 일지와 충하지 않는 날.
+// 천간만 보면 30일 안 길일이 누구에게나 12일로 똑같이 나왔다(천간은 10일 주기라). 일지 충을 빼면서
+// 사람마다, 날짜마다 수가 달라진다(2026-10-21).
+const GAN_EL10=[0,0,1,1,2,2,3,3,4,4];
+const stemGood=(c:Chart,w:{y:number;m:number;d:number})=>{const rel=relation(c.dayMasterEl,todayPillar(w.y,w.m,w.d).el);return rel==='in'||rel==='bi';};
+const chungIlji=(c:Chart,w:{y:number;m:number;d:number})=>(todayPillar(w.y,w.m,w.d).zhi-c.dZhi+12)%12===6;
+const isGil=(c:Chart,w:{y:number;m:number;d:number})=>stemGood(c,w)&&!chungIlji(c,w);
+// 시진 — 시간의 천간은 그날 일진의 천간으로 정해진다(시두법: 갑·기일은 갑자시부터, 을·경일은 병자시부터 …).
+// 그래서 같은 대표라도 날마다 유리한 시간이 바뀐다. 판정은 일진과 같은 원리(인성·비겁 유리, 재성 무난, 나머지 조심).
+function sijinLv(me:number,dayGan:number):('g'|'m'|'c')[]{
+  return Array.from({length:12},(_,z)=>{const hg=((dayGan%5)*2+z)%10;const rel=relation(me,GAN_EL10[hg]);
+    return (rel==='in'||rel==='bi')?'g':rel==='jae'?'m':'c';});
+}
+const SJ_HANJA=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
 
 // 투찰 택일: 오늘부터 30일 길일 캘린더 (대표 일간을 살리는 일진 = 상단/생 날)
 function choilHtml(c:Chart, y:number, m:number, d:number){
   const ws=gilWindow(y,m,d);
   const gil=ws.filter(w=>isGil(c,w));
+  const cut=ws.filter(w=>stemGood(c,w)&&chungIlji(c,w));
+  const WD=['일','월','화','수','목','금','토'];
+  // 길일마다 유리한 시진(상품 설명의 약속). 시진 천간이 그날 일진 따라 바뀌니 날마다 다르다.
+  const hours=gil.map(w=>{const lv=sijinLv(c.dayMasterEl,todayPillar(w.y,w.m,w.d).gan);
+    const hs=lv.map((v,z)=>v==='g'?`${SJ_HANJA[z]}시 ${SIJIN12[z][1]}`:'').filter(Boolean);   // 辰시 07~09
+    return `<div class="gilrow"><b>${w.m===m?w.d+'일':w.m+'/'+w.d} (${WD[w.dow]})</b><span>${hs.join(' · ')||'시진 고르게'}</span></div>`;}).join('');
   let cells='';
   for(let i=0;i<ws[0].dow;i++) cells+='<div class="cd mute"></div>';
   for(const w of ws) cells+=`<div class="cd${isGil(c,w)?' gil':''}">${winLabel(w)}</div>`;
@@ -84,6 +107,8 @@ function choilHtml(c:Chart, y:number, m:number, d:number){
   return `<div class="choil">${dh}${cells}</div>`+
     `<p>오늘부터 <b>${last.m}월 ${last.d}일</b>까지 30일, 대표님 기운이 위로 뻗는 <b>투찰 길일</b>은 <b>${gil.length?gilList(gil,m):'해당 없음'}</b>입니다.</p>`+
     `<p>오늘의 사정률과 같은 원리로, 대표님 일간(${GAN[c.dGan]})을 살리는 일진이 드는 날입니다. 큰 건 투찰·계약·미팅을 이 날에 맞추면 유리합니다.</p>`+
+    (cut.length?`<p>천간은 좋지만 대표님 일지(${ZHI[c.dZhi]})와 충하는 <b>${gilList(cut,m)}</b>${josa(gilList(cut,m),'은')} 길일에서 뺐습니다. 기반이 흔들리는 날이라 큰 건을 걸기엔 무겁습니다.</p>`:'')+
+    `<div class="gilhd">길일마다 유리한 시진</div><div class="gillist">${hours}</div>`+
     `<p>반대로 표시 없는 날은 기운이 눌리니, 무리한 저가 투찰은 피하고 관망하세요.</p>`;
 }
 
@@ -377,7 +402,7 @@ function partnerDeepHtml(c:any, cm:any, otherLabel:string, company:boolean){
   const sec1=`<div class="bzsec"><div class="bzsh">◆ ${who}와 ${otherLabel}의 오행</div>${radar}<div class="axiscard">${rows}</div></div>`+P(lines);
 
   // 2) 앞으로 3년, 이 궁합의 흐름 (대표님 쪽 세운이 궁합을 미는 정도)
-  const Y=(cm.seun&&cm.seun.year)||new Date().getFullYear();
+  const Y=(cm.seun&&cm.seun.year)||(()=>{const k=kstNow();return sajuYearOf(k.y,k.m,k.d);})();
   const yd=[0,1,2].map(k=>{const y=Y+k;const sy=seunYear(y);const rel=relation(me,sy.el);const tilt=TILT_RC[rel]??0;
     const sc=compatScore(cm.rel,{dGan:cm.oGan,dZhi:cm.oZhi},Math.round(tilt*2));
     const tone=tilt>=2?'밀어주는 해입니다. 새 공동 사업·역할 재조정·지분 논의를 이 해에 여는 편이 낫습니다':tilt===1?'힘이 붙는 해입니다. 넓히되 정해 둔 역할과 규칙 안에서 움직이는 편이 낫습니다':tilt<0?'조이는 해입니다. 새 약속을 늘리기보다 맺은 계약을 점검하고 갈등을 미리 푸세요':'평이한 해입니다. 정해 둔 규칙대로 굴리며 신뢰를 쌓으세요';
@@ -397,7 +422,7 @@ function partnerDeepHtml(c:any, cm:any, otherLabel:string, company:boolean){
   const sec4=`<div class="crisis"><div class="crhd">⚠ 이 관계가 상하기 시작하는 신호</div><p>${sg[0].map(x=>'· '+x).join('<br>')}</p></div><p>${sg[1]}</p>`;
 
   // 5) 계약서 쓰기 좋은 달 — 앞으로 6개월, 두 명식의 월운이 함께 받쳐주는 달
-  const now=new Date(); const cy=now.getFullYear(), cmo=now.getMonth()+1;
+  const kn=kstNow(); const cy=kn.y, cmo=kn.m;
   const RK:Record<string,number>={in:3,jae:2,bi:1,sik:0,gwan:-3};
   const ms=Array.from({length:6},(_,k)=>{const mm=((cmo-1+k)%12)+1, yy=cy+Math.floor((cmo-1+k)/12);const el=MONTH_EL[mm-1];
     const a=relation(me,el), b=relation(cm.oel,el); return {mm,yy,a,b,sc:(RK[a]??0)+(RK[b]??0)};});
@@ -444,7 +469,7 @@ function daeunDeepHtml(d:any, legalName:string, curYear:number){
     {title:`${nm}의 대운 80년(10년 단위)`,top:'밀어주는 구간',bottom:'조이는 구간'});
   const sec3=`<div class="threekye"><div class="tkt">${nm}의 대운 여덟 구간</div>${dline}${blocks}</div>`;
   // 4) 올해 남은 달, 회사 흐름
-  const nowM=new Date().getFullYear()===curYear?new Date().getMonth()+1:1;
+  const kn=kstNow(); const nowM=kn.y===curYear?kn.m:1;
   const months=MONTH_EL.map((el,i)=>({m:i+1,rel:relation(d.me,el)})).filter(x=>x.m>=nowM);
   const mrows=months.map(x=>`<div class="myrow${x.m===nowM?' now':''}"><span class="mym">${x.m}월</span><span class="mytag" style="background:${(BY_REL[x.rel]||BY_REL.bi)[1]}">${(BY_REL[x.rel]||BY_REL.bi)[0]}운</span><span class="myd">${BY_DESC[x.rel]}<em class="mydo">할 일: ${BY_DO[x.rel]}</em></span></div>`).join('');
   const mchart=barsSvg(months.map(x=>({label:`${x.m}월`,v:REL_RANK[x.rel],color:(BY_REL[x.rel]||BY_REL.bi)[1],tag:(BY_REL[x.rel]||BY_REL.bi)[0],now:x.m===nowM})),5,
@@ -519,7 +544,7 @@ function baljuHtml(cm:any,c:any,otherLabel:string,tip:string|undefined,premium:b
     const taste = X ? `<p>${X[0]}</p><div class="threekye"><div class="tkt">이 발주처를 대하는 3계 <span class="tkfree">첫 계 미리보기</span></div>`+
       `<div class="tkrow"><span class="tkdot"></span><span class="tktx">${X[1][0]}</span></div>`+
       `<div class="tkrow tklock"><span class="tkdot"></span><span class="tktx"><b>어떻게 · 무엇을</b>: 나머지 두 계는 프리미엄에서 이어집니다</span></div></div>` : '';
-    return basic + taste + `<div class="baljulock">방금 <b>첫 계(언제)</b>까지 맛보셨습니다. <b>발주처 프리미엄</b>을 열면. 나머지 <b>2계(어떻게·무엇을) 실전 시나리오</b>, <b>주의신호</b>, <b>연도별 세운(올해 밀어주는 해/조이는 해)</b>까지 손에 잡히게 이어지고, 한 번 열면 <b>43곳 모든 발주처</b>가 함께 열립니다.</div>`;
+    return basic + taste + `<div class="baljulock">방금 <b>첫 계(언제)</b>까지 맛보셨습니다. <b>발주처 프리미엄</b>을 열면. 나머지 <b>2계(어떻게·무엇을) 실전 시나리오</b>, <b>주의신호</b>, <b>연도별 세운(올해 밀어주는 해/조이는 해)</b>까지 손에 잡히게 이어지고, 한 번 열면 <b>핵심 발주처 ${CORE_CLIENT_COUNT}곳</b>이 함께 열립니다.</div>`;
   }
   const yearLine = cm.seun ? `<div class="cyear"><span class="cyl">${cm.seun.year}년 기준</span><span class="cyd">바탕 ${cm.base} → 올해 <b style="color:${cm.gc}">${cm.score2}</b> <em>${cm.score2>cm.base?'▲ 세운이 밀어주는 해':cm.score2<cm.base?'▼ 세운이 조이는 해':'· 평이한 해'}</em></span></div>` : '';
   const deep = X ? `<p>${X[0]}</p><div class="threekye"><div class="tkt">이 발주처를 대하는 3계</div>`+X[1].map((s2:string)=>`<div class="tkrow"><span class="tkdot"></span><span class="tktx">${s2}</span></div>`).join('')+`</div><p class="cwarn">${X[2]}</p>` : '';
@@ -689,16 +714,14 @@ function cheobangHtml(s:Sajeong){
 }
 // 시진별 흐름 — '판정이 아니라 예보' (12시진 × 일간 상성)
 const SIJIN12:[string,string][]=[['子','23~01'],['丑','01~03'],['寅','03~05'],['卯','05~07'],['辰','07~09'],['巳','09~11'],['午','11~13'],['未','13~15'],['申','15~17'],['酉','17~19'],['戌','19~21'],['亥','21~23']];
-const ZHI_EL12=[4,2,0,0,2,1,1,2,3,3,2,4];
-function sijinHtml(c:Chart){
-  const cells=SIJIN12.map(([h,t],z)=>{
-    const rel=relation(c.dayMasterEl,ZHI_EL12[z]);
-    const lv=(rel==='in'||rel==='bi')?'g':(rel==='jae')?'m':'c';
-    return `<div class="sj12 ${lv}"><b>${h}</b><span>${t}</span><i></i></div>`;
-  }).join('');
-  const gil=SIJIN12.filter((_,z)=>{const r=relation(c.dayMasterEl,ZHI_EL12[z]);return r==='in'||r==='bi';}).map(([h])=>h+'시');
+// 예전에는 시간의 지지 오행만 봐서 대표마다 표가 하나로 굳어 있었다(날마다 같았다). 이제 그날 일진으로 시간 천간을 정한다.
+function sijinHtml(c:Chart,today:{gan:number}){
+  const lv=sijinLv(c.dayMasterEl,today.gan);
+  const cells=SIJIN12.map(([h,t],z)=>`<div class="sj12 ${lv[z]}"><b>${h}</b><span>${t}</span><i></i></div>`).join('');
+  const gil=SIJIN12.filter((_,z)=>lv[z]==='g').map(([h])=>h+'시');
   return `<div class="sjhd">시진별 흐름. 오늘, 언제 움직일까</div><div class="sijin12">${cells}</div>`+
-    `<p style="margin-top:10px">오늘은 <b>${gil.join('·')}</b>${josa(gil.join('·'), '가')} 대표님 일간을 살리는 창입니다. 큰 건의 제출·통화·미팅은 이 창에 맞추면 좋습니다.</p>`+
+    (gil.length?`<p style="margin-top:10px">오늘은 <b>${gil.join('·')}</b>${josa(gil.join('·'), '가')} 대표님 일간을 살리는 시간입니다. 큰 건의 제출·통화·미팅은 이 시간에 맞추면 좋습니다.</p>`:`<p style="margin-top:10px">오늘은 대표님 일간을 살리는 시간이 따로 서지 않습니다. 큰 건은 길일로 미루는 편이 낫습니다.</p>`)+
+    `<p class="fcline">시간의 천간은 그날 일진에 따라 바뀌어, 유리한 시간도 날마다 달라집니다.</p>`+
     `<p class="fcline">이 점수는 판정이 아니라 <b>예보</b>입니다. 우산을 챙길지는 대표님이 정하십니다.</p>`;
 }
 // ── 曆 · 사업운 캘린더 (개인화) — 이달 각 날에 사업 흐름을 표시
@@ -939,7 +962,7 @@ function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolea
   for(let i=0;i<ws[0].dow;i++) cells+='<div class="scd mute"></div>';
   for(const w of ws){
     const rel=relation(me,todayPillar(w.y,w.m,w.d).el);
-    const strong=(rel==='in'||rel==='bi'); const up=strong||rel==='jae';
+    const strong=isGil(c,w); const up=strong||rel==='jae'||stemGood(c,w);   // 일지 충이면 상단에서 무난으로 내린다
     const col=strong?'#177f5e':up?'#7a8a3a':(rel==='gwan'?'#b5402f':'#8a7f68');
     const mark=strong?'▲':up?'△':(rel==='gwan'?'▼':'·');
     if(strong) up30.push(w);
@@ -950,9 +973,9 @@ function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolea
   }
   const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="sch">${x}</div>`).join('');
   const leg=`<div class="sajleg"><span><i style="background:#177f5e"></i>상단(유리)</span><span><i style="background:#7a8a3a"></i>무난</span><span><i style="background:#b5402f"></i>주의(하단)</span></div>`;
-  const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`;
+  const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`+`<p class="fcline">천간이 좋아도 대표님 일지(${ZHI[c.dZhi]})와 충하는 날은 무난(△)으로 낮췄습니다.</p>`;
   if(!unlocked){
-    return grid+`<p class="sajlock">오늘부터 <b>30일</b>의 하루하루 흐름이 이미 산출됐습니다. 지금은 <b>오늘부터 7일</b>만 열려 있습니다. 나머지 <b>23일</b>의 유리·주의 날은 <b>투찰 택일 사주(9,900원)</b>에서 한 번에 열립니다.</p>`;
+    return grid+`<p class="sajlock">오늘부터 <b>30일</b>의 하루하루 흐름이 이미 산출됐습니다. 지금은 <b>오늘부터 7일</b>만 열려 있습니다. 나머지 <b>23일</b>의 유리·주의 날은 <b>투찰 택일 사주(${CAT_INFO.sajeong.price.toLocaleString('ko-KR')}원)</b>에서 한 번에 열립니다.</p>`;
   }
   return grid+`<p style="margin-top:11px">앞으로 30일 중 <b>상단(유리) 흐름</b> 날은 <b>${up30.length?gilList(up30,m):'해당 없음'}</b>입니다. 큰 건 투찰·계약은 이 날들에 무게를 두는 편이 낫습니다. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가는 편이 낫습니다.</p>`;
 }
@@ -961,7 +984,7 @@ function weekAheadHtml(c:Chart,y:number,m:number,d:number){
   for(let i=0;i<7;i++){const dt=new Date(Date.UTC(y,m-1,d+i));
     const yy=dt.getUTCFullYear(),mm=dt.getUTCMonth()+1,dd=dt.getUTCDate();
     const tp=todayPillar(yy,mm,dd);const rel=relation(c.dayMasterEl,tp.el);
-    const strong=(rel==='in'||rel==='bi');const up=strong||rel==='jae';
+    const w={y:yy,m:mm,d:dd};const strong=isGil(c,w);const up=strong||rel==='jae'||stemGood(c,w);   // 달력과 같은 기준
     const col=strong?'#177f5e':up?'#7a8a3a':(rel==='gwan'?'#b5402f':'#8a7a5a');
     const lab=strong?'유리':up?'무난':(rel==='gwan'?'주의':'관망');
     const h=strong?26:up?19:(rel==='gwan'?24:14);
@@ -1060,7 +1083,7 @@ function secSajeong(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn,baljuPremium}=x;
   const out:any[]=[];
   // ── 무료 정점 → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
-  let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c);
+  let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c,today);
   if(nowYMD){
     rateHtml+=`<div class="sajmonhd">오늘부터 <b>30일</b> 사정률. 날마다 어느 쪽인가</div>`;
     rateHtml+=sajeongMonthHtml(c,nowYMD.y,nowYMD.m,nowYMD.d,preciseOn);

@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
 import { recordReport, markUnlocked } from '@/lib/vault';
-import { CLIENTS, isCoreClient } from '@/lib/clients';
+import { CLIENTS, isCoreClient, CORE_CLIENT_COUNT } from '@/lib/clients';
 import { CAT_INFO, isCatKey, productOfMk, catUI } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
@@ -722,7 +722,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {anyPass && (<>
               <div className="cta" onClick={() => { setErr(''); setPassMode(true); setModal(true); }}>
                 발주처 프리미엄 패스 열기
-                <small>한 번 결제로 43곳 모든 발주처 상세 · {won(PRICE_BALJU_PASS)}</small>
+                <small>한 번 결제로 핵심 발주처 {CORE_CLIENT_COUNT}곳 상세 · {won(PRICE_BALJU_PASS)}</small>
               </div>
               <div className="ctaassure">✓ 30초 · 한 번 열면 모든 발주처</div>
             </>)}
@@ -822,7 +822,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                 <h3>발주처 프리미엄 패스</h3>
                 <div className="catbuy">
                   <div className="catbuy-hd"><div><div className="catbuy-nm">발주처 프리미엄 패스</div></div><div className="catbuy-pp">{won(PRICE_BALJU_PASS)}</div></div>
-                  <div className="catbuy-lead">한 번 결제로 <b>43곳 모든 발주처</b>의 3계·실전 시나리오·주의신호·연도 세운이 열립니다.</div>
+                  <div className="catbuy-lead">한 번 결제로 <b>핵심 발주처 {CORE_CLIENT_COUNT}곳</b>의 3계·실전 시나리오·주의신호·연도 세운이 열립니다.</div>
                 </div>
               </>
             ) : catInfo ? (

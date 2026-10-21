@@ -18,3 +18,40 @@ describe('투찰 택일 · 오늘부터 30일', () => {
     expect(rate.html).not.toContain('이번 달');
   });
 });
+
+describe('길일·시진·사주의 해 (2026-10-21 수정)', () => {
+  afterEach(() => vi.useRealTimers());
+  const tk = (birth: string) => {
+    const r: any = computeReport({ birth, cat: 'sajeong' } as any, 1);
+    return r.sections.find((s: any) => s.mk === '擇');
+  };
+  it('일지 충을 빼서 길일 수가 사람마다 달라진다 (누구나 12일이 아니다)', () => {
+    vi.useFakeTimers(); vi.setSystemTime(new Date('2026-10-21T03:00:00Z'));
+    const counts = new Set<number>();
+    for (let d = 1; d <= 24; d++) {
+      const html: string = tk(`1971-07-${String(d).padStart(2, '0')}`).html;
+      counts.add((html.match(/<div class="cd gil">/g) || []).length);
+    }
+    expect(counts.size).toBeGreaterThan(1);
+    for (const n of counts) expect(n).toBeLessThanOrEqual(12);
+  });
+  it('유료 택일에 길일마다 유리한 시진이 붙는다', () => {
+    vi.useFakeTimers(); vi.setSystemTime(new Date('2026-10-21T03:00:00Z'));
+    const html: string = tk('1971-07-16').html;
+    expect(html).toContain('길일마다 유리한 시진');
+    expect((html.match(/class="gilrow"/g) || []).length).toBe((html.match(/<div class="cd gil">/g) || []).length);
+  });
+  it('시진은 날마다 달라진다', () => {
+    const rate = (iso: string) => { vi.useFakeTimers(); vi.setSystemTime(new Date(iso));
+      const r: any = computeReport({ birth: '1971-07-16', cat: 'sajeong' } as any, 0);
+      return (r.sections.find((s: any) => s.mk === '率').html.match(/<div class="sijin12">[\s\S]*?<\/div><p/) || [''])[0]; };
+    const a = rate('2026-10-21T03:00:00Z'), b = rate('2026-10-22T03:00:00Z');
+    expect(a).not.toBe('');
+    expect(a).not.toBe(b);
+  });
+  it('한국 새벽(UTC 전날)에도 오늘은 한국 날짜다', () => {
+    vi.useFakeTimers(); vi.setSystemTime(new Date('2026-10-20T20:00:00Z'));   // KST 10-21 05:00
+    const r: any = computeReport({ birth: '1971-07-16', cat: 'sajeong' } as any, 1);
+    expect(r.sections.find((s: any) => s.mk === '擇').html).toContain('11월 19일</b>까지 30일');
+  });
+});

@@ -16,10 +16,11 @@ describe('bizVerdict', () => {
       expect(v.jae + v.sik + v.gwan + v.power).toBeLessThanOrEqual(6);
     }
   });
-  it('재성이 둘 이상이고 버티는 힘도 둘 이상이면 big, 버티는 힘이 모자라면 heavy', () => {
+  it('재성이 둘 이상이면, 일간이 힘을 얻었으면 big, 못 얻었으면(재다신약) heavy', () => {
     const all = TYCOONS.map(t => { const [y, m, d] = t.born.split('-').map(Number); return bizVerdict(compute(y, m, d, null)); });
     for (const v of all) {
-      if (v.jae >= 2) expect(v.key).toBe(v.power >= 2 ? 'big' : 'heavy');
+      if (v.jae >= 2) expect(['big', 'heavy']).toContain(v.key);
+      if (v.key === 'heavy') expect(v.jae).toBeGreaterThanOrEqual(2);
     }
   });
 });

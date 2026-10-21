@@ -125,6 +125,9 @@ export const CLIENTS: Client[] = [
   { name: '한국건설기술연구원',  date: '1983-06-11', cat: '건설·연구', tip: '건설 R&D·시험 용역: 연구 실적과 전문인력, 정량 배점 관리가 핵심입니다.' },
   { name: '국립공원공단',        date: '1987-07-01', cat: '환경·시설', tip: '탐방시설·생태복원: 친환경 시공 실적과 자연공원 특성 이해가 유리합니다.' },
 ];
+// 화면 문구의 'N곳'은 여기서 센다. 손으로 적었더니 43곳(옛 수)과 64곳이 페이지마다 갈렸다(2026-10-21).
+export const CLIENT_COUNT = CLIENTS.length;
+export const CORE_CLIENT_COUNT = CLIENTS.filter(c => c.core).length;
 export const isCoreClient = (name?: string | null) => !!CLIENTS.find(c => c.name === name)?.core;
 export const clientTip = (name?: string | null) => (name ? CLIENTS.find(c => c.name === name)?.tip : undefined);
 

@@ -11,10 +11,17 @@ import './person.css';
 type Row = { key: string; label: string; me: string; them: string; same: boolean };
 type Res = {
   myPills: string; type: string; year: number;
-  verdict: { key: string; title: string; body: string; jae: number; power: number; sik: number; gwan: number };
+  verdict: { key: string; title: string; body: string; jae: number; power: number; sik: number; gwan: number; str?: { ryeong: boolean; ji: boolean; se: boolean } };
   total: number; top: { label: string; score: number }[]; hidden: number;
   vs: { count: number; rows: Row[]; rank?: number; total?: number } | null;
 };
+
+// 득령(태어난 달)·득지(앉은 자리)·득세(나머지 글자) — 둘 이상 얻으면 신강으로 본다(lib/siksin strengthOf).
+function strText(st?: { ryeong: boolean; ji: boolean; se: boolean }) {
+  if (!st) return '';
+  const got = [st.ryeong && '득령', st.ji && '득지', st.se && '득세'].filter(Boolean) as string[];
+  return got.length ? `${got.join('·')} (${got.length}/3)` : '없음 (0/3)';
+}
 
 export default function BizCheck({ name, tycoon }: { name: string; tycoon: string }) {
   const [birth, setBirth] = useState('');
@@ -51,7 +58,7 @@ export default function BizCheck({ name, tycoon }: { name: string; tycoon: strin
           <p className="bz-lab">대표님은</p>
           <p className="bz-title">{v.title}</p>
           <p className="tw-note">{v.body}</p>
-          <p className="bz-why">근거: 재성(돈을 다루는 기운) {v.jae}개 · 버티는 힘(비겁·인성) {v.power}개 · 식상 {v.sik}개 · 관성 {v.gwan}개 <span>태어난 시를 빼고 다섯 글자로 셌습니다</span></p>
+          <p className="bz-why">근거: 재성(돈을 다루는 기운) {v.jae}개 · 일간이 얻은 힘 {strText(v.str)} · 비겁·인성 {v.power}개 · 식상 {v.sik}개 · 관성 {v.gwan}개 <span>태어난 시를 빼고 다섯 글자로 셌습니다. 일간의 힘은 득령·득지·득세 가운데 몇 개를 얻었는지로 봅니다</span></p>
 
           <div className="bz-score">
             <div><b>{res.total}</b><span>/ 30</span></div>

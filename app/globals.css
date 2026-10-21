@@ -1618,3 +1618,10 @@ dt>a{display:inline-flex;align-items:center;min-height:36px}
 .btab a.on{color:#2f56c4;font-weight:800}
 body:has(.btab) .shell{padding-bottom:calc(59px + env(safe-area-inset-bottom))}
 @media (min-width:900px){.btab{display:none}body:has(.btab) .shell{padding-bottom:0}}
+
+/* 길일마다 유리한 시진 (lib/report-copy choilHtml, 2026-10-21) */
+.gilhd{margin:14px 0 6px;font-size:15px;font-weight:800;color:var(--ink)}
+.gillist{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.gilrow{display:grid;grid-template-columns:92px 1fr;gap:8px;align-items:baseline;padding:8px 11px;border-radius:10px;background:#f4f5f7;font-size:13px}
+.gilrow b{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.gilrow span{color:#33383f;line-height:1.6}

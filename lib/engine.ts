@@ -20,6 +20,12 @@ export function compute(y:number,m:number,d:number,hourFloat:number|null,yaja=fa
   return {...p, dist};
 }
 // 생일 → 명식 (서머타임·진태양시·야자시·음력 보정은 resolveBirth가 처리)
+// 사주의 해는 입춘에 바뀐다. 양력 1월 1일부터 입춘 전까지는 아직 지난해 간지다(2026-10-21).
+// 연도별 흐름(세운)의 '올해'를 이걸로 정한다. 날짜만 알면 되니 정오로 계산한다.
+export function sajuYearOf(y:number,m:number,d:number):number{
+  const c=compute(y,m,d,null);
+  return c.yGan===((y-4)%10+10)%10 ? y : y-1;
+}
 export function chartFromBirth(dateISO:string,timeHHMM:string|null,cal:'solar'|'lunar'='solar',isLeap=false):Chart{
   const r=resolveBirth(dateISO,timeHHMM,cal,isLeap);
   return compute(r.y,r.m,r.d,r.hf,r.yaja);
