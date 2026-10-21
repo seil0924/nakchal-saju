@@ -55,21 +55,34 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[], myGan?:string){
     `<p class="twinnote">※ 인물 명식은 널리 공개된 출생일 기준이며 생시는 미상이라 삼주로만 계산했습니다. 명식의 구조를 견준 것으로, 재미로 보는 유형 비교일 뿐 그분들의 삶이나 대표님의 운을 단정하는 것이 아닙니다.</p>`;
 }
 
-// 투찰 택일: 이번 달 길일 캘린더 (대표 일간을 살리는 일진 = 상단/생 날)
-function choilHtml(c:Chart, y:number, m:number){
-  const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();
-  const days=new Date(Date.UTC(y,m,0)).getUTCDate();
-  const gilDays:number[]=[];
+// 투찰 택일은 '오늘부터 30일'로 본다(2026-10-21). 예전에는 달력의 이번 달(1일~말일)이라
+// 21일에 결제한 손님은 남은 열흘치만 받았다. 사업운 캘린더(rollDays)와 같은 기준이다.
+const GIL_DAYS=30;
+type WinDay={y:number;m:number;d:number;dow:number;i:number};
+// 오늘부터 n일. 달력 칸은 오늘이 든 주의 일요일부터 맞춘다(앞쪽 빈칸 = 오늘 이전).
+function gilWindow(y:number,m:number,d:number,n=GIL_DAYS):WinDay[]{
+  const out:WinDay[]=[];
+  for(let i=0;i<n;i++){const dt=new Date(Date.UTC(y,m-1,d+i));
+    out.push({y:dt.getUTCFullYear(),m:dt.getUTCMonth()+1,d:dt.getUTCDate(),dow:dt.getUTCDay(),i});}
+  return out;
+}
+// 칸 안 날짜 — 첫 칸과 달이 바뀌는 1일에는 월을 붙인다.
+const winLabel=(w:WinDay)=>(w.i===0||w.d===1)?`${w.m}/${w.d}`:`${w.d}`;
+// 길일 목록 — 오늘이 든 달은 '23일', 다음 달로 넘어가면 '11/2'.
+const gilList=(ws:WinDay[],baseM:number)=>ws.map(w=>w.m===baseM?`${w.d}일`:`${w.m}/${w.d}`).join(' · ');
+const isGil=(c:Chart,w:{y:number;m:number;d:number})=>{const rel=relation(c.dayMasterEl,todayPillar(w.y,w.m,w.d).el);return rel==='in'||rel==='bi';};
+
+// 투찰 택일: 오늘부터 30일 길일 캘린더 (대표 일간을 살리는 일진 = 상단/생 날)
+function choilHtml(c:Chart, y:number, m:number, d:number){
+  const ws=gilWindow(y,m,d);
+  const gil=ws.filter(w=>isGil(c,w));
   let cells='';
-  for(let i=0;i<first;i++) cells+='<div class="cd mute"></div>';
-  for(let d=1;d<=days;d++){
-    const rel=relation(c.dayMasterEl, todayPillar(y,m,d).el);
-    const gil=(rel==='in'||rel==='bi'); if(gil) gilDays.push(d);
-    cells+=`<div class="cd${gil?' gil':''}">${d}</div>`;
-  }
+  for(let i=0;i<ws[0].dow;i++) cells+='<div class="cd mute"></div>';
+  for(const w of ws) cells+=`<div class="cd${isGil(c,w)?' gil':''}">${winLabel(w)}</div>`;
   const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="cdh">${x}</div>`).join('');
+  const last=ws[ws.length-1];
   return `<div class="choil">${dh}${cells}</div>`+
-    `<p>이번 달 <b>${m}월</b>, 대표님 기운이 위로 뻗는 <b>투찰 길일</b>은 <b>${gilDays.length?gilDays.join('·')+'일':'해당 없음'}</b>입니다.</p>`+
+    `<p>오늘부터 <b>${last.m}월 ${last.d}일</b>까지 30일, 대표님 기운이 위로 뻗는 <b>투찰 길일</b>은 <b>${gil.length?gilList(gil,m):'해당 없음'}</b>입니다.</p>`+
     `<p>오늘의 사정률과 같은 원리로, 대표님 일간(${GAN[c.dGan]})을 살리는 일진이 드는 날입니다. 큰 건 투찰·계약·미팅을 이 날에 맞추면 유리합니다.</p>`+
     `<p>반대로 표시 없는 날은 기운이 눌리니, 무리한 저가 투찰은 피하고 관망하세요.</p>`;
 }
@@ -668,7 +681,7 @@ function cheobangHtml(s:Sajeong){
   const up=s.tilt>0;
   const when=up?'오늘은 기운이 위로 뻗는 날. 준비된 건이라면 정면 승부해도 좋습니다.':'오늘은 눌리는 흐름. 개시 직후를 피하고 마감 직전 시간대에 손을 쓰는 편이 낫습니다.';
   const warn=up?'자신감이 과해지기 쉬우니, 미리 정한 하한선 아래로는 내려가지 않는 편이 낫습니다.':'조급함에 성급한 저가·과속 투찰을 던지지 않는 편이 낫습니다.';
-  const alt=up?'흐름이 꺾이거나 조건이 나쁘면, 무리하지 말고 이번 달 투찰 길일로 미루세요.':'큰 건이라면 오늘 무리하기보다 이번 달 투찰 길일로 옮기는 편이 유리합니다.';
+  const alt=up?'흐름이 꺾이거나 조건이 나쁘면, 무리하지 말고 30일 안의 투찰 길일로 미루세요.':'큰 건이라면 오늘 무리하기보다 30일 안의 투찰 길일로 옮기는 편이 유리합니다.';
   return `<div class="cheobang"><div class="cbt">오늘의 실행 지침</div>`+
     `<div class="cbrow"><span class="cbk">시점</span><span class="cbv">${when}</span></div>`+
     `<div class="cbrow"><span class="cbk">주의</span><span class="cbv">${warn}</span></div>`+
@@ -802,10 +815,8 @@ function bizMonthDetail(c:Chart,y:number,m:number,d:number){
     `<div class="bzsec"><div class="bzsh">◆ 주차별 전략 · 4주 운용</div><div class="bzwks">${weeks}</div></div>`+
     `<p style="margin-top:12px">※ 오늘부터 30일, 일진과 대표님 일간(${GAN[c.dGan]})의 상성으로 산출한 흐름입니다. 큰 계약·채용·발표는 좋은 날에, 무리한 결정은 주의·휴식일을 피해 잡아 두면 좋습니다. 같은 좋은 날이라도 오전(진태양시) 기운이 더 맑습니다.</p>`;
 }
-function gilCount(c:Chart,y:number,m:number){
-  const days=new Date(Date.UTC(y,m,0)).getUTCDate();let n=0;
-  for(let d=1;d<=days;d++){const rel=relation(c.dayMasterEl,todayPillar(y,m,d).el);if(rel==='in'||rel==='bi')n++;}
-  return n;
+function gilCount(c:Chart,y:number,m:number,d:number){
+  return gilWindow(y,m,d).filter(w=>isGil(c,w)).length;
 }
 // ── 가려진 값 미리보기 ──────────────────────────────
 // 조사한 사주 사이트 대부분이 "??점 · ?월 · [?]명" 처럼 답의 모양은 보여 주고 값만 가린다(천명·헬로우봇·청월당).
@@ -919,34 +930,31 @@ function ileonHtml(c:Chart,today:{gan:number;zhi:number;el:number}){
   const idx=(today.gan*7+today.zhi*3)%pool.length;
   return `<div class="ileon"><span class="ilk">오늘의 한마디</span><p>${pool[idx]}</p></div>`;
 }
-// ── 이번 달 사정률 캘린더 — 하루하루 상단/하단 흐름. 무료는 오늘·이번 주만 열고 나머지는 잠금.
+// ── 오늘부터 30일 사정률 캘린더 — 하루하루 상단/하단 흐름. 무료는 오늘부터 7일만 열고 나머지는 잠금.
 function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolean){
   const me=c.dayMasterEl;
-  const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();
-  const days=new Date(Date.UTC(y,m,0)).getUTCDate();
-  const upDays:number[]=[];
+  const ws=gilWindow(y,m,today);
+  const up30:WinDay[]=[];
   let cells='';
-  for(let i=0;i<first;i++) cells+='<div class="scd mute"></div>';
-  for(let d=1;d<=days;d++){
-    const rel=relation(me,todayPillar(y,m,d).el);
+  for(let i=0;i<ws[0].dow;i++) cells+='<div class="scd mute"></div>';
+  for(const w of ws){
+    const rel=relation(me,todayPillar(w.y,w.m,w.d).el);
     const strong=(rel==='in'||rel==='bi'); const up=strong||rel==='jae';
     const col=strong?'#177f5e':up?'#7a8a3a':(rel==='gwan'?'#b5402f':'#8a7f68');
     const mark=strong?'▲':up?'△':(rel==='gwan'?'▼':'·');
-    if(strong) upDays.push(d);
-    const inWin = d>=today && d<today+7;       // 오늘~이번 주(7일)
-    const reveal = unlocked || inWin;
-    const past = d<today;
-    const cls = d===today?' now':past?' past':reveal?'':' lock';
-    cells+=`<div class="scd${cls}"><span class="scn">${d}</span>`+
+    if(strong) up30.push(w);
+    const reveal = unlocked || w.i<7;          // 오늘부터 이레
+    const cls = w.i===0?' now':reveal?'':' lock';
+    cells+=`<div class="scd${cls}"><span class="scn">${winLabel(w)}</span>`+
       (reveal?`<span class="scm" style="color:${col}">${mark}</span>`:`<span class="scm lockm">·</span>`)+`</div>`;
   }
   const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="sch">${x}</div>`).join('');
   const leg=`<div class="sajleg"><span><i style="background:#177f5e"></i>상단(유리)</span><span><i style="background:#7a8a3a"></i>무난</span><span><i style="background:#b5402f"></i>주의(하단)</span></div>`;
   const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`;
   if(!unlocked){
-    return grid+`<p class="sajlock">이번 달 <b>${m}월</b>의 하루하루 흐름이 이미 산출됐습니다. 지금은 <b>오늘·이번 주</b>만 열려 있습니다. 이달 <b>남은 날 전체</b>의 유리·주의 날은 <b>투찰 택일 사주(9,900원)</b>에서 한 번에 열립니다.</p>`;
+    return grid+`<p class="sajlock">오늘부터 <b>30일</b>의 하루하루 흐름이 이미 산출됐습니다. 지금은 <b>오늘부터 7일</b>만 열려 있습니다. 나머지 <b>23일</b>의 유리·주의 날은 <b>투찰 택일 사주(9,900원)</b>에서 한 번에 열립니다.</p>`;
   }
-  return grid+`<p style="margin-top:11px">이달 <b>상단(유리) 흐름</b> 날: <b>${upDays.join(' · ')}일</b>: 큰 건 투찰·계약은 이 날들에 무게를 두는 편이 낫습니다. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가는 편이 낫습니다.</p>`;
+  return grid+`<p style="margin-top:11px">앞으로 30일 중 <b>상단(유리) 흐름</b> 날은 <b>${up30.length?gilList(up30,m):'해당 없음'}</b>입니다. 큰 건 투찰·계약은 이 날들에 무게를 두는 편이 낫습니다. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가는 편이 낫습니다.</p>`;
 }
 function weekAheadHtml(c:Chart,y:number,m:number,d:number){
   const wn=['일','월','화','수','목','금','토'];let cells='';
@@ -959,7 +967,7 @@ function weekAheadHtml(c:Chart,y:number,m:number,d:number){
     const h=strong?26:up?19:(rel==='gwan'?24:14);
     cells+=`<div class="wacell${i===0?' now':''}"><span class="wad">${mm}/${dd}</span><span class="waw">${wn[dt.getUTCDay()]}</span><span class="watk"><span class="wabar" style="height:${h}px;background:${col}"></span></span><span class="wal" style="color:${col}">${lab}</span></div>`;}
   return `<div class="weekhd">이번 주 7일 흐름<span>· 무료</span></div><div class="weekahead">${cells}</div>`+
-    `<p class="wanote">오늘부터 이레간, 대표님께 <b>유리한 날</b>과 <b>조심할 날</b>의 방향입니다. 각 날의 유리한 시간대와 이달 투찰 길일은 아래에서 이어집니다.</p>`;
+    `<p class="wanote">오늘부터 이레간, 대표님께 <b>유리한 날</b>과 <b>조심할 날</b>의 방향입니다. 각 날의 유리한 시간대와 30일 투찰 길일은 아래에서 이어집니다.</p>`;
 }
 const TIER_RANK:Record<string,number>={free:0,taekil:1,full:2};
 // 대표 유형별 입찰·경영 실전 수칙 3 (행동형 마무리) — me: 일간 오행 0木1火2土3金4水
@@ -1054,16 +1062,16 @@ function secSajeong(x:any):any[]{
   // ── 무료 정점 → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
   let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c);
   if(nowYMD){
-    rateHtml+=`<div class="sajmonhd">이번 달 <b>${nowYMD.m}월</b> 사정률. 날마다 어느 쪽인가</div>`;
+    rateHtml+=`<div class="sajmonhd">오늘부터 <b>30일</b> 사정률. 날마다 어느 쪽인가</div>`;
     rateHtml+=sajeongMonthHtml(c,nowYMD.y,nowYMD.m,nowYMD.d,preciseOn);
     rateHtml+=weekAheadHtml(c,nowYMD.y,nowYMD.m,nowYMD.d);
   }
-  if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m);
-    rateHtml+=`<div class="giltease"><div class="glt">이번 달 <b>${nowYMD.m}월</b> 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날. 정확한 날짜는 바로 아래 <b>택일 캘린더</b>에서 확인하세요</div></div>`;}
-  out.push({mk:'率',tier:'free',t:nowYMD?`이번 달 ${nowYMD.m}월 택일. 오늘은 넣기 좋은 날인가`:`오늘, 투찰에 좋은 흐름인가`,html:rateHtml,gauge:true});
-  if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m);
-    const left0=new Date(Date.UTC(nowYMD.y,nowYMD.m,0)).getUTCDate()-nowYMD.d;
-    out.push({mk:'擇',tier:'taekil',teaser:`이번 달 <b>${nowYMD.m}월</b> 투찰 길일 <b>${gc0}일</b>: ${Array.from({length:Math.min(gc0,4)},()=>QV(2)+'일').join(' · ')}${gc0>4?' …':''} 정확한 날짜가 여기 있습니다. ${nowYMD.m}월은 <b>${left0}일</b> 남았습니다.`,t:`이번 달 투찰 길일 · ${nowYMD.m}월 택일`,html:choilHtml(c,nowYMD.y,nowYMD.m)});}
+  if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m,nowYMD.d);
+    rateHtml+=`<div class="giltease"><div class="glt">오늘부터 30일 안에 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날. 정확한 날짜는 바로 아래 <b>택일 캘린더</b>에서 확인하세요</div></div>`;}
+  out.push({mk:'率',tier:'free',t:nowYMD?`오늘부터 30일 택일. 오늘은 넣기 좋은 날인가`:`오늘, 투찰에 좋은 흐름인가`,html:rateHtml,gauge:true});
+  if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m,nowYMD.d);
+    const end=gilWindow(nowYMD.y,nowYMD.m,nowYMD.d).pop()!;
+    out.push({mk:'擇',tier:'taekil',teaser:`오늘부터 30일, 투찰 길일 <b>${gc0}일</b>: ${Array.from({length:Math.min(gc0,4)},()=>QV(2)+'일').join(' · ')}${gc0>4?' …':''} 정확한 날짜가 여기 있습니다. <b>${end.m}월 ${end.d}일</b>까지 봅니다.`,t:`오늘부터 30일 투찰 길일`,html:choilHtml(c,nowYMD.y,nowYMD.m,nowYMD.d)});}
   return out;
 }
 // [曆 이달] 카테고리 섹션 빌더

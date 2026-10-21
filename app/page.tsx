@@ -48,7 +48,7 @@ const IC = {
 // 홈에는 가격을 적지 않는다(2026-09-15 대표 지시) — 금액이 줄줄이 보이면 아무도 안 들어온다.
 // 모든 상품이 명식·방향·첫 장은 무료로 나오고, 결제는 결과 화면에서 잠긴 장을 열 때만 한다.
 const FEATURED: { href: string; title: string; hook: string; d: string }[] = [
-  { href: '/product/taekil', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 이번 달 길일은 언제인지', d: IC.pick },
+  { href: '/product/taekil', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 30일 안의 길일은 언제인지', d: IC.pick },
   { href: '/product/daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지: 승부 기질·재물·사람', d: IC.person },
 ];
 const OTHERS: { href: string; label: string; sub: string; d: string }[] = [
@@ -123,7 +123,7 @@ export default function Home() {
               <span className="h6-sv">넣을 만한 흐름</span>
             </div>
           </div>
-          <p className="h6-snote">분석형 대표 · 이번 달 투찰 길일 · 시진별 흐름까지</p>
+          <p className="h6-snote">분석형 대표 · 30일 투찰 길일 · 시진별 흐름까지</p>
         </figure>
 
         <Link className="h6-cta" href="/reading?cat=sajeong">내 생년월일로 무료로 보기</Link>

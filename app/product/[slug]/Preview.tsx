@@ -47,7 +47,7 @@ export default function Preview({ k }: { k: CatKey }) {
             <div className="pv-h">이번 주 7일</div>
             <div className="pv-week">{['월', '화', '수', '목', '금', '토', '일'].map((d, i) => <div key={d} className={i === 1 || i === 3 ? 'g' : i === 5 ? 'c' : ''}><span>{d}</span><i /></div>)}</div>
           </div>
-          <Locked t="이번 달 투찰 길일 6일"><Q />일 · <Q />일 · <Q />일 … 정확한 날짜와 시진</Locked>
+          <Locked t="오늘부터 30일 투찰 길일 6일"><Q />일 · <Q />일 · <Q />일 … 정확한 날짜와 시진</Locked>
         </div>
       );
     case 'gunghap':

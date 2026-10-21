@@ -12,7 +12,7 @@ import { markResultSeen } from '@/app/_components/AddToHome';
 import SiteTop from '@/app/_components/SiteTop';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
-type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
+type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
@@ -133,6 +133,12 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             </div>
             <div className="rright">
+            {/* 관리자는 결제 없이 전부 열린다. 표시가 없으면 결제가 그냥 넘어가는 줄 안다(2026-10-21 실제로 그렇게 보였다). */}
+            {res.admin && (
+              <div className="adminview no-print">
+                관리자 열람 중: 결제 없이 전부 열려 보입니다. 손님에게는 잠겨 보이니, 결제 화면은 시크릿 창에서 확인하는 편이 낫습니다.
+              </div>
+            )}
             <div className="rephd">{res.title}</div>
             {res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
@@ -179,7 +185,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
               </>
             )}
-            {level >= 1 && res.sections?.some((s: any) => s.mk === "率") && <div className="unlocked-note">✓ 결제 확인됨 · 이달 투찰 길일과 유리한 시진이 전부 열렸습니다</div>}
+            {level >= 1 && res.sections?.some((s: any) => s.mk === "率") && <div className="unlocked-note">✓ 결제 확인됨 · 오늘부터 30일 투찰 길일과 유리한 시진이 전부 열렸습니다</div>}
             {/* 나도 보기 / CEO 브리지: 공유받은 비소유자에게만 노출(본인 유료 리포트엔 숨김) */}
             {!res.mine && (<>
             <Link className="cta cta2 no-print" href="/reading" style={{ marginTop: 14 }}>

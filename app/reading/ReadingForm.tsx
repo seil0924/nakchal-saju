@@ -727,7 +727,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               <div className="ctaassure">✓ 30초 · 한 번 열면 모든 발주처</div>
             </>)}
             {level >= 1 && ui.gauge && (
-              <div className="unlocked-note">✓ 결제 확인됨 · 이달 투찰 길일과 유리한 시진이 전부 열렸습니다</div>
+              <div className="unlocked-note">✓ 결제 확인됨 · 오늘부터 30일 투찰 길일과 유리한 시진이 전부 열렸습니다</div>
             )}
             <button className="sharebtn no-print" onClick={share}>결과 링크 공유하기 <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={() => window.print()}>
@@ -736,7 +736,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             </button>
             {res.sections.some((s2: any) => s2.mk === '曆' || s2.mk === '曆詳' || s2.mk === '曆年') && (
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={exportIcs}>
-              이달 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
+              30일 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
             </button>)}
             <TrustStrip />
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
