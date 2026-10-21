@@ -186,7 +186,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               나도 무료로 보기<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 투찰 택일</small>
             </Link>
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 10 }}>
-              <div className="bt"><b>나도 30초 만에: 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 100인 중 내 사주와 닮은 대표 · 무료</span></div>
+              <div className="bt"><b>나도 30초 만에: 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 111인 중 내 사주와 닮은 대표 · 무료</span></div>
               <div className="ba">→</div>
             </Link>
             </>)}

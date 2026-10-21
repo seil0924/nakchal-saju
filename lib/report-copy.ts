@@ -27,7 +27,7 @@ function twinHtml(tm:TyMatch, me:number, myDist:number[], myGan?:string){
     `<div class="scmid"><div class="scpct">${sim}<em>%</em></div><div class="scpl">닮음</div></div>`+
     `<div class="scside"><div class="scwrap">${sealSvg(tm.tyDist,tyGanChar,132)}</div><div class="scnm">${t.name}</div><div class="scr">${EL[tm.el]} 기운</div></div>`+
     `</div><div class="sccap">얼굴이 아니라 <b>명식의 문양</b>입니다. 두 인장의 오행 비율이 이만큼 겹칩니다</div></div>`;
-  return `<div class="twinlead">대표님의 명을 세계 거장 100인과 견줬습니다.<br>`+
+  return `<div class="twinlead">대표님의 명을 국내외 거장 111인과 견줬습니다.<br>`+
     `가장 <b>${lv}</b>${josa(lv, '는')} 이 사람이 <b>${t.name}</b>입니다.</div>`+
     sealcmp+
     `<div class="twincard">`+
@@ -846,7 +846,7 @@ function bizYearHtml(c:Chart,selYear:number,curM:number){
     `<p style="margin-top:11px">밀어주는 달(<b>도움운·결실운</b>)에 큰 계약·발표·투자를, 조여지는 달(<b>시련운</b>)엔 내실·정비를 두는 편이 낫습니다. 위 흐름을 <b>${selYear}년 세운</b>과 겹쳐 보면 한 해 농사의 밑그림이 나옵니다.</p>`;
 }
 // ── 診 · 대표 유형 진단 (사주아이식 프로파일) — 4유형 + 4축 스펙트럼 + 위기 약점(심리 훅)
-const TYPE4=['공격형','관계형','안정형','분석형','분석형'];
+export const TYPE4=['공격형','관계형','안정형','분석형','분석형'];
 const TYPE4_SUB=['밀어붙여 판을 여는 대표','사람을 모아 판을 키우는 대표','신용으로 오래 버티는 대표','정보와 결단으로 판을 가르는 대표','흐름을 읽어 스며드는 대표'];
 // 4축: 라벨(좌/우) + me별 위치(0=좌 강 ~ 100=우 강) + 좌/우 해설
 const JIN_AX=[
@@ -977,7 +977,7 @@ function suchikHtml(me:number){
 // ── 대표 경영 스코어카드 (6대 축) — 진단 프레임워크 IP 시각화 ───────
 // 명식(십성·오행)에서 6축을 5점 척도로 환산. 재미로 보는 참고 지표.
 function axisScore(n:number){ return n<=0?1 : n===1?2 : n===2?3 : n===3?4 : 5; }
-function scoreAxes(c:Chart, seun?:any){
+export function scoreAxes(c:Chart, seun?:any){
   const sipA=sipsung(c);           // [비겁,식상,재성,관성,인성]
   const self=sipA[0]+sipA[4];      // 신강도(자기 + 자기를 돕는 기운)
   const tilt=seun&&typeof seun.tilt==='number'?seun.tilt:0;

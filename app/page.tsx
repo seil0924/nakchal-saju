@@ -58,7 +58,7 @@ const OTHERS: { href: string; label: string; sub: string; d: string }[] = [
   { href: '/product/daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', d: IC.trend },
   { href: '/product/calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', d: IC.cal },
   { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', d: IC.compass },
-  { href: '/ceo', label: '닮은 CEO', sub: '거장 100인 중 명식이 닮은 사람', d: IC.ceo },
+  { href: '/ceo', label: '닮은 CEO', sub: '거장 111인 중 명식이 닮은 사람', d: IC.ceo },
 ];
 
 // 첫 화면 예시 카드 — 실제 결과 화면과 같은 모양의 '예시'. 명식 간지와 오행 색은 실제 계산값(1971-07-16생)이다.
