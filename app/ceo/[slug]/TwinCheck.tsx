@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import DateSelect from '@/app/_components/DateSelect';
+import { josa } from '@/lib/josa';
 
 type Row = { key: string; label: string; me: string; them: string; same: boolean };
 type Res = {
@@ -35,7 +36,7 @@ export default function TwinCheck({ name, slugOf }: { name: string; slugOf: Reco
 
   return (
     <section className="tw" aria-labelledby="tw-h">
-      <h2 id="tw-h" className="tw-h">대표님은 {name}과 얼마나 닮았을까</h2>
+      <h2 id="tw-h" className="tw-h">대표님은 {name}{josa(name, '와')} 얼마나 닮았을까</h2>
       <p className="tw-sub">생년월일만 넣으면 여섯 가지 부호를 하나씩 견줍니다. 가입 없이 바로 나옵니다.</p>
       <div className="tw-form">
         <DateSelect value={birth} onChange={setBirth} yearFrom={1930} yearTo={2012} />
@@ -59,7 +60,7 @@ export default function TwinCheck({ name, slugOf }: { name: string; slugOf: Reco
             ))}
           </ul>
           <p className="tw-note">대표님 일주는 <b>{res!.myPills}</b>, 유형은 <b>{res!.type}</b>입니다.
-            {best && <> 100명 중에서는 <Link href={`/ceo/${slugOf[best] || ''}`}>{best}</Link>과 가장 닮았습니다({res!.count}가지).</>}
+            {best && <> 100명 중에서는 <Link href={`/ceo/${slugOf[best] || ''}`}>{best}</Link>{josa(best, '와')} 가장 닮았습니다({res!.count}가지).</>}
           </p>
           <Link className="tw-cta" href={`/reading?cat=daepyo&b=${birth}`}>
             내 명식 전체 무료로 보기
