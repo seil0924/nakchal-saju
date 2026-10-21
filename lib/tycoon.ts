@@ -489,18 +489,38 @@ export type TyMatch = {
   pills: string; el: number; tyDist: number[]; story: string; profile: TyProfile | null;
 };
 
+// 여섯 부호 — 일간 오행·음양·가장 강한 기운·가장 약한 기운·주도하는 십성·신살.
+// 하나하나 '겹침/다름'을 함께 돌려줘야 화면에서 '어디가 닮았는지'를 보여 줄 수 있다.
+export type TraitRow = { key: string; label: string; me: string; them: string; same: boolean };
+function traitRows(u: Traits, T: Traits): TraitRow[] {
+  const sin = [...u.sinsal].find(k => T.sinsal.has(k));
+  const sinLabel = (x: Set<string>) => (x.size ? [...x].map(k => SINSAL_KO[k] || k).join('·') : '없음');
+  return [
+    { key: 'el', label: '일간 오행', me: EL[u.el], them: EL[T.el], same: u.el === T.el },
+    { key: 'yin', label: '음양', me: u.yin ? '음간' : '양간', them: T.yin ? '음간' : '양간', same: u.yin === T.yin },
+    { key: 'strong', label: '가장 강한 기운', me: EL[u.strong], them: EL[T.strong], same: u.strong === T.strong },
+    { key: 'weak', label: '가장 약한 기운', me: EL[u.weak], them: EL[T.weak], same: u.weak === T.weak },
+    { key: 'sip', label: '주도하는 십성', me: SIP[u.sip], them: SIP[T.sip], same: u.sip === T.sip },
+    { key: 'sinsal', label: '신살', me: sinLabel(u.sinsal), them: sinLabel(T.sinsal), same: !!sin },
+  ];
+}
+function matchedLabels(u: Traits, T: Traits): string[] {
+  const m: string[] = [];
+  if (u.el === T.el) m.push(`일간 ${EL[u.el]}`);
+  if (u.yin === T.yin) m.push(u.yin ? '음간' : '양간');
+  if (u.strong === T.strong) m.push(`강한 ${EL[u.strong]}`);
+  if (u.weak === T.weak) m.push(`${EL[u.weak]} 부족`);
+  if (u.sip === T.sip) m.push(`${SIP[u.sip]} 주도`);
+  const inter = [...u.sinsal].find(k => T.sinsal.has(k));
+  if (inter) m.push(SINSAL_KO[inter] || '신살');
+  return m;
+}
+
 export function matchTycoon(userChart: Chart): TyMatch {
   const u = traitsOf(userChart);
   let best = TY[0], bestCount = -1, bestMatched: string[] = [];
   for (const e of TY) {
-    const T = e.tr; const matched: string[] = [];
-    if (u.el === T.el) matched.push(`일간 ${EL[u.el]}`);
-    if (u.yin === T.yin) matched.push(u.yin ? '음간' : '양간');
-    if (u.strong === T.strong) matched.push(`강한 ${EL[u.strong]}`);
-    if (u.weak === T.weak) matched.push(`${EL[u.weak]} 부족`);
-    if (u.sip === T.sip) matched.push(`${SIP[u.sip]} 주도`);
-    const inter = [...u.sinsal].find(k => T.sinsal.has(k));
-    if (inter) matched.push(SINSAL_KO[inter] || '신살');
+    const matched = matchedLabels(u, e.tr);
     if (matched.length > bestCount) { best = e; bestCount = matched.length; bestMatched = matched; }
   }
   const level = bestCount >= 3 ? 'twin' : bestCount === 2 ? 'near' : 'none';
@@ -509,6 +529,21 @@ export function matchTycoon(userChart: Chart): TyMatch {
     pills: pil(best.c.dGan, best.c.dZhi), el: best.c.dayMasterEl,
     tyDist: best.c.dist, story: best.t.story, profile: tyProfile(best.t.en),
   };
+}
+
+// 거장 상세 페이지에서 '이 사람과 나'를 바로 견준다(2026-10-21).
+// 검색으로 '스티브 잡스 사주'를 치고 들어온 사람에게 다른 화면으로 보내 다시 입력시키면 떠난다.
+export type TyCompare = { name: string; count: number; rows: TraitRow[]; rank: number; total: number };
+export function compareTycoon(userChart: Chart, name: string): TyCompare | null {
+  const e = TY.find(x => x.t.name === name);
+  if (!e) return null;
+  const u = traitsOf(userChart);
+  const rows = traitRows(u, e.tr);
+  const count = rows.filter(r => r.same).length;
+  // 100명 가운데 몇 번째로 닮았는가(같은 개수는 같은 순위)
+  const counts = TY.map(x => matchedLabels(u, x.tr).length);
+  const rank = 1 + counts.filter(n => n > count).length;
+  return { name, count, rows, rank, total: TY.length };
 }
 
 // SEO 랜딩용 — 거장명 → slug(공백 제거, 한글/영문 유지) 및 역조회

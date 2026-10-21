@@ -60,3 +60,31 @@ describe('TYCOONS 데이터 무결성', () => {
     }
   });
 });
+
+// 거장 상세 페이지의 '그 자리에서 견주기'(2026-10-21)
+describe('compareTycoon', () => {
+  it('여섯 부호를 겹침/다름으로 돌려주고, 겹친 수와 순위가 맞는다', async () => {
+    const { compareTycoon, TYCOONS } = await import('../tycoon');
+    const { compute } = await import('../engine');
+    const c = compute(1971, 7, 16, null);
+    const r = compareTycoon(c, TYCOONS[0].name)!;
+    expect(r.rows.length).toBe(6);
+    expect(r.count).toBe(r.rows.filter(x => x.same).length);
+    expect(r.rank).toBeGreaterThanOrEqual(1);
+    expect(r.rank).toBeLessThanOrEqual(r.total);
+    expect(r.total).toBe(TYCOONS.length);
+  });
+  it('자기 자신과 견주면 여섯 개가 다 겹치고 1등이다', async () => {
+    const { compareTycoon, TYCOONS } = await import('../tycoon');
+    const { compute } = await import('../engine');
+    const t = TYCOONS[3]; const [y, m, d] = t.born.split('-').map(Number);
+    const r = compareTycoon(compute(y, m, d, null), t.name)!;
+    expect(r.count).toBe(6);
+    expect(r.rank).toBe(1);
+  });
+  it('없는 이름이면 null', async () => {
+    const { compareTycoon } = await import('../tycoon');
+    const { compute } = await import('../engine');
+    expect(compareTycoon(compute(1971, 7, 16, null), '없는사람')).toBeNull();
+  });
+});
