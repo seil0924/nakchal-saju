@@ -17,7 +17,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   daepyo: {
     name: '대표 사주', hanja: '代', oh: 'mok',
     mks: ['核', '器', '鏡', '診', '軸', '符', '五', '決', '人', '財', '方', '士'],
-    price: 19900, needs: [],
+    price: 990, needs: [],
     kicker: '代表 四柱', lead: '대표님이 어떤 그릇으로 태어났는지: 성정·승부 기질·재물·사람까지 낱낱이.',
     gives: [
       '여덟 글자가 어느 오행으로 쏠렸고 어느 자리가 비었는지: 그 불균형이 사업에 무엇으로 나타나는지',
@@ -30,7 +30,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   sajeong: {
     name: '투찰 택일 사주', hanja: '擇', oh: 'su',
     mks: ['率', '擇'],
-    price: 9900, needs: [],
+    price: 990, needs: [],
     kicker: '投札 擇日', lead: '오늘 이 투찰, 넣을 날인가 미룰 날인가: 유리·주의 날, 시진, 오늘부터 30일 길일 전체.',
     gives: [
       '오늘부터 30일 투찰 길일의 정확한 날짜',
@@ -41,7 +41,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   balju: {
     name: '발주처 사주', hanja: '宮', oh: 'mok',
     mks: ['處'],
-    price: 39000, needs: ['client'],
+    price: 990, needs: ['client'],
     kicker: '發注處 宮合', lead: '그 발주처, 나와 맞는 판인가: 설립일 사주로 상성을 봅니다.',
     gives: [
       '그 발주처와의 삼계: 붙을 판인지 접을 판인지',
@@ -52,7 +52,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   gunghap: {
     name: '협정·궁합 사주', hanja: '合', oh: 'hwa',
     mks: ['同點', '同', '協點', '協'],
-    price: 19900, needs: ['partner', 'ally'],
+    price: 990, needs: ['partner', 'ally'],
     kicker: '同業 · 協定 宮合', lead: '손잡기 전에, 깨질 궁합인지부터: 대표×대표, 회사×회사.',
     gives: [
       '동업 궁합: 지분·역할·최종 결정권을 어떻게 나눠야 깨지지 않는지',
@@ -63,7 +63,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   daeun: {
     name: '회사 대운', hanja: '運', oh: 'to',
     mks: ['今', '法', '運'],
-    price: 29000, needs: ['legal'],
+    price: 990, needs: ['legal'],
     kicker: '會社 大運', lead: '회사가 대표님을 밀어주는가: 법인의 그릇과 년도별 큰 흐름.',
     gives: [
       '법인 설립일 사주로 본 회사의 그릇: 회사가 대표님을 받치는지 누르는지',
@@ -74,7 +74,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   calendar: {
     name: '사업운 캘린더 · 이달', hanja: '曆', oh: 'hwa',
     mks: ['曆', '曆詳'],
-    price: 9900, needs: [],
+    price: 990, needs: [],
     kicker: '事業運 月曆', lead: '오늘부터 앞으로 한 달: 계약·채용·투자·발표에 좋은 날과, 갈등·지출을 조심할 날을 달력에 짚어 드립니다.',
     gives: [
       '오늘부터 30일 중 계약에 최적인 핵심 3일',
@@ -85,7 +85,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   ijeon: {
     name: '자리 사주', hanja: '宅', oh: 'to',
     mks: ['宅'],
-    price: 29000, needs: [],
+    price: 990, needs: [],
     kicker: '事務室 移轉 方位', lead: '사무실을 옮기기 전에: 지금 자리의 문·책상 배치와, 옮길 곳의 방위·거리·이사 택일까지.',
     gives: [
       '지금 자리의 문·책상 배치에서 고칠 곳',
@@ -96,7 +96,7 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
   calendar_year: {
     name: '사업운 캘린더 · 연간', hanja: '曆', oh: 'hwa',
     mks: ['曆年要', '曆年'],
-    price: 29000, needs: [],
+    price: 990, needs: [],
     kicker: '事業運 年曆', lead: '올 한 해 12개월: 밀어주는 달과 조여지는 달을 미리 갈라, 큰 계약·발표·정비의 때를 한눈에 잡아 드립니다.',
     gives: [
       '올 한 해 12개월: 밀어주는 달과 조여지는 달',

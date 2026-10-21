@@ -129,9 +129,11 @@ export async function listPayments() {
     const cols = PAY_COLS + ',status,paid_at,created_at,level';
     let pays: any[] | null = null;
     {
-      const withReason = await sb.from('payments').select(cols + ',fail_reason').order('created_at', { ascending: false }).limit(100);
-      if (!withReason.error) pays = withReason.data;
-      else pays = (await sb.from('payments').select(cols).order('created_at', { ascending: false }).limit(100)).data;
+      // item(0009)·fail_reason(0008) 컬럼이 없는 환경도 있다. 있는 만큼만 읽는다.
+      for (const extra of [',fail_reason,item', ',fail_reason', '']) {
+        const r = await sb.from('payments').select(cols + extra).order('created_at', { ascending: false }).limit(100);
+        if (!r.error) { pays = r.data; break; }
+      }
     }
     const rows = (pays ?? []) as any[];
     const rids = [...new Set(rows.map(p => p.report_id).filter(Boolean))] as string[];

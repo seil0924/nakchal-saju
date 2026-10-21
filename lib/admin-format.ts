@@ -32,6 +32,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export type PayRow = {
   user_id?: string | null; report_id?: string | null; pass_key?: string | null;
   amount?: number | null; level?: number | null;
+  item?: string | null; created_at?: string | null;
 };
 
 // 결제한 회원 — 결제 줄에 없으면 패스 키, 그다음 리포트 주인으로 찾는다.
@@ -48,11 +49,15 @@ export function payItemName(p: PayRow, reportCat?: string | null): string {
   const amount = p.amount ?? 0;
   if (p.pass_key) return '발주처 프리미엄 패스';
   if (!p.report_id && (p.level ?? 2) === 0) return '복채';
+  if (p.item) return p.item;                       // 0009 이후: 결제 때 서버가 적어 둔 상품 이름
   if (reportCat && isCatKey(reportCat)) return CAT_INFO[reportCat].name;
-  if (amount === 990) return '택일팩';
+  // 990원이 옛 택일팩 값이던 시절의 결제. 2026-10-21 부터는 모든 상품이 990원이다.
+  if (amount === 990 && p.created_at && p.created_at < '2026-10-21') return '택일팩';
   // 카테고리 없이 뽑은 리포트는 결제 때 고른 상품이 저장되지 않는다 — 금액으로 좁힌다.
   const byPrice = Object.values(CAT_INFO).filter(c => c.price === amount).map(c => c.name);
   if (byPrice.length === 1) return byPrice[0];
+  // 같은 값인 상품이 셋 이상이면 금액으로는 못 가른다(전 상품 990원). 짐작을 늘어놓지 않는다.
+  if (byPrice.length > 3) return `${won(amount)}원 상품`;
   if (byPrice.length > 1) return `${byPrice.join(' / ')} 중`;
   return amount ? `${won(amount)}원 상품` : '리포트';
 }

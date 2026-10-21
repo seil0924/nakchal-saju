@@ -29,9 +29,13 @@ describe('admin-format — 결제', () => {
   it('상품명', () => {
     expect(payItemName({ pass_key: 'pass:balju:x', amount: 39000 })).toBe('발주처 프리미엄 패스');
     expect(payItemName({ report_id: null, level: 0, amount: 5000 })).toBe('복채');
-    expect(payItemName({ report_id: 'r', amount: 19900 }, 'daepyo')).toBe('대표 사주');
-    expect(payItemName({ report_id: 'r', amount: 39000 })).not.toMatch(/원 상품/);
-    expect(payItemName({ report_id: 'r', amount: 9900 })).toMatch(/ \/ .* 중$/);
+    expect(payItemName({ report_id: 'r', amount: 990 }, 'daepyo')).toBe('대표 사주');
+    // 0009 이후: 결제 때 적어 둔 상품 이름이 먼저다
+    expect(payItemName({ report_id: 'r', amount: 990, item: '투찰 택일 사주' })).toBe('투찰 택일 사주');
+    // 전 상품 990원이라 카테고리 없는 리포트는 금액으로 짐작하지 않는다
+    expect(payItemName({ report_id: 'r', amount: 990, created_at: '2026-10-22T01:00:00Z' })).toBe('990원 상품');
+    // 990원이 택일팩이던 옛 결제
+    expect(payItemName({ report_id: 'r', amount: 990, created_at: '2026-07-01T01:00:00Z' })).toBe('택일팩');
     expect(payItemName({ report_id: 'r', amount: 12345 })).toBe('12,345원 상품');
   });
   it('상태', () => {

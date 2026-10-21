@@ -118,7 +118,7 @@ export async function getReportAccess(id: string): Promise<{ owner: string | nul
 }
 
 // userId — 결제한 회원. 2026-09-17 전에는 넣지 않아서 관리자 화면의 유료 회원·전환율이 늘 0이었다.
-export async function createOrder(reportId: string, amount: number, level: number = 2, userId?: string | null): Promise<Order> {
+export async function createOrder(reportId: string, amount: number, level: number = 2, userId?: string | null, item?: string | null): Promise<Order> {
   const c = sb();
   // 결제ID는 전역 유니크해야 함(payments.payment_id UNIQUE). 서버리스에서 performance.now()는
   // 워커 시작후 경과시간이라 호출간 충돌 → 중복키(23505). crypto.randomUUID로 항상 유니크 생성.
@@ -131,7 +131,9 @@ export async function createOrder(reportId: string, amount: number, level: numbe
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(reportId);
     // report_id는 uuid(reports FK)만 허용 — 복채('bokchae') 등 비-uuid는 null 처리(invalid uuid 500 방지)
     const row = { payment_id: paymentId, report_id: (isPass || !isUuid) ? null : reportId, pass_key: isPass ? reportId : null, amount, level, status: 'pending' };
-    let { error } = await c.from('payments').insert(userId ? { ...row, user_id: userId } : row);
+    // item(상품 이름) 컬럼은 0009 마이그레이션 뒤에 생긴다. 없는 환경이면 빼고 다시 넣는다. 기록 때문에 결제가 막히면 안 된다.
+    let { error } = await c.from('payments').insert({ ...row, ...(item ? { item } : {}), ...(userId ? { user_id: userId } : {}) });
+    if (error && item) ({ error } = await c.from('payments').insert(userId ? { ...row, user_id: userId } : row));
     // 회원 프로필이 없는 등으로 user_id 가 걸리면 회원 없이라도 주문은 만든다 — 계측 때문에 결제가 막히면 안 된다.
     if (error && userId) ({ error } = await c.from('payments').insert(row));
     if (error) throw error;
