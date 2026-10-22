@@ -236,6 +236,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
 
   async function submit() {
     setErr('');
+    if (!f.name.trim()) { setErr('대표님 성함을 넣어주세요.'); document.getElementById('rd-name')?.focus(); return; }
     if (!f.birth) { setErr('대표님 생년월일을 입력해 주세요.'); return; }
     // 카테고리별 필수 입력 안내
     const req = ui.requires;   // 카테고리 필수 입력(스키마 기반)
@@ -466,13 +467,17 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         )}
         {/* 2. 대표님 정보 */}
         <div className="card">
-          <div className="st"><span className="l"><span className="b" />대표님 생년월일</span></div>
+          <div className="st"><span className="l"><span className="b" />대표님 성함과 생년월일</span></div>
           {savedSelf.length > 0 && (
             <button type="button" className="pickbtn" onClick={() => setPicker({ open: true, kind: 'self' })}>
               <span className="pktx"><b>{f.birth ? `${f.name || '대표'} · ${yr2(f.birth)}` : '저장된 대표 불러오기'}</b><em>전에 넣으신 생년월일을 그대로 씁니다</em></span>
               <span className="pkgo">›</span>
             </button>
           )}
+          {/* 성함은 필수(2026-10-22). 리포트 제목과 보관함 목록이 성함으로 갈린다 — 비면 '대표님' 리포트가 줄줄이 쌓였다. */}
+          <label htmlFor="rd-name" className="rd-namel">성함</label>
+          <input id="rd-name" className="rd-name" value={f.name} maxLength={12} required aria-required="true" autoComplete="name"
+            placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
           <div className="rd-cal" role="group" aria-label="달력">
             <button type="button" className={f.cal === 'solar' ? 'on' : ''} aria-pressed={f.cal === 'solar'} onClick={() => set('cal', 'solar')}>양력</button>
             <button type="button" className={f.cal === 'lunar' ? 'on' : ''} aria-pressed={f.cal === 'lunar'} onClick={() => set('cal', 'lunar')}>음력</button>
@@ -488,7 +493,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <select required aria-label="태어난 날" value={bd || ''} onChange={e => setB({ d: +e.target.value })}><option value="" disabled>일</option>{DAYS.map(d => <option key={d} value={d}>{d}일</option>)}</select>
           </div>
           <button type="button" className="rd-more" aria-expanded={more} onClick={() => setMore(v => !v)}>
-            {more ? '접기' : '더 정확히 보기'}<span>{more ? '' : ' · 태어난 시간·성함'}</span>
+            {more ? '접기' : '더 정확히 보기'}<span>{more ? '' : ' · 태어난 시간·성별'}</span>
           </button>
           {more && (<div className="rd-fold">
           <label>태어난 시간</label>
@@ -511,8 +516,6 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               ))}
             </div>
           )}
-          <label>성함 <span className="opt">(선택 · 리포트 제목에만 씁니다)</span></label>
-          <input value={f.name} maxLength={12} aria-label="성함" placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
           <label>성별 <span className="opt">(선택 · 계산에는 쓰지 않습니다)</span></label>
           <div className="seg">
             <button className={seg(f.gender === 'M')} onClick={() => set('gender', f.gender === 'M' ? '' : 'M')}>남</button>
@@ -778,6 +781,12 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <span>{catInfo ? `명식·방향 무료 · 전체 ${won(catInfo.price)}` : '명식·오늘의 신호 무료'}</span>
           </div>
           <button type="button" className="go" disabled={busy} onClick={() => {
+            if (!f.name.trim()) {
+              const n = document.getElementById('rd-name');
+              n?.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => n?.focus(), 350);
+              setErr('대표님 성함을 먼저 넣어 주세요.');
+              return;
+            }
             if (!f.birth) {
               const y = document.querySelector<HTMLSelectElement>('.bdate select');
               y?.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => y?.focus(), 350);

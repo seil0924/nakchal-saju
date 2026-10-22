@@ -9,6 +9,9 @@ import { requireUser } from '@/lib/supabase/server';
 export async function POST(req: Request) {
   const input = (await req.json()) as ReportInput;
   if (!input?.birth) return NextResponse.json({ error: 'birth_required' }, { status: 400 });
+  // 성함 필수(2026-10-22). 화면에서 막지만 서버도 같은 선을 지킨다.
+  input.name = String(input.name ?? '').trim().slice(0, 12);
+  if (!input.name) return NextResponse.json({ error: 'name_required' }, { status: 400 });
   const user = await requireUser();                        // 데모면 null
   // 관리자는 무료 리포트 단계에서부터 잠금 없이 본다 — 매번 결제를 태우고 점검할 수는 없다.
   const admin = await adminBypass();
