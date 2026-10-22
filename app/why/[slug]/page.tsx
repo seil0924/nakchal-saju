@@ -70,7 +70,7 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
 
       {/* CTA · 가격 노출 없음 · 무료 진입 */}
       <div style={{ padding: '16px 24px 0' }}>
-        <Link className="fullcta" href={`/reading${PAIN_CAT[p.slug] ? `?cat=${PAIN_CAT[p.slug]}` : ''}`}>{p.cta} <small>생년월일만 · 30초 · 무료로 시작</small></Link>
+        <Link className="fullcta" href={`/reading${PAIN_CAT[p.slug] ? `?cat=${PAIN_CAT[p.slug]}` : ''}`}>{p.cta} <small>성함·생년월일만 · 30초 · 무료로 시작</small></Link>
       </div>
 
       <div className="foot">

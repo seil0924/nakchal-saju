@@ -189,7 +189,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {/* 나도 보기 / CEO 브리지: 공유받은 비소유자에게만 노출(본인 유료 리포트엔 숨김) */}
             {!res.mine && (<>
             <Link className="cta cta2 no-print" href="/reading" style={{ marginTop: 14 }}>
-              나도 무료로 보기<small>생년월일만 30초 · 대표와 회사 사주로 오늘의 투찰 택일</small>
+              나도 무료로 보기<small>성함·생년월일만 30초 · 대표와 회사 사주로 오늘의 투찰 택일</small>
             </Link>
             <Link className="bridge no-print" href="/ceo" style={{ marginTop: 10 }}>
               <div className="bt"><b>나도 30초 만에: 나와 닮은 세계적 CEO 찾기</b><span>잡스·록펠러·샤넬… 거장 111인 중 내 사주와 닮은 대표 · 무료</span></div>

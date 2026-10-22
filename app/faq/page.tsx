@@ -46,7 +46,7 @@ export default function FaqPage() {
             <p style={{ fontSize: 15, lineHeight: 1.82, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p>
           </div>
         ))}
-        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>성함·생년월일만 · 30초 무료로 시작</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>더 알아보기</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
           <Link href="/guide/입찰-사주" style={chip}>입찰 사주란</Link>

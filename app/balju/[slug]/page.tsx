@@ -86,7 +86,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
 
         <Link href={readingUrl} style={cta}>
           {c.name}{josa(c.name, '과', '와')} 내 궁합 보기 →
-          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>대표님 생년월일만 · 30초 무료로 시작</span>
+          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>대표님 성함·생년월일만 · 30초 무료로 시작</span>
         </Link>
 
         <div style={{ fontSize: 13, color: '#636d77', textAlign: 'center', margin: '10px 0 20px', lineHeight: 1.6 }}>

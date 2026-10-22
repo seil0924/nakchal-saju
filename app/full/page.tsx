@@ -155,7 +155,7 @@ export default function FullIntro() {
       {/* CTA. 예전 문구("이달이 지나면 사라집니다")는 겁주기였고 지금은 30일 창이라 사실도 아니다. */}
       <div style={{ padding: '22px 24px 0' }}>
         <div className="urgent">투찰 길일은 <b>오늘부터 30일</b>을 봅니다. 마감이 가까운 공고부터 날짜를 맞춰 보면 좋습니다.</div>
-        <Link className="fullcta" href="/reading">내 사주로 열어보기 <small>생년월일만 · 30초 · 무료로 시작</small></Link>
+        <Link className="fullcta" href="/reading">내 사주로 열어보기 <small>성함·생년월일만 · 30초 · 무료로 시작</small></Link>
         <Link className="fullsub" href="/ceo">먼저 가볍게: 나와 닮은 세계적 CEO 보기 (무료) →</Link>
       </div>
 

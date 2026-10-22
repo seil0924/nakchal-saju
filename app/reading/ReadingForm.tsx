@@ -447,7 +447,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         )}
         {!cat && (
           <div className="rd-hook">
-            <b>생년월일만 넣으면 30초</b>
+            <b>성함과 생년월일만 넣으면 30초</b>
             <span>명식과 오늘의 투찰 신호가 무료로 나옵니다. 가입은 필요 없습니다.</span>
           </div>
         )}

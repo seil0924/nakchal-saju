@@ -48,7 +48,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
             <p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{s.p}</p>
           </div>
         ))}
-        <Link href={g.ctaHref} style={cta}>{g.ctaText}<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href={g.ctaHref} style={cta}>{g.ctaText}<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>성함·생년월일만 · 30초 무료로 시작</span></Link>
         {faqs.length > 0 && (<>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '24px 0 10px' }}>자주 묻는 질문</div>
           {faqs.map((f, i) => (

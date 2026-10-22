@@ -62,7 +62,7 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
             <p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{s.p}</p>
           </div>
         ))}
-        <Link href="/reading?cat=daepyo" style={cta}>내 일간·오행으로 대표 사주 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료 · 6대 축 스코어카드</span></Link>
+        <Link href="/reading?cat=daepyo" style={cta}>내 일간·오행으로 대표 사주 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>성함·생년월일만 · 30초 무료 · 6대 축 스코어카드</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
         {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
         {/* 같은 갈래가 하나뿐이면 제목만 남고 아래가 빈다. 그럴 땐 통째로 뺀다. */}

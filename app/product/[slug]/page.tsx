@@ -103,7 +103,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         <h1><Hook s={p.hook} /></h1>
         <p className="pd-sub">{p.sub}</p>
         <ul className="pd-badges">
-          <li>명식·첫 장 무료</li><li>생년월일만 30초</li><li>가입 없이</li>
+          <li>명식·첫 장 무료</li><li>성함·생년월일만 30초</li><li>가입 없이</li>
         </ul>
         <Link className="pd-cta" href={p.href}>무료로 먼저 보기</Link>
       </header>

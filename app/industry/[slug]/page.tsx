@@ -48,7 +48,7 @@ export default function IndustryPage({ params }: { params: { slug: string } }) {
         <div style={card}><div style={h}>{r.name} 입찰·적격심사 특성</div><p style={p}>{r.trait}</p></div>
         <div style={card}><div style={h}>명리로 보는 {r.name} 대표</div><p style={p}>{r.myeong}</p></div>
 
-        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>생년월일만 · 30초 무료로 시작</span></Link>
+        <Link href="/reading?cat=sajeong" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>성함·생년월일만 · 30초 무료로 시작</span></Link>
 
         {rel.length > 0 && (<>
         <div style={{ ...h, margin: '22px 0 10px' }}>{r.name} 주요 발주처 궁합</div>
