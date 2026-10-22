@@ -1,14 +1,15 @@
 name: Scheduled column publish
 
-# 예약발행 자동화: 매일 09:00·18:00 KST에 Vercel 재배포를 트리거해,
+# 예약발행 자동화: 매일 09:00 KST에 Vercel 재배포를 트리거해,
 # 그 시각이 된 예약 칼럼(content/column/*.md, frontmatter date=KST)이 자동 공개되게 한다.
 # 사전 준비(1회): Vercel 프로젝트 → Settings → Git → Deploy Hooks 에서 훅 생성 후,
 #   GitHub 레포 → Settings → Secrets and variables → Actions 에 VERCEL_DEPLOY_HOOK 등록.
 
 on:
   schedule:
+    # 예약 칼럼은 모두 09:00 글이라 하루 한 번이면 된다. 18:00 배포는 2026-10-22 뺐다 —
+    # 배포마다 빌드 결과가 쌓여 Vercel 무료 배포 저장 공간(10GB)이 가득 찼다.
     - cron: '0 0 * * *'   # 00:00 UTC = 09:00 KST
-    - cron: '0 9 * * *'   # 09:00 UTC = 18:00 KST
   workflow_dispatch:       # 수동 실행도 가능
 
 jobs:
