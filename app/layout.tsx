@@ -67,7 +67,8 @@ const LD = {
 // 문서 언어는 한국어가 기본이고, /en·/zh 페이지가 자기 언어로 바꾼다(app/_components/HtmlLang.tsx).
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    // /en·/zh 는 HtmlLang 인라인 스크립트가 lang 을 바꾼다. React 가 그걸 불일치로 경고하지 않게 이 속성만 눈감는다.
+    <html lang="ko" suppressHydrationWarning>
       <head>
         {/* Google Tag Manager */}
         <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WZR46LPT');` }} />
