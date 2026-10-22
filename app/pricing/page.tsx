@@ -8,7 +8,7 @@ import SiteTop from '@/app/_components/SiteTop';
 import Mascot from '@/app/_components/Mascot';
 
 export const metadata = {
-  title: '이용안내·요금', description: '낙찰사주 상품 안내와 판매가, 청약철회·환불 정책, 사업자정보.',
+  title: '이용안내·요금', description: '낙찰사주 상품 8종(투찰 택일·대표 사주·발주처 궁합·회사 대운 등)의 판매가와 내용, 청약철회·환불 기준, 사업자 정보를 한 곳에 정리했습니다. 명식은 생년월일만으로 무료로 먼저 볼 수 있습니다.',
   alternates: { canonical: '/pricing' },
   openGraph: {
     url: 'https://nakchalsaju.com/pricing', type: 'website', locale: 'ko_KR', siteName: '낙찰사주',

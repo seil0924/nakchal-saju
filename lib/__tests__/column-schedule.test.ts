@@ -41,3 +41,13 @@ describe('예약 칼럼', () => {
     for (const p of sched) expect((p.content.match(/—/g) || []).length, p.f).toBe(0);
   });
 });
+
+// 예전 글도 줄표를 다 걷었다(2026-10-22). uxlint 는 한 줄에 둘 이상일 때만 잡아서 여기서 막는다.
+describe('모든 칼럼', () => {
+  it('제목·설명·FAQ·본문 어디에도 줄표(—)가 없다', () => {
+    for (const p of posts) {
+      const all = JSON.stringify(p.data) + p.content;
+      expect((all.match(/—/g) || []).length, p.f).toBe(0);
+    }
+  });
+});
