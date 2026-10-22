@@ -13,7 +13,8 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   if (!p) return { title: '낙찰사주' };
   const plain = p.title.replace(/\{\/?b\}/g, '').replace(/\n/g, ' ');
   // 레이아웃 템플릿이 ' · 낙찰사주'를 뒤에 붙인다. 여기서 또 붙이면 제목에 두 번 나온다.
-  return { title: plain, description: p.lead, alternates: { canonical: `/why/${p.slug}` } };
+  // lead 는 30~40자라 검색 설명으로 짧다. desc(110~150자)를 쓴다.
+  return { title: plain, description: p.desc, alternates: { canonical: `/why/${p.slug}` } };
 }
 
 // {b}..{/b} → <b>..</b>
@@ -43,8 +44,8 @@ export default function WhyPage({ params }: { params: { slug: string } }) {
         <div className="sub">{p.lead}</div>
       </div>
 
-      {/* 후벼파기 */}
-      <div className="lab"><i /><span>혹시, 이런 밤을 보내셨나요</span></div>
+      {/* 대표가 겪는 장면 */}
+      <div className="lab"><i /><span>이런 장면이 익숙하다면</span></div>
       <div className="painbox">
         {p.dig.map((d, i) => <div key={i} className="pain"><span className="pk">·</span>{d}</div>)}
       </div>
