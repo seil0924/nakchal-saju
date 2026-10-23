@@ -23,8 +23,11 @@ export default function ReportView({ params }: { params: { id: string } }) {
     const sp = new URLSearchParams(location.search);
     const paid = sp.get('paid'); if (paid === null) return;
     const why = sp.get('why') || '';
-    if (paid === '1' && why.startsWith('confirm')) setPayNote({ kind: 'stuck', text: '결제는 됐는데 열람 처리가 끝나지 않았습니다. 이메일 문의로 이 화면 주소를 보내 주시면 바로 열어 드립니다.' });
+    if (paid === '1' && why.startsWith('confirm')) setPayNote({ kind: 'stuck', text: '결제는 됐는데 열람 처리가 끝나지 않았습니다. 다시 결제하지 마시고, 이메일 문의로 이 화면 주소를 보내 주시면 바로 열어 드립니다.' });
     else if (paid === '1') setPayNote({ kind: 'ok', text: '결제됐습니다. 잠긴 장이 모두 열렸습니다.' });
+    // 승인 응답을 못 받았거나(approve_unknown) 승인 뒤 금액이 달랐거나(amount) 서버 오류(fatal): 돈이 나갔을 수 있다
+    else if (/^(approve_unknown|amount|fatal)/.test(why)) setPayNote({ kind: 'stuck', text: '결제 결과를 확인하지 못했습니다. 카드 승인 문자를 받으셨다면 다시 결제하지 마시고, 이메일 문의로 이 화면 주소를 보내 주세요. 확인해서 열어 드리거나 취소해 드립니다.' });
+    else if (why.startsWith('approve')) setPayNote({ kind: 'cancel', text: '카드 승인이 되지 않았습니다. 돈은 나가지 않았습니다. 다른 카드로 다시 해 보세요.' });
     else setPayNote({ kind: 'cancel', text: '결제를 마치지 않았습니다. 돈은 나가지 않았고, 다시 하려면 아래 [열기]를 눌러주세요.' });
     // 새로고침할 때마다 같은 안내가 뜨지 않게 결과 표시만 주소에서 지운다(토큰 t 는 남긴다).
     sp.delete('paid'); sp.delete('why');
@@ -76,6 +79,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
   // 서버가 needs 를 검증하고 금액도 서버가 정한다 — 여기서 보낸 값은 '무엇을 살지'일 뿐이다.
   async function pay(chosen: 'taekil' | 'full', pickCat?: string) {
     if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
+    if (busy) return;   // 연타로 주문이 두 개 생기지 않게
     setErr(''); setBusy(true);
     try {
       const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: id, sku: chosen, cat: pickCat ?? pending }) }).then(x => x.json());

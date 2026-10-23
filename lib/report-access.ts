@@ -10,11 +10,15 @@ export type AccessInput = {
   owner: string | null;       // 리포트 주인(비회원이면 null)
   token: string | null;       // 리포트 접근 토큰(칸이 없거나 비어 있으면 null)
   t: string | null;           // 요청에 실린 ?t=
+  reportId?: string;          // 0007 백필 행(token = id)을 토큰 없는 리포트와 같게 다루려고 받는다
 };
 
 export function canViewPaid(a: AccessInput): boolean {
   if (!a.auth) return true;
   const isOwner = !!a.userId && !!a.owner && a.owner === a.userId;
-  if (a.token === null) return !a.owner || isOwner;   // 토큰 없는 리포트: 비회원 것은 주소가 열쇠, 회원 것은 주인만
+  // 0007 은 기존 행 토큰을 id 로 채운다. 그 행은 브라우저마다 다른 값을 들고 있을 수 있어(예전엔 랜덤을 돌려줬다)
+  // 토큰이 없던 때와 똑같이 다룬다. 새로 만든 행만 진짜 토큰을 따진다.
+  const legacy = a.token === null || (!!a.reportId && a.token === a.reportId);
+  if (legacy) return !a.owner || isOwner;   // 토큰 없는 리포트: 비회원 것은 주소가 열쇠, 회원 것은 주인만
   return isOwner || (!!a.t && a.t === a.token);
 }

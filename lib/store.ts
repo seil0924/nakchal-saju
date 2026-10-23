@@ -5,7 +5,7 @@ import 'server-only';
 import type { ReportInput } from './report';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-export type Order = { paymentId: string; reportId: string; amount: number; level: number; status: 'pending' | 'paid' };
+export type Order = { paymentId: string; reportId: string; amount: number; level: number; status: 'pending' | 'paid' | 'failed' | 'cancelled' };
 
 // ── Supabase 백엔드 (서버 전용 · SERVICE_ROLE) ───────────
 let _sb: SupabaseClient | null | undefined;
@@ -50,7 +50,9 @@ export async function saveReport(input: ReportInput, userId?: string, label?: st
     if (!withTok.error) return { id: withTok.data.id as string, token };
     const base = await c.from('reports').insert({ input, user_id: userId ?? null, label }).select('id').single();
     if (base.error) throw base.error;
-    return { id: base.data.id as string, token };
+    // 토큰 칸이 없어 저장하지 못했다. 랜덤 토큰을 돌려주면 브라우저만 그 값을 들고 있다가,
+    // 나중에 0007(기존 행 토큰 = id 로 백필)을 적용하는 순간 안 맞아 잠긴다. 그래서 id 를 돌려준다.
+    return { id: base.data.id as string, token: base.data.id as string };
   }
   const id = genId('r');
   memReports.set(id, { input, userId: userId ?? null, label, created: g.__seq, token });
@@ -190,16 +192,18 @@ export async function confirmOrder(paymentId: string, paidAmount: number): Promi
 // 마지막 경우(why 가 confirm:*)는 상태를 pending 으로 남겨 둔다 — 승인은 났고
 // 재시도로 수렴해야 하는 건이라 'failed' 로 덮으면 안 된다.
 export async function failOrder(paymentId: string, why: string): Promise<void> {
-  const approved = why.startsWith('confirm:');
+  // confirm:* 는 승인됐는데 저장 실패, approve_unknown 은 승인 응답을 못 받음(돈이 나갔을 수 있다). 둘 다 failed 로 덮지 않는다.
+  const approved = why.startsWith('confirm:') || why.startsWith('approve_unknown');
   const status = approved ? 'pending' : 'failed';
   const c = sb();
   if (c) {
     // fail_reason 컬럼이 아직 없으면(마이그레이션 전) 상태만 남기고 넘어간다.
     // 진단을 붙이려다 결제 흐름을 깨는 것이 제일 나쁘다.
+    // 이미 paid 인 주문은 건드리지 않는다. 같은 인증결과가 두 번 들어오면 두 번째의 '중복 거절'이 paid 를 failed 로 덮었다.
     const withReason = await c.from('payments')
-      .update({ status, fail_reason: why.slice(0, 200) }).eq('payment_id', paymentId);
+      .update({ status, fail_reason: why.slice(0, 200) }).eq('payment_id', paymentId).neq('status', 'paid');
     if (!withReason.error) return;
-    await c.from('payments').update({ status }).eq('payment_id', paymentId);
+    await c.from('payments').update({ status }).eq('payment_id', paymentId).neq('status', 'paid');
     return;
   }
   const o = memOrders.get(paymentId);
@@ -213,6 +217,21 @@ export async function getOrder(paymentId: string): Promise<Order | null> {
     return data ? { paymentId, reportId: data.report_id ?? data.pass_key, amount: data.amount, level: data.level ?? 2, status: data.status } : null;
   }
   return memOrders.get(paymentId) ?? null;
+}
+
+// 이 리포트에 돈이 나간(또는 나갔을 수 있는) 결제가 있는가 — 재결제를 막는다(2026-10-23).
+// unlock_level 만 보면, 승인은 났는데 저장이 실패했거나(confirm:*) 승인 응답을 못 받은(approve_unknown) 건에서 다시 결제된다.
+export async function reportHasPayment(reportId: string): Promise<boolean> {
+  const c = sb();
+  if (!c) return (memUnlockLvl.get(reportId) ?? 0) >= 2;
+  const { data } = await c.from('payments').select('status, fail_reason').eq('report_id', reportId);
+  return (data ?? []).some((r: any) => r.status === 'paid' || /^(confirm:|approve_unknown)/.test(String(r.fail_reason ?? '')));
+}
+
+// KCP 거래번호를 남긴다(환불·대사용). tno 칸(0010)이 없으면 조용히 넘어간다 — 기록 때문에 결제가 막히면 안 된다.
+export async function recordTno(paymentId: string, tno?: string | null): Promise<void> {
+  const c = sb(); if (!c || !tno) return;
+  try { await c.from('payments').update({ tno: String(tno).slice(0, 40) }).eq('payment_id', paymentId); } catch { /* noop */ }
 }
 
 // 리포트 언락 레벨 (0 무료 · 1 택일팩 · 2 전체)
@@ -236,5 +255,7 @@ export async function hasEntitlement(key: string): Promise<boolean> {
   return memPasses.has(key);
 }
 export async function hasBaljuPass(userId?: string | null): Promise<boolean> {
+  // 운영(DB 연결)에서 비회원은 패스가 없다. 예전엔 'pass:balju:demo' 를 조회해, 데모로 산 패스가 있으면 비회원 전원이 열렸다.
+  if (!userId && sb()) return false;
   return hasEntitlement(BALJU_PASS_KEY(userId));
 }

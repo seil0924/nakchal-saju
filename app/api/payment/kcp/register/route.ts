@@ -7,6 +7,8 @@ export async function POST(req: Request) {
   const { paymentId, goodName } = await req.json();
   const order = await getOrder(paymentId);
   if (!order) return NextResponse.json({ error: 'order_not_found' }, { status: 400 });
+  // 이미 끝난(또는 실패로 닫힌) 주문으로 결제창을 다시 열지 않는다.
+  if (order.status && order.status !== 'pending') return NextResponse.json({ error: 'order_closed' }, { status: 409 });
   const origin = new URL(req.url).origin;
   const r = await kcpRegister({
     ordr_idxx: paymentId, good_mny: order.amount, good_name: goodName || '낙찰사주 리포트',

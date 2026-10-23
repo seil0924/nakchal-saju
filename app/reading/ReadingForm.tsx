@@ -375,6 +375,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     setErr(''); setBusy(true);
     try {
       const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: 'baljuPass' }) }).then(x => x.json());
+      // 준비가 실패하면 결제창을 열지 않는다(로그인 필요·이미 산 패스).
+      if (prep?.error || !prep?.paymentId) { setBusy(false); paying.current = false; setErr(prep?.error === 'login_required' ? '발주처 프리미엄 패스는 로그인 후 살 수 있습니다.' : prep?.error === 'already_paid' ? '이미 발주처 프리미엄 패스가 있습니다. 새로고침하면 열립니다.' : '결제 준비에 실패했습니다. 잠시 뒤 다시 눌러주세요.'); return; }
       if (KCP_CLIENT_ENABLED) {
         const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
         if (kres === 'redirect') return;

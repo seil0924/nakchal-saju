@@ -1,7 +1,7 @@
 // POST /api/payment/prepare — 결제 사전등록
 // 서버가 금액을 확정합니다. 카테고리 리포트면 카테고리 개별가, 아니면 sku(택일팩/전체).
 import { NextResponse } from 'next/server';
-import { getReport, createOrder, unlockLevel, BALJU_PASS_KEY } from '@/lib/store';
+import { getReport, createOrder, unlockLevel, reportHasPayment, hasBaljuPass, BALJU_PASS_KEY } from '@/lib/store';
 import { PRICE_BALJU_PASS } from '@/lib/constants';
 import { isCatKey, CAT_INFO, canSellCat } from '@/lib/report-categories';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
@@ -21,6 +21,8 @@ export async function POST(req: Request) {
   if (sku === 'baljuPass') {
     const user = await requireUser();
     if (authEnabled() && !user?.id) return NextResponse.json({ error: 'login_required' }, { status: 401 });
+    // 이미 산 패스를 또 사지 않게.
+    if (await hasBaljuPass(user?.id)) return NextResponse.json({ error: 'already_paid' }, { status: 409 });
     const order = await createOrder(BALJU_PASS_KEY(user?.id), PRICE_BALJU_PASS, 1, user?.id ?? null, '발주처 프리미엄 패스');
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 발주처 프리미엄 패스', sku: 'baljuPass' });
   }
@@ -30,7 +32,8 @@ export async function POST(req: Request) {
   }
   // 이미 다 열린 리포트면 결제창을 열지 않는다(2026-10-23). 첫 손님이 2분 사이 같은 대표 사주를 두 번 결제했다.
   // 모바일 카드 결제 뒤 다른 브라우저로 돌아와 접근 토큰이 없어 잠겨 보였기 때문이다(돌아오는 주소에 t 를 실어 고침).
-  if ((await unlockLevel(reportId)) >= 2) {
+  // 열림 레벨만 보면, 승인은 났는데 저장이 실패했거나 승인 응답을 못 받은 건에서 다시 결제된다. 결제 기록도 본다.
+  if ((await unlockLevel(reportId)) >= 2 || (await reportHasPayment(reportId))) {
     return NextResponse.json({ error: 'already_paid' }, { status: 409 });
   }
   // 카테고리 개별 결제

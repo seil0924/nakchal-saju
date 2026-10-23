@@ -41,9 +41,17 @@ export async function kcpApprove(p: { enc_data: string; enc_info: string; tran_c
     ordr_no: p.ordr_no,
     pay_type: p.pay_type || 'PACA',   // 신용카드
   };
-  const res = await fetch(URL_APPROVE, { method: 'POST', headers: { 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify(body) });
-  const data = await res.json();
+  // 20초 안에 답이 없거나 JSON 이 아니면 '결과 불명'(unknown)으로 돌려준다. 예전엔 예외가 그대로 터져
+  // 모바일은 500 화면, PC 는 사유 없는 '대기'로 남았다 — KCP 쪽에선 승인됐을 수 있는 건이다.
+  const ctl = new AbortController(); const timer = setTimeout(() => ctl.abort(), 20000);
+  let data: any;
+  try {
+    const res = await fetch(URL_APPROVE, { method: 'POST', headers: { 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify(body), signal: ctl.signal });
+    data = await res.json();
+  } catch (e: any) {
+    return { ok: false, unknown: true, amount: 0, tno: undefined, res_cd: '', res_msg: String(e?.name === 'AbortError' ? 'timeout' : (e?.message || e)).slice(0, 60), raw: null };
+  } finally { clearTimeout(timer); }
   const ok = data?.res_cd === '0000';
   const amount = Number(data?.amount || 0);
-  return { ok, amount, tno: data?.tno, res_cd: data?.res_cd, res_msg: data?.res_msg, raw: data };
+  return { ok, unknown: false, amount, tno: data?.tno, res_cd: data?.res_cd, res_msg: data?.res_msg, raw: data };
 }

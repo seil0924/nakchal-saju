@@ -28,7 +28,7 @@ async function payPC(p: { paymentId: string; amount: number; goodName: string })
     if (typeof (window as any).KCP_Pay_Execute_Web !== 'function') { resolve(null); return; } // 스크립트 미준비 → 무한대기 방지
     const form = document.createElement('form'); form.setAttribute('name', 'order_info'); form.method = 'post'; form.style.display = 'none';
     const add = (n: string, v: string) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = n; i.value = v; form.appendChild(i); };
-    add('site_cd', SITE_CD); add('site_name', '낙찰사주'); add('pay_method', '110000000000'); add('currency', 'WON'); // 1=카드,2=계좌이체
+    add('site_cd', SITE_CD); add('site_name', '낙찰사주'); add('pay_method', '100000000000'); add('currency', 'WON'); // 카드만. 승인은 PACA(카드)로 고정이라 계좌이체를 열어 두면 고른 손님이 승인 실패를 본다
     add('ordr_idxx', p.paymentId); add('good_name', p.goodName); add('good_mny', String(p.amount));
     // KCP PC 표준결제 필수/권장 필드 — 누락 시 결제창이 '진행중'에서 멈춤
     add('escw_used', 'N');            // 에스크로 미사용

@@ -22,3 +22,13 @@ describe('canViewPaid — 리포트 다시 열기/결제 직후 같은 답', () 
     expect(canViewPaid({ ...base, auth: false, owner: 'u1', token: 'k' })).toBe(true);
   });
 });
+
+describe('0007 백필 행(token = id)', () => {
+  it('토큰 없는 리포트와 똑같이 다룬다 — 브라우저가 옛 랜덤 토큰을 들고 있어도 잠기지 않는다', () => {
+    expect(canViewPaid({ ...base, token: 'r1', reportId: 'r1', t: 'old-random' })).toBe(true);
+    expect(canViewPaid({ ...base, token: 'r1', reportId: 'r1', owner: 'u1', userId: 'u2' })).toBe(false);
+  });
+  it('새로 만든 행(진짜 토큰)은 그대로 따진다', () => {
+    expect(canViewPaid({ ...base, token: 'k', reportId: 'r1', t: 'x' })).toBe(false);
+  });
+});
