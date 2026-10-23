@@ -449,3 +449,5 @@ html body .rite .ritechar .ritepic{height:150px;width:auto;border-radius:0}
 html body .st-brand,html body .h6-brand{gap:8px;font-size:20px;letter-spacing:-.02em}
 html body .dbrand .ds{width:46px;height:46px}
 html body .dbrand .dbt{font-size:19px}
+html body .h6-intro .h6-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+html body .h6-intro .h6-head .brandmark{flex:none;margin-right:-6px}

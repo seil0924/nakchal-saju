@@ -18,15 +18,14 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#3f6be0',
     lang: 'ko',
     categories: ['business', 'productivity', 'lifestyle'],
+    // 아이콘은 브랜드 캐릭터 나경 거북(2026-10-23). 예전엔 /pwa-icon 이 막대 로고를 그려서 냈다.
     icons: [
-      { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
-      // ?v=2 — 첫 판이 한쪽으로 쏠려 있었다. 엣지 캐시가 옛 그림을 물고 있어 주소를 바꾼다.
-      { src: '/pwa-icon?size=192&v=2', sizes: '192x192', type: 'image/png', purpose: 'any' },
-      { src: '/pwa-icon?size=512&v=2', sizes: '512x512', type: 'image/png', purpose: 'any' },
-      { src: '/pwa-icon?size=512&pad=1&v=2', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      { src: '/brand/pwa-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/brand/pwa-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: '/brand/pwa-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
     ],
     shortcuts: [
-      { name: '오늘의 사정률', short_name: '사정률', url: '/reading' },
+      { name: '오늘의 투찰 택일', short_name: '투찰 택일', url: '/reading?cat=sajeong' },
       { name: '택일: 좋은 날 고르기', short_name: '택일', url: '/taekil' },
       { name: '보관함', short_name: '보관함', url: '/vault' },
     ],

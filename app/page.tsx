@@ -4,7 +4,6 @@ import './home6.css';
 import { GUIDES, REGIONS, INDUSTRIES } from '@/lib/seo-landings';
 import { CONCEPTS } from '@/lib/seo-concepts';
 import TodayChip from '@/app/_components/TodayChip';
-import Mascot from '@/app/_components/Mascot';
 import LangNudge from '@/app/_components/LangNudge';
 import TrustStrip from '@/app/_components/TrustStrip';
 import ReviewStrip from '@/app/_components/ReviewStrip';
@@ -97,9 +96,15 @@ export default function Home() {
       </header>
 
       <section className="h6-intro">
-        <Mascot art="welcome" width={132} className="h6-mascot" decorative eager />
-        <p className="h6-eye">공공입찰·수주 대표를 위한 사주</p>
-        <h1>오늘 넣어도 되는 날인지,<br />대표님 명식으로 먼저 봅니다</h1>
+        {/* 장면 그림 카드(연한 바탕)를 제목 위에 따로 두니 로고 거북과 겹쳐 스티커처럼 떠 보였다(2026-10-23 대표 지적).
+            흰 바탕 거북을 제목 옆에 붙여 한 덩어리로 둔다. */}
+        <div className="h6-head">
+          <div>
+            <p className="h6-eye">공공입찰·수주 대표를 위한 사주</p>
+            <h1>오늘 넣어도 되는 날인지,<br />대표님 명식으로 먼저 봅니다</h1>
+          </div>
+          <BrandMark size={84} />
+        </div>
         <p className="h6-lead">성함과 생년월일만 넣으면 명식과 오늘의 투찰 신호가 무료로 나옵니다.</p>
 
         <figure className="h6-sample" aria-label="결과 화면 예시">
