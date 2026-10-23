@@ -78,7 +78,10 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   const mks = catMks(input.cat);
   const filt = (arr: Section[]) => mks ? arr.filter(x => mks.includes(x.mk)) : arr;
   const cc = !!input.clientCore;
-  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf, cc, baljuPremium));
+  // 발주처 사주(cat=balju)를 산 리포트는 그 발주처의 상세(3계·시나리오·주의신호·세운)를 연다(2026-10-23).
+  // 예전엔 상세가 '프리미엄 패스'(로그인 필요)로만 열려서, 990원을 내고 발주처 사주를 사도 더 열리는 게 없었다.
+  const premium = baljuPremium || (input.cat === 'balju' && level >= 2);
+  const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf, cc, premium));
 
   // 자리 사주는 report-copy 의 티어 빌더 바깥에서 만든다.
   // 방위·거리는 주소를 넣어야 생기는 값이라, 명식만으로 도는 빌더에 끼워 넣으면 자리가 어색하다.

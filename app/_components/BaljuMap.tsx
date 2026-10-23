@@ -7,7 +7,8 @@ import Link from 'next/link';
 import { CLIENTS } from '@/lib/clients';
 import { chartFromInput } from '@/lib/preview';
 import { sget } from '@/lib/scope';
-import { migrateLegacy, peopleOf } from '@/lib/people';
+import { migrateLegacy, peopleOf, savePerson } from '@/lib/people';
+import DateSelect from '@/app/_components/DateSelect';
 import {
   rankBalju, splitForMap, dominantOh, fitOf,
   OH_COLOR, OH_TEXT, OH_HANJA, OH_NAME, type BaljuFit,
@@ -68,6 +69,15 @@ export default function BaljuMap() {
   const [me, setMe] = useState<Me | null>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => { setMe(readMe()); setReady(true); }, []);
+  // 생년월일은 이 화면에서 바로 받는다(2026-10-23). 예전엔 입력 화면으로 보냈고, 거기서 [발주처 고르기]가
+  // 다시 이 화면으로 보내 둘이 맴돌았다(대표 지적).
+  const [bd, setBd] = useState('');
+  const fillMe = () => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(bd)) return;
+    try { savePerson({ kind: 'self', date: bd, name: '' }); } catch { /* 저장이 막혀도 이번 화면은 보여 준다 */ }
+    const c = chartFromInput(bd, null, 'solar', false);
+    if (c) setMe({ gan: c.dGan, ji: c.dZhi, name: '대표님' });
+  };
 
   const drift = useMemo(() => driftNodes(), []);
   const fit = useMemo(() => {
@@ -105,10 +115,14 @@ export default function BaljuMap() {
           </svg>
           <div className="bm-cap">발주처 {CLIENTS.length}곳이 설립 오행에 따라 다섯 방위를 떠다닙니다<br />가운데 자리는 아직 비어 있습니다</div>
         </div>
-        <Link className="bm-cta" href="/reading?cat=balju">
-          생년월일 넣고 내 자리 채우기
-          <small>30초 · 무료 · {CLIENTS.length}곳이 궁합 순으로 다시 놓입니다</small>
-        </Link>
+        <div className="bm-fill">
+          <div className="bm-fill-lab">생년월일을 넣으면 가운데 자리가 채워지고, {CLIENTS.length}곳이 궁합 순으로 다시 놓입니다</div>
+          <DateSelect value={bd} onChange={setBd} />
+          <button type="button" className="bm-cta" onClick={fillMe} disabled={!bd}>
+            내 자리 채우기
+            <small>무료 · 가입 없이 · 이 화면에서 바로</small>
+          </button>
+        </div>
       </div>
     );
   }

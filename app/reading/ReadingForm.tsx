@@ -11,7 +11,9 @@ import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
 import PersonPicker from '@/app/_components/PersonPicker';
-import { type Person, type PersonKind } from '@/lib/people';
+import ClientPicker from '@/app/_components/ClientPicker';
+import { uidFromCookie } from '@/lib/scope';
+import { type Person, type PersonKind, peopleOf, migrateLegacy } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
 import TrustStrip from '@/app/_components/TrustStrip';
 import { markResultSeen } from '@/app/_components/AddToHome';
@@ -91,6 +93,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   const [confirm, setConfirm] = useState(false);
   const [modal, setModal] = useState(false);
   const [passMode, setPassMode] = useState(false);   // 발주처 프리미엄 패스 결제 모드
+  // 패스는 계정에 붙는다(다른 기기에서도 열려야 한다). 로그인 안 했으면 결제 버튼 대신 로그인으로 잇는다(2026-10-23).
+  const [loggedIn, setLoggedIn] = useState(true);
+  useEffect(() => { try { setLoggedIn(!!uidFromCookie(document.cookie)); } catch { /* 모르면 서버가 막는다 */ } }, [modal]);
   const [busy, setBusy] = useState(false);
   // 결제 재진입 가드. setBusy 는 다음 렌더에야 반영돼서 같은 틱에 두 번 들어오는 걸 못 막는다 —
   // 실제로 버튼 한 번에 /api/payment/prepare 가 두 번 나갔다. ref 는 즉시 바뀐다.
@@ -103,7 +108,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   const [cat, setCat] = useState(isCatKey(initialCat) ? initialCat : ''); // 카테고리(대표·택일·발주처·궁합·대운)
   const [bp, setBp] = useState({ y: 0, m: 0, d: 0 }); // 생년월일 3분할 선택 누적
   const [picker, setPicker] = useState<{ open: boolean; kind: PersonKind }>({ open: false, kind: 'self' });
-  const [more, setMore] = useState(false);   // 성함·시간·성별: 접어 두고 필요한 사람만 연다
+  const [more, setMore] = useState(false);
+  const [clientPick, setClientPick] = useState(false);   // 발주처 고르기 창(입력 화면 안에서)   // 성함·시간·성별: 접어 두고 필요한 사람만 연다
   const catInfo = isCatKey(cat) ? CAT_INFO[cat] : null;
   const ui = catUI(cat);   // 카테고리별 UI 스키마(단일 소스)
   // 카테고리 개별 결제가 (카테고리 모드면 단일가, 아니면 sku 기준가)
@@ -146,6 +152,17 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       // 닮은 CEO(/ceo)에서 넘어온 경우 대표 생년월일·성함 프리필
       const b = p.get('b'), n = p.get('n');
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
+      // 다른 화면(발주처 지도 등)에서 이미 넣은 대표 생년월일이 있으면 채워 둔다. 같은 걸 두 번 넣게 하지 않는다(2026-10-23).
+      else {
+        try {
+          migrateLegacy();
+          const me = peopleOf('self')[0];
+          if (me?.date && /^\d{4}-\d{2}-\d{2}$/.test(me.date)) {
+            setF(s => s.birth ? s : ({ ...s, birth: me.date, name: s.name || (me.name || '').trim(), cal: (me.cal as any) || s.cal, leap: !!me.leap }));
+            const [yy, mm, dd] = me.date.split('-').map(Number); setBp(prev => (prev.y ? prev : { y: yy, m: mm, d: dd }));
+          }
+        } catch { /* 저장소를 못 읽으면 빈 폼 */ }
+      }
       // ?cat= 은 여기서 읽는다. 서버(page.tsx)가 읽으면 이 화면이 정적 파일이 되지 못해
       // 접속마다 서버 렌더가 되고, 그게 Vercel CPU 로 그대로 나간다(2026-09-21).
       const ct = p.get('cat');
@@ -243,7 +260,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     if (req === 'legal' && !f.legal) { setErr('회사 대운은 법인 설립일이 필요합니다. 아래 「회사 정보」에 설립일을 넣어주세요.'); document.getElementById('cocard')?.scrollIntoView({ behavior: 'smooth' }); return; }
     // 빠진 칸으로 화면을 옮긴다. 안내만 띄우면 아래 결제 막대에 가려 손님이 못 봤다(2026-10-23 협정·궁합에서 대표 지적).
     const toRel = () => setTimeout(() => document.getElementById('relcard')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
-    if (req === 'client' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 추가해 주세요. 위 관계·궁합 칸에서 고르거나 새로 넣을 수 있습니다.'); toRel(); return; }
+    if (req === 'client' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 골라 주세요.'); setTimeout(() => document.getElementById('baljupick')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50); setClientPick(true); return; }
     if (req === 'partnerOrAlly' && !targets.some(t => t.kind === 'partner' || t.kind === 'ally')) { setErr('동업 또는 협정 상대를 먼저 추가해 주세요. 위 관계·궁합 칸에서 고르거나 새로 넣을 수 있습니다.'); toRel(); return; }
     // 자리 사주는 주소·방위가 있어야 읽을 게 생긴다. 없이 팔면 빈 리포트가 나간다.
     if (cat === 'ijeon' && !jari) { setErr('자리 사주는 사무실 주소와 방위가 필요합니다. 「자리 사주」 화면에서 주소를 넣고 다시 오세요.'); return; }
@@ -600,13 +617,13 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               {t ? (
                 <div className="baljusel">
                   <div className="bjinfo"><b>{t.name} {isCoreClient(t.name) && <span className="corelock">핵심</span>}</b><span>{t.date.slice(0, 4)} 설립 · 대표님과의 궁합</span></div>
-                  <Link href="/balju" className="bjchg">다른 발주처 ›</Link>
+                  <button type="button" className="bjchg" onClick={() => setClientPick(true)}>다른 발주처 ›</button>
                 </div>
               ) : (
-                <Link href="/balju" className="baljupick">
-                  <span className="bptx"><b>발주처를 먼저 고르세요</b><em>목록에서 발주처를 선택하면 이 자리에 들어옵니다</em></span>
+                <button type="button" id="baljupick" className="baljupick" onClick={() => setClientPick(true)}>
+                  <span className="bptx"><b>발주처를 먼저 고르세요</b><em>{CLIENTS.length}곳 중에서 검색해 고르면 이 자리에 들어옵니다</em></span>
                   <span className="bpgo">고르기 ›</span>
-                </Link>
+                </button>
               )}
             </div>
           );
@@ -731,7 +748,14 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               </div>
             ) : null)}
             {anyPass && (<>
-              <div className="cta" onClick={() => { setErr(''); setPassMode(true); setModal(true); }}>
+              {/* 이 발주처 하나만: 로그인 없이 990원(발주처 사주). 핵심 발주처 전체는 아래 패스(로그인). */}
+              {cat === 'balju' && catInfo && level < 2 && (
+                <div className="cta" onClick={() => { setErr(''); setPassMode(false); setSku('full'); setModal(true); }}>
+                  이 발주처 상세 열기
+                  <small>{catInfo.name} · 로그인 없이 · {won(catInfo.price)}</small>
+                </div>
+              )}
+              <div className={cat === 'balju' && catInfo && level < 2 ? 'cta sub' : 'cta'} onClick={() => { setErr(''); setPassMode(true); setModal(true); }}>
                 발주처 프리미엄 패스 열기
                 <small>한 번 결제로 핵심 발주처 {CORE_CLIENT_COUNT}곳 상세 · {won(PRICE_BALJU_PASS)}</small>
               </div>
@@ -757,6 +781,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       </div>
 
       <PersonPicker open={picker.open} kind={picker.kind} onPick={handlePick} onClose={() => setPicker(pp => ({ ...pp, open: false }))} />
+      <ClientPicker open={clientPick} onClose={() => setClientPick(false)}
+        onPick={c => { setTargets(prev => [...prev.filter(x => x.kind !== 'client'), { kind: 'client', name: c.name, date: c.date }]); setErr(''); }} />
 
       {/* 로딩 리추얼 */}
       <RiteProgress open={prog} title="만세력을 폅니다" steps={RITE_STEPS} stepMs={410} />
@@ -860,7 +886,18 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다. <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
             </label>
             {err && <div className="errbox">{err}</div>}
+            {passMode && !loggedIn ? (() => {
+              const c = targets.find(x => x.kind === 'client');
+              const back = '/reading?cat=balju' + (c ? `&ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}` : '');
+              return (
+                <div className="passlogin">
+                  <p>패스는 로그인한 계정에 붙습니다. 한 번 사면 다른 날, 다른 기기에서도 계속 열립니다. 발주처 한 곳만 보시려면 로그인 없이 [발주처 사주]로 볼 수 있습니다.</p>
+                  <Link className="paygo" href={`/login?next=${encodeURIComponent(back)}`}>로그인하고 이어서 사기</Link>
+                </div>
+              );
+            })() : (
             <button className="paygo" onClick={() => (passMode ? payPass() : pay(sku))} disabled={busy}>{busy ? '결제 처리중…' : `${won(passMode ? PRICE_BALJU_PASS : unlockPrice)} 결제하기`}</button>
+            )}
             <div className="mclose" onClick={() => { setModal(false); setPassMode(false); }}>다음에 볼게요</div>
             <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>
           </div>
