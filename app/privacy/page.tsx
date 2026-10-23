@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ogCard } from '@/lib/og';
 import SiteTop from '@/app/_components/SiteTop';
+import { BIZ } from '@/lib/bizinfo';
 
 export const metadata = {
   title: '개인정보처리방침',
@@ -21,7 +22,7 @@ const SECTIONS: [string, string][] = [
   ['7. 개인정보의 파기', '보유기간 경과 또는 처리목적 달성 시 지체 없이 파기합니다. 전자적 파일은 복구 불가능한 방법으로 삭제하고, 출력물은 분쇄·소각합니다.'],
   ['8. 개인정보의 안전성 확보 조치', '접근 권한 관리, 접근통제, 전송구간 암호화(HTTPS), 접속기록 보관 등 관리적·기술적 보호조치를 시행합니다.'],
   ['9. 쿠키의 운용', '서비스는 로그인 세션 유지 등을 위해 쿠키를 사용할 수 있으며, 이용자는 브라우저 설정으로 이를 거부할 수 있습니다(일부 기능 제한 가능).'],
-  ['10. 개인정보 보호책임자', '개인정보 보호책임자: 오세일(대표), 연락처: ohselie24@naver.com / 010-2131-1924. 이용자는 개인정보 관련 문의·불만·피해구제를 위 연락처로 요청할 수 있으며, 개인정보침해신고센터(privacy.kisa.or.kr, 국번없이 118) 등에도 상담·신고할 수 있습니다.'],
+  ['10. 개인정보 보호책임자', `개인정보 보호책임자: 오세일(대표), 연락처: ${BIZ.email} / ${BIZ.tel}. 이용자는 개인정보 관련 문의·불만·피해구제를 위 연락처로 요청할 수 있으며, 개인정보침해신고센터(privacy.kisa.or.kr, 국번없이 118) 등에도 상담·신고할 수 있습니다.`],
   ['11. 방침의 변경', '본 방침은 법령·서비스 변경에 따라 개정될 수 있으며, 변경 시 시행 최소 7일 전 공지합니다.'],
 ];
 
@@ -38,7 +39,7 @@ export default function Privacy() {
             <p key={i} style={{ marginTop: i ? 14 : 0 }}><b style={{ color: 'var(--navy)' }}>{h}</b><br />{b}</p>
           ))}
           <p style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed #e6e8ea', fontSize: 13, color: '#58616a' }}>
-            나인굿즈 · 대표 오세일 · 개인정보 보호책임자 오세일 · 문의 ohselie24@naver.com · 010-2131-1924
+            나인굿즈 · 대표 오세일 · 개인정보 보호책임자 오세일 · 문의 {BIZ.email} · {BIZ.tel}
           </p>
         </div>
       </div>

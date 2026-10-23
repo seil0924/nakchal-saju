@@ -59,7 +59,7 @@ export default async function MyPage() {
           <Link href="/terms">이용약관 · 면책<span className="r">›</span></Link>
           <Link href="/privacy">개인정보 처리방침<span className="r">›</span></Link>
           <Link href="/refund">청약철회·환불 안내<span className="r">›</span></Link>
-          <a href="mailto:ohselie24@naver.com">고객센터<span className="r">문의 ›</span></a>
+          <Link href="/contact">이메일 문의<span className="r">고객센터 ›</span></Link>
           <LogoutButton />
         </div>
       </div>

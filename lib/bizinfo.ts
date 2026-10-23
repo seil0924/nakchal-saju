@@ -4,7 +4,7 @@ export const BIZ = {
   ceo: '오세일',
   bizNo: '535-21-01704',
   address: '대전광역시 서구 가장로31 글로리빌 403호',
-  email: 'ohselie24@naver.com',
+  email: 'ohseli12@gmail.com',
   tel: '010-2131-1924',
   built: '자체제작(독립몰)',
 };

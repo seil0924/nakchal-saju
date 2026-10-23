@@ -423,3 +423,23 @@ html body .h6-intro .h6-mascot{width:132px;margin:0 0 10px;border-radius:12px}
 /* 계산 중 화면 — 어두운 영상 대신 분석하는 거북 */
 html body .rite .ritechar{display:flex;justify-content:center;align-items:center;height:150px;margin:-4px -2px 4px;border-radius:10px;background:#f3f6fc;overflow:hidden}
 html body .rite .ritechar .ritepic{height:150px;width:auto;border-radius:0}
+
+/* 이메일 문의 (app/contact, 2026-10-23) */
+.ct-h{margin:6px 0 6px;font-size:22px;font-weight:800;color:var(--u-ink,#1e2124)}
+.ct-lead{margin:0 0 14px;font-size:15px;line-height:1.65;color:#58616a}
+.ct-card{padding:16px}
+.ct-lab{margin:0 0 8px;font-size:13px;font-weight:700;color:#58616a}
+.ct-types{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.ct-types button{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #e6e8ea;background:#fff;color:#33383f;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer}
+.ct-types button.on{border-color:#3f6be0;color:#2f56c4;background:#eef3fe}
+.ct-types button:focus-visible,.ct-addr button:focus-visible,.ct-go:focus-visible{outline:3px solid #2f56c4;outline-offset:2px}
+.ct-pre{margin:0 0 14px;padding:12px 14px;border-radius:10px;background:#f4f5f7;font-family:inherit;font-size:13px;line-height:1.7;color:#33383f;white-space:pre-wrap}
+.ct-go{display:block;text-align:center;padding:14px;border-radius:12px;background:#2f56c4;color:#fff !important;font-size:17px;font-weight:800;text-decoration:none}
+.ct-addr{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding:10px 12px;border-radius:10px;border:1px solid #e6e8ea}
+.ct-addr span{font-size:15px;font-weight:700;color:#1e2124;word-break:break-all}
+.ct-addr button{flex:none;min-height:36px;padding:0 12px;border-radius:8px;border:1px solid #e6e8ea;background:#fff;color:#2f56c4;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+.ct-note{margin:8px 0 0;font-size:13px;color:#636d77}
+.ct-more{margin-top:12px;font-size:15px;line-height:1.7;color:#33383f}
+.ct-more p{margin:0 0 12px}
+.ct-more a{color:#2f56c4;font-weight:700}
+.ct-more .ct-biz{margin:0;padding-top:10px;border-top:1px solid #e6e8ea;font-size:13px;color:#636d77}
