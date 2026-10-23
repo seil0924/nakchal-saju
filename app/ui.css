@@ -451,3 +451,10 @@ html body .dbrand .ds{width:46px;height:46px}
 html body .dbrand .dbt{font-size:19px}
 html body .h6-intro .h6-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 html body .h6-intro .h6-head .brandmark{flex:none;margin-right:-6px}
+
+/* 결제 뒤 돌아온 결과 안내 (app/report/[id], 2026-10-23) */
+.paynote{margin:0 0 12px;padding:11px 13px;border-radius:10px;font-size:15px;line-height:1.6;font-weight:700}
+.paynote.ok{background:#eef8f3;color:#177f5e}
+.paynote.cancel{background:#f4f5f7;color:#33383f}
+.paynote.stuck{background:#fdf1ef;color:#b3382c}
+.paynote a{color:inherit;text-decoration:underline}

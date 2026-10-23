@@ -3,6 +3,7 @@
 import { NextResponse } from 'next/server';
 import { getOrder, confirmOrder, failOrder, getReportAccess } from '@/lib/store';
 import { kcpApprove } from '@/lib/kcp';
+import { payReturnDest, payReturnQuery } from '@/lib/pay-return';
 
 export async function POST(req: Request) {
   const form = await req.formData();
@@ -12,11 +13,14 @@ export async function POST(req: Request) {
   // 사유를 쿼리로만 흘려보내고 행에는 안 남겼다. pc-return 과 같은 이유로 같이 고친다.
   const back = async (ok: boolean, reportId?: string | null, why?: string) => {
     if (why) { try { await failOrder(paymentId, why); } catch { /* 진단이 결제 흐름을 막으면 안 된다 */ } }
-    const base = reportId ? `${origin}/report/${reportId}` : `${origin}/`;
+    // 실패·취소여도 주문의 리포트로 돌려보낸다(예전엔 홈으로 보내 방금 본 결과를 잃었다).
+    if (!reportId && paymentId) { try { reportId = (await getOrder(paymentId))?.reportId ?? null; } catch { /* 못 찾으면 홈 */ } }
+    const base = payReturnDest(origin, ok, reportId);
     // 결제가 끝났으면 접근 토큰을 주소에 싣는다. 휴대폰 카드 결제는 카드사 앱을 거쳐 다른 브라우저로 돌아오는 일이 많고,
     // 그 브라우저엔 비회원 토큰이 없어 돈은 나갔는데 잠겨 보였다(2026-10-22 실제 손님이 같은 상품을 두 번 결제).
-    const tq = ok && reportId ? await tokenQuery(reportId) : '';
-    return NextResponse.redirect(`${base}?paid=${ok ? '1' : '0'}${tq}${why ? `&why=${encodeURIComponent(why)}` : ''}`, 303);
+    const isReport = !!reportId && !String(reportId).startsWith('pass:');
+    const tq = ok && isReport ? await tokenQuery(String(reportId)) : '';
+    return NextResponse.redirect(payReturnQuery(base, ok, why, tq), 303);
   };
 
   if (res_cd && res_cd !== '0000') return await back(false, null, `auth:${res_cd}`);

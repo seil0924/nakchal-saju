@@ -17,6 +17,19 @@ const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
   useEffect(() => { preloadKcp(); }, []);
+  // KCP 결제 뒤 돌아온 결과(?paid=1|0&why=…). 예전엔 아무것도 안 띄워서, 결제를 마쳤는지 손님이 알 수 없었다(2026-10-23).
+  const [payNote, setPayNote] = useState<{ kind: 'ok' | 'stuck' | 'cancel'; text: string } | null>(null);
+  useEffect(() => {
+    const sp = new URLSearchParams(location.search);
+    const paid = sp.get('paid'); if (paid === null) return;
+    const why = sp.get('why') || '';
+    if (paid === '1' && why.startsWith('confirm')) setPayNote({ kind: 'stuck', text: '결제는 됐는데 열람 처리가 끝나지 않았습니다. 이메일 문의로 이 화면 주소를 보내 주시면 바로 열어 드립니다.' });
+    else if (paid === '1') setPayNote({ kind: 'ok', text: '결제됐습니다. 잠긴 장이 모두 열렸습니다.' });
+    else setPayNote({ kind: 'cancel', text: '결제를 마치지 않았습니다. 돈은 나가지 않았고, 다시 하려면 아래 [열기]를 눌러주세요.' });
+    // 새로고침할 때마다 같은 안내가 뜨지 않게 결과 표시만 주소에서 지운다(토큰 t 는 남긴다).
+    sp.delete('paid'); sp.delete('why');
+    const q = sp.toString(); history.replaceState(null, '', location.pathname + (q ? '?' + q : ''));
+  }, []);
   const id = params.id;
   const [res, setRes] = useState<Result | null>(null);
   const [modal, setModal] = useState(false);
@@ -141,6 +154,11 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 관리자 열람 중: 결제 없이 전부 열려 보입니다. 손님에게는 잠겨 보이니, 결제 화면은 시크릿 창에서 확인하는 편이 낫습니다.
               </div>
             )}
+            {payNote && (
+              <div className={'paynote no-print ' + payNote.kind} role="status">
+                {payNote.text}{payNote.kind === 'stuck' && <> <Link href="/contact">이메일 문의 →</Link></>}
+              </div>
+            )}
             <div className="rephd">{res.title}</div>
             {res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
@@ -184,7 +202,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                   </ul>
                 )}
                                 <div className="cta" onClick={(e) => openModal(e)}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
-                <div className="ctaassure">✓ 카카오페이·토스로 30초 · 결제 즉시 열람</div>
+                <div className="ctaassure">✓ 카드로 30초 · 결제 즉시 열람</div>
               </>
             )}
             {level >= 1 && res.sections?.some((s: any) => s.mk === "率") && <div className="unlocked-note">✓ 결제 확인됨 · 오늘부터 30일 투찰 길일과 유리한 시진이 전부 열렸습니다</div>}
@@ -247,7 +265,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               ) : null;
             })()}
             <a className="catsample" href="/samples" target="_blank" rel="noopener">결제하면 열리는 화면, 예시로 먼저 보기 →</a>
-            <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
+            <div className="paymethods">신용·체크카드<span> · 결제창에서 카드사를 고릅니다</span></div>
             <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한: <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won((catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0)} 결제하기`}</button>

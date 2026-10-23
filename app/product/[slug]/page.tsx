@@ -167,7 +167,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           <div className="pd-pv">{won(info.price)}</div>
         </div>
         <ul className="pd-pay">
-          <li>카카오페이 · 토스페이 · 신용/체크카드</li>
+          <li>신용·체크카드 · 카드사 앱결제</li>
           <li>결제 즉시 열람 · 보관함에서 다시 보기</li>
           <li>열람 전 청약철회 가능 · <Link href="/refund">환불 안내</Link></li>
         </ul>

@@ -686,7 +686,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                         <div className="readyline"><b>{catInfo.name}</b>: 열면 이걸 알게 됩니다</div>
                         {catInfo.gives?.length > 0 && <ul className="gives lockgives">{catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}</ul>}
                         <div className="cta" onClick={() => { setErr(''); setModal(true); }}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
-                        <div className="ctaassure">카카오페이·토스로 30초 · 결제 즉시 열람</div>
+                        <div className="ctaassure">카드로 30초 · 결제 즉시 열람</div>
                       </>
                     )}
                   <div className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
@@ -848,7 +848,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               </>
             ) : null}
             <a className="catsample" href="/samples" target="_blank" rel="noopener">결제하면 열리는 화면, 예시로 먼저 보기 →</a>
-            <div className="paymethods">카카오페이 · 토스페이 · 신용/체크카드<span> · 결제창에서 선택</span></div>
+            <div className="paymethods">신용·체크카드<span> · 결제창에서 카드사를 고릅니다</span></div>
             <label className="consent">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
               <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다. <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>

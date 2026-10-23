@@ -3,28 +3,18 @@
 import { NextResponse } from 'next/server';
 import { getOrder, confirmOrder, failOrder, getReportAccess } from '@/lib/store';
 import { kcpApprove } from '@/lib/kcp';
+import { payReturnDest, payReturnQuery } from '@/lib/pay-return';
 
 export async function POST(req: Request) {
   const origin = new URL(req.url).origin;
-  // 결제 결과에 따른 도착지: 리포트 구매→리포트, 복채/패스 등 언락無→결제완료 페이지, 실패→홈.
-  const dest = (ok: boolean, reportId?: string | null) => {
-    const rid = reportId ? String(reportId) : '';
-    if (ok && !rid) return `${origin}/thanks?kind=bokchae`;      // 복채(福債) 등 리포트와 무관한 결제
-    if (ok && rid.startsWith('pass:')) return `${origin}/thanks`; // 발주처 패스 등 이용권
-    if (rid && !rid.startsWith('pass:')) return `${origin}/report/${rid}`;
-    return `${origin}/`;
-  };
-  // 사유를 화면 쿼리로만 흘려보내고 행에는 안 남겼다. 그래서 관리자 화면에서
-  // '결제창 닫음'과 '승인 났는데 저장 실패'가 똑같이 pending 으로 보였다.
+  // 도착지·쿼리 규칙은 lib/pay-return 한 곳(모바일과 같게).
   const back = async (ok: boolean, reportId?: string | null, why?: string, paymentId?: string) => {
-    if (!ok && why && paymentId) { try { await failOrder(paymentId, why); } catch { /* 진단이 흐름을 막으면 안 된다 */ } }
-    if (ok && why && paymentId) { try { await failOrder(paymentId, why); } catch { } }   // confirm:* · 승인은 났다
-    const base = dest(ok, reportId);
-    const sep = base.includes('?') ? '&' : '?';
-    // 결제가 끝났으면 접근 토큰을 싣는다(mobile-return 과 같은 이유).
-    const tq = ok && reportId && !String(reportId).startsWith('pass:') ? await tokenQuery(String(reportId)) : '';
-    const q = `${sep}paid=${ok ? '1' : '0'}${tq}${why ? `&why=${encodeURIComponent(why)}` : ''}`;
-    return NextResponse.redirect(base + q, 303);
+    if (why && paymentId) { try { await failOrder(paymentId, why); } catch { /* 진단이 흐름을 막으면 안 된다 */ } }   // ok 인데 why 면 confirm:* · 승인은 났다
+    if (!reportId && paymentId) { try { reportId = (await getOrder(paymentId))?.reportId ?? null; } catch { /* 못 찾으면 홈 */ } }
+    const base = payReturnDest(origin, ok, reportId);
+    const isReport = !!reportId && !String(reportId).startsWith('pass:');
+    const tq = ok && isReport ? await tokenQuery(String(reportId)) : '';
+    return NextResponse.redirect(payReturnQuery(base, ok, why, tq), 303);
   };
 
   try {
