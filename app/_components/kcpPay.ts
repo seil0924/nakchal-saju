@@ -54,7 +54,10 @@ async function payPC(p: { paymentId: string; amount: number; goodName: string })
       return String(v);                                                                     // 이미 문자열
     };
     const KFIELDS = ['res_cd', 'res_msg', 'enc_data', 'enc_info', 'tran_cd', 'use_pay_method', 'ordr_chk', 'pay_method'];
-    (window as any).m_Completepayment = (result?: any) => {
+    // KCP 표준 샘플: m_Completepayment(FormOrJson, closeEvent). 인증이 아니면 closeEvent() 로 결제창 레이어를 닫아야 한다.
+    // 이걸 안 불러서 PC 에서 '취소'를 누르면 '잠시만 기다려 주십시오' 레이어가 화면을 덮은 채 멈췄다(2026-10-23).
+    const closeLayer = (fn?: any) => { try { if (typeof fn === 'function') fn(); else (window as any).closeEventKCP?.(); } catch { /* noop */ } };
+    (window as any).m_Completepayment = (result?: any, closeEvent?: any) => {
       // 결과 원본: 인자로 오면 그것, 아니면 KCP가 우리 폼을 직접 채운 경우 → 우리 폼
       const src = (result && typeof result === 'object') ? result : form;
       for (const k of KFIELDS) { const val = readv(src, k); if (val !== '') setv(k, val); }   // 실제 문자열 값을 우리 폼(pc-return submit용)에 반영
@@ -64,10 +67,12 @@ async function payPC(p: { paymentId: string; amount: number; goodName: string })
       const msg = gv('res_msg');
       try { (window as any).__kcpLastRes = { res_cd: rc, res_msg: msg }; console.error('[KCP m_Completepayment] res_cd=', rc, 'res_msg=', msg); } catch { /* noop */ }
       form.remove();
-      if (rc) { try { alert('결제 인증 응답: [' + rc + '] ' + (msg || '')); } catch { /* noop */ } }
+      closeLayer(closeEvent);
+      // 손님이 스스로 닫은 것(3001)은 알림 창을 띄우지 않는다. 화면 안내로 충분하다.
+      if (rc && rc !== '3001') { try { alert('결제가 되지 않았습니다. ' + (msg || '') + ' [' + rc + ']'); } catch { /* noop */ } }
       resolve(null);
     };
-    (window as any).m_Cancelpayment = () => { form.remove(); resolve(null); };   // 사용자 취소
+    (window as any).m_Cancelpayment = (closeEvent?: any) => { form.remove(); closeLayer(closeEvent); resolve(null); };   // 사용자 취소
     try { (window as any).KCP_Pay_Execute_Web(form); } catch { /* 정상 종료 시 throw */ }
   });
 }
