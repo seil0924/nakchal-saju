@@ -458,6 +458,10 @@ html body .h6-intro .h6-head .brandmark{flex:none;margin-right:-6px}
 .paynote.cancel{background:#f4f5f7;color:#33383f}
 .paynote.stuck{background:#fdf1ef;color:#b3382c}
 .paynote a{color:inherit;text-decoration:underline}
+/* 패스·복채 결제창을 닫고 돌아왔을 때 아래에 잠깐 뜨는 안내(PayNotice). 탭바 위에 앉힌다 */
+.paytoast{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:60;max-width:520px;margin:0 auto}
+.paytoast .paynote{margin:0;box-shadow:0 6px 24px rgba(20,24,32,.16);border:1px solid #e3e6ea}
+@media (min-width:1024px){.paytoast{bottom:24px}}
 
 /* 발주처 고르기 창 (app/_components/ClientPicker, 2026-10-23) */
 .cp-back{position:fixed;inset:0;z-index:90;background:rgba(30,33,36,.45);display:flex;align-items:flex-end;justify-content:center}

@@ -19,7 +19,7 @@ export default function PayNotice() {
   }, [pathname]);
   if (!show) return null;
   return (
-    <div className="wrap" style={{ paddingTop: 12 }}>
+    <div className="paytoast">
       <p className="paynote cancel" role="status">
         결제를 마치지 않았습니다. 돈은 나가지 않았습니다. 다시 하시려면 결제 버튼을 한 번 더 눌러 주세요.
         <button type="button" onClick={() => setShow(false)} style={{ marginLeft: 8, background: 'none', border: 0, color: 'inherit', textDecoration: 'underline', font: 'inherit', cursor: 'pointer' }}>닫기</button>
