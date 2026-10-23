@@ -207,11 +207,13 @@ export async function markRefunded(paymentId: string): Promise<boolean> {
 }
 
 // 결제가 붙은 리포트 id. 조회가 실패하면 던진다 — '모름' 을 '결제 없음' 으로 읽으면
-// 지우면 안 되는 리포트를 지우게 된다(리포트 삭제는 결제 기록까지 cascade 로 지운다).
+// 지우면 안 되는 리포트를 지우게 된다
+// 결제창만 열고 닫은 주문(대기·실패)은 막지 않는다. 0010 부터 리포트를 지워도 결제 줄은 남고(report_id 만 비움),
+// 점검하며 연 주문 때문에 점검용 리포트 27건 중 25건이 지워지지 않았다(2026-10-23). 완료·환불만 지키면 된다.
 async function paidReportIds(sb: SB, ids: string[]): Promise<Set<string>> {
   const out = new Set<string>();
   for (let i = 0; i < ids.length; i += 200) {
-    const { data, error } = await sb.from('payments').select('report_id').in('report_id', ids.slice(i, i + 200));
+    const { data, error } = await sb.from('payments').select('report_id').in('report_id', ids.slice(i, i + 200)).in('status', ['paid', 'cancelled']);
     if (error) throw error;
     for (const p of (data ?? []) as any[]) if (p.report_id) out.add(p.report_id);
   }

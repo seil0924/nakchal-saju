@@ -257,7 +257,7 @@ export async function buyerKeyOfPayment(paymentId: string): Promise<string | nul
   const { data, error } = await c.from('payments').select('buyer_key').eq('payment_id', paymentId).maybeSingle();
   return error ? null : ((data as any)?.buyer_key ?? null);
 }
-// 이 열쇠로 산 것(완료만). '산 리포트 찾기'가 쓴다.
+// 이 열쇠로 산 것(완료만). '구매한 리포트 찾기'가 쓴다.
 export async function purchasesOf(key: string): Promise<{ reportId: string | null; passKey: string | null; item: string; amount: number; paidAt: string | null }[]> {
   const c = sb();
   if (!c) {
@@ -268,7 +268,7 @@ export async function purchasesOf(key: string): Promise<{ reportId: string | nul
   if (error) return [];
   return (data ?? []).map((r: any) => ({ reportId: r.report_id ?? null, passKey: r.pass_key ?? null, item: r.item ?? '리포트', amount: r.amount ?? 0, paidAt: r.paid_at ?? null }));
 }
-// '산 리포트 찾기' 남용 막기: 같은 곳에서 한 시간 limit 번. 넘으면 true. 기록은 한 시간 뒤 지운다.
+// '구매한 리포트 찾기' 남용 막기: 같은 곳에서 한 시간 limit 번. 넘으면 true. 기록은 한 시간 뒤 지운다.
 export async function findTooMany(ipH: string, limit = 10): Promise<boolean> {
   const c = sb(); if (!c || !ipH) return false;
   const since = new Date(Date.now() - 3600_000).toISOString();

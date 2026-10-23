@@ -50,14 +50,14 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
             <div className="pn">{acct?.name ? `${acct.name} 대표님` : prof.name ? `${prof.name} 대표님` : '대표님'}</div>
             <div className="ps">{acct?.email ? acct.email : (prof.corp || '회사 정보 미입력')} · 무료 이용중</div>
           </div>
-          {/* 로그인은 화면에서 뺐다(2026-10-23). 결제는 성함·휴대폰 번호로 묶고, 다른 기기에선 '산 리포트 찾기'로 연다.
+          {/* 로그인은 화면에서 뺐다(2026-10-23). 결제는 성함·휴대폰 번호로 묶고, 다른 기기에선 '구매한 리포트 찾기'로 연다.
               이미 로그인한 회원에게만 로그아웃을 보인다. /login 주소는 그대로 남아 있다. */}
           {acct && <button className="acctbtn ghost" onClick={logout}>로그아웃</button>}
         </div>
 
         <Link className="loginpromo" href="/find">
           <span className="lpk">다른 기기</span>
-          <span className="lpt"><b>산 리포트 찾기</b><em>결제할 때 넣은 성함과 휴대폰 번호로 다시 엽니다 · 회원가입 없음</em></span>
+          <span className="lpt"><b>구매한 리포트 찾기</b><em>결제할 때 넣은 성함과 휴대폰 번호로 다시 엽니다 · 회원가입 없음</em></span>
           <span className="lpg">→</span>
         </Link>
 
@@ -66,7 +66,7 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
           <Link href="/reading">대표 사주 정보<span className="r">입력·수정 ›</span></Link>
           <Link href="/reading">회사(법인) 정보<span className="r">설립일·상호 ›</span></Link>
           <Link href="/vault">보관함 · 내 리포트<span className="r">이 기기 ›</span></Link>
-          <Link href="/find">산 리포트 찾기<span className="r">다른 기기 ›</span></Link>
+          <Link href="/find">구매한 리포트 찾기<span className="r">다른 기기 ›</span></Link>
         </div>
 
         <div className="sechd"><span className="t"><span className="b" />읽을거리</span></div>

@@ -78,7 +78,7 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   const mks = catMks(input.cat);
   const filt = (arr: Section[]) => mks ? arr.filter(x => mks.includes(x.mk)) : arr;
   const cc = !!input.clientCore;
-  // 발주처 사주(cat=balju)를 산 리포트는 그 발주처의 상세(3계·시나리오·주의신호·세운)를 연다(2026-10-23).
+  // 발주처 사주(cat=balju)를 구매한 리포트는 그 발주처의 상세(3계·시나리오·주의신호·세운)를 연다(2026-10-23).
   // 예전엔 상세가 '프리미엄 패스'(로그인 필요)로만 열려서, 990원을 내고 발주처 사주를 사도 더 열리는 게 없었다.
   const premium = baljuPremium || (input.cat === 'balju' && level >= 2);
   const sections = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, level, selYear, seunSelf, cc, premium));

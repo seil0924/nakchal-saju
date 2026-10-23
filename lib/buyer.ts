@@ -2,7 +2,7 @@
 //
 // 회원가입을 붙이지 않는다. 결제하기로 한 순간에 이름·휴대폰 번호만 받고(창업레이더와 같은 방식),
 // 그 둘을 서버 비밀값으로 섞은 해시(buyer_key)로 산 것을 묶는다.
-//  · 다른 기기에서는 '산 리포트 찾기'에 이름과 번호를 넣으면 같은 열쇠가 나와 목록이 뜬다
+//  · 다른 기기에서는 '구매한 리포트 찾기'에 이름과 번호를 넣으면 같은 열쇠가 나와 목록이 뜬다
 //  · 발주처 프리미엄 패스는 이 열쇠에 붙는다(예전엔 로그인 계정에만 붙어 비회원이 못 샀다)
 //  · 결제가 끝나면 이 열쇠를 브라우저 쿠키(nk_buyer)에 둬서 같은 기기에선 다시 넣지 않는다
 // 번호 인증 문자는 보내지 않는다 — 1건 결제 앞 인증은 카드사 심사에서 걸린다(창업레이더 메모).
@@ -49,7 +49,7 @@ export function checkBuyer(name: string, phone: string, agree: boolean): { ok: t
   return { ok: true, name: n, phone: d, key: buyerKey(n, d) };
 }
 
-// 이 브라우저의 구매자 열쇠(결제·'산 리포트 찾기' 뒤에 심어 둔 쿠키). 요청 밖에서 부르면 null.
+// 이 브라우저의 구매자 열쇠(결제·'구매한 리포트 찾기' 뒤에 심어 둔 쿠키). 요청 밖에서 부르면 null.
 export function buyerKeyFromCookie(): string | null {
   try { const v = cookies().get(BUYER_COOKIE)?.value ?? ''; return /^[0-9a-f]{64}$/.test(v) ? v : null; } catch { return null; }
 }

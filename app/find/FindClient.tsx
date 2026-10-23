@@ -35,7 +35,7 @@ export default function FindClient() {
         <label htmlFor="fd-phone">휴대폰 번호</label>
         <input id="fd-phone" value={phone} onChange={e => setPhone(e.target.value)} inputMode="tel" autoComplete="tel" placeholder="010-0000-0000" required />
         {err && <div className="errbox" role="alert">{err}</div>}
-        <button type="submit" className="ct-go" disabled={busy}>{busy ? '찾는 중' : '산 리포트 찾기'}</button>
+        <button type="submit" className="ct-go" disabled={busy}>{busy ? '찾는 중' : '구매한 리포트 찾기'}</button>
         <p className="ct-note">성함과 번호가 둘 다 맞아야 열립니다. 같은 곳에서 한 시간에 10번까지 찾을 수 있습니다.</p>
       </form>
 

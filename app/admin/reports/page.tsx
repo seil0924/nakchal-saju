@@ -53,17 +53,17 @@ export default async function AdminReports({ searchParams }: { searchParams?: { 
           <div className="acard" style={{ padding: 16, marginBottom: 12, lineHeight: 1.7 }}>
             <div style={{ fontSize: 15, fontWeight: 800, color: '#26231c' }}>‘{q}’ 성함 리포트 {reps.length}건{reps.length >= 500 ? ' (최대 500건 표시)' : ''}</div>
             <div style={{ fontSize: 13.5, color: '#57523f', marginTop: 4 }}>
-              지울 수 있음 <b style={{ color: '#c0392b' }}>{canDel}</b>건 · 결제가 붙었거나 유료로 열려 남김 <b>{keep}</b>건
+              지울 수 있음 <b style={{ color: '#c0392b' }}>{canDel}</b>건 · 결제를 마쳤거나 유료로 열려 남김 <b>{keep}</b>건
             </div>
             <div style={{ fontSize: 12.5, color: '#8a806a', marginTop: 4 }}>
-              리포트를 지우면 거기 딸린 결제 기록도 같이 지워지는 구조라, 결제·유료 리포트는 서버가 지우지 않습니다.
+              결제를 마쳤거나 환불한 리포트, 유료로 열린 리포트는 서버가 지우지 않습니다. 결제창만 열고 닫은 주문이 붙은 리포트는 지우고, 그 주문 기록은 결제 내역에 그대로 남습니다.
               {paidUnknown && ' 지금은 결제 조회가 실패해 아무것도 지울 수 없습니다.'}
             </div>
             <form action={removeByName} style={{ marginTop: 12 }}>
               <input type="hidden" name="name" value={q} />
               <ConfirmSubmit
                 label={canDel > 0 ? `‘${q}’ 리포트 ${canDel}건 삭제` : '지울 리포트가 없습니다'}
-                message={`‘${q}’ 성함 리포트 ${canDel}건을 지웁니다. 되돌릴 수 없습니다.\n결제가 붙었거나 유료로 열린 ${keep}건은 남깁니다.`}
+                message={`‘${q}’ 성함 리포트 ${canDel}건을 지웁니다. 되돌릴 수 없습니다.\n결제를 마쳤거나 유료로 열린 ${keep}건은 남깁니다.`}
                 disabled={canDel === 0}
               />
             </form>

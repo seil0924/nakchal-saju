@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 복채(福債)', sku: 'bokchae' });
   }
   // 리포트·패스 결제는 성함·휴대폰 번호·개인정보 동의를 받는다(2026-10-23, 로그인 대신). 복채는 위에서 따로.
-  // 이 번호로 다른 기기에서 '산 리포트 찾기'를 하고, 패스도 이 번호에 붙는다(lib/buyer).
+  // 이 번호로 다른 기기에서 '구매한 리포트 찾기'를 하고, 패스도 이 번호에 붙는다(lib/buyer).
   const bq = checkBuyer(buyerName, buyerPhone, agree === true);
   if (bq.ok === false) return NextResponse.json({ error: bq.error, message: bq.message }, { status: 400 });
   const buyer = { name: bq.name, phone: bq.phone, key: bq.key };

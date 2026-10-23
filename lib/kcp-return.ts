@@ -18,7 +18,7 @@ async function tokenQuery(reportId: string): Promise<string> {
   try { const { token } = await getReportAccess(reportId); return token ? `&t=${encodeURIComponent(token)}` : ''; } catch { return ''; }
 }
 
-// 돌려보낼 주소와, 결제가 끝났으면 이 브라우저에 심을 구매자 열쇠(같은 기기에선 '산 리포트 찾기'를 안 해도 패스가 열리게).
+// 돌려보낼 주소와, 결제가 끝났으면 이 브라우저에 심을 구매자 열쇠(같은 기기에선 '구매한 리포트 찾기'를 안 해도 패스가 열리게).
 export async function kcpReturn(origin: string, f: KcpFields): Promise<{ url: string; buyerKey: string | null }> {
   const url = await kcpReturnUrl(origin, f);
   const paid = /[?&]paid=1/.test(url);
