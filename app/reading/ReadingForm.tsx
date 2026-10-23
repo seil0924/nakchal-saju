@@ -347,6 +347,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     setErr(''); setBusy(true);
     try {
       const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: chosen }) }).then(x => x.json());
+      // 준비가 실패하면 결제창을 열지 않는다(예전엔 paymentId 없이 결제창을 열려 했다).
+      if (prep?.error || !prep?.paymentId) { setBusy(false); paying.current = false; setErr(prep?.error === 'already_paid' ? '이미 결제가 끝난 리포트입니다. 이 화면에서 잠겨 보이면 이메일 문의로 리포트 주소를 보내 주세요. 바로 열어 드립니다.' : '결제 준비에 실패했습니다. 잠시 뒤 다시 눌러주세요.'); return; }
       if (KCP_CLIENT_ENABLED) {
         const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
         if (kres === 'redirect') return;

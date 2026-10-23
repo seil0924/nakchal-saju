@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import { computeReport } from '@/lib/report';
 import { getReport, getReportAccess } from '@/lib/store';
 import { entitlement, adminBypass } from '@/lib/entitle';
+import { canViewPaid } from '@/lib/report-access';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
@@ -12,12 +13,8 @@ export async function GET(req: Request) {
   const t = new URL(req.url).searchParams.get('t');
   const user = authEnabled() ? await requireUser() : null;
   const { owner, token } = authEnabled() ? await getReportAccess(id) : { owner: null, token: null };
-  // 소유자(user_id 일치) 또는 접근토큰(?t=) 일치면 결제 레벨 그대로, 아니면 무료 티저(level 0) — 유료 내용은 서버 게이팅.
-  // token=null(마이그레이션 전) 또는 무인증이면 기존 동작으로 폴백(안전).
-  const isOwner = !authEnabled()
-    || (token === null
-      ? (!!user && (!owner || owner === user.id))
-      : ((!!user && !!owner && owner === user.id) || (!!t && t === token)));
+  // 누가 결제 레벨을 보는가는 lib/report-access 한 곳에서 정한다(/api/report/paid 와 같은 답).
+  const isOwner = canViewPaid({ auth: authEnabled(), userId: user?.id ?? null, owner, token, t });
   const input = await getReport(id);
   if (!input) return NextResponse.json({ error: 'not_found' }, { status: 404 });
   // 관리자는 소유자가 아니어도 전체를 본다 — 문의 응대와 점검 때문에.

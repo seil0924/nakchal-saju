@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 import { won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
-import { tokParam } from '@/lib/rtok';
+import { tokParam, setTok } from '@/lib/rtok';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import YearBar from '@/app/_components/YearBar';
@@ -43,7 +43,9 @@ export default function ReportView({ params }: { params: { id: string } }) {
   }, [res, level]);
 
   async function load() {
-    const t = tokParam(id, new URLSearchParams(location.search).get('t'));
+    const urlT = new URLSearchParams(location.search).get('t');
+    if (urlT) setTok(id, urlT);   // 결제 뒤 다른 브라우저로 돌아온 경우, 다음에 열 때도 열리게
+    const t = tokParam(id, urlT);
     const r = await fetch('/api/report/get?id=' + id + '&t=' + encodeURIComponent(t));
     if (!r.ok) { setErr('리포트를 찾을 수 없습니다.'); return; }
     setRes(await r.json());
@@ -64,7 +66,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
     setErr(''); setBusy(true);
     try {
       const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: id, sku: chosen, cat: pickCat ?? pending }) }).then(x => x.json());
-      if (prep?.error) { setBusy(false); setErr(prep.error === 'category_required' ? '어떤 풀이를 여실지 먼저 골라 주세요.' : '결제 준비에 실패했습니다.'); return; }
+      if (prep?.error) { setBusy(false); setErr(prep.error === 'category_required' ? '어떤 풀이를 여실지 먼저 골라 주세요.' : prep.error === 'already_paid' ? '이미 결제가 끝난 리포트입니다. 이 화면에서 잠겨 보이면 이메일 문의로 리포트 주소를 보내 주세요. 바로 열어 드립니다.' : '결제 준비에 실패했습니다.'); if (prep.error === 'already_paid') load(); return; }
       if (KCP_CLIENT_ENABLED) {
         const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
         if (kres === 'redirect') return;

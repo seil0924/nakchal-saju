@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 import { computeReport } from '@/lib/report';
 import { getReport, getReportAccess } from '@/lib/store';
 import { entitlement, adminBypass } from '@/lib/entitle';
+import { canViewPaid } from '@/lib/report-access';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
@@ -18,10 +19,8 @@ export async function GET(req: Request) {
   const admin = await adminBypass();
   if (authEnabled()) {
     const { owner, token } = await getReportAccess(id);
-    const isOwner = !!user && !!owner && owner === user.id;
-    const hasToken = !!token && !!t && t === token;
     // 관리자는 남의 리포트도 연다 — 문의에 답하려면 봐야 한다.
-    if (token !== null && !isOwner && !hasToken && !admin) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
+    if (!canViewPaid({ auth: true, userId: user?.id ?? null, owner, token, t }) && !admin) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   }
 
   const { level, bpass } = await entitlement(id, user?.id);

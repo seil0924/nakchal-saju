@@ -1,7 +1,7 @@
 // POST /api/payment/kcp/mobile-return — 모바일 결제창 결과 수신 → 승인 → 리다이렉트
 // pc-return과 동일하게 실패 사유(why)를 노출해 모바일 문제도 즉시 진단 가능하게.
 import { NextResponse } from 'next/server';
-import { getOrder, confirmOrder, failOrder } from '@/lib/store';
+import { getOrder, confirmOrder, failOrder, getReportAccess } from '@/lib/store';
 import { kcpApprove } from '@/lib/kcp';
 
 export async function POST(req: Request) {
@@ -13,7 +13,10 @@ export async function POST(req: Request) {
   const back = async (ok: boolean, reportId?: string | null, why?: string) => {
     if (why) { try { await failOrder(paymentId, why); } catch { /* 진단이 결제 흐름을 막으면 안 된다 */ } }
     const base = reportId ? `${origin}/report/${reportId}` : `${origin}/`;
-    return NextResponse.redirect(`${base}?paid=${ok ? '1' : '0'}${why ? `&why=${encodeURIComponent(why)}` : ''}`, 303);
+    // 결제가 끝났으면 접근 토큰을 주소에 싣는다. 휴대폰 카드 결제는 카드사 앱을 거쳐 다른 브라우저로 돌아오는 일이 많고,
+    // 그 브라우저엔 비회원 토큰이 없어 돈은 나갔는데 잠겨 보였다(2026-10-22 실제 손님이 같은 상품을 두 번 결제).
+    const tq = ok && reportId ? await tokenQuery(reportId) : '';
+    return NextResponse.redirect(`${base}?paid=${ok ? '1' : '0'}${tq}${why ? `&why=${encodeURIComponent(why)}` : ''}`, 303);
   };
 
   if (res_cd && res_cd !== '0000') return await back(false, null, `auth:${res_cd}`);
@@ -31,4 +34,9 @@ export async function POST(req: Request) {
     return await back(true, order.reportId, `confirm:${(e?.message || e?.code || String(e)).slice(0, 90)}`);
   }
   return await back(true, order.reportId);
+}
+
+// 리포트 접근 토큰을 쿼리 조각으로. 토큰 컬럼이 없거나 조회가 실패하면 빈 문자열 — 결제 흐름을 막지 않는다.
+async function tokenQuery(reportId: string): Promise<string> {
+  try { const { token } = await getReportAccess(reportId); return token ? `&t=${encodeURIComponent(token)}` : ''; } catch { return ''; }
 }

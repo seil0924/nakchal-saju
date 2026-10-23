@@ -1,7 +1,7 @@
 // POST /api/payment/kcp/pc-return — PC 표준결제 인증결과 수신(m_Completepayment의 submit) → 승인 → 리다이렉트
 // KCP 권고 방식: 카드 인증 후 order_info 폼을 이 URL로 submit하면, 서버가 enc_data로 승인 API를 호출한다.
 import { NextResponse } from 'next/server';
-import { getOrder, confirmOrder, failOrder } from '@/lib/store';
+import { getOrder, confirmOrder, failOrder, getReportAccess } from '@/lib/store';
 import { kcpApprove } from '@/lib/kcp';
 
 export async function POST(req: Request) {
@@ -21,7 +21,9 @@ export async function POST(req: Request) {
     if (ok && why && paymentId) { try { await failOrder(paymentId, why); } catch { } }   // confirm:* · 승인은 났다
     const base = dest(ok, reportId);
     const sep = base.includes('?') ? '&' : '?';
-    const q = `${sep}paid=${ok ? '1' : '0'}${why ? `&why=${encodeURIComponent(why)}` : ''}`;
+    // 결제가 끝났으면 접근 토큰을 싣는다(mobile-return 과 같은 이유).
+    const tq = ok && reportId && !String(reportId).startsWith('pass:') ? await tokenQuery(String(reportId)) : '';
+    const q = `${sep}paid=${ok ? '1' : '0'}${tq}${why ? `&why=${encodeURIComponent(why)}` : ''}`;
     return NextResponse.redirect(base + q, 303);
   };
 
@@ -49,4 +51,9 @@ export async function POST(req: Request) {
     console.error('[pc-return] fatal', e);
     return await back(false, null, `fatal:${(e?.message || e?.code || String(e)).slice(0, 90)}`);
   }
+}
+
+// 리포트 접근 토큰을 쿼리 조각으로. 토큰 컬럼이 없거나 조회가 실패하면 빈 문자열 — 결제 흐름을 막지 않는다.
+async function tokenQuery(reportId: string): Promise<string> {
+  try { const { token } = await getReportAccess(reportId); return token ? `&t=${encodeURIComponent(token)}` : ''; } catch { return ''; }
 }
