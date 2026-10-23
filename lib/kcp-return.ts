@@ -10,6 +10,7 @@ import 'server-only';
 import { getOrder, confirmOrder, failOrder, getReportAccess, recordTno } from './store';
 import { kcpApprove } from './kcp';
 import { payReturnDest, payReturnQuery } from './pay-return';
+import { notifyPayment } from './notify';
 
 export type KcpFields = { paymentId: string; enc_data: string; enc_info: string; tran_cd: string; res_cd: string };
 
@@ -23,6 +24,8 @@ export async function kcpReturnUrl(origin: string, f: KcpFields): Promise<string
 
   const back = async (ok: boolean, why?: string) => {
     if (why && paymentId) { try { await failOrder(paymentId, why); } catch { /* 진단이 결제 흐름을 막으면 안 된다 */ } }
+    // 사람이 봐야 하는 건(돈이 나갔을 수 있는 것)은 디스코드로 바로 알린다.
+    if (why && paymentId && /^(confirm:|approve_unknown|amount:|fatal:)/.test(why)) await notifyPayment({ kind: 'check', paymentId, why });
     if (!reportId && paymentId) { try { reportId = (await getOrder(paymentId))?.reportId ?? null; } catch { /* 못 찾으면 홈 */ } }
     const base = payReturnDest(origin, ok, reportId);
     // 결제가 끝났으면 접근 토큰을 싣는다. 휴대폰 카드 결제는 카드사 앱을 거쳐 다른 브라우저로 돌아오는 일이 많다.
@@ -55,6 +58,7 @@ export async function kcpReturnUrl(origin: string, f: KcpFields): Promise<string
       console.error('[kcp-return] confirm fail', lastErr);
       return await back(true, `confirm:${(lastErr?.message || lastErr?.code || String(lastErr)).slice(0, 90)}`);
     }
+    await notifyPayment({ kind: 'paid', paymentId });
     return await back(true);
   } catch (e: any) {
     console.error('[kcp-return] fatal', e);

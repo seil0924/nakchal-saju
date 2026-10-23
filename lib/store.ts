@@ -228,6 +228,15 @@ export async function reportHasPayment(reportId: string): Promise<boolean> {
   return (data ?? []).some((r: any) => r.status === 'paid' || /^(confirm:|approve_unknown)/.test(String(r.fail_reason ?? '')));
 }
 
+// 알림용 결제 요약(lib/notify). 손님 개인정보는 담지 않는다.
+export async function paymentSummary(paymentId: string): Promise<{ item: string; amount: number; member: boolean } | null> {
+  const c = sb();
+  if (!c) { const o = memOrders.get(paymentId); return o ? { item: '리포트', amount: o.amount, member: false } : null; }
+  const { data } = await c.from('payments').select('*').eq('payment_id', paymentId).maybeSingle();
+  if (!data) return null;
+  return { item: String(data.item ?? (data.pass_key ? '발주처 프리미엄 패스' : data.report_id ? '리포트' : '복채')), amount: Number(data.amount ?? 0), member: !!data.user_id };
+}
+
 // KCP 거래번호를 남긴다(환불·대사용). tno 칸(0010)이 없으면 조용히 넘어간다 — 기록 때문에 결제가 막히면 안 된다.
 export async function recordTno(paymentId: string, tno?: string | null): Promise<void> {
   const c = sb(); if (!c || !tno) return;
