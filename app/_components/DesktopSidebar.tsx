@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { usePathname } from 'next/navigation';
+import BrandMark from './BrandMark';
 
 // 데스크톱(≥900px) 전용 좌측 내비. 모바일에서는 CSS로 숨김.
 const NAV = [
@@ -62,7 +63,7 @@ export default function DesktopSidebar() {
   const loc = path.startsWith('/zh') ? LOC.zh : path.startsWith('/en') ? LOC.en : null;
   if (loc) return (
     <aside className="dsidebar" lang={path.startsWith('/zh') ? 'zh-Hant' : 'en'}>
-      <Link href={loc.ctaHref} className="dbrand"><span className="ds"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#f2ede0"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#f2ede0"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#f2ede0"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#f2ede0"/><circle cx="29.9" cy="8.2" r="2.6" fill="#b3382c"/></svg></span><span className="dbt">{loc.brand}<small>{loc.sub}</small></span></Link>
+      <Link href={loc.ctaHref} className="dbrand"><span className="ds"><BrandMark size={44} /></span><span className="dbt">{loc.brand}<small>{loc.sub}</small></span></Link>
       <Link href={loc.ctaHref} className="dcta"><span className="dci">士</span> {loc.cta}</Link>
       <nav className="dnav">
         {loc.nav.map(n => (
@@ -79,7 +80,7 @@ export default function DesktopSidebar() {
   );
   return (
     <aside className="dsidebar">
-      <Link href="/" className="dbrand"><span className="ds"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#f2ede0"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#f2ede0"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#f2ede0"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#f2ede0"/><circle cx="29.9" cy="8.2" r="2.6" fill="#b3382c"/></svg></span><span className="dbt">낙찰사주<small>회사 사주 전문</small></span></Link>
+      <Link href="/" className="dbrand"><span className="ds"><BrandMark size={44} /></span><span className="dbt">낙찰사주<small>회사 사주 전문</small></span></Link>
       <Link href="/reading" className="dcta">오늘, 넣을 날인가 →</Link>
       <nav className="dnav">
         {NAV.map(n => (

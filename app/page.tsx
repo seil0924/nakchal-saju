@@ -14,6 +14,7 @@ import { TYCOONS } from '@/lib/tycoon';
 import { GLOSSARY } from '@/lib/glossary';
 import { getAllColumns } from '@/lib/column';
 import { GAN, ZHI, EL_HEX, GAN_ELc, ZHI_ELc } from '@/lib/preview';
+import BrandMark from '@/app/_components/BrandMark';
 
 // 홈만 스스로를 정본으로 선언한다. 레이아웃에 두면 모든 페이지가 이걸 물려받아 홈을 가리킨다.
 export const metadata: Metadata = {
@@ -87,11 +88,7 @@ export default function Home() {
 
       <header className="h6-top">
         <Link href="/" className="h6-brand" aria-label="낙찰사주 홈">
-          <svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true">
-            <rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0" />
-            <rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#fff" /><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#fff" />
-            <rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#fff" /><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#fff" />
-          </svg>
+          <BrandMark size={40} />
           <span>낙찰사주</span>
         </Link>
         <Link href="/more" className="h6-menu" aria-label="메뉴 · 더보기">

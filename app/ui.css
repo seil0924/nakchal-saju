@@ -443,3 +443,9 @@ html body .rite .ritechar .ritepic{height:150px;width:auto;border-radius:0}
 .ct-more p{margin:0 0 12px}
 .ct-more a{color:#2f56c4;font-weight:700}
 .ct-more .ct-biz{margin:0;padding-top:10px;border-top:1px solid #e6e8ea;font-size:13px;color:#636d77}
+
+/* 로고: 나경 거북 + 글자를 키운다(2026-10-23. 예전 30px 막대 아이콘·17px 글자는 안 보였다) */
+.brandmark{display:block;flex:none;object-fit:contain}
+html body .st-brand,html body .h6-brand{gap:8px;font-size:20px;letter-spacing:-.02em}
+html body .dbrand .ds{width:46px;height:46px}
+html body .dbrand .dbt{font-size:19px}
