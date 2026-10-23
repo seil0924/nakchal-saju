@@ -241,8 +241,10 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     // 카테고리별 필수 입력 안내
     const req = ui.requires;   // 카테고리 필수 입력(스키마 기반)
     if (req === 'legal' && !f.legal) { setErr('회사 대운은 법인 설립일이 필요합니다. 아래 「회사 정보」에 설립일을 넣어주세요.'); document.getElementById('cocard')?.scrollIntoView({ behavior: 'smooth' }); return; }
-    if (req === 'client' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 추가해 주세요.'); return; }
-    if (req === 'partnerOrAlly' && !targets.some(t => t.kind === 'partner' || t.kind === 'ally')) { setErr('동업 또는 협정 상대를 먼저 추가해 주세요.'); return; }
+    // 빠진 칸으로 화면을 옮긴다. 안내만 띄우면 아래 결제 막대에 가려 손님이 못 봤다(2026-10-23 협정·궁합에서 대표 지적).
+    const toRel = () => setTimeout(() => document.getElementById('relcard')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+    if (req === 'client' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 추가해 주세요. 위 관계·궁합 칸에서 고르거나 새로 넣을 수 있습니다.'); toRel(); return; }
+    if (req === 'partnerOrAlly' && !targets.some(t => t.kind === 'partner' || t.kind === 'ally')) { setErr('동업 또는 협정 상대를 먼저 추가해 주세요. 위 관계·궁합 칸에서 고르거나 새로 넣을 수 있습니다.'); toRel(); return; }
     // 자리 사주는 주소·방위가 있어야 읽을 게 생긴다. 없이 팔면 빈 리포트가 나간다.
     if (cat === 'ijeon' && !jari) { setErr('자리 사주는 사무실 주소와 방위가 필요합니다. 「자리 사주」 화면에서 주소를 넣고 다시 오세요.'); return; }
     setConfirm(true); // 사주아이식: 입력 확인 모달 먼저
@@ -609,8 +611,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             </div>
           );
         })()}
-        <div className="card reveal" style={{ display: (f.birth && ui.relation.length > 0) ? undefined : 'none' }}>
-          <div className="st"><span className="l"><span className="b" />관계·궁합</span><span className="opt">선택</span></div>
+        <div id="relcard" className="card reveal" style={{ display: (f.birth && ui.relation.length > 0) ? undefined : 'none' }}>
+          <div className="st"><span className="l"><span className="b" />관계·궁합</span><span className="opt">{ui.requires === 'partnerOrAlly' || ui.requires === 'client' ? '필수' : '선택'}</span></div>
           <div className="pkgrid">
             {REL_KINDS.filter(k => ui.relation.includes(k.key as any)).map(k => (
               <button key={k.key} type="button" className="pickbtn" onClick={() => setPicker({ open: true, kind: k.key })}>
@@ -632,8 +634,10 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           )}
         </div>
 
-        {err && !res && !confirm && <div className="errbox">{err}</div>}
+        {err && !res && !confirm && <div className="errbox" role="alert">{err}</div>}
         <div className="note" style={{ textAlign: 'center' }}>※ 재미로 보는 명리 기반 참고 정보. 투찰금액 산정 근거로 사용 불가.</div>
+        {/* 아래 결제 막대(rd-bar, 고정) 높이만큼 비워 둔다. 바깥 .shell 여백은 화면 폭에 따라 안 먹었다. */}
+        <div className="rd-spacer" aria-hidden="true" />
         </>)}
 
         {res && (

@@ -501,3 +501,4 @@ html body .home5 .filmband{background:#f4f5f7!important;height:auto!important;pa
 html body .home5 .filmband video{display:none!important}
 html body .home5 .filmband .fbin{position:static!important}
 html body .home5 .filmband .fbt,html body .home5 .filmband .fbt b{color:#1e2124!important;font-family:var(--sans)!important;text-shadow:none!important}
+.rd-spacer{height:calc(96px + env(safe-area-inset-bottom))}
