@@ -175,6 +175,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       const dr = num(p.get('dr'), 0, 7), dk = num(p.get('dk'), 0, 7);
       const pa = (p.get('pa') || '').slice(0, 40), pb = (p.get('pb') || '').slice(0, 40);
       if (dg !== undefined || dr !== undefined) setJari({ deg: dg, km, door: dr, desk: dk, from: pa || undefined, to: pb || undefined });
+      // 자리 사주는 주소(방위)가 먼저다. 그것 없이 여기 오면 생년월일을 다 넣은 뒤에야 '주소부터 넣으라'는 말을 듣고 막혔다(2026-10-23).
+      // 처음부터 주소를 넣는 화면으로 보낸다. 뒤로 가기가 다시 여기로 오지 않게 replace.
+      else if (ct === 'ijeon') { window.location.replace('/jari'); return; }
       // 저장된 대표가 있는 재방문자에게만 선택 시트를 자동으로 띄운다. 신규 방문자는 폼을 바로 보게 한다.
       if (!p.get('b')) { try { const s = sget('nakchal_self_v1'); const has = !!s && (JSON.parse(s)?.length > 0); void has; /* 퍼널②: 자동 모달 제거: 사용자가 직접 열 때만 */ } catch { /* noop */ } }
     } catch {}
@@ -231,6 +234,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     } else {
       setTargets(prev => [...prev.filter(x => x.kind !== pp.kind), { kind: pp.kind as RelKind, name: pp.name || kindLabel(pp.kind as RelKind), date: pp.date }]);
     }
+    setErr('');   // '먼저 고르세요' 안내가 고른 뒤에도 남아 있었다
   }
   const yr2 = (d: string) => (d || '').slice(2);
 

@@ -5,6 +5,9 @@ import DateSelect from '@/app/_components/DateSelect';
 import { peopleOf, savePerson, removePerson, migrateLegacy, KIND_LABEL, KIND_DATELABEL, type Person, type PersonKind } from '@/lib/people';
 
 // 재사용 사람/업체 선택 바텀시트 (사주아이식) — 낙찰사주 브랜드(먹빛·금박)
+// 칸 예시는 무엇을 넣는지에 맞춘다. 동업 상대 칸에 '한국도로공사'가 보였다(2026-10-23).
+const NAME_PH: Partial<Record<PersonKind, string>> = { self: '예) 홍길동', partner: '예) 김대영 대표', ally: '예) 대영토건(주)', client: '예) 한국도로공사', legal: '예) 대영건설(주)' };
+
 export default function PersonPicker({ open, kind, title, onPick, onClose }: {
   open: boolean; kind: PersonKind; title?: string;
   onPick: (p: Person) => void; onClose: () => void;
@@ -61,7 +64,7 @@ export default function PersonPicker({ open, kind, title, onPick, onClose }: {
         ) : (
           <div className="pp-body">
             <label className="pp-l">{isSelf ? '성함' : `${KIND_LABEL[kind]} 이름`} <span className="pp-opt">(선택)</span></label>
-            <input className="pp-in" value={f.name} maxLength={20} placeholder={isSelf ? '예) 홍길동' : '예) 한국도로공사'} onChange={e => setF(s => ({ ...s, name: e.target.value }))} />
+            <input className="pp-in" value={f.name} maxLength={20} placeholder={NAME_PH[kind] ?? '예) 홍길동'} onChange={e => setF(s => ({ ...s, name: e.target.value }))} />
             <label className="pp-l">달력</label>
             <div className="pp-seg">
               <button className={f.cal === 'solar' ? 'on' : ''} onClick={() => setF(s => ({ ...s, cal: 'solar' }))}>양력</button>

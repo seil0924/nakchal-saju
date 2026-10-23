@@ -260,11 +260,14 @@ export default function JariMap() {
         </ul>
       </section>
 
-      {verdict && (
+      {/* 옮길 주소가 없어도 지금 자리(문·책상) 진단만으로 리포트가 된다. 예전엔 주소 둘을 다 넣어야 버튼이 보여, 이사 계획 없는 손님은 살 수 없었다(2026-10-23). */}
+      {(verdict || (door !== null && desk !== null)) ? (
         <Link className="jr-cta pay" href={payHref}>
           자리 사주 정식 리포트 열기
-          <small>지금 자리 진단 · 옮길 자리 판단 · 석 달 치 택일과 시진 · {won(CAT_INFO.ijeon.price)}</small>
+          <small>{verdict ? '지금 자리 진단 · 옮길 자리 판단' : '지금 자리 진단'} · 석 달 치 택일과 시진 · {won(CAT_INFO.ijeon.price)}</small>
         </Link>
+      ) : (
+        <p className="jr-disc"><b>정식 리포트는</b> 위에서 출입문과 대표 자리 방위를 고르거나, 지금 자리와 옮길 곳 주소를 넣으면 열 수 있습니다.</p>
       )}
 
       <p className="jr-disc">
