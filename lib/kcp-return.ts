@@ -39,8 +39,10 @@ export async function kcpReturnUrl(origin: string, f: KcpFields): Promise<string
     if (why && paymentId) { try { await failOrder(paymentId, why); } catch { /* 진단이 결제 흐름을 막으면 안 된다 */ } }
     // 사람이 봐야 하는 건(돈이 나갔을 수 있는 것)은 디스코드로 바로 알린다.
     if (why && paymentId && /^(confirm:|approve_unknown|amount:|fatal:)/.test(why)) await notifyPayment({ kind: 'check', paymentId, why });
-    if (!reportId && paymentId) { try { reportId = (await getOrder(paymentId))?.reportId ?? null; } catch { /* 못 찾으면 홈 */ } }
-    const base = payReturnDest(origin, ok, reportId);
+    let found = !!reportId;
+    if (!reportId && paymentId) { try { const o = await getOrder(paymentId); found = !!o; reportId = o?.reportId ?? null; } catch { /* 못 찾으면 홈 */ } }
+    // 주문 자체를 못 찾으면 복채 화면이 아니라 홈으로
+    const base = found ? payReturnDest(origin, ok, reportId) : `${origin}/`;
     // 결제가 끝났으면 접근 토큰을 싣는다. 휴대폰 카드 결제는 카드사 앱을 거쳐 다른 브라우저로 돌아오는 일이 많다.
     const isReport = !!reportId && !String(reportId).startsWith('pass:');
     const tq = ok && isReport ? await tokenQuery(String(reportId)) : '';

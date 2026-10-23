@@ -4,10 +4,11 @@
 //  · 결제창을 닫거나 실패하면 주문의 리포트를 찾지 않고 홈으로 보냈다 — 방금 본 결과를 잃는다.
 //  · 발주처 패스 주문은 reportId 가 'pass:…' 라 /report/pass:… 라는 없는 주소로 갔다.
 //  · 복채는 감사 화면 없이 홈으로 갔다.
+//  · 패스·복채 결제창을 닫으면 아무 말 없이 홈으로 갔다. 산 곳으로 돌려보내고 PayNotice 가 알린다.
 export function payReturnDest(origin: string, ok: boolean, reportId?: string | null): string {
   const rid = reportId ? String(reportId) : '';
-  if (rid.startsWith('pass:')) return ok ? `${origin}/thanks` : `${origin}/`;   // 발주처 패스 등 이용권
-  if (!rid) return ok ? `${origin}/thanks?kind=bokchae` : `${origin}/`;        // 복채 등 리포트와 무관한 결제
+  if (rid.startsWith('pass:')) return ok ? `${origin}/thanks` : `${origin}/balju`;   // 발주처 패스 등 이용권
+  if (!rid) return ok ? `${origin}/thanks?kind=bokchae` : `${origin}/bokchae`;  // 복채 등 리포트와 무관한 결제
   return `${origin}/report/${rid}`;                                            // 리포트 결제: 성공·실패 모두 그 리포트로
 }
 

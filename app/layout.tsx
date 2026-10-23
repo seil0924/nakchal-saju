@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import DesktopSidebar from '@/app/_components/DesktopSidebar';
 import TapFX from '@/app/_components/TapFX';
 import ScrollTop from '@/app/_components/ScrollTop';
+import PayNotice from '@/app/_components/PayNotice';
 import AddToHome from '@/app/_components/AddToHome';
 import BottomTab from '@/app/_components/BottomTab';
 
@@ -90,7 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AddToHome />
         <div className="shell">
           <DesktopSidebar />
-          <div className="dmain">{children}</div>
+          <div className="dmain"><PayNotice />{children}</div>
         </div>
         <BottomTab />
       </body>
