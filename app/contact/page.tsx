@@ -28,6 +28,7 @@ export default function Contact() {
         <ContactMail email={BIZ.email} />
         <div className="card ct-more">
           <p><b>환불은 이렇게 요청해 주세요</b><br />결제자 성함, 결제일시, 주문번호(또는 리포트 주소)를 함께 적어 주시면 바로 확인합니다. 기준은 <Link href="/refund">청약철회·환불 안내</Link>에 있습니다.</p>
+          <p><b>산 리포트가 안 보이면</b><br />다른 기기에서는 <Link href="/find">산 리포트 찾기</Link>에 결제 때 넣은 성함과 휴대폰 번호를 넣으면 다시 열립니다.</p>
           <p><b>자주 묻는 질문</b><br />결과를 다시 여는 법, 생년월일을 바꾸는 법은 <Link href="/faq">자주 묻는 질문</Link>에 먼저 정리해 두었습니다.</p>
           <p className="ct-biz">{BIZ.company} · 대표 {BIZ.ceo} · 고객센터 {BIZ.email}</p>
         </div>

@@ -18,11 +18,13 @@ export type ViewStats = {
   balju: SlugStat[];
   ceo: SlugStat[];
   products: SlugStat[];
+  tools: SlugStat[];
 };
 
 const LABEL: Record<string, string> = {
   home: '홈',
-  reading: '무료 열람 · 리포트',
+  reading: '무료 입력 화면',
+  report: '리포트 결과 화면',
   product: '상품 상세페이지',
   ceo: '나와 닮은 CEO',
   column: '칼럼',
@@ -36,7 +38,7 @@ const LABEL: Record<string, string> = {
   tool: '회사·자리 등 도구 화면',
 };
 
-const EMPTY: ViewStats = { ready: false, srcReady: false, kinds: [], srcs: [], columns: [], balju: [], ceo: [], products: [] };
+const EMPTY: ViewStats = { ready: false, srcReady: false, kinds: [], srcs: [], columns: [], balju: [], ceo: [], products: [], tools: [] };
 
 type Row = { kind: string; slug: string | null; created_at: string; src?: string | null };
 
@@ -68,7 +70,7 @@ export async function getViewStats(): Promise<ViewStats> {
 
     const kinds = new Map<string, KindStat>();
     const srcs = new Map<string, SrcStat>();
-    const bySlug: Record<string, Map<string, number>> = { column: new Map(), balju: new Map(), ceo: new Map(), product: new Map() };
+    const bySlug: Record<string, Map<string, number>> = { column: new Map(), balju: new Map(), ceo: new Map(), product: new Map(), tool: new Map() };
 
     for (const r of res.data as unknown as Row[]) {
       const k = kinds.get(r.kind) ?? { kind: r.kind, label: LABEL[r.kind] ?? r.kind, total: 0, d7: 0, today: 0 };
@@ -97,7 +99,7 @@ export async function getViewStats(): Promise<ViewStats> {
     const top = (m: Map<string, number>, n = 20): SlugStat[] =>
       [...m.entries()].map(([slug, count]) => ({ slug, count })).sort((a, b) => b.count - a.count).slice(0, n);
 
-    const order = ['home', 'reading', 'product', 'tool', 'ceo', 'column', 'balju', 'glossary', 'why', 'saju', 'region', 'industry', 'taekil'];
+    const order = ['home', 'product', 'reading', 'report', 'tool', 'ceo', 'column', 'balju', 'glossary', 'why', 'saju', 'region', 'industry', 'taekil'];
     return {
       ready: true,
       srcReady,
@@ -108,6 +110,7 @@ export async function getViewStats(): Promise<ViewStats> {
       balju: top(bySlug.balju),
       ceo: top(bySlug.ceo),
       products: top(bySlug.product),
+      tools: top(bySlug.tool),
     };
   } catch {
     return EMPTY;

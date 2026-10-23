@@ -7,7 +7,7 @@
 //  · 승인은 났는데 저장이 실패하면 그 자리에서 세 번까지 다시 저장한다
 //  · 어떤 예외가 나도 500 대신 사유를 남기고 손님을 자기 리포트로 돌려보낸다
 import 'server-only';
-import { getOrder, confirmOrder, failOrder, getReportAccess, recordTno } from './store';
+import { getOrder, confirmOrder, failOrder, getReportAccess, recordTno, buyerKeyOfPayment } from './store';
 import { kcpApprove } from './kcp';
 import { payReturnDest, payReturnQuery } from './pay-return';
 import { notifyPayment } from './notify';
@@ -16,6 +16,19 @@ export type KcpFields = { paymentId: string; enc_data: string; enc_info: string;
 
 async function tokenQuery(reportId: string): Promise<string> {
   try { const { token } = await getReportAccess(reportId); return token ? `&t=${encodeURIComponent(token)}` : ''; } catch { return ''; }
+}
+
+// 돌려보낼 주소와, 결제가 끝났으면 이 브라우저에 심을 구매자 열쇠(같은 기기에선 '산 리포트 찾기'를 안 해도 패스가 열리게).
+export async function kcpReturn(origin: string, f: KcpFields): Promise<{ url: string; buyerKey: string | null }> {
+  const url = await kcpReturnUrl(origin, f);
+  const paid = /[?&]paid=1/.test(url);
+  let buyerKey = paid && f.paymentId ? await buyerKeyOfPayment(f.paymentId).catch(() => null) : null;
+  // 구매자 칸(0011)이 없는 DB 여도 비회원 패스는 열려야 한다. 패스 키 끝에 같은 열쇠가 들어 있다.
+  if (paid && !buyerKey && f.paymentId) {
+    const k = String((await getOrder(f.paymentId).catch(() => null))?.reportId ?? '');
+    if (k.startsWith('pass:balju:b:')) buyerKey = k.slice('pass:balju:b:'.length);
+  }
+  return { url, buyerKey };
 }
 
 export async function kcpReturnUrl(origin: string, f: KcpFields): Promise<string> {

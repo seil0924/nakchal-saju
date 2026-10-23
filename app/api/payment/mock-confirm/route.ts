@@ -2,7 +2,8 @@
 // 실서비스에서는 이 라우트 대신 KCP 승인(/api/payment/kcp/approve)이
 // KCP 승인응답의 금액을 재검증한 뒤 confirmOrder를 호출합니다.
 import { NextResponse } from 'next/server';
-import { confirmOrder, getOrder } from '@/lib/store';
+import { confirmOrder, getOrder, buyerKeyOfPayment } from '@/lib/store';
+import { BUYER_COOKIE, BUYER_COOKIE_OPTS } from '@/lib/buyer';
 import { KCP_ENABLED } from '@/lib/kcp';
 
 export async function POST(req: Request) {
@@ -16,5 +17,8 @@ export async function POST(req: Request) {
   // 데모: 사용자가 결제창에서 주문금액(택일팩 990 / 전체 12,900)을 냈다고 가정하고 재검증 통과
   const o = await confirmOrder(paymentId, order.amount);
   if (!o) return NextResponse.json({ error: 'confirm_failed' }, { status: 400 });
-  return NextResponse.json({ ok: true, reportId: o.reportId, level: o.level });
+  const res = NextResponse.json({ ok: true, reportId: o.reportId, level: o.level });
+  const bk = await buyerKeyOfPayment(paymentId);   // 운영 결제와 같게, 산 사람 열쇠를 이 브라우저에
+  if (bk) res.cookies.set(BUYER_COOKIE, bk, { ...BUYER_COOKIE_OPTS, secure: false });
+  return res;
 }

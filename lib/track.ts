@@ -5,7 +5,7 @@
 import { srcOf } from '@/lib/track-src';
 
 // 2026-09-28 — 다섯 가지만 세다 보니 용어사전·상품 상세·지역/업종 방문은 관리자 화면에 아예 없었다.
-export type Kind = 'reading' | 'ceo' | 'column' | 'balju' | 'home'
+export type Kind = 'reading' | 'report' | 'ceo' | 'column' | 'balju' | 'home'
   | 'product' | 'glossary' | 'why' | 'saju' | 'region' | 'industry' | 'taekil' | 'tool';
 
 const today = () => {
@@ -30,9 +30,17 @@ function visitSrc(): string {
   }
 }
 
+// 운영자 기기는 세지 않는다. 관리자 화면을 한 번 열면 이 기기에 표시가 남는다(lib/track SKIP_KEY).
+// 운영자와 점검 로봇이 하루에 여러 상품을 눌러 보는 것이 손님 조회수에 섞여 있었다(2026-10-23).
+export const SKIP_KEY = 'nv:skip';
+export function markOperatorDevice() {
+  try { localStorage.setItem(SKIP_KEY, '1'); } catch { /* 저장소가 막히면 그냥 센다 */ }
+}
+
 export function track(kind: Kind, slug?: string) {
   if (typeof window === 'undefined') return;
   try {
+    if (localStorage.getItem(SKIP_KEY)) return;
     const key = `nv:${kind}:${slug || '-'}:${today()}`;
     if (localStorage.getItem(key)) return;   // 오늘 이미 셌다
     localStorage.setItem(key, '1');

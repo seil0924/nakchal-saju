@@ -22,7 +22,9 @@ export default function ScrollTop() {
     else if (seg[0] === 'column' && seg[1]) track('column', sub(1));
     else if (seg[0] === 'balju') track('balju', sub(1));
     else if (seg[0] === 'ceo') track('ceo', sub(1));
-    else if (seg[0] === 'reading' || seg[0] === 'report') track('reading');
+    // 입력 화면과 결과 화면을 따로 센다. 예전엔 둘을 합쳐 '입력했다가 결과를 본 사람'을 가를 수 없었다(2026-10-23).
+    else if (seg[0] === 'reading') track('reading');
+    else if (seg[0] === 'report') track('report');
     // 아래는 2026-09-28 추가 — 여기 없으면 관리자 조회수 화면에 그 화면은 아예 안 나온다
     else if (seg[0] === 'product') track('product', sub(1));
     else if (seg[0] === 'glossary') track('glossary', sub(1));
@@ -31,7 +33,7 @@ export default function ScrollTop() {
     else if (seg[0] === 'region') track('region', sub(1));
     else if (seg[0] === 'industry') track('industry', sub(1));
     else if (seg[0] === 'taekil') track('taekil', sub(1));
-    else if (['hoesa', 'jari', 'full', 'pricing', 'samples', 'more', 'vault', 'review'].includes(seg[0])) track('tool', seg[0]);
+    else if (['hoesa', 'jari', 'full', 'pricing', 'samples', 'more', 'vault', 'review', 'saeobunse', 'ritual', 'method', 'guide', 'faq', 'bokchae', 'find', 'contact'].includes(seg[0])) track('tool', seg[0]);
   }, [pathname]);
 
   return null;

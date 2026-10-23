@@ -1,14 +1,15 @@
 // POST /api/payment/prepare — 결제 사전등록
 // 서버가 금액을 확정합니다. 카테고리 리포트면 카테고리 개별가, 아니면 sku(택일팩/전체).
 import { NextResponse } from 'next/server';
-import { getReport, createOrder, unlockLevel, reportHasPayment, hasBaljuPass, BALJU_PASS_KEY } from '@/lib/store';
+import { getReport, createOrder, unlockLevel, reportHasPayment, hasBaljuPass, BALJU_PASS_KEY, BALJU_PASS_BUYER_KEY } from '@/lib/store';
+import { checkBuyer, buyerKeyFromCookie } from '@/lib/buyer';
 import { PRICE_BALJU_PASS } from '@/lib/constants';
 import { isCatKey, CAT_INFO, canSellCat } from '@/lib/report-categories';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
  try {
-  const { reportId, sku, bokchae, amount, cat: pickedCat } = await req.json();
+  const { reportId, sku, bokchae, amount, cat: pickedCat, buyerName, buyerPhone, agree } = await req.json();
   // 로그인한 손님이면 결제에 회원을 붙인다(비회원 결제는 그대로 된다)
   const uid = (await requireUser().catch(() => null))?.id ?? null;
   // 복채(福債) — 리포트와 무관한 자율 감사·기원 결제. 서버가 금액 범위만 clamp.
@@ -17,13 +18,18 @@ export async function POST(req: Request) {
     const order = await createOrder(reportId || 'bokchae', amt, 0, uid, '복채');   // level 0: 언락과 무관
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 복채(福債)', sku: 'bokchae' });
   }
-  // 발주처 프리미엄 패스 — 사용자 계정 단위 권한(리포트와 무관)
+  // 리포트·패스 결제는 성함·휴대폰 번호·개인정보 동의를 받는다(2026-10-23, 로그인 대신). 복채는 위에서 따로.
+  // 이 번호로 다른 기기에서 '산 리포트 찾기'를 하고, 패스도 이 번호에 붙는다(lib/buyer).
+  const bq = checkBuyer(buyerName, buyerPhone, agree === true);
+  if (bq.ok === false) return NextResponse.json({ error: bq.error, message: bq.message }, { status: 400 });
+  const buyer = { name: bq.name, phone: bq.phone, key: bq.key };
+  // 발주처 프리미엄 패스 — 회원이면 계정에, 아니면 구매자(이름+번호)에 붙는다. 로그인을 요구하지 않는다.
   if (sku === 'baljuPass') {
-    const user = await requireUser();
-    if (authEnabled() && !user?.id) return NextResponse.json({ error: 'login_required' }, { status: 401 });
-    // 이미 산 패스를 또 사지 않게.
-    if (await hasBaljuPass(user?.id)) return NextResponse.json({ error: 'already_paid' }, { status: 409 });
-    const order = await createOrder(BALJU_PASS_KEY(user?.id), PRICE_BALJU_PASS, 1, user?.id ?? null, '발주처 프리미엄 패스');
+    const user = await requireUser().catch(() => null);
+    // 이미 산 패스를 또 사지 않게(이 번호로 산 것, 이 브라우저에 심긴 것, 회원 것).
+    if ((await hasBaljuPass(user?.id, buyer.key)) || (await hasBaljuPass(null, buyerKeyFromCookie()))) return NextResponse.json({ error: 'already_paid' }, { status: 409 });
+    const passKey = user?.id ? BALJU_PASS_KEY(user.id) : BALJU_PASS_BUYER_KEY(buyer.key);
+    const order = await createOrder(passKey, PRICE_BALJU_PASS, 1, user?.id ?? null, '발주처 프리미엄 패스', buyer);
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: '낙찰사주 발주처 프리미엄 패스', sku: 'baljuPass' });
   }
   const input = await getReport(reportId);
@@ -39,7 +45,7 @@ export async function POST(req: Request) {
   // 카테고리 개별 결제
   if (isCatKey(input.cat)) {
     const c = CAT_INFO[input.cat];
-    const order = await createOrder(reportId, c.price, 2, uid, c.name);   // 단일 언락(레벨2)
+    const order = await createOrder(reportId, c.price, 2, uid, c.name, buyer);   // 단일 언락(레벨2)
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: `낙찰사주 ${c.name}`, sku: 'full' });
   }
   // 카테고리 없이 들어온 리포트 — 손님이 결제 시점에 고른 상품으로 판다.
@@ -52,7 +58,7 @@ export async function POST(req: Request) {
   // 금액도 서버가 CAT_INFO 에서 꺼낸다. 클라이언트가 보낸 금액은 쓰지 않는다.
   if (canSellCat(pickedCat, input)) {
     const c = CAT_INFO[pickedCat];
-    const order = await createOrder(reportId, c.price, 2, uid, c.name);
+    const order = await createOrder(reportId, c.price, 2, uid, c.name, buyer);
     return NextResponse.json({ paymentId: order.paymentId, amount: order.amount, orderName: `낙찰사주 ${c.name}`, sku: 'full', cat: pickedCat });
   }
   return NextResponse.json({ error: 'category_required' }, { status: 400 });

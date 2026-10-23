@@ -13,7 +13,7 @@ export default async function AdminViews() {
       <div className="atop">
         <div>
           <h1>조회수</h1>
-          <div className="sub">익명 집계 · 같은 기기에서 하루 1회만 셉니다</div>
+          <div className="sub">익명 집계 · 같은 기기에서 하루 1회만 셉니다 · 관리자 화면을 연 기기는 세지 않습니다</div>
         </div>
       </div>
 
@@ -21,6 +21,8 @@ export default async function AdminViews() {
       <div className="abody">
         <div className="acard" style={{ background: '#faf6ec', borderColor: '#e2cd97' }}>
           <div style={{ padding: '13px 15px', fontSize: 12.5, lineHeight: 1.75, color: '#4a4636' }}>
+            <b>2026-10-23 이전 ‘무료 입력 화면’ 숫자에는 리포트 결과 화면이 섞여 있습니다.</b> 그날부터 둘을 따로 셉니다.
+            같은 날부터 관리자 화면을 연 기기(운영자·점검)는 세지 않습니다. 그 전 숫자에는 운영자 점검 방문이 들어 있습니다.<br />
             <b>2026-08-27 이전 수치에는 검색엔진 크롤러가 섞여 있습니다.</b><br />
             칼럼 133회·닮은 CEO 116회가 찍혔는데 사이트맵의 그 계열 URL 수가 각각 124개·101개였습니다 —
             사람이 아니라 크롤러가 사이트맵을 한 번 훑은 자국입니다. 서치콘솔 클릭 수와도 맞지 않았습니다.
@@ -87,6 +89,17 @@ export default async function AdminViews() {
                   </tr>
                 ))}
                 {s.products.length === 0 && <tr><td colSpan={2}><div className="empty">아직 상세페이지 조회 기록이 없습니다.</div></td></tr>}
+              </tbody></table>
+            </div>
+
+            <div className="atop" style={{ marginTop: 22 }}><div><h1 style={{ fontSize: 17 }}>도구·안내 화면별 조회수</h1><div className="sub">회사·자리·요금·보관함 등</div></div></div>
+            <div className="acard">
+              <table><tbody>
+                <tr><th>화면</th><th style={{ textAlign: 'right' }}>조회</th></tr>
+                {s.tools.map(t => (
+                  <tr key={t.slug}><td><Link href={`/${t.slug}`} style={{ color: 'inherit' }}>/{t.slug}</Link></td><td style={{ textAlign: 'right', fontWeight: 700 }}>{t.count.toLocaleString()}</td></tr>
+                ))}
+                {s.tools.length === 0 && <tr><td colSpan={2}><div className="empty">아직 기록이 없습니다.</div></td></tr>}
               </tbody></table>
             </div>
 

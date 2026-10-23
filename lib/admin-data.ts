@@ -7,6 +7,7 @@ import { kstYmd } from './kst';
 import { kstDayStartIso, kstMonthStartIso, kstStamp, payerOf, payItemName, payStatusLabel } from './admin-format';
 import { splitDeletable, isReportId } from './report-cleanup';
 import { fetchAll } from './sb-page';
+import { dashPhone } from './buyer';
 
 const won = (n: number) => n.toLocaleString('ko-KR');
 
@@ -19,6 +20,8 @@ function whyLabel(reason?: string | null): string {
   if (reason.startsWith('auth:')) return '인증 실패·취소';
   if (reason === 'missing_enc') return '인증값 누락';
   if (reason === 'order_not_found') return '주문 없음';
+  if (reason === 'approve_unknown') return '승인 응답 없음(KCP 확인 필요)';
+  if (reason === 'refund:admin') return '관리자 환불 처리';
   if (reason.startsWith('fatal:')) return '서버 오류';
   return reason.slice(0, 24);
 }
@@ -45,7 +48,7 @@ async function reportMeta(sb: SB, ids: string[]) {
 
 const PAY_COLS = 'payment_id,user_id,report_id,pass_key,amount';
 
-const EMPTY_STATS = { members: 0, todaySignup: 0, paid: 0, convRate: '0.0', mrr: 0, subs: 0, guestPaid: 0, todayReports: 0, testReports: 0, todayPay: 0, todayPayAmt: 0 };
+const EMPTY_STATS = { members: 0, todaySignup: 0, paid: 0, convRate: '0.0', mrr: 0, subs: 0, guestPaid: 0, todayReports: 0, testReports: 0, todayPay: 0, todayPayAmt: 0, todayViews: 0, weekViews: 0, todayTries: 0, refunded: 0 };
 
 export { fetchAll };
 
@@ -54,13 +57,19 @@ export async function getStats() {
   try {
     const sb = supabaseAdmin();
     const dayStart = kstDayStartIso(), monthStart = kstMonthStartIso();
-    const [mAll, mToday, rToday, rTest, paidList] = await Promise.all([
+    const weekStart = new Date(Date.now() - 7 * 86400000).toISOString();
+    const [mAll, mToday, rToday, rTest, paidList, vToday, vWeek, tries, refunds] = await Promise.all([
       sb.from('profiles').select('*', { count: 'exact', head: true }),
       sb.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
       sb.from('reports').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
       // 점검 로봇이 '점검용' 이름으로 뽑은 리포트 — 실제 손님 수에서 뺀다
       sb.from('reports').select('*', { count: 'exact', head: true }).gte('created_at', dayStart).eq('input->>name', '점검용'),
       fetchAll<any>((a, b) => sb.from('payments').select(PAY_COLS + ',paid_at').eq('status', 'paid').order('created_at', { ascending: true }).range(a, b)),
+      // 로그인을 뺀 뒤(2026-10-23)로는 회원 수보다 '오늘 몇 명이 봤고, 몇 번 결제창을 열었나'가 쓸모 있다
+      sb.from('page_views').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
+      sb.from('page_views').select('*', { count: 'exact', head: true }).gte('created_at', weekStart),
+      sb.from('payments').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
+      sb.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'cancelled'),
     ]);
     const members = mAll.count ?? 0;
     const { owner } = await reportMeta(sb, [...new Set(paidList.map((p: any) => p.report_id).filter(Boolean))] as string[]);
@@ -78,6 +87,8 @@ export async function getStats() {
       todayReports: Math.max(0, (rToday.count ?? 0) - test), testReports: test,
       todayPay: todayList.length,
       todayPayAmt: todayList.reduce((a: number, p: any) => a + (p.amount || 0), 0),
+      todayViews: vToday.count ?? 0, weekViews: vWeek.count ?? 0,
+      todayTries: tries.count ?? 0, refunded: refunds.count ?? 0,
     };
   } catch { return EMPTY_STATS; }
 }
@@ -121,18 +132,25 @@ export async function listMembers() {
   } catch { return []; }
 }
 
-export async function listPayments() {
+// q 를 주면 구매자 성함이나 휴대폰 번호로 찾는다(숫자 4자리 이상이면 번호, 아니면 성함).
+export async function listPayments(q?: string) {
   if (!adminEnabled()) return [];
   try {
     const sb = supabaseAdmin();
     // fail_reason 컬럼이 없는 환경도 있어서, 없으면 그 컬럼만 빼고 다시 읽는다.
     const cols = PAY_COLS + ',status,paid_at,created_at,level';
+    const digits = (q ?? '').replace(/\D/g, '');
+    const byPhone = digits.length >= 4, byName = !byPhone && !!q?.trim();
     let pays: any[] | null = null;
     {
-      // item(0009)·fail_reason(0008) 컬럼이 없는 환경도 있다. 있는 만큼만 읽는다.
-      for (const extra of [',fail_reason,item', ',fail_reason', '']) {
-        const r = await sb.from('payments').select(cols + extra).order('created_at', { ascending: false }).limit(100);
-        if (!r.error) { pays = r.data; break; }
+      // buyer_*(0011)·tno(0010)·item(0009)·fail_reason(0008) 컬럼이 없는 환경도 있다. 있는 만큼만 읽는다.
+      for (const extra of [',fail_reason,item,tno,buyer_name,buyer_phone', ',fail_reason,item', ',fail_reason', '']) {
+        if ((byPhone || byName) && !extra.includes('buyer_')) break;   // 구매자 칸이 없으면 찾을 수 없다
+        let r = sb.from('payments').select(cols + extra).order('created_at', { ascending: false });
+        if (byPhone) r = r.like('buyer_phone', `%${digits}%`);
+        if (byName) r = r.eq('buyer_name', q!.trim());
+        const res = await r.limit(byPhone || byName ? 300 : 100);
+        if (!res.error) { pays = res.data; break; }
       }
     }
     const rows = (pays ?? []) as any[];
@@ -147,8 +165,13 @@ export async function listPayments() {
       const who = payer[i];
       return {
         id: (p.payment_id ?? '').slice(-6),
-        name: who ? (pmap[who]?.name ?? '회원') : '비회원',
+        paymentId: p.payment_id ?? '',
+        // 결제 때 받은 성함이 먼저다(로그인 없이 산 사람). 없으면 회원 이름.
+        name: p.buyer_name || (who ? (pmap[who]?.name ?? '회원') : '비회원'),
         email: who ? (pmap[who]?.email ?? '') : '',
+        phone: p.buyer_phone ? dashPhone(p.buyer_phone) : '',
+        tno: p.tno ?? '',
+        refundable: p.status === 'paid',
         item: payItemName(p, p.report_id ? cat[p.report_id] : null),
         amount: p.amount ?? 0,
         status: payStatusLabel(p.status),
@@ -158,6 +181,29 @@ export async function listPayments() {
       };
     });
   } catch { return []; }
+}
+
+// KCP 관리자에서 환불(취소)한 뒤 여기서 표시한다. 기록은 지우지 않고 상태만 바꾼다.
+// 같은 리포트·패스에 다른 완료 결제가 없을 때만 다시 잠근다(두 번 결제 중 하나만 환불한 경우는 열어 둔다).
+export async function markRefunded(paymentId: string): Promise<boolean> {
+  if (!adminEnabled() || !/^pay_[\w-]{6,60}$/.test(paymentId)) return false;
+  const sb = supabaseAdmin();
+  const { data: o, error: e0 } = await sb.from('payments').select('payment_id,report_id,pass_key,status').eq('payment_id', paymentId).maybeSingle();
+  if (e0) throw e0;
+  if (!o || (o as any).status !== 'paid') return false;
+  let { error } = await sb.from('payments').update({ status: 'cancelled', fail_reason: 'refund:admin' }).eq('payment_id', paymentId);
+  if (error) ({ error } = await sb.from('payments').update({ status: 'cancelled' }).eq('payment_id', paymentId));
+  if (error) throw error;
+  const { report_id, pass_key } = o as any;
+  const col = report_id ? 'report_id' : pass_key ? 'pass_key' : null;
+  if (col) {
+    const { count, error: e1 } = await sb.from('payments').select('payment_id', { count: 'exact', head: true }).eq(col, report_id ?? pass_key).eq('status', 'paid');
+    if (!e1 && !count) {
+      if (report_id) await sb.from('reports').update({ unlock_level: 0, unlocked: false }).eq('id', report_id);
+      else await sb.from('entitlements').delete().eq('key', pass_key);
+    }
+  }
+  return true;
 }
 
 // 결제가 붙은 리포트 id. 조회가 실패하면 던진다 — '모름' 을 '결제 없음' 으로 읽으면

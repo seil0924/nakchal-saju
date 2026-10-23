@@ -120,7 +120,8 @@ export async function getReportAccess(id: string): Promise<{ owner: string | nul
 }
 
 // userId — 결제한 회원. 2026-09-17 전에는 넣지 않아서 관리자 화면의 유료 회원·전환율이 늘 0이었다.
-export async function createOrder(reportId: string, amount: number, level: number = 2, userId?: string | null, item?: string | null): Promise<Order> {
+export type Buyer = { name: string; phone: string; key: string };
+export async function createOrder(reportId: string, amount: number, level: number = 2, userId?: string | null, item?: string | null, buyer?: Buyer | null): Promise<Order> {
   const c = sb();
   // 결제ID는 전역 유니크해야 함(payments.payment_id UNIQUE). 서버리스에서 performance.now()는
   // 워커 시작후 경과시간이라 호출간 충돌 → 중복키(23505). crypto.randomUUID로 항상 유니크 생성.
@@ -134,7 +135,10 @@ export async function createOrder(reportId: string, amount: number, level: numbe
     // report_id는 uuid(reports FK)만 허용 — 복채('bokchae') 등 비-uuid는 null 처리(invalid uuid 500 방지)
     const row = { payment_id: paymentId, report_id: (isPass || !isUuid) ? null : reportId, pass_key: isPass ? reportId : null, amount, level, status: 'pending' };
     // item(상품 이름) 컬럼은 0009 마이그레이션 뒤에 생긴다. 없는 환경이면 빼고 다시 넣는다. 기록 때문에 결제가 막히면 안 된다.
-    let { error } = await c.from('payments').insert({ ...row, ...(item ? { item } : {}), ...(userId ? { user_id: userId } : {}) });
+    const extra = { ...(item ? { item } : {}), ...(buyer ? { buyer_name: buyer.name, buyer_phone: buyer.phone, buyer_key: buyer.key } : {}) };
+    let { error } = await c.from('payments').insert({ ...row, ...extra, ...(userId ? { user_id: userId } : {}) });
+    // 구매자 칸(0011)이 없는 환경이면 그것만 빼고 다시(상품 이름은 살린다)
+    if (error && buyer) ({ error } = await c.from('payments').insert({ ...row, ...(item ? { item } : {}), ...(userId ? { user_id: userId } : {}) }));
     if (error && item) ({ error } = await c.from('payments').insert(userId ? { ...row, user_id: userId } : row));
     // 회원 프로필이 없는 등으로 user_id 가 걸리면 회원 없이라도 주문은 만든다 — 계측 때문에 결제가 막히면 안 된다.
     if (error && userId) ({ error } = await c.from('payments').insert(row));
@@ -143,6 +147,7 @@ export async function createOrder(reportId: string, amount: number, level: numbe
   }
   const o: Order = { paymentId, reportId, amount, level, status: 'pending' };
   memOrders.set(paymentId, o);
+  if (buyer) memBuyer.set(paymentId, buyer);
   return o;
 }
 
@@ -243,6 +248,44 @@ export async function recordTno(paymentId: string, tno?: string | null): Promise
   try { await c.from('payments').update({ tno: String(tno).slice(0, 40) }).eq('payment_id', paymentId); } catch { /* noop */ }
 }
 
+// ── 구매자(휴대폰 번호) ─────────────────────────────── lib/buyer 참고
+const memBuyer: Map<string, Buyer> = g.__nkBuyer ?? (g.__nkBuyer = new Map());
+// 이 결제의 구매자 열쇠(결제 뒤 쿠키에 둔다)
+export async function buyerKeyOfPayment(paymentId: string): Promise<string | null> {
+  const c = sb();
+  if (!c) return memBuyer.get(paymentId)?.key ?? null;
+  const { data, error } = await c.from('payments').select('buyer_key').eq('payment_id', paymentId).maybeSingle();
+  return error ? null : ((data as any)?.buyer_key ?? null);
+}
+// 이 열쇠로 산 것(완료만). '산 리포트 찾기'가 쓴다.
+export async function purchasesOf(key: string): Promise<{ reportId: string | null; passKey: string | null; item: string; amount: number; paidAt: string | null }[]> {
+  const c = sb();
+  if (!c) {
+    return [...memOrders.values()].filter(o => o.status === 'paid' && memBuyer.get(o.paymentId)?.key === key)
+      .map(o => ({ reportId: o.reportId.startsWith('pass:') ? null : o.reportId, passKey: o.reportId.startsWith('pass:') ? o.reportId : null, item: '리포트', amount: o.amount, paidAt: null }));
+  }
+  const { data, error } = await c.from('payments').select('report_id,pass_key,item,amount,paid_at,status').eq('buyer_key', key).eq('status', 'paid').order('paid_at', { ascending: false }).limit(100);
+  if (error) return [];
+  return (data ?? []).map((r: any) => ({ reportId: r.report_id ?? null, passKey: r.pass_key ?? null, item: r.item ?? '리포트', amount: r.amount ?? 0, paidAt: r.paid_at ?? null }));
+}
+// '산 리포트 찾기' 남용 막기: 같은 곳에서 한 시간 limit 번. 넘으면 true. 기록은 한 시간 뒤 지운다.
+export async function findTooMany(ipH: string, limit = 10): Promise<boolean> {
+  const c = sb(); if (!c || !ipH) return false;
+  const since = new Date(Date.now() - 3600_000).toISOString();
+  try {
+    await c.from('report_find_log').delete().lt('created_at', since);
+    const { count } = await c.from('report_find_log').select('ip_hash', { count: 'exact', head: true }).eq('ip_hash', ipH).gte('created_at', since);
+    await c.from('report_find_log').insert({ ip_hash: ipH });
+    return (count ?? 0) >= limit;
+  } catch { return false; }
+}
+// 보관 기간이 지난 구매자 정보(이름·번호·열쇠)를 지운다. 거래 기록(금액·상태·일시)은 남긴다.
+export async function purgeOldBuyers(years = 5): Promise<void> {
+  const c = sb(); if (!c) return;
+  const before = new Date(Date.now() - years * 365.25 * 86400_000).toISOString();
+  try { await c.from('payments').update({ buyer_name: null, buyer_phone: null, buyer_key: null }).lt('created_at', before).not('buyer_key', 'is', null); } catch { /* 칸이 없으면 지울 것도 없다 */ }
+}
+
 // 리포트 언락 레벨 (0 무료 · 1 택일팩 · 2 전체)
 export async function unlockLevel(reportId: string): Promise<number> {
   const c = sb();
@@ -258,13 +301,16 @@ export async function isUnlocked(reportId: string): Promise<boolean> {
 
 // ── 사용자 단위 권한(패스) ────────────────────────────────
 export const BALJU_PASS_KEY = (userId?: string | null) => 'pass:balju:' + uid(userId);
+// 로그인 없이 산 패스는 구매자 열쇠에 붙는다(lib/buyer).
+export const BALJU_PASS_BUYER_KEY = (buyerKey: string) => 'pass:balju:b:' + buyerKey;
 export async function hasEntitlement(key: string): Promise<boolean> {
   const c = sb();
   if (c) { const { data } = await c.from('entitlements').select('key').eq('key', key).maybeSingle(); return !!data; }
   return memPasses.has(key);
 }
-export async function hasBaljuPass(userId?: string | null): Promise<boolean> {
-  // 운영(DB 연결)에서 비회원은 패스가 없다. 예전엔 'pass:balju:demo' 를 조회해, 데모로 산 패스가 있으면 비회원 전원이 열렸다.
+export async function hasBaljuPass(userId?: string | null, buyerKey?: string | null): Promise<boolean> {
+  if (buyerKey && (await hasEntitlement(BALJU_PASS_BUYER_KEY(buyerKey)))) return true;
+  // 운영(DB 연결)에서 비회원은 회원 패스가 없다. 예전엔 'pass:balju:demo' 를 조회해, 데모로 산 패스가 있으면 비회원 전원이 열렸다.
   if (!userId && sb()) return false;
   return hasEntitlement(BALJU_PASS_KEY(userId));
 }

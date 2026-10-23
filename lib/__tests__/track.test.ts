@@ -60,6 +60,14 @@ describe('track', () => {
     expect(beacons).toHaveLength(1);
   });
 
+  it('관리자 화면을 연 기기는 세지 않는다', async () => {
+    const { track, markOperatorDevice } = await import('@/lib/track');
+    markOperatorDevice();
+    track('home');
+    track('report');
+    expect(beacons).toHaveLength(0);
+  });
+
   it('슬러그가 다르면 각각 센다', async () => {
     const { track } = await import('@/lib/track');
     track('column', 'aaa');

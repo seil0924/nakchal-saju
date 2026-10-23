@@ -12,7 +12,7 @@ import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
 import PersonPicker from '@/app/_components/PersonPicker';
 import ClientPicker from '@/app/_components/ClientPicker';
-import { uidFromCookie } from '@/lib/scope';
+import BuyerFields, { type BuyerState } from '@/app/_components/BuyerFields';
 import { type Person, type PersonKind, peopleOf, migrateLegacy } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
 import TrustStrip from '@/app/_components/TrustStrip';
@@ -93,9 +93,11 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   const [confirm, setConfirm] = useState(false);
   const [modal, setModal] = useState(false);
   const [passMode, setPassMode] = useState(false);   // 발주처 프리미엄 패스 결제 모드
-  // 패스는 계정에 붙는다(다른 기기에서도 열려야 한다). 로그인 안 했으면 결제 버튼 대신 로그인으로 잇는다(2026-10-23).
-  const [loggedIn, setLoggedIn] = useState(true);
-  useEffect(() => { try { setLoggedIn(!!uidFromCookie(document.cookie)); } catch { /* 모르면 서버가 막는다 */ } }, [modal]);
+  // 결제 창의 구매자 칸(성함·휴대폰·동의). 로그인 대신 이 번호로 산 것을 묶는다(2026-10-23, lib/buyer).
+  const [buyer, setBuyer] = useState<BuyerState>({ name: '', phone: '', agree: false });
+  const setBuyerPart = (p: Partial<BuyerState>) => setBuyer(b => ({ ...b, ...p }));
+  useEffect(() => { if (modal) setBuyer(b => ({ ...b, name: b.name || f.name })); /* eslint-disable-next-line */ }, [modal]);
+  const buyerBody = () => ({ buyerName: buyer.name, buyerPhone: buyer.phone, agree: buyer.agree });
   const [busy, setBusy] = useState(false);
   // 결제 재진입 가드. setBusy 는 다음 렌더에야 반영돼서 같은 틱에 두 번 들어오는 걸 못 막는다 —
   // 실제로 버튼 한 번에 /api/payment/prepare 가 두 번 나갔다. ref 는 즉시 바뀐다.
@@ -365,9 +367,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     paying.current = true;
     setErr(''); setBusy(true);
     try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: chosen }) }).then(x => x.json());
+      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: chosen, ...buyerBody() }) }).then(x => x.json());
       // 준비가 실패하면 결제창을 열지 않는다(예전엔 paymentId 없이 결제창을 열려 했다).
-      if (prep?.error || !prep?.paymentId) { setBusy(false); paying.current = false; setErr(prep?.error === 'already_paid' ? '이미 결제가 끝난 리포트입니다. 이 화면에서 잠겨 보이면 이메일 문의로 리포트 주소를 보내 주세요. 바로 열어 드립니다.' : '결제 준비에 실패했습니다. 잠시 뒤 다시 눌러주세요.'); return; }
+      if (prep?.error || !prep?.paymentId) { setBusy(false); paying.current = false; setErr(prep?.message ? prep.message : prep?.error === 'already_paid' ? '이미 결제가 끝난 리포트입니다. 이 화면에서 잠겨 보이면 이메일 문의로 리포트 주소를 보내 주세요. 바로 열어 드립니다.' : '결제 준비에 실패했습니다. 잠시 뒤 다시 눌러주세요.'); return; }
       if (KCP_CLIENT_ENABLED) {
         const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
         if (kres === 'redirect') return;
@@ -393,9 +395,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     paying.current = true;
     setErr(''); setBusy(true);
     try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: 'baljuPass' }) }).then(x => x.json());
+      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: 'baljuPass', ...buyerBody() }) }).then(x => x.json());
       // 준비가 실패하면 결제창을 열지 않는다(로그인 필요·이미 산 패스).
-      if (prep?.error || !prep?.paymentId) { setBusy(false); paying.current = false; setErr(prep?.error === 'login_required' ? '발주처 프리미엄 패스는 로그인 후 살 수 있습니다.' : prep?.error === 'already_paid' ? '이미 발주처 프리미엄 패스가 있습니다. 새로고침하면 열립니다.' : '결제 준비에 실패했습니다. 잠시 뒤 다시 눌러주세요.'); return; }
+      if (prep?.error || !prep?.paymentId) { setBusy(false); paying.current = false; setErr(prep?.message ? prep.message : prep?.error === 'login_required' ? '발주처 프리미엄 패스는 로그인 후 살 수 있습니다.' : prep?.error === 'already_paid' ? '이미 발주처 프리미엄 패스가 있습니다. 새로고침하면 열립니다.' : '결제 준비에 실패했습니다. 잠시 뒤 다시 눌러주세요.'); return; }
       if (KCP_CLIENT_ENABLED) {
         const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
         if (kres === 'redirect') return;
@@ -881,23 +883,13 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             ) : null}
             <a className="catsample" href="/samples" target="_blank" rel="noopener">결제하면 열리는 화면, 예시로 먼저 보기 →</a>
             <div className="paymethods">신용·체크카드<span> · 결제창에서 카드사를 고릅니다</span></div>
+            <BuyerFields v={buyer} set={setBuyerPart} />
             <label className="consent">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
               <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다. <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
             </label>
-            {err && <div className="errbox">{err}</div>}
-            {passMode && !loggedIn ? (() => {
-              const c = targets.find(x => x.kind === 'client');
-              const back = '/reading?cat=balju' + (c ? `&ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}` : '');
-              return (
-                <div className="passlogin">
-                  <p>패스는 로그인한 계정에 붙습니다. 한 번 사면 다른 날, 다른 기기에서도 계속 열립니다. 발주처 한 곳만 보시려면 로그인 없이 [발주처 사주]로 볼 수 있습니다.</p>
-                  <Link className="paygo" href={`/login?next=${encodeURIComponent(back)}`}>로그인하고 이어서 사기</Link>
-                </div>
-              );
-            })() : (
+            {err && <div className="errbox" role="alert">{err}</div>}
             <button className="paygo" onClick={() => (passMode ? payPass() : pay(sku))} disabled={busy}>{busy ? '결제 처리중…' : `${won(passMode ? PRICE_BALJU_PASS : unlockPrice)} 결제하기`}</button>
-            )}
             <div className="mclose" onClick={() => { setModal(false); setPassMode(false); }}>다음에 볼게요</div>
             <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>
           </div>

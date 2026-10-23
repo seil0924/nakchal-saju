@@ -478,7 +478,6 @@ html body .h6-intro .h6-head .brandmark{flex:none;margin-right:-6px}
 .cp-empty{padding:18px 4px;font-size:15px;color:#636d77}
 button.baljupick,button.bjchg{width:100%;border:0;font-family:inherit;cursor:pointer;text-align:left}
 button.bjchg{width:auto;background:none;color:#2f56c4;font-weight:700;font-size:13px}
-.passlogin p{margin:0 0 10px;font-size:13px;line-height:1.65;color:#33383f}.passlogin .paygo{display:block;text-align:center;text-decoration:none}
 .bm-fill{display:flex;flex-direction:column;gap:8px;margin-top:12px}
 .bm-fill-lab{font-size:13px;color:#58616a;line-height:1.6}
 button.bm-cta{width:100%;border:0;font-family:inherit;cursor:pointer}
@@ -486,3 +485,25 @@ button.bm-cta:disabled{opacity:.55;cursor:default}
 /* 발주처: '이 발주처만'(주) 아래 '패스'(보조) — 같은 모양 두 개가 겹치지 않게 */
 html body .cta.sub{background:#fff!important;color:#2f56c4!important;border:1.5px solid #2f56c4!important}
 html body .cta.sub small{color:#58616a!important}
+
+/* 산 리포트 찾기 (app/find, 2026-10-23) */
+.fd-form{display:flex;flex-direction:column;gap:6px;padding:16px}
+.fd-form label{font-size:13px;font-weight:700;color:#58616a;margin-top:6px}
+.fd-form input{min-height:48px;padding:0 14px;border:1px solid #e6e8ea;border-radius:12px;font-size:16px;font-family:inherit}
+.fd-form .ct-go{margin-top:10px;border:0;cursor:pointer;font-family:inherit}
+.fd-res{margin-top:12px;padding:16px;font-size:15px;line-height:1.7}
+.fd-res a{color:#2f56c4;font-weight:700}
+.fd-pass{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:#eef8f3;color:#177f5e;font-weight:700}
+.fd-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.fd-list a{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;background:#f4f5f7;text-decoration:none}
+.fd-list b{color:#1e2124;font-size:15px}
+.fd-list span{color:#58616a;font-size:13px;font-weight:600}
+
+/* 결제 창 구매자 칸 (app/_components/BuyerFields) */
+.buyer{display:flex;flex-direction:column;gap:8px;margin:12px 0 4px;padding:12px;border-radius:12px;background:#f4f5f7}
+.buyer-row{display:grid;grid-template-columns:84px 1fr;align-items:center;gap:8px}
+.buyer-row label{font-size:13px;font-weight:700;color:#33383f}
+.buyer-row input{min-height:44px;padding:0 12px;border:1px solid #e6e8ea;border-radius:10px;font-size:16px;font-family:inherit;background:#fff;min-width:0}
+.buyer-why{margin:0;font-size:13px;line-height:1.6;color:#58616a}
+.buyer-why a{color:#2f56c4;font-weight:700}
+.buyer .consent{margin:0}

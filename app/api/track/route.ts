@@ -21,7 +21,7 @@ import { isBotRequest } from '@/lib/bot';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const KINDS = new Set(['reading', 'ceo', 'column', 'balju', 'home',
+const KINDS = new Set(['reading', 'report', 'ceo', 'column', 'balju', 'home',
   'product', 'glossary', 'why', 'saju', 'region', 'industry', 'taekil', 'tool']);
 
 export async function POST(req: Request) {

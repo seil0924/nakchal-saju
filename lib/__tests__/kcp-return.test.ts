@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { kcpReturnUrl } from '../kcp-return';
+import { kcpReturnUrl, kcpReturn } from '../kcp-return';
 import { createOrder, confirmOrder, saveReport } from '../store';
 
 const O = 'https://nakchalsaju.com';
@@ -22,5 +22,12 @@ describe('KCP 인증결과 처리 (PC·모바일 공용)', () => {
   it('주문을 못 찾으면 홈으로, 사유를 남긴다', async () => {
     const url = await kcpReturnUrl(O, { ...F, paymentId: 'pay_none', enc_data: 'x', enc_info: 'y', tran_cd: 'z' });
     expect(url).toBe(`${O}/?paid=0&why=order_not_found`);
+  });
+  it('구매자 칸이 없는 DB 에서도 비회원 패스는 결제 뒤 이 기기에서 열린다', async () => {
+    const key = 'a'.repeat(64);
+    const o = await createOrder('pass:balju:b:' + key, 9900, 1);   // 구매자 정보 없이 저장된 주문
+    await confirmOrder(o.paymentId, 9900);
+    const r = await kcpReturn(O, { ...F, paymentId: o.paymentId, enc_data: 'x', enc_info: 'y', tran_cd: 'z' });
+    expect(r.buyerKey).toBe(key);
   });
 });

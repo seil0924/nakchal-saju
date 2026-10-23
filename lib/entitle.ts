@@ -10,6 +10,7 @@
 import 'server-only';
 import { authEnabled, isAdmin } from '@/lib/supabase/server';
 import { unlockLevel, hasBaljuPass } from '@/lib/store';
+import { buyerKeyFromCookie } from '@/lib/buyer';
 
 export type Entitlement = {
   level: number;    // 0 무료 · 1 택일팩 · 2 전체
@@ -23,7 +24,7 @@ export async function entitlement(reportId: string, userId?: string | null): Pro
   }
   return {
     level: await unlockLevel(reportId),
-    bpass: await hasBaljuPass(userId),
+    bpass: await hasBaljuPass(userId, buyerKeyFromCookie()),   // 회원 패스 또는 이 브라우저 구매자의 패스
     admin: false,
   };
 }

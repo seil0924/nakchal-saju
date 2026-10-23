@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import BuyerFields, { type BuyerState } from '@/app/_components/BuyerFields';
 import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 import { won } from '@/lib/constants';
 import { markUnlocked } from '@/lib/vault';
@@ -39,6 +40,9 @@ export default function ReportView({ params }: { params: { id: string } }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [consent, setConsent] = useState(false);
+  // 결제 창 구매자 칸(로그인 대신 휴대폰 번호, 2026-10-23)
+  const [buyer, setBuyer] = useState<BuyerState>({ name: '', phone: '', agree: false });
+  const setBuyerPart = (p: Partial<BuyerState>) => setBuyer(b => ({ ...b, ...p }));
   // 카테고리 없는 리포트에서 손님이 고른 상품(결제 직전까지만 들고 있는다)
   const [pending, setPending] = useState<string | undefined>(undefined);
   const [sku, setSku] = useState<'taekil' | 'full'>('full');
@@ -82,8 +86,8 @@ export default function ReportView({ params }: { params: { id: string } }) {
     if (busy) return;   // 연타로 주문이 두 개 생기지 않게
     setErr(''); setBusy(true);
     try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: id, sku: chosen, cat: pickCat ?? pending }) }).then(x => x.json());
-      if (prep?.error) { setBusy(false); setErr(prep.error === 'category_required' ? '어떤 풀이를 여실지 먼저 골라 주세요.' : prep.error === 'already_paid' ? '이미 결제가 끝난 리포트입니다. 이 화면에서 잠겨 보이면 이메일 문의로 리포트 주소를 보내 주세요. 바로 열어 드립니다.' : '결제 준비에 실패했습니다.'); if (prep.error === 'already_paid') load(); return; }
+      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: id, sku: chosen, cat: pickCat ?? pending, buyerName: buyer.name, buyerPhone: buyer.phone, agree: buyer.agree }) }).then(x => x.json());
+      if (prep?.error) { setBusy(false); setErr(prep.message ? prep.message : prep.error === 'category_required' ? '어떤 풀이를 여실지 먼저 골라 주세요.' : prep.error === 'already_paid' ? '이미 결제가 끝난 리포트입니다. 이 화면에서 잠겨 보이면 이메일 문의로 리포트 주소를 보내 주세요. 바로 열어 드립니다.' : '결제 준비에 실패했습니다.'); if (prep.error === 'already_paid') load(); return; }
       if (KCP_CLIENT_ENABLED) {
         const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
         if (kres === 'redirect') return;
@@ -270,6 +274,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             })()}
             <a className="catsample" href="/samples" target="_blank" rel="noopener">결제하면 열리는 화면, 예시로 먼저 보기 →</a>
             <div className="paymethods">신용·체크카드<span> · 결제창에서 카드사를 고릅니다</span></div>
+            <BuyerFields v={buyer} set={setBuyerPart} />
             <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한: <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
             {err && <div className="errbox">{err}</div>}
             <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won((catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0)} 결제하기`}</button>

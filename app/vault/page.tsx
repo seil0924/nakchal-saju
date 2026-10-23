@@ -53,7 +53,7 @@ export default function Vault() {
       ))}
 
       <div className="sechd" style={{ marginTop: 16 }}><span className="t"><span className="b" />저장된 사주·대상</span></div>
-      {saved.length === 0 && <div className="balnote">리포트에서 대표·발주처·동업 상대를 넣으면 여기에 저장돼 다음에 재사용됩니다.</div>}
+      {saved.length === 0 && <div className="balnote">보관함은 이 기기에 저장됩니다. 다른 기기에서 산 리포트는 <Link href="/find">산 리포트 찾기</Link>에서 결제 때 넣은 성함과 휴대폰 번호로 엽니다.</div>}
       {saved.map((s, i) => (
         <div key={i} className="li" style={{ cursor: 'default' }}>
           <div className="t"><b>{s.name}</b><span>{KIND_LABEL[s.kind] || s.kind} · {s.date}</span></div>
