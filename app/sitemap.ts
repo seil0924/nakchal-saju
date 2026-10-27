@@ -51,7 +51,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 닮은 CEO 상세 100장. 자동생성이라며 사이트맵에서 빼 뒀는데, 실측해 보니 이 페이지들의 CTR 이
     // 사이트에서 가장 높다(용어사전 0.3% 대 CEO 75%). 진입점이 없어 구글이 몇 장밖에 못 찾고 있었다.
     ...TYCOONS.map(t => ({
-      url: `${BASE}/ceo/${tycoonSlug(t.name)}`, lastModified: now,
+      // 한글 주소는 퍼센트 인코딩해야 한다. 날것으로 실었더니 네이버 서치어드바이저가 사이트맵 전체를 오류로 돌려보냈다(2026-10-27).
+      url: `${BASE}/ceo/${encodeURIComponent(tycoonSlug(t.name))}`, lastModified: now,
       changeFrequency: 'monthly' as const, priority: 0.7,
     })),
     // 택일 랜딩. 구매 의도가 실린 검색어(개업일·법인설립일·계약일)로 들어오는 자리라
@@ -78,5 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 
-  return entries;
+  // 한글 주소는 모두 퍼센트 인코딩해서 낸다(이미 인코딩된 것은 한 번 풀고 다시 묶어 이중 인코딩을 막는다).
+  // /ceo/스티브잡스, /saju/갑목-일간 이 날것으로 실려 네이버 서치어드바이저가 사이트맵 전체를 오류로 돌려보냈다(2026-10-27).
+  return entries.map(e => ({ ...e, url: encodeURI(decodeURI(e.url)) }));
 }
