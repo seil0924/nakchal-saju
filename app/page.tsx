@@ -21,6 +21,8 @@ export const metadata: Metadata = {
     canonical: '/',
     // 영어판이 어디 있는지 알려 준다. 자동 리다이렉트 대신 이걸로 구글이 알아서 고른다.
     languages: { 'ko-KR': '/', 'en': '/en/bazi', 'zh-Hant': '/zh/bazi', 'x-default': '/en/bazi' },
+    // 자기 alternates 를 두면 레이아웃의 RSS 알림이 덮인다. 홈에도 다시 적는다.
+    types: { 'application/rss+xml': [{ url: '/rss.xml', title: '낙찰사주 칼럼' }] },
   },
 };
 

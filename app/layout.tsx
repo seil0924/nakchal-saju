@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image', title: '낙찰사주 · 會社 사주 전문', description: '오늘, 넣을 날인가: 투찰 택일을 사주로 짚다', images: ['/api/og'] },
   robots: { index: true, follow: true },
+  // RSS 위치를 모든 화면 머리에 알린다(네이버 서치어드바이저·구독기가 찾는다). canonical 과 달리 물려받아도 문제없다.
+  alternates: { types: { 'application/rss+xml': [{ url: '/rss.xml', title: '낙찰사주 칼럼' }] } },
   // canonical 은 여기 두면 안 된다. 개별 canonical 이 없는 페이지가 전부 이걸 물려받아
   // 자기 자신이 아니라 홈을 정본으로 가리키게 된다 — 구글에 "나는 홈의 사본"이라고 말하는 꼴이다.
   // 홈의 canonical 은 app/page.tsx 가 직접 선언한다. 나머지는 자기 주소로 자동 정본이 된다.
