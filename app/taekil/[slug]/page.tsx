@@ -7,6 +7,7 @@ import TaekilPick from '@/app/_components/TaekilPick';
 import { ogCard, ogCardUrl } from '@/lib/og';
 import { kstYmd } from '@/lib/kst';
 import SiteTop from '@/app/_components/SiteTop';
+import { TAEKIL_YEARS } from '@/lib/taekil-year';
 
 // "앞으로 90일" 목록이라 배포 때 한 번 구우면 며칠 뒤엔 지난 날짜를 보여준다. 한 시간마다 다시 굽는다.
 export const revalidate = 3600;
@@ -66,7 +67,7 @@ export default function TaekilPage({ params }: { params: { slug: string } }) {
   ];
 
   return (
-    <div className="app home">
+    <div className="app home taekil-app">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <SiteTop />
@@ -81,6 +82,12 @@ export default function TaekilPage({ params }: { params: { slug: string } }) {
       </div>
 
       <TaekilPick slug={t.slug} todayYmd={kstYmd()} />
+
+      <div style={{ padding: '0 18px 6px', display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+        {TAEKIL_YEARS.map(y => (
+          <Link key={y} href={`/taekil/${encodeURIComponent(t.slug)}/${y}`} style={{ ...chip, fontSize: 14 }}>{y}년 열두 달 표 보기</Link>
+        ))}
+      </div>
 
       <section className="bz-read" style={{ padding: '0 18px 8px' }}>
         {t.body.map((b, i) => (

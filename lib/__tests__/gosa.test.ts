@@ -7,6 +7,16 @@ describe('착공 고사 축문', () => {
     expect(c.hanja[0]).toBe('維歲次 丙午 正月 壬戌朔 初一日 壬戌');
     expect(c.reading[0]).toBe('유세차 병오 정월 임술삭 초일일 임술');
   });
+  // 중국 표로는 10/10 이 초하루(丁巳)지만 합삭이 10/11 00:50 KST 라 한국은 10/11(戊午)이 초하루다.
+  it('한국 음력을 쓴다(2026-10-27 은 9월 무오삭 17일)', () => {
+    const c = chukmun({ ymd: '2026-10-27', company: '', ceo: '', project: '' });
+    expect(c.hanja[0]).toBe('維歲次 丙午 九月 戊午朔 十七日 甲戌');
+  });
+  it('2027년 설은 한국 날짜(2/7)로 정월 초하루', () => {
+    expect(chukmun({ ymd: '2027-02-07', company: '', ceo: '', project: '' }).hanja[0]).toContain('正月');
+    expect(chukmun({ ymd: '2027-02-07', company: '', ceo: '', project: '' }).hanja[0]).toContain('初一日');
+    expect(chukmun({ ymd: '2027-02-06', company: '', ceo: '', project: '' }).hanja[0]).toContain('十二月');
+  });
   it('윤달은 閏 을 붙인다(2025 윤6월 첫날 7/25)', () => {
     const c = chukmun({ ymd: '2025-07-25', company: '', ceo: '', project: '' });
     expect(c.hanja[0]).toContain('閏六月');

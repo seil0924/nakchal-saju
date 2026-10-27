@@ -6,7 +6,7 @@ import { sellableCats, canSellCat, CAT_INFO } from '../report-categories';
 const 대표만 = {};
 const 법인있음 = { legal: '2016-02-05' };
 const 발주처있음 = { client: '1998-03-02' };
-const 다있음 = { legal: '2016-02-05', client: '1998-03-02', partner: '1980-05-05', ally: '2005-03-10' };
+const 다있음 = { legal: '2016-02-05', client: '1998-03-02', partner: '1980-05-05', ally: '2005-03-10', cands: ['2027-01-14', '2027-01-26'] };
 
 describe('sellableCats — 값이 있는 것만 판다', () => {
   it('생년월일만 있으면 추가 입력이 필요없는 상품만 나온다', () => {

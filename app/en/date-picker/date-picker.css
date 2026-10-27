@@ -56,3 +56,56 @@
 .bz-read b{font-weight:800;color:#1e2124}
 .bz-read i{color:#4a5158}
 .bz-read a{color:#26508f;font-weight:700}
+
+/* 후보 날짜 비교(較) — 목록에서 고르고, 직접 넣고, 아래 막대에서 리딩으로 넘긴다(2026-10-28) */
+.bg-note{margin:0 0 10px;padding:10px 12px;border-radius:3px;background:#f6f2e8;font-size:13px;line-height:1.65;color:#4a4130}
+.dp-days.pick .dg{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.dp-pickb{font-family:var(--sans);font-size:13px;font-weight:700;padding:5px 9px;border-radius:999px;border:1px solid #c8a94e;
+  background:#fff;color:#6b5211;cursor:pointer;white-space:nowrap;min-height:30px}
+.dp-pickb[aria-pressed="true"]{background:#2b2119;border-color:#2b2119;color:#f4ead2}
+.dp-pickb:disabled{opacity:.4;cursor:default}
+.dp-pickb:focus-visible,.bg-chip:focus-visible,.bg-go:focus-visible,.bg-own-row button:focus-visible{outline:2px solid #2f56c4;outline-offset:2px}
+.dp-days li.sel{background:#fbf6ea;border-color:#d8c08a}
+.bg-own{margin:4px 0 12px;padding:12px;border:1px solid #e7e3d8;border-radius:3px;background:#fff}
+.bg-own-h{margin:0 0 3px;font-size:13px;font-weight:800;color:#1e2124}
+.bg-own-s{margin:0 0 9px;font-size:13px;line-height:1.6;color:#5d646b}
+.bg-own-row{display:flex;gap:8px}
+.bg-own-row input{flex:1;min-width:0;padding:9px 10px;font-size:16px}
+.bg-own-row button{flex:none;padding:0 16px;border-radius:3px;border:0;background:#2b2119;color:#f4ead2;font-size:14px;font-weight:800;cursor:pointer}
+.bg-own-row button:disabled{opacity:.35;cursor:default}
+.bg-bar{position:sticky;bottom:0;z-index:20;margin:0 -2px 12px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  background:#fff;border:1px solid #d8c08a;border-radius:6px;box-shadow:0 -6px 18px rgba(43,33,25,.12)}
+.bg-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.bg-chip{font-family:var(--sans);font-size:13px;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid #e2d3a8;background:#f6efdc;color:#4a4130;cursor:pointer}
+.bg-chip span{margin-left:2px;color:#84621a}
+.bg-go{display:block;padding:12px 14px;border-radius:4px;background:#2b2119;color:#f4ead2;text-decoration:none;font-size:15px;font-weight:800;text-align:center}
+.bg-go em{display:block;margin-top:2px;font-style:normal;font-size:13px;font-weight:600;color:#d9c79c}
+.bg-wait{margin:0;font-size:13px;font-weight:700;color:#6b5211;text-align:center;padding:6px 0}
+
+/* 택일 연도판(/taekil/계약일/2027) — 휴대폰 기준. 달 막대는 위에 붙고, 달마다 평일 으뜸날을 먼저 */
+.ty-nav{position:sticky;top:0;z-index:15;display:flex;gap:6px;overflow-x:auto;margin:0 -15px 12px;padding:9px 15px;
+  background:rgba(255,255,255,.96);border-bottom:1px solid #ece7da;scrollbar-width:none}
+.ty-nav::-webkit-scrollbar{display:none}
+.ty-nav a{flex:none;font-size:14px;font-weight:800;color:#4a4130;text-decoration:none;padding:7px 12px;border-radius:999px;background:#f6efdc;min-height:34px;box-sizing:border-box}
+.ty-nav a:focus-visible{outline:2px solid #2f56c4;outline-offset:2px}
+.ty-month{scroll-margin-top:62px;margin:0 0 18px}
+.ty-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 6px;font-family:var(--serif);font-size:18px;font-weight:900;color:#1e2124}
+.ty-h span{font-family:var(--sans);font-size:13px;font-weight:700;color:#6b7278}
+.ty-best{margin:0 0 8px;padding:9px 11px;border-radius:3px;background:#eef5f0;font-size:14px;line-height:1.6;color:#1c5238;font-weight:700;font-variant-numeric:tabular-nums}
+.ty-best b{display:block;font-size:13px;color:#24684a;margin-bottom:1px}
+.ty-best.none{background:#f4f5f7;color:#58616a;font-weight:600;font-size:13px}
+.ty-days{grid-template-columns:1fr !important}
+.ty-days li{grid-template-columns:48px 26px 1fr auto;padding:8px 10px}
+.ty-days li.off{background:#faf9f6}
+.ty-days li.off .dd{color:#a5241f}
+.ty-hol{display:block;font-style:normal;font-size:13px;font-weight:700;color:#a5241f}
+.ty-hol.wk{color:#8a6a6a;font-weight:600}
+.ty-avoid{margin:0 0 4px;font-size:13px;color:#5d646b}
+.ty-avoid summary{cursor:pointer;font-weight:700;color:#a8321f;padding:6px 0}
+.ty-avoid p{margin:2px 0 0;line-height:1.7}
+/* 휴대폰에는 아래 탭 막대(.btab, 58px)가 붙어 있다. 그 위에 떠야 보인다 */
+body:has(.btab) .bg-bar{bottom:calc(60px + env(safe-area-inset-bottom))}
+@media (min-width:900px){body:has(.btab) .bg-bar{bottom:0}}
+.ty-nav a,.ty-nav a:visited{color:#4a4130}
+/* .app 의 overflow:hidden 은 붙박이(sticky) 막대를 죽인다. 택일 화면만 clip 으로 바꾼다(잘라내는 건 같고 스크롤 상자를 만들지 않는다) */
+.app.home.taekil-app{overflow:clip}

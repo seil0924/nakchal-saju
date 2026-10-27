@@ -1625,3 +1625,24 @@ body:has(.btab) .shell{padding-bottom:calc(59px + env(safe-area-inset-bottom))}
 .gilrow{display:grid;grid-template-columns:92px 1fr;gap:8px;align-items:baseline;padding:8px 11px;border-radius:10px;background:#f4f5f7;font-size:13px}
 .gilrow b{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
 .gilrow span{color:#33383f;line-height:1.6}
+/* 후보 날짜 비교(較) 리포트 섹션 */
+.bglist{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.bgrow{display:grid;grid-template-columns:104px 1fr;gap:8px;align-items:baseline;padding:8px 11px;border-radius:10px;background:#f4f5f7;font-size:13px}
+.bgrow b{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.bgrow span{color:#33383f;line-height:1.6}
+.bgcard{border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin:0 0 9px;background:#fff}
+.bgcard.top{border-color:var(--gold);background:#fffaf0}
+.bghd{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 9px;margin-bottom:7px}
+.bghd b{font-size:15px;font-weight:800;color:var(--ink)}
+.bghd em{font-style:normal;font-size:13px;font-weight:700;color:var(--sub);margin-left:auto}
+.bgno{font-size:13px;font-weight:800;color:#fff;background:var(--navy);border-radius:999px;padding:2px 9px}
+.bgcard.top .bgno{background:var(--gold)}
+.bgchk{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:4px}
+.bgchk li{position:relative;padding-left:44px;font-size:13px;line-height:1.6;color:#33383f}
+.bgchk li::before{position:absolute;left:0;top:1px;font-size:12px;font-weight:800;border-radius:4px;padding:0 5px;line-height:1.6}
+.bgchk li.ok::before{content:"통과";color:var(--good);background:#e6f3ee}
+.bgchk li.no::before{content:"걸림";color:var(--red);background:#fbeceb}
+.bghr{font-size:13px;font-weight:700;color:var(--navy);line-height:1.6}
+.bghr.sub{font-weight:600;color:var(--sub)}
+.bgnote{margin-top:6px;font-size:13px;line-height:1.6;color:#7a5c1e;background:#fbf4e4;border-radius:8px;padding:6px 9px}
+.bgfoot{font-size:13px;color:var(--sub)}

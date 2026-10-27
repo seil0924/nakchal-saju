@@ -1,12 +1,13 @@
 // lib/report-categories.ts — 카테고리별 개별 상품(사주아이식)
 // 각 카테고리는 자기 섹션(mk)만 보여주고, 자기 가격으로 개별 결제된다.
-export type CatKey = 'daepyo' | 'sajeong' | 'balju' | 'gunghap' | 'daeun' | 'calendar' | 'calendar_year' | 'ijeon';
+import { parseCands, BIGYO_MIN } from './bigyo-input';
+export type CatKey = 'daepyo' | 'sajeong' | 'balju' | 'gunghap' | 'daeun' | 'calendar' | 'calendar_year' | 'ijeon' | 'bigyo';
 
 export type CatInfo = {
   name: string; hanja: string; oh: 'mok' | 'hwa' | 'to' | 'geum' | 'su';
   mks: string[];            // 이 카테고리에 포함되는 섹션 부호
   price: number;            // 개별 결제가
-  needs: ('legal' | 'client' | 'partner' | 'ally')[]; // 추가 입력
+  needs: ('legal' | 'client' | 'partner' | 'ally' | 'cands')[]; // 추가 입력(cands: 후보 날짜 2개 이상)
   kicker: string; lead: string;
   // 결제하면 뭘 알게 되는지. 분량("5장·수십항목")이 아니라 내용을 적는다 —
   // 랜딩과 결제 벽에서 같이 쓴다. 전부 실제 섹션(mks)이 내놓는 것만 적을 것.
@@ -93,6 +94,18 @@ export const CAT_INFO: Record<CatKey, CatInfo> = {
       '이사에 좋은 날',
     ],
   },
+  // 택일 화면(/taekil)에서 대표님이 고른 날 2~3개를 넘겨받는다. 날짜 없이는 팔지 않는다(needs: cands).
+  bigyo: {
+    name: '후보 날짜 비교', hanja: '較', oh: 'su',
+    mks: ['較', '較詳'],
+    price: 990, needs: ['cands'],
+    kicker: '候補日 比較', lead: '대표님이 고른 날 2~3개 중 어느 날이 대표님께 맞는지: 순위와 근거, 날마다 맞는 시간까지.',
+    gives: [
+      '고른 날짜들의 순위: 대표님 일간을 살리는 날인지, 일지와 충하는 날인지까지 따진 결과',
+      '날마다 통과한 조건과 걸린 조건을 그대로',
+      '그날 안에서 맞는 시간과 피할 시간(오전 7시~오후 5시)',
+    ],
+  },
   calendar_year: {
     name: '사업운 캘린더 · 연간', hanja: '曆', oh: 'hwa',
     mks: ['曆年要', '曆年'],
@@ -155,6 +168,7 @@ export const CAT_UI: Record<string, CatUI> = {
   daeun:          { calToggle: false, situation: false, selfImmediate: true,  legal: 'required', baljuCard: false, relation: [],                             yearBar: true,  gauge: false, requires: 'legal' },
   calendar:       { calToggle: true,  situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
   ijeon:          { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
+  bigyo:          { calToggle: false, situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
   calendar_year:  { calToggle: true,  situation: false, selfImmediate: true,  legal: 'hidden',   baljuCard: false, relation: [],                             yearBar: false, gauge: false, requires: null },
 };
 
@@ -170,9 +184,9 @@ export const catUI = (cat?: string): CatUI => CAT_UI[cat ?? ''] ?? CAT_UI_DEFAUL
  * 그래서 needs 가 채워진 것만 돌려준다. 값이 있는 것만 파는 게 원칙이다.
  */
 export function sellableCats(input: {
-  legal?: string | null; client?: string | null; partner?: string | null; ally?: string | null;
+  legal?: string | null; client?: string | null; partner?: string | null; ally?: string | null; cands?: unknown;
 }): (CatInfo & { key: CatKey })[] {
-  const has = { legal: !!input?.legal, client: !!input?.client, partner: !!input?.partner, ally: !!input?.ally };
+  const has = { legal: !!input?.legal, client: !!input?.client, partner: !!input?.partner, ally: !!input?.ally, cands: parseCands(input?.cands).length >= BIGYO_MIN };
   return (Object.keys(CAT_INFO) as CatKey[])
     .filter(k => CAT_INFO[k].needs.every(n => has[n]))
     .map(k => ({ ...CAT_INFO[k], key: k }));
@@ -181,7 +195,7 @@ export function sellableCats(input: {
 /** 그 리포트에 이 카테고리를 붙여 팔아도 되는가. 결제 직전 서버 검증용. */
 export function canSellCat(
   cat: unknown,
-  input: { legal?: string | null; client?: string | null; partner?: string | null; ally?: string | null },
+  input: { legal?: string | null; client?: string | null; partner?: string | null; ally?: string | null; cands?: unknown },
 ): cat is CatKey {
   return isCatKey(cat) && sellableCats(input).some(c => c.key === cat);
 }

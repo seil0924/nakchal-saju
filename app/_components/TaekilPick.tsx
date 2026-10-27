@@ -6,6 +6,8 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { TAEKIL, OFFICER_KO, goodDays, badDays, taekilBySlug } from '@/lib/taekil';
 import { kstYmd, dateFromYmd } from '@/lib/kst';
+import BigyoBar, { toggleCand } from '@/app/_components/BigyoBar';
+import { isPurpose } from '@/lib/bigyo-input';
 
 const TONE = ['a', 'b', 'c', 'd'];
 // 요일은 영어판 엔진이 Fri·Sun 으로 내준다. 계산을 갈라 놓지 않으려고 그대로 두고,
@@ -27,6 +29,7 @@ export default function TaekilPick({ slug, showTabs = false, todayYmd }: { slug:
   const good = useMemo(() => goodDays(cur, today, 90), [cur, today]);
   const bad = useMemo(() => badDays(today, 90), [today]);
   const [openAvoid, setOpenAvoid] = useState(false);
+  const [sel, setSel] = useState<string[]>([]);   // 비교할 후보 날짜
   const t = taekilBySlug(cur);
   if (!t) return null;
 
@@ -56,16 +59,26 @@ export default function TaekilPick({ slug, showTabs = false, todayYmd }: { slug:
 
       {good.length === 0 && <p className="dp-blurb">앞으로 90일 안에는 해당하는 날이 없습니다.</p>}
 
-      <ul className="dp-days">
+      <p className="bg-note">이 표는 모든 업체가 같이 보는 날입니다. 대표님 일간과 일지까지 따지면 남는 날이 달라집니다. 날을 두세 개 고르시면 대표님 사주로 순위를 매겨 드립니다.</p>
+
+      <ul className="dp-days pick">
         {good.map(d => (
-          <li key={d.ymd} className={TONE[d.rank] || 'd'}>
+          <li key={d.ymd} className={(TONE[d.rank] || 'd') + (sel.includes(d.ymd) ? ' sel' : '')}>
             <span className="dd">{d.month}/{d.day}<em>{dowKo(d.ymd)}</em></span>
             <span className="dh">{OFFICER_KO[d.officer].hanja}</span>
             <span className="dw"><b>{OFFICER_KO[d.officer].name}</b>{OFFICER_KO[d.officer].gist}</span>
-            <span className="dg">{d.ganji}</span>
+            <span className="dg">{d.ganji}
+              <button type="button" className="dp-pickb" aria-pressed={sel.includes(d.ymd)}
+                aria-label={`${d.month}월 ${d.day}일 ${sel.includes(d.ymd) ? '빼기' : '비교할 날로 고르기'}`}
+                disabled={!sel.includes(d.ymd) && sel.length >= 3} onClick={() => setSel(toggleCand(sel, d.ymd))}>
+                {sel.includes(d.ymd) ? '골랐음' : '고르기'}
+              </button>
+            </span>
           </li>
         ))}
       </ul>
+
+      {isPurpose(cur) && <BigyoBar purpose={cur} sel={sel} setSel={setSel} />}
 
       <button type="button" className="dp-toggle" onClick={() => setOpenAvoid(v => !v)} aria-expanded={openAvoid}>
         피하는 날 {bad.length}일 {openAvoid ? '접기' : '펼쳐 보기'}

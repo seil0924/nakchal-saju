@@ -6,6 +6,8 @@ import { catMks } from './report-categories';
 import { taekSection, type JariInput } from './taek-report';
 import { weakElOf } from './taek-house';
 import { kstYmd, dateFromYmd } from './kst';
+import { bigyoFreeHtml, bigyoPaidHtml, bigyoTeaser, bigyoTitle, rankCands } from './bigyo';
+import { parseCands, isPurpose, BIGYO_LABEL } from './bigyo-input';
 
 export type ReportInput = {
   name?: string;
@@ -24,6 +26,9 @@ export type ReportInput = {
   cat?: string;                  // 카테고리(daepyo·sajeong·balju·gunghap·daeun·ijeon): 섹션 필터
   // 자리 사주. /jari 에서 이미 잰 방위각·거리만 넘어온다 — 좌표는 받지도 남기지도 않는다.
   jari?: JariInput;
+  // 후보 날짜 비교. /taekil 에서 대표님이 고른 날짜와 무엇을 하려는 날인지(lib/bigyo-input).
+  cands?: string[];
+  purpose?: string;
 };
 
 function dateChart(v?: string | null): Chart | null {
@@ -93,9 +98,20 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
       html: level >= 2 ? taek.html : '', teaser: taek.teaser });
   }
 
+  // 후보 날짜 비교도 티어 빌더 바깥에서 만든다. 날짜가 손님 입력이라 명식만으로 도는 빌더와 결이 다르다.
+  const cands = parseCands(input.cands);
+  const purpose = isPurpose(input.purpose) ? input.purpose : '계약일';
+  const bigyo = mks && mks.includes('較') && cands.length >= 2;
+  const bigyoSecs = (lv: number): Section[] => bigyo ? [
+    { mk: '較', free: true, tier: 'free', t: bigyoTitle(purpose, cands.length) + ' · 모두가 보는 칸', html: bigyoFreeHtml(purpose, cands) },
+    { mk: '較詳', free: false, tier: 'full', t: '대표님 사주로 매긴 순위', html: lv >= 2 ? bigyoPaidHtml(c, purpose, cands) : '', teaser: bigyoTeaser(c, purpose, cands) },
+  ] : [];
+  sections.push(...bigyoSecs(level));
+
   // 분량 앵커: 전체(레벨 2) 기준 장·항목 수를 산출해 노출 (텍스트는 미전송 — 숫자만)
   const fullSecs = filt(buildTiered(c, today, s, worry, cli, legal, partner, ally, names, daeunMeta, nowYMD, 2, selYear, seunSelf, cc, true));
   if (taek) fullSecs.push({ mk: '宅', free: false, tier: 'full', t: taek.t, html: taek.html, teaser: taek.teaser });
+  fullSecs.push(...bigyoSecs(2));
   const items = fullSecs.reduce((n, sec) => n + (sec.html.match(/<p|<div class="cbrow|<div class="ssrow/g) || []).length, 0);
   const meta = { chapters: fullSecs.length, items };
 
@@ -104,7 +120,14 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
     ? { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos, precise: s.precise }
     : { dir: s.dir, band: [s.bandLo, s.bandHi] as [string, string], pos: s.pos };
 
-  const hero = reportHeroFor(input.cat, { c, s, nowYMD, cli, legal, partner, ally, seunSelf: seunSelf, selYear }); // 카테고리별 히어로
+  let hero = reportHeroFor(input.cat, { c, s, nowYMD, cli, legal, partner, ally, seunSelf: seunSelf, selYear }); // 카테고리별 히어로
+  // 후보 날짜 비교: 순위는 잠긴 칸이라 1순위 날짜를 히어로에 쓰지 않는다. 충 걸린 날 수만.
+  if (bigyo) {
+    const ch = rankCands(c, purpose, cands).filter(r => r.chung).length;
+    hero = { score: 0, big: String(cands.length), unit: '개', label: BIGYO_LABEL[purpose] + ' 후보 날짜',
+      headline: '고르신 날 가운데 <b>대표님께 맞는 날</b>을 가립니다',
+      sub: ch ? '대표님 일지와 충하는 날 ' + ch + '개' : '대표님 일지와 충하는 날 없음', up: ch === 0 };
+  }
   const title = `${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
   return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta,
     selYear, seun: { hanja: seunSelf.hanja, rel: seunSelf.rel, tilt: seunSelf.tilt } };

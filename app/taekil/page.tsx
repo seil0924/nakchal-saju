@@ -6,6 +6,7 @@ import TaekilPick from '@/app/_components/TaekilPick';
 import { ogCard, ogCardUrl } from '@/lib/og';
 import { kstYmd } from '@/lib/kst';
 import SiteTop from '@/app/_components/SiteTop';
+import { TAEKIL_YEARS } from '@/lib/taekil-year';
 import Mascot from '@/app/_components/Mascot';
 
 // "앞으로 90일" 목록이라 배포 때 한 번 구우면 며칠 뒤엔 지난 날짜를 보여준다. 한 시간마다 다시 굽는다.
@@ -36,7 +37,7 @@ export default function TaekilHub() {
     hasPart: TAEKIL.map(t => ({ '@type': 'WebPage', name: t.kw, url: `${BASE}/taekil/${encodeURIComponent(t.slug)}` })),
   };
   return (
-    <div className="app home">
+    <div className="app home taekil-app">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <SiteTop />
@@ -66,6 +67,17 @@ export default function TaekilHub() {
           ))}
         </div>
       </section>
+
+      {TAEKIL_YEARS.map(y => (
+        <section key={y} style={{ padding: '18px 18px 0' }}>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 8 }}>{y}년 열두 달 표</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+            {TAEKIL.map(t => (
+              <Link key={t.slug} href={`/taekil/${encodeURIComponent(t.slug)}/${y}`} style={{ ...pill, fontSize: 14, color: '#2f56c4', padding: '7px 12px', textDecoration: 'none' }}>{t.kw.replace(' 택일', '')}</Link>
+            ))}
+          </div>
+        </section>
+      ))}
 
       <div style={{ padding: '18px 18px 0' }}>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 8 }}>바로 골라 보기</div>

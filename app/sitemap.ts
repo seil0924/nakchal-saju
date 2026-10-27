@@ -5,6 +5,7 @@ import { CONCEPTS } from '@/lib/seo-concepts';
 import { getAllColumns } from '@/lib/column';
 import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
 import { TAEKIL } from '@/lib/taekil';
+import { TAEKIL_YEARS } from '@/lib/taekil-year';
 import { listPublicReviews } from '@/lib/reviews-db';
 import { clientSlug } from '@/lib/clients';
 import { indexableBalju } from '@/lib/balju-index';
@@ -63,6 +64,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE}/taekil/${encodeURIComponent(t.slug)}`, lastModified: now,
       changeFrequency: 'weekly' as const, priority: 0.8,
     })),
+    // 택일 연도판(/taekil/계약일/2027). 다음 해 표는 가을부터 찾는다 — 해외 택일 사이트들도 10월에 이미 다음 해 장을 깔아 둔다.
+    ...TAEKIL.flatMap(t => TAEKIL_YEARS.map(y => ({
+      url: `${BASE}/taekil/${encodeURIComponent(t.slug)}/${y}`, lastModified: now,
+      changeFrequency: 'monthly' as const, priority: 0.7,
+    }))),
     // 핵심 발주처 상세. 공고 보는 곳·본사·주요 발주를 출처로 확인했고, 이웃 페이지와 겹침이 65% 미만인 곳만(lib/balju-index).
     // 같은 분야·같은 설립일 기관(발전 5사 등)은 문장이 78% 겹쳐 얇은 페이지로 읽히므로 계속 뺀다.
     ...indexableBalju().map(c => ({

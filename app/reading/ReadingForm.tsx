@@ -7,6 +7,7 @@ import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc,
 import { recordReport, markUnlocked } from '@/lib/vault';
 import { CLIENTS, isCoreClient, CORE_CLIENT_COUNT } from '@/lib/clients';
 import { CAT_INFO, isCatKey, productOfMk, catUI } from '@/lib/report-categories';
+import { parseCands, isPurpose, BIGYO_MIN, BIGYO_LABEL, type BigyoPurpose } from '@/lib/bigyo-input';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
@@ -64,6 +65,7 @@ const HOOK: Record<string, { seal: string; t: string; d: string }> = {
   gunghap: { seal: '合', t: '손잡기 전에, 깨질 궁합인지부터', d: '지분·역할·최종 결정권을 어떻게 나눠야 안 깨지는지: 계약 전에 봐야 할 궁합.' },
   daeun:   { seal: '運', t: '회사가 대표님을 밀어줍니까, 누릅니까', d: '법인 설립일로 본 회사의 그릇과 10년 대운의 길목: 지금이 확장기인지 정비기인지.' },
   calendar:{ seal: '曆', t: '이달, 언제 움직이고 언제 멈출까', d: '계약·채용·발표에 좋은 날과 갈등·지출을 조심할 날을 달력에 짚어 드립니다.' },
+  bigyo:   { seal: '較', t: '고르신 날 가운데, 대표님께 맞는 날은', d: '모두가 보는 길일표에 대표님 일간과 일지를 겹쳐 순위를 매깁니다. 성함과 생년월일만 넣으면 됩니다.' },
   calendar_year: { seal: '曆', t: '올 한 해, 밀어주는 달에 큰 판을 거세요', d: '12개월 월운(月運)을 밀어주는 달·조여지는 달로 갈라: 한 해 농사의 밑그림.' },
 };
 function dedupe<T>(arr: T[], keyFn: (x: T) => string): T[] {
@@ -139,6 +141,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   // 자리 사주(宅) 핸드오프 — /jari 에서 이미 잰 값만 받는다.
   // 좌표가 아니라 방위각·거리라서 보관함에 남겨도 브이월드 조건을 어기지 않는다.
   const [jari, setJari] = useState<{ deg?: number; km?: number; door?: number; desk?: number; from?: string; to?: string } | null>(null);
+  // 후보 날짜 비교(較) 핸드오프 — /taekil 에서 고른 날짜와 무엇을 하려는 날인지.
+  const [bigyo, setBigyo] = useState<{ purpose: BigyoPurpose; cands: string[] } | null>(null);
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); preloadKcp(); }, []);
   useEffect(() => { try { const s = sget(LS_KEY); if (s) setSaved(JSON.parse(s)); } catch {} }, []);
@@ -178,6 +182,13 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       // 자리 사주는 주소(방위)가 먼저다. 그것 없이 여기 오면 생년월일을 다 넣은 뒤에야 '주소부터 넣으라'는 말을 듣고 막혔다(2026-10-23).
       // 처음부터 주소를 넣는 화면으로 보낸다. 뒤로 가기가 다시 여기로 오지 않게 replace.
       else if (ct === 'ijeon') { window.location.replace('/jari'); return; }
+      // 후보 날짜 비교는 날짜가 먼저다. 없거나 하나뿐이면 날짜 고르는 화면으로 보낸다.
+      if (ct === 'bigyo') {
+        const pp = p.get('p'), cs = parseCands(p.get('d'));
+        const pu: BigyoPurpose = isPurpose(pp) ? pp : '계약일';
+        if (cs.length < BIGYO_MIN) { window.location.replace('/taekil/' + encodeURIComponent(pu) + '#bigyo'); return; }
+        setBigyo({ purpose: pu, cands: cs });
+      }
       // 저장된 대표가 있는 재방문자에게만 선택 시트를 자동으로 띄운다. 신규 방문자는 폼을 바로 보게 한다.
       if (!p.get('b')) { try { const s = sget('nakchal_self_v1'); const has = !!s && (JSON.parse(s)?.length > 0); void has; /* 퍼널②: 자동 모달 제거: 사용자가 직접 열 때만 */ } catch { /* noop */ } }
     } catch {}
@@ -269,6 +280,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     if (req === 'client' && !targets.some(t => t.kind === 'client')) { setErr('발주처를 먼저 골라 주세요.'); setTimeout(() => document.getElementById('baljupick')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50); setClientPick(true); return; }
     if (req === 'partnerOrAlly' && !targets.some(t => t.kind === 'partner' || t.kind === 'ally')) { setErr('동업 또는 협정 상대를 먼저 추가해 주세요. 위 관계·궁합 칸에서 고르거나 새로 넣을 수 있습니다.'); toRel(); return; }
     // 자리 사주는 주소·방위가 있어야 읽을 게 생긴다. 없이 팔면 빈 리포트가 나간다.
+    if (cat === 'bigyo' && !bigyo) { setErr('비교할 날짜가 없습니다. 택일 화면에서 날짜를 두세 개 고른 뒤 다시 오세요.'); return; }
     if (cat === 'ijeon' && !jari) { setErr('자리 사주는 사무실 주소와 방위가 필요합니다. 「자리 사주」 화면에서 주소를 넣고 다시 오세요.'); return; }
     setConfirm(true); // 사주아이식: 입력 확인 모달 먼저
   }
@@ -286,6 +298,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
         situation, worry: f.worry, cat: cat || undefined,
         jari: jari || undefined,
+        cands: bigyo?.cands, purpose: bigyo?.purpose,
       };
       const minWait = new Promise(r => setTimeout(r, 2500)); // 리추얼 최소 상영 시간
       const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
@@ -472,6 +485,13 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           <div className="rd-hook">
             <b>{HOOK[cat].t}</b>
             <span>{HOOK[cat].d}</span>
+          </div>
+        )}
+        {cat === 'bigyo' && bigyo && (
+          <div className="rd-hook rd-cands">
+            <b>{BIGYO_LABEL[bigyo.purpose]} 후보 {bigyo.cands.length}개</b>
+            <span>{bigyo.cands.map(d => { const [y, m, dd] = d.split('-').map(Number); return `${y !== new Date().getFullYear() ? y + '년 ' : ''}${m}월 ${dd}일`; }).join(' · ')}</span>
+            <a href={'/taekil/' + encodeURIComponent(bigyo.purpose) + '#bigyo'}>날짜 다시 고르기</a>
           </div>
         )}
         {!cat && (

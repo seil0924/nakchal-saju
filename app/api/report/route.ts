@@ -6,6 +6,7 @@ import { saveReport, hasBaljuPass } from '@/lib/store';
 import { adminBypass } from '@/lib/entitle';
 import { buyerKeyFromCookie } from '@/lib/buyer';
 import { requireUser } from '@/lib/supabase/server';
+import { parseCands, isPurpose } from '@/lib/bigyo-input';
 
 export async function POST(req: Request) {
   const input = (await req.json()) as ReportInput;
@@ -13,6 +14,9 @@ export async function POST(req: Request) {
   // 성함 필수(2026-10-22). 화면에서 막지만 서버도 같은 선을 지킨다.
   input.name = String(input.name ?? '').trim().slice(0, 12);
   if (!input.name) return NextResponse.json({ error: 'name_required' }, { status: 400 });
+  // 후보 날짜는 손님이 친 값이다. 원장에 남기기 전에 날짜 꼴·개수를 다듬는다.
+  if (input.cands !== undefined) input.cands = parseCands(input.cands);
+  if (input.purpose !== undefined && !isPurpose(input.purpose)) delete input.purpose;
   const user = await requireUser();                        // 데모면 null
   // 관리자는 무료 리포트 단계에서부터 잠금 없이 본다 — 매번 결제를 태우고 점검할 수는 없다.
   const admin = await adminBypass();

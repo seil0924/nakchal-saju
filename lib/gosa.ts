@@ -6,7 +6,8 @@
 // 자리에 공사 이름과 '起工' 을 넣는다. 나머지 글자는 바꾸지 않는다. 지어낸 한문을 보태지 않기 위해서다.
 //
 // 첫 줄 날짜는 음력으로 쓴다: 維歲次 (그해 태세) (음력 달) (그달 초하루 일진)朔 (음력 날짜) (그날 일진).
-import { solarToLunar, lunarToSolar, jdn, GAN, ZHI } from './manse-core';
+import { jdn, GAN, ZHI } from './manse-core';
+import { solarToLunarKR as solarToLunar, lunarToSolarKR as lunarToSolar } from './lunar-kr';
 import { pickWith, type DayPick } from './daypicker-en';
 
 const GAN_KO = ['갑', '을', '병', '정', '무', '기', '경', '신', '임', '계'];
