@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { CLIENTS, clientSlug, clientBySlug, josa } from '@/lib/clients';
 import { baljuContent } from '@/lib/balju-content';
 import { ilganTable, ilganSummary, neighbors } from '@/lib/balju-ilgan';
+import { factsOf, srcHost } from '@/lib/balju-facts';
 import { ogCard } from '@/lib/og';
 import SiteTop from '@/app/_components/SiteTop';
 
@@ -16,9 +17,14 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const c = clientBySlug(params.slug);
   if (!c) return { title: '발주처 · 낙찰사주' };
-  const ct = baljuContent(c);
+  const ct = baljuContent(c, factsOf(c.name));
   const title = `${c.name} 입찰, 대표님과 맞는 발주처일까: 낙찰사주`;
-  const description = `${c.name}(${c.date.slice(0, 4)} 설립·${ct.sector}) 입찰 방식과 준비 포인트, 대표님 사주 궁합. ${ct.bid} 설립일 사주 × 대표 사주로 30초 무료 진단.`;
+  const f = factsOf(c.name);
+  // 확인된 사실이 있으면 설명 앞에 둔다(공고 보는 곳·본사). 64장이 같은 분야 문장으로 시작하던 것을 가른다.
+  // 설명에는 시스템 이름만(괄호·쉼표 뒤 덧붙임은 화면에서 본다)
+  const sys = f?.notice ? f.notice.split(/[(,]/)[0].trim() : '';
+  const lead = sys ? `${c.name} 입찰공고는 ${sys}에서 봅니다${f?.hq ? `. 본사 ${f.hq}` : ''}. ` : '';
+  const description = `${lead}${c.name}(${c.date.slice(0, 4)} 설립·${ct.sector}) 입찰 방식과 준비 포인트, 대표님 사주 궁합. 설립일 사주 × 대표 사주로 30초 무료 진단.`;
   const url = `${BASE}/balju/${clientSlug(c.name)}`;
   return {
     title, description,
@@ -32,11 +38,12 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 export default function BaljuLanding({ params }: { params: { slug: string } }) {
   const c = clientBySlug(params.slug);
   if (!c) return notFound();
-  const ct = baljuContent(c);
+  const ct = baljuContent(c, factsOf(c.name));
   const readingUrl = `/reading?cat=balju&ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`;
   // 모든 페이지가 목록 맨 앞 12곳에 링크하던 것을, 같은 분야·같은 기운의 이웃으로(lib/balju-ilgan)
   const others = neighbors(c, 12);
   const rows = ilganTable(c);
+  const f = factsOf(c.name);
 
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: `${c.name} 입찰, 대표님과 맞는 발주처일까`, about: c.name, description: ct.intro, publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE }, mainEntityOfPage: `${BASE}/balju/${clientSlug(c.name)}` },
@@ -69,6 +76,19 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{c.name}, 어떤 발주처인가</div>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: '#33383f', margin: 0, fontWeight: 500 }}>{ct.intro}</p>
         </div>
+
+        {/* 확인된 사실만(lib/data/balju-facts.json, 출처 함께). 모르는 칸은 줄째 뺀다. */}
+        {f && (f.notice || f.hq || f.biz) && (
+          <div style={card}>
+            <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 8 }}>{c.name} 입찰, 어디서 보나</div>
+            <dl style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: '#33383f' }}>
+              {f.notice && (<div style={fact}><dt style={dt}>공고 보는 곳</dt><dd style={dd}>{f.noticeUrl ? <a href={f.noticeUrl} target="_blank" rel="noopener nofollow" style={{ color: '#2f56c4' }}>{f.notice}</a> : f.notice}</dd></div>)}
+              {f.hq && (<div style={fact}><dt style={dt}>본사</dt><dd style={dd}>{f.hq}</dd></div>)}
+              {f.biz && (<div style={fact}><dt style={dt}>주로 발주하는 것</dt><dd style={dd}>{f.biz}</dd></div>)}
+            </dl>
+            {f.src.length > 0 && <p style={{ fontSize: 13, color: '#636d77', margin: '8px 0 0' }}>출처 {[...new Set(f.src.map(srcHost))].slice(0, 3).join(' · ')} · 기관 사정으로 바뀔 수 있으니 공고 원문을 확인하세요</p>}
+          </div>
+        )}
 
         <div style={card}>
           <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>{ct.sector} · 입찰은 이렇게 진행됩니다</div>
@@ -141,6 +161,9 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
   );
 }
 
+const fact: React.CSSProperties = { display: 'flex', gap: 10, padding: '4px 0' };
+const dt: React.CSSProperties = { flex: '0 0 96px', color: '#636d77', fontSize: 13, fontWeight: 700, paddingTop: 2 };
+const dd: React.CSSProperties = { margin: 0, fontWeight: 600 };
 const th: React.CSSProperties = { padding: '6px 4px', fontWeight: 700 };
 const td: React.CSSProperties = { padding: '7px 4px', color: '#33383f' };
 const tag: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#58616a', background: '#f4f5f7', padding: '5px 11px', borderRadius: 999 };

@@ -6,6 +6,8 @@ import { getAllColumns } from '@/lib/column';
 import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
 import { TAEKIL } from '@/lib/taekil';
 import { listPublicReviews } from '@/lib/reviews-db';
+import { clientSlug } from '@/lib/clients';
+import { indexableBalju } from '@/lib/balju-index';
 
 const BASE = 'https://nakchalsaju.com';
 
@@ -60,6 +62,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...TAEKIL.map(t => ({
       url: `${BASE}/taekil/${encodeURIComponent(t.slug)}`, lastModified: now,
       changeFrequency: 'weekly' as const, priority: 0.8,
+    })),
+    // 핵심 발주처 상세. 공고 보는 곳·본사·주요 발주를 출처로 확인했고, 이웃 페이지와 겹침이 65% 미만인 곳만(lib/balju-index).
+    // 같은 분야·같은 설립일 기관(발전 5사 등)은 문장이 78% 겹쳐 얇은 페이지로 읽히므로 계속 뺀다.
+    ...indexableBalju().map(c => ({
+      url: `${BASE}/balju/${clientSlug(c.name)}`, lastModified: now,
+      changeFrequency: 'monthly' as const, priority: 0.7,
     })),
     ...PAINS.map(p => ({
       url: `${BASE}/why/${p.slug}`, lastModified: now,

@@ -98,7 +98,11 @@ function bucketFor(cat: string, name: string): Bucket {
 
 export type BaljuClient = { name: string; date: string; cat: string; core?: boolean; tip?: string };
 
-export function baljuContent(c: BaljuClient) {
+// 확인된 기관별 사실(lib/balju-facts). 있으면 FAQ 앞 두 문답을 이것으로 바꾼다.
+// 원래 두 문답은 본문의 '입찰 방식'·'먼저 챙길 것' 문장을 그대로 되풀이해서, 분야 템플릿이 한 페이지에 두 번 실렸다(2026-10-27).
+export type BaljuFactsLite = { hq: string | null; notice: string | null; biz: string | null } | null;
+
+export function baljuContent(c: BaljuClient, facts: BaljuFactsLite = null) {
   const year = +c.date.slice(0, 4);
   const gz = yearGanji(year);
   const b = bucketFor(c.cat, c.name);
@@ -115,9 +119,14 @@ export function baljuContent(c: BaljuClient) {
     `낙찰사주는 이 설립일 사주를 대표님 사주와 맞춰, 이 발주처와 애초에 결이 맞는 판인지: ` +
     `언제 나서고 어떻게 대해야 유리한지를 짚어 드립니다.`;
 
+  const f = facts;
   const faqs: [string, string][] = [
-    [`${n} 입찰은 어떤 방식으로 진행되나요?`, b.bid],
-    [`${n}${josa(n, '을', '를')} 준비할 때 무엇을 먼저 챙겨야 하나요?`, b.prep.join(' ')],
+    f?.notice
+      ? [`${n} 입찰공고는 어디서 보나요?`, `${f.notice}에서 냅니다. 참가자격과 마감 일시는 건마다 다르니 공고 원문으로 확인하세요.`]
+      : [`${n} 입찰은 어떤 방식으로 진행되나요?`, b.bid],
+    f?.hq && f?.biz
+      ? [`${n} 본사는 어디이고, 주로 무엇을 발주하나요?`, `본사는 ${f.hq}에 있습니다. 주로 발주하는 것은 ${f.biz}입니다.`]
+      : [`${n}${josa(n, '을', '를')} 준비할 때 무엇을 먼저 챙겨야 하나요?`, b.prep.join(' ')],
     [`설립일 사주로 무엇을 알 수 있나요?`,
       `${n}의 설립연도 세차는 ${gz.ganji}(${gz.hanja}·오행 ${gz.oh})입니다. 낙찰사주는 이 발주처의 기운과 대표님 사주의 오행 균형·상생상극을 맞춰, 이 판에 나서기 좋은 시기와 피해야 할 시기, 대응의 결을 함께 봅니다. 명리 기반 참고 정보이며 투찰금액 산정 근거는 아닙니다.`],
     [`${n} 궁합은 유료인가요?`,
