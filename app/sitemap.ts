@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const hasReviews = (await listPublicReviews(1)).rows.length > 0;
 
   // 1순위 — 전환이 일어나는 페이지
-  const primary = ['', '/reading', '/hoesa', ...(hasReviews ? ['/review'] : []), '/column', '/full', '/pricing', '/contact', '/balju', '/ceo', '/jari', '/taekil',
+  const primary = ['', '/reading', '/hoesa', ...(hasReviews ? ['/review'] : []), '/column', '/full', '/pricing', '/contact', '/balju', '/ceo', '/jari', '/taekil', '/gosa',
     '/en/bazi', '/en/date-picker', '/en/why-charts-differ',
     '/zh/bazi', '/zh/why-charts-differ'];
   // 2순위 — 신뢰·전환 보조

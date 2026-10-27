@@ -33,7 +33,7 @@ export default function ScrollTop() {
     else if (seg[0] === 'region') track('region', sub(1));
     else if (seg[0] === 'industry') track('industry', sub(1));
     else if (seg[0] === 'taekil') track('taekil', sub(1));
-    else if (['hoesa', 'jari', 'full', 'pricing', 'samples', 'more', 'vault', 'review', 'saeobunse', 'ritual', 'method', 'guide', 'faq', 'bokchae', 'find', 'contact'].includes(seg[0])) track('tool', seg[0]);
+    else if (['hoesa', 'jari', 'full', 'pricing', 'samples', 'more', 'vault', 'review', 'saeobunse', 'ritual', 'method', 'guide', 'faq', 'bokchae', 'find', 'contact', 'gosa'].includes(seg[0])) track('tool', seg[0]);
   }, [pathname]);
 
   return null;

@@ -38,13 +38,13 @@ describe('사이트맵에 올린 곳은 모두 열려 있어야 한다', () => {
       .map(e => new URL(e.url).pathname)
       .filter(p => !isPublicPath(p));
     expect(blocked).toEqual([]);
-  });
+  }, 30_000);   // 사이트맵이 발주처 겹침(lib/balju-index)을 계산해서 처음 부를 때 몇 초 걸린다
   // 한글을 날것으로 실으면 네이버 서치어드바이저가 사이트맵 전체를 오류로 돌려보낸다(2026-10-27, /ceo/스티브잡스).
   it('주소는 모두 퍼센트 인코딩된 ASCII 다', async () => {
     const { default: sitemap } = await import('../../app/sitemap');
     const raw = (await sitemap()).map(e => e.url).filter(u => /[^\x21-\x7e]/.test(u));
     expect(raw).toEqual([]);
-  });
+  }, 30_000);
 });
 
 describe('나중에 붙일 자리', () => {

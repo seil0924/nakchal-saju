@@ -12,6 +12,7 @@ const S = {
   sajeong: { href: '/reading?cat=sajeong', title: '오늘의 투찰 택일 무료로 보기', sub: '오늘 넣을 날인지, 앞으로 30일 중 길일은 언제인지' },
   balju: { href: '/balju', title: '발주처 궁합', sub: `공공기관 ${CLIENTS.length}곳의 설립일과 대표님 사주를 맞춰 봅니다` },
   gunghap: { href: '/reading?cat=gunghap', title: '동업·협정 궁합 무료로 보기', sub: '공동수급 상대와 손이 맞는지, 지분 다툼이 날 결인지' },
+  gosa: { href: '/gosa', title: '착공 고사 축문 만들기', sub: '회사명·공사명만 넣으면 날짜 간지까지 채워 인쇄' },
   jari: { href: '/jari', title: '자리 사주 무료로 보기', sub: '지금 사무실의 문·책상 방위와 옮길 곳의 방위' },
   calendar: { href: '/reading?cat=calendar', title: '사업운 캘린더', sub: '이달 계약·발표에 좋은 날과 조심할 날을 달력으로' },
   daeun: { href: '/reading?cat=daeun', title: '회사 대운 무료로 보기', sub: '법인 설립일로 보는 회사의 큰 흐름' },
@@ -32,7 +33,7 @@ export function nextSteps(title: string, tags: string[] = []): [NextStep, NextSt
   // 2027 일간별 사업운은 '대표님 명식' 이야기다. 태그의 동업·파트너에 끌려가지 않게 먼저.
   if (/2027|정미년|신년운|세운/.test(title) && !/입찰/.test(title)) return [S.daepyo, S.sajeong];
   if (/동업|공동수급협정|공동도급 실무|지분|파트너|공동대표|각자대표|사업 궁합/.test(title)) return [S.gunghap, S.balju];
-  if (/착공|기공식/.test(title)) return [S.calendar, S.sajeong];
+  if (/착공|기공식|고사/.test(title)) return [S.gosa, S.calendar];
   if (/발주처/.test(title)) return [S.balju, S.sajeong];
   // '회사 사주는 무엇으로 보나 · 법인 설립등기일, 사업자등록일, 개업일' 이 개업일 택일로 가지 않게 먼저 본다
   if (/회사 사주/.test(title)) return [S.daeun, taekil('법인설립일', '법인설립일')];

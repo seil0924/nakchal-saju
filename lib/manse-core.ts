@@ -56,6 +56,23 @@ export function lunarToSolar(y:number,m:number,d:number,isLeap=false){
   return {y:dt.getUTCFullYear(),m:dt.getUTCMonth()+1,d:dt.getUTCDate()};
 }
 
+// ── 양력 → 음력 (1900-01-31 = 음력 1900-01-01 부터 같은 표로 센다) ──
+// 고사 축문 첫 줄(유세차 ○○ ○월 ○○삭 ○○일)에 음력 달·날짜와 그달 초하루가 필요하다(2026-10-27).
+export function solarToLunar(y:number,m:number,d:number):{y:number;m:number;d:number;leap:boolean}{
+  let off=Math.round((Date.UTC(y,m-1,d)-Date.UTC(1900,0,31))/86400000);
+  if(off<0)return {y,m,d,leap:false};
+  let ly=1900;
+  while(ly<2100){const n=lunarYearDays(ly);if(off<n)break;off-=n;ly++;}
+  const leap=leapMonth(ly);
+  for(let mm=1;mm<=12;mm++){
+    const n=lMonthDays(ly,mm);
+    if(off<n)return {y:ly,m:mm,d:off+1,leap:false};
+    off-=n;
+    if(leap===mm){const ln=leapDays(ly);if(off<ln)return {y:ly,m:mm,d:off+1,leap:true};off-=ln;}
+  }
+  return {y:ly,m:12,d:off+1,leap:false};
+}
+
 // ── 출생지 ───────────────────────────────────────────
 // 진태양시를 내려면 태어난 곳의 경도와 시간대가 있어야 한다.
 // 예전에는 −30분(한국 경도 127.5°)으로 박아 두었는데, 그러면 한국 밖에서 태어난 사람의 시주가 틀린다.

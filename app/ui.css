@@ -519,3 +519,39 @@ html body .cta.sub small{color:#58616a!important}
 .colnext-sub b{font-size:15px;font-weight:700}
 .colnext-sub span{font-size:13px;color:#636d77}
 .colnext-sub b::after{content:' ›';color:#2f56c4}
+
+/* 착공 고사 축문(/gosa, 2026-10-27). 화면은 가로, 인쇄는 축문답게 세로쓰기(오른쪽에서 왼쪽) */
+.gosa-wrap{display:flex;flex-direction:column;gap:12px;padding-bottom:24px}
+.gosa-form{display:flex;flex-direction:column;gap:10px}
+.gosa-f{display:flex;flex-direction:column;gap:4px}
+.gosa-f span{font-size:13px;font-weight:700;color:#636d77}
+.gosa-f input{font:inherit;font-size:17px;padding:11px 12px;border:1px solid #dfe3e8;border-radius:10px;background:#fff;color:#1f2329}
+.gosa-days p{font-size:13px;font-weight:700;color:#636d77;margin:4px 0 6px}
+.gosa-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.gosa-chip{display:flex;flex-direction:column;gap:2px;text-align:left;padding:9px 10px;border:1px solid #dfe3e8;border-radius:10px;background:#fff;font:inherit;cursor:pointer}
+.gosa-chip b{font-size:15px;color:#1f2329}
+.gosa-chip span{font-size:13px;color:#636d77}
+.gosa-chip.on{border-color:#3f6be0;background:#f4f7fe}
+.gosa-out h3{font-size:15px;font-weight:700;margin:16px 0 6px;color:#1f2329}
+.gosa-sample{font-size:13px;color:#636d77;background:#f4f5f7;border-radius:8px;padding:8px 10px;margin:0 0 10px}
+.gosa-paper{border:1px solid #dfe3e8;border-radius:12px;padding:16px 14px;background:#fff;font-family:'Noto Serif KR',serif}
+.gosa-paper p{margin:0 0 6px;font-size:17px;line-height:1.7;word-break:keep-all}
+.gosa-read p{margin:0 0 4px;font-size:15px;line-height:1.7}
+.gosa-mean{font-size:15px;line-height:1.8;margin:0}
+.gosa-act{display:flex;gap:8px;margin-top:14px}
+.gosa-btn{flex:1;font:inherit;font-size:15px;font-weight:700;padding:12px;border-radius:12px;border:0;background:#3f6be0;color:#fff;cursor:pointer}
+.gosa-btn.sub{background:#f4f5f7;color:#1f2329}
+.gosa-note{font-size:13px;color:#636d77;margin:10px 0 0;line-height:1.6}
+.gosa-faq h2,.gosa-more h2{font-size:17px;margin:0 0 8px}
+.gosa-faq .q{font-weight:700;font-size:15px;margin:10px 0 4px}
+.gosa-faq .a{font-size:15px;line-height:1.75;margin:0;color:#33383f}
+.gosa-more p{font-size:15px;line-height:1.7;margin:0 0 6px}
+.gosa-more ul{margin:0;padding-left:18px;font-size:15px;line-height:1.9}
+.gosa-cta{text-align:center;font-size:15px;margin:4px 0 0}
+@media print{
+  body *{visibility:hidden}
+  .gosa-paper,.gosa-paper *{visibility:visible}
+  .gosa-paper{position:fixed;inset:0;margin:auto;border:0;border-radius:0;padding:28mm 22mm;writing-mode:vertical-rl;text-orientation:upright;display:flex;flex-direction:column;justify-content:flex-start;gap:9mm}
+  .gosa-paper p{font-size:22pt;line-height:1.5;margin:0;letter-spacing:.12em}
+  @page{size:A4 landscape;margin:0}
+}
