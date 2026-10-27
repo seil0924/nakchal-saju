@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CLIENTS, clientSlug, clientBySlug, josa } from '@/lib/clients';
 import { baljuContent } from '@/lib/balju-content';
+import { ilganTable, ilganSummary, neighbors } from '@/lib/balju-ilgan';
 import { ogCard } from '@/lib/og';
 import SiteTop from '@/app/_components/SiteTop';
 
@@ -33,7 +34,9 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
   if (!c) return notFound();
   const ct = baljuContent(c);
   const readingUrl = `/reading?cat=balju&ck=client&cn=${encodeURIComponent(c.name)}&cd=${c.date}`;
-  const others = CLIENTS.filter((x) => x.name !== c.name).slice(0, 12);
+  // 모든 페이지가 목록 맨 앞 12곳에 링크하던 것을, 같은 분야·같은 기운의 이웃으로(lib/balju-ilgan)
+  const others = neighbors(c, 12);
+  const rows = ilganTable(c);
 
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: `${c.name} 입찰, 대표님과 맞는 발주처일까`, about: c.name, description: ct.intro, publisher: { '@type': 'Organization', name: '낙찰사주', url: BASE }, mainEntityOfPage: `${BASE}/balju/${clientSlug(c.name)}` },
@@ -84,6 +87,25 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           <p style={{ fontSize: 15, lineHeight: 1.8, color: '#4a4636', margin: 0, fontWeight: 500 }}>{ct.founding}</p>
         </div>
 
+        {/* 대표 일간 10개 각각에게 이 발주처가 몇 번째인지. 페이지마다 다른 계산값이라 템플릿 글의 겹침을 줄인다(2026-10-27). */}
+        <div style={card}>
+          <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>대표님 일간별로 보면</div>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: '#33383f', margin: '0 0 10px', fontWeight: 500 }}>{ilganSummary(c)}</p>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead><tr style={{ color: '#636d77', textAlign: 'left' }}><th style={th}>대표 일간</th><th style={th}>이 발주처는</th><th style={{ ...th, textAlign: 'right' }}>{CLIENTS.length}곳 중</th></tr></thead>
+            <tbody>
+              {rows.map(r => (
+                <tr key={r.ilgan} style={{ borderTop: '1px solid var(--line)' }}>
+                  <td style={td}><b>{r.ilgan}</b> {r.hanja}</td>
+                  <td style={td}>{r.desc}</td>
+                  <td style={{ ...td, textAlign: 'right', fontWeight: 700 }}>{r.rank}위</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.6, margin: '8px 0 0' }}>일지를 모르는 상태로 일지 12개를 고르게 평균한 순위입니다. 대표님 일지에 따라 점수가 10점 안팎 오르내립니다.</p>
+        </div>
+
         <Link href={readingUrl} style={cta}>
           {c.name}{josa(c.name, '과', '와')} 내 궁합 보기 →
           <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>대표님 성함·생년월일만 · 30초 무료로 시작</span>
@@ -103,7 +125,7 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
           ))}
         </div>
 
-        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '18px 0 10px' }}>다른 발주처와의 궁합도 보기</div>
+        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '18px 0 10px' }}>같은 분야·같은 기운의 발주처</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
           {others.map((o) => (
             <Link key={o.name} href={`/balju/${clientSlug(o.name)}`} style={chip}>{o.name}</Link>
@@ -119,6 +141,8 @@ export default function BaljuLanding({ params }: { params: { slug: string } }) {
   );
 }
 
+const th: React.CSSProperties = { padding: '6px 4px', fontWeight: 700 };
+const td: React.CSSProperties = { padding: '7px 4px', color: '#33383f' };
 const tag: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: '#58616a', background: '#f4f5f7', padding: '5px 11px', borderRadius: 999 };
 const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };

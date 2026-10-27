@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getColumn, getAllColumnSlugs, getAllColumns } from '@/lib/column';
 import { conceptsFor } from '@/lib/concept-links';
+import { nextSteps } from '@/lib/column-next';
 import SiteTop from '@/app/_components/SiteTop';
 
 const BASE = 'https://nakchalsaju.com';
@@ -53,6 +54,7 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
   if (!p) notFound();
   const rel = relatedColumns(p.slug, p.tags);
   const concepts = conceptsFor(p.title, p.tags);
+  const [next1, next2] = nextSteps(p.title, p.tags);
 
   // Article 구조화 데이터 — 구글이 발행일·제목·저자를 정확히 인식
   const ld = {
@@ -110,6 +112,13 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
         )}
       </article>
 
+      {/* 다 읽은 자리에서 바로 이어지는 무료 입구. 글 주제에 맞춰 고른다(lib/column-next). 예전엔 관련 글 목록 아래, 모든 글에 같은 버튼이었다. */}
+      <section className="colnext" aria-label="이 글 다음에 볼 것">
+        <div className="colrel-hd">이 글 다음에 볼 것</div>
+        <Link className="fullcta" href={next1.href}>{next1.title} <small>{next1.sub}</small></Link>
+        <Link className="colnext-sub" href={next2.href}><b>{next2.title}</b><span>{next2.sub}</span></Link>
+      </section>
+
       {/* 관련 칼럼: 내부 링크 그래프. 크롤러 진입 경로이자 체류 시간 확보 */}
       {rel.length > 0 && (
         <nav className="colrel" aria-label="관련 칼럼">
@@ -145,10 +154,6 @@ export default function ColumnPost({ params }: { params: { slug: string } }) {
           </ul>
         </nav>
       )}
-      {/* 유입 → 전환: 무료 진입 CTA */}
-      <div style={{ padding: '8px 24px 0' }}>
-        <Link className="fullcta" href="/reading">오늘, 넣을 날인가 보기 <small>성함·생년월일만 · 30초 · 무료로 시작</small></Link>
-      </div>
 
       <div className="foot">
         <div className="crule" />
