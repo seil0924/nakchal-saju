@@ -8,7 +8,7 @@ import { kstDayStartIso, kstMonthStartIso, kstStamp, payerOf, payItemName, paySt
 import { splitDeletable, isReportId } from './report-cleanup';
 import { fetchAll } from './sb-page';
 import { dashPhone } from './buyer';
-import { isTestName, isTestProfile } from './admin-test';
+import { isTestName, isTestProfile, testIdsOf } from './admin-test';
 
 const won = (n: number) => n.toLocaleString('ko-KR');
 
@@ -39,12 +39,12 @@ type SB = ReturnType<typeof supabaseAdmin>;
 
 // 리포트 id → 주인·카테고리 (결제 줄에 회원·상품이 없을 때 거꾸로 찾는 데 쓴다)
 async function reportMeta(sb: SB, ids: string[]) {
-  const owner: Record<string, string | null> = {}, cat: Record<string, string | undefined> = {};
+  const owner: Record<string, string | null> = {}, cat: Record<string, string | undefined> = {}, nameOf: Record<string, string | undefined> = {};
   for (let i = 0; i < ids.length; i += 200) {
     const { data } = await sb.from('reports').select('id,user_id,input').in('id', ids.slice(i, i + 200));
-    for (const r of (data ?? []) as any[]) { owner[r.id] = r.user_id ?? null; cat[r.id] = r.input?.cat; }
+    for (const r of (data ?? []) as any[]) { owner[r.id] = r.user_id ?? null; cat[r.id] = r.input?.cat; nameOf[r.id] = r.input?.name || undefined; }
   }
-  return { owner, cat };
+  return { owner, cat, nameOf };
 }
 
 const PAY_COLS = 'payment_id,user_id,report_id,pass_key,amount';
@@ -73,18 +73,18 @@ export async function getStats() {
       sb.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'cancelled'),
     ]);
     const members = mAll.count ?? 0;
-    const { owner } = await reportMeta(sb, [...new Set(paidAll.map((p: any) => p.report_id).filter(Boolean))] as string[]);
+    const { owner, nameOf } = await reportMeta(sb, [...new Set(paidAll.map((p: any) => p.report_id).filter(Boolean))] as string[]);
     // 운영자가 직접 해 본 결제는 매출·건수에서 뺀다(lib/admin-test). 가려내는 조회가 실패하면 빼지 않고 그대로 센다.
     const testUsers = new Set<string>(), testPays = new Set<string>();
     try {
       const profs = await fetchAll<any>((a, b) => sb.from('profiles').select('id,name,email,role').range(a, b));
-      profs.forEach(p => { if (isTestProfile(p)) testUsers.add(p.id); });
+      testIdsOf(profs).forEach(id => testUsers.add(id));
     } catch { /* 회원 표를 못 읽으면 가려내지 않는다 */ }
     try {
       const named = await fetchAll<any>((a, b) => sb.from('payments').select('payment_id,buyer_name').eq('status', 'paid').not('buyer_name', 'is', null).range(a, b));
       named.forEach(p => { if (isTestName(p.buyer_name)) testPays.add(p.payment_id); });
     } catch { /* buyer_name 칸이 없는 환경 */ }
-    const isTestPay = (p: any) => testPays.has(p.payment_id) || testUsers.has(payerOf(p, owner) ?? '');
+    const isTestPay = (p: any) => testPays.has(p.payment_id) || testUsers.has(payerOf(p, owner) ?? '') || isTestName(p.report_id ? nameOf[p.report_id] : null);
     const testPaid = paidAll.filter(isTestPay).length;
     const paidList = paidAll.filter((p: any) => !isTestPay(p));
     const payers = paidList.map((p: any) => payerOf(p, owner));
@@ -137,12 +137,13 @@ export async function listMembers() {
       if (who) paidBy[who] = (paidBy[who] || 0) + (p.amount || 0);
     }
     reps.forEach(r => { repBy[r.user_id] = (repBy[r.user_id] || 0) + 1; });
+    const tests = testIdsOf((profs ?? []) as any[]);
     return (profs ?? []).map((p: any) => ({
       name: p.name ?? '(이름없음)', email: p.email ?? '', provider: p.provider ?? 'email',
       joined: kstStamp(p.created_at, true),
       sub: (paidBy[p.id] || 0) > 0 ? '유료' : '무료',
       paidTotal: paidBy[p.id] || 0, reports: repBy[p.id] || 0,
-      test: isTestProfile(p),
+      test: tests.has(p.id),
     }));
   } catch { return []; }
 }
@@ -170,7 +171,7 @@ export async function listPayments(q?: string) {
     }
     const rows = (pays ?? []) as any[];
     const rids = [...new Set(rows.map(p => p.report_id).filter(Boolean))] as string[];
-    const { owner, cat } = await reportMeta(sb, rids);
+    const { owner, cat, nameOf } = await reportMeta(sb, rids);
     const payer = rows.map(p => payerOf(p, owner));
     const uids = [...new Set(payer.filter(Boolean))] as string[];
     const profs = uids.length ? (await sb.from('profiles').select('id,name,email,role').in('id', uids)).data ?? [] : [];
@@ -182,13 +183,14 @@ export async function listPayments(q?: string) {
         id: (p.payment_id ?? '').slice(-6),
         paymentId: p.payment_id ?? '',
         // 결제 때 받은 성함이 먼저다(로그인 없이 산 사람). 없으면 회원 이름.
-        name: p.buyer_name || (who ? (pmap[who]?.name ?? '회원') : '비회원'),
+        // 그다음은 리포트에 입력한 성함(로그인 없이 결제창만 연 주문도 이건 남는다). 2026-10-28
+        name: p.buyer_name || (who ? (pmap[who]?.name ?? '회원') : (p.report_id && nameOf[p.report_id]) ? nameOf[p.report_id] + ' (입력 성함)' : '비회원'),
         email: who ? (pmap[who]?.email ?? '') : '',
         phone: p.buyer_phone ? dashPhone(p.buyer_phone) : '',
         tno: p.tno ?? '',
         refundable: p.status === 'paid',
         // 운영자가 직접 해 본 결제. 목록에서 기본으로 숨기고 합계에서 뺀다.
-        test: isTestName(p.buyer_name) || (who ? isTestProfile(pmap[who] ?? {}) : false),
+        test: isTestName(p.buyer_name) || (who ? isTestProfile(pmap[who] ?? {}) : false) || isTestName(p.report_id ? nameOf[p.report_id] : null),
         item: payItemName(p, p.report_id ? cat[p.report_id] : null),
         amount: p.amount ?? 0,
         status: payStatusLabel(p.status),

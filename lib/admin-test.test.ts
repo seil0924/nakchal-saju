@@ -23,3 +23,16 @@ describe('운영·점검 계정 가려내기', () => {
     expect(isTestProfile({ role: 'user', name: '김대영', email: 'kim@x.co.kr' })).toBe(false);
   });
 });
+
+import { testIdsOf } from './admin-test';
+describe('회원 목록에서 점검 계정 고르기', () => {
+  it('관리자와 메일 앞머리가 같은 계정, 빈 계정', () => {
+    const ids = testIdsOf([
+      { id: 'a', role: 'admin', name: '운영', email: 'oh_kim24@naver.com' },
+      { id: 'b', role: 'user', name: null, email: 'ohkim24@gmail.com' },
+      { id: 'c', role: 'user', name: null, email: null },
+      { id: 'd', role: 'user', name: '김대영', email: 'kim@x.co.kr' },
+    ]);
+    expect([...ids].sort()).toEqual(['a', 'b', 'c']);
+  });
+});

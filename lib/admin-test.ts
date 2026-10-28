@@ -26,3 +26,20 @@ export function isTestEmail(email?: string | null): boolean {
 export function isTestProfile(p: { role?: string | null; name?: string | null; email?: string | null }): boolean {
   return p.role === 'admin' || isTestName(p.name) || isTestEmail(p.email);
 }
+
+// 메일 앞머리에서 . _ - 를 뺀 모양. oh_kim 과 ohkim 을 같은 사람으로 본다.
+const bare = (email?: string | null) => (email ?? '').toLowerCase().split('@')[0].replace(/[._-]/g, '');
+
+// 회원 목록 전체를 보고 운영·점검 계정 id 를 고른다. 한 명씩 볼 때보다 둘을 더 잡는다.
+//  1) 관리자 계정과 메일 앞머리가 같은 계정: 운영자가 다른 메일로 가입해 본 것(2026-10-28 실제로 있었다)
+//  2) 이름도 메일도 없는 빈 계정: 손님이면 연락할 길도 없고, 가입 점검 때 생긴 것이었다
+export function testIdsOf(profiles: { id: string; role?: string | null; name?: string | null; email?: string | null }[]): Set<string> {
+  const out = new Set<string>();
+  const adminBare = new Set(profiles.filter(p => p.role === 'admin').map(p => bare(p.email)).filter(Boolean));
+  for (const p of profiles) {
+    if (isTestProfile(p)) out.add(p.id);
+    else if (p.email && adminBare.has(bare(p.email))) out.add(p.id);
+    else if (!(p.name ?? '').trim() && !(p.email ?? '').trim()) out.add(p.id);
+  }
+  return out;
+}
