@@ -10,7 +10,9 @@ import { kstYmd } from '@/lib/kst';
 import { ILGAN, ilganBySlug, TONE_LABEL } from '@/lib/ilgan';
 import { weekSignals, bestWeekday } from '@/lib/today-ilgan';
 
-export const revalidate = 3600;
+// 내용은 KST 자정에 한 번 바뀐다. 한 시간 주기면 자정부터 1시까지 어제 날짜가 남아 있어서 5분으로 줄였다(2026-10-28).
+// 다시 굽는 일은 방문이 있을 때만 일어나고 계산뿐이라 비용이 거의 없다.
+export const revalidate = 300;
 const BASE = 'https://nakchalsaju.com';
 
 export function generateStaticParams() { return ILGAN.map(x => ({ ilgan: x.slug })); }

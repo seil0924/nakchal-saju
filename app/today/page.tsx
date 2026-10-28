@@ -9,7 +9,9 @@ import { kstYmd } from '@/lib/kst';
 import { ILGAN, TONE_LABEL } from '@/lib/ilgan';
 import { daySignal } from '@/lib/today-ilgan';
 
-export const revalidate = 3600;
+// 내용은 KST 자정에 한 번 바뀐다. 한 시간 주기면 자정부터 1시까지 어제 날짜가 남아 있어서 5분으로 줄였다(2026-10-28).
+// 다시 굽는 일은 방문이 있을 때만 일어나고 계산뿐이라 비용이 거의 없다.
+export const revalidate = 300;
 const BASE = 'https://nakchalsaju.com';
 const T = '오늘의 투찰 운세';
 const D = '오늘 일진을 일간 열 개에 맞대어, 대표님 일간에게 오늘이 넣기 편한 날인지 미루는 편이 나은 날인지 매일 계산해 둡니다. 내 일간을 모르면 생년월일로 바로 찾습니다.';

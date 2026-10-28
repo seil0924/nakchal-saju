@@ -9,8 +9,10 @@ import SiteTop from '@/app/_components/SiteTop';
 import { TAEKIL_YEARS } from '@/lib/taekil-year';
 import Mascot from '@/app/_components/Mascot';
 
-// "앞으로 90일" 목록이라 배포 때 한 번 구우면 며칠 뒤엔 지난 날짜를 보여준다. 한 시간마다 다시 굽는다.
-export const revalidate = 3600;
+// "앞으로 90일" 목록이라 배포 때 한 번 구우면 며칠 뒤엔 지난 날짜를 보여준다. 그래서 주기적으로 다시 굽는다.
+// 내용은 KST 자정에 한 번 바뀐다. 한 시간 주기면 자정부터 1시까지 어제 날짜가 남아 있어서 5분으로 줄였다(2026-10-28).
+// 다시 굽는 일은 방문이 있을 때만 일어나고 계산뿐이라 비용이 거의 없다.
+export const revalidate = 300;
 
 const CARD = { seal: '擇', k: '擇日 · 언제 시작할 것인가', t: '개업·설립·계약·이전·입찰\n좋은 날 고르기', s: '건제십이신으로 앞으로 90일 · 무료' };
 

@@ -22,8 +22,14 @@ strip(path.join(tmp, 'lib'));
 // lib 안의 '@/lib/…' 가져오기를 임시 폴더에서도 풀리게 한다(없으면 하네스가 모듈을 못 찾고 멈춘다).
 fs.writeFileSync(path.join(tmp, 'tsconfig.json'), JSON.stringify({ compilerOptions: { baseUrl: '.', paths: { '@/*': ['./*'] } } }));
 
+// 시계를 고정한다. 리포트에는 '오늘의 신호'·'오늘부터 30일'이 들어 있어서, 시계를 그대로 두면
+// 날짜가 바뀔 때마다 144건이 전부 다르게 나와 회귀를 못 잡았다(2026-10-28 발견).
 const harness = `
 import { computeReport } from './lib/report';
+const FIXED = Date.parse('2026-10-15T03:00:00Z');   // KST 2026-10-15 정오
+const RealDate = Date;
+class FixedDate extends RealDate { constructor(...a: any[]) { if (a.length) super(...(a as [any])); else super(FIXED); } static now() { return FIXED; } }
+(globalThis as any).Date = FixedDate;
 const births=[['std','1980-05-15','09:20','solar',false],['notime','1975-11-03',null,'solar',false],['ipchun','1990-02-04','04:10','solar',false],['yaja2330','1985-07-20','23:30','solar',false],['lunarleap','1984-10-15','12:00','lunar',true],['dawnF','1972-12-31','05:45','solar',false]];
 const rel={legal:'2010-03-02',legalName:'대한건설',client:'2001-01-05',clientName:'한국도로공사',partner:'1978-06-06',partnerName:'김대영',ally:'1999-09-09',allyName:'대영토건'};
 const cats=[undefined,'daepyo','sajeong','balju','gunghap','daeun','calendar','calendar_year'];
