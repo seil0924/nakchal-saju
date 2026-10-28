@@ -55,6 +55,11 @@ export default function TermPage({ params }: { params: { slug: string } }) {
             {rel.map(r => (<Link key={r.slug} href={`/glossary/${r.slug}`} style={chip}>{r.term}</Link>))}
           </div>
         </>)}
+        {/* 입찰 용어로 들어오는 사람이 실제 입찰하는 대표다(기초금액·투찰·추정가격·관급공사 뜻, 30일 유입 39회). 입력 없이 바로 보는 페이지로 먼저 넘긴다(2026-10-28). */}
+        <Link href={t.cat === '입찰·조달' ? '/today' : '/saeobunse/2027'} style={next}>
+          {t.cat === '입찰·조달' ? '투찰을 앞두셨다면, 오늘이 내 일간에게 넣기 편한 날인지 보기' : '2027년 정미년, 내 일간의 움직일 달과 조심할 달 보기'}
+          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#58616a', marginTop: 3 }}>입력 없이 바로 · 무료</span>
+        </Link>
         <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>성함·생년월일만 · 30초 무료로 시작</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '20px 0 10px' }}>다른 용어</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 22 }}>
@@ -66,4 +71,5 @@ export default function TermPage({ params }: { params: { slug: string } }) {
   );
 }
 const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
+const next: React.CSSProperties = { display: 'block', background: '#eef2fd', color: '#2f56c4', borderRadius: 12, padding: '13px 15px', fontSize: 15, fontWeight: 800, textDecoration: 'none', marginBottom: 10 };
 const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

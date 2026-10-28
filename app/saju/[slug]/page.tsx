@@ -62,6 +62,17 @@ export default function ConceptPage({ params }: { params: { slug: string } }) {
             <p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{s.p}</p>
           </div>
         ))}
+        {/* 일간 페이지는 검색 노출이 많다(을목 30일 2,829회). 새로 만든 일간별 페이지로 바로 넘긴다(2026-10-28). */}
+        {c.group === '일간' && (() => {
+          const il = c.slug.replace(/-일간$/, '');
+          return (
+            <div style={{ ...card, display: 'grid', gap: 8 }}>
+              <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)' }}>{il} 일간 대표님께</div>
+              <Link href={`/saeobunse/2027/${encodeURIComponent(il)}`} style={{ fontSize: 15, fontWeight: 700, color: '#2f56c4' }}>2027년 정미년 {il} 일간 사업운, 움직일 달과 조심할 달</Link>
+              <Link href={`/today/${encodeURIComponent(il)}`} style={{ fontSize: 15, fontWeight: 700, color: '#2f56c4' }}>오늘 {il} 일간에게 넣기 편한 날인지</Link>
+            </div>
+          );
+        })()}
         <Link href="/reading?cat=daepyo" style={cta}>내 일간·오행으로 대표 사주 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>성함·생년월일만 · 30초 무료 · 6대 축 스코어카드</span></Link>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>자주 묻는 질문</div>
         {faqs.map((x, i) => (<div key={i} style={card}><div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 6 }}>Q. {x.q}</div><p style={{ fontSize: 15, lineHeight: 1.78, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p></div>))}
