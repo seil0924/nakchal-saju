@@ -1,34 +1,55 @@
 # 낙찰사주 (nakchal-saju)
 
-> 공공입찰·조달·경매·수주 사업을 하는 기업 대표와 법인을 위한 사주명리(만세력) 기반 비즈니스 의사결정 참고 서비스. 재미·참고용이며 낙찰 결과를 예측·보장하지 않고, 실제 투찰금액 산정 근거가 아님.
+> 공공입찰·조달·수주 사업을 하는 기업 대표와 법인을 위한 사주명리(만세력) 기반 의사결정 참고 서비스. 대표가 고를 수 있는 날짜와 시간, 사람과 자리를 명리로 계산한다. 낙찰 결과와 사정률을 예측하거나 보장하지 않으며, 실제 투찰금액 산정 근거가 아니다. 사정률은 복수예비가격 추첨으로 정해져 누구도 미리 맞힐 수 없다.
 
 ## 무엇을 제공하나
-- 오늘의 낙찰 사정률(무료 투찰 택일 신호): 대표 명식 × 오늘 일진 상성으로 오늘이 투찰에 유리한지 참고 지표
-- 대표 사주: 성정·승부 기질·재물·사람·6대 축 경영 스코어카드·유형별 실전 수칙
-- 발주처 궁합: 대표 사주 × 발주처 설립일 상성 + 기관별 조달 특성(적격심사·종합심사·기술형입찰)
-- 협정·동업 궁합: 지분·역할·결정권 배분 지침, 공동도급 관재수
-- 회사 대운: 법인 설립일 기준 10년 대운·연도별 세운
-- 사업운 캘린더: 계약·채용·발표에 좋은 날/조심할 날 (.ics 내보내기)
+- 오늘의 투찰 택일: 대표 일간과 오늘 일진의 상성으로 오늘이 넣기 편한 날인지, 앞으로 30일 길일과 시진
+- 후보 날짜 비교: 대표가 직접 고른 날짜 2~3개를 건제십이신, 일간 상성, 일지 충 세 조건으로 순위를 매김
+- 대표 사주: 성정, 승부 기질, 재물, 사람
+- 회사 사주와 회사 대운: 법인 설립일 기준 명식, 10년 대운과 연도별 세운
+- 발주처 사주: 대표 사주와 공공 발주처 99곳 설립일의 상성
+- 협정·궁합 사주: 공동도급 상대, 동업자와의 궁합
+- 사업운 캘린더: 앞으로 한 달 움직일 날과 조심할 날(.ics 내보내기)
+- 사무실 자리: 이전 방위와 거리
+- 택일: 개업일, 법인설립일, 계약일, 사무실이전, 입찰일 다섯 가지의 앞으로 90일과 2027년 열두 달 표(공휴일·대체공휴일 표시)
+- 착공 고사 축문 만들기: 날짜 줄을 한국 시간 합삭 기준 음력으로 채움
+- 나는 대표가 될 사주일까: 생년월일로 대표 신호 다섯 개와 다섯 갈래 대표 유형(무료)
 
-## 신뢰 근거(방법론)
-- 절기(節氣)를 천문(태양황경) 계산으로 판정, 진태양시·서머타임·야자시 보정, 음·양력 자동 변환으로 명식 산출
+## 계산 방법
+- 절기를 태양황경으로 직접 계산하고 진태양시, 서머타임, 야자시를 보정한다. 고정 만세력표를 쓰지 않는다.
+- 음력은 한국 시간(UTC+9) 합삭으로 계산한다. 중국 시간 기준 음력과 하루씩 다른 달(약 3%)을 바로잡는다.
+- 공휴일은 2027년부터 새로 생기는 노동절과 제헌절, 대체공휴일 규칙까지 계산한다.
 
 ## 주요 페이지
 - 홈: https://nakchalsaju.com/
-- 오늘의 사정률(무료): https://nakchalsaju.com/reading
-- 발주처 궁합(공공 발주처 100곳): https://nakchalsaju.com/balju
-- 자주 묻는 질문(FAQ): https://nakchalsaju.com/faq
-- 나와 닮은 세계적 CEO(무료): https://nakchalsaju.com/ceo
-
-## 콘텐츠 허브
-- 입찰 사주 가이드(11): https://nakchalsaju.com/guide/입찰-사주 (낙찰 운세·법인 설립일 사주·투찰 길일·관재수·동업 궁합·대표 사주·조달청 입찰·개업일 택일·발주처 궁합·신년 사업운)
-- 대표·사장 고민별 상담(17): https://nakchalsaju.com/why (하한가·연패·자금난·직원 이탈·매출 정체·번아웃·승계·결단·확장·배신·재물 누수·건강·운때·창업시기·관재수·동업)
-- 명리 개념 사전(16): https://nakchalsaju.com/사주/갑목-일간 (일간 10·오행 5, 경영·입찰 관점 해설)
-- 지역별 입찰(17개 시·도): https://nakchalsaju.com/region/서울
-- 업종별 입찰(8): https://nakchalsaju.com/industry/전기공사 (통신·시설관리·건설·소방·기계설비·조경·청소경비)
-- 입찰·명리 용어사전(47): https://nakchalsaju.com/glossary (사정률·적격심사·일간·대운·관재수 등 정의)
-- 계산 방법론(E-E-A-T): https://nakchalsaju.com/method (절기 천문계산·진태양시·야자시 보정)
+- 무료로 사주 보기: https://nakchalsaju.com/reading
+- 택일(다섯 가지): https://nakchalsaju.com/taekil
+- 2027년 계약일 열두 달 표: https://nakchalsaju.com/taekil/%EA%B3%84%EC%95%BD%EC%9D%BC/2027
+- 나는 대표가 될 사주일까: https://nakchalsaju.com/sajang
+- 회사 사주: https://nakchalsaju.com/hoesa
+- 발주처 사주: https://nakchalsaju.com/balju
+- 사무실 자리: https://nakchalsaju.com/jari
+- 착공 고사 축문: https://nakchalsaju.com/gosa
+- 나와 닮은 세계적 CEO 111인: https://nakchalsaju.com/ceo
+- 이용안내·요금: https://nakchalsaju.com/pricing
+- 자주 묻는 질문: https://nakchalsaju.com/faq
+- 계산 방법: https://nakchalsaju.com/method
 - 샘플 리포트: https://nakchalsaju.com/samples
 
+## 콘텐츠
+- 사주 칼럼 66편: https://nakchalsaju.com/column
+- 입찰 대표 고민 17가지: https://nakchalsaju.com/why
+- 입찰 사주 가이드 11편: https://nakchalsaju.com/guide/%EC%9E%85%EC%B0%B0-%EC%82%AC%EC%A3%BC
+- 명리 개념 18개(일간 10, 오행 5, 십성 3): https://nakchalsaju.com/saju/%EA%B0%91%EB%AA%A9-%EC%9D%BC%EA%B0%84
+- 지역별 입찰 17개 시·도: https://nakchalsaju.com/region/%EC%84%9C%EC%9A%B8
+- 업종별 입찰 8개: https://nakchalsaju.com/industry/%EC%A0%84%EA%B8%B0%EA%B3%B5%EC%82%AC
+- 입찰·명리 용어사전 46개: https://nakchalsaju.com/glossary
+- 전체 본문(AI 인용용): https://nakchalsaju.com/llms-full.txt
+
+## 영어·중국어
+- BaZi calculator: https://nakchalsaju.com/en/bazi
+- Auspicious date picker: https://nakchalsaju.com/en/date-picker
+- 八字排盤: https://nakchalsaju.com/zh/bazi
+
 ## 고지
-사주명리 이론에 기반한 참고·오락 정보입니다. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다.
+사주명리 이론에 기반한 참고 정보입니다. 미래를 예측하거나 낙찰 같은 특정 결과를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다. 최종 판단은 대표님이 합니다.

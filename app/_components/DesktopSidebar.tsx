@@ -3,29 +3,23 @@ import Link from 'next/link';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { usePathname } from 'next/navigation';
 import BrandMark from './BrandMark';
+import { IC, FEATURED, GROUPS, MINE } from '@/lib/nav';
 
 // 데스크톱(≥900px) 전용 좌측 내비. 모바일에서는 CSS로 숨김.
-const NAV = [
-  { href: '/', label: '홈', d: 'M3 10.5 12 3l9 7.5V21H3z' },
-  // 회사 사주 — 무료 입구이자 사장만 검색하는 자리라 전역에 건다.
-  { href: '/hoesa', label: '회사 사주', d: 'M4 21V6l7-3 7 3v15M4 21h14M9 21v-4h4v4M8 10h1M12 10h1M8 14h1M12 14h1' },
-  { href: '/balju', label: '발주처', d: 'M3 21V7l9-4 9 4v14M3 21h18M9 21v-5h6v5' },
-  { href: '/column', label: '칼럼', d: 'M5 4h9l5 5v11H5zM14 4v5h5M8 13h8M8 16h8' },
-  // 택일은 검색으로 들어오는 입구라 사이트 전역에서 한 번씩 걸어 준다.
-  { href: '/taekil', label: '택일', d: 'M4 6h16v14H4zM4 10h16M9 3v4M15 3v4' },
-  { href: '/vault', label: '보관함', d: 'M4 7h16v13H4zM4 7l2-3h12l2 3' },
-  // 다른 기기에서 구매한 리포트 다시 열기(로그인 대신 성함·휴대폰, 2026-10-23)
-  { href: '/find', label: '구매한 리포트 찾기', d: 'M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM20 20l-4-4' },
-  // 비회원도 바로 찾게 메뉴에 둔다(2026-10-23). 결제 뒤 화면이 이상할 때 손님이 찾는 곳이다.
-  { href: '/contact', label: '문의하기', d: 'M3 6h18v12H3zM3 6l9 7 9-7' },
-  { href: '/more', label: '더보기', d: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1l-.3-2.5h-4l-.3 2.5a7 7 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7 7 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5a7 7 0 0 0 .1-1z' },
+// 홈 목록과 같은 이름·아이콘·묶음으로 보인다(lib/nav, 2026-10-28). 예전엔 '발주처'와 '발주처 사주'처럼 같은 것을 달리 불렀다.
+// 회사 사주·택일·발주처는 검색으로 들어오는 입구라 계속 전역에 걸린다. 보관함·리포트 찾기·문의는 결제 뒤 손님이 찾는 자리라 맨 아래 묶음에 둔다.
+const SECTIONS: { title: string | null; items: { href: string; label: string; d: string }[] }[] = [
+  { title: null, items: [{ href: '/', label: '홈', d: IC.home }] },
+  { title: '사주 보기', items: [...FEATURED, ...GROUPS[0].items] },
+  ...GROUPS.slice(1).map(g => ({ title: g.title, items: g.items })),
+  { title: '내 리포트', items: MINE },
 ];
 
 // /en/, /zh/ 는 한국어 껍데기를 물려받으면 안 된다. 사정률·투찰은 조달청 복수예비가격이 있어야 성립하는
 // 한국 전용 상품이라 바깥에서는 팔지 않는다. 그래서 CTA도 계산기로 보낸다.
 type Loc = { brand: string; sub: string; cta: string; ctaHref: string; disc: string; biz: string;
   nav: { href: string; label: string; d: string }[] };
-const IC = {
+const LIC = {
   calc: 'M6 3h12v18H6zM9 7h6M9 11h2M13 11h2M9 15h2M13 15h2',
   cal: 'M4 6h16v14H4zM4 10h16M9 3v4M15 3v4',
   diff: 'M4 6h7v12H4zM13 6h7v12h-7M11 12h2',
@@ -35,9 +29,9 @@ const LOC: Record<'en' | 'zh', Loc> = {
     brand: 'BaZi', sub: 'Four Pillars · true solar time',
     cta: 'Free BaZi calculator', ctaHref: '/en/bazi',
     nav: [
-      { href: '/en/bazi', label: 'Calculator', d: IC.calc },
-      { href: '/en/date-picker', label: 'Date picker', d: IC.cal },
-      { href: '/en/why-charts-differ', label: 'Why charts differ', d: IC.diff },
+      { href: '/en/bazi', label: 'Calculator', d: LIC.calc },
+      { href: '/en/date-picker', label: 'Date picker', d: LIC.cal },
+      { href: '/en/why-charts-differ', label: 'Why charts differ', d: LIC.diff },
     ],
     disc: 'For reference and interest. Not professional advice.',
     biz: 'Nine Goods · Daejeon, Korea',
@@ -46,9 +40,9 @@ const LOC: Record<'en' | 'zh', Loc> = {
     brand: '八字', sub: '四柱 · 真太陽時',
     cta: '免費八字排盤', ctaHref: '/zh/bazi',
     nav: [
-      { href: '/zh/bazi', label: '八字排盤', d: IC.calc },
-      { href: '/en/date-picker', label: '擇日 (EN)', d: IC.cal },
-      { href: '/zh/why-charts-differ', label: '各家排盤為何不同', d: IC.diff },
+      { href: '/zh/bazi', label: '八字排盤', d: LIC.calc },
+      { href: '/en/date-picker', label: '擇日 (EN)', d: LIC.cal },
+      { href: '/zh/why-charts-differ', label: '各家排盤為何不同', d: LIC.diff },
     ],
     disc: '僅供參考，非專業建議。',
     biz: 'Nine Goods · 韓國大田',
@@ -82,13 +76,18 @@ export default function DesktopSidebar() {
   );
   return (
     <aside className="dsidebar">
-      <Link href="/" className="dbrand"><span className="ds"><BrandMark size={44} /></span><span className="dbt">낙찰사주<small>회사 사주 전문</small></span></Link>
+      <Link href="/" className="dbrand"><span className="ds"><BrandMark size={44} /></span><span className="dbt">낙찰사주<small>공공입찰 대표를 위한 사주</small></span></Link>
       <Link href="/reading" className="dcta">오늘, 넣을 날인가 →</Link>
-      <nav className="dnav">
-        {NAV.map(n => (
-          <Link key={n.href} href={n.href} className={'dnavi' + (active(n.href) ? ' on' : '')}>
-            <svg viewBox="0 0 24 24"><path d={n.d} /></svg>{n.label}
-          </Link>
+      <nav className="dnav dnav-g">
+        {SECTIONS.map((s, i) => (
+          <div key={i} className="dgrp">
+            {s.title && <div className="dgt">{s.title}</div>}
+            {s.items.map(n => (
+              <Link key={n.href} href={n.href} className={'dnavi' + (active(n.href) ? ' on' : '')} aria-current={active(n.href) ? 'page' : undefined}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={n.d} /></svg>{n.label}
+              </Link>
+            ))}
+          </div>
         ))}
       </nav>
       <div className="dfoot">

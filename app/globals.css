@@ -1649,3 +1649,11 @@ body:has(.btab) .shell{padding-bottom:calc(59px + env(safe-area-inset-bottom))}
 /* 결제 버튼 근처의 선 긋기(2026-10-28). 작은 글씨 면책이 본문 주장을 막지 못한다는 해외 사례에 따라 본문에 가까운 크기로 둔다. */
 .ctapromise{text-align:center;font-size:14px;line-height:1.6;color:#3a3f47;margin-top:6px}
 .nocharge{font-size:13px;color:#58616a;text-align:center;margin:10px 0 2px}
+/* 왼쪽 메뉴 묶음(2026-10-28). 홈 목록과 같은 묶음 이름을 단다. 항목이 17개라 낮은 화면에서는 사이드바 전체가 스크롤된다. */
+@media (min-width:900px){
+  .dsidebar{overflow-y:auto;scrollbar-width:thin}
+  .dnav-g{flex:none;gap:12px}
+  .dgrp{display:flex;flex-direction:column;gap:1px}
+  .dgt{padding:2px 13px 4px;font-size:13px;font-weight:700;letter-spacing:.02em;opacity:.7}
+  .dnav-g .dnavi{padding:8px 13px}
+}

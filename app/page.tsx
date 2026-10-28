@@ -14,6 +14,7 @@ import { GLOSSARY } from '@/lib/glossary';
 import { getAllColumns } from '@/lib/column';
 import { GAN, ZHI, EL_HEX, GAN_ELc, ZHI_ELc } from '@/lib/preview';
 import BrandMark from '@/app/_components/BrandMark';
+import { FEATURED, GROUPS } from '@/lib/nav';
 
 // 홈만 스스로를 정본으로 선언한다. 레이아웃에 두면 모든 페이지가 이걸 물려받아 홈을 가리킨다.
 export const metadata: Metadata = {
@@ -33,37 +34,10 @@ export const metadata: Metadata = {
 // 후기가 붙으면 홈도 갱신돼야 한다. 관리자 등록 때 revalidatePath('/') 로 즉시 반영되고, 10분 주기도 함께 건다.
 export const revalidate = 600;
 
-// 아이콘은 한 스타일(24px 선, 굵기 1.8)로만 그린다.
-const IC = {
-  company: 'M4 20V6l7-2v16M11 9h9v11M7 8h1M7 12h1M7 16h1M14 13h3M14 16h3M3 20h18',
-  person: 'M12 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM5 20c1.2-3.5 3.9-5.3 7-5.3s5.8 1.8 7 5.3',
-  pick: 'M5 6h14v14H5zM8.5 4v4M15.5 4v4M5 10h14M9.5 15l2 2 3.5-3.5',
-  client: 'M3 10l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18',
-  pair: 'M9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM15 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z',
-  trend: 'M4 18l5-5 4 3 7-8M15 8h5v5',
-  cal: 'M5 6h14v14H5zM8.5 4v4M15.5 4v4M5 10h14M8.5 13.5h.01M12 13.5h.01M15.5 13.5h.01M8.5 16.5h.01M12 16.5h.01',
-  compass: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM15.5 8.5l-2 5-5 2 2-5z',
-  ceo: 'M10 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4 19c.9-2.9 3.2-4.4 6-4.4M17 18.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM19 18l2 2',
-};
-
 // 처음 온 대표에게 권하는 두 가지. 아홉 칸이 같은 무게로 늘어서 있으면 무엇부터 누를지 모른다.
 // 홈에는 가격을 적지 않는다(2026-09-15 대표 지시) — 금액이 줄줄이 보이면 아무도 안 들어온다.
 // 모든 상품이 명식·방향·첫 장은 무료로 나오고, 결제는 결과 화면에서 잠긴 장을 열 때만 한다.
-const FEATURED: { href: string; title: string; hook: string; d: string }[] = [
-  { href: '/product/taekil', title: '오늘의 투찰 택일', hook: '오늘 넣을 날인지, 30일 안의 길일은 언제인지', d: IC.pick },
-  { href: '/product/daepyo', title: '대표 사주', hook: '어떤 그릇의 대표인지: 승부 기질·재물·사람', d: IC.person },
-];
-const OTHERS: { href: string; label: string; sub: string; d: string }[] = [
-  { href: '/hoesa', label: '회사 사주', sub: '설립일만 넣고 30초', d: IC.company },
-  { href: '/balju', label: '발주처 사주', sub: '그 발주처와 맞는 판인가', d: IC.client },
-  { href: '/product/gunghap', label: '협정·궁합 사주', sub: '손잡기 전에 깨질 궁합인지', d: IC.pair },
-  { href: '/product/daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', d: IC.trend },
-  { href: '/product/calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', d: IC.cal },
-  { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', d: IC.compass },
-  { href: '/ceo', label: '닮은 CEO', sub: '거장 111인 중 명식이 닮은 사람', d: IC.ceo },
-  { href: '/sajang', label: '대표가 될 사주일까', sub: '대표가 된다면 어떤 대표가 맞는지까지', d: IC.person },
-];
-
+// 이름·아이콘·묶음은 데스크톱 왼쪽 메뉴와 같은 곳(lib/nav)에서 읽는다(2026-10-28).
 // 첫 화면 예시 카드 — 실제 결과 화면과 같은 모양의 '예시'. 명식 간지와 오행 색은 실제 계산값(1971-07-16생)이다.
 const SAMPLE = [
   { pos: '년주', g: 7, z: 11 }, { pos: '월주', g: 1, z: 7 }, { pos: '일주', g: 8, z: 2 },
@@ -180,8 +154,8 @@ export default function Home() {
               <Link href={f.href} className="h6-fcard">
                 <span className="h6-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={f.d} /></svg></span>
                 <span className="h6-ftx">
-                  <b>{f.title}</b>
-                  <span>{f.hook}</span>
+                  <b>{f.label}</b>
+                  <span>{f.sub}</span>
                   <em>무료로 보기</em>
                 </span>
               </Link>
@@ -190,20 +164,22 @@ export default function Home() {
         </ul>
       </section>
 
-      <section className="h6-sec" aria-labelledby="h6-pick">
-        <h2 id="h6-pick" className="h6-h">다른 풀이</h2>
-        <ul className="h6-list">
-          {OTHERS.map(o => (
-            <li key={o.href}>
-              <Link href={o.href} className="h6-row">
-                <span className="h6-ic sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={o.d} /></svg></span>
-                <span className="h6-rtx"><b>{o.label}</b><span>{o.sub}</span></span>
-                <span className="h6-pr free">무료</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {GROUPS.map(g => (
+        <section key={g.key} className="h6-sec" aria-labelledby={'h6-g-' + g.key}>
+          <h2 id={'h6-g-' + g.key} className="h6-h">{g.title}</h2>
+          <ul className="h6-list">
+            {g.items.map(o => (
+              <li key={o.href}>
+                <Link href={o.href} className="h6-row">
+                  <span className="h6-ic sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={o.d} /></svg></span>
+                  <span className="h6-rtx"><b>{o.label}</b><span>{o.sub}</span></span>
+                  <span className="h6-pr free">무료</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
 
       <section className="h6-sec h6-gray" aria-labelledby="h6-today">
         <h2 id="h6-today" className="h6-h">오늘, 넣을 날인가</h2>

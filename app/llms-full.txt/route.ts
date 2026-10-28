@@ -4,6 +4,9 @@ import { CONCEPTS } from '@/lib/seo-concepts';
 import { CLIENTS } from '@/lib/clients';
 import { GLOSSARY } from '@/lib/glossary';
 import { getAllColumns } from '@/lib/column';
+import { TAEKIL } from '@/lib/taekil';
+import { TAEKIL_YEARS } from '@/lib/taekil-year';
+import { TYPES } from '@/lib/sajang';
 
 export const dynamic = 'force-static';
 
@@ -34,12 +37,28 @@ export function GET() {
   for (const c of CONCEPTS) {
     parts.push(`### ${c.h1}`);
     parts.push(c.lead);
-    parts.push(`(${BASE}/사주/${c.slug})`);
+    parts.push(`(${BASE}/saju/${encodeURIComponent(c.slug)})`);
     parts.push('');
   }
 
+  // 택일과 대표 유형(2026-10-28). 검색으로 가장 많이 들어오는 무료 화면인데 전문에 빠져 있었다.
+  parts.push('## 택일 (건제십이신)');
+  for (const t of TAEKIL) {
+    parts.push(`### ${t.kw}`);
+    parts.push(t.lead);
+    parts.push(t.pick);
+    parts.push(`(${BASE}/taekil/${encodeURIComponent(t.slug)}, 연도판 ${TAEKIL_YEARS.map(y => `${BASE}/taekil/${encodeURIComponent(t.slug)}/${y}`).join(' ')})`);
+    parts.push('');
+  }
+
+  parts.push('## 나는 대표가 될 사주일까 (다섯 갈래 대표)');
+  parts.push('재성, 식상, 비겁, 일간의 힘, 천간에 드러난 재성·식상 다섯 신호가 몇 개 서는지로 네 단계 판정을 내고, 원국 일곱 자리 십성 중 가장 많은 무리로 대표 유형을 나눈다. 사업의 성패를 정하지 않는다.');
+  for (const t of Object.values(TYPES)) parts.push(`- ${t.name}: ${t.one} 잘 맞는 판은 ${t.fit}.`);
+  parts.push(`(${BASE}/sajang)`);
+  parts.push('');
+
   parts.push('## 공공 발주처 사전 (설립일 기반 궁합)');
-  parts.push('아래 100곳의 설립일을 사전으로 두고 대표 사주와의 상성 및 조달 특성을 제공한다.');
+  parts.push(`아래 ${CLIENTS.length}곳의 설립일을 사전으로 두고 대표 사주와의 상성 및 조달 특성을 제공한다.`);
   for (const c of CLIENTS) parts.push(`- ${c.name} (설립 ${c.date}, ${c.cat})${c.tip ? ' · ' + c.tip : ''}`);
   parts.push('');
 
