@@ -10,7 +10,8 @@ export type Pain = {
   slug: string;
   mk: string;            // 인장 한자
   kicker: string;
-  title: string;         // '○○? 대표님의 잘못이 아닙니다' (b태그는 {b}로)
+  q: string;             // 대표님이 검색창에 치는 말 그대로. h1·검색 제목으로 쓴다(2026-10-28)
+  title: string;         // 옛 제목('○○? 대표님의 잘못이 아닙니다'). 대조 문형이라 화면에서는 더 쓰지 않는다
   lead: string;          // 히어로 한 줄 (/why 목록에도 나간다)
   desc: string;          // 검색 설명 110~150자 (generateMetadata description)
   dig: string[];         // 대표가 겪는 장면을 담담하게
@@ -23,6 +24,7 @@ export type Pain = {
 export const PAINS: Pain[] = [
   {
     slug: 'haha',
+    q: '입찰 하한가에서 자꾸 떨어질 때',
     mk: '率',
     kicker: '落札 下限',
     title: '번번이 하한가에서 미끄러진다면,\n대표님의 {b}계산이 틀린 게 아닙니다{/b}',
@@ -48,6 +50,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'losing-streak',
+    q: '입찰이 계속 떨어질 때',
     mk: '運',
     kicker: '連 敗',
     title: '요즘 뭘 넣어도 안 된다면,\n대표님이 {b}무너진 게 아닙니다{/b}',
@@ -73,6 +76,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'big-miss',
+    q: '큰 입찰 건만 자꾸 놓칠 때',
     mk: '財',
     kicker: '大 件',
     title: '작은 건은 되는데 큰 건만 놓친다면,\n{b}그릇이 작아서가 아닙니다{/b}',
@@ -98,6 +102,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'partner',
+    q: '협정 상대나 동업자에게 데였을 때',
     mk: '同',
     kicker: '同業 背信',
     title: '손잡은 사람에게 데인 적 있다면,\n{b}사람을 잘못 본 게 아닙니다{/b}',
@@ -123,6 +128,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'gwanjae',
+    q: '소송, 하자, 민원이 끊이지 않을 때',
     mk: '官',
     kicker: '官 災 數',
     title: '소송·하자·민원에 시달렸다면,\n{b}대표님이 부주의해서가 아닙니다{/b}',
@@ -148,6 +154,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'jamin',
+    q: '통장은 도는데 남는 돈이 없을 때',
     mk: '資',
     kicker: '資 金 難',
     title: '통장은 도는데 손에 남는 게 없다면,\n{b}대표님이 못 벌어서가 아닙니다{/b}',
@@ -173,6 +180,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'staff',
+    q: '키운 직원이 자꾸 그만둘 때',
     mk: '人',
     kicker: '人 事 流',
     title: '애써 키운 직원이 자꾸 떠난다면,\n{b}대표님이 부족해서가 아닙니다{/b}',
@@ -198,6 +206,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'slump',
+    q: '매출이 몇 년째 제자리일 때',
     mk: '停',
     kicker: '賣 出 停 滯',
     title: '똑같이 뛰는데 제자리라면,\n{b}대표님이 게을러서가 아닙니다{/b}',
@@ -223,6 +232,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'burnout',
+    q: '대표 혼자 다 짊어지고 지칠 때',
     mk: '燒',
     kicker: '燃 燒 消 盡',
     title: '다 짊어지고 혼자 타들어 간다면,\n{b}대표님이 약해서가 아닙니다{/b}',
@@ -248,6 +258,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'succession',
+    q: '회사를 누구에게 물려줄지 막막할 때',
     mk: '承',
     kicker: '事 業 承 繼',
     title: '누구에게 물려줄지 막막하다면,\n{b}망설이는 게 당연합니다{/b}',
@@ -273,6 +284,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'decision',
+    q: '결정을 미루다 때를 놓칠 때',
     mk: '決',
     kicker: '決 斷 猶 豫',
     title: '매번 재다가 때를 놓친다면,\n{b}대표님이 우유부단해서가 아닙니다{/b}',
@@ -298,6 +310,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'expand',
+    q: '사업을 키워도 될지 겁날 때',
     mk: '擴',
     kicker: '擴 張 時 機',
     title: '지금 벌려도 되나 겁이 난다면,\n{b}대표님이 소심해서가 아닙니다{/b}',
@@ -323,6 +336,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'betray',
+    q: '믿었던 사람에게 배신당했을 때',
     mk: '背',
     kicker: '信 賴 背 信',
     title: '믿었던 사람에게 데였다면,\n{b}대표님이 순진해서가 아닙니다{/b}',
@@ -348,6 +362,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'money-leak',
+    q: '벌어도 돈이 새는 것 같을 때',
     mk: '漏',
     kicker: '財 物 漏 出',
     title: '벌어도 남는 게 없다면,\n{b}대표님이 흥청망청해서가 아닙니다{/b}',
@@ -373,6 +388,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'health',
+    q: '대표 몸이 먼저 무너질 것 같을 때',
     mk: '身',
     kicker: '代 表 健 康',
     title: '몸이 먼저 무너질 것 같다면,\n{b}대표님이 유난스러워서가 아닙니다{/b}',
@@ -398,6 +414,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'timing',
+    q: '될 듯하다가 자꾸 안 풀릴 때',
     mk: '運',
     kicker: '運 때 未 到',
     title: '될 듯 될 듯 안 풀린다면,\n{b}대표님이 운이 없어서가 아닙니다{/b}',
@@ -423,6 +440,7 @@ export const PAINS: Pain[] = [
   },
   {
     slug: 'start',
+    q: '창업, 지금 시작해도 될지 망설여질 때',
     mk: '創',
     kicker: '創 業 時 機',
     title: '지금 시작해도 될지 망설인다면,\n{b}대표님이 겁이 많아서가 아닙니다{/b}',
@@ -456,4 +474,11 @@ export const PAIN_CAT: Record<string, string> = {
   decision: 'daepyo', expand: 'calendar', betray: 'gunghap', 'money-leak': 'daepyo',
   health: 'daepyo', timing: 'daeun', start: 'calendar',
 };
+// 말할 곳 없는 세 자리. 홈과 고민 페이지가 같이 쓴다(2026-10-28, 일본 경영자 점술 페이지의 흐름).
+export const ALONE = [
+  '직원에게는 괜찮다고 말합니다.',
+  '집에는 회사 이야기를 꺼내지 않습니다.',
+  '협정 상대에게는 흔들리는 모습을 보일 수 없습니다.',
+];
+
 export const painBySlug = (slug: string) => PAINS.find(p => p.slug === slug) || null;

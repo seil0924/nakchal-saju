@@ -184,6 +184,7 @@ export default function Home() {
       <section className="h6-sec h6-gray" aria-labelledby="h6-today">
         <h2 id="h6-today" className="h6-h">오늘, 넣을 날인가</h2>
         <TodayChip />
+        <Link className="h6-more" href="/today">내 일간으로 오늘의 투찰 운세 보기</Link>
       </section>
 
       <ReviewStrip />

@@ -186,3 +186,4 @@ html body .home6 .trust .trdisc { background: transparent !important; padding: 1
 @media (min-width: 900px) {
   .dmain .app.home6 { max-width: 640px; padding: 0; border-left: 1px solid var(--h6-line); border-right: 1px solid var(--h6-line); }
 }
+.h6-more { display: flex; align-items: center; justify-content: center; min-height: 48px; margin-top: 12px; border-radius: 12px; background: #fff; border: 1px solid var(--h6-line); color: var(--h6-blue-d) !important; font-weight: 700; }

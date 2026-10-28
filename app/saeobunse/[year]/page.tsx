@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { ogCard } from '@/lib/og';
 import SiteTop from '@/app/_components/SiteTop';
 import Mascot from '@/app/_components/Mascot';
+import { ILGAN } from '@/lib/ilgan';
+import { SAEUN_YEARS } from '@/lib/saeun-ilgan';
 
 const BASE = 'https://nakchalsaju.com';
 const MIN = 2026, MAX = 2035;
@@ -118,6 +120,19 @@ export default function YearPage({ params }: { params: { year: string } }) {
             <Link key={yy} href={`/saeobunse/${yy}`} style={{ fontSize: 13, fontWeight: 700, textDecoration: 'none', padding: '8px 12px', borderRadius: 999, border: '1px solid var(--line)', color: yy === y ? '#fff' : '#58616a', background: yy === y ? '#3f6be0' : '#fff' }}>{yy}</Link>
           ))}
         </div>
+
+        {/* 띠는 년주 하나만 본다. 일간으로 본 사업운이 따로 있으면 그쪽을 먼저 권한다(2026-10-28). */}
+        {SAEUN_YEARS.includes(y) && (
+          <div style={{ border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 16, background: '#fff' }}>
+            <h2 style={{ fontWeight: 800, fontSize: 17, margin: '0 0 6px' }}>일간으로 보는 {y}년 사업운</h2>
+            <p style={{ fontSize: 13, lineHeight: 1.7, color: '#58616a', margin: '0 0 10px' }}>띠보다 대표님 일간이 사업운을 더 가깝게 보여 줍니다. 일간별로 열두 달 움직일 달과 조심할 달을 정리했습니다.</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+              {ILGAN.map(x => (
+                <Link key={x.slug} href={`/saeobunse/${y}/${encodeURIComponent(x.slug)}`} style={{ fontSize: 15, fontWeight: 700, textDecoration: 'none', padding: '8px 12px', borderRadius: 999, border: '1px solid var(--line)', color: '#2f56c4', background: '#fff' }}>{x.ko}{x.el}</Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {DATA.map((t, i) => (
           <div key={i} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 12 }}>

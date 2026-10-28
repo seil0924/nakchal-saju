@@ -1657,3 +1657,10 @@ body:has(.btab) .shell{padding-bottom:calc(59px + env(safe-area-inset-bottom))}
   .dgt{padding:2px 13px 4px;font-size:13px;font-weight:700;letter-spacing:.02em;opacity:.7}
   .dnav-g .dnavi{padding:8px 13px}
 }
+/* 고민 페이지 말할 곳 없는 자리·대체 경로·선 긋기(2026-10-28) */
+.home5 .painbox.alone{margin-top:8px;background:#f4f5f7;border-color:#f4f5f7}
+.home5 .painbox.alone .pain{color:#58616a}
+.home5 .painbox.alone .pain.turn{color:#2f56c4;font-weight:800;border-bottom:0;padding-left:30px}
+.home5 .whyalt{margin:12px 0 0;font-size:13px;line-height:1.7;color:#58616a;text-align:center}
+.home5 .whyalt a{color:#2f56c4;font-weight:700}
+.home5 .whypromise{margin:6px 0 0;font-size:14px;color:#3a3f47;text-align:center}

@@ -20,6 +20,8 @@ export const IC = {
   find: 'M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM20 20l-4-4',
   mail: 'M3 6h18v12H3zM3 6l9 7 9-7',
   more: 'M5 12h.01M12 12h.01M19 12h.01',
+  year: 'M4 6h16v14H4zM4 10h16M9 3v4M15 3v4M8 13.5h8M8 16.5h5',
+  sun: 'M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
 } as const;
 
 export type NavItem = { href: string; label: string; sub: string; d: string };
@@ -39,6 +41,8 @@ export const GROUPS: NavGroup[] = [
     { href: '/product/daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', d: IC.trend },
   ] },
   { key: 'day', title: '날과 자리', items: [
+    { href: '/today', label: '오늘의 투찰 운세', sub: '일간별로 매일 바뀌는 신호', d: IC.sun },
+    { href: '/saeobunse/2027', label: '2027 사업운', sub: '일간별 열두 달 움직일 달과 조심할 달', d: IC.year },
     { href: '/taekil', label: '택일', sub: '개업·설립·계약·이전·입찰 좋은 날', d: IC.day },
     { href: '/product/calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', d: IC.cal },
     { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', d: IC.compass },

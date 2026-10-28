@@ -6,6 +6,8 @@ import { getAllColumns } from '@/lib/column';
 import { TYCOONS, tycoonSlug } from '@/lib/tycoon';
 import { TAEKIL } from '@/lib/taekil';
 import { TAEKIL_YEARS } from '@/lib/taekil-year';
+import { ILGAN } from '@/lib/ilgan';
+import { SAEUN_YEARS } from '@/lib/saeun-ilgan';
 import { listPublicReviews } from '@/lib/reviews-db';
 import { clientSlug } from '@/lib/clients';
 import { indexableBalju } from '@/lib/balju-index';
@@ -27,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const hasReviews = (await listPublicReviews(1)).rows.length > 0;
 
   // 1순위 — 전환이 일어나는 페이지
-  const primary = ['', '/reading', '/hoesa', ...(hasReviews ? ['/review'] : []), '/column', '/full', '/pricing', '/contact', '/balju', '/ceo', '/jari', '/taekil', '/gosa', '/sajang',
+  const primary = ['', '/reading', '/hoesa', ...(hasReviews ? ['/review'] : []), '/column', '/full', '/pricing', '/contact', '/balju', '/ceo', '/jari', '/taekil', '/gosa', '/sajang', '/today',
     '/en/bazi', '/en/date-picker', '/en/why-charts-differ',
     '/zh/bazi', '/zh/why-charts-differ'];
   // 2순위 — 신뢰·전환 보조
@@ -69,6 +71,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE}/taekil/${encodeURIComponent(t.slug)}/${y}`, lastModified: now,
       changeFrequency: 'monthly' as const, priority: 0.7,
     }))),
+    // 일간별 오늘의 투찰 운세(매일 바뀜)와 일간별 그해 사업운(2026-10-28). 사업운은 12~2월 검색 전에 색인되도록 미리 싣는다.
+    ...ILGAN.map(x => ({
+      url: `${BASE}/today/${encodeURIComponent(x.slug)}`, lastModified: now,
+      changeFrequency: 'daily' as const, priority: 0.8,
+    })),
+    ...SAEUN_YEARS.flatMap(y => [{ url: `${BASE}/saeobunse/${y}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.7 },
+      ...ILGAN.map(x => ({ url: `${BASE}/saeobunse/${y}/${encodeURIComponent(x.slug)}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.8 }))]),
     // 핵심 발주처 상세. 공고 보는 곳·본사·주요 발주를 출처로 확인했고, 이웃 페이지와 겹침이 65% 미만인 곳만(lib/balju-index).
     // 같은 분야·같은 설립일 기관(발전 5사 등)은 문장이 78% 겹쳐 얇은 페이지로 읽히므로 계속 뺀다.
     ...indexableBalju().map(c => ({

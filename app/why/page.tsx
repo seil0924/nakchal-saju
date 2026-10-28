@@ -23,7 +23,7 @@ export default function WhyHub() {
       <div className="lab"><i /><span>어떤 고민이 가장 무거우신가요</span></div>
       <div className="list">
         {PAINS.map((p, i) => {
-          const plain = p.title.replace(/\{\/?b\}/g, '').replace(/\n/g, ' ');
+          const plain = p.q;
           return (
             <Link key={i} className="li5" href={`/why/${p.slug}`}>
               <div className="gz" style={{ color: '#9a2a20' }}>{p.mk}</div>
