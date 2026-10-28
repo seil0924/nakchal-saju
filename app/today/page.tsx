@@ -1,5 +1,5 @@
 import '@/app/_components/ilgan.css';
-// /today — 오늘의 투찰 운세, 일간 열 개(2026-10-28). 한 시간마다 다시 굽는다.
+// /today — 오늘의 투찰 운세, 일간 열 개(2026-10-28). 매일 바뀐다.
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteTop from '@/app/_components/SiteTop';

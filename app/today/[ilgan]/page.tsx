@@ -1,6 +1,6 @@
 import '@/app/_components/ilgan.css';
 // /today/임수 — 일간별 오늘의 투찰 운세(2026-10-28).
-// 투찰 전날 밤이나 당일 아침에 "오늘 넣어도 되나"를 검색하는 대표님이 오는 자리. 매일 바뀐다(한 시간마다 다시 굽는다).
+// 투찰 전날 밤이나 당일 아침에 "오늘 넣어도 되나"를 검색하는 대표님이 오는 자리. 매일 바뀐다.
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
