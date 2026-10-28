@@ -22,7 +22,8 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const KINDS = new Set(['reading', 'report', 'ceo', 'column', 'balju', 'home',
-  'product', 'glossary', 'why', 'saju', 'region', 'industry', 'taekil', 'tool']);
+  'product', 'glossary', 'why', 'saju', 'region', 'industry', 'taekil', 'tool',
+  'today', 'saeobunse', 'sajang']);
 
 export async function POST(req: Request) {
   try {

@@ -2,6 +2,10 @@ export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import { getViewStats } from '@/lib/admin-views';
 import { getAllColumns } from '@/lib/column';
+import { pageOf, srcName, srcLine } from './page-name';
+
+const MAIN_SRC = ['naver', 'google', 'direct'];
+const R: React.CSSProperties = { textAlign: 'right' };
 
 export default async function AdminViews() {
   const s = await getViewStats();
@@ -19,16 +23,17 @@ export default async function AdminViews() {
 
       {/* 이 경고를 지우지 말 것. 지우면 옛 숫자를 다시 진짜로 착각하게 된다. */}
       <div className="abody">
-        <div className="acard" style={{ background: '#faf6ec', borderColor: '#e2cd97' }}>
-          <div style={{ padding: '13px 15px', fontSize: 12.5, lineHeight: 1.75, color: '#4a4636' }}>
+        <details className="acard" style={{ background: '#faf6ec', borderColor: '#e2cd97' }}>
+          <summary style={{ padding: '11px 15px', fontSize: 13, fontWeight: 700, color: '#4a4636', cursor: 'pointer' }}>옛 숫자 주의: 2026-10-23 이전에는 운영자 방문, 2026-08-27 이전에는 검색엔진 크롤러가 섞여 있습니다</summary>
+          <div style={{ padding: '0 15px 13px', fontSize: 12.5, lineHeight: 1.75, color: '#4a4636' }}>
             <b>2026-10-23 이전 ‘무료 입력 화면’ 숫자에는 리포트 결과 화면이 섞여 있습니다.</b> 그날부터 둘을 따로 셉니다.
             같은 날부터 관리자 화면을 연 기기(운영자·점검)는 세지 않습니다. 그 전 숫자에는 운영자 점검 방문이 들어 있습니다.<br />
             <b>2026-08-27 이전 수치에는 검색엔진 크롤러가 섞여 있습니다.</b><br />
             칼럼 133회·닮은 CEO 116회가 찍혔는데 사이트맵의 그 계열 URL 수가 각각 124개·101개였습니다 —
             사람이 아니라 크롤러가 사이트맵을 한 번 훑은 자국입니다. 서치콘솔 클릭 수와도 맞지 않았습니다.
-            그날부터 봇을 걸러 저장하지 않습니다. <b>추세는 그 이후 숫자로만 보십시오.</b>
+            그날부터 봇을 걸러 저장하지 않습니다. <b>추세는 그 이후 숫자로만 보세요.</b>
           </div>
-        </div>
+        </details>
         {!s.ready && (
           <div className="acard">
             <div className="empty">
@@ -40,6 +45,61 @@ export default async function AdminViews() {
 
         {s.ready && (
           <>
+            <div className="atop" style={{ marginTop: 8 }}><div><h1 style={{ fontSize: 17 }}>최근 7일, 날짜별로 어디서 왔나</h1><div className="sub">한 기기가 한 화면을 하루 1회 · 한국시간</div></div></div>
+            <div className="acard">
+              <table><tbody>
+                <tr><th>날짜</th><th style={R}>합계</th>{MAIN_SRC.map(x => <th key={x} style={R}>{srcName(x)}</th>)}<th style={R}>그 밖</th></tr>
+                {s.days.map((d, i) => {
+                  const rest = d.total - MAIN_SRC.reduce((a, x) => a + (d.bySrc[x] ?? 0), 0);
+                  return (
+                    <tr key={d.ymd}>
+                      <td><b>{d.ymd.slice(5).replace('-', '.')}</b>{i === 0 && <span style={{ color: '#a39c8e' }}> 오늘</span>}</td>
+                      <td style={{ ...R, fontWeight: 700 }}>{d.total}</td>
+                      {MAIN_SRC.map(x => <td key={x} style={R}>{d.bySrc[x] ?? 0}</td>)}
+                      <td style={R} title={srcLine(Object.fromEntries(Object.entries(d.bySrc).filter(([k]) => !MAIN_SRC.includes(k))))}>{rest}</td>
+                    </tr>
+                  );
+                })}
+              </tbody></table>
+            </div>
+
+            <div className="atop" style={{ marginTop: 22 }}><div><h1 style={{ fontSize: 17 }}>방금 들어온 방문</h1><div className="sub">최근 50건 · 언제, 어느 화면을, 어디서 · 누가 봤는지는 남기지 않습니다</div></div></div>
+            <div className="acard">
+              <table><tbody>
+                <tr><th>시각</th><th>화면</th><th>어디서</th></tr>
+                {s.recent.map((r, i) => {
+                  const p = pageOf(r.kind, r.slug);
+                  return (
+                    <tr key={i}>
+                      <td style={{ color: '#a39c8e', whiteSpace: 'nowrap' }}>{r.at}</td>
+                      <td>{p.href ? <Link href={p.href} target="_blank" style={{ color: 'inherit' }}>{p.name}</Link> : p.name}</td>
+                      <td style={{ whiteSpace: 'nowrap' }}>{srcName(r.src)}</td>
+                    </tr>
+                  );
+                })}
+                {s.recent.length === 0 && <tr><td colSpan={3}><div className="empty">아직 기록이 없습니다.</div></td></tr>}
+              </tbody></table>
+            </div>
+
+            <div className="atop" style={{ marginTop: 22 }}><div><h1 style={{ fontSize: 17 }}>최근 7일 많이 본 화면</h1><div className="sub">상위 20 · 어디서 왔는지 같이</div></div></div>
+            <div className="acard">
+              <table><tbody>
+                <tr><th>화면</th><th style={R}>조회</th><th>어디서</th></tr>
+                {s.pages7.map((p, i) => {
+                  const n = pageOf(p.kind, p.slug);
+                  return (
+                    <tr key={i}>
+                      <td>{n.href ? <Link href={n.href} target="_blank" style={{ color: 'inherit' }}>{n.name}</Link> : n.name}</td>
+                      <td style={{ ...R, fontWeight: 700 }}>{p.count}</td>
+                      <td style={{ fontSize: 12.5, color: '#57523f' }}>{srcLine(p.bySrc)}</td>
+                    </tr>
+                  );
+                })}
+                {s.pages7.length === 0 && <tr><td colSpan={3}><div className="empty">최근 7일 기록이 없습니다.</div></td></tr>}
+              </tbody></table>
+            </div>
+
+            <div className="atop" style={{ marginTop: 22 }}><div><h1 style={{ fontSize: 17 }}>화면 종류별</h1><div className="sub">오늘 · 최근 7일 · 누적</div></div></div>
             <div className="acard">
               <table><tbody>
                 <tr><th>화면</th><th style={{ textAlign: 'right' }}>오늘</th><th style={{ textAlign: 'right' }}>최근 7일</th><th style={{ textAlign: 'right' }}>누적</th></tr>

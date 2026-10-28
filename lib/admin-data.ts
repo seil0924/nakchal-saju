@@ -8,6 +8,7 @@ import { kstDayStartIso, kstMonthStartIso, kstStamp, payerOf, payItemName, paySt
 import { splitDeletable, isReportId } from './report-cleanup';
 import { fetchAll } from './sb-page';
 import { dashPhone } from './buyer';
+import { isTestName, isTestProfile } from './admin-test';
 
 const won = (n: number) => n.toLocaleString('ko-KR');
 
@@ -48,7 +49,7 @@ async function reportMeta(sb: SB, ids: string[]) {
 
 const PAY_COLS = 'payment_id,user_id,report_id,pass_key,amount';
 
-const EMPTY_STATS = { members: 0, todaySignup: 0, paid: 0, convRate: '0.0', mrr: 0, subs: 0, guestPaid: 0, todayReports: 0, testReports: 0, todayPay: 0, todayPayAmt: 0, todayViews: 0, weekViews: 0, todayTries: 0, refunded: 0 };
+const EMPTY_STATS = { members: 0, todaySignup: 0, paid: 0, convRate: '0.0', mrr: 0, subs: 0, guestPaid: 0, todayReports: 0, testReports: 0, todayPay: 0, todayPayAmt: 0, todayViews: 0, weekViews: 0, todayTries: 0, refunded: 0, testPaid: 0 };
 
 export { fetchAll };
 
@@ -58,7 +59,7 @@ export async function getStats() {
     const sb = supabaseAdmin();
     const dayStart = kstDayStartIso(), monthStart = kstMonthStartIso();
     const weekStart = new Date(Date.now() - 7 * 86400000).toISOString();
-    const [mAll, mToday, rToday, rTest, paidList, vToday, vWeek, tries, refunds] = await Promise.all([
+    const [mAll, mToday, rToday, rTest, paidAll, vToday, vWeek, tries, refunds] = await Promise.all([
       sb.from('profiles').select('*', { count: 'exact', head: true }),
       sb.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
       sb.from('reports').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
@@ -72,7 +73,20 @@ export async function getStats() {
       sb.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'cancelled'),
     ]);
     const members = mAll.count ?? 0;
-    const { owner } = await reportMeta(sb, [...new Set(paidList.map((p: any) => p.report_id).filter(Boolean))] as string[]);
+    const { owner } = await reportMeta(sb, [...new Set(paidAll.map((p: any) => p.report_id).filter(Boolean))] as string[]);
+    // 운영자가 직접 해 본 결제는 매출·건수에서 뺀다(lib/admin-test). 가려내는 조회가 실패하면 빼지 않고 그대로 센다.
+    const testUsers = new Set<string>(), testPays = new Set<string>();
+    try {
+      const profs = await fetchAll<any>((a, b) => sb.from('profiles').select('id,name,email,role').range(a, b));
+      profs.forEach(p => { if (isTestProfile(p)) testUsers.add(p.id); });
+    } catch { /* 회원 표를 못 읽으면 가려내지 않는다 */ }
+    try {
+      const named = await fetchAll<any>((a, b) => sb.from('payments').select('payment_id,buyer_name').eq('status', 'paid').not('buyer_name', 'is', null).range(a, b));
+      named.forEach(p => { if (isTestName(p.buyer_name)) testPays.add(p.payment_id); });
+    } catch { /* buyer_name 칸이 없는 환경 */ }
+    const isTestPay = (p: any) => testPays.has(p.payment_id) || testUsers.has(payerOf(p, owner) ?? '');
+    const testPaid = paidAll.filter(isTestPay).length;
+    const paidList = paidAll.filter((p: any) => !isTestPay(p));
     const payers = paidList.map((p: any) => payerOf(p, owner));
     const paidUsers = new Set(payers.filter(Boolean)).size;
     const monthAmt = paidList.filter((p: any) => p.paid_at && p.paid_at >= monthStart).reduce((a: number, p: any) => a + (p.amount || 0), 0);
@@ -88,7 +102,7 @@ export async function getStats() {
       todayPay: todayList.length,
       todayPayAmt: todayList.reduce((a: number, p: any) => a + (p.amount || 0), 0),
       todayViews: vToday.count ?? 0, weekViews: vWeek.count ?? 0,
-      todayTries: tries.count ?? 0, refunded: refunds.count ?? 0,
+      todayTries: tries.count ?? 0, refunded: refunds.count ?? 0, testPaid,
     };
   } catch { return EMPTY_STATS; }
 }
@@ -97,7 +111,7 @@ export async function listMembers() {
   if (!adminEnabled()) return [];
   try {
     const sb = supabaseAdmin();
-    const { data: profs } = await sb.from('profiles').select('id,name,email,provider,created_at').order('created_at', { ascending: false }).limit(50);
+    const { data: profs } = await sb.from('profiles').select('id,name,email,provider,created_at,role').order('created_at', { ascending: false }).limit(100);
     const ids = (profs ?? []).map((p: any) => p.id);
     if (!ids.length) return [];
     // 회원의 리포트에 붙은 결제 + 회원이 직접 붙은 결제(2026-09-17 이후) + 발주처 패스
@@ -128,6 +142,7 @@ export async function listMembers() {
       joined: kstStamp(p.created_at, true),
       sub: (paidBy[p.id] || 0) > 0 ? '유료' : '무료',
       paidTotal: paidBy[p.id] || 0, reports: repBy[p.id] || 0,
+      test: isTestProfile(p),
     }));
   } catch { return []; }
 }
@@ -158,7 +173,7 @@ export async function listPayments(q?: string) {
     const { owner, cat } = await reportMeta(sb, rids);
     const payer = rows.map(p => payerOf(p, owner));
     const uids = [...new Set(payer.filter(Boolean))] as string[];
-    const profs = uids.length ? (await sb.from('profiles').select('id,name,email').in('id', uids)).data ?? [] : [];
+    const profs = uids.length ? (await sb.from('profiles').select('id,name,email,role').in('id', uids)).data ?? [] : [];
     const pmap: Record<string, any> = {};
     profs.forEach((p: any) => { pmap[p.id] = p; });
     return rows.map((p, i) => {
@@ -172,6 +187,8 @@ export async function listPayments(q?: string) {
         phone: p.buyer_phone ? dashPhone(p.buyer_phone) : '',
         tno: p.tno ?? '',
         refundable: p.status === 'paid',
+        // 운영자가 직접 해 본 결제. 목록에서 기본으로 숨기고 합계에서 뺀다.
+        test: isTestName(p.buyer_name) || (who ? isTestProfile(pmap[who] ?? {}) : false),
         item: payItemName(p, p.report_id ? cat[p.report_id] : null),
         amount: p.amount ?? 0,
         status: payStatusLabel(p.status),

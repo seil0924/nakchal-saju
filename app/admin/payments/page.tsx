@@ -18,26 +18,31 @@ async function refund(formData: FormData) {
   revalidatePath('/admin/payments');
 }
 
+// 운영자가 직접 해 본 결제는 기본으로 숨기고 '점검·운영' 칸에 모은다(lib/admin-test).
 const FILTERS: [string, string, string[]][] = [
-  ['all', '전체', []],
+  ['all', '손님 전체', []],
   ['done', '완료', ['완료']],
   ['wait', '대기(결제창 이탈)', ['대기']],
   ['fail', '실패', ['실패']],
   ['refund', '환불', ['환불']],
+  ['test', '점검·운영', []],
 ];
 
 export default async function AdminPayments({ searchParams }: { searchParams?: { f?: string; q?: string } }) {
   const q = String(searchParams?.q ?? '').trim().slice(0, 20);
   // 보관 기간(5년)이 지난 구매자 성함·번호는 이 화면을 열 때 지운다. 거래 기록은 남는다.
   await purgeOldBuyers(BUYER_KEEP_YEARS);
-  const all = await listPayments(q || undefined);
+  const listed = await listPayments(q || undefined);
+  const tests = listed.filter(p => p.test);
+  // 이름이나 번호로 찾을 때는 점검 결제도 같이 보여 준다. 찾는 사람이 점검 결제를 찾고 있을 수 있다.
+  const all = q ? listed : listed.filter(p => !p.test);
   const f = FILTERS.find(x => x[0] === searchParams?.f) ?? FILTERS[0];
-  const pays = f[2].length ? all.filter(p => f[2].includes(p.status)) : all;
+  const pays = f[0] === 'test' ? tests : f[2].length ? all.filter(p => f[2].includes(p.status)) : all;
   const done = all.filter(p => p.status === '완료');
   const total = done.reduce((a, p) => a + p.amount, 0);
   return (
     <>
-      <div className="atop"><div><h1>결제·주문 내역</h1><div className="sub">{q ? `‘${q}’ 로 찾은 주문 ` : '최근 주문 '}{all.length}건 · 그중 완료 {done.length}건 ₩{won(total)} · 한국시간 · 누적 합계는 대시보드</div></div></div>
+      <div className="atop"><div><h1>결제·주문 내역</h1><div className="sub">{q ? `‘${q}’ 로 찾은 주문 ` : '최근 주문 '}{all.length}건 · 그중 완료 {done.length}건 ₩{won(total)}{!q && tests.length ? ` · 점검 결제 ${tests.length}건은 따로 모음` : ''} · 한국시간 · 누적 합계는 대시보드</div></div></div>
       <div className="abody">
         <form method="get" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12 }}>
           <input name="q" defaultValue={q} maxLength={20} placeholder="구매자 성함 또는 휴대폰 번호" aria-label="구매자 성함 또는 휴대폰 번호로 찾기"
@@ -48,7 +53,7 @@ export default async function AdminPayments({ searchParams }: { searchParams?: {
         <div className="filters">
           {FILTERS.map(([k, label, st]) => (
             <Link key={k} href={k === 'all' ? '/admin/payments' : `/admin/payments?f=${k}`} className={'fx' + (f[0] === k ? ' on' : '')} style={{ textDecoration: 'none' }}>
-              {label} {st.length ? all.filter(p => st.includes(p.status)).length : all.length}
+              {label} {k === 'test' ? tests.length : st.length ? all.filter(p => st.includes(p.status)).length : all.length}
             </Link>
           ))}
         </div>
@@ -58,7 +63,7 @@ export default async function AdminPayments({ searchParams }: { searchParams?: {
             {pays.map((p, i) => (
               <tr key={i}>
                 <td>#{p.id}</td>
-                <td className="who">{p.name}<em>{[p.phone, p.email].filter(Boolean).join(' · ')}</em></td>
+                <td className="who">{p.name}{p.test && <span className="pill free" style={{ marginLeft: 6 }}>점검</span>}<em>{[p.phone, p.email].filter(Boolean).join(' · ')}</em></td>
                 <td>{p.item}</td>
                 <td className="amt">{won(p.amount)}</td>
                 <td><span className={'pill ' + (p.status === '완료' ? 'done' : 'refund')}>{p.status}</span>{p.why && <em style={{ display: 'block', fontSize: 11.5, color: '#b3382c', marginTop: 3, fontStyle: 'normal' }}>{p.why}</em>}</td>

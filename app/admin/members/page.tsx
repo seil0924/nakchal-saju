@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { getStats, listMembers, won } from '@/lib/admin-data';
 
 type M = Awaited<ReturnType<typeof listMembers>>[number];
+// 손님만 기본으로 본다. 운영자·점검 계정은 마지막 칸에 따로 모은다(lib/admin-test).
 const FILTERS: [string, string, (m: M) => boolean][] = [
-  ['all', '전체', () => true],
-  ['paid', '유료', m => m.sub === '유료'],
-  ['free', '무료', m => m.sub === '무료'],
-  ['social', '카카오·구글', m => m.provider === 'kakao' || m.provider === 'google'],
+  ['all', '손님 전체', m => !m.test],
+  ['paid', '유료', m => !m.test && m.sub === '유료'],
+  ['free', '무료', m => !m.test && m.sub === '무료'],
+  ['social', '카카오·구글', m => !m.test && (m.provider === 'kakao' || m.provider === 'google')],
+  ['test', '점검·운영', m => m.test],
 ];
 
 export default async function AdminMembers({ searchParams }: { searchParams?: { f?: string } }) {
@@ -16,7 +18,7 @@ export default async function AdminMembers({ searchParams }: { searchParams?: { 
   const mems = all.filter(f[2]);
   return (
     <>
-      <div className="atop"><div><h1>회원 관리</h1><div className="sub">전체 회원 {s.members.toLocaleString('ko-KR')}명 · 최근 가입 {all.length}명 표시 · 가입일은 한국시간</div></div></div>
+      <div className="atop"><div><h1>회원 관리</h1><div className="sub">전체 회원 {s.members.toLocaleString('ko-KR')}명 · 최근 가입 {all.length}명 중 점검·운영 {all.filter(m => m.test).length}명은 따로 모음 · 가입일은 한국시간</div></div></div>
       <div className="abody">
         <div className="filters">
           {FILTERS.map(([k, label, fn]) => (
@@ -30,7 +32,7 @@ export default async function AdminMembers({ searchParams }: { searchParams?: { 
             <tr><th>회원</th><th>수단</th><th>가입일</th><th>등급</th><th>결제총액</th><th>리포트</th></tr>
             {mems.map((m, i) => (
               <tr key={i}>
-                <td className="who">{m.name}<em>{m.email}</em></td>
+                <td className="who">{m.name}{m.test && <span className="pill free" style={{ marginLeft: 6 }}>점검</span>}<em>{m.email}</em></td>
                 <td><span className={'ci ' + m.provider}>{m.provider[0].toUpperCase()}</span></td>
                 <td>{m.joined}</td>
                 <td><span className={'pill ' + (m.sub === '무료' ? 'free' : 'sub')}>{m.sub}</span></td>

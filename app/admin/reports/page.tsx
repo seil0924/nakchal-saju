@@ -5,6 +5,7 @@ import { listReports, deleteReports, deleteReportsByName } from '@/lib/admin-dat
 import { authEnabled, isAdmin } from '@/lib/supabase/server';
 import { cleanName, isReportId } from '@/lib/report-cleanup';
 import ConfirmSubmit from './ConfirmSubmit';
+import { TEST_NAMES } from '@/lib/admin-test';
 
 // 서버 액션은 레이아웃의 관리자 확인을 거치지 않는다 — 액션 주소만 알면 누구나 POST 할 수 있다.
 // 지우는 버튼이라 여기서 한 번 더 막는다.
@@ -28,7 +29,7 @@ async function removeByName(formData: FormData) {
   revalidatePath('/admin/reports');
 }
 
-const QUICK = ['점검용', '오세일'];
+const QUICK = TEST_NAMES;
 
 export default async function AdminReports({ searchParams }: { searchParams?: { q?: string } }) {
   const q = cleanName(searchParams?.q);

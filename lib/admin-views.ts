@@ -4,11 +4,16 @@ import 'server-only';
 import { adminEnabled, supabaseAdmin } from '@/lib/supabase/admin';
 import { SRC_LABEL, isSrc } from '@/lib/track-src';
 import { fetchAll } from '@/lib/admin-data';
-import { kstDayStartIso } from '@/lib/admin-format';
+import { kstDayStartIso, kstStamp } from '@/lib/admin-format';
+import { kstYmd } from '@/lib/kst';
 
 export type KindStat = { kind: string; label: string; total: number; d7: number; today: number };
 export type SlugStat = { slug: string; count: number };
 export type SrcStat = { src: string; label: string; total: number; d7: number; today: number };
+// "조회수가 났다는데 어디서 났는지 모르겠다"(2026-10-28). 날짜별·한 줄씩 볼 수 있게 한다.
+export type DayStat = { ymd: string; total: number; bySrc: Record<string, number> };
+export type RecentView = { at: string; kind: string; slug: string | null; src: string };
+export type PageStat = { kind: string; slug: string | null; count: number; bySrc: Record<string, number> };
 export type ViewStats = {
   ready: boolean;              // 테이블이 준비됐는지
   srcReady: boolean;           // src 컬럼 마이그레이션이 돌았는지
@@ -19,6 +24,9 @@ export type ViewStats = {
   ceo: SlugStat[];
   products: SlugStat[];
   tools: SlugStat[];
+  days: DayStat[];        // 최근 7일, 오늘이 맨 위
+  recent: RecentView[];   // 최근 50건
+  pages7: PageStat[];     // 최근 7일 많이 본 화면 20
 };
 
 const LABEL: Record<string, string> = {
@@ -36,9 +44,12 @@ const LABEL: Record<string, string> = {
   industry: '업종별 안내',
   taekil: '택일 안내',
   tool: '회사·자리 등 도구 화면',
+  today: '오늘의 투찰 운세',
+  saeobunse: '사업운',
+  sajang: '대표가 될 사주일까',
 };
 
-const EMPTY: ViewStats = { ready: false, srcReady: false, kinds: [], srcs: [], columns: [], balju: [], ceo: [], products: [], tools: [] };
+const EMPTY: ViewStats = { ready: false, srcReady: false, kinds: [], srcs: [], columns: [], balju: [], ceo: [], products: [], tools: [], days: [], recent: [], pages7: [] };
 
 type Row = { kind: string; slug: string | null; created_at: string; src?: string | null };
 
@@ -70,6 +81,11 @@ export async function getViewStats(): Promise<ViewStats> {
 
     const kinds = new Map<string, KindStat>();
     const srcs = new Map<string, SrcStat>();
+    // 오늘부터 거꾸로 7일. 방문이 없는 날도 0으로 보여야 빈 날이 눈에 띈다.
+    const days: DayStat[] = Array.from({ length: 7 }, (_, i) => ({ ymd: kstYmd(new Date(now - i * 86400000)), total: 0, bySrc: {} }));
+    const dayOf = new Map(days.map(d => [d.ymd, d]));
+    const pages = new Map<string, PageStat>();
+    const recent: RecentView[] = [];
     const bySlug: Record<string, Map<string, number>> = { column: new Map(), balju: new Map(), ceo: new Map(), product: new Map(), tool: new Map() };
 
     for (const r of res.data as unknown as Row[]) {
@@ -92,6 +108,17 @@ export async function getViewStats(): Promise<ViewStats> {
         srcs.set(key, s);
       }
 
+      const sk = srcReady ? (isSrc(r.src ?? '') ? (r.src as string) : (r.src ? 'other' : 'unknown')) : 'unknown';
+      if (recent.length < 50) recent.push({ at: kstStamp(r.created_at), kind: r.kind, slug: r.slug, src: sk });
+      const day = dayOf.get(kstYmd(new Date(r.created_at)));
+      if (day) { day.total += 1; day.bySrc[sk] = (day.bySrc[sk] ?? 0) + 1; }
+      if (r.created_at >= weekStart) {
+        const pk = r.kind + '|' + (r.slug ?? '');
+        const ps = pages.get(pk) ?? { kind: r.kind, slug: r.slug, count: 0, bySrc: {} };
+        ps.count += 1; ps.bySrc[sk] = (ps.bySrc[sk] ?? 0) + 1;
+        pages.set(pk, ps);
+      }
+
       const m = bySlug[r.kind];
       if (m && r.slug) m.set(r.slug, (m.get(r.slug) ?? 0) + 1);
     }
@@ -99,7 +126,7 @@ export async function getViewStats(): Promise<ViewStats> {
     const top = (m: Map<string, number>, n = 20): SlugStat[] =>
       [...m.entries()].map(([slug, count]) => ({ slug, count })).sort((a, b) => b.count - a.count).slice(0, n);
 
-    const order = ['home', 'product', 'reading', 'report', 'tool', 'ceo', 'column', 'balju', 'glossary', 'why', 'saju', 'region', 'industry', 'taekil'];
+    const order = ['home', 'product', 'reading', 'report', 'tool', 'ceo', 'column', 'balju', 'glossary', 'why', 'saju', 'region', 'industry', 'taekil', 'today', 'saeobunse', 'sajang'];
     return {
       ready: true,
       srcReady,
@@ -111,6 +138,8 @@ export async function getViewStats(): Promise<ViewStats> {
       ceo: top(bySlug.ceo),
       products: top(bySlug.product),
       tools: top(bySlug.tool),
+      days, recent,
+      pages7: [...pages.values()].sort((a, b) => b.count - a.count).slice(0, 20),
     };
   } catch {
     return EMPTY;

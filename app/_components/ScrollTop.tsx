@@ -33,7 +33,11 @@ export default function ScrollTop() {
     else if (seg[0] === 'region') track('region', sub(1));
     else if (seg[0] === 'industry') track('industry', sub(1));
     else if (seg[0] === 'taekil') track('taekil', sub(1));
-    else if (['hoesa', 'jari', 'full', 'pricing', 'samples', 'more', 'vault', 'review', 'saeobunse', 'ritual', 'method', 'guide', 'faq', 'bokchae', 'find', 'contact', 'gosa'].includes(seg[0])) track('tool', seg[0]);
+    // 2026-10-28 — 오늘의 투찰 운세, 사업운, 대표가 될 사주일까. 슬러그에 '/' 를 못 쓰니 사업운은 '2027-을목' 처럼 잇는다.
+    else if (seg[0] === 'today') track('today', sub(1));
+    else if (seg[0] === 'saeobunse') track('saeobunse', [sub(1), sub(2)].filter(Boolean).join('-') || undefined);
+    else if (seg[0] === 'sajang') track('sajang');
+    else if (['hoesa', 'jari', 'full', 'pricing', 'samples', 'more', 'vault', 'review', 'ritual', 'method', 'guide', 'faq', 'bokchae', 'find', 'contact', 'gosa'].includes(seg[0])) track('tool', seg[0]);
   }, [pathname]);
 
   return null;
