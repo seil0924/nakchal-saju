@@ -36,3 +36,13 @@ describe('회원 목록에서 점검 계정 고르기', () => {
     expect([...ids].sort()).toEqual(['a', 'b', 'c']);
   });
 });
+
+import { isNamelessSetupOrder } from './admin-test';
+describe('성함 받기 전 이름 없는 주문', () => {
+  it('10.24 전 이름 없는 주문만 점검으로', () => {
+    expect(isNamelessSetupOrder({ created_at: '2026-07-21T03:00:00Z' }, false)).toBe(true);
+    expect(isNamelessSetupOrder({ created_at: '2026-10-23T05:46:00Z' }, false)).toBe(true);
+    expect(isNamelessSetupOrder({ created_at: '2026-10-22T08:48:00Z' }, true)).toBe(false);   // 태끄니처럼 이름이 있으면 손님
+    expect(isNamelessSetupOrder({ created_at: '2026-10-24T14:02:00Z' }, false)).toBe(false);  // 그날부터는 규칙 밖
+  });
+});

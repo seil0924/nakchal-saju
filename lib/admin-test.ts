@@ -4,7 +4,17 @@
 // 여기서 못 거른 계정이 있으면 TEST_NAMES 에 이름을 더한다.
 
 // 운영자가 점검할 때 쓰는 이름. 리포트 원문 조회의 빠른 찾기(QUICK)와 같은 목록이다.
-export const TEST_NAMES = ['점검용', '오세일'];
+// 'T' 는 2026-09-07 결제창 점검 때 넣은 이름(대표님 확인, 2026-10-28).
+export const TEST_NAMES = ['점검용', '오세일', 'T'];
+
+// 결제 때 성함을 받기 시작한 날(2026-10-24) 전에 생긴 주문 중, 성함도 회원도 리포트 입력 성함도 없는 것은
+// 결제 연동을 붙이며 운영자가 해 본 것이었다(07.21~22 복채, 10.23 점검. 대표님 확인, 2026-10-28).
+// 그날부터는 모든 주문에 성함이 붙으므로 이 규칙이 손님을 덮칠 일이 없다.
+export const BUYER_NAME_SINCE = '2026-10-24T00:00:00+09:00';
+export function isNamelessSetupOrder(p: { created_at?: string | null; paid_at?: string | null }, hasAnyName: boolean): boolean {
+  const at = p.created_at || p.paid_at;
+  return !hasAnyName && !!at && Date.parse(at) < Date.parse(BUYER_NAME_SINCE);
+}
 
 const WORD = /(점검|테스트|test|qa\b|dummy|더미|example|sample|샘플)/i;
 

@@ -8,7 +8,7 @@ import { kstDayStartIso, kstMonthStartIso, kstStamp, payerOf, payItemName, paySt
 import { splitDeletable, isReportId } from './report-cleanup';
 import { fetchAll } from './sb-page';
 import { dashPhone } from './buyer';
-import { isTestName, isTestProfile, testIdsOf } from './admin-test';
+import { isTestName, isTestProfile, testIdsOf, isNamelessSetupOrder } from './admin-test';
 
 const won = (n: number) => n.toLocaleString('ko-KR');
 
@@ -75,16 +75,17 @@ export async function getStats() {
     const members = mAll.count ?? 0;
     const { owner, nameOf } = await reportMeta(sb, [...new Set(paidAll.map((p: any) => p.report_id).filter(Boolean))] as string[]);
     // 운영자가 직접 해 본 결제는 매출·건수에서 뺀다(lib/admin-test). 가려내는 조회가 실패하면 빼지 않고 그대로 센다.
-    const testUsers = new Set<string>(), testPays = new Set<string>();
+    const testUsers = new Set<string>(), testPays = new Set<string>(), namedPays = new Set<string>();
     try {
       const profs = await fetchAll<any>((a, b) => sb.from('profiles').select('id,name,email,role').range(a, b));
       testIdsOf(profs).forEach(id => testUsers.add(id));
     } catch { /* 회원 표를 못 읽으면 가려내지 않는다 */ }
     try {
       const named = await fetchAll<any>((a, b) => sb.from('payments').select('payment_id,buyer_name').eq('status', 'paid').not('buyer_name', 'is', null).range(a, b));
-      named.forEach(p => { if (isTestName(p.buyer_name)) testPays.add(p.payment_id); });
+      named.forEach(p => { namedPays.add(p.payment_id); if (isTestName(p.buyer_name)) testPays.add(p.payment_id); });
     } catch { /* buyer_name 칸이 없는 환경 */ }
-    const isTestPay = (p: any) => testPays.has(p.payment_id) || testUsers.has(payerOf(p, owner) ?? '') || isTestName(p.report_id ? nameOf[p.report_id] : null);
+    const isTestPay = (p: any) => testPays.has(p.payment_id) || testUsers.has(payerOf(p, owner) ?? '') || isTestName(p.report_id ? nameOf[p.report_id] : null)
+      || isNamelessSetupOrder(p, namedPays.has(p.payment_id) || !!payerOf(p, owner) || !!(p.report_id && nameOf[p.report_id]));
     const testPaid = paidAll.filter(isTestPay).length;
     const paidList = paidAll.filter((p: any) => !isTestPay(p));
     const payers = paidList.map((p: any) => payerOf(p, owner));
@@ -190,7 +191,8 @@ export async function listPayments(q?: string) {
         tno: p.tno ?? '',
         refundable: p.status === 'paid',
         // 운영자가 직접 해 본 결제. 목록에서 기본으로 숨기고 합계에서 뺀다.
-        test: isTestName(p.buyer_name) || (who ? isTestProfile(pmap[who] ?? {}) : false) || isTestName(p.report_id ? nameOf[p.report_id] : null),
+        test: isTestName(p.buyer_name) || (who ? isTestProfile(pmap[who] ?? {}) : false) || isTestName(p.report_id ? nameOf[p.report_id] : null)
+          || isNamelessSetupOrder(p, !!p.buyer_name || !!who || !!(p.report_id && nameOf[p.report_id])),
         item: payItemName(p, p.report_id ? cat[p.report_id] : null),
         amount: p.amount ?? 0,
         status: payStatusLabel(p.status),
