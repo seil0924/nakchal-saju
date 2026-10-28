@@ -57,6 +57,18 @@
 .h6-snote { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--h6-line); font-size: 13px; color: var(--h6-mut); }
 .h6-assure { margin: 8px 0 0; text-align: center; font-size: 13px; color: var(--h6-mut); }
 
+/* 속마음 · 하는 일 · 이럴 때 (2026-10-28). 한 줄에 한 문장, 장식 없이 줄 간격으로만 나눈다. */
+.h6-lines { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.h6-lines li { font-size: 17px; line-height: 1.55; font-weight: 600; color: var(--h6-ink); letter-spacing: -.01em; }
+.h6-lines.alone { margin-top: 22px; padding-top: 18px; border-top: 1px solid #e2e5e9; }
+.h6-lines.alone li { color: var(--h6-sub); }
+.h6-turn { margin: 18px 0 0; font-size: 17px; line-height: 1.55; font-weight: 800; color: var(--h6-blue-d); }
+.h6-lines.plain li { font-size: 15px; font-weight: 500; line-height: 1.7; }
+.h6-free { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--h6-gray); font-size: 15px; line-height: 1.6; }
+.h6-free b { display: block; font-size: 13px; color: var(--h6-blue-d); margin-bottom: 2px; }
+.h6-promise { margin: 0 0 20px; font-size: 15px; line-height: 1.7; color: var(--h6-ink); }
+.h6-lines.when { margin-bottom: 18px; }
+
 /* 아이콘 */
 .h6-ic { flex: none; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; background: var(--h6-gray); }
 .h6-ic svg { width: 26px; height: 26px; fill: none; stroke: var(--h6-blue); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }

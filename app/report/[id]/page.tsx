@@ -194,7 +194,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}><div className="ti">{sec.t}</div>
                     {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}<div className="cv">▾</div></div>
                   <div className="bd">{sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
-                    : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
+                    : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '대표님 명식으로 계산해 둔 장입니다. 열면 바로 보입니다.' }} />
                       {catInfo ? <button type="button" className="tlink" onClick={openThis}>{pName}에 포함 · 열기</button> : <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button>}</div>)}</div>
                 </div>
               );
@@ -203,14 +203,15 @@ export default function ReportView({ params }: { params: { id: string } }) {
               <>
                 {/* 분량이 아니라 내용을 말한다. "5장·수십항목"은 아무도 안 궁금하다 —
                     궁금한 건 "돈 내면 내가 뭘 알게 되냐"다. */}
-                <div className="readyline"><b>{catInfo.name}</b>: 열면 이걸 알게 됩니다</div>
+                <div className="readyline"><b>{catInfo.name}</b> 계산은 끝났습니다. 열면 이걸 알게 됩니다</div>
                 {catInfo.gives?.length > 0 && (
                   <ul className="gives lockgives">
                     {catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}
                   </ul>
                 )}
                                 <div className="cta" onClick={(e) => openModal(e)}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
-                <div className="ctaassure">✓ 카드로 30초 · 결제 즉시 열람</div>
+                <div className="ctaassure">카드로 30초 · 결제하면 바로 열립니다</div>
+                <div className="ctapromise">낙찰을 약속하지 않습니다. 정하는 건 대표님입니다.</div>
               </>
             )}
             {level >= 1 && res.sections?.some((s: any) => s.mk === "率") && <div className="unlocked-note">✓ 결제 확인됨 · 오늘부터 30일 투찰 길일과 유리한 시진이 전부 열렸습니다</div>}
@@ -248,7 +249,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
       )}
       {res && level < 2 && catInfo && sticky && !modal && (
         <div className="stickycta no-print" onClick={(e) => openModal(e)}>
-          <span className="sl"><b>{catInfo.name} 열기</b><em>산출 완료 · 열람만 잠금</em></span>
+          <span className="sl"><b>{catInfo.name} 열기</b><em>계산은 끝났습니다 · 열면 바로 보입니다</em></span>
           <span className="sr">{won(catInfo.price)} →</span>
         </div>
       )}
@@ -277,6 +278,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             <BuyerFields v={buyer} set={setBuyerPart} />
             <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한: <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
             {err && <div className="errbox">{err}</div>}
+            <div className="nocharge">동의 없이 추가 결제를 받지 않습니다.</div>
             <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won((catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0)} 결제하기`}</button>
             <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
             <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>

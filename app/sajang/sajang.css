@@ -1,0 +1,55 @@
+/* /sajang (2026-10-28). 홈 home6 와 같은 색·글씨 단계(22·17·15·13). */
+.sajang-app { --sj-ink: #1e2124; --sj-sub: #58616a; --sj-line: #e6e8ea; --sj-gray: #f4f5f7; --sj-blue: #3f6be0; --sj-blue-d: #2f56c4; --sj-good: #1f7a55;
+  background: #fff; color: var(--sj-ink); font-size: 15px; line-height: 1.6; }
+.sj-hero { padding: 24px 20px 8px; }
+.sj-eye { margin: 0 0 6px; font-size: 13px; font-weight: 700; color: var(--sj-blue-d); }
+.sj-hero h1 { margin: 0 0 8px; font-size: 22px; line-height: 1.4; font-weight: 800; letter-spacing: -.02em; text-wrap: balance; }
+.sj-hero p { margin: 0; color: var(--sj-sub); }
+
+.sj-wrap { padding: 12px 20px 24px; }
+.sj-form { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--sj-line); border-radius: 14px; }
+.sj-fl { display: grid; gap: 6px; }
+.sj-fl > span { font-size: 13px; font-weight: 700; color: var(--sj-sub); }
+.sj-fl input[type=date], .sj-fl input[type=time] { min-height: 48px; padding: 0 12px; border: 1px solid #cfd4da; border-radius: 10px; font-size: 17px; background: #fff; color: var(--sj-ink); }
+.sj-trow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.sj-tb { min-height: 44px; padding: 0 16px; border: 1px solid #cfd4da; border-radius: 10px; background: #fff; font-size: 15px; font-weight: 600; color: var(--sj-sub); }
+.sj-tb.on { border-color: var(--sj-blue); color: var(--sj-blue-d); background: #eef2fd; }
+.sj-tb:focus-visible, .sj-fl input:focus-visible { outline: 2px solid var(--sj-blue); outline-offset: 2px; }
+.sj-wait { margin: 14px 0 0; text-align: center; font-size: 13px; color: var(--sj-sub); }
+
+.sj-out { margin-top: 18px; }
+.sj-q { font-size: 13px; font-weight: 700; color: var(--sj-blue-d); }
+.sj-q.second { margin-top: 28px; padding-top: 22px; border-top: 8px solid var(--sj-gray); margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
+.sj-verdict, .sj-type { margin: 4px 0 6px; font-size: 22px; line-height: 1.4; font-weight: 800; letter-spacing: -.02em; text-wrap: balance; }
+.sj-count { margin: 0 0 6px; font-size: 15px; }
+.sj-count b { color: var(--sj-blue-d); font-variant-numeric: tabular-nums; }
+.sj-body { margin: 0 0 12px; color: #3a3f47; }
+.sj-sig { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.sj-sig li { display: grid; grid-template-columns: 76px 1fr; gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--sj-gray); font-size: 15px; line-height: 1.55; }
+.sj-sig li b { font-size: 13px; font-weight: 800; }
+.sj-sig li.ok b { color: var(--sj-good); }
+.sj-sig li.no { color: var(--sj-sub); }
+.sj-sig li.no b { color: #6b747d; }
+.sj-cols { display: grid; gap: 12px; margin-bottom: 12px; }
+@media (min-width: 560px) { .sj-cols { grid-template-columns: 1fr 1fr; } }
+.sj-cols h3 { margin: 0 0 6px; font-size: 15px; font-weight: 800; }
+.sj-cols ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.sj-fit, .sj-second { margin: 0 0 10px; padding: 12px 14px; border-radius: 12px; background: var(--sj-gray); }
+.sj-fit b { display: block; font-size: 13px; color: var(--sj-blue-d); }
+.sj-second { background: #fff; border: 1px solid var(--sj-line); }
+.sj-hint { margin: 0 0 12px; font-size: 13px; color: var(--sj-sub); }
+.sj-next { display: grid; gap: 8px; margin-top: 16px; }
+.sj-cta { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 56px; padding: 8px 12px; border-radius: 12px; background: var(--sj-blue); color: #fff !important; font-size: 17px; font-weight: 800; text-decoration: none; text-align: center; }
+.sj-cta small { font-size: 13px; font-weight: 600; opacity: .9; }
+.sj-link { display: flex; align-items: center; justify-content: center; min-height: 48px; border: 1px solid var(--sj-line); border-radius: 12px; color: var(--sj-blue-d) !important; font-weight: 700; text-decoration: none; }
+
+.sj-read { padding: 8px 20px 32px; border-top: 8px solid var(--sj-gray); }
+.sj-read h2 { margin: 20px 0 10px; font-size: 17px; font-weight: 800; }
+.sj-types { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.sj-types li { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--sj-line); border-radius: 12px; }
+.sj-types li span { color: var(--sj-sub); font-size: 15px; }
+.sj-faq { margin-bottom: 10px; }
+.sj-faq h3 { margin: 0 0 4px; font-size: 15px; font-weight: 800; }
+.sj-faq p { margin: 0; color: #3a3f47; }
+.sj-disc { margin: 18px 0 0; font-size: 13px; color: var(--sj-sub); line-height: 1.7; }
+.sj-disc a { color: var(--sj-blue-d); font-weight: 700; }

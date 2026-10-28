@@ -732,10 +732,11 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                   <React.Fragment key={i}>
                     {catInfo && level < 2 && i === firstLockedIdx && (
                       <>
-                        <div className="readyline"><b>{catInfo.name}</b>: 열면 이걸 알게 됩니다</div>
+                        <div className="readyline"><b>{catInfo.name}</b> 계산은 끝났습니다. 열면 이걸 알게 됩니다</div>
                         {catInfo.gives?.length > 0 && <ul className="gives lockgives">{catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}</ul>}
                         <div className="cta" onClick={() => { setErr(''); setModal(true); }}>{catInfo.name} 열기<small>{catInfo.lead} · {won(catInfo.price)}</small></div>
-                        <div className="ctaassure">카드로 30초 · 결제 즉시 열람</div>
+                        <div className="ctaassure">카드로 30초 · 결제하면 바로 열립니다</div>
+                        <div className="ctapromise">낙찰을 약속하지 않습니다. 정하는 건 대표님입니다.</div>
                       </>
                     )}
                   <div className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
@@ -750,7 +751,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                       {sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
                         : (
                           <div className="teaser">
-                            <div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '결제 후 열람 가능한 섹션입니다.' }} />
+                            <div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '대표님 명식으로 계산해 둔 장입니다. 열면 바로 보입니다.' }} />
                             {catInfo
                               ? <button type="button" className="tlink" onClick={openThis}>{pName}에 포함 · 열기</button>
                               : <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button>}
@@ -828,7 +829,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       {/* 스크롤 스티키 CTA (전체 미열람 시) */}
       {res && level < 2 && catInfo && anyLocked && sticky && !modal && !prog && (
         <div className="stickycta no-print" onClick={() => { setErr(''); setModal(true); }}>
-          <span className="sl"><b>{catInfo.name} 열기</b><em>산출 완료 · 열람만 잠금</em></span>
+          <span className="sl"><b>{catInfo.name} 열기</b><em>계산은 끝났습니다 · 열면 바로 보입니다</em></span>
           <span className="sr">{won(catInfo.price)} →</span>
         </div>
       )}
@@ -913,6 +914,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다. <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
             </label>
             {err && <div className="errbox" role="alert">{err}</div>}
+            <div className="nocharge">동의 없이 추가 결제를 받지 않습니다.</div>
             <button className="paygo" onClick={() => (passMode ? payPass() : pay(sku))} disabled={busy}>{busy ? '결제 처리중…' : `${won(passMode ? PRICE_BALJU_PASS : unlockPrice)} 결제하기`}</button>
             <div className="mclose" onClick={() => { setModal(false); setPassMode(false); }}>다음에 볼게요</div>
             <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>

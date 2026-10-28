@@ -61,11 +61,25 @@ const OTHERS: { href: string; label: string; sub: string; d: string }[] = [
   { href: '/product/calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', d: IC.cal },
   { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', d: IC.compass },
   { href: '/ceo', label: '닮은 CEO', sub: '거장 111인 중 명식이 닮은 사람', d: IC.ceo },
+  { href: '/sajang', label: '대표가 될 사주일까', sub: '대표가 된다면 어떤 대표가 맞는지까지', d: IC.person },
 ];
 
 // 첫 화면 예시 카드 — 실제 결과 화면과 같은 모양의 '예시'. 명식 간지와 오행 색은 실제 계산값(1971-07-16생)이다.
 const SAMPLE = [
   { pos: '년주', g: 7, z: 11 }, { pos: '월주', g: 1, z: 7 }, { pos: '일주', g: 8, z: 2 },
+];
+
+// 대표가 밤에 혼자 되뇌는 말을 대표 말투로. 숫자나 후기처럼 읽히는 구체 횟수는 넣지 않는다(지어낸 사례가 된다).
+const INNER = [
+  '견적은 맞게 뽑았는데 또 하한가 근처에서 밀렸습니다.',
+  '개찰 결과를 몇 번이고 다시 엽니다.',
+  '월급날은 다가오는데 이번 달 낙찰이 없습니다.',
+  '큰 건 하나를 두고 오늘 넣을지 내일 넣을지 밤새 고민합니다.',
+];
+const ALONE = [
+  '직원에게는 괜찮다고 말합니다.',
+  '집에는 이번 달 이야기를 꺼내지 않습니다.',
+  '협정 상대에게는 흔들리는 모습을 보일 수 없습니다.',
 ];
 
 const MORE: { href: string; label: string; sub: string }[] = [
@@ -102,12 +116,12 @@ export default function Home() {
             흰 바탕 거북을 제목 옆에 붙여 한 덩어리로 둔다. */}
         <div className="h6-head">
           <div>
-            <p className="h6-eye">공공입찰·수주 대표를 위한 사주</p>
-            <h1>오늘 넣어도 되는 날인지,<br />대표님 명식으로 먼저 봅니다</h1>
+            <p className="h6-eye">공공입찰 대표를 위한 사주</p>
+            <h1>마감 10분 전,<br />투찰 버튼 위에서 손이 멈출 때</h1>
           </div>
           <BrandMark size={84} />
         </div>
-        <p className="h6-lead">성함과 생년월일만 넣으면 명식과 오늘의 투찰 신호가 무료로 나옵니다.</p>
+        <p className="h6-lead">금액은 다 뽑았습니다. 남은 건 언제 넣느냐입니다.</p>
 
         <figure className="h6-sample" aria-label="결과 화면 예시">
           <figcaption><span className="h6-tag">예시</span>1971년 7월 16일생 대표</figcaption>
@@ -130,8 +144,32 @@ export default function Home() {
           <p className="h6-snote">분석형 대표 · 30일 투찰 길일 · 시진별 흐름까지</p>
         </figure>
 
-        <Link className="h6-cta" href="/reading?cat=sajeong">내 생년월일로 무료로 보기</Link>
+        <Link className="h6-cta" href="/reading?cat=sajeong">내 생년월일로 오늘 보기</Link>
         <p className="h6-assure">가입 없이 30초 · 결제는 결과를 본 뒤에 고릅니다</p>
+      </section>
+
+      {/* 흐름(2026-10-28): 대표 속마음 → 말할 곳 없는 자리 → 우리가 하는 일 → 상품 → 선 긋기 → 이럴 때 보세요.
+          일본 경영자용 점술 페이지(直凛·フォーチュンネイジュ)의 순서를 입찰 대표 장면으로 옮겼다.
+          겁주는 말·애원하는 말·결과 약속은 쓰지 않는다(일본 소비자계약법 불안 조장 취소권, docs/STYLE.md). */}
+      <section className="h6-sec h6-gray h6-voice" aria-labelledby="h6-inner">
+        <h2 id="h6-inner" className="h6-h">대표님 속마음</h2>
+        <ul className="h6-lines">
+          {INNER.map(t => <li key={t}>{t}</li>)}
+        </ul>
+        <ul className="h6-lines alone">
+          {ALONE.map(t => <li key={t}>{t}</li>)}
+        </ul>
+        <p className="h6-turn">그래서 넣는 날도 결국 대표님 혼자 정합니다.</p>
+      </section>
+
+      <section className="h6-sec" aria-labelledby="h6-do">
+        <h2 id="h6-do" className="h6-h">저희가 하는 일</h2>
+        <ul className="h6-lines plain">
+          <li>사정률은 복수예비가격 추첨으로 정해집니다. 저희도 맞히지 못합니다.</li>
+          <li>대표님이 고를 수 있는 건 넣는 날과 시간입니다.</li>
+          <li>그날이 대표님 일간을 살리는 날인지, 일지와 부딪히는 날인지 만세력으로 계산해 드립니다.</li>
+        </ul>
+        <p className="h6-free"><b>바로 나오는 것</b>대표님 명식, 오늘의 투찰 신호, 앞으로 30일 중 넣을 만한 날</p>
       </section>
 
       <section className="h6-sec" aria-labelledby="h6-first">
@@ -185,6 +223,17 @@ export default function Home() {
       </section>
 
       <section className="h6-sec h6-gray"><TrustStrip /></section>
+
+      <section className="h6-sec h6-close" aria-labelledby="h6-when">
+        <p className="h6-promise">낙찰을 약속하지 않습니다. 날을 정할 근거 하나를 드립니다. 정하는 건 대표님입니다.</p>
+        <h2 id="h6-when" className="h6-h">이럴 때 먼저 보세요</h2>
+        <ul className="h6-lines when">
+          <li>큰 건을 넣기 전날 밤에</li>
+          <li>몇 달째 결과가 없을 때</li>
+          <li>협정 상대를 정하기 전에</li>
+        </ul>
+        <Link className="h6-cta" href="/reading?cat=sajeong">내 생년월일로 무료로 보기</Link>
+      </section>
 
       <section className="h6-sec" aria-labelledby="h6-more">
         <h2 id="h6-more" className="h6-h">더 알아보기</h2>

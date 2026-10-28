@@ -1646,3 +1646,6 @@ body:has(.btab) .shell{padding-bottom:calc(59px + env(safe-area-inset-bottom))}
 .bghr.sub{font-weight:600;color:var(--sub)}
 .bgnote{margin-top:6px;font-size:13px;line-height:1.6;color:#7a5c1e;background:#fbf4e4;border-radius:8px;padding:6px 9px}
 .bgfoot{font-size:13px;color:var(--sub)}
+/* 결제 버튼 근처의 선 긋기(2026-10-28). 작은 글씨 면책이 본문 주장을 막지 못한다는 해외 사례에 따라 본문에 가까운 크기로 둔다. */
+.ctapromise{text-align:center;font-size:14px;line-height:1.6;color:#3a3f47;margin-top:6px}
+.nocharge{font-size:13px;color:#58616a;text-align:center;margin:10px 0 2px}
