@@ -1,5 +1,5 @@
 'use client';
-// 휴대폰 하단 탭 — 모든 화면에서 같은 자리, 같은 다섯 칸.
+// 휴대폰 하단 탭: 홈·무료 시작·내 리포트·전체 메뉴의 네 칸.
 // 전에는 홈(nav5)·발주처·자리·보관함·더보기·마이페이지가 저마다 탭을 따로 그렸고,
 // 나머지 화면엔 아예 없었다. 점신·사주나루·천명처럼 어디서든 엄지 자리에 돌아갈 곳이 보이게 한다.
 //
@@ -7,16 +7,16 @@
 // 둘을 겹쳐 쌓으면 화면 아래 7분의 1이 막대가 되어 다시 난잡해진다. 데스크톱은 사이드바가 있어 숨긴다.
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { FREE_START, IC } from '@/lib/nav';
 
 const HIDE = ['/admin', '/login', '/auth', '/en', '/zh', '/reading', '/report', '/thanks'];
 
 type Item = { href: string; label: string; match: (p: string) => boolean; d?: string; dots?: boolean };
 const ITEMS: Item[] = [
   { href: '/', label: '홈', match: p => p === '/', d: 'M4 10.5 12 4l8 6.5V20H4z' },
-  { href: '/reading', label: '사주 보기', match: p => p.startsWith('/reading') || p.startsWith('/hoesa') || p.startsWith('/jari'), d: 'M5 4h14v16H5zM9 9h6M9 13h6M9 17h3' },
-  { href: '/balju', label: '발주처', match: p => p.startsWith('/balju'), d: 'M4 20V8l8-4 8 4v12M4 20h16M10 20v-5h4v5' },
-  { href: '/vault', label: '보관함', match: p => p.startsWith('/vault') || p.startsWith('/mypage'), d: 'M4 8h16v12H4zM4 8l2-3h12l2 3M10 12h4' },
-  { href: '/more', label: '더보기', match: p => p.startsWith('/more'), dots: true },
+  { href: FREE_START.href, label: '무료 시작', match: p => p === '/reading', d: IC.pick },
+  { href: '/vault', label: '내 리포트', match: p => p.startsWith('/vault') || p.startsWith('/mypage') || p === '/find', d: IC.vault },
+  { href: '/more', label: '전체 메뉴', match: p => p === '/more', dots: true },
 ];
 
 export default function BottomTab() {

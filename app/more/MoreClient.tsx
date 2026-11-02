@@ -1,91 +1,64 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { sget } from '@/lib/scope';
+import { useState } from 'react';
 import SiteTop from '@/app/_components/SiteTop';
+import { FREE_START, GROUPS, MINE, type NavItem } from '@/lib/nav';
+import './menu.css';
 
-// 19 · 더보기 · 설정 (프로필 · 회사 · 구독 · 알림)
-// 로그인 상태(initial)는 서버가 쿠키를 읽어 미리 판정 → 첫 페인트에 로그아웃/로그인 버튼 즉시 표시(지연 팝인 제거)
-const NK = 'nakchal_notify_v1';
+function MenuLinks({ items }: { items: NavItem[] }) {
+  return <ul className="menu-links">{items.map(n => (
+    <li key={n.href}><Link href={n.href}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={n.d} /></svg>
+      <span><b>{n.label}</b><small>{n.sub}</small></span><span className="menu-arrow" aria-hidden="true">→</span>
+    </Link></li>
+  ))}</ul>;
+}
 
 export default function MoreClient({ initial }: { initial: { loggedIn: boolean; email?: string; name?: string } }) {
-  const [notify, setNotify] = useState(true);
-  const [prof, setProf] = useState<{ name?: string; corp?: string }>({});
-  const [acct, setAcct] = useState<{ email?: string; name?: string } | null>(
-    initial.loggedIn ? { email: initial.email, name: initial.name } : null,
-  );
-
+  const [acct, setAcct] = useState(initial.loggedIn ? { email: initial.email, name: initial.name } : null);
   async function logout() {
     try { await fetch('/api/auth/signout', { method: 'POST' }); } catch {}
     setAcct(null);
-    if (typeof window !== 'undefined') window.location.href = '/';
+    window.location.href = '/';
   }
-
-  useEffect(() => {
-    try { setNotify(localStorage.getItem(NK) !== '0'); } catch {}
-    try {
-      const raw = sget('nakchal_saved_targets_v1');
-      if (raw) {
-        const arr = JSON.parse(raw);
-        const rep = Array.isArray(arr) ? arr.find((t: any) => t.kind === 'legal' || t.corp) : null;
-        if (rep) setProf({ corp: rep.name });
-      }
-    } catch {}
-  }, []);
-
-  function toggleNotify() {
-    setNotify(v => { const n = !v; try { localStorage.setItem(NK, n ? '1' : '0'); } catch {} return n; });
-  }
-
   return (
-    <div className="app home">
+    <div className="app menu-page">
       <SiteTop />
-
-      <div style={{ padding: '0 16px 24px' }}>
-        {/* 이 화면엔 제목 요소가 하나도 없었다. 스크린리더로 오면 어디인지 알 길이 없다. */}
-        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 17, color: 'var(--ink)', margin: '14px 2px 0' }}>더보기 · 설정</h1>
-        <div className="profcard" style={{ marginTop: 10 }}>
-          <div className="pav" style={{background:'#3f6be0',border:0}}><svg viewBox="0 0 40 40" width="26" height="26" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="9" fill="#3f6be0"/><rect x="10" y="19" width="3.8" height="12" rx="1.9" fill="#fff"/><rect x="16" y="14" width="3.8" height="17" rx="1.9" fill="#fff"/><rect x="22" y="17" width="3.8" height="14" rx="1.9" fill="#fff"/><rect x="28" y="11" width="3.8" height="20" rx="1.9" fill="#fff"/><circle cx="29.9" cy="8.2" r="2.6" fill="#ffd2ca"/></svg></div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="pn">{acct?.name ? `${acct.name} 대표님` : prof.name ? `${prof.name} 대표님` : '대표님'}</div>
-            <div className="ps">{acct?.email ? acct.email : (prof.corp || '회사 정보 미입력')} · 무료 이용중</div>
-          </div>
-          {/* 로그인은 화면에서 뺐다(2026-10-23). 결제는 성함·휴대폰 번호로 묶고, 다른 기기에선 '구매한 리포트 찾기'로 연다.
-              이미 로그인한 회원에게만 로그아웃을 보인다. /login 주소는 그대로 남아 있다. */}
-          {acct && <button className="acctbtn ghost" onClick={logout}>로그아웃</button>}
+      <div className="menu-content">
+        <header className="menu-heading"><h1>전체 메뉴</h1><p>궁금한 내용에 맞춰 골라보세요. 처음이라면 오늘의 흐름부터 무료로 확인할 수 있습니다.</p></header>
+        <Link className="menu-start" href={FREE_START.href}>{FREE_START.label}<span aria-hidden="true">→</span></Link>
+        <nav className="menu-jumps" aria-label="분야 바로가기">
+          {GROUPS.map(g => <a key={g.key} href={'#' + g.key}>{g.title}</a>)}
+          <a href="#reports">내 리포트</a><a href="#help">이용안내</a>
+        </nav>
+        <p className="menu-note">서비스마다 무료 열람 범위가 다르며, 상세 풀이의 요금은 각 서비스에서 안내합니다.</p>
+        <div className="menu-groups">
+          {GROUPS.map(g => (
+            <section id={g.key} key={g.key} className="menu-group" aria-labelledby={'menu-' + g.key}>
+              <h2 id={'menu-' + g.key}>{g.title}</h2><p>{g.sub}</p><MenuLinks items={g.items} />
+            </section>
+          ))}
+          <section id="reports" className="menu-group" aria-labelledby="menu-reports">
+            <h2 id="menu-reports">내 리포트</h2><p>저장한 결과나 구매한 리포트를 다시 볼 때</p>
+            <MenuLinks items={MINE.filter(n => n.href === '/vault' || n.href === '/find')} />
+            {acct && <div className="menu-account"><span>{acct.name || '대표님'}<small>{acct.email}</small></span><button className="acctbtn ghost" onClick={logout}>로그아웃</button></div>}
+          </section>
+          <section id="help" className="menu-group" aria-labelledby="menu-help">
+            <h2 id="menu-help">이용안내·문의</h2><p>가격·결과 예시·계산 방법이 궁금할 때</p>
+            <ul className="menu-help-links">
+              <li><Link href="/pricing">이용안내·요금 →</Link></li>
+              <li><Link href="/samples">리포트 예시 →</Link></li>
+              <li><Link href="/faq">자주 묻는 질문 →</Link></li>
+              <li><Link href="/method">계산 방법 →</Link></li>
+              <li><Link href="/glossary">용어사전 →</Link></li>
+              <li><Link href="/why">서비스 소개 →</Link></li>
+              <li><Link href="/bokchae">복채 →</Link></li>
+              <li><Link href="/contact">문의하기 →</Link></li>
+            </ul>
+          </section>
         </div>
-
-        <Link className="loginpromo" href="/find">
-          <span className="lpk">다른 기기</span>
-          <span className="lpt"><b>구매한 리포트 찾기</b><em>결제할 때 넣은 성함과 휴대폰 번호로 다시 엽니다 · 회원가입 없음</em></span>
-          <span className="lpg">→</span>
-        </Link>
-
-        <div className="sechd"><span className="t"><span className="b" />내 정보</span></div>
-        <div className="setrow">
-          <Link href="/reading">대표 사주 정보<span className="r">입력·수정 ›</span></Link>
-          <Link href="/reading">회사(법인) 정보<span className="r">설립일·상호 ›</span></Link>
-          <Link href="/vault">보관함 · 내 리포트<span className="r">이 기기 ›</span></Link>
-          <Link href="/find">구매한 리포트 찾기<span className="r">다른 기기 ›</span></Link>
-        </div>
-
-        <div className="sechd"><span className="t"><span className="b" />읽을거리</span></div>
-        <div className="setrow">
-          <Link href="/jari">자리 사주: 사무실 방위·이전 택일<span className="r">›</span></Link>
-          <Link href="/column">사주 칼럼<span className="r">입찰·수주 명리 이야기 ›</span></Link>
-        </div>
-
-        <div className="sechd"><span className="t"><span className="b" />기타</span></div>
-        <div className="setrow">
-          <Link href="/terms">이용약관 · 면책<span className="r">›</span></Link>
-          <Link href="/privacy">개인정보 처리방침<span className="r">›</span></Link>
-          <Link href="/refund">청약철회·환불 안내<span className="r">›</span></Link>
-          <Link href="/contact">이메일 문의<span className="r">고객센터 ›</span></Link>
-        </div>
-
-        <div className="hdisc" style={{ marginTop: 14 }}>명리 기반 참고 정보 · 투찰금액 산정 근거가 아닙니다</div>
+        <footer className="menu-footer"><Link href="/terms">이용약관</Link><Link href="/privacy">개인정보처리방침</Link><Link href="/refund">청약철회·환불</Link><p>명리 기반 참고 정보입니다. 투찰금액 산정 근거가 아닙니다.</p></footer>
       </div>
-
     </div>
   );
 }

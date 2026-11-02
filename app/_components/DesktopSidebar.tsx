@@ -3,17 +3,11 @@ import Link from 'next/link';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { usePathname } from 'next/navigation';
 import BrandMark from './BrandMark';
-import { IC, FEATURED, GROUPS, MINE } from '@/lib/nav';
+import { IC, FREE_START, GROUPS, MINE } from '@/lib/nav';
 
 // 데스크톱(≥900px) 전용 좌측 내비. 모바일에서는 CSS로 숨김.
-// 홈 목록과 같은 이름·아이콘·묶음으로 보인다(lib/nav, 2026-10-28). 예전엔 '발주처'와 '발주처 사주'처럼 같은 것을 달리 불렀다.
-// 회사 사주·택일·발주처는 검색으로 들어오는 입구라 계속 전역에 걸린다. 보관함·리포트 찾기·문의는 결제 뒤 손님이 찾는 자리라 맨 아래 묶음에 둔다.
-const SECTIONS: { title: string | null; items: { href: string; label: string; d: string }[] }[] = [
-  { title: null, items: [{ href: '/', label: '홈', d: IC.home }] },
-  { title: '사주 보기', items: [...FEATURED, ...GROUPS[0].items] },
-  ...GROUPS.slice(1).map(g => ({ title: g.title, items: g.items })),
-  { title: '내 리포트', items: MINE },
-];
+// 홈·전체 메뉴와 같은 이름·아이콘·묶음을 쓴다. 현재 페이지가 속한 묶음은 펼친다.
+// 보관함·리포트 찾기·문의는 항상 보이는 마지막 묶음에 둔다.
 
 // /en/, /zh/ 는 한국어 껍데기를 물려받으면 안 된다. 사정률·투찰은 조달청 복수예비가격이 있어야 성립하는
 // 한국 전용 상품이라 바깥에서는 팔지 않는다. 그래서 CTA도 계산기로 보낸다.
@@ -51,7 +45,7 @@ const LOC: Record<'en' | 'zh', Loc> = {
 
 export default function DesktopSidebar() {
   const path = usePathname() || '/';
-  const active = (h: string) => (h === '/' ? path === '/' : path.startsWith(h));
+  const active = (h: string) => path === h || (h !== '/' && path.startsWith(h + '/'));
   const hideShell = path.startsWith('/admin') || path === '/login' || path === '/signup';
   if (hideShell) return null;
 
@@ -77,18 +71,23 @@ export default function DesktopSidebar() {
   return (
     <aside className="dsidebar">
       <Link href="/" className="dbrand"><span className="ds"><BrandMark size={44} /></span><span className="dbt">낙찰사주<small>공공입찰 대표를 위한 사주</small></span></Link>
-      <Link href="/reading" className="dcta">오늘, 넣을 날인가 →</Link>
-      <nav className="dnav dnav-g">
-        {SECTIONS.map((s, i) => (
-          <div key={i} className="dgrp">
-            {s.title && <div className="dgt">{s.title}</div>}
-            {s.items.map(n => (
+      <Link href={FREE_START.href} className="dcta dcta-start">{FREE_START.label} →</Link>
+      <nav className="dnav dnav-g" aria-label="서비스 메뉴">
+        <Link href="/" className={'dnavi' + (path === '/' ? ' on' : '')} aria-current={path === '/' ? 'page' : undefined}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={IC.home} /></svg>홈</Link>
+        {GROUPS.map(g => (
+          <details key={path + g.key} className="dnav-group" open={g.items.some(n => active(n.href)) || (path === '/' && g.key === 'day')}>
+            <summary>{g.title}</summary>
+            {g.items.map(n => (
               <Link key={n.href} href={n.href} className={'dnavi' + (active(n.href) ? ' on' : '')} aria-current={active(n.href) ? 'page' : undefined}>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d={n.d} /></svg>{n.label}
               </Link>
             ))}
-          </div>
+          </details>
         ))}
+        <div className="dgrp">
+          <div className="dgt">내 리포트·도움말</div>
+          {MINE.map(n => <Link key={n.href} href={n.href} className={'dnavi' + (active(n.href) ? ' on' : '')} aria-current={active(n.href) ? 'page' : undefined}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={n.d} /></svg>{n.label}</Link>)}
+        </div>
       </nav>
       <div className="dfoot">
         명리 기반 참고 정보입니다.<br />투찰금액 산정 근거가 아닙니다.

@@ -11,7 +11,7 @@ export default function SiteTop() {
         <BrandMark size={40} />
         <span>낙찰사주</span>
       </Link>
-      <Link href="/more" className="st-menu" aria-label="메뉴 · 더보기">
+      <Link href="/more" className="st-menu" aria-label="전체 메뉴">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
       </Link>
     </header>

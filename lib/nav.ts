@@ -1,6 +1,4 @@
-// lib/nav.ts — 상품·메뉴 이름과 아이콘의 한 곳(2026-10-28).
-// 데스크톱 왼쪽 메뉴와 홈 목록이 같은 상품을 다른 이름·다른 아이콘으로 불렀다('발주처' 대 '발주처 사주', 건물 그림 두 가지).
-// 이제 둘 다 여기서 읽는다. 묶음 순서도 같다: 사주 보기 → 날과 자리 → 가볍게 보기.
+// 홈·PC 메뉴·전체 메뉴가 같은 서비스 이름과 목적별 묶음을 사용한다.
 // 아이콘은 한 스타일(24px 선, 굵기 1.8)로만 그린다.
 export const IC = {
   home: 'M4 10.5 12 4l8 6.5V20H4z',
@@ -25,39 +23,45 @@ export const IC = {
 } as const;
 
 export type NavItem = { href: string; label: string; sub: string; d: string };
-export type NavGroup = { key: string; title: string; items: NavItem[] };
+export type NavGroup = { key: string; title: string; sub: string; items: NavItem[] };
 
-// 처음 온 대표에게 권하는 둘(홈 맨 위 카드). 왼쪽 메뉴에서는 '사주 보기' 맨 앞 두 줄이다.
+export const FREE_START = { href: '/reading?cat=sajeong', label: '오늘의 흐름 무료로 보기' };
+
+// 처음 이용할 때 안내하는 두 서비스. 각 목적별 묶음의 첫 항목이다.
 export const FEATURED: NavItem[] = [
-  { href: '/product/taekil', label: '오늘의 투찰 택일', sub: '오늘 넣을 날인지, 30일 안의 길일은 언제인지', d: IC.pick },
-  { href: '/product/daepyo', label: '대표 사주', sub: '어떤 그릇의 대표인지: 승부 기질·재물·사람', d: IC.person },
+  { href: '/product/taekil', label: '오늘의 투찰 택일', sub: '내 생년월일로 오늘의 해석과 7일 흐름 확인', d: IC.pick },
+  { href: '/product/daepyo', label: '대표 사주', sub: '생년월일로 보는 대표의 성향·재물·사람 관계', d: IC.person },
 ];
 
 export const GROUPS: NavGroup[] = [
-  { key: 'saju', title: '사주 보기', items: [
-    { href: '/hoesa', label: '회사 사주', sub: '설립일만 넣고 30초', d: IC.company },
-    { href: '/balju', label: '발주처 사주', sub: '그 발주처와 맞는 판인가', d: IC.client },
-    { href: '/product/gunghap', label: '협정·궁합 사주', sub: '손잡기 전에 깨질 궁합인지', d: IC.pair },
-    { href: '/product/daeun', label: '회사 대운', sub: '회사가 대표님을 밀어주는가', d: IC.trend },
+  { key: 'day', title: '오늘·날짜 보기', sub: '오늘의 흐름이나 개업·계약 날짜가 궁금할 때', items: [
+    FEATURED[0],
+    { href: '/taekil', label: '개업·계약 택일', sub: '개업·설립·계약·이전·입찰 날짜 고르기', d: IC.day },
+    { href: '/today', label: '일간별 오늘 운세', sub: '나의 일간에 해당하는 공통 운세 읽기', d: IC.sun },
+    { href: '/product/calendar', label: '사업운 캘린더', sub: '한 달의 사업 흐름을 달력으로 확인', d: IC.cal },
+    { href: '/saeobunse/2027', label: '2027 사업운', sub: '일간별 열두 달의 사업 흐름 읽기', d: IC.year },
   ] },
-  { key: 'day', title: '날과 자리', items: [
-    { href: '/today', label: '오늘의 투찰 운세', sub: '일간별로 매일 바뀌는 신호', d: IC.sun },
-    { href: '/saeobunse/2027', label: '2027 사업운', sub: '일간별 열두 달 움직일 달과 조심할 달', d: IC.year },
-    { href: '/taekil', label: '택일', sub: '개업·설립·계약·이전·입찰 좋은 날', d: IC.day },
-    { href: '/product/calendar', label: '사업운 캘린더', sub: '앞으로 한 달, 움직일 날과 조심할 날', d: IC.cal },
-    { href: '/jari', label: '사무실 자리', sub: '옮기기 전에 방위부터', d: IC.compass },
+  { key: 'saju', title: '대표·회사 분석', sub: '나의 성향과 회사의 흐름을 알고 싶을 때', items: [
+    FEATURED[1],
+    { href: '/hoesa', label: '회사 사주', sub: '설립일로 보는 회사의 성향과 흐름', d: IC.company },
+    { href: '/product/daeun', label: '회사 대운', sub: '대표와 회사의 장기적인 흐름 함께 보기', d: IC.trend },
   ] },
-  { key: 'light', title: '가볍게 보기', items: [
+  { key: 'relation', title: '관계·궁합 보기', sub: '발주처나 함께 일할 상대와의 관계가 궁금할 때', items: [
+    { href: '/balju', label: '발주처 사주', sub: '발주처를 찾아 성향과 나와의 궁합 확인', d: IC.client },
+    { href: '/product/gunghap', label: '협정·궁합 사주', sub: '협정·동업 상대와의 성향과 관계 살펴보기', d: IC.pair },
+  ] },
+  { key: 'light', title: '가볍게 보기·읽을거리', sub: '사주를 더 알아보고 싶을 때', items: [
     { href: '/ceo', label: '닮은 CEO', sub: '거장 111인 중 명식이 닮은 사람', d: IC.ceo },
     { href: '/sajang', label: '대표가 될 사주일까', sub: '대표가 된다면 어떤 대표가 맞는지까지', d: IC.boss },
+    { href: '/jari', label: '사무실 자리', sub: '사무실 방위와 이전 날짜 살펴보기', d: IC.compass },
     { href: '/column', label: '칼럼', sub: '입찰·수주 명리 이야기', d: IC.column },
   ] },
 ];
 
 // 왼쪽 메뉴 맨 아래 묶음. 홈 목록에는 나오지 않는다(상품이 아니라 내 리포트·도움말 자리).
 export const MINE: NavItem[] = [
-  { href: '/vault', label: '보관함', sub: '이 기기에 저장한 리포트', d: IC.vault },
+  { href: '/vault', label: '내 리포트 보관함', sub: '이 기기에 저장한 리포트', d: IC.vault },
   { href: '/find', label: '구매한 리포트 찾기', sub: '다른 기기에서 산 리포트', d: IC.find },
   { href: '/contact', label: '문의하기', sub: '결제 뒤 화면이 이상할 때', d: IC.mail },
-  { href: '/more', label: '더보기', sub: '전체 메뉴', d: IC.more },
+  { href: '/more', label: '전체 메뉴', sub: '모든 서비스와 이용안내', d: IC.more },
 ];
