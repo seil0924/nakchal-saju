@@ -1,13 +1,13 @@
 // middleware.ts — Supabase 세션 갱신 + 로그인 게이트
 // 정책: 랜딩·무료 리딩·바이럴/세일즈 입구는 로그인 없이 "맛보기" 가능(전환 앞단 확보).
-//       로그인은 저장(보관함)·마이페이지·결제된 리포트 열람에서만 요구한다.
+//       기기 보관함은 비회원도 연다. 계정 목록과 유료 본문 권한은 각 API에서 확인한다.
 //       인증 미설정(데모)이면 게이트 없음.
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
 // 로그인 없이 접근 가능한 공개 경로.
 const PUBLIC_EXACT = new Set<string>([
-  '/', '/login', '/terms', '/privacy', '/more', '/thanks', '/saeobunse',
+  '/', '/login', '/terms', '/privacy', '/more', '/vault', '/thanks', '/saeobunse',
   '/reading', '/hoesa', '/review', '/ceo', '/balju', '/bokchae', '/ritual', '/why', '/faq', '/samples', '/glossary', '/method', '/refund', '/pricing', '/contact', '/find', '/column', '/gosa', '/sajang', '/today',
   // '/full' 은 리포트 본문이 아니라 그것을 파는 랜딩이다. 사이트맵 1순위에 올려놓고
   // 로그인으로 막고 있었다 — 검색으로 온 사람이 전부 튕겼다.
@@ -151,7 +151,7 @@ export async function middleware(req: NextRequest) {
   const fwd = new Headers(req.headers);
   fwd.set('x-nk-path', req.nextUrl.pathname);
   const res = NextResponse.next({ request: { headers: fwd } });
-  // 로그인 확인은 보관함·마이페이지·관리자에서만 한다.
+  // 로그인 확인은 보호된 계정·관리자 경로에서만 한다.
   // 예전에는 모든 요청마다 Supabase 에 로그인 조회를 보냈다 — 크롤러가 캐시된 페이지를 한 장 열 때도
   // 서버 함수가 깨어나 네트워크 호출을 했다. 토큰 갱신은 브라우저 클라이언트가 알아서 한다.
   if (!needsLogin(req.nextUrl.pathname)) return res;
@@ -167,7 +167,7 @@ export async function middleware(req: NextRequest) {
   });
   const { data: { user } } = await sb.auth.getUser();
 
-  // 보관함·마이페이지·관리자만 로그인 필요. 그 밖의 없는 주소는 그대로 흘려 404 를 받게 한다.
+  // 보호된 계정·관리자 경로만 로그인 필요. 그 밖의 없는 주소는 그대로 흘려 404 를 받게 한다.
   if (!user && needsLogin(req.nextUrl.pathname)) {
     const to = req.nextUrl.clone();
     to.pathname = '/login';

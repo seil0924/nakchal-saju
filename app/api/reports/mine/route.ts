@@ -7,6 +7,6 @@ export const dynamic = 'force-dynamic';   // 사람마다 답이 다르다: 캐�
 
 export async function GET() {
   const user = await requireUser();
-  const list = await listReports(user?.id);
+  const list = user?.id ? await listReports(user.id) : [];
   return NextResponse.json({ reports: list });
 }

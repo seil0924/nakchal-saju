@@ -5,12 +5,12 @@ import path from 'node:path';
 
 describe('isPublicPath — 로그인 게이트 판정', () => {
   it('공개 경로는 true (랜딩·로그인·무료 리딩·세일즈 입구)', () => {
-    for (const p of ['/', '/login', '/reading', '/pricing', '/terms', '/privacy', '/ceo', '/balju'])
+    for (const p of ['/', '/vault', '/login', '/reading', '/pricing', '/terms', '/privacy', '/ceo', '/balju'])
       expect(isPublicPath(p)).toBe(true);
   });
-  it('보호 경로는 false (보관함·마이페이지)', () => {
+  it('보호 경로는 false (계정·관리자)', () => {
     // '/full' 은 여기 있었는데 빼냈다. 리포트 본문이 아니라 그것을 파는 랜딩이라 막을 이유가 없다.
-    for (const p of ['/vault', '/mypage'])
+    for (const p of ['/mypage', '/admin'])
       expect(isPublicPath(p)).toBe(false);
   });
   it('정적 파일(확장자 포함)은 게이트 제외', () => {
@@ -59,7 +59,7 @@ describe('나중에 붙일 자리', () => {
   });
 
   it('보호해야 할 곳은 그대로 막혀 있다', () => {
-    for (const p of ['/vault', '/mypage', '/admin', '/admin/views'])
+    for (const p of ['/vault/private', '/mypage', '/admin', '/admin/views'])
       expect(isPublicPath(p)).toBe(false);
   });
 });
