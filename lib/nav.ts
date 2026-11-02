@@ -62,6 +62,7 @@ export const GROUPS: NavGroup[] = [
 export const MINE: NavItem[] = [
   { href: '/vault', label: '내 리포트 보관함', sub: '이 기기에 저장한 리포트', d: IC.vault },
   { href: '/find', label: '구매한 리포트 찾기', sub: '다른 기기에서 산 리포트', d: IC.find },
-  { href: '/contact', label: '문의하기', sub: '결제 뒤 화면이 이상할 때', d: IC.mail },
+  { href: '/contact', label: '문의하기', sub: '결제·환불·풀이·오류 도움받기', d: IC.mail },
+  { href: '/refund', label: '환불 안내', sub: '상황별 기준과 요청 방법', d: IC.mail },
   { href: '/more', label: '전체 메뉴', sub: '모든 서비스와 이용안내', d: IC.more },
 ];

@@ -1,38 +1,29 @@
-// /contact — 이메일 문의(2026-10-23).
-// 폼으로 받아 DB 에 쌓지 않는다. 손님 메일 앱으로 고객센터 주소·제목·양식을 채워 열어 줄 뿐이라
-// 우리가 따로 보관하는 개인정보가 없다(처리방침에 새 항목이 생기지 않는다).
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteTop from '@/app/_components/SiteTop';
 import { BIZ } from '@/lib/bizinfo';
 import { ogCard } from '@/lib/og';
 import ContactMail from './ContactMail';
+import { supportTopic, supportReport } from '@/lib/support';
+import './support.css';
 
 export const metadata: Metadata = {
-  title: '이메일 문의',
-  description: `결제·환불, 리포트 내용, 오류 신고, 제휴 문의는 이메일(${BIZ.email})로 받습니다. 문의 유형을 고르면 제목과 양식이 채워진 메일이 열립니다. 받은 순서대로 답장드립니다.`,
+  title: '문의하기·고객센터',
+  description: '결제·환불, 리포트 내용, 화면 오류를 이메일로 문의하세요. 문의 유형별 준비 정보와 메일 앱이 열리지 않을 때의 방법을 안내합니다.',
   alternates: { canonical: '/contact' },
-  openGraph: {
-    url: 'https://nakchalsaju.com/contact', type: 'website', locale: 'ko_KR', siteName: '낙찰사주',
-    images: ogCard({ seal: '問', k: '問議 · 고객센터', t: '이메일 문의', s: '낙찰사주 · 나인굿즈' }),
-  },
+  openGraph: { url: 'https://nakchalsaju.com/contact', type: 'website', locale: 'ko_KR', siteName: '낙찰사주', images: ogCard({ seal: '問', k: '問議 · 고객센터', t: '문의하기·고객센터', s: '낙찰사주 · 나인굿즈' }) },
 };
 
-export default function Contact() {
-  return (
-    <div className="app">
-      <SiteTop />
-      <div className="wrap">
-        <h1 className="ct-h">이메일 문의</h1>
-        <p className="ct-lead">문의 유형을 고르면 제목과 양식이 채워진 메일이 열립니다. 받은 순서대로 답장드립니다.</p>
-        <ContactMail email={BIZ.email} />
-        <div className="card ct-more">
-          <p><b>환불은 이렇게 요청해 주세요</b><br />결제자 성함, 결제일시, 주문번호(또는 리포트 주소)를 함께 적어 주시면 바로 확인합니다. 기준은 <Link href="/refund">청약철회·환불 안내</Link>에 있습니다.</p>
-          <p><b>구매한 리포트가 안 보이면</b><br />다른 기기에서는 <Link href="/find">구매한 리포트 찾기</Link>에 결제 때 넣은 성함과 휴대폰 번호를 넣으면 다시 열립니다.</p>
-          <p><b>자주 묻는 질문</b><br />결과를 다시 여는 법, 생년월일을 바꾸는 법은 <Link href="/faq">자주 묻는 질문</Link>에 먼저 정리해 두었습니다.</p>
-          <p className="ct-biz">{BIZ.company} · 대표 {BIZ.ceo} · 고객센터 {BIZ.email}</p>
-        </div>
-      </div>
-    </div>
-  );
+export default function Contact({ searchParams }: { searchParams: { topic?: string; report?: string } }) {
+  return <div className="app">
+    <SiteTop />
+    <main className="support-page">
+      <nav className="support-tabs" aria-label="고객센터 안내"><Link href="/contact" aria-current="page">문의하기</Link><Link href="/refund">환불 안내</Link><Link href="/faq">자주 묻는 질문</Link></nav>
+      <h1>어떤 도움이 필요하신가요?</h1>
+      <p className="support-lead">결제·환불, 리포트 내용, 화면 오류를 이메일로 문의할 수 있습니다. 가입이나 로그인 없이 이용하세요.</p>
+      <div className="support-quick"><Link href="/find"><b>구매했는데 리포트가 안 보여요 →</b><span>결제할 때 입력한 성함과 번호로 다시 찾기</span></Link><Link href="/refund"><b>환불 기준부터 확인할게요 →</b><span>상황별 기준과 환불 요청 방법 확인</span></Link></div>
+      <ContactMail key={supportTopic(searchParams.topic) + supportReport(searchParams.report)} email={BIZ.email} initialTopic={supportTopic(searchParams.topic)} reportId={supportReport(searchParams.report)} />
+      <p className="support-fine">{BIZ.company} · 대표 {BIZ.ceo} · 고객센터 {BIZ.email}</p>
+    </main>
+  </div>;
 }

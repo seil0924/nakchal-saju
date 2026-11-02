@@ -1,5 +1,6 @@
 'use client';
 import Checkout from '@/app/_components/Checkout';
+import SupportLinks from '@/app/_components/SupportLinks';
 import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/lib/purchase-client';
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
@@ -838,6 +839,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={exportIcs}>
               30일 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
             </button>)}
+            <SupportLinks reportId={res.reportId} />
             <TrustStrip />
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>
             </div>
@@ -870,7 +872,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         </div>
       , document.body)}
 
-      {modal && res && mounted && <Checkout
+      {modal && res && mounted && <Checkout reportId={res.reportId}
         name={passMode ? '발주처 프리미엄 패스' : catInfo?.name ?? '선택한 풀이'}
         price={passMode ? PRICE_BALJU_PASS : unlockPrice} subject={res.title}
         details={passMode ? [`핵심 발주처 ${CORE_CLIENT_COUNT}곳의 상세 풀이`] : catInfo?.gives?.slice(0, 3) ?? [catInfo?.lead ?? '선택한 리포트의 유료 풀이']}

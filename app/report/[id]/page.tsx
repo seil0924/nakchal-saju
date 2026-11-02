@@ -13,6 +13,8 @@ import YearBar from '@/app/_components/YearBar';
 import { markResultSeen } from '@/app/_components/AddToHome';
 import SiteTop from '@/app/_components/SiteTop';
 import Checkout from '@/app/_components/Checkout';
+import SupportLinks from '@/app/_components/SupportLinks';
+import { supportHref } from '@/lib/support';
 import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/lib/purchase-client';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
@@ -121,7 +123,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
           <div className="purchase-actions">
             {payNote?.kind !== 'ok' && <button type="button" disabled={checking} onClick={() => load()}>결제 상태 다시 확인</button>}
             {payNote?.kind === 'ok' && <button type="button" onClick={() => { const index = res?.sections.findIndex(s => !s.free && !!s.html) ?? -1; if (index >= 0) setExpanded([index]); document.getElementById(index >= 0 ? 'report-section-' + index : 'rep')?.scrollIntoView({ block: 'start', behavior: 'smooth' }); }}>구매한 내용 읽기</button>}
-            <Link href="/vault">보관함</Link><Link href="/find">구매 기록으로 찾기</Link>{payNote?.kind === 'stuck' && <Link href="/contact">문의하기</Link>}
+            <Link href="/vault">보관함</Link><Link href="/find">구매 기록으로 찾기</Link>{payNote?.kind === 'stuck' && <Link href={supportHref('pay', id)}>문의하기</Link>}
           </div>
         </div>}
         {err && !res && <div className="purchase-notice"><h2>다시 여는 방법을 선택해주세요</h2><p>결제할 때 입력한 성함과 휴대폰 번호로 구매 기록을 찾을 수 있습니다.</p><div className="purchase-actions"><button disabled={checking} onClick={() => load()}>다시 불러오기</button><Link href="/find">구매한 리포트 찾기</Link><Link href="/vault">보관함</Link></div></div>}
@@ -209,6 +211,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 도움이 되셨다면 한 줄 남겨 주세요: <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
               </p>
             )}
+            <SupportLinks reportId={id} />
             <button className="sharebtn no-print" style={{ marginTop: 12 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장
@@ -227,7 +230,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
         </div>
       )}
 
-      {modal && <Checkout name={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.name ?? '선택한 풀이'}
+      {modal && <Checkout reportId={id} name={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.name ?? '선택한 풀이'}
         price={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0} subject={res?.title}
         details={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.gives?.slice(0, 3) ?? ['선택한 상품의 유료 풀이가 열립니다']}
         buyer={buyer} setBuyer={setBuyerPart} consent={consent} setConsent={setConsent} busy={busy || checking}

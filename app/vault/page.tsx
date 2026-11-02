@@ -5,6 +5,7 @@ import { listVault, type VaultItem } from '@/lib/vault';
 import { requestJSON } from '@/lib/purchase-client';
 import { sget } from '@/lib/scope';
 import SiteTop from '@/app/_components/SiteTop';
+import SupportLinks from '@/app/_components/SupportLinks';
 import '@/app/_components/checkout.css';
 import Mascot from '@/app/_components/Mascot';
 
@@ -64,6 +65,7 @@ export default function Vault() {
           <div className="r" style={{ background: '#f4f5f7', color: '#8a6a2a' }}>저장됨</div>
         </div>
       ))}
+      <SupportLinks />
       <div className="balnote">결제 내역은 있는데 리포트가 열리지 않으면 <Link href="/contact">문의하기</Link>를 이용해주세요.</div>
 
     </div>

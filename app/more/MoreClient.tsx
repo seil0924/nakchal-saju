@@ -29,8 +29,9 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
         <Link className="menu-start" href={FREE_START.href}>{FREE_START.label}<span aria-hidden="true">→</span></Link>
         <nav className="menu-jumps" aria-label="분야 바로가기">
           {GROUPS.map(g => <a key={g.key} href={'#' + g.key}>{g.title}</a>)}
-          <a href="#reports">내 리포트</a><a href="#help">이용안내</a>
+          <a href="#reports">내 리포트</a><a href="#help">이용안내·문의</a>
         </nav>
+        <nav className="menu-jumps" aria-label="문의와 환불 바로가기"><Link href="/contact">문의하기 →</Link><Link href="/refund">환불 안내·요청 방법 →</Link></nav>
         <p className="menu-note">서비스마다 무료 열람 범위가 다르며, 상세 풀이의 요금은 각 서비스에서 안내합니다.</p>
         <div className="menu-groups">
           {GROUPS.map(g => (
@@ -53,7 +54,7 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
               <li><Link href="/glossary">용어사전 →</Link></li>
               <li><Link href="/why">서비스 소개 →</Link></li>
               <li><Link href="/bokchae">복채 →</Link></li>
-              <li><Link href="/contact">문의하기 →</Link></li>
+              <li><Link href="/contact">문의하기 →</Link></li><li><Link href="/refund">환불 안내·요청 방법 →</Link></li>
             </ul>
           </section>
         </div>
