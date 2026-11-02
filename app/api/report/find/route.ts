@@ -3,7 +3,7 @@
 // 같은 곳에서 한 시간에 10번까지 — 그 이상은 남의 번호를 두드려 보는 것이다(창업레이더와 같은 선).
 // 찾으면 이 브라우저에 구매자 열쇠를 심어, 패스가 있으면 이 기기에서도 열리게 한다.
 import { NextResponse } from 'next/server';
-import { purchasesOf, findTooMany } from '@/lib/store';
+import { purchasesOf, findTooMany, getReportAccess } from '@/lib/store';
 import { buyerKey, normName, normPhone, validPhone, ipHash, BUYER_COOKIE, BUYER_COOKIE_OPTS } from '@/lib/buyer';
 
 export async function POST(req: Request) {
@@ -17,9 +17,14 @@ export async function POST(req: Request) {
 
   const key = buyerKey(name, phone);
   const list = await purchasesOf(key);
-  const reports = list.filter(x => x.reportId).map(x => ({ id: x.reportId as string, item: x.item, paidAt: x.paidAt }));
+  const unique = [...new Map(list.filter(x => x.reportId).map(x => [x.reportId, x])).values()];
+  const reports = await Promise.all(unique.map(async x => {
+    const id = x.reportId as string;
+    const { token } = await getReportAccess(id);
+    return { id, item: x.item, paidAt: x.paidAt, token: token || id };
+  }));
   const pass = list.some(x => x.passKey);
-  const res = NextResponse.json({ reports, pass });
+  const res = NextResponse.json({ reports, pass }, { headers: { 'Cache-Control': 'no-store' } });
   if (reports.length || pass) res.cookies.set(BUYER_COOKIE, key, BUYER_COOKIE_OPTS);
   return res;
 }

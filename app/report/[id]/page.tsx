@@ -1,17 +1,19 @@
 'use client';
 import TaekilAccess from '@/app/_components/TaekilAccess';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import BuyerFields, { type BuyerState } from '@/app/_components/BuyerFields';
-import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
+import { type BuyerState } from '@/app/_components/BuyerFields';
+import { preloadKcp } from '@/app/_components/kcpPay';
 import { won } from '@/lib/constants';
-import { markUnlocked } from '@/lib/vault';
+import { recordReport } from '@/lib/vault';
 import { tokParam, setTok } from '@/lib/rtok';
 import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import YearBar from '@/app/_components/YearBar';
 import { markResultSeen } from '@/app/_components/AddToHome';
 import SiteTop from '@/app/_components/SiteTop';
+import Checkout from '@/app/_components/Checkout';
+import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/lib/purchase-client';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
 type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
@@ -19,22 +21,10 @@ const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
   useEffect(() => { preloadKcp(); }, []);
-  // KCP 결제 뒤 돌아온 결과(?paid=1|0&why=…). 예전엔 아무것도 안 띄워서, 결제를 마쳤는지 손님이 알 수 없었다(2026-10-23).
   const [payNote, setPayNote] = useState<{ kind: 'ok' | 'stuck' | 'cancel'; text: string } | null>(null);
-  useEffect(() => {
-    const sp = new URLSearchParams(location.search);
-    const paid = sp.get('paid'); if (paid === null) return;
-    const why = sp.get('why') || '';
-    if (paid === '1' && why.startsWith('confirm')) setPayNote({ kind: 'stuck', text: '결제는 됐는데 열람 처리가 끝나지 않았습니다. 다시 결제하지 마시고, 이메일 문의로 이 화면 주소를 보내 주시면 바로 열어 드립니다.' });
-    else if (paid === '1') setPayNote({ kind: 'ok', text: '결제됐습니다. 잠긴 장이 모두 열렸습니다.' });
-    // 승인 응답을 못 받았거나(approve_unknown) 승인 뒤 금액이 달랐거나(amount) 서버 오류(fatal): 돈이 나갔을 수 있다
-    else if (/^(approve_unknown|amount|fatal)/.test(why)) setPayNote({ kind: 'stuck', text: '결제 결과를 확인하지 못했습니다. 카드 승인 문자를 받으셨다면 다시 결제하지 마시고, 이메일 문의로 이 화면 주소를 보내 주세요. 확인해서 열어 드리거나 취소해 드립니다.' });
-    else if (why.startsWith('approve')) setPayNote({ kind: 'cancel', text: '카드 승인이 되지 않았습니다. 돈은 나가지 않았습니다. 다른 카드로 다시 해 보세요.' });
-    else setPayNote({ kind: 'cancel', text: '결제를 마치지 않았습니다. 돈은 나가지 않았고, 다시 하려면 아래 [열기]를 눌러주세요.' });
-    // 새로고침할 때마다 같은 안내가 뜨지 않게 결과 표시만 주소에서 지운다(토큰 t 는 남긴다).
-    sp.delete('paid'); sp.delete('why');
-    const q = sp.toString(); history.replaceState(null, '', location.pathname + (q ? '?' + q : ''));
-  }, []);
+  const [checking, setChecking] = useState(false);
+  const [recovery, setRecovery] = useState(false);
+  const paying = useRef(false);
   const id = params.id;
   const [res, setRes] = useState<Result | null>(null);
   const [modal, setModal] = useState(false);
@@ -46,10 +36,8 @@ export default function ReportView({ params }: { params: { id: string } }) {
   const setBuyerPart = (p: Partial<BuyerState>) => setBuyer(b => ({ ...b, ...p }));
   // 카테고리 없는 리포트에서 손님이 고른 상품(결제 직전까지만 들고 있는다)
   const [pending, setPending] = useState<string | undefined>(undefined);
-  const [sku, setSku] = useState<'taekil' | 'full'>('full');
-  const [seal, setSeal] = useState(false);
+  const sku = 'full' as const;
   const [sticky, setSticky] = useState(false);
-  const [anchor, setAnchor] = useState<{ x: number; y: number } | null>(null);
   const level = res?.level ?? (res?.unlocked ? 2 : 0);
   const catInfo = isCatKey(res?.cat) ? CAT_INFO[res!.cat as string] : null;
 
@@ -64,15 +52,26 @@ export default function ReportView({ params }: { params: { id: string } }) {
   }, [res, level]);
 
   async function load() {
-    const urlT = new URLSearchParams(location.search).get('t');
-    if (urlT) setTok(id, urlT);   // 결제 뒤 다른 브라우저로 돌아온 경우, 다음에 열 때도 열리게
-    const t = tokParam(id, urlT);
-    const r = await fetch('/api/report/get?id=' + id + '&t=' + encodeURIComponent(t));
-    if (!r.ok) { setErr('리포트를 찾을 수 없습니다.'); return; }
-    setRes(await r.json());
-    markResultSeen();
+    setChecking(true); setErr('');
+    const sp = new URLSearchParams(location.search);
+    const returned = sp.has('paid');
+    const uncertain = sp.get('paid') === '1' || /^(approve_unknown|amount|fatal|confirm)/.test(sp.get('why') || '');
+    if (uncertain) setRecovery(true);
+    try {
+      const urlT = sp.get('t');
+      if (urlT) setTok(id, urlT);
+      const { ok, data } = await requestJSON('/api/report/get?id=' + encodeURIComponent(id) + '&t=' + encodeURIComponent(tokParam(id, urlT)));
+      if (!ok || !data.sections) throw new Error('리포트를 불러오지 못했습니다. 잠시 후 다시 확인해주세요.');
+      setRes(data); markResultSeen();
+      recordReport({ id, label: data.title, when: Date.now(), unlocked: !!data.unlocked });
+      if (data.unlocked && !data.admin) { setRecovery(false); setModal(false); setPayNote({ kind: 'ok', text: '구매한 풀이가 열려 있습니다. 추가 결제 없이 아래에서 다시 읽을 수 있습니다.' }); }
+      else if (uncertain) setPayNote({ kind: 'stuck', text: PURCHASE_PENDING });
+      else if (returned) setPayNote({ kind: 'cancel', text: '결제를 완료하지 못했습니다. 무료 결과는 그대로 볼 수 있습니다. 카드 승인 내역이 있다면 구매 기록 찾기 또는 문의를 이용해주세요.' });
+      return data as Result;
+    } catch (e) { setErr(e instanceof Error ? e.message : '연결을 확인하고 다시 시도해주세요.'); if (uncertain) setPayNote({ kind: 'stuck', text: PURCHASE_PENDING }); return null; }
+    finally { setChecking(false); }
   }
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [id]);
+  useEffect(() => { setRes(null); setPayNote(null); setRecovery(false); load(); /* eslint-disable-next-line */ }, [id]);
 
   async function switchYear(y: number) {
     if (busy) return; setBusy(true);
@@ -83,43 +82,23 @@ export default function ReportView({ params }: { params: { id: string } }) {
   // pickCat: 카테고리 없이 만들어진 리포트를 결제할 때 손님이 고른 상품.
   // 서버가 needs 를 검증하고 금액도 서버가 정한다 — 여기서 보낸 값은 '무엇을 살지'일 뿐이다.
   async function pay(chosen: 'taekil' | 'full', pickCat?: string) {
-    if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
-    if (busy) return;   // 연타로 주문이 두 개 생기지 않게
-    setErr(''); setBusy(true);
+    if (paying.current || recovery) return;
+    paying.current = true; setBusy(true); setErr('');
+    let confirmed = false;
     try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: id, sku: chosen, cat: pickCat ?? pending, buyerName: buyer.name, buyerPhone: buyer.phone, agree: buyer.agree }) }).then(x => x.json());
-      if (prep?.error) { setBusy(false); setErr(prep.message ? prep.message : prep.error === 'category_required' ? '어떤 풀이를 여실지 먼저 골라 주세요.' : prep.error === 'already_paid' ? '이미 결제가 끝난 리포트입니다. 이 화면에서 잠겨 보이면 이메일 문의로 리포트 주소를 보내 주세요. 바로 열어 드립니다.' : '결제 준비에 실패했습니다.'); if (prep.error === 'already_paid') load(); return; }
-      if (KCP_CLIENT_ENABLED) {
-        const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
-        if (kres === 'redirect') return;
-        if (!kres) { setBusy(false); setErr('결제가 취소되었습니다.'); return; }
-        const ap = await fetch('/api/payment/kcp/approve', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId, enc_data: kres.enc_data, enc_info: kres.enc_info, tran_cd: kres.tran_cd }) }).then(x => x.json());
-        if (!ap?.ok) { setBusy(false); setErr('결제 승인에 실패했습니다. 다시 시도해 주세요.'); return; }
-      } else {
-        await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
-      }
-      await new Promise(r => setTimeout(r, 500));
-      await load(); markUnlocked(id); setModal(false);
-      setSeal(true); setTimeout(() => setSeal(false), 2600);
-    } catch { setErr('결제 확인에 실패했습니다.'); }
-    finally { setBusy(false); }
+      const outcome = await startPurchase({ reportId: id, sku: chosen, cat: pickCat ?? pending, buyerName: buyer.name, buyerPhone: buyer.phone, agree: buyer.agree });
+      if (outcome === 'redirect') return;
+      if (outcome === 'cancelled') { setErr('결제창을 닫았습니다. 무료 결과는 그대로 볼 수 있습니다.'); return; }
+      confirmed = true;
+      const loaded = await load();
+      if (!loaded || (loaded.level ?? 0) < (chosen === 'taekil' ? 1 : 2)) throw new PurchaseError(PURCHASE_PENDING, true);
+      setModal(false);
+      requestAnimationFrame(() => document.getElementById('purchase-status')?.scrollIntoView({ block: 'center' }));
+    } catch (e) { const recover = confirmed || (e instanceof PurchaseError && e.recover); setErr(e instanceof Error ? e.message : PURCHASE_PENDING); setRecovery(recover); if (recover) setPayNote({ kind: 'stuck', text: PURCHASE_PENDING }); }
+    finally { setBusy(false); paying.current = false; }
   }
+  function openModal(_e?: unknown) { setErr(''); setModal(true); }
 
-  function openModal(e?: any) {
-    setErr('');
-    if (e && typeof window !== 'undefined' && window.matchMedia('(min-width:721px)').matches) setAnchor({ x: e.clientX, y: e.clientY });
-    else setAnchor(null);
-    setModal(true);
-  }
-  // 데스크톱: 클릭한 결제 버튼 부근에 다이얼로그를 앵커링(뷰포트 내로 클램프). 모바일(anchor=null)은 하단 시트.
-  const sheetStyle = anchor ? (() => {
-    const W = 432, H = 360, M = 16;
-    const left = Math.max(M, Math.min(anchor.x - W / 2, window.innerWidth - W - M));
-    const top = Math.max(M, Math.min(anchor.y - 24, window.innerHeight - H - M));
-    return { position: 'fixed' as const, left, top, margin: 0 };
-  })() : undefined;
-
-  const lockedCount = res ? res.sections.filter((s2: any) => (RANK[s2.tier] ?? 2) > level).length : 0;
   // 첫 장만 펼친다 — ReadingForm 과 같은 규칙
   const [expanded, setExpanded] = useState<number[]>([]);
   useEffect(() => {
@@ -135,15 +114,17 @@ export default function ReportView({ params }: { params: { id: string } }) {
       <div className="hero"><h1>{catInfo ? catInfo.name : '사주 리포트'}</h1>
         <p><Link href="/vault" style={{ color: 'var(--navy)', textDecoration: 'underline' }}>← 보관함</Link></p></div>
       <div className="wrap">
-        {err && <div className="errbox">{err}</div>}
-        {/* 리포트를 못 찾으면 한 줄 오류만 남아 막다른 화면이 됐다. 왜 그런지와 갈 곳을 같이 준다. */}
-        {err && !res && (
-          <div className="card" style={{ textAlign: 'center', lineHeight: 1.8, color: '#3a3f47', fontSize: 15 }}>
-            <p style={{ margin: 0 }}>주소가 잘렸거나 공유 링크가 만료됐을 수 있습니다.<br />로그인하셨다면 보관함에 저장된 리포트가 있습니다.</p>
-            <Link className="cta" href="/reading" style={{ marginTop: 14 }}>무료로 새로 뽑기 →</Link>
-            <p style={{ marginTop: 10 }}><Link href="/vault" style={{ color: 'var(--navy)', fontWeight: 700 }}>보관함 열기</Link></p>
+        {err && !modal && <div className="errbox" role="alert">{err}</div>}
+        {(payNote || (checking && !res)) && <div id="purchase-status" className={'purchase-notice ' + (payNote?.kind ?? '')} role="status">
+          <h2>{checking ? '리포트 열람 상태를 확인하고 있습니다' : payNote?.kind === 'ok' ? '구매한 리포트 다시 보기' : payNote?.kind === 'stuck' ? '결제 확인이 필요합니다' : '무료 결과로 돌아왔습니다'}</h2>
+          <p>{payNote?.text}</p>
+          <div className="purchase-actions">
+            {payNote?.kind !== 'ok' && <button type="button" disabled={checking} onClick={() => load()}>결제 상태 다시 확인</button>}
+            {payNote?.kind === 'ok' && <button type="button" onClick={() => { const index = res?.sections.findIndex(s => !s.free && !!s.html) ?? -1; if (index >= 0) setExpanded([index]); document.getElementById(index >= 0 ? 'report-section-' + index : 'rep')?.scrollIntoView({ block: 'start', behavior: 'smooth' }); }}>구매한 내용 읽기</button>}
+            <Link href="/vault">보관함</Link><Link href="/find">구매 기록으로 찾기</Link>{payNote?.kind === 'stuck' && <Link href="/contact">문의하기</Link>}
           </div>
-        )}
+        </div>}
+        {err && !res && <div className="purchase-notice"><h2>다시 여는 방법을 선택해주세요</h2><p>결제할 때 입력한 성함과 휴대폰 번호로 구매 기록을 찾을 수 있습니다.</p><div className="purchase-actions"><button disabled={checking} onClick={() => load()}>다시 불러오기</button><Link href="/find">구매한 리포트 찾기</Link><Link href="/vault">보관함</Link></div></div>}
         {res && (
           <div className="rcols" id="rep">
             <div className="rleft">
@@ -161,11 +142,6 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {res.admin && (
               <div className="adminview no-print">
                 관리자 열람 중: 결제 없이 전부 열려 보입니다. 손님에게는 잠겨 보이니, 결제 화면은 시크릿 창에서 확인하는 편이 낫습니다.
-              </div>
-            )}
-            {payNote && (
-              <div className={'paynote no-print ' + payNote.kind} role="status">
-                {payNote.text}{payNote.kind === 'stuck' && <> <Link href="/contact">이메일 문의 →</Link></>}
               </div>
             )}
             <div className="rephd">{res.title}</div>
@@ -190,7 +166,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               // 폼을 처음부터 다시 시키는 셈이라, 그 자리에서 결제되게 바꿨다.
               const openThis = (e?: any) => { setErr(''); if (!catInfo && prod) setPending(prod.key); openModal(e); };
               return (
-                <div key={i} className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
+                <div id={'report-section-' + i} key={i} className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                   <div className="hd" role="button" tabIndex={0} aria-expanded={locked ? undefined : expanded.includes(i)}
                     onClick={locked ? openThis : () => toggleSec(i)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}><div className="ti">{sec.t}</div>
@@ -244,11 +220,6 @@ export default function ReportView({ params }: { params: { id: string } }) {
         {!res && !err && <div style={{ textAlign: 'center', color: '#636d77', padding: 30 }}>불러오는 중…</div>}
       </div>
 
-      {seal && (
-        <div className="sealov" aria-hidden>
-          <div className="sealbox"><video className="sealvid" autoPlay muted playsInline poster="/openseal-poster.jpg"><source src="/openseal.mp4" type="video/mp4" /></video><div className="sealtxt">봉인 해제: 잠긴 섹션이 열렸습니다</div></div>
-        </div>
-      )}
       {res && level < 2 && catInfo && sticky && !modal && (
         <div className="stickycta no-print" onClick={(e) => openModal(e)}>
           <span className="sl"><b>{catInfo.name} 열기</b><em>계산은 끝났습니다 · 열면 바로 보입니다</em></span>
@@ -256,37 +227,12 @@ export default function ReportView({ params }: { params: { id: string } }) {
         </div>
       )}
 
-      {modal && (
-        <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setModal(false); }}>
-          <div className="sheet" style={sheetStyle}>
-            <div className="grip" />
-            {/* 카테고리 없이 만들어진 리포트면 손님이 방금 고른 상품(pending)을 보여준다. */}
-            {(() => {
-              const pick = catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null);
-              return pick ? (
-                <>
-                  <h3>{pick.name} 전체 열기</h3>
-                  <div className="catbuy">
-                    <div className="catbuy-hd"><div className="catbuy-nm">{lockedCount > 0 ? `잠긴 ${lockedCount}장 전부` : '전체 풀이'}</div><div className="catbuy-pp">{won(pick.price)}</div></div>
-                    {pick.gives?.length > 0
-                      ? <ul className="gives catgives">{pick.gives.slice(0, 3).map((g: string) => <li key={g}>{g}</li>)}</ul>
-                      : <div className="catbuy-lead">{pick.lead}</div>}
-                  </div>
-                </>
-              ) : null;
-            })()}
-            <a className="catsample" href="/samples" target="_blank" rel="noopener">결제하면 열리는 화면, 예시로 먼저 보기 →</a>
-            <div className="paymethods">신용·체크카드<span> · 결제창에서 카드사를 고릅니다</span></div>
-            <BuyerFields v={buyer} set={setBuyerPart} />
-            <label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (열람 후 청약철회 제한: <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span></label>
-            {err && <div className="errbox">{err}</div>}
-            <div className="nocharge">동의 없이 추가 결제를 받지 않습니다.</div>
-            <button className="paygo" onClick={() => pay(sku)} disabled={busy}>{busy ? '결제 처리중…' : `${won((catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0)} 결제하기`}</button>
-            <div className="mclose" onClick={() => setModal(false)}>다음에 볼게요</div>
-            <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>
-          </div>
-        </div>
-      )}
+      {modal && <Checkout name={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.name ?? '선택한 풀이'}
+        price={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0} subject={res?.title}
+        details={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.gives?.slice(0, 3) ?? ['선택한 상품의 유료 풀이가 열립니다']}
+        buyer={buyer} setBuyer={setBuyerPart} consent={consent} setConsent={setConsent} busy={busy || checking}
+        error={err} recovery={recovery} onPay={() => pay(sku)} onClose={() => setModal(false)} onCheck={() => load()} />}
+
     </div>
   );
 }

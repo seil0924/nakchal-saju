@@ -5,6 +5,7 @@ import { computeReport } from '@/lib/report';
 import { getReport, getReportAccess } from '@/lib/store';
 import { entitlement, adminBypass } from '@/lib/entitle';
 import { canViewPaid } from '@/lib/report-access';
+import { buyerCanViewReport } from '@/lib/buyer-report-access';
 import { requireUser, authEnabled } from '@/lib/supabase/server';
 
 export async function GET(req: Request) {
@@ -14,7 +15,7 @@ export async function GET(req: Request) {
   const user = authEnabled() ? await requireUser() : null;
   const { owner, token } = authEnabled() ? await getReportAccess(id) : { owner: null, token: null };
   // 누가 결제 레벨을 보는가는 lib/report-access 한 곳에서 정한다(/api/report/paid 와 같은 답).
-  const isOwner = canViewPaid({ auth: authEnabled(), userId: user?.id ?? null, owner, token, t, reportId: id });
+  const isOwner = canViewPaid({ auth: authEnabled(), userId: user?.id ?? null, owner, token, t, reportId: id }) || await buyerCanViewReport(id);
   const input = await getReport(id);
   if (!input) return NextResponse.json({ error: 'not_found' }, { status: 404 });
   // 관리자는 소유자가 아니어도 전체를 본다 — 문의 응대와 점검 때문에.

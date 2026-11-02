@@ -14,15 +14,8 @@ export const BUYER_COOKIE = 'nk_buyer';
 export const BUYER_KEEP_YEARS = 5;   // 거래기록 보관(전자상거래법 시행령 제6조). 지난 것은 purgeOldBuyers 가 지운다
 
 // 같은 사람의 이름을 같게: 빈칸 제거 + 유니코드 모양(NFC) 맞춤. 맥에서 붙여넣은 자모 풀린 이름도 같게 본다.
-export const normName = (v: string) => String(v ?? '').normalize('NFC').replace(/\s+/g, '').slice(0, 20);
-
-// 번호는 숫자만, +82 는 0 으로. 010-1234-5678, 01012345678, +82 10 1234 5678 이 모두 같은 번호다.
-export function normPhone(v: string): string {
-  let d = String(v ?? '').replace(/\D/g, '');
-  if (d.startsWith('82') && d.length >= 11) d = '0' + d.slice(2);
-  return d;
-}
-export const validPhone = (d: string) => /^01[016789]\d{7,8}$/.test(d);
+import { normName, normPhone, validPhone } from './buyer-input';
+export { normName, normPhone, validPhone } from './buyer-input';
 
 // 화면에 보일 때는 가운데를 가린다(관리자 목록은 전체를 본다).
 export const maskPhone = (d: string) => d.length >= 10 ? `${d.slice(0, 3)}-****-${d.slice(-4)}` : d;

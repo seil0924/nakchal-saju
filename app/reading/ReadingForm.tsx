@@ -1,10 +1,13 @@
 'use client';
+import Checkout from '@/app/_components/Checkout';
+import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/lib/purchase-client';
+
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
-import { recordReport, markUnlocked, listVault } from '@/lib/vault';
+import { recordReport, listVault } from '@/lib/vault';
 import { CLIENTS, isCoreClient, CORE_CLIENT_COUNT } from '@/lib/clients';
 import { CAT_INFO, isCatKey, productOfMk, catUI } from '@/lib/report-categories';
 import { parseCands, isPurpose, BIGYO_MIN, BIGYO_LABEL, type BigyoPurpose } from '@/lib/bigyo-input';
@@ -15,13 +18,13 @@ import './reading.css';
 import DateSelect from '@/app/_components/DateSelect';
 import PersonPicker from '@/app/_components/PersonPicker';
 import ClientPicker from '@/app/_components/ClientPicker';
-import BuyerFields, { type BuyerState } from '@/app/_components/BuyerFields';
+import { type BuyerState } from '@/app/_components/BuyerFields';
 import { type Person, type PersonKind, peopleOf, migrateLegacy } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
 import TrustStrip from '@/app/_components/TrustStrip';
 import TaekilAccess from '@/app/_components/TaekilAccess';
 import { markResultSeen } from '@/app/_components/AddToHome';
-import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
+import { preloadKcp } from '@/app/_components/kcpPay';
 import { sget, sset } from '@/lib/scope';
 import { setTok, tokParam } from '@/lib/rtok';
 
@@ -105,7 +108,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   useEffect(() => () => reportRequest.current?.abort(), []);
   const [consent, setConsent] = useState(false);
   const [prog, setProg] = useState(false);
-  const [seal, setSeal] = useState(false);     // 결제 후 개봉 연출
+  const [recovery, setRecovery] = useState(false);
+  const [purchased, setPurchased] = useState(false);     // 결제 후 개봉 연출
   const [sticky, setSticky] = useState(false); // 스크롤 스티키 CTA
   const [cat, setCat] = useState(isCatKey(initialCat) ? initialCat : ''); // 카테고리(대표·택일·발주처·궁합·대운)
   const [bp, setBp] = useState({ y: 0, m: 0, d: 0 }); // 생년월일 3분할 선택 누적
@@ -304,7 +308,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
 
   async function run() {
     if (generating.current) return;
-    generating.current = true;
+    generating.current = true; setPurchased(false); setRecovery(false);
     const controller = new AbortController();
     reportRequest.current = controller;
     setErr('');
@@ -345,7 +349,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   // 개별 상품(묶음 없음): 잠긴 섹션 → 그 섹션을 파는 카테고리 상품으로 리포트를 좁혀 다시 뽑는다.
   async function openProduct(catKey: string) {
     if (busy) return;
-    setCat(catKey); setErr(''); setBusy(true); setLevel(0);
+    setPurchased(false); setRecovery(false); setCat(catKey); setErr(''); setBusy(true); setLevel(0);
     try {
       const tg = (k: RelKind) => targets.find(t => t.kind === k);
       const body = {
@@ -398,60 +402,25 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   const toggleSec = (i: number) => setExpanded(ex => ex.includes(i) ? ex.filter(x => x !== i) : [...ex, i]);
   const anyPass = !!res && res.sections.some(s => (s as any).passLock);   // 발주처 프리미엄 잠금 존재
 
-  async function pay(chosen: 'taekil' | 'full') {
-    if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
-    if (!res || paying.current) return;
-    paying.current = true;
-    setErr(''); setBusy(true);
+  async function pay(chosen: 'taekil' | 'full' | 'baljuPass') {
+    if (!res || paying.current || recovery) return;
+    paying.current = true; setErr(''); setBusy(true);
+    let confirmed = false;
     try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: chosen, ...buyerBody() }) }).then(x => x.json());
-      // 준비가 실패하면 결제창을 열지 않는다(예전엔 paymentId 없이 결제창을 열려 했다).
-      if (prep?.error || !prep?.paymentId) { setBusy(false); paying.current = false; setErr(prep?.message ? prep.message : prep?.error === 'already_paid' ? '이미 결제가 끝난 리포트입니다. 이 화면에서 잠겨 보이면 이메일 문의로 리포트 주소를 보내 주세요. 바로 열어 드립니다.' : '결제 준비에 실패했습니다. 잠시 뒤 다시 눌러주세요.'); return; }
-      if (KCP_CLIENT_ENABLED) {
-        const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
-        if (kres === 'redirect') return;
-        if (!kres) { setBusy(false); setErr('결제가 취소되었습니다.'); return; }
-        const ap = await fetch('/api/payment/kcp/approve', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId, enc_data: kres.enc_data, enc_info: kres.enc_info, tran_cd: kres.tran_cd }) }).then(x => x.json());
-        if (!ap?.ok) { setBusy(false); setErr('결제 승인에 실패했습니다. 다시 시도해 주세요.'); return; }
-      } else {
-        await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
-      }
-      let full: any = null;
-      for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId + '&t=' + encodeURIComponent(tokParam(res.reportId))); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
-      if (!full) throw new Error();
-      setRes({ ...res, ...full }); setLevel(full.level ?? (chosen === 'taekil' ? 1 : 2)); setModal(false);
-      markUnlocked(res.reportId);
-      setSeal(true); setTimeout(() => setSeal(false), 2600); // 개봉(開) 연출: 절정으로 마무리
-    } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
+      const outcome = await startPurchase({ reportId: res.reportId, sku: chosen, ...buyerBody() });
+      if (outcome === 'redirect') return;
+      if (outcome === 'cancelled') { setErr('결제창을 닫았습니다. 무료 결과는 그대로 볼 수 있습니다.'); return; }
+      confirmed = true;
+      if (chosen === 'baljuPass') { location.assign('/thanks?kind=pass&paid=1'); return; }
+      const { ok, data: full } = await requestJSON('/api/report/paid?id=' + res.reportId + '&t=' + encodeURIComponent(tokParam(res.reportId)));
+      if (!ok || !(full.level >= (chosen === 'taekil' ? 1 : 2))) throw new PurchaseError(PURCHASE_PENDING, true);
+      setRes({ ...res, ...full }); setLevel(full.level); setModal(false); setPurchased(true);
+      recordReport({ id: res.reportId, label: res.title, when: Date.now(), unlocked: true });
+      requestAnimationFrame(() => document.getElementById('purchase-success')?.scrollIntoView({ block: 'center' }));
+    } catch (e) { setErr(e instanceof Error ? e.message : PURCHASE_PENDING); setRecovery(confirmed || (e instanceof PurchaseError && e.recover)); }
     finally { setBusy(false); paying.current = false; }
   }
-
-  async function payPass() {
-    if (!consent) { setErr('결제 전 안내에 동의해 주세요.'); return; }
-    if (!res || paying.current) return;
-    paying.current = true;
-    setErr(''); setBusy(true);
-    try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ reportId: res.reportId, sku: 'baljuPass', ...buyerBody() }) }).then(x => x.json());
-      // 준비가 실패하면 결제창을 열지 않는다(로그인 필요·이미 산 패스).
-      if (prep?.error || !prep?.paymentId) { setBusy(false); paying.current = false; setErr(prep?.message ? prep.message : prep?.error === 'login_required' ? '발주처 프리미엄 패스는 로그인 후 살 수 있습니다.' : prep?.error === 'already_paid' ? '이미 발주처 프리미엄 패스가 있습니다. 새로고침하면 열립니다.' : '결제 준비에 실패했습니다. 잠시 뒤 다시 눌러주세요.'); return; }
-      if (KCP_CLIENT_ENABLED) {
-        const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
-        if (kres === 'redirect') return;
-        if (!kres) { setBusy(false); setErr('결제가 취소되었습니다.'); return; }
-        const ap = await fetch('/api/payment/kcp/approve', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId, enc_data: kres.enc_data, enc_info: kres.enc_info, tran_cd: kres.tran_cd }) }).then(x => x.json());
-        if (!ap?.ok) { setBusy(false); setErr('결제 승인에 실패했습니다. 다시 시도해 주세요.'); return; }
-      } else {
-        await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
-      }
-      let full: any = null;
-      for (let i = 0; i < 6; i++) { const resp = await fetch('/api/report/paid?id=' + res.reportId + '&t=' + encodeURIComponent(tokParam(res.reportId))); if (resp.ok) { full = await resp.json(); break; } await new Promise(r => setTimeout(r, 700)); }
-      if (!full) throw new Error();
-      setRes({ ...res, ...full }); setModal(false); setPassMode(false);
-      setSeal(true); setTimeout(() => setSeal(false), 2600);
-    } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 자동 반영됩니다.'); }
-    finally { setBusy(false); paying.current = false; }
-  }
+  const payPass = () => pay('baljuPass');
 
   async function share() {
     if (!res) return;
@@ -498,7 +467,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   };
   const birthDays = birthMonthDays(by, bm, f.cal, f.leap);
   const dateError = fieldErrors.birth || (by && bm && !birthDays ? '선택한 월은 윤달이 아닙니다. 평달·윤달과 월을 확인해주세요.' : '');
-  const editInput = () => { setRes(null); setLevel(0); setConfirm(false); setErr(''); focusField('rd-name'); };
+  const editInput = () => { setPurchased(false); setRecovery(false); setRes(null); setLevel(0); setConfirm(false); setErr(''); focusField('rd-name'); };
 
   return (
     <div className="app reading-page">
@@ -510,6 +479,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         <ol className="rd-steps" aria-label="무료 풀이 진행 순서">
           {['정보 입력', '내용 확인', '무료 결과'].map((label, i) => <li key={label} aria-current={(res ? 2 : confirm || prog ? 1 : 0) === i ? 'step' : undefined}><span>{i + 1}</span>{label}</li>)}
         </ol>
+        {purchased && res && <div className="purchase-notice" id="purchase-success" role="status"><h2>구매한 풀이가 열렸습니다</h2><p>{catInfo?.name ?? '구매한 리포트'} · 다음에도 보관함에서 다시 열 수 있습니다. 다른 기기에서는 결제할 때 입력한 성함과 번호로 찾아주세요.</p><div className="purchase-actions"><Link href={`/report/${res.reportId}?t=${encodeURIComponent(tokParam(res.reportId))}`}>구매한 리포트 보기</Link><Link href="/vault">보관함으로</Link><Link href="/find">다른 기기에서 찾기</Link></div></div>}
         {err && !modal && <div id="rd-request-error" className="errbox" role="alert" tabIndex={-1}>{err}</div>}
         {!res && !confirm && !prog && (<>
         {/* 0. 컨셉 훅: 카테고리별 몰입 배너 */}
@@ -881,18 +851,6 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
 
 
 
-      {/* 결제 성공: 개봉 연출 */}
-      {seal && (
-        <div className="sealov" aria-hidden>
-          <div className="sealbox">
-            <video className="sealvid" autoPlay muted playsInline poster="/openseal-poster.jpg">
-              <source src="/openseal.mp4" type="video/mp4" />
-            </video>
-            <div className="sealtxt">봉인 해제: 잠긴 섹션이 열렸습니다</div>
-          </div>
-        </div>
-      )}
-
       {/* 스크롤 스티키 CTA (전체 미열람 시) */}
       {res && level < 2 && catInfo && anyLocked && sticky && !modal && !prog && mounted && createPortal(
         <div className="stickycta no-print" onClick={() => { setErr(''); setModal(true); }}>
@@ -912,45 +870,15 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         </div>
       , document.body)}
 
-      {/* 결제 모달 */}
-      {modal && mounted && createPortal(
-        <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setModal(false); }}>
-          <div className="sheet">
-            <div className="grip" />
-            {passMode ? (
-              <>
-                <h3>발주처 프리미엄 패스</h3>
-                <div className="catbuy">
-                  <div className="catbuy-hd"><div><div className="catbuy-nm">발주처 프리미엄 패스</div></div><div className="catbuy-pp">{won(PRICE_BALJU_PASS)}</div></div>
-                  <div className="catbuy-lead">한 번 결제로 <b>핵심 발주처 {CORE_CLIENT_COUNT}곳</b>의 3계·실전 시나리오·주의신호·연도 세운이 열립니다.</div>
-                </div>
-              </>
-            ) : catInfo ? (
-              <>
-                <h3>{catInfo.name} 전체 열기</h3>
-                <div className="catbuy">
-                  <div className="catbuy-hd"><div className="catbuy-nm">{lockedCount > 0 ? `잠긴 ${lockedCount}장 전부` : '전체 풀이'}</div><div className="catbuy-pp">{won(catInfo.price)}</div></div>
-                  {catInfo.gives?.length > 0
-                    ? <ul className="gives catgives">{catInfo.gives.slice(0, 3).map((g: string) => <li key={g}>{g}</li>)}</ul>
-                    : <div className="catbuy-lead">{catInfo.lead}</div>}
-                </div>
-              </>
-            ) : null}
-            <a className="catsample" href="/samples" target="_blank" rel="noopener">결제하면 열리는 화면, 예시로 먼저 보기 →</a>
-            <div className="paymethods">신용·체크카드<span> · 결제창에서 카드사를 고릅니다</span></div>
-            <BuyerFields v={buyer} set={setBuyerPart} />
-            <label className="consent">
-              <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
-              <span>결제 및 <Link href="/terms" className="legal-link">이용약관</Link>·<Link href="/privacy" className="legal-link">개인정보처리방침</Link>에 동의합니다. (콘텐츠 특성상 열람 후 청약철회가 제한될 수 있습니다. <Link href="/refund" className="legal-link">청약철회·환불 안내</Link>)</span>
-            </label>
-            {err && <div className="errbox" role="alert">{err}</div>}
-            <div className="nocharge">동의 없이 추가 결제를 받지 않습니다.</div>
-            <button className="paygo" onClick={() => (passMode ? payPass() : pay(sku))} disabled={busy}>{busy ? '결제 처리중…' : `${won(passMode ? PRICE_BALJU_PASS : unlockPrice)} 결제하기`}</button>
-            <div className="mclose" onClick={() => { setModal(false); setPassMode(false); }}>다음에 볼게요</div>
-            <div className="msec">🔒 NHN KCP 안전결제 · 결제 금액은 서버에서 재검증됩니다</div>
-          </div>
-        </div>
-      , document.body)}
+      {modal && res && mounted && <Checkout
+        name={passMode ? '발주처 프리미엄 패스' : catInfo?.name ?? '선택한 풀이'}
+        price={passMode ? PRICE_BALJU_PASS : unlockPrice} subject={res.title}
+        details={passMode ? [`핵심 발주처 ${CORE_CLIENT_COUNT}곳의 상세 풀이`] : catInfo?.gives?.slice(0, 3) ?? [catInfo?.lead ?? '선택한 리포트의 유료 풀이']}
+        buyer={buyer} setBuyer={setBuyerPart} consent={consent} setConsent={setConsent}
+        busy={busy} error={err} recovery={recovery} onPay={() => passMode ? payPass() : pay(sku)}
+        onClose={() => { setModal(false); setPassMode(false); }}
+        onCheck={() => location.assign('/report/' + res.reportId + '?paid=1&t=' + encodeURIComponent(tokParam(res.reportId)))} />}
+
     </div>
   );
 }

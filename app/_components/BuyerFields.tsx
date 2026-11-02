@@ -10,12 +10,12 @@ export default function BuyerFields({ v, set }: { v: BuyerState; set: (p: Partia
   return (
     <div className="buyer">
       <div className="buyer-row">
-        <label htmlFor="by-name">성함</label>
+        <label htmlFor="by-name">구매자 성함</label>
         <input id="by-name" value={v.name} onChange={e => set({ name: e.target.value })} maxLength={20} autoComplete="name" placeholder="홍길동" />
       </div>
       <div className="buyer-row">
         <label htmlFor="by-phone">휴대폰 번호</label>
-        <input id="by-phone" value={v.phone} onChange={e => set({ phone: e.target.value })} inputMode="tel" autoComplete="tel" placeholder="010-0000-0000" />
+        <input id="by-phone" value={v.phone} onChange={e => set({ phone: e.target.value })} type="tel" maxLength={24} inputMode="tel" autoComplete="tel" placeholder="010-0000-0000" />
       </div>
       <p className="buyer-why">다른 기기에서 <Link href="/find">구매한 리포트 찾기</Link>를 할 때 이 성함과 번호를 씁니다. 회원가입은 없고 문자도 보내지 않습니다.</p>
       <label className="consent">
