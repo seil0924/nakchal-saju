@@ -126,6 +126,8 @@
 .h6-chips a { display: inline-flex; align-items: center; min-height: 44px; padding: 4px 12px; border: 1px solid var(--h6-line); border-radius: 8px; font-size: 14px; }
 .home6 a:focus-visible, .home6 summary:focus-visible { outline: 3px solid var(--h6-blue); outline-offset: 3px; }
 @media (min-width: 900px) {
+  /* 가로 후기 목록의 본래 폭이 페이지 전환용 flex 자식을 넓히지 않게 한다. */
+  .dmain > .pagein:has(> .home6) { width: 100%; min-width: 0; max-width: 1080px; }
   .dmain .app.home6 { max-width: 1080px; padding: 0; border: 1px solid var(--h6-line); border-top: 0; }
   .h6-intro { padding: 48px 32px; }
   .h6-sec { padding: 36px 32px; }
