@@ -148,7 +148,7 @@ describe('sajeong — 사정률 (결정론적 유료값)', () => {
     const r = sajeong(c, { gan: 0, zhi: 0, el: sikEl });
     expect(r.up).toBe(false);
     expect(r.dir).toBe('하단 밴드');
-    expect(r.bridge).toContain('하단');
+    expect(r.bridge).toContain('소모를 살펴보는 날');
   });
   it('pos 는 4~96 범위로 클램프', () => {
     const c = compute(2000, 6, 15, 14);

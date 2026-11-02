@@ -110,12 +110,12 @@ export default function Home() {
               ))}
             </div>
             <div className="h6-sig">
-              <span className="h6-sl">투찰 택일 신호</span>
+              <span className="h6-sl">명리 해석 점수</span>
               <span className="h6-sn">65<small>점</small></span>
               <span className="h6-sv">넣을 만한 흐름</span>
             </div>
           </div>
-          <p className="h6-snote">분석형 대표 · 30일 투찰 길일 · 시진별 흐름까지</p>
+          <p className="h6-snote">오늘 해석·7일 흐름 무료 · 30일 전체와 길일별 시진은 유료</p>
         </figure>
 
         <Link className="h6-cta" href="/reading?cat=sajeong">내 생년월일로 오늘 보기</Link>
@@ -143,7 +143,7 @@ export default function Home() {
           <li>대표님이 고를 수 있는 건 넣는 날과 시간입니다.</li>
           <li>그날이 대표님 일간을 살리는 날인지, 일지와 부딪히는 날인지 만세력으로 계산해 드립니다.</li>
         </ul>
-        <p className="h6-free"><b>바로 나오는 것</b>대표님 명식, 오늘의 투찰 신호, 앞으로 30일 중 넣을 만한 날</p>
+        <p className="h6-free"><b>무료로 나오는 것</b>대표님 명식, 오늘의 해석과 시진, 오늘부터 7일 흐름. 30일 전체와 길일별 시진은 결제 후 열립니다.</p>
       </section>
 
       <section className="h6-sec" aria-labelledby="h6-first">

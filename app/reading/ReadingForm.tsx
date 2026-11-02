@@ -17,6 +17,7 @@ import BuyerFields, { type BuyerState } from '@/app/_components/BuyerFields';
 import { type Person, type PersonKind, peopleOf, migrateLegacy } from '@/lib/people';
 import YearBar from '@/app/_components/YearBar';
 import TrustStrip from '@/app/_components/TrustStrip';
+import TaekilAccess from '@/app/_components/TaekilAccess';
 import { markResultSeen } from '@/app/_components/AddToHome';
 import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
 import { sget, sset } from '@/lib/scope';
@@ -60,7 +61,7 @@ function relCat(me:number,td:number){ if(td===me)return'bi'; if((td+1)%5===me)re
 // 카테고리별 '혹하게 하는' 컨셉 훅 — 입력 화면 상단에서 몰입을 잡는다.
 const HOOK: Record<string, { seal: string; t: string; d: string }> = {
   daepyo:  { seal: '鏡', t: '잡스·록펠러와 같은 그릇일지 모릅니다', d: '타고난 승부 기질·재물·사람 다루는 법을 여덟 글자로 낱낱이: 위기에 드러나는 그 약점까지.' },
-  sajeong: { seal: '率', t: '오늘 넣을까 미룰까: 30초면 방향이 섭니다', d: '오늘이 나설 날인지 관망할 날인지, 앞으로 30일 중 어느 날이 유리한지 한눈에 짚어 드립니다.' },
+  sajeong: { seal: '率', t: '오늘의 명리 해석부터, 무료로 확인하세요', d: '대표님 명식과 오늘 일진을 풀이합니다. 실제 투찰은 공고의 마감 시각과 참가 조건이 우선입니다.' },
   balju:   { seal: '宮', t: '그 발주처, 애초에 나와 맞는 판입니까', d: '설립일 사주 × 대표님 사주 궁합 점수: 큰 판에 손대기 전에 확인해주세요.' },
   gunghap: { seal: '合', t: '손잡기 전에, 깨질 궁합인지부터', d: '지분·역할·최종 결정권을 어떻게 나눠야 안 깨지는지: 계약 전에 봐야 할 궁합.' },
   daeun:   { seal: '運', t: '회사가 대표님을 밀어줍니까, 누릅니까', d: '법인 설립일로 본 회사의 그릇과 10년 대운의 길목: 지금이 확장기인지 정비기인지.' },
@@ -514,6 +515,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             </div>
           </div>
         )}
+        {cat === 'sajeong' && <TaekilAccess />}
         {/* 2. 대표님 정보 */}
         <div className="card">
           <div className="st"><span className="l"><span className="b" />대표님 성함과 생년월일</span></div>
@@ -610,7 +612,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         {/* 0-1. 이걸 알게 됩니다. 폼보다 먼저 온다.
             전에는 이 자리가 비어 있어서, 처음 온 대표가 보는 게 빈 입력폼뿐이었다.
             뭘 얻는지 모르는 채로 생년월일부터 넣으라고 하면 아무도 안 넣는다. */}
-        {catInfo && catInfo.gives?.length > 0 && (
+        {cat !== 'sajeong' && catInfo && catInfo.gives?.length > 0 && (
           <div className="card">
             <div className="st"><span className="l"><span className="b" />이걸 알게 됩니다</span>
               <span className="opt">{catInfo.name}</span></div>
@@ -709,6 +711,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
               </div>
             )}
             <div className="rephd">{res.title}</div>
+            {res.sections.some(sec => sec.mk === '率') && <TaekilAccess unlocked={level >= 1} />}
             <button className="topshare no-print" onClick={share} aria-label="결과 링크 공유">↗ 결과 공유</button>
             {res.hero && <a className="topshare no-print" href={`/api/og/card?score=${encodeURIComponent(String(res.hero.big ?? res.hero.score))}&unit=${encodeURIComponent(res.hero.unit ?? '점')}&type=${encodeURIComponent(res.hero.label)}&note=${encodeURIComponent(res.hero.sub || '')}&up=${res.hero.up ? '1' : '0'}`} target="_blank" rel="noopener" style={{ marginLeft: 6 }}>카드 저장</a>}
             {res.selYear && ui.yearBar && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
@@ -744,7 +747,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                       onClick={locked ? openThis : () => toggleSec(i)}
                       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}>
                       <div className="ti">{sec.t}</div>
-                      {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}
+                      {sec.mk === '率' ? <span className="lb free">{level >= 1 ? '30일 열림' : '7일 무료'}</span> : sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}
                       <div className="cv">▾</div>
                     </div>
                     <div className="bd">
@@ -829,7 +832,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       {/* 스크롤 스티키 CTA (전체 미열람 시) */}
       {res && level < 2 && catInfo && anyLocked && sticky && !modal && !prog && (
         <div className="stickycta no-print" onClick={() => { setErr(''); setModal(true); }}>
-          <span className="sl"><b>{catInfo.name} 열기</b><em>계산은 끝났습니다 · 열면 바로 보입니다</em></span>
+          <span className="sl"><b>{cat === 'sajeong' ? '30일 전체 흐름 열기' : `${catInfo.name} 열기`}</b><em>{cat === 'sajeong' ? '나머지 23일 · 길일별 시진 추가' : '계산은 끝났습니다 · 열면 바로 보입니다'}</em></span>
           <span className="sr">{won(catInfo.price)} →</span>
         </div>
       )}
@@ -839,7 +842,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         <div className="rd-bar no-print">
           <div className="rd-bar-tx">
             <b>{catInfo ? catInfo.name : '사주 보기'}</b>
-            <span>{catInfo ? `명식·방향 무료 · 전체 ${won(catInfo.price)}` : '명식·오늘의 신호 무료'}</span>
+            <span>{cat === 'sajeong' ? `7일 흐름 무료 · 30일 전체 ${won(CAT_INFO.sajeong.price)}` : catInfo ? `명식·방향 무료 · 전체 ${won(catInfo.price)}` : '명식·오늘의 신호 무료'}</span>
           </div>
           <button type="button" className="go" disabled={busy} onClick={() => {
             if (!f.name.trim()) {

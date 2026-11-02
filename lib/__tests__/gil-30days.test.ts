@@ -14,8 +14,45 @@ describe('투찰 택일 · 오늘부터 30일', () => {
     // 칸 30개(앞쪽 빈칸 제외)
     expect((tk.html.match(/<div class="cd(?: gil)?">/g) || []).length).toBe(30);
     const rate = r.sections.find((s: any) => s.mk === '率');
-    expect(rate.html).toContain('오늘부터 <b>30일</b> 사정률');
+    expect(rate.html).toContain('오늘부터 <b>30일</b> 명리 흐름 달력');
     expect(rate.html).not.toContain('이번 달');
+  });
+});
+
+describe('투찰 결과의 명리 표현과 무료·유료 경계', () => {
+  afterEach(() => vi.useRealTimers());
+
+  it.each(['2026-11-02T03:00:00Z', '2026-12-29T03:00:00Z'])('무료 달력은 7일만 공개하고 나머지 23일을 명시한다: %s', iso => {
+    vi.useFakeTimers(); vi.setSystemTime(new Date(iso));
+    const result = computeReport({ birth: '1971-07-16', cat: 'sajeong' }, 0);
+    const rate = result.sections.find(s => s.mk === '率')!;
+    expect((rate.html.match(/class="scm" style=/g) || []).length).toBe(7);
+    expect((rate.html.match(/class="scm lockm" aria-label="[^"]+">미공개/g) || []).length).toBe(23);
+    expect(rate.html).toContain('오늘부터 7일 무료');
+    expect(rate.html).toContain('990원 결제 후');
+    expect(rate.html).not.toContain('class="scm lockm">·');
+    expect(result.sections.find(s => s.mk === '擇')!.html).toBe('');
+  });
+
+  it.each([1, 2])('유료 레벨 %i에서는 30일 모두 공개하고 추가 결제를 요구하지 않는다', level => {
+    vi.useFakeTimers(); vi.setSystemTime(new Date('2026-11-02T03:00:00Z'));
+    const result = computeReport({ birth: '1971-07-16', cat: 'sajeong' }, level);
+    const rate = result.sections.find(s => s.mk === '率')!;
+    expect((rate.html.match(/class="scm" style=/g) || []).length).toBe(30);
+    expect(rate.html).not.toContain('lockm');
+    expect(rate.html).not.toContain('990원 결제 후');
+    expect(rate.html).toContain('30일 전체 열람 중');
+    expect(result.sections.find(s => s.mk === '擇')!.html).toContain('길일마다 유리한 시진');
+  });
+
+  it.each([0, 1, 2])('레벨 %i 결과에 사정률 백분율·상하단 예측을 표시하지 않는다', level => {
+    vi.useFakeTimers(); vi.setSystemTime(new Date('2026-11-02T03:00:00Z'));
+    const result = computeReport({ birth: '1971-07-16', cat: 'sajeong' }, level);
+    const html = result.sections.map(s => s.html).join('');
+    expect(html).not.toMatch(/100\.0|101\.2|98\.6|class="gmeter"|상단|하단|사정률이/);
+    expect(html).toContain('공고의 마감 시각');
+    expect(result.hero.label).toBe('오늘의 명리 해석 점수');
+    expect(result.hero.sub).toContain('낙찰 확률이 아닙니다');
   });
 });
 

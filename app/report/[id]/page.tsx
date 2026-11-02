@@ -1,4 +1,5 @@
 'use client';
+import TaekilAccess from '@/app/_components/TaekilAccess';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import BuyerFields, { type BuyerState } from '@/app/_components/BuyerFields';
@@ -168,6 +169,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               </div>
             )}
             <div className="rephd">{res.title}</div>
+            {res.sections.some(sec => sec.mk === '率') && <TaekilAccess unlocked={level >= 1} />}
             {res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
@@ -192,7 +194,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                   <div className="hd" role="button" tabIndex={0} aria-expanded={locked ? undefined : expanded.includes(i)}
                     onClick={locked ? openThis : () => toggleSec(i)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}><div className="ti">{sec.t}</div>
-                    {sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}<div className="cv">▾</div></div>
+                    {sec.mk === '率' ? <span className="lb free">{level >= 1 ? '30일 열림' : '7일 무료'}</span> : sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}<div className="cv">▾</div></div>
                   <div className="bd">{sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
                     : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '대표님 명식으로 계산해 둔 장입니다. 열면 바로 보입니다.' }} />
                       {catInfo ? <button type="button" className="tlink" onClick={openThis}>{pName}에 포함 · 열기</button> : <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button>}</div>)}</div>

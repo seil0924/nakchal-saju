@@ -113,11 +113,11 @@ export function sinsal(c:Chart):Sinsal[]{
 const TILT:Record<string,number>={in:2,bi:1,jae:1,sik:-1,gwan:-2};
 function mulberry32(a:number){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 export function mkBridge(rel:string,me:number,td:number){const M=EL[me],D=EL[td];
-  if(rel==='in')return `오늘은 <b>${D}</b> 기운이 당신의 <b>${M}</b> 기운을 살리는 날: 위로 뻗어 사정률이 <b>상단</b>으로 뽑혔습니다.`;
-  if(rel==='bi')return `오늘은 당신과 같은 <b>${M}</b> 기운이 힘을 보태는 날: <b>상단</b> 흐름으로 뽑혔습니다.`;
-  if(rel==='jae')return `오늘은 당신이 다스리는 <b>${D}</b> 기운의 날, 재물의 기운이라 <b>약간 위</b>로 뽑혔습니다.`;
-  if(rel==='sik')return `오늘은 당신의 <b>${M}</b> 기운이 <b>${D}</b>${josa(D, '로')} 새어나가는 날: 힘이 빠져 <b>하단</b>으로 뽑혔습니다.`;
-  return `오늘은 <b>${D}</b> 기운이 당신의 <b>${M}</b> 기운을 누르는 날: 눌린 기운이라 <b>하단</b>으로 뽑혔습니다.`;}
+  if(rel==='in')return `명리에서는 오늘의 <b>${D}</b> 기운이 대표님의 <b>${M}</b> 기운을 돕는 관계로 봅니다. 도움과 협력을 살펴보는 날로 해석합니다.`;
+  if(rel==='bi')return `명리에서는 오늘과 대표님의 <b>${M}</b> 기운이 같은 관계로 봅니다. 추진력과 협업의 균형을 살펴보는 날로 해석합니다.`;
+  if(rel==='jae')return `명리에서는 대표님이 오늘의 <b>${D}</b> 기운을 다스리는 관계로 봅니다. 실속과 마무리를 살펴보는 날로 해석합니다.`;
+  if(rel==='sik')return `명리에서는 대표님의 <b>${M}</b> 기운이 <b>${D}</b>${josa(D, '로')} 이어지는 관계로 봅니다. 표현과 활동에 힘을 쓰되 소모를 살펴보는 날로 해석합니다.`;
+  return `명리에서는 오늘의 <b>${D}</b> 기운이 대표님의 <b>${M}</b> 기운을 누르는 관계로 봅니다. 부담과 준비 상태를 점검하는 날로 해석합니다.`;}
 export type Sajeong = {
   rel:string; tilt:number; up:boolean;
   dir:string; bandLo:string; bandHi:string; pos:number; bridge:string;

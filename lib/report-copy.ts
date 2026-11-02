@@ -106,10 +106,10 @@ function choilHtml(c:Chart, y:number, m:number, d:number){
   const last=ws[ws.length-1];
   return `<div class="choil">${dh}${cells}</div>`+
     `<p>오늘부터 <b>${last.m}월 ${last.d}일</b>까지 30일, 대표님 기운이 위로 뻗는 <b>투찰 길일</b>은 <b>${gil.length?gilList(gil,m):'해당 없음'}</b>입니다.</p>`+
-    `<p>오늘의 사정률과 같은 원리로, 대표님 일간(${GAN[c.dGan]})을 살리는 일진이 드는 날입니다. 큰 건 투찰·계약·미팅을 이 날에 맞추면 유리합니다.</p>`+
+    `<p>대표님 일간(${GAN[c.dGan]})을 돕는 일진을 명리 기준으로 골랐습니다. 실제 낙찰 가능성을 뜻하지 않으며, 일정은 공고의 마감 시각과 참가 조건을 우선해 정하세요.</p>`+
     (cut.length?`<p>천간은 좋지만 대표님 일지(${ZHI[c.dZhi]})와 충하는 <b>${gilList(cut,m)}</b>${josa(gilList(cut,m),'은')} 길일에서 뺐습니다. 기반이 흔들리는 날이라 큰 건을 걸기엔 무겁습니다.</p>`:'')+
     `<div class="gilhd">길일마다 유리한 시진</div><div class="gillist">${hours}</div>`+
-    `<p>반대로 표시 없는 날은 기운이 눌리니, 무리한 저가 투찰은 피하고 관망하세요.</p>`;
+    `<p>표시 없는 날은 위 길일 조건에 해당하지 않는 날입니다. 제출을 피해야 하는 날이라는 뜻은 아닙니다.</p>`;
 }
 
 const DMc=['한번 정하면 밀어붙여 새 판을 여는 개척형 대표이십니다.','현장을 달구고 사람을 움직이는 추진력의 대표이십니다.','신뢰로 오래 버티는 뚝심의 경영자이십니다.','빠르게 끊고 확실히 마무리하는 승부사형 대표이십니다.','판을 읽고 돌아갈 길을 찾는 지략형 대표이십니다.'];
@@ -586,30 +586,17 @@ const DZHI_TRAIT=['머리 회전이 빠르고 물처럼 상황에 맞춰 흐르�
  '매섭게 가르고 다듬는 결단과 정밀함',
  '의리와 원칙을 끝까지 지키는 우직한 관리자형',
  '넓게 품고 멀리 내다보는 포용·직관형'];
-function gaugeHtml(s,worryTxt,unlocked){
+function gaugeHtml(s,worryTxt){
   const up=s.tilt>0;
-  const clamp=(v)=>Math.max(0,Math.min(100,v));
-  const toPct=(v)=>clamp((parseFloat(v)-98)/4*100);
-  const bL=toPct(s.bandLo), bW=Math.max(5,toPct(s.bandHi)-toPct(s.bandLo));
-  const pos=clamp(s.pos);
   return `<div class="gauge">`+
     `<div class="gverdict ${up?'up':'down'}">`+
-      
-      `<span class="gvl">오늘의 택일 신호 · 투찰 유·불리</span>`+
-      `<span class="gvd">${up?'상단':'하단'} 흐름<i>${up?'▲':'▼'}</i></span>`+
-      `<span class="gvb">기준 <b>100.0</b> 대비 <b>${up?'위':'아래'}쪽</b>: 이번 흐름 <b>${s.bandLo}~${s.bandHi}%</b>에 무게</span>`+
+      `<span class="gvl">오늘의 명리 해석</span>`+
+      `<span class="gvd">${up?'기운을 돕는 흐름':'준비를 살펴보는 흐름'}</span>`+
+      `<span class="gvb">대표님 명식과 오늘 일진의 오행 관계를 풀이했습니다</span>`+
     `</div>`+
-    `<div class="gmeter">`+
-      `<div class="gmtrack"><div class="gmband" style="left:${bL}%;width:${bW}%"></div></div>`+
-      `<div class="gmbase"></div>`+
-      `<div class="gmneedle" style="left:${pos}%"></div>`+
-    `</div>`+
-    `<div class="gscale"><span>98.0<em>하한</em></span><span class="mid">기준 100.0</span><span>102.0<em>상한</em></span></div>`+
-    // 여기에 있던 "🔒 정밀 택일 지표 100.42%" 를 걷어냈다.
-    // 그 소수점 두 자리의 마지막 ±0.2 는 명식·날짜로 시드를 만든 mulberry32 난수다(engine.ts).
-    // 방향(상단/하단)은 명리로 결정되고 그건 무료로 다 준다. 그러면 결제선이 계산이 아니라
-    // 난수 위에 그어져 있던 셈이라, 파는 쪽을 택일(길일 날짜·시진·이달 전체)로 옮겼다.
-    `<p class="gbridge">${s.bridge}</p>`+`<p class="gnote"><b>사정률 자체는 추첨입니다.</b> 복수예비가격 15개 중 4개를 뽑아 정하므로 생년월일로 맞힐 수 있는 값이 아닙니다. 누구도 맞히지 못합니다. 이 지표가 짚는 것은 그 숫자가 아니라 <b>지금이 대표님께 움직일 때인가</b>입니다. 명식과 오늘 일진의 상성으로 낸 택일·의사결정 참고 지표이며, 실제 낙찰가나 당락을 예측하지 않습니다.</p>`+`${worryTxt?`<p class="worry">${worryTxt}</p>`:''}`;
+    `<p class="gbridge">${s.bridge}</p>`+
+    `<p class="gnote"><b>명리 기반 참고·오락용 해석입니다.</b> 점수는 낙찰 확률이 아니며, 사정률·투찰금액·당락을 예측하지 않습니다. 실제 제출은 <b>공고의 마감 시각과 참가 조건을 우선</b>해 판단하세요.</p>`+
+    `${worryTxt?`<p class="worry">${worryTxt}</p>`:''}</div>`;
 }
 // 오행 분포 — 다섯 기운의 글자 수를 레이더로(숫자는 꼭짓점 아래에 그대로)
 function distHtml(c){
@@ -635,10 +622,10 @@ function heroFor(c,s){
   const up=s.tilt>0;
   const score=Math.max(30,Math.min(92,Math.round(46+(s.pos-50)*0.7+(REL_B[s.rel]??0))));
   const headline=up
-    ? '오늘은 대표님 기운이 <b>투찰에 유리한</b> 흐름입니다'
-    : '오늘은 눌리는 흐름입니다. <b>서두르기보다 때를 고르는</b> 편이 낫습니다';
-  return {score,label:'오늘의 투찰 택일 신호',headline,
-    sub:`${up?'상단':'하단'} 흐름 · 명식×일진 택일 지표(예측 아님)`,up};
+    ? '명리로 보면 <b>대표님 기운을 돕는</b> 흐름입니다'
+    : '명리로 보면 <b>준비를 살펴보는</b> 흐름입니다';
+  return {score,label:'오늘의 명리 해석 점수',headline,
+    sub:'명식과 일진의 참고 점수 · 낙찰 확률이 아닙니다',up};
 }
 // 회사의 대운 (설립일 사주 기준 10년 주기 · 근사)
 function daeun(legalChart,foundYear,curYear){
@@ -704,9 +691,9 @@ function daeunSectionHtml(d,legalName,curYear){
 // 처방형 결과 (saju.ai식): 시점·주의·대안 3박자 — '맞히기'가 아니라 '의사결정 지침'
 function cheobangHtml(s:Sajeong){
   const up=s.tilt>0;
-  const when=up?'오늘은 기운이 위로 뻗는 날. 준비된 건이라면 정면 승부해도 좋습니다.':'오늘은 눌리는 흐름. 개시 직후를 피하고 마감 직전 시간대에 손을 쓰는 편이 낫습니다.';
-  const warn=up?'자신감이 과해지기 쉬우니, 미리 정한 하한선 아래로는 내려가지 않는 편이 낫습니다.':'조급함에 성급한 저가·과속 투찰을 던지지 않는 편이 낫습니다.';
-  const alt=up?'흐름이 꺾이거나 조건이 나쁘면, 무리하지 말고 30일 안의 투찰 길일로 미루세요.':'큰 건이라면 오늘 무리하기보다 30일 안의 투찰 길일로 옮기는 편이 유리합니다.';
+  const when=up?'기운을 돕는 흐름으로 풀이합니다. 준비한 서류와 조건을 차분히 확인해 보세요.':'준비를 살펴보는 흐름으로 풀이합니다. 빠진 서류나 확인할 조건을 정리해 보세요.';
+  const warn='투찰금액은 원가와 공고 조건으로 판단하세요. 이 해석이나 점수를 근거로 금액을 바꾸지 마세요.';
+  const alt='공고의 마감 시각이 우선입니다. 제출을 미루지 말고 여유 있게 완료하세요. 날짜 비교는 실제 선택 가능한 기간 안에서만 참고하세요.';
   return `<div class="cheobang"><div class="cbt">오늘의 실행 지침</div>`+
     `<div class="cbrow"><span class="cbk">시점</span><span class="cbv">${when}</span></div>`+
     `<div class="cbrow"><span class="cbk">주의</span><span class="cbv">${warn}</span></div>`+
@@ -720,9 +707,9 @@ function sijinHtml(c:Chart,today:{gan:number}){
   const cells=SIJIN12.map(([h,t],z)=>`<div class="sj12 ${lv[z]}"><b>${h}</b><span>${t}</span><i></i></div>`).join('');
   const gil=SIJIN12.filter((_,z)=>lv[z]==='g').map(([h])=>h+'시');
   return `<div class="sjhd">시진별 흐름. 오늘, 언제 움직일까</div><div class="sijin12">${cells}</div>`+
-    (gil.length?`<p style="margin-top:10px">오늘은 <b>${gil.join('·')}</b>${josa(gil.join('·'), '가')} 대표님 일간을 살리는 시간입니다. 큰 건의 제출·통화·미팅은 이 시간에 맞추면 좋습니다.</p>`:`<p style="margin-top:10px">오늘은 대표님 일간을 살리는 시간이 따로 서지 않습니다. 큰 건은 길일로 미루는 편이 낫습니다.</p>`)+
+    (gil.length?`<p style="margin-top:10px">명리에서는 오늘 <b>${gil.join('·')}</b>${josa(gil.join('·'), '가')} 대표님 일간을 돕는 시간으로 풀이합니다. 실제로 선택 가능한 시간 안에서 참고하세요.</p>`:`<p style="margin-top:10px">오늘은 명리 기준으로 대표님 일간을 돕는 시간이 따로 서지 않습니다. 제출을 미루라는 뜻은 아니며, 공고 마감을 우선하세요.</p>`)+
     `<p class="fcline">시간의 천간은 그날 일진에 따라 바뀌어, 유리한 시간도 날마다 달라집니다.</p>`+
-    `<p class="fcline">이 점수는 판정이 아니라 <b>예보</b>입니다. 우산을 챙길지는 대표님이 정하십니다.</p>`;
+    `<p class="fcline">시간대와 점수는 명리 해석입니다. 낙찰 확률이나 실제 결과를 예측하지 않습니다.</p>`;
 }
 // ── 曆 · 사업운 캘린더 (개인화) — 이달 각 날에 사업 흐름을 표시
 // 일진 × 대표 일간의 상성으로 8개 사업 유형을 배정한다.
@@ -947,13 +934,13 @@ const ILEON:Record<string,string[]>={
   bi:['같은 기운이 힘을 보태는 날. 밀어붙일 일은 오늘 밀어붙이세요.','추진력이 붙는 날입니다. 다만 혼자 다 지려 하지 마세요.'],
   jae:['실리가 잡히는 날. 계약·수금 이야기를 꺼내기 좋습니다.','거둬들일 것을 챙기는 날입니다. 벌이기보다 마무리에 두면 좋습니다.'],
   sik:['말과 결과물로 승부하는 날. 다만 말이 앞서지 않게 하세요.','에너지를 밖으로 쏟는 날입니다. 과속·지출을 한 박자 늦추세요.'],
-  gwan:['눌리는 기운이 도는 날. 큰 결정은 하루 미루는 편이 낫습니다.','조여지는 하루입니다. 서두른 저가·과속 투찰을 삼가는 편이 낫습니다.']};
+  gwan:['부담을 살펴보는 날로 풀이합니다. 중요한 조건을 한 번 더 확인해 보세요.','준비를 점검하는 날로 풀이합니다. 공고 마감 전에 여유 있게 확인을 마치세요.']};
 function ileonHtml(c:Chart,today:{gan:number;zhi:number;el:number}){
   const rel=relation(c.dayMasterEl,today.el);const pool=ILEON[rel]||ILEON.bi;
   const idx=(today.gan*7+today.zhi*3)%pool.length;
   return `<div class="ileon"><span class="ilk">오늘의 한마디</span><p>${pool[idx]}</p></div>`;
 }
-// ── 오늘부터 30일 사정률 캘린더 — 하루하루 상단/하단 흐름. 무료는 오늘부터 7일만 열고 나머지는 잠금.
+// ── 오늘부터 30일 명리 흐름. 무료 7일과 미공개 23일을 구분한다.
 function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolean){
   const me=c.dayMasterEl;
   const ws=gilWindow(y,m,today);
@@ -969,15 +956,16 @@ function sajeongMonthHtml(c:Chart,y:number,m:number,today:number,unlocked:boolea
     const reveal = unlocked || w.i<7;          // 오늘부터 이레
     const cls = w.i===0?' now':reveal?'':' lock';
     cells+=`<div class="scd${cls}"><span class="scn">${winLabel(w)}</span>`+
-      (reveal?`<span class="scm" style="color:${col}">${mark}</span>`:`<span class="scm lockm">·</span>`)+`</div>`;
+      (reveal?`<span class="scm" style="color:${col}">${mark}</span>`:`<span class="scm lockm" aria-label="${w.m}월 ${w.d}일 결제 후 공개">미공개</span>`)+`</div>`;
   }
   const dh=['일','월','화','수','목','금','토'].map(x=>`<div class="sch">${x}</div>`).join('');
-  const leg=`<div class="sajleg"><span><i style="background:#177f5e"></i>상단(유리)</span><span><i style="background:#7a8a3a"></i>무난</span><span><i style="background:#b5402f"></i>주의(하단)</span></div>`;
-  const grid=`<div class="sajcal">${dh}${cells}</div>${leg}`+`<p class="fcline">천간이 좋아도 대표님 일지(${ZHI[c.dZhi]})와 충하는 날은 무난(△)으로 낮췄습니다.</p>`;
+  const leg=`<div class="sajleg"><span>▲ 길일</span><span>△ 무난</span><span>· 관망</span><span>▼ 주의</span>${unlocked?'':'<span>미공개 · 결제 후 열림</span>'}</div>`;
+  const scope=unlocked?'30일 전체 열람 중':'오늘부터 7일 무료 · 나머지 23일은 결제 후 공개';
+  const grid=`<p class="sajscope">${scope}</p><div class="sajcal" role="group" aria-label="30일 명리 흐름 달력">${dh}${cells}</div>${leg}`+`<p class="fcline">기호는 명리 해석의 구분입니다. 천간이 좋아도 대표님 일지(${ZHI[c.dZhi]})와 충하는 날은 무난(△)으로 낮췄습니다.</p>`;
   if(!unlocked){
-    return grid+`<p class="sajlock">오늘부터 <b>30일</b>의 하루하루 흐름이 이미 산출됐습니다. 지금은 <b>오늘부터 7일</b>만 열려 있습니다. 나머지 <b>23일</b>의 유리·주의 날은 <b>투찰 택일 사주(${CAT_INFO.sajeong.price.toLocaleString('ko-KR')}원)</b>에서 한 번에 열립니다.</p>`;
+    return grid+`<p class="sajlock"><b>무료:</b> 오늘 해석·오늘의 시진·7일 흐름.<br/><b>${CAT_INFO.sajeong.price.toLocaleString('ko-KR')}원 결제 후:</b> 나머지 23일을 포함한 30일 전체 흐름과 길일별 시진이 열립니다. 미공개 칸은 아직 볼 수 없는 날짜이며, 무난하다는 뜻이 아닙니다.</p>`;
   }
-  return grid+`<p style="margin-top:11px">앞으로 30일 중 <b>상단(유리) 흐름</b> 날은 <b>${up30.length?gilList(up30,m):'해당 없음'}</b>입니다. 큰 건 투찰·계약은 이 날들에 무게를 두는 편이 낫습니다. 주의(하단) 날엔 무리한 저가·과속 투찰을 삼가는 편이 낫습니다.</p>`;
+  return grid+`<p style="margin-top:11px">앞으로 30일 중 명리 기준 <b>길일</b>은 <b>${up30.length?gilList(up30,m):'해당 없음'}</b>입니다. 일정 비교에 참고하되, 실제 제출은 공고의 마감 시각과 참가 조건을 우선하세요.</p>`;
 }
 function weekAheadHtml(c:Chart,y:number,m:number,d:number){
   const wn=['일','월','화','수','목','금','토'];let cells='';
@@ -1083,15 +1071,15 @@ function secSajeong(x:any):any[]{
   const {c,today,s,worryTxt,clientChart,legalChart,partnerChart,allyChart,level,names,daeunMeta,nowYMD,selYear,seunSelf,clientCore,me,gan,sip,dom,strong,weak,zero,P,unlocked,preciseOn,baljuPremium}=x;
   const out:any[]=[];
   // ── 무료 정점 → 가장 가벼운 결제(擇 990원) 순으로 배치 — 몰입 직후 첫 문턱을 낮게
-  let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt,preciseOn)+cheobangHtml(s)+sijinHtml(c,today);
+  let rateHtml=ileonHtml(c,today)+gaugeHtml(s,worryTxt)+cheobangHtml(s)+sijinHtml(c,today);
   if(nowYMD){
-    rateHtml+=`<div class="sajmonhd">오늘부터 <b>30일</b> 사정률. 날마다 어느 쪽인가</div>`;
+    rateHtml+=`<div class="sajmonhd">오늘부터 <b>30일</b> 명리 흐름 달력</div>`;
     rateHtml+=sajeongMonthHtml(c,nowYMD.y,nowYMD.m,nowYMD.d,preciseOn);
     rateHtml+=weekAheadHtml(c,nowYMD.y,nowYMD.m,nowYMD.d);
   }
   if(nowYMD){const gc=gilCount(c,nowYMD.y,nowYMD.m,nowYMD.d);
-    rateHtml+=`<div class="giltease"><div class="glt">오늘부터 30일 안에 투찰 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">대표님 일간을 살리는 날. 정확한 날짜는 바로 아래 <b>택일 캘린더</b>에서 확인하세요</div></div>`;}
-  out.push({mk:'率',tier:'free',t:nowYMD?`오늘부터 30일 택일. 오늘은 넣기 좋은 날인가`:`오늘, 투찰에 좋은 흐름인가`,html:rateHtml,gauge:true});
+    rateHtml+=`<div class="giltease"><div class="glt">오늘부터 30일 안에 명리 기준 길일이 <b>${gc}일</b> 있습니다</div><div class="gls">${preciseOn?'전체 날짜와 길일별 시진은 아래 택일 캘린더에서 확인하세요.':`길일 개수는 무료입니다. 전체 날짜와 길일별 시진은 ${CAT_INFO.sajeong.price.toLocaleString('ko-KR')}원 결제 후 열립니다.`}</div></div>`;}
+  out.push({mk:'率',tier:'free',t:nowYMD?(preciseOn?'오늘의 해석과 30일 전체 흐름':'오늘의 해석과 7일 무료 흐름'):'오늘의 명리 해석',html:rateHtml,gauge:true});
   if(nowYMD){const gc0=gilCount(c,nowYMD.y,nowYMD.m,nowYMD.d);
     const end=gilWindow(nowYMD.y,nowYMD.m,nowYMD.d).pop()!;
     out.push({mk:'擇',tier:'taekil',teaser:`오늘부터 30일, 투찰 길일 <b>${gc0}일</b>: ${Array.from({length:Math.min(gc0,4)},()=>QV(2)+'일').join(' · ')}${gc0>4?' …':''} 정확한 날짜가 여기 있습니다. <b>${end.m}월 ${end.d}일</b>까지 봅니다.`,t:`오늘부터 30일 투찰 길일`,html:choilHtml(c,nowYMD.y,nowYMD.m,nowYMD.d)});}
