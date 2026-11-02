@@ -92,7 +92,7 @@ export default function Home() {
         <details><summary>무료로 어디까지 볼 수 있나요?</summary><p>오늘의 투찰 택일은 기본 명식, 오늘의 해석과 시진, 오늘부터 7일 흐름, 30일 안의 길일 개수를 무료로 제공합니다. 나머지 23일과 길일별 시진은 구매를 선택하면 열립니다. <Link href="/pricing">이용안내·요금 보기</Link></p></details>
         <details><summary>태어난 시간을 몰라도 되나요?</summary><p>시간을 모르면 입력 화면에서 ‘모름’을 선택하세요. 확인할 수 있는 정보로 풀이하며, 시간에 따라 달라지는 해석에는 제한이 있습니다.</p></details>
         <details><summary>사정률이나 낙찰을 예측하나요?</summary><p>사정률이나 낙찰 확률을 예측하지 않습니다. 생년월일과 날짜를 명리 기준으로 해석하는 참고 정보이며, 투찰금액 산정 근거가 아닙니다. 실제 입찰은 공고와 마감 시간을 우선해 판단하세요. <Link href="/method">계산 방법 보기</Link></p></details>
-        <div className="h6-help"><Link href="/faq">자주 묻는 질문 더 보기 →</Link><Link href="/contact">문의하기 →</Link></div>
+        <div className="h6-help"><Link href="/pricing#steps">처음 이용하는 방법 →</Link><Link href="/faq">자주 묻는 질문 더 보기 →</Link><Link href="/contact">문의하기 →</Link></div>
       </section>
       <section className="h6-sec h6-close" aria-labelledby="h6-ready">
         <BrandMark size={60} /><h2 id="h6-ready" className="h6-h">내 생년월일로 확인해보세요</h2>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteTop from '@/app/_components/SiteTop';
+import HelpNav from '@/app/_components/HelpNav';
 import { BIZ } from '@/lib/bizinfo';
 import { ogCard } from '@/lib/og';
 import ContactMail from './ContactMail';
@@ -18,7 +19,7 @@ export default function Contact({ searchParams }: { searchParams: { topic?: stri
   return <div className="app">
     <SiteTop />
     <main className="support-page">
-      <nav className="support-tabs" aria-label="고객센터 안내"><Link href="/contact" aria-current="page">문의하기</Link><Link href="/refund">환불 안내</Link><Link href="/faq">자주 묻는 질문</Link></nav>
+      <HelpNav current="/contact" />
       <h1>어떤 도움이 필요하신가요?</h1>
       <p className="support-lead">결제·환불, 리포트 내용, 화면 오류를 이메일로 문의할 수 있습니다. 가입이나 로그인 없이 이용하세요.</p>
       <div className="support-quick"><Link href="/find"><b>구매했는데 리포트가 안 보여요 →</b><span>결제할 때 입력한 성함과 번호로 다시 찾기</span></Link><Link href="/refund"><b>환불 기준부터 확인할게요 →</b><span>상황별 기준과 환불 요청 방법 확인</span></Link></div>

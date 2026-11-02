@@ -9,7 +9,17 @@ import { track } from '@/lib/track';
 export default function ScrollTop() {
   const pathname = usePathname();
 
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  useEffect(() => {
+    // 이용안내의 특정 단계 등으로 들어온 링크는 목적지 위치를 유지한다.
+    const frame = requestAnimationFrame(() => {
+      let id = window.location.hash.slice(1);
+      try { id = decodeURIComponent(id); } catch {}
+      const target = id ? document.getElementById(id) : null;
+      if (target) target.scrollIntoView({ block: 'start' });
+      else window.scrollTo(0, 0);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [pathname]);
 
   useEffect(() => {
     if (!pathname) return;

@@ -1,65 +1,51 @@
 import type { Metadata } from 'next';
-import { ogCard } from '@/lib/og';
-
-const CARD = { seal: '問', k: '常 問', t: '자주 묻는 질문', s: '정확도 · 결제 · 환불까지 있는 그대로' };
 import Link from 'next/link';
-import { FAQ_MAIN } from '@/lib/faq';
+import { ogCard } from '@/lib/og';
+import { FAQ_GROUPS, FAQ_MAIN } from '@/lib/faq';
+import { FREE_START } from '@/lib/nav';
 import SiteTop from '@/app/_components/SiteTop';
+import HelpNav from '@/app/_components/HelpNav';
+import '../contact/support.css';
+import './help.css';
 
 const BASE = 'https://nakchalsaju.com';
-
 export const metadata: Metadata = {
-  title: '자주 묻는 질문: 입찰 사주·발주처 궁합·투찰 택일',
-  description: '입찰 사주란 무엇인지, 사주로 낙찰을 예측할 수 있는지, 발주처 궁합·법인 설립일 사주·투찰 길일은 어떻게 보는지: 낙찰사주에 대해 자주 묻는 질문에 답합니다.',
+  title: '자주 묻는 질문: 무료 시작·결제·리포트 다시 보기',
+  description: '생년월일 입력, 무료·유료 범위, 결제, 구매한 리포트 다시 보기, 문의·환불까지 이용 중 궁금한 점을 순서대로 확인하세요.',
   alternates: { canonical: '/faq' },
-  keywords: ['입찰 사주', '낙찰 사주', '발주처 궁합', '투찰 택일', '법인 설립일 사주', '사주 낙찰', '낙찰사주 FAQ'],
-  openGraph: { title: '자주 묻는 질문 | 낙찰사주', description: '입찰 사주·발주처 궁합·투찰 택일에 대해 자주 묻는 질문', url: `${BASE}/faq`, type: 'article', siteName: '낙찰사주', images: ogCard(CARD) },
+  openGraph: { title: '자주 묻는 질문 | 낙찰사주', description: '처음 시작부터 구매한 리포트 다시 보기까지', url: `${BASE}/faq`, type: 'website', siteName: '낙찰사주', images: ogCard({ seal: '問', k: '이용 도움말', t: '자주 묻는 질문', s: '시작 · 입력 · 결제 · 다시 보기 · 문의' }) },
 };
 
 export default function FaqPage() {
   const ld = [
-    {
-      '@context': 'https://schema.org', '@type': 'FAQPage',
-      mainEntity: FAQ_MAIN.map(x => ({
-        '@type': 'Question', name: x.q,
-        acceptedAnswer: { '@type': 'Answer', text: x.a },
-      })),
-    },
-    {
-      '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
-        { '@type': 'ListItem', position: 1, name: '홈', item: `${BASE}/` },
-        { '@type': 'ListItem', position: 2, name: '자주 묻는 질문', item: `${BASE}/faq` },
-      ],
-    },
+    { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ_MAIN.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '홈', item: BASE },
+      { '@type': 'ListItem', position: 2, name: '자주 묻는 질문', item: `${BASE}/faq` },
+    ] },
   ];
-  return (
-    <div className="app home">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <SiteTop />
-      <div style={{ padding: '18px 18px 4px' }}>
-        <div style={{ fontSize: 13, letterSpacing: '.3em', color: '#636d77', fontWeight: 700, marginBottom: 6 }}>自主 問答</div>
-        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 22, lineHeight: 1.4, color: 'var(--ink)', margin: '2px 0 8px' }}>자주 묻는 질문</h1>
-        <p style={{ fontSize: 15, lineHeight: 1.8, color: '#3a3630', fontWeight: 500, margin: '0 0 18px' }}>입찰 사주가 무엇인지부터 발주처 궁합·투찰 택일까지 대표님이 가장 많이 묻는 것들에 답합니다.</p>
-        {FAQ_MAIN.map((x, i) => (
-          <div key={i} style={card}>
-            <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', marginBottom: 7, lineHeight: 1.5 }}>Q. {x.q}</div>
-            <p style={{ fontSize: 15, lineHeight: 1.82, color: '#33383f', margin: 0, fontWeight: 500 }}>{x.a}</p>
-          </div>
-        ))}
-        <Link href="/reading" style={cta}>오늘의 투찰 택일 무료로 보기 →<span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 3 }}>성함·생년월일만 · 30초 무료로 시작</span></Link>
-        <div style={{ fontFamily: 'var(--serif)', fontWeight: 800, fontSize: 15, color: 'var(--navy)', margin: '22px 0 10px' }}>더 알아보기</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
-          <Link href="/guide/입찰-사주" style={chip}>입찰 사주란</Link>
-          <Link href="/balju" style={chip}>발주처 궁합</Link>
-          <Link href="/guide/투찰-길일" style={chip}>투찰 길일</Link>
-          <Link href="/guide/법인-설립일-사주" style={chip}>법인 설립일 사주</Link>
-          <Link href="/why" style={chip}>대표 고민별</Link>
-        </div>
-        <p style={{ fontSize: 13, color: '#636d77', lineHeight: 1.65, marginBottom: 20 }}>※ 사주명리 이론에 기반한 참고·오락용 정보입니다. 미래를 예측하거나 특정 결과(낙찰 등)를 보장하지 않으며, 실제 투찰금액 산정의 근거로 사용할 수 없습니다.</p>
+  return <div className="app">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, '\\u003c') }} />
+    <SiteTop />
+    <main className="support-page help-page" id="help-top">
+      <HelpNav current="/faq" />
+      <span className="help-eyebrow">처음 이용하는 분을 위한 도움말</span>
+      <h1>자주 묻는 질문</h1>
+      <p className="support-lead">궁금한 주제를 고른 뒤 질문을 눌러보세요. 답변 아래에서 필요한 화면으로 바로 이동할 수 있습니다.</p>
+      <div className="support-quick">
+        <Link href="/pricing#steps"><b>처음부터 순서대로 알고 싶어요 →</b><span>입력 → 무료 결과 → 선택 구매 → 다시 보기</span></Link>
+        <Link href="/find"><b>구매했는데 리포트가 안 보여요 →</b><span>다시 결제하기 전에 구매 기록부터 확인</span></Link>
       </div>
-    </div>
-  );
+      <nav className="help-jumps" aria-label="질문 주제 바로가기">{FAQ_GROUPS.map(g => <a href={'#' + g.id} key={g.id}>{g.title}</a>)}</nav>
+      {FAQ_GROUPS.map((group, i) => <section className="support-card faq-group" id={group.id} key={group.id} aria-labelledby={group.id + '-title'}>
+        <h2 id={group.id + '-title'}><span className="help-number">0{i + 1}</span>{group.title}</h2>
+        <p className="support-caption">{group.intro}</p>
+        {group.items.map((item, j) => <details key={item.id} id={'question-' + item.id} open={i === 0 && j === 0}>
+          <summary>{item.q}</summary><p>{item.a}</p><Link className="faq-next" href={item.href}>{item.label} →</Link>
+        </details>)}
+        <a className="help-back" href="#help-top">주제 목록으로 ↑</a>
+      </section>)}
+      <section className="support-card help-ending"><h2>아직 궁금한 점이 남았나요?</h2><p>문의 유형을 고르면 필요한 정보를 안내해드립니다. 아는 내용만 적어 이메일로 보내주세요.</p><div className="support-actions"><Link href="/contact">문의하기 →</Link><Link href={FREE_START.href}>{FREE_START.label} →</Link></div></section>
+    </main>
+  </div>;
 }
-const card: React.CSSProperties = { background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '15px 16px', marginBottom: 11 };
-const cta: React.CSSProperties = { display: 'block', textAlign: 'center', background: '#2f56c4', color: '#fff', border: '1px solid var(--gold2)', borderRadius: 12, padding: '15px', fontFamily: 'var(--serif)', fontWeight: 900, fontSize: 17, textDecoration: 'none', marginTop: 6 };
-const chip: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 'var(--navy)', background: '#f4f5f7', border: '1px solid #e2cd97', borderRadius: 999, padding: '7px 12px', textDecoration: 'none' };

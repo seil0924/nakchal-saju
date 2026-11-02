@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { ogCard } from '@/lib/og';
 import SiteTop from '@/app/_components/SiteTop';
+import HelpNav from '@/app/_components/HelpNav';
 import '../contact/support.css';
 
 export const metadata = {
@@ -13,7 +14,7 @@ export const metadata = {
 
 export default function Refund() {
   return <div className="app"><SiteTop /><main className="support-page">
-    <nav className="support-tabs" aria-label="고객센터 안내"><Link href="/contact">문의하기</Link><Link href="/refund" aria-current="page">환불 안내</Link><Link href="/faq">자주 묻는 질문</Link></nav>
+    <HelpNav current="/refund" />
     <h1>환불, 이렇게 요청해주세요</h1>
     <p className="support-lead">구매한 유료 내용을 보았는지, 정상적으로 제공되었는지에 따라 안내가 달라집니다. 상황을 잘 모르셔도 고객센터에 확인을 요청할 수 있습니다.</p>
     <div className="support-actions"><Link href="/contact?topic=refund#write">환불 요청 내용 작성하기 →</Link><a href="#refund-process">요청 후 처리 순서 보기</a></div>
