@@ -4,12 +4,14 @@ import Link from 'next/link';
 import { createPortal } from 'react-dom';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { chartFromInput, sipsungPreview, GAN, ZHI, EL, EL_HEX, GAN_ELc, ZHI_ELc, SIP, SIJIN, SIJIN_MID } from '@/lib/preview';
-import { recordReport, markUnlocked } from '@/lib/vault';
+import { recordReport, markUnlocked, listVault } from '@/lib/vault';
 import { CLIENTS, isCoreClient, CORE_CLIENT_COUNT } from '@/lib/clients';
 import { CAT_INFO, isCatKey, productOfMk, catUI } from '@/lib/report-categories';
 import { parseCands, isPurpose, BIGYO_MIN, BIGYO_LABEL, type BigyoPurpose } from '@/lib/bigyo-input';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
-import RiteProgress from '@/app/_components/RiteProgress';
+import { birthDateError, birthMonthDays, updateBirthParts, validBirthTime, displayBirth } from '@/lib/reading-input';
+import { requestReading } from '@/lib/reading-request';
+import './reading.css';
 import DateSelect from '@/app/_components/DateSelect';
 import PersonPicker from '@/app/_components/PersonPicker';
 import ClientPicker from '@/app/_components/ClientPicker';
@@ -23,16 +25,6 @@ import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kc
 import { sget, sset } from '@/lib/scope';
 import { setTok, tokParam } from '@/lib/rtok';
 
-// 로딩 리추얼 단계 — 실제 엔진 절차를 그대로 보여준다 (계산 과정의 가시화)
-const RITE_STEPS = [
-  '절기(節氣) 천문 계산: 진태양시 보정',
-  '원국(元局) 구성: 십성·오행 배치',
-  '신살(神殺) 대조',
-  '오늘 일진 × 명식 흐름 대조',
-  '국내외 거장 111인 명식 대조',
-  '리포트 봉인: 섹션 산출',
-];
-
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string; passLock?: boolean };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
@@ -43,7 +35,6 @@ const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매',
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
 const YEARS = Array.from({ length: 83 }, (_, i) => 2012 - i); // 2012..1930
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
-const DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
 
 // 관계 유형 (사주아이식: 유형 선택 → 대상 저장/재사용)
 const REL_KINDS = [
@@ -61,7 +52,7 @@ function relCat(me:number,td:number){ if(td===me)return'bi'; if((td+1)%5===me)re
 // 카테고리별 '혹하게 하는' 컨셉 훅 — 입력 화면 상단에서 몰입을 잡는다.
 const HOOK: Record<string, { seal: string; t: string; d: string }> = {
   daepyo:  { seal: '鏡', t: '잡스·록펠러와 같은 그릇일지 모릅니다', d: '타고난 승부 기질·재물·사람 다루는 법을 여덟 글자로 낱낱이: 위기에 드러나는 그 약점까지.' },
-  sajeong: { seal: '率', t: '오늘의 명리 해석부터, 무료로 확인하세요', d: '대표님 명식과 오늘 일진을 풀이합니다. 실제 투찰은 공고의 마감 시각과 참가 조건이 우선입니다.' },
+  sajeong: { seal: '率', t: '성함과 생년월일을 입력해주세요', d: '오늘의 해석과 7일 흐름은 무료입니다. 태어난 시간을 몰라도 시작할 수 있습니다.' },
   balju:   { seal: '宮', t: '그 발주처, 애초에 나와 맞는 판입니까', d: '설립일 사주 × 대표님 사주 궁합 점수: 큰 판에 손대기 전에 확인해주세요.' },
   gunghap: { seal: '合', t: '손잡기 전에, 깨질 궁합인지부터', d: '지분·역할·최종 결정권을 어떻게 나눠야 안 깨지는지: 계약 전에 봐야 할 궁합.' },
   daeun:   { seal: '運', t: '회사가 대표님을 밀어줍니까, 누릅니까', d: '법인 설립일로 본 회사의 그릇과 10년 대운의 길목: 지금이 확장기인지 정비기인지.' },
@@ -84,7 +75,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     // 성별은 계산에 쓰지 않는다(보관함 표시용). 시간은 '모름'이 기본 — 예전엔 '예 · 09:20'이 미리 골라져 있어
     // 손대지 않고 넘어간 사람이 전부 09:20생(巳時)으로 계산됐다(2026-09-14).
     birth: '', gender: '' as '' | 'M' | 'F',
-    timeMode: 'N' as 'Y' | 'grid' | 'N', time: '09:20', sijin: 3,
+    timeMode: 'N' as 'Y' | 'grid' | 'N', time: '', sijin: -1,
     legal: '', company: '', client: '', partner: '', ally: '',
     bidType: '', condition: '', worry: '',
   });
@@ -106,8 +97,14 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   // 실제로 버튼 한 번에 /api/payment/prepare 가 두 번 나갔다. ref 는 즉시 바뀐다.
   const paying = useRef(false);
   const [err, setErr] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; birth?: string; time?: string }>({});
+  const [dateNotice, setDateNotice] = useState('');
+  const [savedResult, setSavedResult] = useState(false);
+  const generating = useRef(false);
+  const reportRequest = useRef<AbortController | null>(null);
+  useEffect(() => () => reportRequest.current?.abort(), []);
   const [consent, setConsent] = useState(false);
-  const [prog, setProg] = useState(false);     // 로딩 리추얼
+  const [prog, setProg] = useState(false);
   const [seal, setSeal] = useState(false);     // 결제 후 개봉 연출
   const [sticky, setSticky] = useState(false); // 스크롤 스티키 CTA
   const [cat, setCat] = useState(isCatKey(initialCat) ? initialCat : ''); // 카테고리(대표·택일·발주처·궁합·대운)
@@ -120,6 +117,17 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   // 카테고리 개별 결제가 (카테고리 모드면 단일가, 아니면 sku 기준가)
   const unlockPrice = catInfo ? catInfo.price : 0;   // 카테고리 전용: 무카테고리는 개별 상품으로만 결제
   const set = (k: string, v: any) => setF(s => ({ ...s, [k]: v }));
+  const focusField = (id: string) => requestAnimationFrame(() => {
+    const el = document.getElementById(id);
+    el?.focus({ preventScroll: true }); el?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  });
+  useEffect(() => {
+    const id = res ? 'rd-result-title' : prog ? 'rd-progress-title' : confirm ? 'rd-review-title' : null;
+    if (id) requestAnimationFrame(() => {
+      const el = document.getElementById(id);
+      el?.focus({ preventScroll: true }); el?.scrollIntoView({ block: 'start' });
+    });
+  }, [res?.reportId, confirm, prog]);
 
   // 잠긴 섹션을 지나 스크롤하면 슬림 CTA 노출 (결과 없거나 전체 열람이면 숨김)
   useEffect(() => {
@@ -234,27 +242,27 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     const p = { company: f.company, legal: f.legal };
     setSavedLegal(prev => { const nx = [p, ...prev.filter(x => !(x.legal === p.legal && x.company === p.company))].slice(0, 8); try { sset(LEGAL_KEY, JSON.stringify(nx)); } catch {} return nx; });
   }
-  function loadSelf(p: any) { setF(s => ({ ...s, name: p.name || '', birth: p.birth, gender: p.gender || '', cal: p.cal || 'solar', leap: !!p.leap, timeMode: p.timeMode || 'N', time: p.time || '09:20', sijin: p.sijin ?? 3 })); const [yy, mm, dd] = String(p.birth).split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
+  function loadSelf(p: any) { setF(s => ({ ...s, name: p.name || '', birth: p.birth, gender: p.gender || '', cal: p.cal || 'solar', leap: !!p.leap, timeMode: p.timeMode || 'N', time: p.time || '', sijin: p.sijin ?? -1 })); const [yy, mm, dd] = String(p.birth).split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
   function loadLegalProfile(p: any) { setF(s => ({ ...s, company: p.company || '', legal: p.legal })); }
   // 통합 사람/업체 시트에서 선택 → 해당 슬롯 채우기
   function handlePick(pp: Person) {
     if (pp.kind === 'self') {
-      setF(s => ({ ...s, name: pp.name || '', birth: pp.date, gender: pp.gender || '', cal: pp.cal || 'solar', leap: !!pp.leap, timeMode: (pp.timeMode as any) || (pp.time ? 'Y' : 'N'), time: pp.time || '09:20' }));
+      setF(s => ({ ...s, name: pp.name || '', birth: pp.date, gender: pp.gender || '', cal: pp.cal || 'solar', leap: !!pp.leap, timeMode: (pp.timeMode as any) || (pp.time ? 'Y' : 'N'), time: pp.time || '' }));
       const [yy, mm, dd] = String(pp.date).split('-').map(Number); setBp({ y: yy, m: mm, d: dd });
     } else if (pp.kind === 'legal') {
       setF(s => ({ ...s, company: pp.name || '', legal: pp.date }));
     } else {
       setTargets(prev => [...prev.filter(x => x.kind !== pp.kind), { kind: pp.kind as RelKind, name: pp.name || kindLabel(pp.kind as RelKind), date: pp.date }]);
     }
-    setErr('');   // '먼저 고르세요' 안내가 고른 뒤에도 남아 있었다
+    setErr(''); setFieldErrors({});
   }
   const yr2 = (d: string) => (d || '').slice(2);
 
-  const effTime = f.timeMode === 'Y' ? f.time : f.timeMode === 'grid' ? SIJIN_MID[f.sijin] : null;
+  const effTime = f.timeMode === 'Y' ? f.time : f.timeMode === 'grid' ? SIJIN_MID[f.sijin] ?? null : null;
   const situation = [f.bidType, f.condition].filter(Boolean).join(' · ');
 
   // 실시간 명식 미리보기 (클라이언트 계산 — 사정률 정밀값은 서버에서만)
-  const chart = useMemo(() => chartFromInput(f.birth, effTime, f.cal, f.leap), [f.birth, effTime, f.cal, f.leap]);
+  const chart = useMemo(() => !birthDateError(f.birth, f.cal, f.leap) && (f.timeMode === 'N' || validBirthTime(effTime)) ? chartFromInput(f.birth, effTime, f.cal, f.leap) : null, [f.birth, effTime, f.cal, f.leap, f.timeMode]);
   const sip = chart ? sipsungPreview(chart) : null;
   const dom = sip ? sip.indexOf(Math.max(...sip)) : 0;
 
@@ -270,9 +278,17 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   }
 
   async function submit() {
+    if (busy || generating.current) return;
     setErr('');
-    if (!f.name.trim()) { setErr('대표님 성함을 넣어주세요.'); document.getElementById('rd-name')?.focus(); return; }
-    if (!f.birth) { setErr('대표님 생년월일을 입력해 주세요.'); return; }
+    const errors = {
+      name: f.name.trim() ? '' : '성함을 입력해주세요. 리포트 제목에 사용합니다.',
+      birth: birthDateError(f.birth, f.cal, f.leap),
+      time: f.timeMode === 'N' || validBirthTime(effTime) ? '' : '태어난 시간을 골라주세요. 모르면 ‘모름’으로 진행할 수 있습니다.',
+    };
+    setFieldErrors(errors);
+    if (errors.name) { focusField('rd-name'); return; }
+    if (errors.birth) { focusField(!bp.y ? 'rd-year' : !bp.m ? 'rd-month' : 'rd-day'); return; }
+    if (errors.time) { setMore(true); focusField('rd-time-options'); return; }
     // 카테고리별 필수 입력 안내
     const req = ui.requires;   // 카테고리 필수 입력(스키마 기반)
     if (req === 'legal' && !f.legal) { setErr('회사 대운은 법인 설립일이 필요합니다. 아래 「회사 정보」에 설립일을 넣어주세요.'); document.getElementById('cocard')?.scrollIntoView({ behavior: 'smooth' }); return; }
@@ -283,10 +299,15 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     // 자리 사주는 주소·방위가 있어야 읽을 게 생긴다. 없이 팔면 빈 리포트가 나간다.
     if (cat === 'bigyo' && !bigyo) { setErr('비교할 날짜가 없습니다. 택일 화면에서 날짜를 두세 개 고른 뒤 다시 오세요.'); return; }
     if (cat === 'ijeon' && !jari) { setErr('자리 사주는 사무실 주소와 방위가 필요합니다. 「자리 사주」 화면에서 주소를 넣고 다시 오세요.'); return; }
-    setConfirm(true); // 사주아이식: 입력 확인 모달 먼저
+    setConfirm(true); // 결과를 만들기 전에 달력 기준과 날짜를 확인한다.
   }
 
   async function run() {
+    if (generating.current) return;
+    generating.current = true;
+    const controller = new AbortController();
+    reportRequest.current = controller;
+    setErr('');
     setConfirm(false); setBusy(true); setLevel(0); setProg(true);
     try {
       const tg = (k: RelKind) => targets.find(t => t.kind === k);
@@ -301,12 +322,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         jari: jari || undefined,
         cands: bigyo?.cands, purpose: bigyo?.purpose,
       };
-      const minWait = new Promise(r => setTimeout(r, 2500)); // 리추얼 최소 상영 시간
-      const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
-      if (!resp.ok) throw new Error();
-      const r = await resp.json();
+      const r = await requestReading<Result & { token?: string; label?: string }>(body, controller);
       setTok(r.reportId, r.token);   // 접근토큰 로컬 보관(비회원 리포트 IDOR 방어)
-      await minWait;
       setRes(r);
       markResultSeen();   // 홈 화면 추가 권유는 결과를 본 사람에게만
       // 관리자는 서버가 레벨 2로 본문을 만들어 보낸다. 그 값을 그대로 받아야
@@ -314,13 +331,15 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       setLevel(r.level ?? 0);
       // 보관함 기록 (이 기기 · 로그인 시 계정) + 저장된 사주/대상 서버 기록(best-effort)
       recordReport({ id: r.reportId, label: r.label || r.title, when: Date.now(), unlocked: false });
+      setSavedResult(listVault().some(item => item.id === r.reportId));
       fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: 'self', name: f.name, birth_date: f.birth, birth_time: f.timeMode === 'N' ? null : effTime, calendar: f.cal, is_leap: f.leap }) }).catch(() => {});
       if (f.legal) fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: 'legal', name: f.company, birth_date: f.legal }) }).catch(() => {});
       targets.forEach(t => fetch('/api/charts', { method: 'POST', body: JSON.stringify({ kind: t.kind, name: t.name, birth_date: t.date }) }).catch(() => {}));
       saveSelfProfile(); if (f.legal) saveLegalProfile();
-      setTimeout(() => document.getElementById('rep')?.scrollIntoView({ behavior: 'smooth' }), 60);
-    } catch { setErr('리포트를 뽑는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
-    finally { setBusy(false); setProg(false); }
+    } catch (error) {
+      setErr(error instanceof Error ? error.message : '결과를 불러오지 못했습니다. 입력 내용은 그대로입니다. 다시 시도해주세요.');
+      focusField('rd-request-error');
+    } finally { generating.current = false; reportRequest.current = null; setBusy(false); setProg(false); }
   }
 
   // 개별 상품(묶음 없음): 잠긴 섹션 → 그 섹션을 파는 카테고리 상품으로 리포트를 좁혀 다시 뽑는다.
@@ -466,21 +485,33 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   const by = bp.y, bm = bp.m, bd = bp.d;
   // 년/월/일 3분할 — 부분 선택을 상태에 누적하고, 셋이 다 차면 birth를 세팅한다.
   const setB = (part: { y?: number; m?: number; d?: number }) => {
-    setBp(prev => {
-      const nx = { ...prev, ...part };
-      if (nx.y && nx.m && nx.d) set('birth', `${nx.y}-${String(nx.m).padStart(2, '0')}-${String(nx.d).padStart(2, '0')}`);
-      return nx;
-    });
+    const next = updateBirthParts(bp, part, f.cal, f.leap);
+    setBp(next.parts); set('birth', next.birth);
+    setFieldErrors(e => ({ ...e, birth: '' }));
+    setDateNotice(next.cleared ? '선택한 달에 맞게 태어난 날을 다시 골라주세요.' : '');
   };
+  const setCalendar = (cal: 'solar' | 'lunar', leap: boolean) => {
+    const next = updateBirthParts(bp, {}, cal, leap);
+    setBp(next.parts); setF(s => ({ ...s, cal, leap, birth: next.birth }));
+    setFieldErrors(e => ({ ...e, birth: '' }));
+    setDateNotice(next.cleared ? '달력 기준이 바뀌었습니다. 태어난 날을 다시 골라주세요.' : '');
+  };
+  const birthDays = birthMonthDays(by, bm, f.cal, f.leap);
+  const dateError = fieldErrors.birth || (by && bm && !birthDays ? '선택한 월은 윤달이 아닙니다. 평달·윤달과 월을 확인해주세요.' : '');
+  const editInput = () => { setRes(null); setLevel(0); setConfirm(false); setErr(''); focusField('rd-name'); };
 
   return (
-    <div className="app">
+    <div className="app reading-page">
       <header className="u-top">
         <Link href="/" className="u-back" aria-label="홈으로"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></Link>
         <h1>{catInfo ? catInfo.name : '사주 보기'}</h1>
       </header>
       <div className="wrap">
-        {!res && (<>
+        <ol className="rd-steps" aria-label="무료 풀이 진행 순서">
+          {['정보 입력', '내용 확인', '무료 결과'].map((label, i) => <li key={label} aria-current={(res ? 2 : confirm || prog ? 1 : 0) === i ? 'step' : undefined}><span>{i + 1}</span>{label}</li>)}
+        </ol>
+        {err && !modal && <div id="rd-request-error" className="errbox" role="alert" tabIndex={-1}>{err}</div>}
+        {!res && !confirm && !prog && (<>
         {/* 0. 컨셉 훅: 카테고리별 몰입 배너 */}
         {cat && HOOK[cat] && (
           <div className="rd-hook">
@@ -497,8 +528,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         )}
         {!cat && (
           <div className="rd-hook">
-            <b>성함과 생년월일만 넣으면 30초</b>
-            <span>명식과 오늘의 투찰 신호가 무료로 나옵니다. 가입은 필요 없습니다.</span>
+            <b>성함과 생년월일을 입력해주세요</b>
+            <span>무료 풀이를 먼저 확인합니다. 태어난 시간을 몰라도 시작할 수 있습니다.</span>
           </div>
         )}
         {/* 0-2. 사업운 캘린더: 기간 선택(이달/연간 한 경로) */}
@@ -515,55 +546,61 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             </div>
           </div>
         )}
-        {cat === 'sajeong' && <TaekilAccess />}
         {/* 2. 대표님 정보 */}
         <div className="card">
-          <div className="st"><span className="l"><span className="b" />대표님 성함과 생년월일</span></div>
+          <div className="st"><span className="l"><span className="b" />기본 정보</span><span className="opt">필수</span></div>
           {savedSelf.length > 0 && (
             <button type="button" className="pickbtn" onClick={() => setPicker({ open: true, kind: 'self' })}>
-              <span className="pktx"><b>{f.birth ? `${f.name || '대표'} · ${yr2(f.birth)}` : '저장된 대표 불러오기'}</b><em>전에 넣으신 생년월일을 그대로 씁니다</em></span>
+              <span className="pktx"><b>저장된 정보 불러오기</b><em>{f.birth ? '아래 정보가 본인 정보인지 확인해주세요.' : '이전에 입력한 정보를 선택할 수 있습니다.'}</em></span>
               <span className="pkgo">›</span>
             </button>
           )}
           {/* 성함은 필수(2026-10-22). 리포트 제목과 보관함 목록이 성함으로 갈린다 — 비면 '대표님' 리포트가 줄줄이 쌓였다. */}
           <label htmlFor="rd-name" className="rd-namel">성함</label>
-          <input id="rd-name" className="rd-name" value={f.name} maxLength={12} required aria-required="true" autoComplete="name"
-            placeholder="예) 홍길동" onChange={e => set('name', e.target.value)} />
+          <input id="rd-name" className="rd-name" value={f.name} maxLength={12} required aria-required="true" autoComplete="name" aria-invalid={!!fieldErrors.name} aria-describedby={fieldErrors.name ? 'rd-name-error' : 'rd-name-help'}
+            placeholder="예) 홍길동" onChange={e => { set('name', e.target.value); setFieldErrors(x => ({ ...x, name: '' })); }} />
+          {fieldErrors.name ? <p id="rd-name-error" className="rd-field-error" role="alert">{fieldErrors.name}</p> : <p id="rd-name-help" className="rd-help">리포트 제목과 보관함에서 구분할 이름입니다.</p>}
+          <div className="rd-namel">생년월일</div>
           <div className="rd-cal" role="group" aria-label="달력">
-            <button type="button" className={f.cal === 'solar' ? 'on' : ''} aria-pressed={f.cal === 'solar'} onClick={() => set('cal', 'solar')}>양력</button>
-            <button type="button" className={f.cal === 'lunar' ? 'on' : ''} aria-pressed={f.cal === 'lunar'} onClick={() => set('cal', 'lunar')}>음력</button>
+            <button type="button" className={f.cal === 'solar' ? 'on' : ''} aria-pressed={f.cal === 'solar'} onClick={() => setCalendar('solar', false)}>양력</button>
+            <button type="button" className={f.cal === 'lunar' ? 'on' : ''} aria-pressed={f.cal === 'lunar'} onClick={() => setCalendar('lunar', f.leap)}>음력</button>
             {f.cal === 'lunar' && (<>
               <span className="rd-sep" aria-hidden="true" />
-              <button type="button" className={!f.leap ? 'on' : ''} aria-pressed={!f.leap} onClick={() => set('leap', false)}>평달</button>
-              <button type="button" className={f.leap ? 'on' : ''} aria-pressed={f.leap} onClick={() => set('leap', true)}>윤달</button>
+              <button type="button" className={!f.leap ? 'on' : ''} aria-pressed={!f.leap} onClick={() => setCalendar('lunar', false)}>평달</button>
+              <button type="button" className={f.leap ? 'on' : ''} aria-pressed={f.leap} onClick={() => setCalendar('lunar', true)}>윤달</button>
             </>)}
           </div>
+          <p id="rd-calendar-help" className="rd-help">{f.cal === 'lunar' ? '음력 생일 그대로 골라주세요. 윤달에 태어났다고 확인한 경우에만 ‘윤달’을 선택하세요.' : '양력 생일을 골라주세요. 음력으로 알고 있다면 먼저 ‘음력’을 선택하세요.'}</p>
           <div className="bdate">
-            <select required aria-label="태어난 해" value={by || ''} onChange={e => setB({ y: +e.target.value })}><option value="" disabled>년</option>{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
-            <select required aria-label="태어난 달" value={bm || ''} onChange={e => setB({ m: +e.target.value })}><option value="" disabled>월</option>{MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}</select>
-            <select required aria-label="태어난 날" value={bd || ''} onChange={e => setB({ d: +e.target.value })}><option value="" disabled>일</option>{DAYS.map(d => <option key={d} value={d}>{d}일</option>)}</select>
+            <select id="rd-year" required aria-label="태어난 해" aria-invalid={!!dateError} aria-describedby={dateError ? 'rd-birth-error' : 'rd-calendar-help'} value={by || ''} onChange={e => setB({ y: +e.target.value })}><option value="" disabled>년도</option>{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
+            <select id="rd-month" required aria-label="태어난 달" aria-invalid={!!dateError} aria-describedby={dateError ? 'rd-birth-error' : 'rd-calendar-help'} value={bm || ''} onChange={e => setB({ m: +e.target.value })}><option value="" disabled>월</option>{MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}</select>
+            <select id="rd-day" required aria-label="태어난 날" aria-invalid={!!dateError} aria-describedby={dateError ? 'rd-birth-error' : 'rd-calendar-help'} value={bd || ''} onChange={e => setB({ d: +e.target.value })}><option value="" disabled>일</option>{Array.from({ length: birthDays }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}일</option>)}</select>
           </div>
+          {dateError && <p id="rd-birth-error" className="rd-field-error" role="alert">{dateError}</p>}
+          {dateNotice && !dateError && <p className="rd-help" role="status">{dateNotice}</p>}
           <button type="button" className="rd-more" aria-expanded={more} onClick={() => setMore(v => !v)}>
-            {more ? '접기' : '더 정확히 보기'}<span>{more ? '' : ' · 태어난 시간·성별'}</span>
+            {more ? '태어난 시간·성별 접기' : '태어난 시간·성별 추가'}<span>선택</span>
           </button>
+          {!more && <p className="rd-help">{f.timeMode === 'N' ? '시간을 모르면 추가하지 않고 다음으로 넘어가세요.' : `태어난 시간: ${effTime || '선택 필요'}`}</p>}
           {more && (<div className="rd-fold">
           <label>태어난 시간</label>
-          <div className="seg">
-            <button className={seg(f.timeMode === 'Y')} onClick={() => set('timeMode', 'Y')}>시각을 앎</button>
-            <button className={seg(f.timeMode === 'grid')} onClick={() => set('timeMode', 'grid')}>대략만</button>
-            <button className={seg(f.timeMode === 'N')} onClick={() => set('timeMode', 'N')}>모름</button>
+          <div id="rd-time-options" className="seg" role="group" aria-label="태어난 시간 입력 방법" tabIndex={-1} aria-describedby={fieldErrors.time ? 'rd-time-error' : undefined}>
+            <button className={seg(f.timeMode === 'Y')} aria-pressed={f.timeMode === 'Y'} onClick={() => { set('timeMode', 'Y'); setFieldErrors(e => ({ ...e, time: '' })); }}>정확히 알아요</button>
+            <button className={seg(f.timeMode === 'grid')} aria-pressed={f.timeMode === 'grid'} onClick={() => { set('timeMode', 'grid'); setFieldErrors(e => ({ ...e, time: '' })); }}>대략 알아요</button>
+            <button className={seg(f.timeMode === 'N')} aria-pressed={f.timeMode === 'N'} onClick={() => { set('timeMode', 'N'); setFieldErrors(e => ({ ...e, time: '' })); }}>모름</button>
           </div>
-          {f.timeMode === 'N' && <div className="tsnote">모르시면 시주 없이 세 기둥으로 계산합니다.</div>}
+          {fieldErrors.time && <p id="rd-time-error" className="rd-field-error" role="alert">{fieldErrors.time}</p>}
+          {f.timeMode === 'N' && <div className="tsnote">생년월일만으로 풀이합니다. 시간에 따라 달라지는 해석은 제외합니다.</div>}
           {f.timeMode === 'Y' && (
             <div>
-              <input type="time" aria-label="태어난 시각" value={f.time} onChange={e => set('time', e.target.value)} style={{ marginTop: 8 }} />
-              <div className="tsnote">✓ 진태양시 −30분 자동 보정 (한국 경도 기준)</div>
+              <input type="time" aria-label="태어난 시각" aria-invalid={!!fieldErrors.time} value={f.time} onChange={e => { set('time', e.target.value); setFieldErrors(x => ({ ...x, time: '' })); }} style={{ marginTop: 8 }} />
+              <div className="tsnote">오전·오후를 확인해주세요. 한국 출생 기준으로 시간을 보정합니다.</div>
             </div>
           )}
           {f.timeMode === 'grid' && (
             <div className="sijin">
               {SIJIN.map(([nm, rng], i) => (
-                <div key={i} className={'sj' + (f.sijin === i ? ' on' : '')} onClick={() => set('sijin', i)}><b>{nm}</b><span>{rng}</span></div>
+                <button type="button" key={i} className={'sj' + (f.sijin === i ? ' on' : '')} aria-pressed={f.sijin === i} onClick={() => { set('sijin', i); setFieldErrors(x => ({ ...x, time: '' })); }}><b>{nm}</b><span>{rng}</span></button>
               ))}
             </div>
           )}
@@ -575,8 +612,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           </div>)}
 
           {/* 실시간 만세력 미리보기: 생년월일이 들어온 뒤에만 */}
-          {chart && <div className="prevbox">
-            <div className="prevhd"><span>만세력 미리보기</span><span className="live">● 실시간</span></div>
+          {chart && <details className="prevbox rd-preview">
+            <summary>입력한 생년월일의 사주 미리보기 <span>선택</span></summary>
             {chart ? (
               <div>
                 <div className="msg4">
@@ -589,12 +626,13 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                 <div className="sipline">일간 <b style={{ color: 'var(--navy)' }}>{GAN[chart.dGan]}({EL[chart.dayMasterEl]})</b> · 강한 십성 <b style={{ color: 'var(--red)' }}>{SIP[dom]}</b></div>
               </div>
             ) : null}
-          </div>}
+          </details>}
         </div>
 
         {/* 상황 (사정률·통합에서만): 고르지 않아도 뽑힌다. 생년월일 아래로 내렸다. */}
-        {ui.situation && (<div className="card">
-          <div className="st"><span className="l"><span className="b" />지금 어떤 입찰을 앞두고 계세요?</span><span className="opt">선택</span></div>
+        {ui.situation && (<details className="card rd-optional">
+          <summary>입찰 상황 추가 <span>선택</span></summary>
+          <p className="rd-help">고르지 않아도 무료 결과를 볼 수 있습니다.</p>
           <div className="chips">
             {BID_TYPES.map(t => <button key={t} className={'chip2' + (f.bidType === t ? ' on' : '')} onClick={() => set('bidType', f.bidType === t ? '' : t)}>{t}</button>)}
           </div>
@@ -606,7 +644,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           <label style={{ marginTop: 14 }}>지금 가장 고민되는 결정 <span className="opt">(선택)</span></label>
           <textarea value={f.worry} maxLength={200} onChange={e => set('worry', e.target.value)} placeholder="예) 이번 도로공사 큰 건, 넣을지 말지 고민입니다" />
           </div>)}
-        </div>)}
+        </details>)}
+        {cat === 'sajeong' && <details className="card rd-optional"><summary>무료·유료 범위 확인</summary><TaekilAccess /></details>}
 
 
         {/* 0-1. 이걸 알게 됩니다. 폼보다 먼저 온다.
@@ -679,15 +718,41 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           )}
         </div>
 
-        {err && !res && !confirm && <div className="errbox" role="alert">{err}</div>}
         <div className="note" style={{ textAlign: 'center' }}>※ 재미로 보는 명리 기반 참고 정보. 투찰금액 산정 근거로 사용 불가.</div>
         {/* 아래 결제 막대(rd-bar, 고정) 높이만큼 비워 둔다. 바깥 .shell 여백은 화면 폭에 따라 안 먹었다. */}
         <div className="rd-spacer" aria-hidden="true" />
         </>)}
 
-        {res && (
-          <button className="reinput no-print" onClick={() => { setRes(null); setLevel(0); setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 30); }}>← 정보 다시 입력</button>
-        )}
+        {confirm && !prog && <section className="card rd-review" aria-labelledby="rd-review-title">
+          <h2 id="rd-review-title" tabIndex={-1}>입력 내용을 확인해주세요</h2>
+          <p className="rd-help">특히 양력·음력과 생년월일이 맞는지 확인해주세요.</p>
+          <dl className="rd-summary">
+            <div><dt>성함</dt><dd>{f.name}</dd></div>
+            <div><dt>생년월일</dt><dd>{displayBirth(f.birth, f.cal, f.leap)}</dd></div>
+            <div><dt>태어난 시간</dt><dd>{f.timeMode === 'Y' ? f.time : f.timeMode === 'grid' && f.sijin >= 0 ? `${SIJIN[f.sijin][0]} (${SIJIN[f.sijin][1]})` : '모름 · 생년월일만으로 풀이'}</dd></div>
+            {f.gender && <div><dt>성별</dt><dd>{f.gender === 'M' ? '남' : '여'}</dd></div>}
+            {situation && <div><dt>입찰 상황</dt><dd>{situation}</dd></div>}
+            {f.legal && <div><dt>{f.company || '회사 설립일'}</dt><dd>{f.legal}</dd></div>}
+            {targets.map(t => <div key={t.kind}><dt>{kindLabel(t.kind)}</dt><dd>{t.name} · {t.date}</dd></div>)}
+          </dl>
+          <p className="rd-review-note">{cat === 'sajeong' ? '오늘의 해석과 7일 흐름을 무료로 확인합니다.' : '먼저 무료로 제공하는 결과를 확인합니다.'}<br />이 단계에서는 결제하지 않습니다.</p>
+          <div className="rd-review-actions">
+            <button type="button" onClick={editInput}>입력 내용 수정</button>
+            <button type="button" className="primary" onClick={run} disabled={busy}>무료 결과 확인하기 →</button>
+          </div>
+        </section>}
+        {prog && <section className="card rd-progress" aria-busy="true" aria-labelledby="rd-progress-title">
+          <h2 id="rd-progress-title" tabIndex={-1}>무료 결과를 준비하고 있습니다</h2>
+          <p role="status">입력한 생년월일로 풀이 중입니다. 완료되면 바로 결과를 보여드립니다.</p>
+          <p className="rd-help">연결 상태에 따라 잠시 걸릴 수 있습니다.</p>
+        </section>}
+        {res && <section className="rd-result-intro" aria-labelledby="rd-result-title">
+          <h2 id="rd-result-title" tabIndex={-1}>{level > 0 ? '상세 결과가 열렸습니다' : '무료 결과가 나왔습니다'}</h2>
+          <p>{f.name} · {displayBirth(f.birth, f.cal, f.leap)}</p>
+          <p className="rd-help">{cat === 'sajeong' ? '오늘의 해석과 7일 흐름은 아래 첫 풀이에서 확인하세요.' : '아래 첫 풀이가 펼쳐져 있습니다. 다른 제목을 누르면 이어서 볼 수 있습니다.'}</p>
+          <div className="rd-result-actions no-print"><button type="button" onClick={editInput}>입력 내용 수정</button><Link href="/vault">내 리포트 보관함 →</Link></div>
+          <p className="rd-help">{savedResult ? '이 기기의 보관함에 저장했습니다. 나중에 다시 열어볼 수 있습니다.' : '이 기기에 저장하지 못했습니다. 아래 [결과 공유]로 링크를 따로 보관해주세요.'}</p>
+        </section>}
         {res && (
           <div id="rep" className="rcols" style={{ marginTop: 6 }}>
             <div className="rleft">
@@ -814,8 +879,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       <ClientPicker open={clientPick} onClose={() => setClientPick(false)}
         onPick={c => { setTargets(prev => [...prev.filter(x => x.kind !== 'client'), { kind: 'client', name: c.name, date: c.date }]); setErr(''); }} />
 
-      {/* 로딩 리추얼 */}
-      <RiteProgress open={prog} title="만세력을 폅니다" steps={RITE_STEPS} stepMs={410} />
+
 
       {/* 결제 성공: 개봉 연출 */}
       {seal && (
@@ -830,58 +894,21 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       )}
 
       {/* 스크롤 스티키 CTA (전체 미열람 시) */}
-      {res && level < 2 && catInfo && anyLocked && sticky && !modal && !prog && (
+      {res && level < 2 && catInfo && anyLocked && sticky && !modal && !prog && mounted && createPortal(
         <div className="stickycta no-print" onClick={() => { setErr(''); setModal(true); }}>
           <span className="sl"><b>{cat === 'sajeong' ? '30일 전체 흐름 열기' : `${catInfo.name} 열기`}</b><em>{cat === 'sajeong' ? '나머지 23일 · 길일별 시진 추가' : '계산은 끝났습니다 · 열면 바로 보입니다'}</em></span>
           <span className="sr">{won(catInfo.price)} →</span>
         </div>
-      )}
+      , document.body)}
 
       {/* 바닥 막대: 무엇을 얼마에 사는지 늘 보이게. 누르면 무료 결과부터 뽑는다(결제는 결과 뒤). */}
-      {!res && !prog && !confirm && (
+      {!res && !prog && !confirm && mounted && createPortal(
         <div className="rd-bar no-print">
           <div className="rd-bar-tx">
             <b>{catInfo ? catInfo.name : '사주 보기'}</b>
             <span>{cat === 'sajeong' ? `7일 흐름 무료 · 30일 전체 ${won(CAT_INFO.sajeong.price)}` : catInfo ? `명식·방향 무료 · 전체 ${won(catInfo.price)}` : '명식·오늘의 신호 무료'}</span>
           </div>
-          <button type="button" className="go" disabled={busy} onClick={() => {
-            if (!f.name.trim()) {
-              const n = document.getElementById('rd-name');
-              n?.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => n?.focus(), 350);
-              setErr('대표님 성함을 먼저 넣어 주세요.');
-              return;
-            }
-            if (!f.birth) {
-              const y = document.querySelector<HTMLSelectElement>('.bdate select');
-              y?.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => y?.focus(), 350);
-              setErr('생년월일을 먼저 넣어 주세요.');
-              return;
-            }
-            submit();
-          }}>{busy ? '짚는 중…' : '무료로 먼저 보기'}</button>
-        </div>
-      )}
-
-      {/* 입력 확인 모달 (사주아이식) */}
-      {confirm && mounted && createPortal(
-        <div className="modal on" onClick={e => { if ((e.target as HTMLElement).classList.contains('modal')) setConfirm(false); }}>
-          <div className="sheet">
-            <div className="grip" />
-            <div className="sumbox">
-              <div className="sumhd">입력하신 내용이 맞나요?</div>
-              <div className="sumrow"><span className="k">성함</span><span className="v">{f.name || '—'}</span></div>
-              <div className="sumrow"><span className="k">생년월일</span><span className="v">{f.birth} ({f.cal === 'lunar' ? '음력' + (f.leap ? '·윤달' : '') : '양력'})</span></div>
-              <div className="sumrow"><span className="k">태어난 시</span><span className="v">{f.timeMode === 'Y' ? f.time : f.timeMode === 'grid' ? SIJIN[f.sijin][0] + ' ' + SIJIN[f.sijin][1] : '모름 (삼주)'}</span></div>
-              <div className="sumrow"><span className="k">성별</span><span className="v">{f.gender === 'M' ? '남' : f.gender === 'F' ? '여' : '선택 안 함'}</span></div>
-              {situation && <div className="sumrow"><span className="k">상황</span><span className="v">{situation}</span></div>}
-              {f.legal && <div className="sumrow"><span className="k">법인{f.company ? ' · ' + f.company : ''}</span><span className="v">{f.legal}</span></div>}
-              {targets.map(t => <div key={t.kind} className="sumrow"><span className="k">{kindLabel(t.kind)}</span><span className="v">{t.name} · {t.date}</span></div>)}
-            </div>
-            <div className="sumbtns">
-              <button onClick={() => setConfirm(false)}>수정하기</button>
-              <button className="ok" onClick={run}>맞습니다 →</button>
-            </div>
-          </div>
+<button type="button" className="go" disabled={busy} onClick={submit}>입력 내용 확인 →</button>
         </div>
       , document.body)}
 
