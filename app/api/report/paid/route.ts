@@ -1,5 +1,3 @@
-import { qaEligible } from '@/lib/report-qa';
-import { reportQaAvailable } from '@/lib/report-qa-server';
 // GET /api/report/paid?id=<reportId> — 유료 전체 리포트
 // ★결제 검증 + (인증 시)소유권 확인된 경우에만 200. 아니면 402/403.
 // 유료 텍스트는 여기서 처음 생성됩니다.
@@ -35,5 +33,5 @@ export async function GET(req: Request) {
 
   const year = Number(new URL(req.url).searchParams.get('year')) || undefined;
   const full = computeReport(input, level, year, bpass); // 결제된 레벨 + 패스만큼 공개
-  return NextResponse.json({ ...full, level, admin, qaAvailable: reportQaAvailable() && qaEligible(level, bpass, input.cat) });
+  return NextResponse.json({ ...full, level, admin });
 }

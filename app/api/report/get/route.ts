@@ -1,5 +1,3 @@
-import { qaEligible } from '@/lib/report-qa';
-import { reportQaAvailable } from '@/lib/report-qa-server';
 // GET /api/report/get?id= — 보관함에서 리포트 다시 열기 (잠금 상태 반영)
 // 결제된 리포트면 전체, 아니면 무료 게이팅본을 반환.
 import { NextResponse } from 'next/server';
@@ -27,5 +25,5 @@ export async function GET(req: Request) {
   const bpass = ent.bpass;
   const year = Number(new URL(req.url).searchParams.get('year')) || undefined;
   const rep = computeReport(input, level, year, bpass);
-  return NextResponse.json({ reportId: id, unlocked: level >= 1, qaAvailable: reportQaAvailable() && qaEligible(level, bpass, input.cat), level, mine: isOwner, admin, cat: input.cat ?? null, ...rep });
+  return NextResponse.json({ reportId: id, unlocked: level >= 1, level, mine: isOwner, admin, cat: input.cat ?? null, ...rep });
 }

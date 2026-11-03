@@ -1,5 +1,3 @@
-import { qaEligible } from '@/lib/report-qa';
-import { reportQaAvailable } from '@/lib/report-qa-server';
 // POST /api/report — 명식 입력 → 무료 리포트 + reportId 발급
 // 유료 섹션 텍스트/정밀값은 여기서 응답하지 않습니다(게이팅).
 import { NextResponse } from 'next/server';
@@ -33,5 +31,5 @@ export async function POST(req: Request) {
   const { id: reportId, token } = await saveReport(input, user?.id, label); // 원장 보관(+소유자+라벨+접근토큰)
   // level 을 같이 내려보낸다. 안 보내면 화면이 0 으로 계산해서,
   // 관리자에게 만들어 준 본문은 다 그려지는데 배지만 자물쇠로 뜬다(표시가 서로 어긋남).
-  return NextResponse.json({ reportId, token, label, admin, qaAvailable: reportQaAvailable() && qaEligible(admin ? 2 : 0, bpass, input.cat), level: admin ? 2 : 0, ...free });
+  return NextResponse.json({ reportId, token, label, admin, level: admin ? 2 : 0, ...free });
 }
