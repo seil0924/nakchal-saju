@@ -577,6 +577,18 @@ html body .sajcal .scm.lockm{font-size:11px;font-weight:600;line-height:1.5;whit
   @page{size:A4 landscape;margin:0}
 }
 
+/* 대표 사주: 조건과 근거를 읽기 쉬운 카드로 구분한다. */
+html body .interpretation-cards { display: grid; gap: 12px; margin: 16px 0; }
+html body .interpretation-card { min-width: 0; padding: 18px; margin: 12px 0; border: 1px solid #dce3ed; border-radius: 12px; background: #f7f9fc; color: #263445; overflow-wrap: anywhere; }
+html body .interpretation-cards .interpretation-card { margin: 0; }
+html body .sec .bd .interpretation-card h3 { margin: 0 0 8px; color: #244675; font-size: 17px; line-height: 1.5; }
+html body .sec .bd .interpretation-card p { margin: 8px 0 0; font-size: 16px; line-height: 1.85; color: #263445; }
+html body .sec .bd p.interpretation-note { padding: 12px 14px; margin: 14px 0; border-left: 3px solid #acbad0; background: #f1f4f8; font-size: 14px; line-height: 1.8; color: #526174; overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  html body .interpretation-card { padding: 14px; }
+  html body .sec .bd .interpretation-card h3 { font-size: 16px; }
+}
+
 /* 목적별 메뉴는 펼쳐서 선택한다. 현재 페이지가 속한 묶음은 기본으로 연다. */
 @media (min-width:900px) {
   .dsidebar .dcta-start { font-size: 14px; padding: 13px 8px; }

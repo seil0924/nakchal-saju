@@ -19,7 +19,7 @@ export const metadata = {
 
 const PRODUCTS = [
   { name: '투찰 택일 사주', price: CAT_INFO.sajeong.price, href: '/product/taekil', desc: '무료 7일에 나머지 23일을 더한 30일 전체 명리 흐름, 길일 날짜와 길일별 시진(시간대).' },
-  { name: '대표 사주', price: CAT_INFO.daepyo.price, href: '/product/daepyo', desc: '대표의 성향·재물·사람 관계와 6대 축 경영 스코어카드 등 상세 풀이.' },
+  { name: '대표 사주', price: CAT_INFO.daepyo.price, href: '/product/daepyo', desc: '태어난 달·지장간을 반영한 성향과 함께 나타난 강점·주의점의 조건별 풀이.' },
   { name: '발주처 프리미엄 패스', price: PRICE_BALJU_PASS, href: '/balju', desc: '발주처 기본 점수·기관 특성은 무료. 패스를 구매하면 모든 발주처의 상세 풀이(삼계·시나리오·주의신호·연도별 흐름)를 열람할 수 있습니다.' },
   { name: '협정·궁합 사주', price: CAT_INFO.gunghap.price, href: '/product/gunghap', desc: '동업·협정 상대와의 성향, 지분·역할·결정권을 나눌 때 참고할 풀이.' },
   { name: '후보 날짜 비교', price: CAT_INFO.bigyo.price, href: '/taekil', desc: '택일 화면에서 고른 날짜 2~3개의 비교 순위와 근거, 날짜별 참고 시간대.' },
