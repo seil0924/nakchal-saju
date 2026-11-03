@@ -48,7 +48,7 @@ export default function MoreClient({ initial }: { initial: { loggedIn: boolean; 
             <h2 id="menu-help">이용안내·문의</h2><p>시작 방법·가격·구매 후 다시 보기가 궁금할 때</p>
             <ul className="menu-help-links">
               <li><Link href="/pricing">이용안내·요금 →</Link></li>
-              <li><Link href="/samples">리포트 예시 →</Link></li>
+              <li><Link href="/samples">상품별 리포트 예시·비교 →</Link></li>
               <li><Link href="/faq">자주 묻는 질문 →</Link></li>
               <li><Link href="/method">계산 방법 →</Link></li>
               <li><Link href="/glossary">용어사전 →</Link></li>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { CAT_INFO } from '@/lib/report-categories';
+import { PRODUCT_PAGES } from '@/lib/product-pages';
 import { PRICE_BALJU_PASS, won } from '@/lib/constants';
 import { bizFooterLine } from '@/lib/bizinfo';
 import { FREE_START } from '@/lib/nav';
@@ -63,7 +64,10 @@ export default function Pricing() {
       <h2 id="prices-title">상품별 요금과 구매 범위</h2>
       <p>모든 표시 금액은 <b>부가세 포함 최종 금액</b>입니다. 정기 구독이나 자동 갱신 없이 한 번 결제합니다.</p>
       <p className="support-caption">리포트는 구매 화면에 표시된 대상과 상품에 적용됩니다. 한 상품을 샀다고 다른 상품이나 새로 만든 리포트가 모두 열리지는 않습니다. 발주처 패스는 아래 안내 범위에 적용됩니다.</p>
-      <dl className="guide-price-list">{PRODUCTS.map(p => <div className="guide-price-row" key={p.name}><dt>{p.name}</dt><dd className="guide-price">{won(p.price)}<span className="guide-price-meta">1회 결제</span></dd><dd className="guide-desc">{p.desc}<Link href={p.href}>{p.name === '후보 날짜 비교' ? '날짜 고르기' : '내용 살펴보기'} →</Link></dd></div>)}</dl>
+      <dl className="guide-price-list">{PRODUCTS.map(p => {
+        const sample = PRODUCT_PAGES.find(item => `/product/${item.slug}` === p.href || item.href === p.href);
+        return <div className="guide-price-row" key={p.name}><dt>{p.name}</dt><dd className="guide-price">{won(p.price)}<span className="guide-price-meta">1회 결제</span></dd><dd className="guide-desc">{p.desc}<Link href={p.href}>{p.name === '후보 날짜 비교' ? '날짜 고르기' : '내용 살펴보기'} →</Link>{sample && <Link href={`/samples?product=${sample.slug}#sample-report`} aria-label={`${p.name} 내용 예시 보기`}>내용 예시 →</Link>}</dd></div>;
+      })}</dl>
       <p className="support-caption">결제수단: 신용·체크카드(NHN KCP). 결제 전 구매 화면에서 상품명·대상·최종 금액과 <Link href="/refund">환불 기준</Link>을 확인해주세요.</p>
       <Link href="/samples">리포트 예시 먼저 보기 →</Link>
     </section>
