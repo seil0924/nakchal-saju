@@ -1,6 +1,7 @@
 'use client';
 import Checkout from '@/app/_components/Checkout';
 import SupportLinks from '@/app/_components/SupportLinks';
+import ReportQuestions from '@/app/_components/ReportQuestions';
 import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/lib/purchase-client';
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
@@ -33,7 +34,7 @@ type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t:
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
 type Hero = { score: number; big?: string; unit?: string; label: string; headline: string; sub: string; up: boolean };
-type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number }; admin?: boolean; level?: number };
+type Result = { qaAvailable?: boolean; reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number }; admin?: boolean; level?: number };
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
@@ -778,7 +779,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                         <div className="ctapromise">낙찰을 약속하지 않습니다. 정하는 건 대표님입니다.</div>
                       </>
                     )}
-                  <div className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
+                  <div id={'report-section-' + i} className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                     <div className="hd" role="button" tabIndex={0} aria-expanded={locked ? undefined : expanded.includes(i)}
                       onClick={locked ? openThis : () => toggleSec(i)}
                       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}>
@@ -839,6 +840,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={exportIcs}>
               30일 길일 <b style={{ color: 'var(--navy)' }}>캘린더 담기</b> · .ics <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 구글·애플·네이버</span>
             </button>)}
+            <ReportQuestions key={res.reportId + ':' + res.selYear} reportId={res.reportId} available={res.qaAvailable} year={res.selYear} sections={res.sections}
+              onSource={index => { setExpanded(old => old.includes(index) ? old : [...old, index]); requestAnimationFrame(() => { const el = document.getElementById('report-section-' + index); el?.scrollIntoView({ block: 'start', behavior: 'smooth' }); (el?.querySelector('[role="button"]') as HTMLElement | null)?.focus({ preventScroll: true }); }); }} />
             <SupportLinks reportId={res.reportId} />
             <TrustStrip />
             <div className="disc">만세력·십성·오행 상성으로 산출한 명리 기반 참고 정보입니다.<br />실제 투찰금액 산정의 근거로 사용할 수 없습니다.</div>

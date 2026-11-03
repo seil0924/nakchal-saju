@@ -14,12 +14,13 @@ import { markResultSeen } from '@/app/_components/AddToHome';
 import SiteTop from '@/app/_components/SiteTop';
 import Checkout from '@/app/_components/Checkout';
 import SupportLinks from '@/app/_components/SupportLinks';
+import ReportQuestions from '@/app/_components/ReportQuestions';
 import { supportHref } from '@/lib/support';
 import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/lib/purchase-client';
 import { paymentReturnState, PAYMENT_RETURN_COPY } from '@/lib/payment-status';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
-type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
+type Result = { qaAvailable?: boolean; reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
@@ -213,6 +214,8 @@ export default function ReportView({ params }: { params: { id: string } }) {
                 도움이 되셨다면 한 줄 남겨 주세요: <Link href="/review" style={{ color: 'var(--navy)', fontWeight: 700 }}>후기 남기기</Link>
               </p>
             )}
+            <ReportQuestions key={id + ':' + res.selYear} reportId={id} available={res.qaAvailable} year={res.selYear} sections={res.sections}
+              onSource={index => { setExpanded(old => old.includes(index) ? old : [...old, index]); requestAnimationFrame(() => { const el = document.getElementById('report-section-' + index); el?.scrollIntoView({ block: 'start', behavior: 'smooth' }); (el?.querySelector('[role="button"]') as HTMLElement | null)?.focus({ preventScroll: true }); }); }} />
             <SupportLinks reportId={id} />
             <button className="sharebtn no-print" style={{ marginTop: 12 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
