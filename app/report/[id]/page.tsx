@@ -16,6 +16,7 @@ import Checkout from '@/app/_components/Checkout';
 import SupportLinks from '@/app/_components/SupportLinks';
 import { supportHref } from '@/lib/support';
 import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/lib/purchase-client';
+import { paymentReturnState, PAYMENT_RETURN_COPY } from '@/lib/payment-status';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
 type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
@@ -23,7 +24,7 @@ const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
   useEffect(() => { preloadKcp(); }, []);
-  const [payNote, setPayNote] = useState<{ kind: 'ok' | 'stuck' | 'cancel'; text: string } | null>(null);
+  const [payNote, setPayNote] = useState<{ kind: 'ok' | 'stuck' | 'cancel' | 'failed'; text: string } | null>(null);
   const [checking, setChecking] = useState(false);
   const [recovery, setRecovery] = useState(false);
   const paying = useRef(false);
@@ -56,9 +57,10 @@ export default function ReportView({ params }: { params: { id: string } }) {
   async function load() {
     setChecking(true); setErr('');
     const sp = new URLSearchParams(location.search);
-    const returned = sp.has('paid');
-    const uncertain = sp.get('paid') === '1' || /^(approve_unknown|amount|fatal|confirm)/.test(sp.get('why') || '');
+    const returned = paymentReturnState(sp.get('paid'), sp.get('why'));
+    const uncertain = returned === 'pending';
     if (uncertain) setRecovery(true);
+    if (returned) setPayNote({ kind: uncertain ? 'stuck' : returned === 'cancelled' ? 'cancel' : 'failed', text: PAYMENT_RETURN_COPY[returned].text });
     try {
       const urlT = sp.get('t');
       if (urlT) setTok(id, urlT);
@@ -68,7 +70,6 @@ export default function ReportView({ params }: { params: { id: string } }) {
       recordReport({ id, label: data.title, when: Date.now(), unlocked: !!data.unlocked });
       if (data.unlocked && !data.admin) { setRecovery(false); setModal(false); setPayNote({ kind: 'ok', text: '구매한 풀이가 열려 있습니다. 추가 결제 없이 아래에서 다시 읽을 수 있습니다.' }); }
       else if (uncertain) setPayNote({ kind: 'stuck', text: PURCHASE_PENDING });
-      else if (returned) setPayNote({ kind: 'cancel', text: '결제를 완료하지 못했습니다. 무료 결과는 그대로 볼 수 있습니다. 카드 승인 내역이 있다면 구매 기록 찾기 또는 문의를 이용해주세요.' });
       return data as Result;
     } catch (e) { setErr(e instanceof Error ? e.message : '연결을 확인하고 다시 시도해주세요.'); if (uncertain) setPayNote({ kind: 'stuck', text: PURCHASE_PENDING }); return null; }
     finally { setChecking(false); }
@@ -118,12 +119,13 @@ export default function ReportView({ params }: { params: { id: string } }) {
       <div className="wrap">
         {err && !modal && <div className="errbox" role="alert">{err}</div>}
         {(payNote || (checking && !res)) && <div id="purchase-status" className={'purchase-notice ' + (payNote?.kind ?? '')} role="status">
-          <h2>{checking ? '리포트 열람 상태를 확인하고 있습니다' : payNote?.kind === 'ok' ? '구매한 리포트 다시 보기' : payNote?.kind === 'stuck' ? '결제 확인이 필요합니다' : '무료 결과로 돌아왔습니다'}</h2>
+          <h2>{checking ? '리포트 열람 상태를 확인하고 있습니다' : payNote?.kind === 'ok' ? '구매한 리포트 다시 보기' : payNote?.kind === 'stuck' ? PAYMENT_RETURN_COPY.pending.title : payNote?.kind === 'cancel' ? PAYMENT_RETURN_COPY.cancelled.title : PAYMENT_RETURN_COPY.failed.title}</h2>
           <p>{payNote?.text}</p>
           <div className="purchase-actions">
+            {payNote?.kind !== 'ok' && <Link href="/find">구매 기록 확인하기</Link>}
             {payNote?.kind !== 'ok' && <button type="button" disabled={checking} onClick={() => load()}>결제 상태 다시 확인</button>}
             {payNote?.kind === 'ok' && <button type="button" onClick={() => { const index = res?.sections.findIndex(s => !s.free && !!s.html) ?? -1; if (index >= 0) setExpanded([index]); document.getElementById(index >= 0 ? 'report-section-' + index : 'rep')?.scrollIntoView({ block: 'start', behavior: 'smooth' }); }}>구매한 내용 읽기</button>}
-            <Link href="/vault">보관함</Link><Link href="/find">구매 기록으로 찾기</Link>{payNote?.kind === 'stuck' && <Link href={supportHref('pay', id)}>문의하기</Link>}
+            <Link href="/vault">보관함</Link>{payNote?.kind !== 'ok' && <Link href={supportHref('pay', id)}>결제 문의하기</Link>}
           </div>
         </div>}
         {err && !res && <div className="purchase-notice"><h2>다시 여는 방법을 선택해주세요</h2><p>결제할 때 입력한 성함과 휴대폰 번호로 구매 기록을 찾을 수 있습니다.</p><div className="purchase-actions"><button disabled={checking} onClick={() => load()}>다시 불러오기</button><Link href="/find">구매한 리포트 찾기</Link><Link href="/vault">보관함</Link></div></div>}

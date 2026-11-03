@@ -1,9 +1,10 @@
 import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
+import { PURCHASE_PENDING } from './payment-status';
+export { PURCHASE_PENDING } from './payment-status';
 
 export class PurchaseError extends Error {
   constructor(message: string, public recover = false) { super(message); }
 }
-export const PURCHASE_PENDING = '결제 결과를 아직 확인하지 못했습니다. 다시 결제하지 말고 결제 상태를 확인해주세요. 계속 열리지 않으면 구매 기록 찾기 또는 문의를 이용해주세요.';
 
 export async function requestJSON(url: string, body?: unknown) {
   const controller = new AbortController();

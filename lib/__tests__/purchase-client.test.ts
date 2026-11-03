@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { startPurchase, requestJSON } from '../purchase-client';
+import { startPurchase, requestJSON, PURCHASE_PENDING } from '../purchase-client';
 import { openKcpPay } from '@/app/_components/kcpPay';
 
 const flags = vi.hoisted(() => ({ enabled: true }));
@@ -26,7 +26,15 @@ describe('결제 취소·확인 지연·재결제 방지 안내', () => {
   it('승인 응답을 잃으면 재결제 대신 상태 확인을 요구한다', async () => {
     vi.mocked(fetch).mockResolvedValueOnce(prep()).mockRejectedValueOnce(new Error('offline'));
     vi.mocked(openKcpPay).mockResolvedValue({ enc_data: 'test', enc_info: 'test', tran_cd: 'test' });
-    await expect(startPurchase({})).rejects.toMatchObject({ recover: true });
+    await expect(startPurchase({})).rejects.toMatchObject({ recover: true, message: PURCHASE_PENDING });
+    expect(fetch).toHaveBeenCalledTimes(2);
+  });
+  it('복채도 승인 응답이 불확실하면 자동 재결제하지 않는다', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(prep()).mockResolvedValueOnce(json({ ok: false, error: 'approve_unknown' }, 502));
+    vi.mocked(openKcpPay).mockResolvedValue({ enc_data: 'test', enc_info: 'test', tran_cd: 'test' });
+    await expect(startPurchase({ bokchae: true, amount: 50000 })).rejects.toMatchObject({ recover: true, message: PURCHASE_PENDING });
+    expect(openKcpPay).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledTimes(2);
   });
   it('결제 준비 실패는 승인 불명 상태와 구분한다', async () => {
     vi.mocked(fetch).mockRejectedValue(new Error('offline'));

@@ -1,38 +1,51 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { won } from '@/lib/constants';
-import { openKcpPay, KCP_CLIENT_ENABLED, preloadKcp } from '@/app/_components/kcpPay';
+import { preloadKcp } from '@/app/_components/kcpPay';
+import { startPurchase, PurchaseError } from '@/lib/purchase-client';
+import { paymentReturnState } from '@/lib/payment-status';
+import PaymentReturnNotice from '@/app/_components/PaymentReturnNotice';
 import SiteTop from '@/app/_components/SiteTop';
 
 // 복채(福債) — 홈 최하단에만 조용히 두는 자율 감사·기원 결제. 리포트/결제 흐름엔 등장하지 않는다.
 const PRESETS = [50000, 100000, 200000, 500000, 1000000];
 
 export default function Bokchae() {
+  return <Suspense fallback={null}><BokchaeForm /></Suspense>;
+}
+
+function BokchaeForm() {
   useEffect(() => { preloadKcp(); }, []);
   const [amt, setAmt] = useState(0);
   const [custom, setCustom] = useState(false); // '직접' 입력 모드
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState('');
+  const search = useSearchParams();
+  const returnState = paymentReturnState(search.get('paid'), search.get('why'));
+  const recovery = returnState === 'pending';
+  const paying = useRef(false);
 
   async function pay(amount: number) {
-    if (!amount) return;
+    if (!amount || paying.current || recovery) return;
+    paying.current = true;
     setBusy(true); setErr('');
     try {
-      const prep = await fetch('/api/payment/prepare', { method: 'POST', body: JSON.stringify({ bokchae: true, amount }) }).then(x => x.json());
-      if (KCP_CLIENT_ENABLED) {
-        const kres = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 복채' });
-        if (kres === 'redirect') return;
-        if (!kres) { setBusy(false); setErr('복채 결제가 취소되었습니다.'); return; }
-        const ap = await fetch('/api/payment/kcp/approve', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId, enc_data: kres.enc_data, enc_info: kres.enc_info, tran_cd: kres.tran_cd }) }).then(x => x.json());
-        if (!ap?.ok) { setBusy(false); setErr('복채 결제 승인에 실패했습니다. 다시 시도해 주세요.'); return; }
-      } else {
-        await fetch('/api/payment/mock-confirm', { method: 'POST', body: JSON.stringify({ paymentId: prep.paymentId }) });
-      }
+      const outcome = await startPurchase({ bokchae: true, amount });
+      if (outcome === 'redirect') return;
+      if (outcome === 'cancelled') { setErr('복채 결제창을 닫았습니다. 승인 알림을 받았다면 다시 결제하지 말고 결제 문의를 이용해주세요.'); return; }
       setDone(true);
-    } catch { setErr('결제 확인에 실패했습니다. 결제되었다면 잠시 후 반영됩니다.'); }
-    finally { setBusy(false); }
+    } catch (e) {
+      if (!(e instanceof PurchaseError) || e.recover) {
+        // Preserve uncertainty on reload, too; closing guidance must not re-enable payment.
+        const url = new URL(window.location.href);
+        url.searchParams.set('paid', '0'); url.searchParams.set('why', 'approve_unknown');
+        window.history.replaceState(null, '', url.pathname + url.search);
+      } else setErr(e.message);
+    }
+    finally { setBusy(false); paying.current = false; }
   }
 
   return (
@@ -61,6 +74,7 @@ export default function Bokchae() {
               이곳의 풀이가 대표님의 한 해에 닿았다면: 그 마음만큼 조용히 놓고 가세요.
               정해진 값은 없습니다.
             </p>
+            {returnState && <PaymentReturnNotice state={returnState} bokchae />}
             <div className="bokamts">
               {PRESETS.map(a => (
                 <button key={a} className={'bokamt' + (!custom && amt === a ? ' on' : '')} onClick={() => { setCustom(false); setAmt(a); }}>{won(a)}</button>
@@ -73,8 +87,8 @@ export default function Bokchae() {
                 onChange={e => setAmt(Math.max(0, Math.min(1000000, Math.floor(+e.target.value) || 0)))} />
             )}
             {err && <div className="errbox" style={{ marginTop: 12 }}>{err}</div>}
-            <button className="bokgo" disabled={busy || amt <= 0} onClick={() => pay(amt)}>
-              {busy ? '올리는 중…' : amt > 0 ? `복채 ${won(amt)} 올립니다 · 印` : '금액을 골라주세요'}
+            <button className="bokgo" disabled={busy || recovery || amt <= 0} onClick={() => pay(amt)}>
+              {recovery ? '추가 결제 전에 승인 내역을 확인해주세요' : busy ? '결제 결과 확인 중…' : amt > 0 ? `복채 ${won(amt)} 올립니다 · 印` : '금액을 골라주세요'}
             </button>
             <div className="boknote">복채는 리포트 열람과 무관한 자율 결제입니다. 재미로 보는 명리 기반 서비스에 대한 감사·기원의 표시일 뿐, 특정한 효과를 보장하지 않습니다.</div>
             <Link className="bokback" href="/">← 홈으로</Link>
