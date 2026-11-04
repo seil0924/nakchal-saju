@@ -9,7 +9,7 @@ import { adminBypass } from '@/lib/entitle';
 import { buyerKeyFromCookie } from '@/lib/buyer';
 import { requireUser } from '@/lib/supabase/server';
 import { parseCands, isPurpose } from '@/lib/bigyo-input';
-import { birthDateError, validBirthTime } from '@/lib/reading-input';
+import { birthDateError, relatedDateError, validBirthTime } from '@/lib/reading-input';
 
 export async function POST(req: Request) {
   const input = (await req.json()) as ReportInput;
@@ -21,6 +21,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'birth_invalid' }, { status: 400 });
   }
   if (input.time != null && !validBirthTime(input.time)) return NextResponse.json({ error: 'time_invalid' }, { status: 400 });
+  for (const key of ['legal', 'client', 'partner', 'ally'] as const) {
+    if (input[key] && relatedDateError(input[key])) return NextResponse.json({ error: 'related_date_invalid', field: key }, { status: 400 });
+  }
   // 후보 날짜는 손님이 친 값이다. 원장에 남기기 전에 날짜 꼴·개수를 다듬는다.
   if (input.cands !== undefined) input.cands = parseCands(input.cands);
   if (input.purpose !== undefined && !isPurpose(input.purpose)) delete input.purpose;

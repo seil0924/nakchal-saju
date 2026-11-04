@@ -17,7 +17,9 @@ export default function Balju() {
   // 발주처 고른 뒤 '본인(대표)' 선택 → 리딩으로 (양쪽 프리필)
   function onSelf(self: Person) {
     if (!pick) return;
-    const qs = new URLSearchParams({ cat: 'balju', ck: 'client', cn: pick.name, cd: pick.date, b: self.date, n: self.name || '' });
+    const qs = new URLSearchParams({ cat: 'balju', ck: 'client', cn: pick.name, cd: pick.date, b: self.date, n: self.name || '', cal: self.cal || 'solar', leap: self.leap ? '1' : '0' });
+    if (self.time && self.timeMode !== 'N') qs.set('time', self.time);
+    if (self.gender) qs.set('gender', self.gender);
     router.push(`/reading?${qs.toString()}`);
   }
   // 발주처 즐겨찾기 (localStorage) — 자주 보는 기관을 저장해 재방문 때 바로

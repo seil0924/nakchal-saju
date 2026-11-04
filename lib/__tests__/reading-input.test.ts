@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { birthDateError, birthMonthDays, updateBirthParts, validBirthTime } from '../reading-input';
+import { birthDateError, birthMonthDays, relatedSolarDate, updateBirthParts, validBirthTime } from '../reading-input';
 
 describe('처음 입력하는 생년월일', () => {
+  it('관계 대상의 음력 날짜를 계산용 양력으로 환산한다', () => {
+    expect(relatedSolarDate('2020-01-01', 'lunar')).toBe('2020-01-25');
+    expect(relatedSolarDate('2020-04-01', 'lunar', true)).toBe('2020-05-23');
+    expect(relatedSolarDate('1896-08-04')).toBe('1896-08-04');
+    expect(relatedSolarDate('2020-01-31', 'lunar')).toBe('');
+  });
   it('윤년과 달별 마지막 날을 확인한다', () => {
     expect(birthMonthDays(1980, 2, 'solar')).toBe(29);
     expect(birthDateError('1981-02-29')).not.toBe('');

@@ -194,7 +194,7 @@ export default function CeoTwin() {
             </div>
           )}
           <label>생년월일</label>
-          <DateSelect value={f.birth} onChange={v => set('birth', v)} yearFrom={1930} yearTo={2012} />
+          <DateSelect value={f.birth} onChange={v => set('birth', v)} cal={f.cal} leap={f.leap} yearFrom={1930} yearTo={2012} />
           <div className="note">※ 태어난 시간은 몰라도 됩니다(삼주 기준). 닮은 유형만 보는 재미용입니다.</div>
         </div>
 

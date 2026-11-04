@@ -212,7 +212,7 @@ function Result({ ch, label, curYear, raw, name }: {
             <span className="hsq">앞으로 8년 중 회사를 밀어주는 해 <b>{ahead.up}번</b>: {ahead.list.filter(x => x.rel === 'in' || x.rel === 'jae').slice(0, 3).map((x, i) => <b key={i} className="qv">????</b>).reduce<React.ReactNode[]>((acc, el, i) => (i ? [...acc, ' · ', el] : [el]), [])}년 · 조이는 해 <b>{ahead.down}번</b></span>
           </div>
           <div className="hsex">
-            <Link href="/reading?cat=daeun">회사 대운 · 대표 궁합 보기 →</Link>
+            <Link href={'/reading?' + new URLSearchParams({ cat: 'daeun', ld: raw, ln: name || '' }).toString()}>회사 대운 · 대표 궁합 보기 →</Link>
             <Link href="/column/hoesa-daepyo-gunghap">회사와 대표의 궁합이란</Link>
             <Link href="/column/gaeeop-taekil">설립일 택일은 어떻게 하나</Link>
           </div>

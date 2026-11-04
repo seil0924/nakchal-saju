@@ -13,7 +13,7 @@ import { preloadKcp } from '@/app/_components/kcpPay';
 import { won } from '@/lib/constants';
 import { recordReport } from '@/lib/vault';
 import { tokParam, setTok } from '@/lib/rtok';
-import { CAT_INFO, isCatKey, productOfMk } from '@/lib/report-categories';
+import { CAT_INFO, isCatKey, productOfMk, catUI } from '@/lib/report-categories';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
 import YearBar from '@/app/_components/YearBar';
 import { markResultSeen } from '@/app/_components/AddToHome';
@@ -159,7 +159,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             )}
             <div className="rephd">{res.title}</div>
             {res.sections.some(sec => sec.mk === '率') && <TaekilAccess unlocked={level >= 1} />}
-            {res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
+            {catUI(res.cat ?? undefined).yearBar && res.selYear && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
               return (
                 <div className="rtoc">

@@ -12,6 +12,22 @@ beforeEach(() => vi.clearAllMocks());
 const post = (body: unknown) => POST(new Request('http://localhost/api/report', { method: 'POST', body: JSON.stringify(body) }));
 
 describe('리포트 생성 전 날짜·시간 검사', () => {
+  it('1900년 이전 설립된 발주처도 정상 날짜이면 처리한다', async () => {
+    const response = await post({ name: '점검', birth: '1980-02-29', cat: 'balju', client: '1896-08-04' });
+    expect(response.status).toBe(200);
+    expect(saveReport).toHaveBeenCalledOnce();
+  });
+  it('오래된 설립일도 없는 날짜는 거부한다', async () => {
+    expect((await post({ name: '점검', birth: '1980-02-29', client: '1896-02-30' })).status).toBe(400);
+    expect(saveReport).not.toHaveBeenCalled();
+  });
+  it.each(['legal', 'client', 'partner', 'ally'])('%s 대상의 없는 날짜는 계산하거나 저장하지 않는다', async field => {
+    const response = await post({ name: '점검', birth: '1980-02-29', [field]: '2016-02-31' });
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ error: 'related_date_invalid', field });
+    expect(computeReport).not.toHaveBeenCalled();
+    expect(saveReport).not.toHaveBeenCalled();
+  });
   it('질문 본문 위조는 버리고 허용된 질문 키·여정 필드만 원장에 남긴다', async () => {
     await post({name:'점검',birth:'1980-02-29',cat:'daepyo',focusId:'sik',focus:{question:'외부 문장',mk:'器'},journey:{id:'a'.repeat(32),source:'sajang',cat:'daepyo',phone:'01000000000'}});
     const saved = vi.mocked(saveReport).mock.calls[0][0];

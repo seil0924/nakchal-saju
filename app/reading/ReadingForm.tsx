@@ -19,7 +19,7 @@ import { CLIENTS, isCoreClient, CORE_CLIENT_COUNT } from '@/lib/clients';
 import { CAT_INFO, isCatKey, productOfMk, catUI } from '@/lib/report-categories';
 import { parseCands, isPurpose, BIGYO_MIN, BIGYO_LABEL, type BigyoPurpose } from '@/lib/bigyo-input';
 import WonGuk, { type Pillar } from '@/app/_components/WonGuk';
-import { birthDateError, birthMonthDays, updateBirthParts, validBirthTime, displayBirth } from '@/lib/reading-input';
+import { birthDateError, relatedDateError, relatedSolarDate, birthMonthDays, updateBirthParts, validBirthTime, displayBirth } from '@/lib/reading-input';
 import { requestReading } from '@/lib/reading-request';
 import './reading.css';
 import DateSelect from '@/app/_components/DateSelect';
@@ -173,6 +173,11 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   useEffect(() => {
     try {
       const p = new URLSearchParams(window.location.search);
+      // 회사 사주에서 확인한 법인을 그대로 이어 본다. 대표 생일과는 별도 입력이다.
+      const legalDate = p.get('ld');
+      if (p.get('cat') === 'daeun' && legalDate && !relatedDateError(legalDate)) {
+        setF(s => ({ ...s, legal: legalDate, company: (p.get('ln') || '').trim().slice(0, 40) }));
+      }
       const ck = p.get('ck') as RelKind | null, cn = p.get('cn'), cd = p.get('cd');
       if (ck && cd && ['client', 'partner', 'ally'].includes(ck)) {
         setAddKind(ck);
@@ -184,7 +189,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         const cal = p.get('cal') === 'lunar' ? 'lunar' : 'solar';
         const leap = cal === 'lunar' && p.get('leap') === '1';
         const time = validBirthTime(p.get('time')) ? p.get('time')! : '';
-        setF(s => ({ ...s, birth: b, name: n || s.name, cal, leap, time, timeMode: time ? 'Y' : 'N', sijin: -1 }));
+        const gender = p.get('gender');
+        setF(s => ({ ...s, birth: b, name: n || s.name, cal, leap, time, timeMode: time ? 'Y' : 'N', sijin: -1, gender: gender === 'M' || gender === 'F' ? gender : s.gender }));
         const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd });
         const source = p.get('from');
         setEntrySource(p.get('cat') === 'daepyo' && (source === 'ceo' || source === 'sajang') ? source : '');
@@ -195,7 +201,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           migrateLegacy();
           const me = peopleOf('self')[0];
           if (me?.date && /^\d{4}-\d{2}-\d{2}$/.test(me.date)) {
-            setF(s => s.birth ? s : ({ ...s, birth: me.date, name: s.name || (me.name || '').trim(), cal: (me.cal as any) || s.cal, leap: !!me.leap }));
+            const savedTime = me.timeMode !== 'N' && validBirthTime(me.time) ? me.time! : '';
+            setF(s => s.birth ? s : ({ ...s, birth: me.date, name: s.name || (me.name || '').trim(), cal: me.cal || s.cal, leap: !!me.leap, gender: me.gender || s.gender, time: savedTime, timeMode: savedTime ? 'Y' : 'N' }));
             const [yy, mm, dd] = me.date.split('-').map(Number); setBp(prev => (prev.y ? prev : { y: yy, m: mm, d: dd }));
           }
         } catch { /* 저장소를 못 읽으면 빈 폼 */ }
@@ -280,9 +287,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       setF(s => ({ ...s, name: pp.name || '', birth: pp.date, gender: pp.gender || '', cal: pp.cal || 'solar', leap: !!pp.leap, timeMode: (pp.timeMode as any) || (pp.time ? 'Y' : 'N'), time: pp.time || '' }));
       const [yy, mm, dd] = String(pp.date).split('-').map(Number); setBp({ y: yy, m: mm, d: dd });
     } else if (pp.kind === 'legal') {
-      setF(s => ({ ...s, company: pp.name || '', legal: pp.date }));
+      setF(s => ({ ...s, company: pp.name || '', legal: relatedSolarDate(pp.date, pp.cal, pp.leap) }));
     } else {
-      setTargets(prev => [...prev.filter(x => x.kind !== pp.kind), { kind: pp.kind as RelKind, name: pp.name || kindLabel(pp.kind as RelKind), date: pp.date }]);
+      setTargets(prev => [...prev.filter(x => x.kind !== pp.kind), { kind: pp.kind as RelKind, name: pp.name || kindLabel(pp.kind as RelKind), date: relatedSolarDate(pp.date, pp.cal, pp.leap) }]);
     }
     setErr(''); setFieldErrors({});
   }
@@ -319,6 +326,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     if (errors.name) { focusField('rd-name'); return; }
     if (errors.birth) { focusField(!bp.y ? 'rd-year' : !bp.m ? 'rd-month' : 'rd-day'); return; }
     if (errors.time) { setMore(true); focusField('rd-time-options'); return; }
+    if (f.legal && relatedDateError(f.legal)) { setErr('회사 설립일을 다시 확인해주세요. 선택한 달에 있는 날짜여야 합니다.'); return; }
+    if (targets.some(t => relatedDateError(t.date))) { setErr('상대방의 날짜를 다시 확인해주세요. 선택한 달에 있는 날짜여야 합니다.'); return; }
     // 카테고리별 필수 입력 안내
     const req = ui.requires;   // 카테고리 필수 입력(스키마 기반)
     if (req === 'legal' && !f.legal) { setErr('회사 대운은 법인 설립일이 필요합니다. 아래 「회사 정보」에 설립일을 넣어주세요.'); document.getElementById('cocard')?.scrollIntoView({ behavior: 'smooth' }); return; }
@@ -731,7 +740,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {f.gender && <div><dt>성별</dt><dd>{f.gender === 'M' ? '남' : '여'}</dd></div>}
             {situation && <div><dt>입찰 상황</dt><dd>{situation}</dd></div>}
             {f.legal && <div><dt>{f.company || '회사 설립일'}</dt><dd>{f.legal}</dd></div>}
-            {targets.map(t => <div key={t.kind}><dt>{kindLabel(t.kind)}</dt><dd>{t.name} · {t.date}</dd></div>)}
+            {targets.map(t => <div key={t.kind}><dt>{kindLabel(t.kind)}</dt><dd>{t.name} · {t.date} · 양력 기준</dd></div>)}
           </dl>
           <p className="rd-review-note">{cat === 'sajeong' ? '오늘의 해석과 7일 흐름을 무료로 확인합니다.' : '먼저 무료로 제공하는 결과를 확인합니다.'}<br />이 단계에서는 결제하지 않습니다.</p>
           <div className="rd-review-actions">

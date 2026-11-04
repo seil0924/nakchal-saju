@@ -77,7 +77,7 @@ export default function PersonPicker({ open, kind, title, onPick, onClose }: {
               </div>
             )}
             <label className="pp-l">{dateLabel}</label>
-            <DateSelect value={f.date} onChange={v => setF(s => ({ ...s, date: v }))} yearFrom={1930} yearTo={2026} />
+            <DateSelect value={f.date} onChange={v => setF(s => ({ ...s, date: v }))} cal={f.cal} leap={f.leap} yearFrom={1930} yearTo={2026} />
             {isSelf && (<>
               <label className="pp-l">성별</label>
               <div className="pp-seg">
