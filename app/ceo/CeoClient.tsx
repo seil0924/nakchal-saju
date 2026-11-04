@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { CAT_INFO } from '@/lib/report-categories';
+import { won } from '@/lib/constants';
 import { EL_HEX } from '@/lib/preview';
 import { sealSvg } from '@/lib/seal';
 import RiteProgress from '@/app/_components/RiteProgress';
@@ -14,6 +16,7 @@ const CEO_STEPS = [
 ];
 
 type Twin = {
+  leadership: { label: string; themes: { label: string; strength: string }[]; mixed: boolean };
   type: string; typeDesc: string; good: string; risk: string; way: string; me: number;
   myeong: string; user: string; biz: string; hope: string;
   myPills: string; myDist: number[]; level: 'twin' | 'near' | 'none'; count: number; matched: string[];
@@ -157,7 +160,7 @@ export default function CeoTwin() {
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }
 
-  const bridge = `/reading?b=${encodeURIComponent(f.birth)}${f.name ? `&n=${encodeURIComponent(f.name)}` : ''}`;
+  const bridge = '/reading?' + new URLSearchParams({ cat: 'daepyo', b: f.birth, n: f.name, cal: f.cal, leap: f.cal === 'lunar' && f.leap ? '1' : '0', from: 'ceo' }).toString();
 
   return (
     <div className="app">
@@ -223,6 +226,8 @@ export default function CeoTwin() {
               </div>
             </div>
 
+            <a className="prp-jump no-print" href="#ceo-leadership">내가 대표가 된다면? 내 스타일 보기 ↓</a>
+
             {/* 거장 프로필: 상징·분야·전성기 규모·연혁 (이미지처럼 각인) */}
             {res.profile && (
               <div className="typrof">
@@ -279,47 +284,30 @@ export default function CeoTwin() {
               </div>
             )}
 
-            {/* 3막: 주인공 전환: 대표님이 그 명입니다 (칭찬 → 회사 연결 → 방향·희망) */}
-            <div className="mecard">
-              <div className="mel">그리고: 대표님이 그 명입니다</div>
-              <p className="mep">{res.tycoon.name}을 일으킨 그 <b>{ELC[res.me]}의 기운</b>이, 대표님 명식에 같은 뼈대로 앉아 있습니다.</p>
-              <p className="mep">{res.user}</p>
-              <div className="merule" />
-              <p className="mep">{res.biz}</p>
-              <p className="mep dim">{res.hope}</p>
-            </div>
-
-            {/* 유형 실전 지침 */}
-            <div className="cheobang" style={{ marginTop: 14 }}>
-              <div className="cbt">{res.type}의 승부 기질: 실전에서는</div>
-              <div className="cbrow"><span className="cbk">강점</span><span className="cbv">{res.good}</span></div>
-              <div className="cbrow"><span className="cbk">주의</span><span className="cbv">{res.risk}</span></div>
-              <div className="cbrow"><span className="cbk">지침</span><span className="cbv">{res.way}</span></div>
-            </div>
+            <section id="ceo-leadership" className="paid-reading-preview" aria-labelledby="ceo-leadership-title">
+              <p className="prp-eyebrow">닮은 CEO 다음에는, 내 이야기</p>
+              <h2 id="ceo-leadership-title">내가 대표가 된다면 어떤 스타일일까요?</h2>
+              <p className="prp-reason">{res.tycoon.name}{gwa(res.tycoon.name)} 닮은 점을 살펴봤습니다. 이번에는 내 사주 구성으로 일하고 사람을 이끄는 방식을 봅니다.</p>
+              <div className="prp-excerpt">
+                <span className="prp-label">내 대표 스타일 · 무료 맛보기</span>
+                <h3>{res.leadership.mixed ? '여러 성향을 함께 쓰는 대표 스타일' : res.leadership.label + ' 중심의 대표 스타일'}</h3>
+                {res.leadership.themes.map(theme => <p key={theme.label}><b>{theme.label}</b><br />{theme.strength}에 힘을 쓰는 모습으로 풀이합니다.</p>)}
+                <p className="prp-scope">{res.leadership.mixed ? '같은 비중의 성향이 있어 함께 읽습니다. ' : ''}태어난 시간을 제외한 구성입니다. 성공 여부를 예측하는 결과는 아닙니다.</p>
+              </div>
+              <h3 className="prp-next-title">내 스타일을 더 살펴보면</h3>
+              <ul>
+                <li>내 강점은 어떤 상황에서 부담으로 바뀔까요?</li>
+                <li>함께 일할 때 역할과 책임은 어떻게 나눌까요?</li>
+                <li>서로 다른 성향을 상황에 맞게 어떻게 쓸까요?</li>
+              </ul>
+              <Link className="prp-open ceo-next-link" href={bridge}>내 대표 성향 무료로 이어 보기 →</Link>
+              <p className="prp-scope">입력한 생년월일과 양력·음력 구분이 이어집니다. 다음 화면에서 정보를 확인해주세요.</p>
+              <p className="prp-scope">기본 성향은 무료입니다. 자세한 적용 방법과 전체 풀이는 {won(CAT_INFO.daepyo.price)} · 선택 시 1회 결제합니다.</p>
+            </section>
 
             <div className="sharewrap">
               <button className="sharebtn primary" onClick={share}>결과 링크 공유<span style={{ fontWeight: 500, fontSize: 13, display: 'block', marginTop: 2 }}>카카오톡 · 문자</span></button>
               <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 13, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
-            </div>
-
-            {/* 미끼 브리지: 유형은 알려줬지만 '나 개인'은 감춰 갈증을 만든다 */}
-            <div className="bridges">
-              <div className="bridgehd">그 명이 <b>오늘, 이달, 이 발주처</b>에서 어떻게 흐르는지: 대표님만의 풀이는 따로 있습니다</div>
-              <Link className="bridge" href={bridge}>
-                <div className="bi">率</div>
-                <div className="bt"><b>오늘, 나에게 유리한 날인가</b><span>같은 {res.type}이라도 오늘 일진은 사람마다 다릅니다 · 무료</span></div>
-                <div className="ba">→</div>
-              </Link>
-              <Link className="bridge" href={bridge}>
-                <div className="bi">命</div>
-                <div className="bt"><b>{res.tycoon.name}{gwa(res.tycoon.name)} 닮은 {res.count}가지, 그리고 다른 것들</b><span>내 여덟 글자 원국·승부 기질·재물운 전체 리포트</span></div>
-                <div className="ba">→</div>
-              </Link>
-              <Link className="bridge" href={bridge}>
-                <div className="bi">宮</div>
-                <div className="bt"><b>이 유형이 조심할 발주처·파트너</b><span>발주처·동업·협정 궁합으로 손잡기 전 진단</span></div>
-                <div className="ba">→</div>
-              </Link>
             </div>
 
             <p className="twinnote" style={{ marginTop: 14 }}>

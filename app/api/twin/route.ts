@@ -3,6 +3,7 @@
 //
 // target 을 주면 그 거장 한 명과의 비교(여섯 부호 겹침/다름, 거장 전체 중 순위)를 같이 준다.
 // 거장 상세 페이지(/ceo/<이름>)가 검색으로 들어온 사람을 그 자리에서 견주게 하려고 붙였다(2026-10-21).
+import { interpretChart } from '@/lib/saju-interpretation';
 import { NextResponse } from 'next/server';
 import { chartFromBirth, pil } from '@/lib/engine';
 import { matchTycoon, compareTycoon, TYPE_NAME, TYPE_DESC, TYPE_GOOD, TYPE_RISK, TYPE_WAY, TYPE_MYEONG, TYPE_USER, TYPE_BIZ, TYPE_HOPE } from '@/lib/tycoon';
@@ -15,6 +16,7 @@ export async function POST(req: Request) {
     }
     const c = chartFromBirth(birth, time ?? null, cal ?? 'solar', leap ?? false);
     const me = c.dayMasterEl;
+    const interpretation = interpretChart(c);
     const tm = matchTycoon(c);
     const vs = typeof target === 'string' && target.length <= 40 ? compareTycoon(c, target) : null;
     return NextResponse.json({
@@ -22,6 +24,11 @@ export async function POST(req: Request) {
       good: TYPE_GOOD[me], risk: TYPE_RISK[me], way: TYPE_WAY[me],
       myeong: TYPE_MYEONG[me], user: TYPE_USER[me], biz: TYPE_BIZ[me], hope: TYPE_HOPE[me],
       me,
+      leadership: {
+        label: interpretation.label,
+        themes: interpretation.themes.map(({ label, strength }) => ({ label, strength })),
+        mixed: interpretation.leaders.length > 1,
+      },
       myPills: pil(c.dGan, c.dZhi),           // 내 일주(맛보기): 전체 원국은 리포트에서
       myDist: c.dist,                          // 내 여덟 글자 오행 분포
       level: tm.level, count: tm.count, matched: tm.matched,

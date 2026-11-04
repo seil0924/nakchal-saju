@@ -103,6 +103,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   // 실제로 버튼 한 번에 /api/payment/prepare 가 두 번 나갔다. ref 는 즉시 바뀐다.
   const paying = useRef(false);
   const [err, setErr] = useState('');
+  const [fromCeo, setFromCeo] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; birth?: string; time?: string }>({});
   const [dateNotice, setDateNotice] = useState('');
   const [savedResult, setSavedResult] = useState(false);
@@ -173,7 +174,13 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       }
       // 닮은 CEO(/ceo)에서 넘어온 경우 대표 생년월일·성함 프리필
       const b = p.get('b'), n = p.get('n');
-      if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) { setF(s => ({ ...s, birth: b, name: n || s.name })); const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd }); }
+      if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) {
+        const cal = p.get('cal') === 'lunar' ? 'lunar' : 'solar';
+        const leap = cal === 'lunar' && p.get('leap') === '1';
+        setF(s => ({ ...s, birth: b, name: n || s.name, cal, leap }));
+        const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd });
+        setFromCeo(p.get('from') === 'ceo' && p.get('cat') === 'daepyo');
+      }
       // 다른 화면(발주처 지도 등)에서 이미 넣은 대표 생년월일이 있으면 채워 둔다. 같은 걸 두 번 넣게 하지 않는다(2026-10-23).
       else {
         try {
@@ -486,7 +493,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         {err && !modal && <div id="rd-request-error" className="errbox" role="alert" tabIndex={-1}>{err}</div>}
         {!res && !confirm && !prog && (<>
         {/* 0. 컨셉 훅: 카테고리별 몰입 배너 */}
-        {cat && HOOK[cat] && (
+        {fromCeo && <div className="rd-hook"><b>내가 대표가 된다면, 나의 강점과 일하는 방식</b><span>닮은 CEO에서 입력한 정보를 가져왔습니다. 확인 후 무료 성향과 유료 풀이 일부를 볼 수 있습니다.</span></div>}
+        {!fromCeo && cat && HOOK[cat] && (
           <div className="rd-hook">
             <b>{HOOK[cat].t}</b>
             <span>{HOOK[cat].d}</span>
