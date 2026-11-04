@@ -53,3 +53,17 @@
 .sj-faq p { margin: 0; color: #3a3f47; }
 .sj-disc { margin: 18px 0 0; font-size: 13px; color: var(--sj-sub); line-height: 1.7; }
 .sj-disc a { color: var(--sj-blue-d); font-weight: 700; }
+
+/* 무료 유형 풀이를 읽은 뒤 개인별 적용 방법으로 이어지는 안내. */
+.sajang-app .sj-followup { margin-top: 22px; padding: 24px; border: 1px solid #c7d6ee; border-radius: 16px; background: #f4f8ff; overflow-wrap: anywhere; }
+.sajang-app .sj-followup h2 { margin: 8px 0 14px; font-size: 22px; line-height: 1.5; color: #1d3559; }
+.sajang-app .sj-followup p { line-height: 1.8; }
+.sajang-app .sj-followup-details { margin: 18px 0; padding: 16px; background: #fff; border: 1px solid #dce5f1; border-radius: 12px; }
+.sajang-app .sj-followup h3 { margin: 0 0 10px; font-size: 16px; }
+.sajang-app .sj-followup ul { margin: 0; padding-left: 20px; line-height: 1.9; }
+.sajang-app .sj-followup-note { margin: 12px 0 0; font-size: 13px; color: #58616a; }
+.sajang-app .sj-cta:focus-visible { outline: 3px solid #172e5b; outline-offset: 4px; }
+@media (max-width: 480px) {
+  .sajang-app .sj-followup { padding: 20px 16px; }
+  .sajang-app .sj-followup h2 { font-size: 20px; }
+}

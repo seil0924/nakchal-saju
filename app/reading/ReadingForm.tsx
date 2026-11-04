@@ -103,7 +103,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   // 실제로 버튼 한 번에 /api/payment/prepare 가 두 번 나갔다. ref 는 즉시 바뀐다.
   const paying = useRef(false);
   const [err, setErr] = useState('');
-  const [fromCeo, setFromCeo] = useState(false);
+  const [entrySource, setEntrySource] = useState<'ceo' | 'sajang' | ''>('');
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; birth?: string; time?: string }>({});
   const [dateNotice, setDateNotice] = useState('');
   const [savedResult, setSavedResult] = useState(false);
@@ -177,9 +177,11 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       if (b && /^\d{4}-\d{2}-\d{2}$/.test(b)) {
         const cal = p.get('cal') === 'lunar' ? 'lunar' : 'solar';
         const leap = cal === 'lunar' && p.get('leap') === '1';
-        setF(s => ({ ...s, birth: b, name: n || s.name, cal, leap }));
+        const time = validBirthTime(p.get('time')) ? p.get('time')! : '';
+        setF(s => ({ ...s, birth: b, name: n || s.name, cal, leap, time, timeMode: time ? 'Y' : 'N', sijin: -1 }));
         const [yy, mm, dd] = b.split('-').map(Number); setBp({ y: yy, m: mm, d: dd });
-        setFromCeo(p.get('from') === 'ceo' && p.get('cat') === 'daepyo');
+        const source = p.get('from');
+        setEntrySource(p.get('cat') === 'daepyo' && (source === 'ceo' || source === 'sajang') ? source : '');
       }
       // 다른 화면(발주처 지도 등)에서 이미 넣은 대표 생년월일이 있으면 채워 둔다. 같은 걸 두 번 넣게 하지 않는다(2026-10-23).
       else {
@@ -493,8 +495,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         {err && !modal && <div id="rd-request-error" className="errbox" role="alert" tabIndex={-1}>{err}</div>}
         {!res && !confirm && !prog && (<>
         {/* 0. 컨셉 훅: 카테고리별 몰입 배너 */}
-        {fromCeo && <div className="rd-hook"><b>내가 대표가 된다면, 나의 강점과 일하는 방식</b><span>닮은 CEO에서 입력한 정보를 가져왔습니다. 확인 후 무료 성향과 유료 풀이 일부를 볼 수 있습니다.</span></div>}
-        {!fromCeo && cat && HOOK[cat] && (
+        {entrySource && <div className="rd-hook"><b>{entrySource === 'sajang' ? '내 강점을 살리고, 조심할 점을 이해하는 방법' : '내가 대표가 된다면, 나의 강점과 일하는 방식'}</b><span>{entrySource === 'sajang' ? '‘대표가 될 사주일까’' : '닮은 CEO'}에서 입력한 정보를 가져왔습니다. 확인 후 무료 성향과 유료 풀이 일부를 볼 수 있습니다.</span></div>}
+        {!entrySource && cat && HOOK[cat] && (
           <div className="rd-hook">
             <b>{HOOK[cat].t}</b>
             <span>{HOOK[cat].d}</span>
@@ -553,7 +555,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
           </div>
           <p id="rd-calendar-help" className="rd-help">{f.cal === 'lunar' ? '음력 생일 그대로 골라주세요. 윤달에 태어났다고 확인한 경우에만 ‘윤달’을 선택하세요.' : '양력 생일을 골라주세요. 음력으로 알고 있다면 먼저 ‘음력’을 선택하세요.'}</p>
           <div className="bdate">
-            <select id="rd-year" required aria-label="태어난 해" aria-invalid={!!dateError} aria-describedby={dateError ? 'rd-birth-error' : 'rd-calendar-help'} value={by || ''} onChange={e => setB({ y: +e.target.value })}><option value="" disabled>년도</option>{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
+            <select id="rd-year" required aria-label="태어난 해" aria-invalid={!!dateError} aria-describedby={dateError ? 'rd-birth-error' : 'rd-calendar-help'} value={by || ''} onChange={e => setB({ y: +e.target.value })}><option value="" disabled>년도</option>{by && !YEARS.includes(by) ? <option value={by}>{by}년</option> : null}{YEARS.map(y => <option key={y} value={y}>{y}년</option>)}</select>
             <select id="rd-month" required aria-label="태어난 달" aria-invalid={!!dateError} aria-describedby={dateError ? 'rd-birth-error' : 'rd-calendar-help'} value={bm || ''} onChange={e => setB({ m: +e.target.value })}><option value="" disabled>월</option>{MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}</select>
             <select id="rd-day" required aria-label="태어난 날" aria-invalid={!!dateError} aria-describedby={dateError ? 'rd-birth-error' : 'rd-calendar-help'} value={bd || ''} onChange={e => setB({ d: +e.target.value })}><option value="" disabled>일</option>{Array.from({ length: birthDays }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}일</option>)}</select>
           </div>
