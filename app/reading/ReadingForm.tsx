@@ -1,4 +1,6 @@
 'use client';
+import PaidReadingPreview from '@/app/_components/PaidReadingPreview';
+import type { PaidPreview } from '@/lib/paid-preview';
 import Checkout from '@/app/_components/Checkout';
 import SupportLinks from '@/app/_components/SupportLinks';
 import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/lib/purchase-client';
@@ -33,7 +35,7 @@ type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t:
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
 type Hero = { score: number; big?: string; unit?: string; label: string; headline: string; sub: string; up: boolean };
-type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number }; admin?: boolean; level?: number };
+type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; purchasePreview?: PaidPreview | null; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number }; admin?: boolean; level?: number };
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
@@ -758,6 +760,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                   <span>제목을 누르면 펼쳐집니다</span>
                 </div>
               ); })()}
+            {res.purchasePreview && <a className="prp-jump no-print" href="#paid-reading-preview">내 유료 풀이 일부 미리보기 ↓</a>}
             <div id="acc">
               {(() => { const firstLockedIdx = res.sections.findIndex((s2: any) => (RANK[s2.tier] ?? 2) > level && !s2.html); return res.sections.map((sec, i) => {
                 const rank = RANK[sec.tier] ?? 2;
@@ -769,7 +772,10 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                 const openThis = () => { setErr(''); if (catInfo) setModal(true); else if (prod) openProduct(prod.key); };
                 return (
                   <React.Fragment key={i}>
-                    {catInfo && level < 2 && i === firstLockedIdx && (
+                    {res.purchasePreview && i === firstLockedIdx && <PaidReadingPreview preview={res.purchasePreview} busy={busy} onOpen={() => {
+                      setErr(''); if (catInfo) setModal(true); else openProduct(res.purchasePreview!.cat);
+                    }} />}
+                    {!res.purchasePreview && catInfo && level < 2 && i === firstLockedIdx && (
                       <>
                         <div className="readyline"><b>{catInfo.name}</b> 계산은 끝났습니다. 열면 이걸 알게 됩니다</div>
                         {catInfo.gives?.length > 0 && <ul className="gives lockgives">{catInfo.gives.map((g: string) => <li key={g}>{g}</li>)}</ul>}

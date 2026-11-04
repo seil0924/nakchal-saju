@@ -3,6 +3,26 @@ import { GAN, ZHI } from './manse-core';
 import type { Chart, Seun, Sajeong } from './engine';
 import type { Section } from './report-copy';
 import { GROUPS, elementName, interpretChart, periodReading } from './saju-interpretation';
+import type { PaidPreview } from './paid-preview';
+
+export function representativePaidPreview(c: Chart): PaidPreview {
+  const a = interpretChart(c);
+  const t = a.tensions[0];
+  const questions: Record<string, string> = {
+    '빠른 실행과 신중한 검토': '내 사주에는 왜 실행력과 신중함이 함께 나올까요?',
+    '자율성과 책임 의식': '내 방식대로 하고 싶은 마음과 책임감은 어떻게 함께 읽을까요?',
+    '새로운 제안과 절차 준수': '새로운 방법을 찾는 성향과 원칙을 지키는 성향은 어떻게 조절할까요?',
+    '성과 지향과 감당할 범위': '성과를 내고 싶은 마음과 내가 감당할 범위는 어떻게 나눠 볼까요?',
+  };
+  return {
+    cat: 'daepyo', sectionMk: '決',
+    question: questions[t.title] ?? '내 사주의 강점은 어떤 상황에서 부담으로 바뀔까요?',
+    reason: `${t.evidence}${a.hourKnown ? '' : ' · 생시 미상으로 시주 제외'}`,
+    excerptTitle: t.title,
+    excerpt: t.body, // 決 장의 동일 단락. 적용 방법과 나머지 장은 결제 후 전송한다.
+    next: ['이 구성에 맞는 구체적인 적용 방법', '협업에서 역할과 책임을 나누는 방법', '지장간까지 살핀 구성과 성과·일상 풀이'],
+  };
+}
 
 const escape = (s: string) => s.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]!));
 const p = (...texts: string[]) => texts.map(t => `<p>${escape(t)}</p>`).join('');

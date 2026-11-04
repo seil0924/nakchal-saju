@@ -1,7 +1,9 @@
 // lib/report.ts — 명식 입력 → 섹션 리포트 (서버 전용)
 import 'server-only';
 import { chartFromBirth, compute, todayPillar, sajuYearOf, sajeong, wonguk, seunOf, type Chart, type Pillar, type Seun } from './engine';
-import { buildTiered, reportHeroFor, type Section, type Hero } from './report-copy';
+import { buildTiered, reportHeroFor, taekilPaidPreview, type Section, type Hero } from './report-copy';
+import { representativePaidPreview } from './interpretation-copy';
+import type { PaidPreview } from './paid-preview';
 import { catMks } from './report-categories';
 import { taekSection, type JariInput } from './taek-report';
 import { weakElOf } from './taek-house';
@@ -44,6 +46,7 @@ export type ReportResult = {
   gauge: { dir: string; band: [string, string]; pos: number; precise?: string };
   hero: Hero;
   sections: Section[];
+  purchasePreview: PaidPreview | null;
   meta: { chapters: number; items: number }; // 분량 앵커: 전체 리포트 장·항목 수
   selYear: number;              // 이 리포트가 기준으로 삼은 해 (세운)
   seun: { hanja: string; rel: string; tilt: number }; // 대표 본인의 그해 세운
@@ -129,6 +132,10 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
       sub: ch ? '대표님 일지와 충하는 날 ' + ch + '개' : '대표님 일지와 충하는 날 없음', up: ch === 0 };
   }
   const title = `${input.name ? input.name + ' 대표님' : '대표님'}의 사주 리포트`;
-  return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta,
+  // 미리보기는 해당 상품이 실제로 잠긴 경우에만 제공한다. 구매 후에는 null로 지워진다.
+  const locked = (mk:string) => sections.some(sec => sec.mk===mk && !sec.html && !sec.free);
+  const purchasePreview = input.cat==='daepyo' && locked('決') ? representativePaidPreview(c)
+    : (!input.cat || input.cat==='sajeong') && locked('擇') ? taekilPaidPreview(c,ky,km,kd) : null;
+  return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta, purchasePreview,
     selYear, seun: { hanja: seunSelf.hanja, rel: seunSelf.rel, tilt: seunSelf.tilt } };
 }

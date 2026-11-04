@@ -1,6 +1,8 @@
 'use client';
+import PaidReadingPreview from '@/app/_components/PaidReadingPreview';
+import type { PaidPreview } from '@/lib/paid-preview';
 import TaekilAccess from '@/app/_components/TaekilAccess';
-import { useState, useEffect, useRef } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { type BuyerState } from '@/app/_components/BuyerFields';
 import { preloadKcp } from '@/app/_components/kcpPay';
@@ -19,7 +21,7 @@ import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/l
 import { paymentReturnState, PAYMENT_RETURN_COPY } from '@/lib/payment-status';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
-type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
+type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; purchasePreview?: PaidPreview | null; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
@@ -158,6 +160,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                   <span>제목을 누르면 펼쳐집니다</span>
                 </div>
               ); })()}
+            {res.purchasePreview && <a className="prp-jump no-print" href="#paid-reading-preview">내 유료 풀이 일부 미리보기 ↓</a>}
             <div className="print-only pfoot" style={{ display: 'none' }}>낙찰사주 · 사주·투찰 택일 리포트 · 명리 기반 참고 정보</div>
             {res.sections.map((sec, i) => {
               const rank = RANK[sec.tier] ?? 2;
@@ -170,7 +173,11 @@ export default function ReportView({ params }: { params: { id: string } }) {
               // 폼을 처음부터 다시 시키는 셈이라, 그 자리에서 결제되게 바꿨다.
               const openThis = (e?: any) => { setErr(''); if (!catInfo && prod) setPending(prod.key); openModal(e); };
               return (
-                <div id={'report-section-' + i} key={i} className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
+                <Fragment key={i}>
+                {res.purchasePreview && i === res.sections.findIndex(s => !s.html && !s.free) && <PaidReadingPreview preview={res.purchasePreview} busy={busy || checking} onOpen={() => {
+                  setErr(''); if (!catInfo) setPending(res.purchasePreview!.cat); openModal();
+                }} />}
+                <div id={'report-section-' + i} className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                   <div className="hd" role="button" tabIndex={0} aria-expanded={locked ? undefined : expanded.includes(i)}
                     onClick={locked ? openThis : () => toggleSec(i)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}><div className="ti">{sec.t}</div>
@@ -179,9 +186,10 @@ export default function ReportView({ params }: { params: { id: string } }) {
                     : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '대표님 명식으로 계산해 둔 장입니다. 열면 바로 보입니다.' }} />
                       {catInfo ? <button type="button" className="tlink" onClick={openThis}>{pName}에 포함 · 열기</button> : <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button>}</div>)}</div>
                 </div>
+                </Fragment>
               );
             })}
-            {level < 2 && catInfo && (
+            {level < 2 && catInfo && !res.purchasePreview && (
               <>
                 {/* 분량이 아니라 내용을 말한다. "5장·수십항목"은 아무도 안 궁금하다 —
                     궁금한 건 "돈 내면 내가 뭘 알게 되냐"다. */}

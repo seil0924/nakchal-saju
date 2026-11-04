@@ -10,6 +10,7 @@ import { kstYmd } from './kst';
 import { CAT_INFO } from './report-categories';
 import { representativeSections } from './interpretation-copy';
 import { interpretChart } from './saju-interpretation';
+import type { PaidPreview } from './paid-preview';
 // 서버는 UTC 라 new Date() 의 날짜가 한국 새벽에 하루 늦다. 날짜는 한국 기준으로만 읽는다.
 const kstNow=()=>{const [y,m,d]=kstYmd().split('-').map(Number);return {y,m,d};};
 import { radarSvg, barsSvg, lineSvg, ringSvg } from './report-charts';
@@ -81,6 +82,26 @@ function sijinLv(me:number,dayGan:number):('g'|'m'|'c')[]{
 }
 const SJ_HANJA=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
 
+// 미리보기와 유료 본문이 같은 날짜·시진 문장을 사용한다.
+function gilDayDetail(c:Chart,w:WinDay,baseM:number){
+  const lv=sijinLv(c.dayMasterEl,todayPillar(w.y,w.m,w.d).gan);
+  const hs=lv.map((v,z)=>v==='g'?`${SJ_HANJA[z]}시 ${SIJIN12[z][1]}`:'').filter(Boolean);
+  return {label:`${w.m===baseM?w.d+'일':w.m+'/'+w.d} (${['일','월','화','수','목','금','토'][w.dow]})`,hours:hs.join(' · ')||'시진 고르게'};
+}
+export function taekilPaidPreview(c:Chart,y:number,m:number,d:number):PaidPreview|null{
+  const ws=gilWindow(y,m,d), gil=ws.filter(w=>isGil(c,w));
+  const first=gil[0];
+  if(!first)return null;
+  const row=gilDayDetail(c,first,m),last=ws[ws.length-1];
+  return {cat:'sajeong',sectionMk:'擇',
+    question:`내 사주로 고른 ${first.m}월 ${first.d}일에는 어느 시간대를 참고할까요?`,
+    reason:`일간 ${GAN[c.dGan]}을 돕거나 같은 기운인 날 중 일지 ${ZHI[c.dZhi]}와 충하지 않는 날짜입니다.`,
+    excerptTitle:`길일별 시진 중 1일 · ${first.y}년 ${first.m}월 ${first.d}일`,
+    excerpt:`${row.label} · ${row.hours}`,
+    next:[`${last.m}월 ${last.d}일까지 30일 전체 흐름`, `명리 기준 길일 ${gil.length}일의 날짜와 각 시간대`, '길일을 고른 조건과 표시 없는 날을 읽는 방법'],
+  };
+}
+
 // 투찰 택일: 오늘부터 30일 길일 캘린더 (대표 일간을 살리는 일진 = 상단/생 날)
 function choilHtml(c:Chart, y:number, m:number, d:number){
   const ws=gilWindow(y,m,d);
@@ -88,9 +109,8 @@ function choilHtml(c:Chart, y:number, m:number, d:number){
   const cut=ws.filter(w=>stemGood(c,w)&&chungIlji(c,w));
   const WD=['일','월','화','수','목','금','토'];
   // 길일마다 유리한 시진(상품 설명의 약속). 시진 천간이 그날 일진 따라 바뀌니 날마다 다르다.
-  const hours=gil.map(w=>{const lv=sijinLv(c.dayMasterEl,todayPillar(w.y,w.m,w.d).gan);
-    const hs=lv.map((v,z)=>v==='g'?`${SJ_HANJA[z]}시 ${SIJIN12[z][1]}`:'').filter(Boolean);   // 辰시 07~09
-    return `<div class="gilrow"><b>${w.m===m?w.d+'일':w.m+'/'+w.d} (${WD[w.dow]})</b><span>${hs.join(' · ')||'시진 고르게'}</span></div>`;}).join('');
+  const hours=gil.map(w=>{const row=gilDayDetail(c,w,m);
+    return `<div class="gilrow"><b>${row.label}</b><span>${row.hours}</span></div>`;}).join('');
   let cells='';
   for(let i=0;i<ws[0].dow;i++) cells+='<div class="cd mute"></div>';
   for(const w of ws) cells+=`<div class="cd${isGil(c,w)?' gil':''}">${winLabel(w)}</div>`;
