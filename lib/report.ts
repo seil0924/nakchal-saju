@@ -1,5 +1,7 @@
 // lib/report.ts — 명식 입력 → 섹션 리포트 (서버 전용)
 import 'server-only';
+import { entryQuestion, type Focus } from './reading-focus';
+import { cleanJourney, type Journey } from './funnel';
 import { chartFromBirth, compute, todayPillar, sajuYearOf, sajeong, wonguk, seunOf, type Chart, type Pillar, type Seun } from './engine';
 import { buildTiered, reportHeroFor, taekilPaidPreview, type Section, type Hero } from './report-copy';
 import { representativePaidPreview } from './interpretation-copy';
@@ -12,6 +14,9 @@ import { bigyoFreeHtml, bigyoPaidHtml, bigyoTeaser, bigyoTitle, rankCands } from
 import { parseCands, isPurpose, BIGYO_LABEL } from './bigyo-input';
 
 export type ReportInput = {
+  focusId?: string;
+  focus?: Focus | null; // 서버가 생성한 질문. 최초 생성 API는 클라이언트 값을 버린다.
+  journey?: Journey | null;
   name?: string;
   birth: string;                 // YYYY-MM-DD
   time?: string | null;          // HH:MM (모르면 null → 삼주)
@@ -40,6 +45,8 @@ function dateChart(v?: string | null): Chart | null {
 }
 
 export type ReportResult = {
+  focus: Focus | null;
+  journey: Journey | null;
   title: string;
   dayMaster: number;
   wonguk: Pillar[];              // 사주팔자 원국 (무료 · 만세력 신뢰)
@@ -136,6 +143,11 @@ export function computeReport(input: ReportInput, unlockedFlag: boolean | number
   const locked = (mk:string) => sections.some(sec => sec.mk===mk && !sec.html && !sec.free);
   const purchasePreview = input.cat==='daepyo' && locked('決') ? representativePaidPreview(c)
     : (!input.cat || input.cat==='sajeong') && locked('擇') ? taekilPaidPreview(c,ky,km,kd) : null;
-  return { title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta, purchasePreview,
+  const requested = input.cat === 'daepyo' ? entryQuestion(input.focusId) : null;
+  const fallback = input.focusId !== 'preview' ? null : input.cat === 'daepyo' ? representativePaidPreview(c) : input.cat === 'sajeong' ? taekilPaidPreview(c,ky,km,kd) : null;
+  const saved = input.focus && sections.some(sec => sec.mk === input.focus!.mk) ? input.focus : null;
+  const focusBase = saved ?? (requested ? { id: input.focusId!, question: requested.question, mk: requested.mk } : fallback ? { id: 'preview', question: fallback.question, mk: fallback.sectionMk } : null);
+  const focus = focusBase ? { ...focusBase, open: sections.some(sec => sec.mk === focusBase.mk && !!sec.html) } : null;
+  return { focus, journey: cleanJourney(input.journey), title, dayMaster: c.dayMasterEl, wonguk: wonguk(c), gauge, hero, sections, meta, purchasePreview,
     selYear, seun: { hanja: seunSelf.hanja, rel: seunSelf.rel, tilt: seunSelf.tilt } };
 }

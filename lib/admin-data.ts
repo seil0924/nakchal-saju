@@ -67,8 +67,8 @@ export async function getStats() {
       sb.from('reports').select('*', { count: 'exact', head: true }).gte('created_at', dayStart).eq('input->>name', '점검용'),
       fetchAll<any>((a, b) => sb.from('payments').select(PAY_COLS + ',paid_at').eq('status', 'paid').order('created_at', { ascending: true }).range(a, b)),
       // 로그인을 뺀 뒤(2026-10-23)로는 회원 수보다 '오늘 몇 명이 봤고, 몇 번 결제창을 열었나'가 쓸모 있다
-      sb.from('page_views').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
-      sb.from('page_views').select('*', { count: 'exact', head: true }).gte('created_at', weekStart),
+      sb.from('page_views').select('*', { count: 'exact', head: true }).neq('kind', 'funnel_v1').gte('created_at', dayStart),
+      sb.from('page_views').select('*', { count: 'exact', head: true }).neq('kind', 'funnel_v1').gte('created_at', weekStart),
       sb.from('payments').select('*', { count: 'exact', head: true }).gte('created_at', dayStart),
       sb.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'cancelled'),
     ]);

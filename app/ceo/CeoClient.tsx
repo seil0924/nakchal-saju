@@ -1,4 +1,7 @@
 'use client';
+import { useEntryJourney } from '@/app/_components/FunnelObserver';
+import { trackFunnel } from '@/lib/funnel-client';
+import { ENTRY_QUESTIONS } from '@/lib/reading-focus';
 import { useState } from 'react';
 import Link from 'next/link';
 import { CAT_INFO } from '@/lib/report-categories';
@@ -160,7 +163,8 @@ export default function CeoTwin() {
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }
 
-  const bridge = '/reading?' + new URLSearchParams({ cat: 'daepyo', b: f.birth, n: f.name, cal: f.cal, leap: f.cal === 'lunar' && f.leap ? '1' : '0', from: 'ceo' }).toString();
+  const journey = useEntryJourney('ceo', res ? [f.birth, f.cal, f.leap].join('|') : null);
+  const bridge = '/reading?' + new URLSearchParams({ cat: 'daepyo', b: f.birth, n: f.name, cal: f.cal, leap: f.cal === 'lunar' && f.leap ? '1' : '0', from: 'ceo', q: 'ceo', ...(journey ? { j: journey.id } : {}) }).toString();
 
   return (
     <div className="app">
@@ -286,7 +290,7 @@ export default function CeoTwin() {
 
             <section id="ceo-leadership" className="paid-reading-preview" aria-labelledby="ceo-leadership-title">
               <p className="prp-eyebrow">닮은 CEO 다음에는, 내 이야기</p>
-              <h2 id="ceo-leadership-title">내가 대표가 된다면 어떤 스타일일까요?</h2>
+              <h2 id="ceo-leadership-title">{ENTRY_QUESTIONS.ceo.question}</h2>
               <p className="prp-reason">{res.tycoon.name}{gwa(res.tycoon.name)} 닮은 점을 살펴봤습니다. 이번에는 내 사주 구성으로 일하고 사람을 이끄는 방식을 봅니다.</p>
               <div className="prp-excerpt">
                 <span className="prp-label">내 대표 스타일 · 무료 맛보기</span>
@@ -300,7 +304,7 @@ export default function CeoTwin() {
                 <li>함께 일할 때 역할과 책임은 어떻게 나눌까요?</li>
                 <li>서로 다른 성향을 상황에 맞게 어떻게 쓸까요?</li>
               </ul>
-              <Link className="prp-open ceo-next-link" href={bridge}>내 대표 성향 무료로 이어 보기 →</Link>
+              <Link className="prp-open ceo-next-link" href={bridge} onClick={() => trackFunnel(journey, 'bridge_click')}>내 대표 성향 무료로 이어 보기 →</Link>
               <p className="prp-scope">입력한 생년월일과 양력·음력 구분이 이어집니다. 다음 화면에서 정보를 확인해주세요.</p>
               <p className="prp-scope">기본 성향은 무료입니다. 자세한 적용 방법과 전체 풀이는 {won(CAT_INFO.daepyo.price)} · 선택 시 1회 결제합니다.</p>
             </section>

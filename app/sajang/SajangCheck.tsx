@@ -1,22 +1,18 @@
 'use client';
 // 생년월일 한 줄 → 대표가 될 바탕(신호 다섯) + 어떤 대표가 맞는지(다섯 갈래). 가입·결제 없이 브라우저에서 바로 낸다.
+import { useEntryJourney } from '@/app/_components/FunnelObserver';
+import { trackFunnel } from '@/lib/funnel-client';
+import { ENTRY_QUESTIONS } from '@/lib/reading-focus';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { chartFromInput } from '@/lib/preview';
 import { CAT_INFO } from '@/lib/report-categories';
 import { won } from '@/lib/constants';
 import { birthDateError, validBirthTime } from '@/lib/reading-input';
-import { judgeSajang, type Group } from '@/lib/sajang';
+import { judgeSajang } from '@/lib/sajang';
 
 const DAY_SLUG = ['갑목', '을목', '병화', '정화', '무토', '기토', '경금', '신금', '임수', '계수'];
 
-const NEXT_QUESTION: Record<Group, string> = {
-  bi: '내 추진력은 언제 강점이 되고, 언제 무리가 될까요?',
-  sik: '아이디어를 실행하는 힘, 어디까지 직접 맡는 게 좋을까요?',
-  jae: '기회를 알아보는 감각과 감당할 범위는 어떻게 나눌까요?',
-  gwan: '책임감을 살리면서 혼자 짊어지지 않으려면 어떻게 할까요?',
-  in: '꼼꼼한 검토가 실행을 늦추지 않으려면 어떻게 할까요?',
-};
 
 export default function SajangCheck() {
   const [date, setDate] = useState('');
@@ -29,7 +25,8 @@ export default function SajangCheck() {
     return chartFromInput(date, effectiveTime, 'solar', false);
   }, [date, effectiveTime]);
   const r = useMemo(() => (chart ? judgeSajang(chart) : null), [chart]);
-  const readingHref = '/reading?' + new URLSearchParams({ cat: 'daepyo', from: 'sajang', b: date, cal: 'solar', ...(effectiveTime ? { time: effectiveTime } : {}) }).toString();
+  const journey = useEntryJourney('sajang', r ? date + '|' + effectiveTime : null);
+  const readingHref = '/reading?' + new URLSearchParams({ cat: 'daepyo', from: 'sajang', q: r?.type.group ?? '', ...(journey ? { j: journey.id } : {}), b: date, cal: 'solar', ...(effectiveTime ? { time: effectiveTime } : {}) }).toString();
 
   return (
     <section className="sj-wrap">
@@ -74,7 +71,7 @@ export default function SajangCheck() {
 
           <section className="sj-followup" aria-labelledby="sj-followup-title">
             <p className="sj-eye">내 유형에서 이어지는 질문</p>
-            <h2 id="sj-followup-title">{NEXT_QUESTION[r.type.group]}</h2>
+            <h2 id="sj-followup-title">{ENTRY_QUESTIONS[r.type.group].question}</h2>
             <p><b>{r.type.name}</b>의 강점과 주의점을 살펴봤습니다. 같은 성향도 맡은 일과 상황에 따라 다르게 나타날 수 있습니다.</p>
             {r.second && <p className="sj-hint">함께 나타난 ‘{r.second.name}’ 성향도 한쪽으로 단정하지 않고 살펴보세요.</p>}
             <div className="sj-followup-details">
@@ -85,7 +82,7 @@ export default function SajangCheck() {
                 <li>서로 다른 성향을 이해하고 적용하는 방법</li>
               </ul>
             </div>
-            <Link className="sj-cta" href={readingHref}>
+            <Link className="sj-cta" href={readingHref} onClick={() => trackFunnel(journey, 'bridge_click')}>
               내 강점과 주의점 자세히 보기 →
               <small>무료 결과와 유료 풀이 일부부터 확인</small>
             </Link>

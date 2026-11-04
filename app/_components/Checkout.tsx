@@ -1,4 +1,7 @@
 'use client';
+import { trackFunnel } from '@/lib/funnel-client';
+import type { Journey } from '@/lib/funnel';
+import type { Focus } from '@/lib/reading-focus';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
@@ -9,9 +12,11 @@ import { PURCHASE_PENDING } from '@/lib/purchase-client';
 import './checkout.css';
 import { supportHref } from '@/lib/support';
 
-type Props = { reportId?: string; name: string; price: number; details: string[]; subject?: string; buyer: BuyerState; setBuyer: (p: Partial<BuyerState>) => void; consent: boolean; setConsent: (v: boolean) => void; busy: boolean; error: string; recovery: boolean; onPay: () => void; onClose: () => void; onCheck: () => void };
+type Props = { journey?: Journey | null; focus?: Focus | null; admin?: boolean; reportId?: string; name: string; price: number; details: string[]; subject?: string; buyer: BuyerState; setBuyer: (p: Partial<BuyerState>) => void; consent: boolean; setConsent: (v: boolean) => void; busy: boolean; error: string; recovery: boolean; onPay: () => void; onClose: () => void; onCheck: () => void };
 
 export default function Checkout(p: Props) {
+  const close = () => { trackFunnel(p.journey, 'checkout_close', p.admin); p.onClose(); };
+  useEffect(() => { trackFunnel(p.journey, 'checkout_open', p.admin); }, [p.journey?.id, p.admin]);
   const box = useRef<HTMLDivElement>(null);
   const [validation, setValidation] = useState('');
   useEffect(() => {
@@ -27,9 +32,9 @@ export default function Checkout(p: Props) {
     if (error) { requestAnimationFrame(() => box.current?.querySelector<HTMLElement>('[role="alert"]')?.focus()); return; }
     p.onPay();
   }
-  return createPortal(<div className="checkout-overlay" onClick={e => { if (e.target === e.currentTarget && !p.busy) p.onClose(); }}>
+  return createPortal(<div className="checkout-overlay" onClick={e => { if (e.target === e.currentTarget && !p.busy) close(); }}>
     <div className="checkout-panel" role="dialog" aria-modal="true" aria-labelledby="checkout-title" ref={box} tabIndex={-1} onKeyDown={e => {
-      if (e.key === 'Escape' && !p.busy) p.onClose();
+      if (e.key === 'Escape' && !p.busy) close();
       if (e.key !== 'Tab') return;
       const nodes = box.current?.querySelectorAll<HTMLElement>('a[href],button:not(:disabled),input:not(:disabled)');
       if (!nodes?.length) return;
@@ -37,9 +42,9 @@ export default function Checkout(p: Props) {
       if (e.shiftKey && (document.activeElement === first || document.activeElement === box.current)) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }}>
-      <div className="checkout-top"><span>1 구매 확인 · 2 카드 결제 · 3 리포트 열기</span><button type="button" aria-label="결제 창 닫기" disabled={p.busy} onClick={p.onClose}>×</button></div>
+      <div className="checkout-top"><span>1 구매 확인 · 2 카드 결제 · 3 리포트 열기</span><button type="button" aria-label="결제 창 닫기" disabled={p.busy} onClick={close}>×</button></div>
       <h2 id="checkout-title">구매할 내용을 확인해주세요</h2>
-      <div className="checkout-order"><b>{p.name}</b>{p.subject && <p>{p.subject}</p>}<ul>{p.details.map(x => <li key={x}>{x}</li>)}</ul><div className="checkout-total"><span>이번 결제 금액 · 부가세 포함</span><strong>{won(p.price)}</strong></div><small>한 번 결제 · 자동으로 반복 결제되지 않습니다</small></div>
+      <div className="checkout-order">{p.focus && <p><b>처음 궁금했던 질문</b><br />{p.focus.question}<br /><small>구매 후 이 질문과 연결된 풀이부터 펼칩니다.</small></p>}<b>{p.name}</b>{p.subject && <p>{p.subject}</p>}<ul>{p.details.map(x => <li key={x}>{x}</li>)}</ul><div className="checkout-total"><span>이번 결제 금액 · 부가세 포함</span><strong>{won(p.price)}</strong></div><small>한 번 결제 · 자동으로 반복 결제되지 않습니다</small></div>
       <p className="checkout-help"><Link href="/refund" target="_blank" rel="noopener noreferrer">환불 기준·요청 방법 확인 (새 창)</Link></p>
       <form onSubmit={submit}>
         {!p.recovery && <fieldset disabled={p.busy}>
@@ -51,7 +56,7 @@ export default function Checkout(p: Props) {
         {(validation || p.error || p.recovery) && <div className="errbox" role="alert" tabIndex={-1}>{validation || p.error || PURCHASE_PENDING}</div>}
         {p.recovery ? <div className="purchase-actions"><Link href="/find">구매 기록 확인하기</Link><button type="button" disabled={p.busy} onClick={p.onCheck}>결제 상태 다시 확인</button><Link href={supportHref('pay', p.reportId)}>결제·열람 문제 문의</Link></div> : <><button className="paygo" type="submit" disabled={p.busy || !p.price}>{p.busy ? '결제 결과를 확인하고 있습니다…' : `${won(p.price)} 카드 결제로 이어가기`}</button><p className="checkout-help">다음 결제창에서 신용·체크카드를 선택합니다. 결제 후 구매한 내용이 열리고, 보관함에서 다시 볼 수 있습니다.</p></>}
       </form>
-      <button className="checkout-back" type="button" disabled={p.busy} onClick={p.onClose}>무료 결과로 돌아가기</button>
+      <button className="checkout-back" type="button" disabled={p.busy} onClick={close}>무료 결과로 돌아가기</button>
       <Link className="checkout-find" href="/find">이미 구매하셨나요? 구매한 리포트 찾기 →</Link>
     </div>
   </div>, document.body);

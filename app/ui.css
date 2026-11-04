@@ -624,3 +624,10 @@ html body .sec .bd p.interpretation-note { padding: 12px 14px; margin: 14px 0; b
 html body .ceo-next-link { text-align: center; text-decoration: none; box-sizing: border-box; }
 html body #ceo-leadership { scroll-margin-top: 24px; }
 html body #ceo-leadership .prp-excerpt > p:not(.prp-scope) { font-size: 16px; line-height: 1.85; margin: 12px 0; color: #263445; }
+
+html body .reading-focus { margin: 0 0 18px; padding: 20px; border: 1px solid #c7d6ee; border-radius: 14px; background: #f4f8ff; color: #263445; }
+html body .reading-focus p { font-size: 14px; line-height: 1.8; margin: 8px 0; }
+html body .reading-focus h2 { font-size: 20px; line-height: 1.6; margin: 8px 0; }
+html body .reading-focus button { border: 0; padding: 12px 16px; background: #315fd1; color: white; border-radius: 9px; font-weight: 700; }
+
+html body .focus-chapter-question { padding: 14px; border-left: 3px solid #315fd1; background: #f4f8ff; color: #263445; font-weight: 700; line-height: 1.7; }

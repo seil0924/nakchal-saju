@@ -1,4 +1,8 @@
 'use client';
+import ReadingFocus from '@/app/_components/ReadingFocus';
+import { firstReadingSection, type Focus } from '@/lib/reading-focus';
+import { cleanJourney, type Journey } from '@/lib/funnel';
+import { newJourney, trackFunnel } from '@/lib/funnel-client';
 import PaidReadingPreview from '@/app/_components/PaidReadingPreview';
 import type { PaidPreview } from '@/lib/paid-preview';
 import Checkout from '@/app/_components/Checkout';
@@ -35,7 +39,7 @@ type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t:
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 type Gauge = { dir: string; band: [string, string]; pos: number; precise?: string };
 type Hero = { score: number; big?: string; unit?: string; label: string; headline: string; sub: string; up: boolean };
-type Result = { reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; purchasePreview?: PaidPreview | null; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number }; admin?: boolean; level?: number };
+type Result = { focus?: Focus | null; journey?: Journey | null; reportId: string; title: string; wonguk?: Pillar[]; gauge: Gauge; hero: Hero; sections: Section[]; purchasePreview?: PaidPreview | null; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number }; admin?: boolean; level?: number };
 
 const BID_TYPES = ['관급 공사', '민간 공사', '용역', '물품·구매', '아직 미정'];
 const CONDITIONS = ['저가경쟁 심함', '기술평가 중심', '재입찰', '첫 도전', '수의계약'];
@@ -103,6 +107,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   // 실제로 버튼 한 번에 /api/payment/prepare 가 두 번 나갔다. ref 는 즉시 바뀐다.
   const paying = useRef(false);
   const [err, setErr] = useState('');
+  const [journey, setJourney] = useState<Journey | null>(null);
+  const [focusId, setFocusId] = useState<string | undefined>(undefined);
   const [entrySource, setEntrySource] = useState<'ceo' | 'sajang' | ''>('');
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; birth?: string; time?: string }>({});
   const [dateNotice, setDateNotice] = useState('');
@@ -197,6 +203,14 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
       // ?cat= 은 여기서 읽는다. 서버(page.tsx)가 읽으면 이 화면이 정적 파일이 되지 못해
       // 접속마다 서버 렌더가 되고, 그게 Vercel CPU 로 그대로 나간다(2026-09-21).
       const ct = p.get('cat');
+      setFocusId(p.get('q') || undefined);
+      const source = p.get('from') === 'ceo' ? 'ceo' : p.get('from') === 'sajang' ? 'sajang' : 'direct';
+      const storageKey = 'nf:input:' + source + ':' + ct;
+      let incoming = cleanJourney({ id: p.get('j'), source, cat: ct });
+      try { if (!incoming) incoming = cleanJourney(JSON.parse(sessionStorage.getItem(storageKey) || 'null')); } catch {}
+      const nextJourney = incoming ?? newJourney(source, ct || '');
+      try { sessionStorage.setItem(storageKey, JSON.stringify(nextJourney)); } catch {}
+      setJourney(nextJourney); trackFunnel(nextJourney, 'input_view');
       if (isCatKey(ct)) { setCat(ct); if (ct === 'gunghap') setAddKind('partner'); }
       // /jari → /reading 핸드오프. 숫자만 받고, 범위를 벗어나면 조용히 버린다.
       const num = (v: string | null, lo: number, hi: number) => { const n = Number(v); return v !== null && Number.isFinite(n) && n >= lo && n <= hi ? n : undefined; };
@@ -334,7 +348,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         client: tg('client')?.date || null, clientName: tg('client')?.name, clientCore: isCoreClient(tg('client')?.name),
         partner: tg('partner')?.date || null, partnerName: tg('partner')?.name,
         ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
-        situation, worry: f.worry, cat: cat || undefined,
+        situation, worry: f.worry, cat: cat || undefined, focusId, journey,
         jari: jari || undefined,
         cands: bigyo?.cands, purpose: bigyo?.purpose,
       };
@@ -371,7 +385,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         client: tg('client')?.date || null, clientName: tg('client')?.name, clientCore: isCoreClient(tg('client')?.name),
         partner: tg('partner')?.date || null, partnerName: tg('partner')?.name,
         ally: tg('ally')?.date || null, allyName: tg('ally')?.name,
-        situation, worry: f.worry, cat: catKey,
+        situation, worry: f.worry, cat: catKey, focusId, journey: journey ? { ...journey, cat: catKey } : newJourney('direct', catKey),
       };
       const resp = await fetch('/api/report', { method: 'POST', body: JSON.stringify(body) });
       if (!resp.ok) throw new Error();
@@ -408,8 +422,9 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   const lockedCount = res ? res.sections.filter((s2: any) => (RANK[s2.tier] ?? 2) > level).length : 0;
   useEffect(() => {
     if (!res) return;
-    const first = res.sections.findIndex((s2: any) => (RANK[s2.tier] ?? 2) <= level && !!s2.html);
+    const first = firstReadingSection(res.sections, res.focus);
     setExpanded(first >= 0 ? [first] : []);
+    trackFunnel(res.journey, res.sections.some(s => !s.free && !!s.html) ? 'paid_open' : 'free_result', res.admin);
   }, [res, level]);
   const toggleSec = (i: number) => setExpanded(ex => ex.includes(i) ? ex.filter(x => x !== i) : [...ex, i]);
   const anyPass = !!res && res.sections.some(s => (s as any).passLock);   // 발주처 프리미엄 잠금 존재
@@ -419,7 +434,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
     paying.current = true; setErr(''); setBusy(true);
     let confirmed = false;
     try {
-      const outcome = await startPurchase({ reportId: res.reportId, sku: chosen, ...buyerBody() });
+      const outcome = await startPurchase({ reportId: res.reportId, sku: chosen, ...buyerBody() }, res.journey);
       if (outcome === 'redirect') return;
       if (outcome === 'cancelled') { setErr('결제창을 닫았습니다. 무료 결과는 그대로 볼 수 있습니다.'); return; }
       confirmed = true;
@@ -479,7 +494,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   };
   const birthDays = birthMonthDays(by, bm, f.cal, f.leap);
   const dateError = fieldErrors.birth || (by && bm && !birthDays ? '선택한 월은 윤달이 아닙니다. 평달·윤달과 월을 확인해주세요.' : '');
-  const editInput = () => { setPurchased(false); setRecovery(false); setRes(null); setLevel(0); setConfirm(false); setErr(''); focusField('rd-name'); };
+  const editInput = () => { const next = newJourney(journey?.source ?? 'direct', cat); setJourney(next); trackFunnel(next, 'input_view'); setPurchased(false); setRecovery(false); setRes(null); setLevel(0); setConfirm(false); setErr(''); focusField('rd-name'); };
 
   return (
     <div className="app reading-page">
@@ -751,6 +766,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             </div>
             <div className="rright">
+            <ReadingFocus focus={res.focus} onRead={() => { const i = firstReadingSection(res.sections, res.focus); setExpanded(i >= 0 ? [i] : []); requestAnimationFrame(() => document.getElementById('report-section-' + i)?.scrollIntoView({ block: 'start', behavior: 'smooth' })); }} />
             {/* 관리자는 결제 없이 전부 열려 보인다. 그걸 안 적어두면 손님 화면이 이런 줄 알고
                 유료 게이팅이 고장 난 걸 멀쩡한 걸로 착각하게 된다. */}
             {res.admin && (
@@ -782,7 +798,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                 const openThis = () => { setErr(''); if (catInfo) setModal(true); else if (prod) openProduct(prod.key); };
                 return (
                   <React.Fragment key={i}>
-                    {res.purchasePreview && i === firstLockedIdx && <PaidReadingPreview preview={res.purchasePreview} busy={busy} onOpen={() => {
+                    {res.purchasePreview && i === firstLockedIdx && <PaidReadingPreview journey={res.journey} admin={res.admin} preview={res.purchasePreview} busy={busy} onOpen={() => {
                       setErr(''); if (catInfo) setModal(true); else openProduct(res.purchasePreview!.cat);
                     }} />}
                     {!res.purchasePreview && catInfo && level < 2 && i === firstLockedIdx && (
@@ -794,7 +810,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                         <div className="ctapromise">낙찰을 약속하지 않습니다. 정하는 건 대표님입니다.</div>
                       </>
                     )}
-                  <div className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
+                  <div id={'report-section-' + i} className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
                     <div className="hd" role="button" tabIndex={0} aria-expanded={locked ? undefined : expanded.includes(i)}
                       onClick={locked ? openThis : () => toggleSec(i)}
                       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}>
@@ -803,6 +819,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
                       <div className="cv">▾</div>
                     </div>
                     <div className="bd">
+                      {sec.html && res.focus?.mk === sec.mk && <p className="focus-chapter-question">처음 궁금했던 질문 · {res.focus.question}</p>}
                       {sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
                         : (
                           <div className="teaser">
@@ -888,7 +905,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
         </div>
       , document.body)}
 
-      {modal && res && mounted && <Checkout reportId={res.reportId}
+      {modal && res && mounted && <Checkout journey={passMode ? null : res.journey} focus={passMode ? null : res.focus} admin={res.admin} reportId={res.reportId}
         name={passMode ? '발주처 프리미엄 패스' : catInfo?.name ?? '선택한 풀이'}
         price={passMode ? PRICE_BALJU_PASS : unlockPrice} subject={res.title}
         details={passMode ? [`핵심 발주처 ${CORE_CLIENT_COUNT}곳의 상세 풀이`] : catInfo?.gives?.slice(0, 3) ?? [catInfo?.lead ?? '선택한 리포트의 유료 풀이']}

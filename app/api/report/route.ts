@@ -1,5 +1,7 @@
 // POST /api/report — 명식 입력 → 무료 리포트 + reportId 발급
 // 유료 섹션 텍스트/정밀값은 여기서 응답하지 않습니다(게이팅).
+import { cleanJourney } from '@/lib/funnel';
+import { entryQuestion } from '@/lib/reading-focus';
 import { NextResponse } from 'next/server';
 import { computeReport, type ReportInput } from '@/lib/report';
 import { saveReport, hasBaljuPass } from '@/lib/store';
@@ -22,11 +24,17 @@ export async function POST(req: Request) {
   // 후보 날짜는 손님이 친 값이다. 원장에 남기기 전에 날짜 꼴·개수를 다듬는다.
   if (input.cands !== undefined) input.cands = parseCands(input.cands);
   if (input.purpose !== undefined && !isPurpose(input.purpose)) delete input.purpose;
+  delete input.focus;
+  input.focusId = input.cat === 'daepyo' && entryQuestion(input.focusId) ? input.focusId : ['daepyo', 'sajeong'].includes(input.cat || '') ? 'preview' : undefined;
+  input.journey = cleanJourney(input.journey);
+  if (input.journey?.cat !== input.cat) input.journey = null;
   const user = await requireUser();                        // 데모면 null
   // 관리자는 무료 리포트 단계에서부터 잠금 없이 본다 — 매번 결제를 태우고 점검할 수는 없다.
   const admin = await adminBypass();
   const bpass = admin || await hasBaljuPass(user?.id, buyerKeyFromCookie());
+  if (admin) input.journey = null;
   const free = computeReport(input, admin ? 2 : false, undefined, bpass);
+  input.focus = free.focus;
   const label = `${input.name ? input.name + ' 대표님' : '대표님'} · ${free.hero.label}${input.legalName ? ' · ' + input.legalName : ''}`;
   const { id: reportId, token } = await saveReport(input, user?.id, label); // 원장 보관(+소유자+라벨+접근토큰)
   // level 을 같이 내려보낸다. 안 보내면 화면이 0 으로 계산해서,

@@ -12,6 +12,13 @@ beforeEach(() => vi.clearAllMocks());
 const post = (body: unknown) => POST(new Request('http://localhost/api/report', { method: 'POST', body: JSON.stringify(body) }));
 
 describe('리포트 생성 전 날짜·시간 검사', () => {
+  it('질문 본문 위조는 버리고 허용된 질문 키·여정 필드만 원장에 남긴다', async () => {
+    await post({name:'점검',birth:'1980-02-29',cat:'daepyo',focusId:'sik',focus:{question:'외부 문장',mk:'器'},journey:{id:'a'.repeat(32),source:'sajang',cat:'daepyo',phone:'01000000000'}});
+    const saved = vi.mocked(saveReport).mock.calls[0][0];
+    expect(saved.focus).toBeUndefined(); // mock computeReport에는 focus가 없다.
+    expect(saved.focusId).toBe('sik');
+    expect(saved.journey).toEqual({id:'a'.repeat(32),source:'sajang',cat:'daepyo'});
+  });
   it('없는 날짜는 계산하거나 저장하지 않는다', async () => {
     const response = await post({ name: '점검', birth: '1981-02-29' });
     expect(response.status).toBe(400);

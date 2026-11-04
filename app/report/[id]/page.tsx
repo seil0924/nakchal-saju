@@ -1,4 +1,8 @@
 'use client';
+import ReadingFocus from '@/app/_components/ReadingFocus';
+import { firstReadingSection, type Focus } from '@/lib/reading-focus';
+import type { Journey } from '@/lib/funnel';
+import { trackFunnel } from '@/lib/funnel-client';
 import PaidReadingPreview from '@/app/_components/PaidReadingPreview';
 import type { PaidPreview } from '@/lib/paid-preview';
 import TaekilAccess from '@/app/_components/TaekilAccess';
@@ -21,7 +25,7 @@ import { startPurchase, requestJSON, PurchaseError, PURCHASE_PENDING } from '@/l
 import { paymentReturnState, PAYMENT_RETURN_COPY } from '@/lib/payment-status';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string };
-type Result = { reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; purchasePreview?: PaidPreview | null; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
+type Result = { focus?: Focus | null; journey?: Journey | null; reportId: string; title: string; unlocked: boolean; level?: number; mine?: boolean; admin?: boolean; cat?: string | null; wonguk?: Pillar[]; hero?: any; gauge?: any; sections: Section[]; purchasePreview?: PaidPreview | null; meta?: { chapters: number; items: number }; selYear?: number; seun?: { hanja: string; rel: string; tilt: number } };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
 
 export default function ReportView({ params }: { params: { id: string } }) {
@@ -69,6 +73,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
       const { ok, data } = await requestJSON('/api/report/get?id=' + encodeURIComponent(id) + '&t=' + encodeURIComponent(tokParam(id, urlT)));
       if (!ok || !data.sections) throw new Error('리포트를 불러오지 못했습니다. 잠시 후 다시 확인해주세요.');
       setRes(data); markResultSeen();
+      if (returned && !data.unlocked) trackFunnel(data.journey, returned === 'cancelled' ? 'payment_cancel' : returned === 'pending' ? 'payment_pending' : 'payment_error', data.admin);
       recordReport({ id, label: data.title, when: Date.now(), unlocked: !!data.unlocked });
       if (data.unlocked && !data.admin) { setRecovery(false); setModal(false); setPayNote({ kind: 'ok', text: '구매한 풀이가 열려 있습니다. 추가 결제 없이 아래에서 다시 읽을 수 있습니다.' }); }
       else if (uncertain) setPayNote({ kind: 'stuck', text: PURCHASE_PENDING });
@@ -91,7 +96,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
     paying.current = true; setBusy(true); setErr('');
     let confirmed = false;
     try {
-      const outcome = await startPurchase({ reportId: id, sku: chosen, cat: pickCat ?? pending, buyerName: buyer.name, buyerPhone: buyer.phone, agree: buyer.agree });
+      const outcome = await startPurchase({ reportId: id, sku: chosen, cat: pickCat ?? pending, buyerName: buyer.name, buyerPhone: buyer.phone, agree: buyer.agree }, res?.journey);
       if (outcome === 'redirect') return;
       if (outcome === 'cancelled') { setErr('결제창을 닫았습니다. 무료 결과는 그대로 볼 수 있습니다.'); return; }
       confirmed = true;
@@ -108,8 +113,9 @@ export default function ReportView({ params }: { params: { id: string } }) {
   const [expanded, setExpanded] = useState<number[]>([]);
   useEffect(() => {
     if (!res) return;
-    const first = res.sections.findIndex((s2: any) => (RANK[s2.tier] ?? 2) <= level && !!s2.html);
+    const first = firstReadingSection(res.sections, res.focus);
     setExpanded(first >= 0 ? [first] : []);
+    trackFunnel(res.journey, res.sections.some(s => !s.free && !!s.html) ? 'paid_open' : 'free_result', res.admin);
   }, [res, level]);
   const toggleSec = (i: number) => setExpanded(ex => ex.includes(i) ? ex.filter(x => x !== i) : [...ex, i]);
 
@@ -126,7 +132,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
           <div className="purchase-actions">
             {payNote?.kind !== 'ok' && <Link href="/find">구매 기록 확인하기</Link>}
             {payNote?.kind !== 'ok' && <button type="button" disabled={checking} onClick={() => load()}>결제 상태 다시 확인</button>}
-            {payNote?.kind === 'ok' && <button type="button" onClick={() => { const index = res?.sections.findIndex(s => !s.free && !!s.html) ?? -1; if (index >= 0) setExpanded([index]); document.getElementById(index >= 0 ? 'report-section-' + index : 'rep')?.scrollIntoView({ block: 'start', behavior: 'smooth' }); }}>구매한 내용 읽기</button>}
+            {payNote?.kind === 'ok' && <button type="button" onClick={() => { const index = res ? firstReadingSection(res.sections, res.focus) : -1; if (index >= 0) setExpanded([index]); document.getElementById(index >= 0 ? 'report-section-' + index : 'rep')?.scrollIntoView({ block: 'start', behavior: 'smooth' }); }}>구매한 내용 읽기</button>}
             <Link href="/vault">보관함</Link>{payNote?.kind !== 'ok' && <Link href={supportHref('pay', id)}>결제 문의하기</Link>}
           </div>
         </div>}
@@ -144,6 +150,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
             {res.wonguk && res.wonguk.length > 0 && <WonGuk p={res.wonguk} />}
             </div>
             <div className="rright">
+            <ReadingFocus focus={res.focus} onRead={() => { const i = firstReadingSection(res.sections, res.focus); setExpanded(i >= 0 ? [i] : []); requestAnimationFrame(() => document.getElementById('report-section-' + i)?.scrollIntoView({ block: 'start', behavior: 'smooth' })); }} />
             {/* 관리자는 결제 없이 전부 열린다. 표시가 없으면 결제가 그냥 넘어가는 줄 안다(2026-10-21 실제로 그렇게 보였다). */}
             {res.admin && (
               <div className="adminview no-print">
@@ -174,7 +181,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
               const openThis = (e?: any) => { setErr(''); if (!catInfo && prod) setPending(prod.key); openModal(e); };
               return (
                 <Fragment key={i}>
-                {res.purchasePreview && i === res.sections.findIndex(s => !s.html && !s.free) && <PaidReadingPreview preview={res.purchasePreview} busy={busy || checking} onOpen={() => {
+                {res.purchasePreview && i === res.sections.findIndex(s => !s.html && !s.free) && <PaidReadingPreview journey={res.journey} admin={res.admin} preview={res.purchasePreview} busy={busy || checking} onOpen={() => {
                   setErr(''); if (!catInfo) setPending(res.purchasePreview!.cat); openModal();
                 }} />}
                 <div id={'report-section-' + i} className={'sec' + (open && expanded.includes(i) ? ' open' : '') + (locked ? ' locked' : '')} style={{ animationDelay: Math.min(i * 55, 440) + 'ms' }}>
@@ -182,7 +189,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
                     onClick={locked ? openThis : () => toggleSec(i)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (locked) openThis(); else toggleSec(i); } }}><div className="ti">{sec.t}</div>
                     {sec.mk === '率' ? <span className="lb free">{level >= 1 ? '30일 열림' : '7일 무료'}</span> : sec.free ? <span className="lb free">무료</span> : open ? <span className="lb free">열림</span> : <span className="lb lk" aria-label="잠김" />}<div className="cv">▾</div></div>
-                  <div className="bd">{sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
+                  <div className="bd">{sec.html && res.focus?.mk === sec.mk && <p className="focus-chapter-question">처음 궁금했던 질문 · {res.focus.question}</p>}{sec.html ? <div dangerouslySetInnerHTML={{ __html: sec.html }} />
                     : (<div className="teaser"><div className="ttx" dangerouslySetInnerHTML={{ __html: sec.teaser || '대표님 명식으로 계산해 둔 장입니다. 열면 바로 보입니다.' }} />
                       {catInfo ? <button type="button" className="tlink" onClick={openThis}>{pName}에 포함 · 열기</button> : <button className="tunlock" onClick={openThis}>{`${pName} 열기 · ${won(pPrice)}`} →</button>}</div>)}</div>
                 </div>
@@ -240,7 +247,7 @@ export default function ReportView({ params }: { params: { id: string } }) {
         </div>
       )}
 
-      {modal && <Checkout reportId={id} name={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.name ?? '선택한 풀이'}
+      {modal && <Checkout journey={res?.journey} focus={res?.focus} admin={res?.admin} reportId={id} name={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.name ?? '선택한 풀이'}
         price={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.price ?? 0} subject={res?.title}
         details={(catInfo ?? (isCatKey(pending) ? CAT_INFO[pending] : null))?.gives?.slice(0, 3) ?? ['선택한 상품의 유료 풀이가 열립니다']}
         buyer={buyer} setBuyer={setBuyerPart} consent={consent} setConsent={setConsent} busy={busy || checking}

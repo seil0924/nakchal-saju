@@ -68,7 +68,7 @@ export async function getViewStats(): Promise<ViewStats> {
     // ★Supabase 는 한 번에 1000줄만 준다. 예전 .limit(50000) 은 최근 1000줄만 세서 누적이 1000에서 멈췄다.
     const q = async (cols: string) => {
       try {
-        const data = await fetchAll<any>((a, b) => sb.from('page_views').select(cols)
+        const data = await fetchAll<any>((a, b) => sb.from('page_views').select(cols).neq('kind', 'funnel_v1')
           .order('created_at', { ascending: false }).range(a, b));
         return { data, error: null as any };
       } catch (error) { return { data: null, error }; }

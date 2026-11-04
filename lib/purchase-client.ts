@@ -1,3 +1,5 @@
+import { trackFunnel } from './funnel-client';
+import type { Journey } from './funnel';
 import { openKcpPay, KCP_CLIENT_ENABLED } from '@/app/_components/kcpPay';
 import { PURCHASE_PENDING } from './payment-status';
 export { PURCHASE_PENDING } from './payment-status';
@@ -17,7 +19,8 @@ export async function requestJSON(url: string, body?: unknown) {
 }
 
 // Never suggest another charge after authorization might have occurred.
-export async function startPurchase(body: unknown): Promise<'confirmed' | 'cancelled' | 'redirect'> {
+export async function startPurchase(body: unknown, journey?: Journey | null): Promise<'confirmed' | 'cancelled' | 'redirect'> {
+  trackFunnel(journey, 'payment_start');
   let mayHaveCharged = false;
   try {
     const { ok, data: prep } = await requestJSON('/api/payment/prepare', body);
@@ -28,7 +31,7 @@ export async function startPurchase(body: unknown): Promise<'confirmed' | 'cance
       mayHaveCharged = true;
       const auth = await openKcpPay({ paymentId: prep.paymentId, amount: prep.amount, goodName: prep.orderName ?? '낙찰사주 리포트' });
       if (auth === 'redirect') return 'redirect';
-      if (!auth) return 'cancelled';
+      if (!auth) { trackFunnel(journey, 'payment_cancel'); return 'cancelled'; }
       const approval = await requestJSON('/api/payment/kcp/approve', { paymentId: prep.paymentId, ...auth });
       if (!approval.ok || !approval.data.ok) throw new PurchaseError(PURCHASE_PENDING, true);
     } else {
@@ -37,6 +40,7 @@ export async function startPurchase(body: unknown): Promise<'confirmed' | 'cance
     }
     return 'confirmed';
   } catch (e) {
+    trackFunnel(journey, (e instanceof PurchaseError ? e.recover : mayHaveCharged) ? 'payment_pending' : 'payment_error');
     if (e instanceof PurchaseError) throw e;
     throw new PurchaseError(mayHaveCharged ? PURCHASE_PENDING : '연결이 지연되어 결제를 준비하지 못했습니다. 잠시 후 다시 시도해주세요.', mayHaveCharged);
   }
