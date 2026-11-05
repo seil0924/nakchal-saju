@@ -570,11 +570,26 @@ html body .sajcal .scm.lockm{font-size:11px;font-weight:600;line-height:1.5;whit
   .taekil-access-grid>div+div{border-left:0;border-top:1px solid var(--u-line);padding:12px 0 0}
 }
 @media print{
-  body *{visibility:hidden}
-  .gosa-paper,.gosa-paper *{visibility:visible}
-  .gosa-paper{position:fixed;inset:0;margin:auto;border:0;border-radius:0;padding:28mm 22mm;writing-mode:vertical-rl;text-orientation:upright;display:flex;flex-direction:column;justify-content:flex-start;gap:9mm}
-  .gosa-paper p{font-size:22pt;line-height:1.5;margin:0;letter-spacing:.12em}
-  @page{size:A4 landscape;margin:0}
+  html:has(.gosa-page),body:has(.gosa-page),body:has(.gosa-page) *{page:gosa}
+  .gosa-page .gosa-wrap>:not(.gosa-out),.gosa-out>:not(.gosa-paper){display:none!important}
+  .gosa-page,.gosa-wrap,.gosa-out{margin:0!important;padding:0!important;border:0!important;box-shadow:none!important}
+  .gosa-paper{height:170mm;margin:0 auto;border:0;border-radius:0;padding:0;writing-mode:vertical-rl;text-orientation:upright;display:flex;flex-direction:column;justify-content:flex-start;gap:8mm}
+  .gosa-paper p{font-size:20pt;line-height:1.5;margin:0;letter-spacing:.08em;overflow-wrap:anywhere}
+  @page gosa{size:A4 landscape;margin:20mm}
+}
+
+/* Print the readable report, including collapsed chapters, without navigation or purchase controls. */
+@media print{
+  html body .dsidebar,html body .btab,next-route-announcer,
+  html body .sec.locked,html body .paid-reading-preview,html body .rtoc,
+  html body .ctaassure,html body .ctapromise,html body .readyline,html body .lockgives{display:none!important}
+  html body .shell,html body .dmain,html body .rcols{display:block!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important}
+  html body .app,html body .shell,html body .dmain{min-height:0!important;overflow:visible!important}
+  html body .rleft{position:static!important}
+  html body .sec{break-inside:auto;animation:none!important}
+  html body .sec .hd,html body .sec h3{break-after:avoid}
+  html body .sec p,html body .sec blockquote{break-inside:avoid}
+  html body .sec:not(.locked) .bd{display:block!important}
 }
 
 /* 무료 결과와 유료 풀이를 잇는 개인별 발췌. */

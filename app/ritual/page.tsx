@@ -8,14 +8,15 @@ export default function Ritual() {
   const amuletRef = useRef<HTMLDivElement>(null);
 
   // 부적을 PNG로 그려 저장 (배경화면용)
-  function saveAmulet() {
+  async function saveAmulet() {
+    await document.fonts.ready;
     const w = 600, h = 800;
     const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
     const x = cv.getContext('2d'); if (!x) return;
     x.fillStyle = '#ffffff'; x.fillRect(0, 0, w, h);
     x.strokeStyle = '#3f6be0'; x.lineWidth = 8; x.strokeRect(24, 24, w - 48, h - 48);
     x.fillStyle = '#1e2124'; x.textAlign = 'center';
-    x.font = '800 190px Pretendard, "Noto Sans KR", sans-serif'; x.fillText('吉', w / 2, h / 2 - 40);
+    x.font = '800 190px Pretendard, "Noto Sans KR", sans-serif'; x.fillText('吉', w / 2, h / 2 - 120);
     x.font = '700 66px Pretendard, "Noto Sans KR", sans-serif';
     '落札大吉'.split('').forEach((ch, i) => x.fillText(ch, w / 2, h / 2 + 110 + i * 78 - 120));
     x.font = '600 24px sans-serif'; x.fillStyle = '#636d77';

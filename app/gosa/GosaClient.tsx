@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { chukmun, gosaDays, type GosaDay } from '@/lib/gosa';
+import { copyText } from '@/lib/share-client';
 
 const DOW = ['일', '월', '화', '수', '목', '금', '토'];
 const fmt = (ymd: string) => { const [y, m, d] = ymd.split('-').map(Number); return `${m}월 ${d}일(${DOW[new Date(y, m - 1, d).getDay()]})`; };
@@ -24,7 +25,9 @@ export default function GosaClient() {
 
   async function copy() {
     if (!c) return;
-    try { await navigator.clipboard.writeText([...c.hanja, '', ...c.reading, '', c.meaning].join('\n')); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { /* 복사가 막힌 브라우저 */ }
+    if (await copyText([...c.hanja, '', ...c.reading, '', c.meaning].join('\n'))) {
+      setCopied(true); setTimeout(() => setCopied(false), 1800);
+    }
   }
 
   return (

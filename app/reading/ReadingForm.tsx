@@ -34,6 +34,7 @@ import { markResultSeen } from '@/app/_components/AddToHome';
 import { preloadKcp } from '@/app/_components/kcpPay';
 import { sget, sset } from '@/lib/scope';
 import { setTok, tokParam } from '@/lib/rtok';
+import { reportShareText, shareLink } from '@/lib/share-client';
 
 type Section = { mk: string; free: boolean; tier: 'free' | 'taekil' | 'full'; t: string; html: string; teaser?: string; passLock?: boolean };
 const RANK: Record<string, number> = { free: 0, taekil: 1, full: 2 };
@@ -458,14 +459,11 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
   }
   const payPass = () => pay('baljuPass');
 
-  async function share() {
+  async function share(copyOnly = false) {
     if (!res) return;
     const url = `${location.origin}/report/${res.reportId}?t=${encodeURIComponent(tokParam(res.reportId))}`;
-    const text = `[낙찰사주] 오늘 낙찰 유리도 ${res.hero?.score ?? ''}점: ${res.hero?.sub ?? ''}. 대표와 회사 사주로 오늘의 투찰 택일을 짚어 봤습니다. 대표님도 한번 보시죠:`;
-    try {
-      if (navigator.share) await navigator.share({ title: '낙찰사주', text, url });
-      else { await navigator.clipboard.writeText(text + ' ' + url); alert('공유 문구와 링크를 복사했어요. 카톡에 붙여넣어 보내세요.'); }
-    } catch {}
+    const title = catInfo?.name ?? res.title;
+    await shareLink({ title: `낙찰사주 · ${title}`, text: reportShareText(title, res.hero?.sub), url }, copyOnly);
   }
 
   function exportIcs() {
@@ -785,7 +783,8 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             )}
             <div className="rephd">{res.title}</div>
             {res.sections.some(sec => sec.mk === '率') && <TaekilAccess unlocked={level >= 1} />}
-            <button className="topshare no-print" onClick={share} aria-label="결과 링크 공유">↗ 결과 공유</button>
+            <button className="topshare no-print" onClick={() => share()} aria-label="결과 링크 공유">↗ 결과 공유</button>
+            <button className="topshare no-print" style={{ marginLeft: 6 }} onClick={() => share(true)}>링크 복사</button>
             {res.hero && <a className="topshare no-print" href={`/api/og/card?score=${encodeURIComponent(String(res.hero.big ?? res.hero.score))}&unit=${encodeURIComponent(res.hero.unit ?? '점')}&type=${encodeURIComponent(res.hero.label)}&note=${encodeURIComponent(res.hero.sub || '')}&up=${res.hero.up ? '1' : '0'}`} target="_blank" rel="noopener" style={{ marginLeft: 6 }}>카드 저장</a>}
             {res.selYear && ui.yearBar && <YearBar year={res.selYear} hanja={res.seun?.hanja} busy={busy} onChange={switchYear} />}
             {(() => { const total = res.sections.length; const opened = res.sections.filter(s => (RANK[s.tier] ?? 2) <= level && s.html).length;
@@ -872,7 +871,7 @@ export default function ReadingForm({ initialCat = '' }: { initialCat?: string }
             {level >= 1 && ui.gauge && (
               <div className="unlocked-note">✓ 결제 확인됨 · 오늘부터 30일 투찰 길일과 유리한 시진이 전부 열렸습니다</div>
             )}
-            <button className="sharebtn no-print" onClick={share}>결과 링크 공유하기 <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>
+            <button className="sharebtn no-print" onClick={() => share()}>결과 링크 공유하기 <span style={{ fontWeight: 500, fontSize: 13, color: 'var(--sub)' }}>· 카카오톡·문자</span></button>
             <button className="sharebtn no-print" style={{ marginTop: 9 }} onClick={() => window.print()}>
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" /></svg>
               PDF로 내보내기 · 저장

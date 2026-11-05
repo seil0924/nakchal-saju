@@ -11,6 +11,7 @@ import { sealSvg } from '@/lib/seal';
 import RiteProgress from '@/app/_components/RiteProgress';
 import DateSelect from '@/app/_components/DateSelect';
 import SiteTop from '@/app/_components/SiteTop';
+import { shareLink } from '@/lib/share-client';
 
 const CEO_STEPS = [
   '삼주(三柱) 구성: 년·월·일',
@@ -40,7 +41,7 @@ function explainMatch(m: string): [string, string] {
   if (m === '양간') return ['기질의 음양', '드러내고 밀어붙이는 양(陽)의 기질이 같습니다'];
   if (m === '음간') return ['기질의 음양', '안으로 벼리고 신중히 움직이는 음(陰)의 기질이 같습니다'];
   if (m.startsWith('강한 ')) { const e = m.slice(3); return ['무기가 같음', `둘 다 ${e} 기운이 강해: ${STRONG_TRAIT[e] || '같은 힘'}이 무기입니다`]; }
-  if (m.endsWith(' 부족')) { const e = m.slice(0, -3); return ['같은 숙제', `둘 다 ${e} 기운이 비어: ${WEAK_TRAIT[e] || '같은 자리'}이 평생의 과제였습니다`]; }
+  if (m.endsWith(' 부족')) { const e = m.slice(0, -3); return ['함께 보완할 방향', `두 명식에서 ${e}의 비중이 상대적으로 작습니다. 기운이 전혀 없다는 뜻은 아니며, ${WEAK_TRAIT[e] || '해당 기운'}을 보완할 방향으로 참고하세요.`]; }
   if (m.endsWith(' 주도')) { const s = m.slice(0, -3); return ['생각의 결', `주도하는 기운이 같은 ${s}: ${SIP_TRAIT[s] || '같은'} 방식으로 판단하고 결정합니다`]; }
   return ['특수 부호', SINSAL_TRAIT[m] ? `똑같이 ${m}이 앉아: ${SINSAL_TRAIT[m]}을 타고났습니다` : `같은 특수 부호 ${m}을 지녔습니다`];
 }
@@ -145,15 +146,10 @@ export default function CeoTwin() {
     return await new Promise<Blob | null>(r => cv.toBlob(b => r(b), 'image/png', 0.95));
   }
 
-  async function share() {
+  async function share(copyOnly = false) {
     if (!res) return;
     const url = `${location.origin}/ceo`;   // 이미지 카드 대신 URL(링크) 공유: 받은 사람이 열어 '나도 보기'
-    try {
-      const nav: any = navigator;
-      if (nav.share) { await nav.share({ title: '낙찰사주 · 나와 닮은 CEO', text: shareText, url }); return; }
-      await navigator.clipboard.writeText(shareText + ' ' + url);
-      alert('공유 문구와 링크를 복사했어요. 카톡에 붙여넣어 보내세요.');
-    } catch {}
+    await shareLink({ title: '낙찰사주 · 나와 닮은 CEO', text: shareText, url }, copyOnly);
   }
 
   async function saveImage() {
@@ -310,7 +306,8 @@ export default function CeoTwin() {
             </section>
 
             <div className="sharewrap">
-              <button className="sharebtn primary" onClick={share}>결과 링크 공유<span style={{ fontWeight: 500, fontSize: 13, display: 'block', marginTop: 2 }}>카카오톡 · 문자</span></button>
+              <button className="sharebtn primary" onClick={() => share()}>결과 링크 공유<span style={{ fontWeight: 500, fontSize: 13, display: 'block', marginTop: 2 }}>카카오톡 · 문자</span></button>
+              <button className="sharebtn" onClick={() => share(true)}>링크 복사</button>
               <button className="sharebtn" onClick={saveImage}>카드 저장<span style={{ fontWeight: 500, fontSize: 13, display: 'block', marginTop: 2 }}>이미지 파일</span></button>
             </div>
 

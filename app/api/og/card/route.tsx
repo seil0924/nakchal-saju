@@ -18,13 +18,13 @@ export async function GET(req: Request) {
     (
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg,#3f6be0,#2646a3)', padding: '64px 72px', position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 84, height: 84, borderRadius: 18, border: '3px solid rgba(255,255,255,0.85)', color: '#ffffff', fontSize: 46, background: '#2f56c4', marginBottom: 26 }}>落</div>
-        <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 26, letterSpacing: 6, marginBottom: 14 }}>落札四柱 · 오늘의 신호</div>
+        <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 26, letterSpacing: 6, marginBottom: 14 }}>落札四柱 · 사주 풀이 요약</div>
         <div style={{ display: 'flex', alignItems: 'baseline', color: accent, fontSize: 132, fontWeight: 700, lineHeight: 1 }}>
           {score}<span style={{ fontSize: 46, marginLeft: 6 }}>{unit}</span>
         </div>
         <div style={{ color: '#fff', fontSize: 40, fontWeight: 700, marginTop: 18 }}>{type}</div>
         <div style={{ color: '#d9e4fb', fontSize: 28, marginTop: 20, textAlign: 'center', maxWidth: 760, lineHeight: 1.4 }}>{note}</div>
-        <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 24, marginTop: 34 }}>nakchalsaju.com · 내 오늘 흐름도 보기</div>
+        <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 24, marginTop: 34 }}>nakchalsaju.com · 내 사주도 보기</div>
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 10, background: '#b3382c' }} />
       </div>
     ),
