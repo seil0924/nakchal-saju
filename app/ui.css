@@ -646,3 +646,34 @@ html body .reading-focus h2 { font-size: 20px; line-height: 1.6; margin: 8px 0; 
 html body .reading-focus button { border: 0; padding: 12px 16px; background: #315fd1; color: white; border-radius: 9px; font-weight: 700; }
 
 html body .focus-chapter-question { padding: 14px; border-left: 3px solid #315fd1; background: #f4f8ff; color: #263445; font-weight: 700; line-height: 1.7; }
+
+/* Wide article tables must scroll inside the page instead of being clipped by .app. */
+.column-table-wrap{min-width:0;margin:20px 0}
+.column-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+.column-table-scroll:focus-visible{outline:3px solid #8aaaf0;outline-offset:3px}
+.column-table-scroll table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.7}
+.column-table-scroll th,.column-table-scroll td{padding:10px;border:1px solid #dce3ed;text-align:left;vertical-align:top}
+.column-table-scroll th{background:#f4f7fb}
+.column-table-hint{display:none}
+@media(max-width:599px){
+  .column-table-scroll table{min-width:480px}
+  .column-table-hint{display:block;margin-bottom:8px;color:#58616a;font-size:13px;line-height:1.6}
+}
+
+/* Keep small standalone actions usable with a finger; leave inline prose links alone. */
+html body .pp-sheet{display:flex;flex-direction:column;max-height:calc(100dvh - 24px)}
+html body .pp-hd{flex-shrink:0}
+html body .pp-body{min-height:0;overscroll-behavior-y:contain}
+html body .pp-x{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;color:#344054!important;background:#f4f5f7;border-radius:10px;flex-shrink:0}
+html body .pp-x:focus-visible{outline:3px solid #8aaaf0;outline-offset:2px}
+@media(max-width:899px){
+  html body .topshare,html body .dp-pickb,html body .bg-chip,html body .bg-own-row button{min-height:44px;min-width:44px}
+  html body .tlink{min-height:44px;padding:8px 0}
+  html body .help-page .faq-group summary,html body .product-faq summary,html body .support-page summary{min-height:44px;padding:8px 0}
+  html body .help-page .help-back,html body .guide-price-row .guide-desc a{display:inline-flex;align-items:center;min-height:44px;white-space:normal}
+}
+@media print{
+  .column-table-hint{display:none}
+  .column-table-scroll{overflow:visible}
+  .column-table-scroll table{min-width:0}
+}

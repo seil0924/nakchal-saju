@@ -99,6 +99,8 @@ export function getColumn(slug: string): ColumnPost | null {
   if (!readFileNames().includes(file)) return null;
   const parsed = parseFile(file);
   if (!parsed) return null;
-  const html = marked.parse(boldToStrong(parsed.body), { async: false }) as string;
+  const html = (marked.parse(boldToStrong(parsed.body), { async: false }) as string)
+    .replace(/<table\b[^>]*>[\s\S]*?<\/table>/gi, table =>
+      `<div class="column-table-wrap"><span class="column-table-hint">표를 좌우로 밀어 전체 내용을 확인하세요.</span><div class="column-table-scroll" role="region" aria-label="본문 표 · 좌우로 스크롤" tabindex="0">${table}</div></div>`);
   return { ...parsed.meta, html };
 }
